@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Vault</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f5f5f7;
+            margin: 0;
+        }
+
+        .landing {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 24px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+        }
+
+            .drop-zone:hover {
+                border-color: #007aff;
+            }
+
+        #fileInput {
+            display: none;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: green;
+        }
+
+        .chat-view {
+            display: none;
+            min-height: 100vh;
+            background: #e9e9eb;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: rgba(245, 245, 247, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #ddd;
+            padding: 14px 20px;
+            z-index: 10;
+        }
+
+        .chat-header-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-header-meta {
+            font-size: 12px;
+            color: #666;
+        }
+
+        #downloadBtn {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+            #downloadBtn:hover {
+                opacity: 0.9;
+            }
+
+        .chat-messages {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        .message-row {
+            display: flex;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+            .message-row.me {
+                justify-content: flex-end;
+            }
+
+            .message-row.them {
+                justify-content: flex-start;
+            }
+
+        .message-bubble-wrap {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-row.me .message-bubble-wrap {
+            align-items: flex-end;
+        }
+
+        .message-row.them .message-bubble-wrap {
+            align-items: flex-start;
+        }
+
+        .message-bubble {
+            padding: 10px 14px;
+            border-radius: 18px;
+            line-height: 1.35;
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+
+        .message-row.me .message-bubble {
+            background: #007aff;
+            color: white;
+        }
+
+        .message-row.them .message-bubble {
+            background: white;
+            color: black;
+        }
+
+        .attachment-bubble {
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="landing" id="landing">
+        <div class="container">
+            <h1>Recover your conversation</h1>
+            <p>Upload your exported chat file</p>
+
+            <div class="drop-zone" id="dropZone">
+                Click or drag a file here
+            </div>
+
+            <input type="file" id="fileInput" accept=".txt" />
+            <div class="status" id="status"></div>
+        </div>
+    </div>
+
+    <div class="chat-view" id="chatView">
+        <div class="chat-header">
+            <div class="chat-header-left">
+                <div class="chat-header-name" id="chatHeaderName"></div>
+                <div class="chat-header-meta" id="chatHeaderMeta"></div>
+            </div>
+            <button id="downloadBtn">Download HTML</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+    </div>
+
+    <script>const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const status = document.getElementById('status');
+        const landing = document.getElementById('landing');
+        const chatView = document.getElementById('chatView');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatHeaderName = document.getElementById('chatHeaderName');
+        const chatHeaderMeta = document.getElementById('chatHeaderMeta');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        dropZone.onclick = () => fileInput.click();
+
+        fileInput.addEventListener('change', handleFile);
+
+        dropZone.addEventListener('dragover', e => e.preventDefault());
+
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file) readFile(file);
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (!window.chatMessagesData || !window.chatMessagesData.length) return;
+
+            const html = generateExportHTML();
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chatvault_export.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+
+        function handleFile(e) {
+            const file = e.target.files[0];
+            if (file) readFile(file);
+        }
+
+        function readFile(file) {
+            const reader = new FileReader();
+
+            reader.onload = e => {
+                const text = e.target.result;
+                const messages = parseMessages(text);
+                window.chatMessagesData = messages;
+
+                status.innerText = `Loaded ${messages.length.toLocaleString()} messages`;
+
+                renderConversation(messages);
+            };
+
+            reader.readAsText(file);
+        }
+
+        function parseMessages(rawText) {
+            const lines = rawText.split('\n');
+            const messages = [];
+
+            for (const line of lines) {
+                if (!line.includes('|')) continue;
+
+                const parts = line.split('|').map(part => part.trim());
+                if (parts.length < 3) continue;
+
+                const timestamp = parts[0];
+                const sender = parts[1];
+                const rawMessageText = parts.slice(2).join(' | ');
+
+                if (!timestamp || !sender) continue;
+
+                const cleanedText = cleanMessageText(rawMessageText);
+                const isAttachmentOnly = cleanedText.length === 0 && containsAttachmentPlaceholder(rawMessageText);
+
+                if (!cleanedText && !isAttachmentOnly) continue;
+
+                messages.push({
+                    timestamp,
+                    sender,
+                    text: isAttachmentOnly ? '[Attachment]' : cleanedText,
+                    isAttachmentOnly
+                });
+            }
+
+            return messages;
+        }
+
+        function cleanMessageText(text) {
+            return text
+                .replace(/\uFFFC/g, '')
+                .replace(/\uFFFD/g, '')
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                .trim();
+        }
+
+        function containsAttachmentPlaceholder(text) {
+            return /[\uFFFC\uFFFD]/.test(text);
+        }
+
+        function renderConversation(messages) {
+            chatMessages.innerHTML = '';
+
+            const other = messages.find(m => m.sender !== 'Me')?.sender || 'Conversation';
+            chatHeaderName.innerText = other;
+            chatHeaderMeta.innerText = `${messages.length.toLocaleString()} messages`;
+
+            for (const m of messages) {
+                const row = document.createElement('div');
+                row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'}`;
+
+                const wrap = document.createElement('div');
+                wrap.className = 'message-bubble-wrap';
+
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble';
+
+                if (m.isAttachmentOnly) {
+                    bubble.classList.add('attachment-bubble');
+                }
+
+                bubble.textContent = m.text;
+
+                const time = document.createElement('div');
+                time.className = 'message-time';
+                time.textContent = formatTimestamp(m.timestamp);
+
+                wrap.appendChild(bubble);
+                wrap.appendChild(time);
+                row.appendChild(wrap);
+                chatMessages.appendChild(row);
+            }
+
+            landing.style.display = 'none';
+            chatView.style.display = 'block';
+
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'auto'
+            });
+        }
+
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp.replace(' ', 'T'));
+
+            if (Number.isNaN(date.getTime())) {
+                return timestamp;
+            }
+
+            return date.toLocaleString([], {
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit'
+            });
+        }
+
+        function generateExportHTML() {
+            const cloned = chatView.cloneNode(true);
+
+            const btn = cloned.querySelector('#downloadBtn');
+            if (btn) {
+                btn.remove();
+            }
+
+            return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Vault Export</title>
+<style>${document.querySelector('style').innerHTML}</style>
+</head>
+<body>
+${cloned.outerHTML}
+</body>
+</html>`;
+        }</script>
+
+</body>
+</html>
