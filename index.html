@@ -123,6 +123,16 @@
                 justify-content: flex-start;
             }
 
+            .message-row.group-middle,
+            .message-row.group-end {
+                margin-top: 2px;
+            }
+
+            .message-row.group-start,
+            .message-row.group-single {
+                margin-top: 10px;
+            }
+
         .message-bubble-wrap {
             max-width: 70%;
             display: flex;
@@ -165,6 +175,11 @@
             font-size: 11px;
             color: #666;
             margin-top: 4px;
+        }
+
+        .message-row.group-start .message-time,
+        .message-row.group-middle .message-time {
+            display: none;
         }
     </style>
 </head>
@@ -306,9 +321,26 @@
             chatHeaderName.innerText = other;
             chatHeaderMeta.innerText = `${messages.length.toLocaleString()} messages`;
 
-            for (const m of messages) {
+            for (let i = 0; i < messages.length; i++) {
+                const m = messages[i];
+                const prev = messages[i - 1];
+                const next = messages[i + 1];
+
+                const sameAsPrev = prev && prev.sender === m.sender;
+                const sameAsNext = next && next.sender === m.sender;
+
+                let groupType = 'group-single';
+
+                if (!sameAsPrev && sameAsNext) {
+                    groupType = 'group-start';
+                } else if (sameAsPrev && sameAsNext) {
+                    groupType = 'group-middle';
+                } else if (sameAsPrev && !sameAsNext) {
+                    groupType = 'group-end';
+                }
+
                 const row = document.createElement('div');
-                row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'}`;
+                row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'} ${groupType}`;
 
                 const wrap = document.createElement('div');
                 wrap.className = 'message-bubble-wrap';
