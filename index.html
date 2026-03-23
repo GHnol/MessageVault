@@ -137,6 +137,7 @@
             max-width: 70%;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .message-row.me .message-bubble-wrap {
@@ -147,7 +148,12 @@
             align-items: flex-start;
         }
 
+        .message-bubble-wrap.has-reactions {
+            padding-top: 8px;
+        }
+
         .message-bubble {
+            position: relative;
             padding: 10px 14px;
             border-radius: 18px;
             line-height: 1.35;
@@ -180,6 +186,31 @@
         .message-row.group-start .message-time,
         .message-row.group-middle .message-time {
             display: none;
+        }
+
+        .reaction-badges {
+            position: absolute;
+            top: 0;
+            right: 8px;
+            transform: translateY(-35%);
+            display: flex;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        .reaction-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            font-size: 13px;
+            line-height: 1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.12);
         }
     </style>
 </head>
@@ -260,11 +291,13 @@
             reader.onload = e => {
                 const text = e.target.result;
                 const messages = parseMessages(text);
-                window.chatMessagesData = messages;
+                const normalizedMessages = applyReactions(messages);
 
-                status.innerText = `Loaded ${messages.length.toLocaleString()} messages`;
+                window.chatMessagesData = normalizedMessages;
 
-                renderConversation(messages);
+                status.innerText = `Loaded ${normalizedMessages.length.toLocaleString()} display messages`;
+
+                renderConversation(normalizedMessages);
             };
 
             reader.readAsText(file);
@@ -295,7 +328,8 @@
                     timestamp,
                     sender,
                     text: isAttachmentOnly ? '[Attachment]' : cleanedText,
-                    isAttachmentOnly
+                    isAttachmentOnly,
+                    reactions: []
                 });
             }
 
@@ -312,6 +346,150 @@
 
         function containsAttachmentPlaceholder(text) {
             return /[\uFFFC\uFFFD]/.test(text);
+        }
+
+        function normalizeComparableText(text) {
+            return text
+                .replace(/\uFFFC/g, '')
+                .replace(/\uFFFD/g, '')
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                .replace(/[“”]/g, '"')
+                .replace(/[‘’]/g, "'")
+                .replace(/…/g, '...')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .toLowerCase();
+        }
+
+        function stripOuterQuotes(text) {
+            return text
+                .replace(/^[“"]+/, '')
+                .replace(/[”"]+$/, '')
+                .trim();
+        }
+
+        function removeTrailingEllipsis(text) {
+            return text.replace(/(\.\.\.|…)+\s*$/g, '').trim();
+        }
+
+        function applyReactions(messages) {
+            const kept = [];
+
+            for (let i = 0; i < messages.length; i++) {
+                const message = {
+                    ...messages[i],
+                    reactions: [...(messages[i].reactions || [])]
+                };
+
+                const reactionData = parseReactionMessage(message.text);
+
+                if (!reactionData) {
+                    kept.push(message);
+                    continue;
+                }
+
+                const targetIndex = findReactionTargetIndex(kept, message.sender, reactionData.targetText);
+
+                if (targetIndex === -1) {
+                    kept.push(message);
+                    continue;
+                }
+
+                kept[targetIndex].reactions.push({
+                    reactor: message.sender,
+                    label: reactionData.label,
+                    emoji: reactionData.emoji
+                });
+            }
+
+            return kept;
+        }
+
+        function parseReactionMessage(text) {
+            const cleaned = text.trim();
+            const labels = ['Loved', 'Liked', 'Disliked', 'Laughed at', 'Emphasized', 'Questioned'];
+
+            for (const label of labels) {
+                if (!cleaned.startsWith(label + ' ')) continue;
+
+                let remainder = cleaned.slice(label.length).trim();
+                remainder = stripOuterQuotes(remainder);
+
+                if (!remainder) return null;
+
+                const emojiMap = {
+                    Loved: '❤️',
+                    Liked: '👍',
+                    Disliked: '👎',
+                    'Laughed at': '😂',
+                    Emphasized: '‼️',
+                    Questioned: '❓'
+                };
+
+                return {
+                    label,
+                    emoji: emojiMap[label],
+                    targetText: remainder
+                };
+            }
+
+            return null;
+        }
+
+        function scoreReactionMatch(message, reactorSender, targetText) {
+            const normalizedMessage = normalizeComparableText(message.text);
+            const normalizedTarget = normalizeComparableText(targetText);
+
+            if (!normalizedMessage || !normalizedTarget) return -1;
+
+            const messageNoEllipsis = removeTrailingEllipsis(normalizedMessage);
+            const targetNoEllipsis = removeTrailingEllipsis(normalizedTarget);
+
+            let score = -1;
+
+            if (messageNoEllipsis === targetNoEllipsis) {
+                score = 100;
+            } else if (messageNoEllipsis.startsWith(targetNoEllipsis) && targetNoEllipsis.length >= 8) {
+                score = 90;
+            } else if (targetNoEllipsis.startsWith(messageNoEllipsis) && messageNoEllipsis.length >= 8) {
+                score = 85;
+            } else if (messageNoEllipsis.includes(targetNoEllipsis) && targetNoEllipsis.length >= 12) {
+                score = 70;
+            } else if (targetNoEllipsis.includes(messageNoEllipsis) && messageNoEllipsis.length >= 12) {
+                score = 65;
+            }
+
+            if (score === -1) return -1;
+
+            if (message.sender !== reactorSender) {
+                score += 10;
+            }
+
+            if (message.isAttachmentOnly) {
+                score -= 20;
+            }
+
+            return score;
+        }
+
+        function findReactionTargetIndex(messages, reactorSender, targetText) {
+            let bestIndex = -1;
+            let bestScore = -1;
+
+            for (let i = messages.length - 1; i >= 0; i--) {
+                const score = scoreReactionMatch(messages[i], reactorSender, targetText);
+
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestIndex = i;
+                }
+
+                if (score >= 110) {
+                    return i;
+                }
+            }
+
+            return bestScore >= 70 ? bestIndex : -1;
         }
 
         function renderConversation(messages) {
@@ -345,6 +523,10 @@
                 const wrap = document.createElement('div');
                 wrap.className = 'message-bubble-wrap';
 
+                if (m.reactions && m.reactions.length) {
+                    wrap.classList.add('has-reactions');
+                }
+
                 const bubble = document.createElement('div');
                 bubble.className = 'message-bubble';
 
@@ -353,12 +535,27 @@
                 }
 
                 bubble.textContent = m.text;
+                wrap.appendChild(bubble);
+
+                if (m.reactions && m.reactions.length) {
+                    const reactionContainer = document.createElement('div');
+                    reactionContainer.className = 'reaction-badges';
+
+                    for (const reaction of m.reactions) {
+                        const badge = document.createElement('div');
+                        badge.className = 'reaction-badge';
+                        badge.textContent = reaction.emoji;
+                        badge.title = `${reaction.reactor} ${reaction.label.toLowerCase()} this message`;
+                        reactionContainer.appendChild(badge);
+                    }
+
+                    wrap.appendChild(reactionContainer);
+                }
 
                 const time = document.createElement('div');
                 time.className = 'message-time';
                 time.textContent = formatTimestamp(m.timestamp);
 
-                wrap.appendChild(bubble);
                 wrap.appendChild(time);
                 row.appendChild(wrap);
                 chatMessages.appendChild(row);
