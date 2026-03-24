@@ -372,6 +372,38 @@
             return text.replace(/(\.\.\.|…)+\s*$/g, '').trim();
         }
 
+        function tokenizeComparableText(text) {
+            return normalizeComparableText(text)
+                .replace(/[^a-z0-9'\s]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .split(' ')
+                .filter(Boolean);
+        }
+
+        function isOrderedSubsequence(needleTokens, haystackTokens) {
+            if (!needleTokens.length || !haystackTokens.length) return false;
+
+            let needleIndex = 0;
+            for (let i = 0; i < haystackTokens.length && needleIndex < needleTokens.length; i++) {
+                if (haystackTokens[i] === needleTokens[needleIndex]) {
+                    needleIndex++;
+                }
+            }
+            return needleIndex === needleTokens.length;
+        }
+
+        function countSharedTokens(aTokens, bTokens) {
+            const bSet = new Set(bTokens);
+            let count = 0;
+            for (const token of aTokens) {
+                if (bSet.has(token)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         function applyReactions(messages) {
             const kept = [];
 
@@ -436,7 +468,7 @@
             return null;
         }
 
-        function scoreReactionMatch(message, reactorSender, targetText) {
+        function scoreReactionMatch(message, reactorSender, targetText, recencyOffset) {
             const normalizedMessage = normalizeComparableText(message.text);
             const normalizedTarget = normalizeComparableText(targetText);
 
@@ -450,24 +482,53 @@
             if (messageNoEllipsis === targetNoEllipsis) {
                 score = 100;
             } else if (messageNoEllipsis.startsWith(targetNoEllipsis) && targetNoEllipsis.length >= 8) {
-                score = 90;
+                score = 92;
             } else if (targetNoEllipsis.startsWith(messageNoEllipsis) && messageNoEllipsis.length >= 8) {
-                score = 85;
+                score = 88;
             } else if (messageNoEllipsis.includes(targetNoEllipsis) && targetNoEllipsis.length >= 12) {
-                score = 70;
+                score = 84;
             } else if (targetNoEllipsis.includes(messageNoEllipsis) && messageNoEllipsis.length >= 12) {
-                score = 65;
+                score = 80;
+            }
+
+            const messageTokens = tokenizeComparableText(messageNoEllipsis);
+            const targetTokens = tokenizeComparableText(targetNoEllipsis);
+
+            if (messageTokens.length && targetTokens.length) {
+                const shared = countSharedTokens(targetTokens, messageTokens);
+                const overlap = shared / Math.max(1, targetTokens.length);
+                const subsequence = isOrderedSubsequence(targetTokens, messageTokens);
+
+                if (subsequence && overlap >= 0.75 && targetTokens.length >= 4) {
+                    score = Math.max(score, 86);
+                }
+
+                if (subsequence && overlap >= 0.6 && targetTokens.length >= 5) {
+                    score = Math.max(score, 80);
+                }
+
+                if (overlap >= 0.85 && targetTokens.length >= 4) {
+                    score = Math.max(score, 78);
+                }
+
+                if (overlap >= 0.7 && targetTokens.length >= 5) {
+                    score = Math.max(score, 72);
+                }
             }
 
             if (score === -1) return -1;
 
             if (message.sender !== reactorSender) {
                 score += 10;
+            } else {
+                score -= 8;
             }
 
             if (message.isAttachmentOnly) {
                 score -= 20;
             }
+
+            score += Math.max(0, 8 - recencyOffset);
 
             return score;
         }
@@ -475,9 +536,10 @@
         function findReactionTargetIndex(messages, reactorSender, targetText) {
             let bestIndex = -1;
             let bestScore = -1;
+            let recencyOffset = 0;
 
-            for (let i = messages.length - 1; i >= 0; i--) {
-                const score = scoreReactionMatch(messages[i], reactorSender, targetText);
+            for (let i = messages.length - 1; i >= 0; i--, recencyOffset++) {
+                const score = scoreReactionMatch(messages[i], reactorSender, targetText, recencyOffset);
 
                 if (score > bestScore) {
                     bestScore = score;
@@ -489,7 +551,7 @@
                 }
             }
 
-            return bestScore >= 70 ? bestIndex : -1;
+            return bestScore >= 72 ? bestIndex : -1;
         }
 
         function renderConversation(messages) {
