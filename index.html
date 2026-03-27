@@ -211,21 +211,61 @@
         .kbd-combo {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            margin: 4px 0;
+            gap: 6px;
+            margin: 8px 0;
         }
 
         kbd {
-            display: inline-block;
-            padding: 3px 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             background: #f5f5f7;
             border: 1px solid #d2d2d7;
-            border-radius: 6px;
+            border-radius: 8px;
             box-shadow: 0 1px 0 rgba(0,0,0,0.08);
             color: #1d1d1f;
+            line-height: 1;
+        }
+
+        .kbd-symbol {
+            font-size: 15px;
+        }
+
+        .kbd-label {
+            font-size: 12px;
+            color: #6e6e73;
+            font-weight: 400;
+        }
+
+        .kbd-plus {
+            font-size: 13px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .kbd-clarify {
+            font-size: 13px;
+            color: #6e6e73;
+            margin: 4px 0 12px !important;
+        }
+
+        .alt-path {
+            font-size: 13px;
+            color: #48484a;
+            background: #f5f5f7;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin: 0 0 12px;
+            line-height: 1.5;
+        }
+
+        .alt-path-label {
+            color: #86868b;
+            font-weight: 500;
         }
 
         /* Copy path button */
@@ -1147,9 +1187,17 @@
             <div class="guide-step">
                 <div class="guide-step-number">1</div>
                 <h3>Open "Go to Folder" in Finder</h3>
-                <p>Click on your desktop or open any Finder window, then press:</p>
+                <p>Click on your desktop or open a Finder window, then press:</p>
                 <div class="kbd-combo">
-                    <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>G</kbd>
+                    <kbd><span class="kbd-symbol">⌘</span><span class="kbd-label">Command</span></kbd>
+                    <span class="kbd-plus">+</span>
+                    <kbd><span class="kbd-symbol">⇧</span><span class="kbd-label">Shift</span></kbd>
+                    <span class="kbd-plus">+</span>
+                    <kbd><span class="kbd-symbol">G</span></kbd>
+                </div>
+                <p class="kbd-clarify">Hold <strong>Command</strong> and <strong>Shift</strong> at the same time, then press <strong>G</strong>.</p>
+                <div class="alt-path">
+                    <span class="alt-path-label">Or:</span> In Finder's menu bar, click <strong>Go</strong> &#8594; <strong>Go to Folder…</strong>
                 </div>
                 <p>A small dialog will appear asking where to go.</p>
                 <div class="finder-mock">
