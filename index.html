@@ -958,6 +958,29 @@
                 color: #007aff;
             }
 
+        .how-it-works-details {
+            margin-top: 12px;
+            border-top: 1px solid #f0f0f2;
+            padding-top: 10px;
+        }
+
+            .how-it-works-details summary {
+                font-size: 12px;
+                color: #86868b;
+                cursor: pointer;
+                font-weight: 500;
+            }
+
+                .how-it-works-details summary:hover {
+                    color: #6e6e73;
+                }
+
+            .how-it-works-details .how-it-works-tech {
+                border-top: none;
+                padding-top: 6px;
+                margin-top: 4px !important;
+            }
+
         /* ── Inline trust notes (guide steps, etc.) ── */
         .inline-trust-note {
             display: flex;
@@ -1078,7 +1101,7 @@
             <div class="trust-bar">
                 <div class="trust-item">
                     <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    100% private
+                    Processed on your device
                 </div>
                 <div class="trust-divider"></div>
                 <div class="trust-item">
@@ -1100,7 +1123,10 @@
                     <p><strong>Chat Vault reads your messages file right here in your browser.</strong></p>
                     <p>When you drop a file in, your browser reads it using built-in tools — the same way it opens a photo or PDF. Your messages are processed on your computer and displayed on your screen. That's it.</p>
                     <p>There's no server, no account, no upload. If you close this tab, everything is gone. We never see your data — it never leaves your machine.</p>
-                    <p class="how-it-works-tech">For the curious: chat.db is read using <a href="https://sql.js.org" target="_blank" rel="noopener">SQL.js</a>, a local database reader that runs in your browser via WebAssembly. You can verify there are no network requests in your browser's developer tools (Network tab).</p>
+                    <details class="how-it-works-details">
+                        <summary>Technical details</summary>
+                        <p class="how-it-works-tech">chat.db is read using <a href="https://sql.js.org" target="_blank" rel="noopener">SQL.js</a>, a local database reader that runs in your browser via WebAssembly. You can verify there are no network requests in your browser's developer tools (Network tab).</p>
+                    </details>
                 </div>
             </div>
         </div>
@@ -1463,7 +1489,7 @@
                 const normalizedMessages = applyReactions(messages);
 
                 window.chatMessagesData = normalizedMessages;
-                showStatusIn(txtStatus, `Loaded ${normalizedMessages.length.toLocaleString()} display messages`);
+                showStatusIn(txtStatus, `Found ${normalizedMessages.length.toLocaleString()} messages — processed locally`);
                 renderConversation(normalizedMessages);
             };
 
@@ -1490,7 +1516,7 @@
 
                 if (!tableNames.includes('message') || !tableNames.includes('chat')) {
                     hideLoading();
-                    showStatusIn(statusEl, 'This doesn\'t appear to be a Mac Messages database (chat.db).', true);
+                    showStatusIn(statusEl, 'This file doesn\'t look like a Mac Messages database. Make sure you\'re using chat.db from the Messages folder.', true);
                     return;
                 }
 
@@ -1502,7 +1528,7 @@
                 hideLoading();
 
                 if (conversations.length === 0) {
-                    showStatusIn(statusEl, 'No conversations found in this database.', true);
+                    showStatusIn(statusEl, 'No conversations found. The file may be empty or your messages might be stored in iCloud.', true);
                     return;
                 }
 
@@ -1511,7 +1537,7 @@
             } catch (err) {
                 hideLoading();
                 console.error('DB Error:', err);
-                showStatusIn(statusEl, 'Error reading database: ' + err.message, true);
+                showStatusIn(statusEl, 'Something went wrong reading the file. Try dragging it in again, or check that it\'s the right file.', true);
             }
         }
 
@@ -1885,7 +1911,7 @@
                 } catch (err) {
                     hideLoading();
                     console.error('Error loading conversation:', err);
-                    alert('Error loading conversation: ' + err.message);
+                    alert('Couldn\'t load this conversation. Try selecting it again.');
                 }
             }, 50);
         }
