@@ -5,56 +5,689 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Vault</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background: #f5f5f7;
             margin: 0;
+            color: #1d1d1f;
         }
 
+        /* ── Landing ── */
         .landing {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 24px;
         }
 
         .container {
             text-align: center;
-            max-width: 500px;
-            padding: 24px;
+            max-width: 560px;
+            width: 100%;
         }
 
-        h1 {
-            margin-bottom: 10px;
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
         }
 
-        p {
-            color: #666;
+        .landing h1 {
+            margin: 0 0 6px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #86868b;
+            margin: 0 0 32px;
+            font-size: 16px;
+        }
+
+        /* ── Ingestion cards ── */
+        .ingest-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        .drop-zone {
-            border: 2px dashed #ccc;
-            padding: 40px;
-            border-radius: 12px;
+        .ingest-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
             background: white;
+            border-radius: 14px;
+            border: 1.5px solid #e5e5ea;
             cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.15s;
+            text-align: left;
         }
 
-            .drop-zone:hover {
+            .ingest-card:hover {
                 border-color: #007aff;
+                box-shadow: 0 2px 12px rgba(0,122,255,0.1);
             }
 
-        #fileInput {
+            .ingest-card.primary {
+                border-color: #007aff;
+                background: #f8fbff;
+            }
+
+        .ingest-card-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+            width: 48px;
+            text-align: center;
+        }
+
+        .ingest-card-body {
+            flex: 1;
+        }
+
+        .ingest-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .ingest-card-desc {
+            font-size: 13px;
+            color: #86868b;
+            line-height: 1.4;
+        }
+
+        .ingest-card-arrow {
+            color: #c7c7cc;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .ingest-card:hover .ingest-card-arrow {
+            color: #007aff;
+        }
+
+        .privacy-note {
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 16px;
+            line-height: 1.5;
+        }
+
+            .privacy-note svg {
+                vertical-align: -2px;
+                margin-right: 3px;
+            }
+
+        /* ── Guided walkthrough ── */
+        .guide-view {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f7;
+        }
+
+        .guide-container {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .guide-header {
+            position: sticky;
+            top: 0;
+            background: rgba(245,245,247,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #d2d2d7;
+            padding: 16px 20px;
+            margin: 0 -20px 24px;
+            z-index: 10;
+        }
+
+        .guide-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: #007aff;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            margin-bottom: 8px;
+        }
+
+            .guide-back:hover {
+                text-decoration: underline;
+            }
+
+        .guide-header-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .guide-header-sub {
+            font-size: 13px;
+            color: #86868b;
+            margin-top: 2px;
+        }
+
+        /* Steps */
+        .guide-step {
+            background: white;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid #e5e5ea;
+        }
+
+        .guide-step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #007aff;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .guide-step h3 {
+            margin: 0 0 8px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .guide-step p {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: #48484a;
+            line-height: 1.55;
+        }
+
+            .guide-step p:last-child {
+                margin-bottom: 0;
+            }
+
+        /* Keyboard shortcut display */
+        .kbd-combo {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin: 4px 0;
+        }
+
+        kbd {
+            display: inline-block;
+            padding: 3px 8px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            background: #f5f5f7;
+            border: 1px solid #d2d2d7;
+            border-radius: 6px;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+            color: #1d1d1f;
+        }
+
+        /* Copy path button */
+        .copy-path-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .path-display {
+            flex: 1;
+            font-family: "SF Mono", "Menlo", "Consolas", monospace;
+            font-size: 14px;
+            background: #f5f5f7;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #1d1d1f;
+            user-select: all;
+        }
+
+        .copy-btn {
+            padding: 10px 16px;
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.15s;
+        }
+
+            .copy-btn:hover {
+                opacity: 0.88;
+            }
+
+            .copy-btn.copied {
+                background: #34c759;
+            }
+
+        /* Visual mock of Finder dialog */
+        .finder-mock {
+            background: #f5f5f7;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .finder-mock-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .finder-mock-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+            .finder-mock-dots span {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                display: block;
+            }
+
+                .finder-mock-dots span:nth-child(1) {
+                    background: #ff5f56;
+                }
+
+                .finder-mock-dots span:nth-child(2) {
+                    background: #ffbd2e;
+                }
+
+                .finder-mock-dots span:nth-child(3) {
+                    background: #27c93f;
+                }
+
+        .finder-mock-title {
+            font-size: 12px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .finder-mock-field {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #c7c7cc;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: "SF Mono", "Menlo", "Consolas", monospace;
+            font-size: 13px;
+            color: #007aff;
+        }
+
+        .finder-mock-file {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .finder-mock-file-icon {
+            font-size: 20px;
+        }
+
+        .finder-mock-file-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .finder-mock-file-size {
+            font-size: 12px;
+            color: #86868b;
+            margin-left: auto;
+        }
+
+        /* Drop zone within guide */
+        .guide-drop-zone {
+            border: 2.5px dashed #007aff;
+            padding: 36px 24px;
+            border-radius: 14px;
+            background: #f0f7ff;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-align: center;
+            margin: 12px 0;
+        }
+
+            .guide-drop-zone:hover {
+                background: #e4f0ff;
+                box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
+            }
+
+            .guide-drop-zone.drag-over {
+                background: #d6e9ff;
+                box-shadow: 0 0 0 4px rgba(0,122,255,0.2);
+            }
+
+        .guide-drop-icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .guide-drop-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #007aff;
+        }
+
+        .guide-drop-hint {
+            font-size: 13px;
+            color: #86868b;
+            margin-top: 4px;
+        }
+
+        /* Troubleshooting expander */
+        .trouble-section {
+            margin-top: 16px;
+        }
+
+        .trouble-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #86868b;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 8px 0;
+        }
+
+            .trouble-toggle:hover {
+                color: #1d1d1f;
+            }
+
+        .trouble-toggle-arrow {
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+
+        .trouble-toggle.open .trouble-toggle-arrow {
+            transform: rotate(90deg);
+        }
+
+        .trouble-content {
+            display: none;
+            background: #fffbeb;
+            border: 1px solid #f0e0a0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-top: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #48484a;
+        }
+
+            .trouble-content.open {
+                display: block;
+            }
+
+            .trouble-content h4 {
+                margin: 0 0 8px;
+                font-size: 14px;
+                font-weight: 600;
+                color: #1d1d1f;
+            }
+
+            .trouble-content ol {
+                margin: 0;
+                padding-left: 20px;
+            }
+
+            .trouble-content li {
+                margin-bottom: 6px;
+            }
+
+            .trouble-content .setting-path {
+                font-weight: 600;
+                color: #1d1d1f;
+            }
+
+        /* ── txt upload sub-view ── */
+        .txt-upload-view {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f7;
+        }
+
+        .txt-container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .txt-header {
+            position: sticky;
+            top: 0;
+            background: rgba(245,245,247,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #d2d2d7;
+            padding: 16px 20px;
+            margin: 0 -20px 24px;
+            z-index: 10;
+        }
+
+        .txt-drop-zone {
+            border: 2px dashed #d2d2d7;
+            padding: 44px 32px;
+            border-radius: 16px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+            .txt-drop-zone:hover {
+                border-color: #007aff;
+                background: #f0f7ff;
+                box-shadow: 0 0 0 4px rgba(0,122,255,0.08);
+            }
+
+            .txt-drop-zone.drag-over {
+                border-color: #007aff;
+                background: #e8f2ff;
+                box-shadow: 0 0 0 4px rgba(0,122,255,0.15);
+            }
+
+        .txt-drop-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .txt-drop-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .txt-drop-hint {
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        /* ── Shared elements ── */
+        #fileInput, #dbFileInput {
             display: none;
         }
 
         .status {
             margin-top: 15px;
             font-size: 14px;
-            color: green;
+            color: #34c759;
+            min-height: 20px;
+            text-align: center;
         }
 
+            .status.error {
+                color: #ff3b30;
+            }
+
+        /* ── Contact Picker ── */
+        .contact-picker {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f7;
+        }
+
+        .picker-header {
+            position: sticky;
+            top: 0;
+            background: rgba(245,245,247,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #d2d2d7;
+            padding: 16px 20px;
+            z-index: 10;
+        }
+
+        .picker-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+        }
+
+        .picker-subtitle {
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        .picker-search {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            font-size: 15px;
+            background: white;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+            .picker-search:focus {
+                border-color: #007aff;
+                box-shadow: 0 0 0 3px rgba(0,122,255,0.12);
+            }
+
+        .picker-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: #007aff;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            margin-bottom: 8px;
+        }
+
+            .picker-back:hover {
+                text-decoration: underline;
+            }
+
+        .contact-list {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 12px 16px 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.15s, box-shadow 0.15s;
+            border: 1px solid transparent;
+        }
+
+            .contact-item:hover {
+                background: #f0f7ff;
+                border-color: #007aff;
+                box-shadow: 0 2px 8px rgba(0,122,255,0.08);
+            }
+
+        .contact-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #007aff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+            .contact-avatar.group {
+                background: #34c759;
+            }
+
+        .contact-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1d1d1f;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .contact-meta {
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 2px;
+        }
+
+        .contact-count {
+            font-size: 13px;
+            color: #86868b;
+            font-variant-numeric: tabular-nums;
+            flex-shrink: 0;
+        }
+
+        /* ── Chat View ── */
         .chat-view {
             display: none;
             min-height: 100vh;
@@ -67,9 +700,10 @@
             align-items: center;
             position: sticky;
             top: 0;
-            background: rgba(245, 245, 247, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid #ddd;
+            background: rgba(245, 245, 247, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #d2d2d7;
             padding: 14px 20px;
             z-index: 10;
         }
@@ -86,21 +720,33 @@
 
         .chat-header-meta {
             font-size: 12px;
-            color: #666;
+            color: #86868b;
         }
 
-        #downloadBtn {
+        .chat-header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-btn {
             background: #007aff;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 8px 14px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 500;
+            transition: opacity 0.15s;
         }
 
-            #downloadBtn:hover {
-                opacity: 0.9;
+            .header-btn:hover {
+                opacity: 0.88;
+            }
+
+            .header-btn.secondary {
+                background: #e5e5ea;
+                color: #1d1d1f;
             }
 
         .chat-messages {
@@ -109,6 +755,23 @@
             padding: 20px 16px 40px;
         }
 
+        /* ── Date separators ── */
+        .date-separator {
+            text-align: center;
+            margin: 20px 0 12px;
+        }
+
+            .date-separator span {
+                display: inline-block;
+                background: rgba(0,0,0,0.06);
+                color: #6e6e73;
+                font-size: 12px;
+                font-weight: 500;
+                padding: 4px 12px;
+                border-radius: 999px;
+            }
+
+        /* ── Message rows ── */
         .message-row {
             display: flex;
             margin: 10px 0;
@@ -179,7 +842,7 @@
 
         .message-time {
             font-size: 11px;
-            color: #666;
+            color: #86868b;
             margin-top: 4px;
         }
 
@@ -194,8 +857,11 @@
             right: 8px;
             transform: translateY(-35%);
             display: flex;
-            gap: 4px;
+            flex-wrap: wrap;
+            gap: 3px;
             z-index: 2;
+            max-width: 200px;
+            justify-content: flex-end;
         }
 
         .reaction-badge {
@@ -212,80 +878,423 @@
             line-height: 1;
             box-shadow: 0 1px 2px rgba(0,0,0,0.12);
         }
+
+        /* ── Loading overlay ── */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+            .loading-overlay.active {
+                display: flex;
+            }
+
+        .loading-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #e5e5ea;
+            border-top-color: #007aff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 15px;
+            color: #6e6e73;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Reading database…</div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         LANDING — Two clear ingestion paths
+    ════════════════════════════════════════════ -->
     <div class="landing" id="landing">
         <div class="container">
-            <h1>Recover your conversation</h1>
-            <p>Upload your exported chat file</p>
+            <div class="logo-icon">🔐</div>
+            <h1>Chat Vault</h1>
+            <p class="subtitle">Recover, preserve, and relive your conversations</p>
 
-            <div class="drop-zone" id="dropZone">
-                Click or drag a file here
+            <div class="ingest-options">
+                <div class="ingest-card primary" id="macGuideCard">
+                    <div class="ingest-card-icon">💻</div>
+                    <div class="ingest-card-body">
+                        <div class="ingest-card-title">Get messages from your Mac</div>
+                        <div class="ingest-card-desc">We'll walk you through finding your Messages database. Takes about 2 minutes.</div>
+                    </div>
+                    <div class="ingest-card-arrow">›</div>
+                </div>
+
+                <div class="ingest-card" id="txtUploadCard">
+                    <div class="ingest-card-icon">📄</div>
+                    <div class="ingest-card-body">
+                        <div class="ingest-card-title">Upload a text export</div>
+                        <div class="ingest-card-desc">Already have a .txt export? Drop it here.</div>
+                    </div>
+                    <div class="ingest-card-arrow">›</div>
+                </div>
             </div>
 
-            <input type="file" id="fileInput" accept=".txt" />
-            <div class="status" id="status"></div>
+            <div class="privacy-note">
+                <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2.5 6V4.5C2.5 2.567 4.067 1 6 1s3.5 1.567 3.5 3.5V6M1 6h10v7H1V6z" stroke="#86868b" stroke-width="1.2" /></svg>
+                Your data stays on your computer. Nothing is uploaded or sent anywhere.
+            </div>
         </div>
     </div>
 
+    <!-- ════════════════════════════════════════════
+         GUIDED WALKTHROUGH — Mac Messages
+    ════════════════════════════════════════════ -->
+    <div class="guide-view" id="guideView">
+        <div class="guide-container">
+            <div class="guide-header">
+                <button class="guide-back" id="guideBack">&#8592; Back</button>
+                <div class="guide-header-title">Get your Mac Messages</div>
+                <div class="guide-header-sub">Follow these 3 steps — no Terminal needed</div>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="guide-step">
+                <div class="guide-step-number">1</div>
+                <h3>Open "Go to Folder" in Finder</h3>
+                <p>First, click on your desktop or open a Finder window. Then press this keyboard shortcut:</p>
+                <div class="kbd-combo">
+                    <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>G</kbd>
+                </div>
+                <p>A small dialog box will appear at the top of the Finder window asking you where to go.</p>
+                <div class="finder-mock">
+                    <div class="finder-mock-bar">
+                        <div class="finder-mock-dots"><span></span><span></span><span></span></div>
+                        <div class="finder-mock-title">Go to Folder</div>
+                    </div>
+                    <div class="finder-mock-field">~/Library/Messages/</div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="guide-step">
+                <div class="guide-step-number">2</div>
+                <h3>Paste this path and press Enter</h3>
+                <p>Copy the path below, paste it into the "Go to Folder" box, and press Enter.</p>
+                <div class="copy-path-row">
+                    <div class="path-display" id="pathDisplay">~/Library/Messages/</div>
+                    <button class="copy-btn" id="copyPathBtn">Copy</button>
+                </div>
+                <p>Finder will open the Messages folder. You'll see a file called <strong>chat.db</strong> — that's the one you need.</p>
+                <div class="finder-mock">
+                    <div class="finder-mock-bar">
+                        <div class="finder-mock-dots"><span></span><span></span><span></span></div>
+                        <div class="finder-mock-title">Messages</div>
+                    </div>
+                    <div class="finder-mock-file">
+                        <div class="finder-mock-file-icon">🗄️</div>
+                        <div class="finder-mock-file-name">chat.db</div>
+                        <div class="finder-mock-file-size">← This file</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="guide-step">
+                <div class="guide-step-number">3</div>
+                <h3>Drag chat.db here</h3>
+                <p>Drag the chat.db file from Finder and drop it right here:</p>
+                <div class="guide-drop-zone" id="guideDropZone">
+                    <div class="guide-drop-icon">📥</div>
+                    <div class="guide-drop-text">Drop chat.db here</div>
+                    <div class="guide-drop-hint">or click to browse</div>
+                </div>
+                <input type="file" id="dbFileInput" accept=".db" />
+                <div class="status" id="guideStatus"></div>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="trouble-section">
+                <button class="trouble-toggle" id="troubleToggle">
+                    <span class="trouble-toggle-arrow">▶</span>
+                    Can't find the file, or getting a permissions error?
+                </button>
+                <div class="trouble-content" id="troubleContent">
+                    <h4>If the folder won't open or appears empty:</h4>
+                    <p>macOS protects your Messages data. You may need to grant Finder access:</p>
+                    <ol>
+                        <li>Open <span class="setting-path">System Settings</span> (click the Apple menu → System Settings)</li>
+                        <li>Go to <span class="setting-path">Privacy &amp; Security → Full Disk Access</span></li>
+                        <li>Click the <span class="setting-path">+</span> button</li>
+                        <li>Navigate to <span class="setting-path">Applications → Finder</span> and add it (or search for "Finder")</li>
+                        <li>You may need to unlock with your password first</li>
+                        <li>Close Finder and reopen it, then try Step 1 again</li>
+                    </ol>
+
+                    <h4 style="margin-top:16px">If you're using Safari or Chrome to access Chat Vault:</h4>
+                    <p>You can also add your browser to Full Disk Access. Same steps as above, but add Safari or Google Chrome instead of Finder. Then use the "click to browse" button in Step 3 above to navigate to the file.</p>
+
+                    <h4 style="margin-top:16px">Still not working?</h4>
+                    <p>On some Macs, Messages data may be stored only in iCloud and not locally. If chat.db is missing or very small (&lt;1 MB), your messages may not be stored on this Mac.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         TXT UPLOAD VIEW
+    ════════════════════════════════════════════ -->
+    <div class="txt-upload-view" id="txtUploadView">
+        <div class="txt-container">
+            <div class="txt-header">
+                <button class="guide-back" id="txtBack">&#8592; Back</button>
+                <div class="guide-header-title">Upload text export</div>
+                <div class="guide-header-sub">Drop a .txt file with your exported messages</div>
+            </div>
+
+            <div class="txt-drop-zone" id="txtDropZone">
+                <div class="txt-drop-icon">📄</div>
+                <div class="txt-drop-text">Drop your .txt file here or click to browse</div>
+                <div class="txt-drop-hint">Format: timestamp | sender | message</div>
+            </div>
+            <input type="file" id="fileInput" accept=".txt" />
+            <div class="status" id="txtStatus"></div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         CONTACT PICKER (for chat.db)
+    ════════════════════════════════════════════ -->
+    <div class="contact-picker" id="contactPicker">
+        <div class="picker-header">
+            <button class="picker-back" id="pickerBack">&#8592; Back</button>
+            <div class="picker-title">Your Conversations</div>
+            <div class="picker-subtitle" id="pickerSubtitle"></div>
+            <input type="text" class="picker-search" id="pickerSearch" placeholder="Search conversations…" />
+        </div>
+        <div class="contact-list" id="contactList"></div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         CHAT VIEW
+    ════════════════════════════════════════════ -->
     <div class="chat-view" id="chatView">
         <div class="chat-header">
             <div class="chat-header-left">
                 <div class="chat-header-name" id="chatHeaderName"></div>
                 <div class="chat-header-meta" id="chatHeaderMeta"></div>
             </div>
-            <button id="downloadBtn">Download HTML</button>
+            <div class="chat-header-actions">
+                <button class="header-btn secondary" id="backToPickerBtn" style="display:none;">&#8592; Conversations</button>
+                <button class="header-btn" id="downloadBtn">Download HTML</button>
+            </div>
         </div>
         <div class="chat-messages" id="chatMessages"></div>
     </div>
 
-    <script>const fileInput = document.getElementById('fileInput');
-        const dropZone = document.getElementById('dropZone');
-        const status = document.getElementById('status');
+    <!-- ════════════════════════════════════════════
+         JAVASCRIPT
+    ════════════════════════════════════════════ -->
+    <script>/* ─────────────────────────────────────────────
+           DOM references
+        ───────────────────────────────────────────── */
         const landing = document.getElementById('landing');
+        const guideView = document.getElementById('guideView');
+        const txtUploadView = document.getElementById('txtUploadView');
+        const contactPicker = document.getElementById('contactPicker');
         const chatView = document.getElementById('chatView');
         const chatMessages = document.getElementById('chatMessages');
         const chatHeaderName = document.getElementById('chatHeaderName');
         const chatHeaderMeta = document.getElementById('chatHeaderMeta');
         const downloadBtn = document.getElementById('downloadBtn');
 
-        dropZone.onclick = () => fileInput.click();
+        // Landing
+        const macGuideCard = document.getElementById('macGuideCard');
+        const txtUploadCard = document.getElementById('txtUploadCard');
 
-        fileInput.addEventListener('change', handleFile);
+        // Guide view
+        const guideBack = document.getElementById('guideBack');
+        const guideDropZone = document.getElementById('guideDropZone');
+        const dbFileInput = document.getElementById('dbFileInput');
+        const guideStatus = document.getElementById('guideStatus');
+        const copyPathBtn = document.getElementById('copyPathBtn');
+        const troubleToggle = document.getElementById('troubleToggle');
+        const troubleContent = document.getElementById('troubleContent');
 
-        dropZone.addEventListener('dragover', e => e.preventDefault());
+        // Txt view
+        const txtBack = document.getElementById('txtBack');
+        const txtDropZone = document.getElementById('txtDropZone');
+        const fileInput = document.getElementById('fileInput');
+        const txtStatus = document.getElementById('txtStatus');
 
-        dropZone.addEventListener('drop', e => {
-            e.preventDefault();
-            const file = e.dataTransfer.files[0];
-            if (file) readFile(file);
-        });
+        // Picker
+        const contactList = document.getElementById('contactList');
+        const pickerSearch = document.getElementById('pickerSearch');
+        const pickerSubtitle = document.getElementById('pickerSubtitle');
+        const pickerBack = document.getElementById('pickerBack');
+        const backToPickerBtn = document.getElementById('backToPickerBtn');
 
-        downloadBtn.addEventListener('click', () => {
-            if (!window.chatMessagesData || !window.chatMessagesData.length) return;
+        // Loading
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loadingText = document.getElementById('loadingText');
 
-            const html = generateExportHTML();
-            const blob = new Blob([html], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
+        /* ─────────────────────────────────────────────
+           State
+        ───────────────────────────────────────────── */
+        let dbConversations = null;
+        let sqlDB = null;
+        let cameFromGuide = false;
 
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'chatvault_export.html';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-
-            setTimeout(() => URL.revokeObjectURL(url), 1000);
-        });
-
-        function handleFile(e) {
-            const file = e.target.files[0];
-            if (file) readFile(file);
+        /* ─────────────────────────────────────────────
+           View navigation
+        ───────────────────────────────────────────── */
+        function hideAllViews() {
+            landing.style.display = 'none';
+            guideView.style.display = 'none';
+            txtUploadView.style.display = 'none';
+            contactPicker.style.display = 'none';
+            chatView.style.display = 'none';
         }
 
-        function readFile(file) {
+        function showView(view) {
+            hideAllViews();
+            view.style.display = view === landing ? 'flex' : 'block';
+        }
+
+        // Landing → Guide
+        macGuideCard.onclick = () => {
+            cameFromGuide = true;
+            showView(guideView);
+        };
+
+        // Landing → Txt upload
+        txtUploadCard.onclick = () => {
+            cameFromGuide = false;
+            showView(txtUploadView);
+        };
+
+        // Back buttons
+        guideBack.onclick = () => showView(landing);
+        txtBack.onclick = () => showView(landing);
+
+        /* ─────────────────────────────────────────────
+           Copy path button
+        ───────────────────────────────────────────── */
+        copyPathBtn.onclick = () => {
+            navigator.clipboard.writeText('~/Library/Messages/').then(() => {
+                copyPathBtn.textContent = 'Copied!';
+                copyPathBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyPathBtn.textContent = 'Copy';
+                    copyPathBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                // Fallback: select the text
+                const range = document.createRange();
+                range.selectNodeContents(document.getElementById('pathDisplay'));
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+            });
+        };
+
+        /* ─────────────────────────────────────────────
+           Troubleshooting expander
+        ───────────────────────────────────────────── */
+        troubleToggle.onclick = () => {
+            troubleToggle.classList.toggle('open');
+            troubleContent.classList.toggle('open');
+        };
+
+        /* ─────────────────────────────────────────────
+           Guide drop zone (.db files)
+        ───────────────────────────────────────────── */
+        guideDropZone.onclick = () => dbFileInput.click();
+
+        guideDropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            guideDropZone.classList.add('drag-over');
+        });
+
+        guideDropZone.addEventListener('dragleave', () => {
+            guideDropZone.classList.remove('drag-over');
+        });
+
+        guideDropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            guideDropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) handleDBFile(file, guideStatus);
+        });
+
+        dbFileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) handleDBFile(file, guideStatus);
+        });
+
+        /* ─────────────────────────────────────────────
+           Txt drop zone (.txt files)
+        ───────────────────────────────────────────── */
+        txtDropZone.onclick = () => fileInput.click();
+
+        txtDropZone.addEventListener('dragover', e => {
+            e.preventDefault();
+            txtDropZone.classList.add('drag-over');
+        });
+
+        txtDropZone.addEventListener('dragleave', () => {
+            txtDropZone.classList.remove('drag-over');
+        });
+
+        txtDropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            txtDropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) readTxtFile(file);
+        });
+
+        fileInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) readTxtFile(file);
+        });
+
+        /* ─────────────────────────────────────────────
+           Loading helpers
+        ───────────────────────────────────────────── */
+        function showLoading(msg) {
+            loadingText.textContent = msg || 'Processing…';
+            loadingOverlay.classList.add('active');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
+        }
+
+        function showStatusIn(el, msg, isError) {
+            el.textContent = msg;
+            el.className = 'status' + (isError ? ' error' : '');
+        }
+
+        /* ─────────────────────────────────────────────
+           .txt flow (PRESERVED — unchanged logic)
+        ───────────────────────────────────────────── */
+        function readTxtFile(file) {
             const reader = new FileReader();
 
             reader.onload = e => {
@@ -294,15 +1303,449 @@
                 const normalizedMessages = applyReactions(messages);
 
                 window.chatMessagesData = normalizedMessages;
-
-                status.innerText = `Loaded ${normalizedMessages.length.toLocaleString()} display messages`;
-
+                showStatusIn(txtStatus, `Loaded ${normalizedMessages.length.toLocaleString()} display messages`);
                 renderConversation(normalizedMessages);
             };
 
             reader.readAsText(file);
         }
 
+        /* ─────────────────────────────────────────────
+           chat.db flow (SQL.js in-browser)
+        ───────────────────────────────────────────── */
+        async function handleDBFile(file, statusEl) {
+            showLoading('Loading database engine…');
+
+            try {
+                const SQL = await loadSqlJs();
+                showLoading('Reading database…');
+
+                const buffer = await file.arrayBuffer();
+                const uint8 = new Uint8Array(buffer);
+
+                sqlDB = new SQL.Database(uint8);
+
+                const tables = sqlDB.exec("SELECT name FROM sqlite_master WHERE type='table'");
+                const tableNames = tables[0] ? tables[0].values.map(r => r[0]) : [];
+
+                if (!tableNames.includes('message') || !tableNames.includes('chat')) {
+                    hideLoading();
+                    showStatusIn(statusEl, 'This doesn\'t appear to be a Mac Messages database (chat.db).', true);
+                    return;
+                }
+
+                showLoading('Extracting conversations…');
+
+                const conversations = extractConversationList(sqlDB);
+                dbConversations = conversations;
+
+                hideLoading();
+
+                if (conversations.length === 0) {
+                    showStatusIn(statusEl, 'No conversations found in this database.', true);
+                    return;
+                }
+
+                showContactPicker(conversations);
+
+            } catch (err) {
+                hideLoading();
+                console.error('DB Error:', err);
+                showStatusIn(statusEl, 'Error reading database: ' + err.message, true);
+            }
+        }
+
+        function loadSqlJs() {
+            return new Promise((resolve, reject) => {
+                if (window.initSqlJs) {
+                    window.initSqlJs({ locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}` })
+                        .then(resolve).catch(reject);
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.min.js';
+                script.onload = () => {
+                    window.initSqlJs({ locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}` })
+                        .then(resolve).catch(reject);
+                };
+                script.onerror = () => reject(new Error('Failed to load SQL.js. Check your internet connection.'));
+                document.head.appendChild(script);
+            });
+        }
+
+        /* ─────────────────────────────────────────────
+           SQLite extraction (PRESERVED)
+        ───────────────────────────────────────────── */
+        function extractConversationList(db) {
+            const result = db.exec(`
+                    SELECT
+                        c.ROWID as chat_id,
+                        c.chat_identifier,
+                        c.display_name,
+                        c.style,
+                        COUNT(cmj.message_id) as msg_count
+                    FROM chat c
+                    JOIN chat_message_join cmj ON cmj.chat_id = c.ROWID
+                    GROUP BY c.ROWID
+                    HAVING msg_count > 0
+                    ORDER BY msg_count DESC
+                `);
+
+            if (!result.length) return [];
+
+            const conversations = [];
+            for (const row of result[0].values) {
+                const [chatId, chatIdentifier, displayName, style, msgCount] = row;
+                const isGroup = style === 43;
+                const name = displayName || chatIdentifier || 'Unknown';
+
+                conversations.push({
+                    chatId,
+                    chatIdentifier: chatIdentifier || '',
+                    name,
+                    isGroup,
+                    messageCount: msgCount
+                });
+            }
+
+            return conversations;
+        }
+
+        function extractMessagesForChat(db, chatId) {
+            const APPLE_EPOCH = 978307200;
+
+            const result = db.exec(`
+                    SELECT
+                        m.ROWID,
+                        m.text,
+                        m.date,
+                        m.is_from_me,
+                        m.cache_has_attachments,
+                        m.associated_message_type,
+                        m.associated_message_guid,
+                        m.guid,
+                        h.id as handle_id
+                    FROM message m
+                    JOIN chat_message_join cmj ON cmj.message_id = m.ROWID
+                    LEFT JOIN handle h ON h.ROWID = m.handle_id
+                    WHERE cmj.chat_id = ?
+                    ORDER BY m.date ASC
+                `, [chatId]);
+
+            if (!result.length) return [];
+
+            const guidMap = {};
+            const rawMessages = [];
+
+            for (const row of result[0].values) {
+                const [rowid, text, dateVal, isFromMe, hasAttach, assocType, assocGuid, guid, handleId] = row;
+
+                let unixSeconds;
+                if (dateVal > 1e15) {
+                    unixSeconds = APPLE_EPOCH + (dateVal / 1e9);
+                } else if (dateVal > 1e12) {
+                    unixSeconds = APPLE_EPOCH + (dateVal / 1e6);
+                } else {
+                    unixSeconds = APPLE_EPOCH + dateVal;
+                }
+
+                const date = new Date(unixSeconds * 1000);
+                const timestamp = formatDateForParsing(date);
+                const sender = isFromMe ? 'Me' : (handleId || 'Unknown');
+
+                rawMessages.push({
+                    rowid, text, timestamp, sender,
+                    hasAttach, assocType, assocGuid, guid
+                });
+            }
+
+            const messages = [];
+            const tapbacks = [];
+
+            for (const raw of rawMessages) {
+                if (raw.assocType && raw.assocType !== 0) {
+                    const info = parseTapback(raw.assocType, raw.sender);
+                    if (info) {
+                        info._assocGuid = raw.assocGuid;
+                        info._timestamp = raw.timestamp;
+                        tapbacks.push(info);
+                    }
+                    continue;
+                }
+
+                const cleanedText = raw.text ? cleanMessageText(raw.text) : '';
+                const isAttachmentOnly = !cleanedText && raw.hasAttach;
+
+                if (!cleanedText && !isAttachmentOnly) continue;
+
+                const idx = messages.length;
+                if (raw.guid) {
+                    guidMap[raw.guid] = idx;
+                }
+
+                messages.push({
+                    timestamp: raw.timestamp,
+                    sender: raw.sender,
+                    text: isAttachmentOnly ? '[Attachment]' : cleanedText,
+                    isAttachmentOnly: !!isAttachmentOnly,
+                    reactions: []
+                });
+            }
+
+            // Separate additions from removals
+            const additions = tapbacks.filter(tb => !tb.isRemoval);
+            const removals = tapbacks.filter(tb => tb.isRemoval);
+
+            // First pass: attach added tapbacks to their target messages
+            for (const tb of additions) {
+                let targetIdx = resolveTargetIdx(tb, messages, guidMap);
+
+                if (targetIdx !== -1) {
+                    // Deduplicate: don't add if same reactor + same emoji already exists
+                    const isDup = messages[targetIdx].reactions.some(
+                        r => r.reactor === tb.reactor && r.emoji === tb.emoji
+                    );
+                    if (!isDup) {
+                        messages[targetIdx].reactions.push({
+                            reactor: tb.reactor,
+                            label: tb.label,
+                            emoji: tb.emoji
+                        });
+                    }
+                }
+                // If no match found, silently drop — better than wrong attachment
+            }
+
+            // Second pass: apply removals — cancel out matching reactions
+            for (const tb of removals) {
+                let targetIdx = resolveTargetIdx(tb, messages, guidMap);
+
+                if (targetIdx !== -1) {
+                    const rxns = messages[targetIdx].reactions;
+                    const removeIdx = rxns.findIndex(
+                        r => r.reactor === tb.reactor && r.emoji === tb.emoji
+                    );
+                    if (removeIdx !== -1) {
+                        rxns.splice(removeIdx, 1);
+                    }
+                }
+            }
+
+            return messages;
+        }
+
+        function resolveTargetIdx(tb, messages, guidMap) {
+            let targetIdx = -1;
+
+            // GUID matching — the primary path
+            // associated_message_guid formats:
+            //   "p:0/XXXXXXXX-XXXX-..." (reply tapback)
+            //   "bp:XXXXXXXX-XXXX-..." (bubble tapback)
+            //   just "XXXXXXXX-XXXX-..." (rare)
+            if (tb._assocGuid) {
+                let targetGuid = tb._assocGuid;
+
+                // Strip "p:N/" prefix
+                const slashIdx = targetGuid.indexOf('/');
+                if (slashIdx !== -1) {
+                    targetGuid = targetGuid.substring(slashIdx + 1);
+                }
+
+                // Strip "bp:" prefix (no slash variant)
+                if (targetGuid.startsWith('bp:')) {
+                    targetGuid = targetGuid.substring(3);
+                }
+
+                if (guidMap[targetGuid] !== undefined) {
+                    targetIdx = guidMap[targetGuid];
+                }
+            }
+
+            // Fallback: find nearest message by timestamp proximity
+            // Only search within a short time window to avoid piling
+            if (targetIdx === -1 && tb._timestamp) {
+                const tbTime = new Date(tb._timestamp.replace(' ', 'T')).getTime();
+                if (!isNaN(tbTime)) {
+                    let bestIdx = -1;
+                    let bestScore = Infinity;
+
+                    for (let i = messages.length - 1; i >= 0; i--) {
+                        const msgTime = new Date(messages[i].timestamp.replace(' ', 'T')).getTime();
+                        if (isNaN(msgTime)) continue;
+
+                        const timeDiff = Math.abs(tbTime - msgTime);
+
+                        // Only match within 24 hours
+                        if (timeDiff > 86400000) {
+                            // If we're going backward in time and already past window, stop
+                            if (tbTime > msgTime) break;
+                            continue;
+                        }
+
+                        // Score: time proximity + cross-person bonus
+                        let score = timeDiff;
+                        if (messages[i].sender !== tb.reactor) {
+                            score *= 0.5; // prefer other person's messages
+                        }
+
+                        if (score < bestScore) {
+                            bestScore = score;
+                            bestIdx = i;
+                        }
+                    }
+
+                    targetIdx = bestIdx;
+                }
+            }
+
+            return targetIdx;
+        }
+
+        function parseTapback(assocType, sender) {
+            const tapbackMap = {
+                2000: { label: 'Loved', emoji: '❤️' },
+                2001: { label: 'Liked', emoji: '👍' },
+                2002: { label: 'Disliked', emoji: '👎' },
+                2003: { label: 'Laughed at', emoji: '😂' },
+                2004: { label: 'Emphasized', emoji: '‼️' },
+                2005: { label: 'Questioned', emoji: '❓' }
+            };
+
+            // 3000-3005 = removed tapbacks
+            const removalMap = {
+                3000: '❤️', 3001: '👍', 3002: '👎',
+                3003: '😂', 3004: '‼️', 3005: '❓'
+            };
+
+            const info = tapbackMap[assocType];
+            if (info) {
+                return {
+                    reactor: sender,
+                    label: info.label,
+                    emoji: info.emoji,
+                    isRemoval: false
+                };
+            }
+
+            const removalEmoji = removalMap[assocType];
+            if (removalEmoji) {
+                return {
+                    reactor: sender,
+                    label: 'removed',
+                    emoji: removalEmoji,
+                    isRemoval: true
+                };
+            }
+
+            return null;
+        }
+
+        function formatDateForParsing(date) {
+            if (isNaN(date.getTime())) return '';
+            const y = date.getFullYear();
+            const mo = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const h = String(date.getHours()).padStart(2, '0');
+            const mi = String(date.getMinutes()).padStart(2, '0');
+            const s = String(date.getSeconds()).padStart(2, '0');
+            return `${y}-${mo}-${d} ${h}:${mi}:${s}`;
+        }
+
+        /* ─────────────────────────────────────────────
+           Contact picker UI (PRESERVED)
+        ───────────────────────────────────────────── */
+        function showContactPicker(conversations) {
+            showView(contactPicker);
+
+            pickerSubtitle.textContent = `${conversations.length} conversation${conversations.length !== 1 ? 's' : ''} found`;
+
+            renderContactList(conversations);
+
+            pickerSearch.value = '';
+            pickerSearch.oninput = () => {
+                const q = pickerSearch.value.toLowerCase().trim();
+                const filtered = q
+                    ? conversations.filter(c => c.name.toLowerCase().includes(q) || c.chatIdentifier.toLowerCase().includes(q))
+                    : conversations;
+                renderContactList(filtered);
+            };
+        }
+
+        function renderContactList(conversations) {
+            contactList.innerHTML = '';
+
+            for (const conv of conversations) {
+                const item = document.createElement('div');
+                item.className = 'contact-item';
+
+                const initials = getInitials(conv.name);
+                const avatarClass = conv.isGroup ? 'contact-avatar group' : 'contact-avatar';
+
+                item.innerHTML = `
+                        <div class="${avatarClass}">${conv.isGroup ? '👥' : escapeHTML(initials)}</div>
+                        <div class="contact-info">
+                            <div class="contact-name">${escapeHTML(conv.name)}</div>
+                            <div class="contact-meta">${escapeHTML(conv.chatIdentifier)}</div>
+                        </div>
+                        <div class="contact-count">${conv.messageCount.toLocaleString()} msgs</div>
+                    `;
+
+                item.onclick = () => openConversation(conv);
+                contactList.appendChild(item);
+            }
+        }
+
+        function getInitials(name) {
+            const parts = name.trim().split(/\s+/);
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return name.slice(0, 2).toUpperCase();
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function openConversation(conv) {
+            showLoading(`Loading ${conv.name}…`);
+
+            setTimeout(() => {
+                try {
+                    const messages = extractMessagesForChat(sqlDB, conv.chatId);
+                    window.chatMessagesData = messages;
+
+                    backToPickerBtn.style.display = 'inline-flex';
+                    showView(chatView);
+                    renderConversation(messages);
+                    hideLoading();
+                } catch (err) {
+                    hideLoading();
+                    console.error('Error loading conversation:', err);
+                    alert('Error loading conversation: ' + err.message);
+                }
+            }, 50);
+        }
+
+        pickerBack.onclick = () => {
+            dbConversations = null;
+            if (sqlDB) { sqlDB.close(); sqlDB = null; }
+            showView(landing);
+        };
+
+        backToPickerBtn.onclick = () => {
+            backToPickerBtn.style.display = 'none';
+            if (dbConversations) {
+                showContactPicker(dbConversations);
+            }
+        };
+
+        /* ─────────────────────────────────────────────
+           .txt parsing (PRESERVED — unchanged)
+        ───────────────────────────────────────────── */
         function parseMessages(rawText) {
             const lines = rawText.split('\n');
             const messages = [];
@@ -336,6 +1779,9 @@
             return messages;
         }
 
+        /* ─────────────────────────────────────────────
+           Text utilities (PRESERVED — unchanged)
+        ───────────────────────────────────────────── */
         function cleanMessageText(text) {
             return text
                 .replace(/\uFFFC/g, '')
@@ -353,9 +1799,9 @@
                 .replace(/\uFFFC/g, '')
                 .replace(/\uFFFD/g, '')
                 .replace(/[\u200B-\u200D\uFEFF]/g, '')
-                .replace(/[“”]/g, '"')
-                .replace(/[‘’]/g, "'")
-                .replace(/…/g, '...')
+                .replace(/["\u201C\u201D]/g, '"')
+                .replace(/['\u2018\u2019]/g, "'")
+                .replace(/\u2026/g, '...')
                 .replace(/\s+/g, ' ')
                 .trim()
                 .toLowerCase();
@@ -363,8 +1809,8 @@
 
         function stripOuterQuotes(text) {
             return text
-                .replace(/^[“"]+/, '')
-                .replace(/[”"]+$/, '')
+                .replace(/^["\u201C\u201D]+/, '')
+                .replace(/["\u201C\u201D]+$/, '')
                 .trim();
         }
 
@@ -404,6 +1850,9 @@
             return count;
         }
 
+        /* ─────────────────────────────────────────────
+           Reaction matching (PRESERVED — unchanged)
+        ───────────────────────────────────────────── */
         function applyReactions(messages) {
             const kept = [];
 
@@ -554,6 +2003,9 @@
             return bestScore >= 72 ? bestIndex : -1;
         }
 
+        /* ─────────────────────────────────────────────
+           Render conversation (PRESERVED with date separators)
+        ───────────────────────────────────────────── */
         function renderConversation(messages) {
             chatMessages.innerHTML = '';
 
@@ -561,10 +2013,21 @@
             chatHeaderName.innerText = other;
             chatHeaderMeta.innerText = `${messages.length.toLocaleString()} messages`;
 
+            let lastDateStr = '';
+
             for (let i = 0; i < messages.length; i++) {
                 const m = messages[i];
                 const prev = messages[i - 1];
                 const next = messages[i + 1];
+
+                const dateStr = getDateString(m.timestamp);
+                if (dateStr && dateStr !== lastDateStr) {
+                    const sep = document.createElement('div');
+                    sep.className = 'date-separator';
+                    sep.innerHTML = `<span>${dateStr}</span>`;
+                    chatMessages.appendChild(sep);
+                    lastDateStr = dateStr;
+                }
 
                 const sameAsPrev = prev && prev.sender === m.sender;
                 const sameAsNext = next && next.sender === m.sender;
@@ -603,11 +2066,20 @@
                     const reactionContainer = document.createElement('div');
                     reactionContainer.className = 'reaction-badges';
 
+                    // Collapse reactions by emoji (like real iMessage)
+                    const emojiCounts = {};
+                    const emojiReactors = {};
                     for (const reaction of m.reactions) {
+                        emojiCounts[reaction.emoji] = (emojiCounts[reaction.emoji] || 0) + 1;
+                        if (!emojiReactors[reaction.emoji]) emojiReactors[reaction.emoji] = [];
+                        emojiReactors[reaction.emoji].push(reaction.reactor);
+                    }
+
+                    for (const [emoji, count] of Object.entries(emojiCounts)) {
                         const badge = document.createElement('div');
                         badge.className = 'reaction-badge';
-                        badge.textContent = reaction.emoji;
-                        badge.title = `${reaction.reactor} ${reaction.label.toLowerCase()} this message`;
+                        badge.textContent = count > 1 ? `${emoji} ${count}` : emoji;
+                        badge.title = emojiReactors[emoji].join(', ');
                         reactionContainer.appendChild(badge);
                     }
 
@@ -624,12 +2096,21 @@
             }
 
             landing.style.display = 'none';
+            guideView.style.display = 'none';
+            txtUploadView.style.display = 'none';
+            contactPicker.style.display = 'none';
             chatView.style.display = 'block';
 
             window.scrollTo({
                 top: document.body.scrollHeight,
                 behavior: 'auto'
             });
+        }
+
+        function getDateString(timestamp) {
+            const date = new Date(timestamp.replace(' ', 'T'));
+            if (isNaN(date.getTime())) return '';
+            return date.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
         }
 
         function formatTimestamp(timestamp) {
@@ -647,13 +2128,33 @@
             });
         }
 
+        /* ─────────────────────────────────────────────
+           Export (PRESERVED)
+        ───────────────────────────────────────────── */
+        downloadBtn.addEventListener('click', () => {
+            if (!window.chatMessagesData || !window.chatMessagesData.length) return;
+
+            const html = generateExportHTML();
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chatvault_export.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+
         function generateExportHTML() {
             const cloned = chatView.cloneNode(true);
 
             const btn = cloned.querySelector('#downloadBtn');
-            if (btn) {
-                btn.remove();
-            }
+            if (btn) btn.remove();
+            const backBtn = cloned.querySelector('#backToPickerBtn');
+            if (backBtn) backBtn.remove();
 
             return `<!DOCTYPE html>
 <html>
