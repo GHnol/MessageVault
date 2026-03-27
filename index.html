@@ -113,18 +113,6 @@
             color: #007aff;
         }
 
-        .privacy-note {
-            font-size: 12px;
-            color: #86868b;
-            margin-top: 16px;
-            line-height: 1.5;
-        }
-
-            .privacy-note svg {
-                vertical-align: -2px;
-                margin-right: 3px;
-            }
-
         /* ── Guided walkthrough ── */
         .guide-view {
             display: none;
@@ -879,7 +867,136 @@
             box-shadow: 0 1px 2px rgba(0,0,0,0.12);
         }
 
+        /* ── Trust bar (landing) ── */
+        .trust-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        .trust-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #6e6e73;
+            font-weight: 500;
+        }
+
+            .trust-item svg {
+                flex-shrink: 0;
+            }
+
+        .trust-divider {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #c7c7cc;
+        }
+
+        /* ── How it works panel (landing) ── */
+        .how-it-works-toggle {
+            display: inline-block;
+            background: none;
+            border: none;
+            color: #007aff;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 0;
+            margin-top: 4px;
+        }
+
+            .how-it-works-toggle:hover {
+                text-decoration: underline;
+            }
+
+        .how-it-works-panel {
+            display: none;
+            text-align: left;
+            margin-top: 12px;
+        }
+
+            .how-it-works-panel.open {
+                display: block;
+            }
+
+        .how-it-works-inner {
+            background: white;
+            border: 1px solid #e5e5ea;
+            border-radius: 12px;
+            padding: 20px 22px;
+        }
+
+            .how-it-works-inner p {
+                font-size: 14px;
+                line-height: 1.6;
+                color: #48484a;
+                margin: 0 0 10px;
+            }
+
+                .how-it-works-inner p:last-child {
+                    margin-bottom: 0;
+                }
+
+            .how-it-works-inner strong {
+                color: #1d1d1f;
+            }
+
+        .how-it-works-tech {
+            font-size: 12px !important;
+            color: #86868b !important;
+            border-top: 1px solid #f0f0f2;
+            padding-top: 10px;
+            margin-top: 12px !important;
+        }
+
+            .how-it-works-tech a {
+                color: #007aff;
+            }
+
+        /* ── Inline trust notes (guide steps, etc.) ── */
+        .inline-trust-note {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f5f5f7;
+            border-radius: 8px;
+        }
+
+            .inline-trust-note svg {
+                flex-shrink: 0;
+            }
+
+        /* ── Trouble reassurance callout ── */
+        .trouble-reassurance {
+            background: #f0faf3;
+            border: 1px solid #b8e6c8;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: 12px;
+            font-size: 13px;
+            line-height: 1.55;
+            color: #2d6a3f;
+        }
+
+            .trouble-reassurance strong {
+                color: #1a5430;
+            }
+
         /* ── Loading overlay ── */
+        .loading-trust {
+            font-size: 12px;
+            color: #86868b;
+        }
+
         .loading-overlay {
             display: none;
             position: fixed;
@@ -925,7 +1042,8 @@
     <!-- Loading overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
-        <div class="loading-text" id="loadingText">Reading database…</div>
+        <div class="loading-text" id="loadingText">Reading locally…</div>
+        <div class="loading-trust">Everything is processed on your computer</div>
     </div>
 
     <!-- ════════════════════════════════════════════
@@ -942,7 +1060,7 @@
                     <div class="ingest-card-icon">💻</div>
                     <div class="ingest-card-body">
                         <div class="ingest-card-title">Get messages from your Mac</div>
-                        <div class="ingest-card-desc">We'll walk you through finding your Messages database. Takes about 2 minutes.</div>
+                        <div class="ingest-card-desc">We'll walk you through it step by step. Takes about 2 minutes, no technical skills needed.</div>
                     </div>
                     <div class="ingest-card-arrow">›</div>
                 </div>
@@ -950,16 +1068,40 @@
                 <div class="ingest-card" id="txtUploadCard">
                     <div class="ingest-card-icon">📄</div>
                     <div class="ingest-card-body">
-                        <div class="ingest-card-title">Upload a text export</div>
-                        <div class="ingest-card-desc">Already have a .txt export? Drop it here.</div>
+                        <div class="ingest-card-title">I already have an export file</div>
+                        <div class="ingest-card-desc">Drop a .txt file with your exported messages.</div>
                     </div>
                     <div class="ingest-card-arrow">›</div>
                 </div>
             </div>
 
-            <div class="privacy-note">
-                <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M2.5 6V4.5C2.5 2.567 4.067 1 6 1s3.5 1.567 3.5 3.5V6M1 6h10v7H1V6z" stroke="#86868b" stroke-width="1.2" /></svg>
-                Your data stays on your computer. Nothing is uploaded or sent anywhere.
+            <div class="trust-bar">
+                <div class="trust-item">
+                    <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    100% private
+                </div>
+                <div class="trust-divider"></div>
+                <div class="trust-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" /><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    Runs locally
+                </div>
+                <div class="trust-divider"></div>
+                <div class="trust-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5l-7 7L3 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    No account needed
+                </div>
+            </div>
+
+            <button class="how-it-works-toggle" id="howItWorksToggle">
+                How does this work?
+            </button>
+            <div class="how-it-works-panel" id="howItWorksPanel">
+                <div class="how-it-works-inner">
+                    <p><strong>Chat Vault reads your messages file right here in your browser.</strong></p>
+                    <p>When you drop a file in, your browser reads it using built-in tools — the same way it opens a photo or PDF. Your messages are processed on your computer and displayed on your screen. That's it.</p>
+                    <p>There's no server, no account, no upload. If you close this tab, everything is gone. We never see your data — it never leaves your machine.</p>
+                    <p class="how-it-works-tech">For the curious: chat.db is read using <a href="https://sql.js.org" target="_blank" rel="noopener">SQL.js</a>, a local database reader that runs in your browser via WebAssembly. You can verify there are no network requests in your browser's developer tools (Network tab).</p>
+                </div>
             </div>
         </div>
     </div>
@@ -972,18 +1114,18 @@
             <div class="guide-header">
                 <button class="guide-back" id="guideBack">&#8592; Back</button>
                 <div class="guide-header-title">Get your Mac Messages</div>
-                <div class="guide-header-sub">Follow these 3 steps — no Terminal needed</div>
+                <div class="guide-header-sub">3 quick steps — everything stays on your computer</div>
             </div>
 
             <!-- Step 1 -->
             <div class="guide-step">
                 <div class="guide-step-number">1</div>
                 <h3>Open "Go to Folder" in Finder</h3>
-                <p>First, click on your desktop or open a Finder window. Then press this keyboard shortcut:</p>
+                <p>Click on your desktop or open any Finder window, then press:</p>
                 <div class="kbd-combo">
                     <kbd>⌘</kbd> <kbd>⇧</kbd> <kbd>G</kbd>
                 </div>
-                <p>A small dialog box will appear at the top of the Finder window asking you where to go.</p>
+                <p>A small dialog will appear asking where to go.</p>
                 <div class="finder-mock">
                     <div class="finder-mock-bar">
                         <div class="finder-mock-dots"><span></span><span></span><span></span></div>
@@ -997,12 +1139,12 @@
             <div class="guide-step">
                 <div class="guide-step-number">2</div>
                 <h3>Paste this path and press Enter</h3>
-                <p>Copy the path below, paste it into the "Go to Folder" box, and press Enter.</p>
+                <p>Copy the path below and paste it into the dialog box:</p>
                 <div class="copy-path-row">
                     <div class="path-display" id="pathDisplay">~/Library/Messages/</div>
                     <button class="copy-btn" id="copyPathBtn">Copy</button>
                 </div>
-                <p>Finder will open the Messages folder. You'll see a file called <strong>chat.db</strong> — that's the one you need.</p>
+                <p>Finder will open your Messages folder. Look for <strong>chat.db</strong>.</p>
                 <div class="finder-mock">
                     <div class="finder-mock-bar">
                         <div class="finder-mock-dots"><span></span><span></span><span></span></div>
@@ -1011,7 +1153,7 @@
                     <div class="finder-mock-file">
                         <div class="finder-mock-file-icon">🗄️</div>
                         <div class="finder-mock-file-name">chat.db</div>
-                        <div class="finder-mock-file-size">← This file</div>
+                        <div class="finder-mock-file-size">&#8592; Drag this one</div>
                     </div>
                 </div>
             </div>
@@ -1019,40 +1161,46 @@
             <!-- Step 3 -->
             <div class="guide-step">
                 <div class="guide-step-number">3</div>
-                <h3>Drag chat.db here</h3>
-                <p>Drag the chat.db file from Finder and drop it right here:</p>
+                <h3>Drag chat.db into this window</h3>
+                <p>Grab the file from Finder and drop it below. Your browser will read it locally — nothing gets uploaded.</p>
                 <div class="guide-drop-zone" id="guideDropZone">
                     <div class="guide-drop-icon">📥</div>
                     <div class="guide-drop-text">Drop chat.db here</div>
-                    <div class="guide-drop-hint">or click to browse</div>
+                    <div class="guide-drop-hint">or click to browse for it</div>
                 </div>
                 <input type="file" id="dbFileInput" accept=".db" />
                 <div class="status" id="guideStatus"></div>
+                <div class="inline-trust-note">
+                    <svg width="12" height="14" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    Your file is read by your browser on your computer. It is not sent to any server.
+                </div>
             </div>
 
-            <!-- Troubleshooting -->
+            <!-- Troubleshooting / Permissions -->
             <div class="trouble-section">
                 <button class="trouble-toggle" id="troubleToggle">
                     <span class="trouble-toggle-arrow">▶</span>
-                    Can't find the file, or getting a permissions error?
+                    Folder won't open? Here's why and how to fix it
                 </button>
                 <div class="trouble-content" id="troubleContent">
-                    <h4>If the folder won't open or appears empty:</h4>
-                    <p>macOS protects your Messages data. You may need to grant Finder access:</p>
+                    <h4>This is normal — macOS is protecting your messages</h4>
+                    <p>Apple keeps your Messages folder locked down by default. This is a good thing — it means other apps can't read your conversations without your permission. To let Finder access it, you just need to flip one switch:</p>
                     <ol>
-                        <li>Open <span class="setting-path">System Settings</span> (click the Apple menu → System Settings)</li>
-                        <li>Go to <span class="setting-path">Privacy &amp; Security → Full Disk Access</span></li>
-                        <li>Click the <span class="setting-path">+</span> button</li>
-                        <li>Navigate to <span class="setting-path">Applications → Finder</span> and add it (or search for "Finder")</li>
-                        <li>You may need to unlock with your password first</li>
-                        <li>Close Finder and reopen it, then try Step 1 again</li>
+                        <li>Open <span class="setting-path">System Settings</span> (Apple menu &#8594; System Settings)</li>
+                        <li>Go to <span class="setting-path">Privacy &amp; Security &#8594; Full Disk Access</span></li>
+                        <li>Click the <span class="setting-path">+</span> button and add <span class="setting-path">Finder</span></li>
+                        <li>You may need to unlock settings with your password first</li>
+                        <li>Close and reopen Finder, then try Step 1 again</li>
                     </ol>
+                    <div class="trouble-reassurance">
+                        <strong>What does Full Disk Access actually do?</strong> It allows Finder (your file browser) to see protected folders — that's all. It doesn't send anything online or give anyone else access. You're just telling your Mac "yes, I want to open my own files." You can remove Finder from this list anytime after you're done.
+                    </div>
 
-                    <h4 style="margin-top:16px">If you're using Safari or Chrome to access Chat Vault:</h4>
-                    <p>You can also add your browser to Full Disk Access. Same steps as above, but add Safari or Google Chrome instead of Finder. Then use the "click to browse" button in Step 3 above to navigate to the file.</p>
+                    <h4 style="margin-top:16px">Alternative: add your browser instead</h4>
+                    <p>You can add Safari or Chrome to Full Disk Access instead of Finder. Then use the "click to browse" option in Step 3 to navigate directly to the file.</p>
 
-                    <h4 style="margin-top:16px">Still not working?</h4>
-                    <p>On some Macs, Messages data may be stored only in iCloud and not locally. If chat.db is missing or very small (&lt;1 MB), your messages may not be stored on this Mac.</p>
+                    <h4 style="margin-top:16px">File missing or very small?</h4>
+                    <p>If chat.db doesn't exist or is under 1 MB, your messages may be stored in iCloud rather than on this Mac. This is most common on newer Macs that sync messages via iCloud.</p>
                 </div>
             </div>
         </div>
@@ -1066,7 +1214,7 @@
             <div class="txt-header">
                 <button class="guide-back" id="txtBack">&#8592; Back</button>
                 <div class="guide-header-title">Upload text export</div>
-                <div class="guide-header-sub">Drop a .txt file with your exported messages</div>
+                <div class="guide-header-sub">Your file stays on your computer — we never see it</div>
             </div>
 
             <div class="txt-drop-zone" id="txtDropZone">
@@ -1128,6 +1276,8 @@
         // Landing
         const macGuideCard = document.getElementById('macGuideCard');
         const txtUploadCard = document.getElementById('txtUploadCard');
+        const howItWorksToggle = document.getElementById('howItWorksToggle');
+        const howItWorksPanel = document.getElementById('howItWorksPanel');
 
         // Guide view
         const guideBack = document.getElementById('guideBack');
@@ -1212,6 +1362,16 @@
                 window.getSelection().removeAllRanges();
                 window.getSelection().addRange(range);
             });
+        };
+
+        /* ─────────────────────────────────────────────
+           "How this works" panel
+        ───────────────────────────────────────────── */
+        howItWorksToggle.onclick = () => {
+            howItWorksPanel.classList.toggle('open');
+            howItWorksToggle.textContent = howItWorksPanel.classList.contains('open')
+                ? 'Hide details'
+                : 'How does this work?';
         };
 
         /* ─────────────────────────────────────────────
@@ -1314,11 +1474,11 @@
            chat.db flow (SQL.js in-browser)
         ───────────────────────────────────────────── */
         async function handleDBFile(file, statusEl) {
-            showLoading('Loading database engine…');
+            showLoading('Setting up local reader…');
 
             try {
                 const SQL = await loadSqlJs();
-                showLoading('Reading database…');
+                showLoading('Reading your file locally…');
 
                 const buffer = await file.arrayBuffer();
                 const uint8 = new Uint8Array(buffer);
@@ -1334,7 +1494,7 @@
                     return;
                 }
 
-                showLoading('Extracting conversations…');
+                showLoading('Finding your conversations…');
 
                 const conversations = extractConversationList(sqlDB);
                 dbConversations = conversations;
