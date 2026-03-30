@@ -1098,6 +1098,19 @@
             color: #6e6e73;
             font-weight: 500;
         }
+
+        .loading-check {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #34c759;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -1105,8 +1118,8 @@
     <!-- Loading overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
-        <div class="loading-text" id="loadingText">Reading locally…</div>
-        <div class="loading-trust">Everything is processed on your computer</div>
+        <div class="loading-text" id="loadingText">Processing…</div>
+        <div class="loading-trust">Everything stays on your device</div>
     </div>
 
     <!-- ════════════════════════════════════════════
@@ -1131,8 +1144,8 @@
                 <div class="ingest-card" id="txtUploadCard">
                     <div class="ingest-card-icon">📄</div>
                     <div class="ingest-card-body">
-                        <div class="ingest-card-title">I already have an export file</div>
-                        <div class="ingest-card-desc">Drop a .txt file with your exported messages.</div>
+                        <div class="ingest-card-title">Already have an export?</div>
+                        <div class="ingest-card-desc">If you have a previously exported .txt file, you can load it here.</div>
                     </div>
                     <div class="ingest-card-arrow">›</div>
                 </div>
@@ -1146,7 +1159,7 @@
                 <div class="trust-divider"></div>
                 <div class="trust-item">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" /><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    Runs locally
+                    No data uploaded
                 </div>
                 <div class="trust-divider"></div>
                 <div class="trust-item">
@@ -1239,14 +1252,14 @@
                 <p>Grab the file from Finder and drop it below. Your browser will read it locally — nothing gets uploaded.</p>
                 <div class="guide-drop-zone" id="guideDropZone">
                     <div class="guide-drop-icon">📥</div>
-                    <div class="guide-drop-text">Drop chat.db here</div>
+                    <div class="guide-drop-text">Drag chat.db here to open your messages</div>
                     <div class="guide-drop-hint">or click to browse for it</div>
                 </div>
                 <input type="file" id="dbFileInput" accept=".db" />
                 <div class="status" id="guideStatus"></div>
                 <div class="inline-trust-note">
                     <svg width="12" height="14" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    Your file is read by your browser on your computer. It is not sent to any server.
+                    Opens locally, nothing leaves your computer
                 </div>
             </div>
 
@@ -1287,14 +1300,14 @@
         <div class="txt-container">
             <div class="txt-header">
                 <button class="guide-back" id="txtBack">&#8592; Back</button>
-                <div class="guide-header-title">Upload text export</div>
-                <div class="guide-header-sub">Your file stays on your computer — we never see it</div>
+                <div class="guide-header-title">Load an export file</div>
+                <div class="guide-header-sub">Drop your previously exported .txt file below</div>
             </div>
 
             <div class="txt-drop-zone" id="txtDropZone">
                 <div class="txt-drop-icon">📄</div>
                 <div class="txt-drop-text">Drop your .txt file here or click to browse</div>
-                <div class="txt-drop-hint">Format: timestamp | sender | message</div>
+                <div class="txt-drop-hint">Supports exported conversation files</div>
             </div>
             <input type="file" id="fileInput" accept=".txt" />
             <div class="status" id="txtStatus"></div>
@@ -1307,9 +1320,9 @@
     <div class="contact-picker" id="contactPicker">
         <div class="picker-header">
             <button class="picker-back" id="pickerBack">&#8592; Back</button>
-            <div class="picker-title">Your Conversations</div>
+            <div class="picker-title">Choose a conversation</div>
             <div class="picker-subtitle" id="pickerSubtitle"></div>
-            <input type="text" class="picker-search" id="pickerSearch" placeholder="Search conversations…" />
+            <input type="text" class="picker-search" id="pickerSearch" placeholder="Search by name or number…" />
         </div>
         <div class="contact-list" id="contactList"></div>
     </div>
@@ -1325,7 +1338,7 @@
             </div>
             <div class="chat-header-actions">
                 <button class="header-btn secondary" id="backToPickerBtn" style="display:none;">&#8592; Conversations</button>
-                <button class="header-btn" id="downloadBtn">Download HTML</button>
+                <button class="header-btn" id="downloadBtn">Save conversation</button>
             </div>
         </div>
         <div class="chat-messages" id="chatMessages"></div>
@@ -1518,6 +1531,31 @@
 
         function hideLoading() {
             loadingOverlay.classList.remove('active');
+            // Reset to spinner state in case it was showing success
+            const spinner = loadingOverlay.querySelector('.loading-spinner');
+            const check = loadingOverlay.querySelector('.loading-check');
+            if (spinner) spinner.style.display = '';
+            if (check) check.remove();
+        }
+
+        function showLoadingSuccess(msg, submsg) {
+            // Replace spinner with checkmark
+            const spinner = loadingOverlay.querySelector('.loading-spinner');
+            if (spinner) spinner.style.display = 'none';
+
+            // Add checkmark if not already present
+            if (!loadingOverlay.querySelector('.loading-check')) {
+                const check = document.createElement('div');
+                check.className = 'loading-check';
+                check.textContent = '✓';
+                loadingOverlay.insertBefore(check, loadingText);
+            }
+
+            loadingText.textContent = msg;
+            const trustLine = loadingOverlay.querySelector('.loading-trust');
+            if (trustLine) trustLine.textContent = submsg || '';
+
+            loadingOverlay.classList.add('active');
         }
 
         function showStatusIn(el, msg, isError) {
@@ -1573,14 +1611,23 @@
                 const conversations = extractConversationList(sqlDB);
                 dbConversations = conversations;
 
-                hideLoading();
-
                 if (conversations.length === 0) {
+                    hideLoading();
                     showStatusIn(statusEl, 'No conversations found. The file may be empty or your messages might be stored in iCloud.', true);
                     return;
                 }
 
-                showContactPicker(conversations);
+                // Success moment — let the user see it worked before moving on
+                const totalMsgs = conversations.reduce((sum, c) => sum + c.messageCount, 0);
+                showLoadingSuccess(
+                    `Found ${conversations.length} conversation${conversations.length !== 1 ? 's' : ''} · ${totalMsgs.toLocaleString()} messages`,
+                    'Read locally — nothing was uploaded'
+                );
+
+                setTimeout(() => {
+                    hideLoading();
+                    showContactPicker(conversations);
+                }, 1500);
 
             } catch (err) {
                 hideLoading();
@@ -1892,7 +1939,7 @@
         function showContactPicker(conversations) {
             showView(contactPicker);
 
-            pickerSubtitle.textContent = `${conversations.length} conversation${conversations.length !== 1 ? 's' : ''} found`;
+            pickerSubtitle.textContent = `${conversations.length} conversation${conversations.length !== 1 ? 's' : ''}`;
 
             renderContactList(conversations);
 
@@ -1922,7 +1969,7 @@
                             <div class="contact-name">${escapeHTML(conv.name)}</div>
                             <div class="contact-meta">${escapeHTML(conv.chatIdentifier)}</div>
                         </div>
-                        <div class="contact-count">${conv.messageCount.toLocaleString()} msgs</div>
+                        <div class="contact-count">${conv.messageCount.toLocaleString()} messages</div>
                     `;
 
                 item.onclick = () => openConversation(conv);
@@ -2374,7 +2421,9 @@
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'chatvault_export.html';
+            const contactName = chatHeaderName.innerText || 'conversation';
+            const safeName = contactName.replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_|_$/g, '').toLowerCase();
+            a.download = `chatvault_${safeName}.html`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -2390,12 +2439,14 @@
             const backBtn = cloned.querySelector('#backToPickerBtn');
             if (backBtn) backBtn.remove();
 
+            const exportName = chatHeaderName.innerText || 'Conversation';
+
             return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat Vault Export</title>
+<title>${exportName} — Chat Vault</title>
 <style>${document.querySelector('style').innerHTML}</style>
 </head>
 <body>
