@@ -9,6 +9,37 @@
             box-sizing: border-box;
         }
 
+        /* ── Chat theme tokens (scoped to chat-view only) ── */
+        .chat-view {
+            --chat-bg: #f2f2f7;
+            --bubble-me: #007aff;
+            --bubble-me-text: #ffffff;
+            --bubble-them: #e5e5ea;
+            --bubble-them-text: #000000;
+            --badge-me: #007aff;
+            --badge-them: #b0b0b4;
+            --chat-text-secondary: #86868b;
+            --date-text: #6e6e73;
+            --chat-header-bg: rgba(245, 245, 247, 0.92);
+            --chat-header-border: #d2d2d7;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .chat-view {
+                --chat-bg: #000000;
+                --bubble-me: #007aff;
+                --bubble-me-text: #ffffff;
+                --bubble-them: #2c2c2e;
+                --bubble-them-text: #ffffff;
+                --badge-me: #007aff;
+                --badge-them: #636366;
+                --chat-text-secondary: #8e8e93;
+                --date-text: #8e8e93;
+                --chat-header-bg: rgba(28, 28, 30, 0.92);
+                --chat-header-border: #38383a;
+            }
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background: #f5f5f7;
@@ -719,7 +750,7 @@
         .chat-view {
             display: none;
             min-height: 100vh;
-            background: #e9e9eb;
+            background: var(--chat-bg);
         }
 
         .chat-header {
@@ -728,10 +759,10 @@
             align-items: center;
             position: sticky;
             top: 0;
-            background: rgba(245, 245, 247, 0.92);
+            background: var(--chat-header-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid #d2d2d7;
+            border-bottom: 1px solid var(--chat-header-border);
             padding: 14px 20px;
             z-index: 10;
         }
@@ -744,11 +775,12 @@
         .chat-header-name {
             font-size: 18px;
             font-weight: 600;
+            color: var(--bubble-them-text);
         }
 
         .chat-header-meta {
             font-size: 12px;
-            color: #86868b;
+            color: var(--chat-text-secondary);
         }
 
         .chat-header-actions {
@@ -790,13 +822,9 @@
         }
 
             .date-separator span {
-                display: inline-block;
-                background: rgba(0,0,0,0.06);
-                color: #6e6e73;
                 font-size: 12px;
                 font-weight: 500;
-                padding: 4px 12px;
-                border-radius: 999px;
+                color: var(--date-text);
             }
 
         /* ── Message rows ── */
@@ -840,7 +868,7 @@
         }
 
         .message-bubble-wrap.has-reactions {
-            padding-top: 8px;
+            padding-top: 10px;
         }
 
         .message-bubble {
@@ -850,17 +878,28 @@
             line-height: 1.35;
             white-space: pre-wrap;
             word-break: break-word;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+            box-shadow: 0 0.5px 1px rgba(0,0,0,0.06);
         }
 
         .message-row.me .message-bubble {
-            background: #007aff;
-            color: white;
+            background: var(--bubble-me);
+            color: var(--bubble-me-text);
         }
 
         .message-row.them .message-bubble {
-            background: white;
-            color: black;
+            background: var(--bubble-them);
+            color: var(--bubble-them-text);
+        }
+
+        /* Bubble tail on last message in group and single messages */
+        .message-row.me.group-end .message-bubble,
+        .message-row.me.group-single .message-bubble {
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-row.them.group-end .message-bubble,
+        .message-row.them.group-single .message-bubble {
+            border-bottom-left-radius: 4px;
         }
 
         .attachment-bubble {
@@ -870,7 +909,7 @@
 
         .message-time {
             font-size: 11px;
-            color: #86868b;
+            color: var(--chat-text-secondary);
             margin-top: 4px;
         }
 
@@ -879,32 +918,67 @@
             display: none;
         }
 
+        /* ── Reaction badges (asset-based SVG) ── */
         .reaction-badges {
             position: absolute;
-            top: 0;
-            right: 8px;
-            transform: translateY(-35%);
+            top: 2px;
+            transform: translateY(-50%);
             display: flex;
-            flex-wrap: wrap;
-            gap: 3px;
+            gap: 1px;
             z-index: 2;
-            max-width: 200px;
-            justify-content: flex-end;
+        }
+
+        .message-row.me .reaction-badges {
+            left: -2px;
+            right: auto;
+        }
+
+        .message-row.them .reaction-badges {
+            right: -2px;
+            left: auto;
         }
 
         .reaction-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 22px;
-            height: 22px;
-            padding: 0 6px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            font-size: 13px;
+            position: relative;
+            width: 30px;
+            height: 30px;
+        }
+
+        .reaction-shape {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .reaction-badge.reactor-me .reaction-shape {
+            color: var(--badge-me);
+        }
+
+        .reaction-badge.reactor-them .reaction-shape {
+            color: var(--badge-them);
+        }
+
+        /* Emoji centered on the main circle of each SVG variant */
+        .reaction-emoji {
+            position: absolute;
+            font-size: 15px;
             line-height: 1;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+        }
+
+        /* Left SVG: main circle center at 56.4%, 44.3% of viewBox */
+        .message-row.me .reaction-emoji {
+            top: 44%;
+            left: 56%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Right SVG: main circle center at 43.6%, 44.3% of viewBox */
+        .message-row.them .reaction-emoji {
+            top: 44%;
+            left: 44%;
+            transform: translate(-50%, -50%);
         }
 
         /* ── Trust bar (landing) ── */
@@ -1348,8 +1422,8 @@
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>/* ─────────────────────────────────────────────
-           DOM references
-        ───────────────────────────────────────────── */
+                   DOM references
+                ───────────────────────────────────────────── */
         const landing = document.getElementById('landing');
         const guideView = document.getElementById('guideView');
         const txtUploadView = document.getElementById('txtUploadView');
@@ -1660,18 +1734,18 @@
         ───────────────────────────────────────────── */
         function extractConversationList(db) {
             const result = db.exec(`
-                    SELECT
-                        c.ROWID as chat_id,
-                        c.chat_identifier,
-                        c.display_name,
-                        c.style,
-                        COUNT(cmj.message_id) as msg_count
-                    FROM chat c
-                    JOIN chat_message_join cmj ON cmj.chat_id = c.ROWID
-                    GROUP BY c.ROWID
-                    HAVING msg_count > 0
-                    ORDER BY msg_count DESC
-                `);
+                        SELECT
+                            c.ROWID as chat_id,
+                            c.chat_identifier,
+                            c.display_name,
+                            c.style,
+                            COUNT(cmj.message_id) as msg_count
+                        FROM chat c
+                        JOIN chat_message_join cmj ON cmj.chat_id = c.ROWID
+                        GROUP BY c.ROWID
+                        HAVING msg_count > 0
+                        ORDER BY msg_count DESC
+                    `);
 
             if (!result.length) return [];
 
@@ -1697,22 +1771,22 @@
             const APPLE_EPOCH = 978307200;
 
             const result = db.exec(`
-                    SELECT
-                        m.ROWID,
-                        m.text,
-                        m.date,
-                        m.is_from_me,
-                        m.cache_has_attachments,
-                        m.associated_message_type,
-                        m.associated_message_guid,
-                        m.guid,
-                        h.id as handle_id
-                    FROM message m
-                    JOIN chat_message_join cmj ON cmj.message_id = m.ROWID
-                    LEFT JOIN handle h ON h.ROWID = m.handle_id
-                    WHERE cmj.chat_id = ?
-                    ORDER BY m.date ASC
-                `, [chatId]);
+                        SELECT
+                            m.ROWID,
+                            m.text,
+                            m.date,
+                            m.is_from_me,
+                            m.cache_has_attachments,
+                            m.associated_message_type,
+                            m.associated_message_guid,
+                            m.guid,
+                            h.id as handle_id
+                        FROM message m
+                        JOIN chat_message_join cmj ON cmj.message_id = m.ROWID
+                        LEFT JOIN handle h ON h.ROWID = m.handle_id
+                        WHERE cmj.chat_id = ?
+                        ORDER BY m.date ASC
+                    `, [chatId]);
 
             if (!result.length) return [];
 
@@ -1783,11 +1857,17 @@
                 let targetIdx = resolveTargetIdx(tb, messages, guidMap);
 
                 if (targetIdx !== -1) {
-                    // Deduplicate: don't add if same reactor + same emoji already exists
-                    const isDup = messages[targetIdx].reactions.some(
-                        r => r.reactor === tb.reactor && r.emoji === tb.emoji
+                    // One reaction per reactor per message (iMessage behavior)
+                    const existingIdx = messages[targetIdx].reactions.findIndex(
+                        r => r.reactor === tb.reactor
                     );
-                    if (!isDup) {
+                    if (existingIdx !== -1) {
+                        messages[targetIdx].reactions[existingIdx] = {
+                            reactor: tb.reactor,
+                            label: tb.label,
+                            emoji: tb.emoji
+                        };
+                    } else {
                         messages[targetIdx].reactions.push({
                             reactor: tb.reactor,
                             label: tb.label,
@@ -1795,7 +1875,6 @@
                         });
                     }
                 }
-                // If no match found, silently drop — better than wrong attachment
             }
 
             // Second pass: apply removals — cancel out matching reactions
@@ -1845,6 +1924,7 @@
 
             // Fallback: find nearest message by timestamp proximity
             // Only search within a short time window to avoid piling
+            // Skip attachment-only messages — too ambiguous for fallback targeting
             if (targetIdx === -1 && tb._timestamp) {
                 const tbTime = new Date(tb._timestamp.replace(' ', 'T')).getTime();
                 if (!isNaN(tbTime)) {
@@ -1852,22 +1932,21 @@
                     let bestScore = Infinity;
 
                     for (let i = messages.length - 1; i >= 0; i--) {
+                        if (messages[i].isAttachmentOnly) continue;
+
                         const msgTime = new Date(messages[i].timestamp.replace(' ', 'T')).getTime();
                         if (isNaN(msgTime)) continue;
 
                         const timeDiff = Math.abs(tbTime - msgTime);
 
-                        // Only match within 24 hours
                         if (timeDiff > 86400000) {
-                            // If we're going backward in time and already past window, stop
                             if (tbTime > msgTime) break;
                             continue;
                         }
 
-                        // Score: time proximity + cross-person bonus
                         let score = timeDiff;
                         if (messages[i].sender !== tb.reactor) {
-                            score *= 0.5; // prefer other person's messages
+                            score *= 0.5;
                         }
 
                         if (score < bestScore) {
@@ -1964,13 +2043,13 @@
                 const avatarClass = conv.isGroup ? 'contact-avatar group' : 'contact-avatar';
 
                 item.innerHTML = `
-                        <div class="${avatarClass}">${conv.isGroup ? '👥' : escapeHTML(initials)}</div>
-                        <div class="contact-info">
-                            <div class="contact-name">${escapeHTML(conv.name)}</div>
-                            <div class="contact-meta">${escapeHTML(conv.chatIdentifier)}</div>
-                        </div>
-                        <div class="contact-count">${conv.messageCount.toLocaleString()} messages</div>
-                    `;
+                            <div class="${avatarClass}">${conv.isGroup ? '👥' : escapeHTML(initials)}</div>
+                            <div class="contact-info">
+                                <div class="contact-name">${escapeHTML(conv.name)}</div>
+                                <div class="contact-meta">${escapeHTML(conv.chatIdentifier)}</div>
+                            </div>
+                            <div class="contact-count">${conv.messageCount.toLocaleString()} messages</div>
+                        `;
 
                 item.onclick = () => openConversation(conv);
                 contactList.appendChild(item);
@@ -2157,11 +2236,23 @@
                     continue;
                 }
 
-                kept[targetIndex].reactions.push({
-                    reactor: message.sender,
-                    label: reactionData.label,
-                    emoji: reactionData.emoji
-                });
+                // One reaction per reactor per message (iMessage behavior)
+                const existingIdx = kept[targetIndex].reactions.findIndex(
+                    r => r.reactor === message.sender
+                );
+                if (existingIdx !== -1) {
+                    kept[targetIndex].reactions[existingIdx] = {
+                        reactor: message.sender,
+                        label: reactionData.label,
+                        emoji: reactionData.emoji
+                    };
+                } else {
+                    kept[targetIndex].reactions.push({
+                        reactor: message.sender,
+                        label: reactionData.label,
+                        emoji: reactionData.emoji
+                    });
+                }
             }
 
             return kept;
@@ -2294,21 +2385,29 @@
             chatHeaderName.innerText = other;
             chatHeaderMeta.innerText = `${messages.length.toLocaleString()} messages`;
 
-            let lastDateStr = '';
+            let lastTimestamp = null;
 
             for (let i = 0; i < messages.length; i++) {
                 const m = messages[i];
                 const prev = messages[i - 1];
                 const next = messages[i + 1];
 
-                const dateStr = getDateString(m.timestamp);
-                if (dateStr && dateStr !== lastDateStr) {
-                    const sep = document.createElement('div');
-                    sep.className = 'date-separator';
-                    sep.innerHTML = `<span>${dateStr}</span>`;
-                    chatMessages.appendChild(sep);
-                    lastDateStr = dateStr;
+                // Time-gap-based separators (iMessage style)
+                const currentTime = parseTimestamp(m.timestamp);
+                const gap = lastTimestamp && currentTime ? (currentTime - lastTimestamp) : Infinity;
+
+                // Show separator if gap > 1 hour or first message
+                if (gap >= 3600000 || i === 0) {
+                    const label = formatSeparatorLabel(currentTime);
+                    if (label) {
+                        const sep = document.createElement('div');
+                        sep.className = 'date-separator';
+                        sep.innerHTML = `<span>${label}</span>`;
+                        chatMessages.appendChild(sep);
+                    }
                 }
+
+                if (currentTime) lastTimestamp = currentTime;
 
                 const sameAsPrev = prev && prev.sender === m.sender;
                 const sameAsNext = next && next.sender === m.sender;
@@ -2347,20 +2446,32 @@
                     const reactionContainer = document.createElement('div');
                     reactionContainer.className = 'reaction-badges';
 
-                    // Collapse reactions by emoji (like real iMessage)
-                    const emojiCounts = {};
-                    const emojiReactors = {};
+                    // Collapse by emoji, track reactor identity for coloring
+                    const emojiGroups = {};
                     for (const reaction of m.reactions) {
-                        emojiCounts[reaction.emoji] = (emojiCounts[reaction.emoji] || 0) + 1;
-                        if (!emojiReactors[reaction.emoji]) emojiReactors[reaction.emoji] = [];
-                        emojiReactors[reaction.emoji].push(reaction.reactor);
+                        if (!emojiGroups[reaction.emoji]) {
+                            emojiGroups[reaction.emoji] = { count: 0, reactors: [], isMe: false };
+                        }
+                        emojiGroups[reaction.emoji].count++;
+                        emojiGroups[reaction.emoji].reactors.push(reaction.reactor);
+                        if (reaction.reactor === 'Me') {
+                            emojiGroups[reaction.emoji].isMe = true;
+                        }
                     }
 
-                    for (const [emoji, count] of Object.entries(emojiCounts)) {
+                    for (const [emoji, group] of Object.entries(emojiGroups)) {
                         const badge = document.createElement('div');
-                        badge.className = 'reaction-badge';
-                        badge.textContent = count > 1 ? `${emoji} ${count}` : emoji;
-                        badge.title = emojiReactors[emoji].join(', ');
+                        const reactorClass = group.isMe ? 'reactor-me' : 'reactor-them';
+                        badge.className = `reaction-badge ${reactorClass}`;
+                        badge.title = group.reactors.join(', ');
+
+                        // Asset-based SVG from Figma: left variant for me-messages, right for them-messages
+                        const isMe = m.sender === 'Me';
+                        const svgPath = isMe
+                            ? `<path d="M8.5 98.5C12.9183 98.5 16.5 102.082 16.5 106.5C16.5 110.918 12.9183 114.5 8.5 114.5C4.08172 114.5 0.5 110.918 0.5 106.5C0.5 102.082 4.08172 98.5 8.5 98.5ZM66 0.5C93.8904 0.5 116.5 23.1096 116.5 51C116.5 78.8904 93.8904 101.5 66 101.5C57.2495 101.5 49.0194 99.2734 41.8438 95.3574C39.3538 100.193 34.3133 103.5 28.5 103.5C20.2157 103.5 13.5 96.7843 13.5 88.5C13.5 82.6868 16.8064 77.6453 21.6416 75.1553C17.726 67.9799 15.5 59.75 15.5 51C15.5 23.1096 38.1096 0.5 66 0.5Z" fill="currentColor"/>`
+                            : `<path d="M108.5 98.5C104.082 98.5 100.5 102.082 100.5 106.5C100.5 110.918 104.082 114.5 108.5 114.5C112.918 114.5 116.5 110.918 116.5 106.5C116.5 102.082 112.918 98.5 108.5 98.5ZM51 0.5C23.1096 0.5 0.5 23.1096 0.5 51C0.5 78.8904 23.1096 101.5 51 101.5C59.7505 101.5 67.9806 99.2734 75.1562 95.3574C77.6462 100.193 82.6867 103.5 88.5 103.5C96.7843 103.5 103.5 96.7843 103.5 88.5C103.5 82.6868 100.194 77.6453 95.3584 75.1553C99.274 67.9799 101.5 59.75 101.5 51C101.5 23.1096 78.8904 0.5 51 0.5Z" fill="currentColor"/>`;
+
+                        badge.innerHTML = `<svg class="reaction-shape" viewBox="0 0 117 115" xmlns="http://www.w3.org/2000/svg">${svgPath}</svg><span class="reaction-emoji">${group.count > 1 ? `${emoji} ${group.count}` : emoji}</span>`;
                         reactionContainer.appendChild(badge);
                     }
 
@@ -2388,10 +2499,36 @@
             });
         }
 
-        function getDateString(timestamp) {
+        function parseTimestamp(timestamp) {
             const date = new Date(timestamp.replace(' ', 'T'));
-            if (isNaN(date.getTime())) return '';
-            return date.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            return isNaN(date.getTime()) ? null : date.getTime();
+        }
+
+        function formatSeparatorLabel(ms) {
+            if (!ms) return '';
+            const date = new Date(ms);
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const yesterday = new Date(today.getTime() - 86400000);
+            const sixDaysAgo = new Date(today.getTime() - 6 * 86400000);
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const msgDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+            const timeStr = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+            if (msgDay.getTime() === today.getTime()) {
+                return timeStr;
+            } else if (msgDay.getTime() === yesterday.getTime()) {
+                return `Yesterday ${timeStr}`;
+            } else if (msgDay >= sixDaysAgo) {
+                const dayName = date.toLocaleDateString([], { weekday: 'short' });
+                return `${dayName} ${timeStr}`;
+            } else if (msgDay >= startOfYear) {
+                const monthDay = date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                return `${monthDay} at ${timeStr}`;
+            } else {
+                return date.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+            }
         }
 
         function formatTimestamp(timestamp) {
@@ -2434,23 +2571,234 @@
         function generateExportHTML() {
             const cloned = chatView.cloneNode(true);
 
+            // Remove interactive controls from export
             const btn = cloned.querySelector('#downloadBtn');
             if (btn) btn.remove();
             const backBtn = cloned.querySelector('#backToPickerBtn');
             if (backBtn) backBtn.remove();
 
+            // Remove the app-style sticky header — we'll replace with keepsake header
+            const appHeader = cloned.querySelector('.chat-header');
+            if (appHeader) appHeader.remove();
+
             const exportName = chatHeaderName.innerText || 'Conversation';
+            const messages = window.chatMessagesData || [];
+            const msgCount = messages.length;
+
+            // Compute date range
+            let dateFrom = '', dateTo = '';
+            if (msgCount > 0) {
+                const parseTS = ts => new Date(ts.replace(' ', 'T'));
+                const first = parseTS(messages[0].timestamp);
+                const last = parseTS(messages[msgCount - 1].timestamp);
+                const fmt = d => isNaN(d.getTime()) ? '' : d.toLocaleDateString([], { month: 'long', day: 'numeric', year: 'numeric' });
+                dateFrom = fmt(first);
+                dateTo = fmt(last);
+            }
+
+            const dateRangeText = (dateFrom && dateTo && dateFrom !== dateTo)
+                ? `${dateFrom} — ${dateTo}`
+                : (dateFrom || dateTo || '');
+
+            // Keepsake header HTML
+            const keepsakeHeader = `
+<div class="keepsake-header">
+            <div class="keepsake-name">${escapeHTML(exportName)}</div>
+            ${dateRangeText ? `<div class="keepsake-dates">${dateRangeText}</div>` : ''}
+            <div class="keepsake-count">${msgCount.toLocaleString()} messages</div>
+</div>`;
+
+            // Keepsake footer HTML
+            const keepsakeFooter = `
+<div class="keepsake-footer">
+            <div class="keepsake-footer-line"></div>
+            <div class="keepsake-footer-text">Recovered with Chat Vault</div>
+</div>`;
+
+            // Print button with tip (only in export, hidden when printing)
+            const printBtn = `
+<div class="export-actions no-print">
+            <button onclick="window.print()" class="export-print-btn">Print / Save as PDF</button>
+            <div class="export-print-tip">For the cleanest result, uncheck "Headers and footers" in the print dialog</div>
+</div>`;
+
+            // Export-specific styles (keepsake header, footer, print stylesheet)
+            const exportStyles = `
+
+/* ── Keepsake header ── */
+.keepsake-header {
+            text-align: center;
+            padding: 48px 24px 36px;
+            border-bottom: 1px solid #e5e5ea;
+            background: #f5f5f7;
+}
+
+.keepsake-name {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+}
+
+.keepsake-dates {
+            font-size: 14px;
+            color: #6e6e73;
+            margin-bottom: 4px;
+}
+
+.keepsake-count {
+            font-size: 13px;
+            color: #86868b;
+}
+
+/* ── Keepsake footer ── */
+.keepsake-footer {
+            text-align: center;
+            padding: 40px 24px 48px;
+}
+
+.keepsake-footer-line {
+            width: 40px;
+            height: 1px;
+            background: #d2d2d7;
+            margin: 0 auto 16px;
+}
+
+.keepsake-footer-text {
+            font-size: 12px;
+            color: #c7c7cc;
+            letter-spacing: 0.3px;
+}
+
+/* ── Export actions ── */
+.export-actions {
+            text-align: center;
+            padding: 16px;
+            background: rgba(245,245,247,0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #e5e5ea;
+}
+
+.export-print-btn {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #007aff;
+            background: white;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: background 0.15s;
+}
+
+.export-print-btn:hover {
+            background: #f0f7ff;
+}
+
+.export-print-tip {
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 8px;
+}
+
+/* ── Print / PDF styles (export only) ── */
+@media print {
+            .no-print { display: none !important; }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .chat-view {
+                min-height: auto !important;
+                background: white !important;
+            }
+
+            .chat-messages {
+                padding: 8px 0 !important;
+                max-width: 100% !important;
+            }
+
+            .keepsake-header {
+                background: white !important;
+                padding: 32px 0 24px !important;
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            .keepsake-footer {
+                page-break-before: avoid;
+                break-before: avoid;
+                padding: 32px 0 24px !important;
+            }
+
+            .message-row {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .message-bubble-wrap {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .date-separator {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            .message-row.group-start {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            .message-bubble {
+                box-shadow: none !important;
+            }
+
+            .reaction-badge {
+                box-shadow: none !important;
+            }
+
+            .message-row.me .message-bubble {
+                background: #007aff !important;
+                color: white !important;
+            }
+
+            .message-row.them .message-bubble {
+                background: #f2f2f7 !important;
+                color: black !important;
+            }
+
+            @page {
+                margin: 2cm 1.5cm;
+            }
+}`;
 
             return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${exportName} — Chat Vault</title>
-<style>${document.querySelector('style').innerHTML}</style>
+<title>${escapeHTML(exportName)} — Chat Vault</title>
+<style>${document.querySelector('style').innerHTML}${exportStyles}</style>
 </head>
 <body>
+${printBtn}
+${keepsakeHeader}
 ${cloned.outerHTML}
+${keepsakeFooter}
 </body>
 </html>`;
         }</script>
