@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Vault</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         /* ── Chat theme tokens (scoped to chat-view only) ── */
         .chat-view {
@@ -101,15 +99,15 @@
             text-align: left;
         }
 
-            .ingest-card:hover {
-                border-color: #007aff;
-                box-shadow: 0 2px 12px rgba(0,122,255,0.1);
-            }
+        .ingest-card:hover {
+            border-color: #007aff;
+            box-shadow: 0 2px 12px rgba(0,122,255,0.1);
+        }
 
-            .ingest-card.primary {
-                border-color: #007aff;
-                background: #f8fbff;
-            }
+        .ingest-card.primary {
+            border-color: #007aff;
+            background: #f8fbff;
+        }
 
         .ingest-card-icon {
             font-size: 32px;
@@ -182,9 +180,7 @@
             margin-bottom: 8px;
         }
 
-            .guide-back:hover {
-                text-decoration: underline;
-            }
+        .guide-back:hover { text-decoration: underline; }
 
         .guide-header-title {
             font-size: 22px;
@@ -234,9 +230,9 @@
             line-height: 1.55;
         }
 
-            .guide-step p:last-child {
-                margin-bottom: 0;
-            }
+        .guide-step p:last-child {
+            margin-bottom: 0;
+        }
 
         /* Keyboard shortcut display */
         .kbd-combo {
@@ -332,13 +328,11 @@
             transition: opacity 0.15s;
         }
 
-            .copy-btn:hover {
-                opacity: 0.88;
-            }
+        .copy-btn:hover { opacity: 0.88; }
 
-            .copy-btn.copied {
-                background: #34c759;
-            }
+        .copy-btn.copied {
+            background: #34c759;
+        }
 
         /* Visual mock of Finder dialog */
         .finder-mock {
@@ -361,24 +355,16 @@
             gap: 5px;
         }
 
-            .finder-mock-dots span {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                display: block;
-            }
+        .finder-mock-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: block;
+        }
 
-                .finder-mock-dots span:nth-child(1) {
-                    background: #ff5f56;
-                }
-
-                .finder-mock-dots span:nth-child(2) {
-                    background: #ffbd2e;
-                }
-
-                .finder-mock-dots span:nth-child(3) {
-                    background: #27c93f;
-                }
+        .finder-mock-dots span:nth-child(1) { background: #ff5f56; }
+        .finder-mock-dots span:nth-child(2) { background: #ffbd2e; }
+        .finder-mock-dots span:nth-child(3) { background: #27c93f; }
 
         .finder-mock-title {
             font-size: 12px;
@@ -436,15 +422,15 @@
             margin: 12px 0;
         }
 
-            .guide-drop-zone:hover {
-                background: #e4f0ff;
-                box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
-            }
+        .guide-drop-zone:hover {
+            background: #e4f0ff;
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.1);
+        }
 
-            .guide-drop-zone.drag-over {
-                background: #d6e9ff;
-                box-shadow: 0 0 0 4px rgba(0,122,255,0.2);
-            }
+        .guide-drop-zone.drag-over {
+            background: #d6e9ff;
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.2);
+        }
 
         .guide-drop-icon {
             font-size: 28px;
@@ -481,9 +467,9 @@
             padding: 8px 0;
         }
 
-            .trouble-toggle:hover {
-                color: #1d1d1f;
-            }
+        .trouble-toggle:hover {
+            color: #1d1d1f;
+        }
 
         .trouble-toggle-arrow {
             transition: transform 0.2s;
@@ -506,30 +492,30 @@
             color: #48484a;
         }
 
-            .trouble-content.open {
-                display: block;
-            }
+        .trouble-content.open {
+            display: block;
+        }
 
-            .trouble-content h4 {
-                margin: 0 0 8px;
-                font-size: 14px;
-                font-weight: 600;
-                color: #1d1d1f;
-            }
+        .trouble-content h4 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
 
-            .trouble-content ol {
-                margin: 0;
-                padding-left: 20px;
-            }
+        .trouble-content ol {
+            margin: 0;
+            padding-left: 20px;
+        }
 
-            .trouble-content li {
-                margin-bottom: 6px;
-            }
+        .trouble-content li {
+            margin-bottom: 6px;
+        }
 
-            .trouble-content .setting-path {
-                font-weight: 600;
-                color: #1d1d1f;
-            }
+        .trouble-content .setting-path {
+            font-weight: 600;
+            color: #1d1d1f;
+        }
 
         /* ── txt upload sub-view ── */
         .txt-upload-view {
@@ -566,33 +552,21 @@
             text-align: center;
         }
 
-            .txt-drop-zone:hover {
-                border-color: #007aff;
-                background: #f0f7ff;
-                box-shadow: 0 0 0 4px rgba(0,122,255,0.08);
-            }
-
-            .txt-drop-zone.drag-over {
-                border-color: #007aff;
-                background: #e8f2ff;
-                box-shadow: 0 0 0 4px rgba(0,122,255,0.15);
-            }
-
-        .txt-drop-icon {
-            font-size: 36px;
-            margin-bottom: 10px;
+        .txt-drop-zone:hover {
+            border-color: #007aff;
+            background: #f0f7ff;
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.08);
         }
 
-        .txt-drop-text {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 4px;
+        .txt-drop-zone.drag-over {
+            border-color: #007aff;
+            background: #e8f2ff;
+            box-shadow: 0 0 0 4px rgba(0,122,255,0.15);
         }
 
-        .txt-drop-hint {
-            font-size: 13px;
-            color: #86868b;
-        }
+        .txt-drop-icon { font-size: 36px; margin-bottom: 10px; }
+        .txt-drop-text { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+        .txt-drop-hint { font-size: 13px; color: #86868b; }
 
         /* ── Shared elements ── */
         #fileInput, #dbFileInput {
@@ -607,9 +581,9 @@
             text-align: center;
         }
 
-            .status.error {
-                color: #ff3b30;
-            }
+        .status.error {
+            color: #ff3b30;
+        }
 
         /* ── Contact Picker ── */
         .contact-picker {
@@ -654,10 +628,10 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-            .picker-search:focus {
-                border-color: #007aff;
-                box-shadow: 0 0 0 3px rgba(0,122,255,0.12);
-            }
+        .picker-search:focus {
+            border-color: #007aff;
+            box-shadow: 0 0 0 3px rgba(0,122,255,0.12);
+        }
 
         .picker-back {
             display: inline-flex;
@@ -672,9 +646,7 @@
             margin-bottom: 8px;
         }
 
-            .picker-back:hover {
-                text-decoration: underline;
-            }
+        .picker-back:hover { text-decoration: underline; }
 
         .contact-list {
             max-width: 600px;
@@ -695,11 +667,11 @@
             border: 1px solid transparent;
         }
 
-            .contact-item:hover {
-                background: #f0f7ff;
-                border-color: #007aff;
-                box-shadow: 0 2px 8px rgba(0,122,255,0.08);
-            }
+        .contact-item:hover {
+            background: #f0f7ff;
+            border-color: #007aff;
+            box-shadow: 0 2px 8px rgba(0,122,255,0.08);
+        }
 
         .contact-avatar {
             width: 44px;
@@ -715,9 +687,7 @@
             flex-shrink: 0;
         }
 
-            .contact-avatar.group {
-                background: #34c759;
-            }
+        .contact-avatar.group { background: #34c759; }
 
         .contact-info {
             flex: 1;
@@ -800,14 +770,12 @@
             transition: opacity 0.15s;
         }
 
-            .header-btn:hover {
-                opacity: 0.88;
-            }
+        .header-btn:hover { opacity: 0.88; }
 
-            .header-btn.secondary {
-                background: #e5e5ea;
-                color: #1d1d1f;
-            }
+        .header-btn.secondary {
+            background: #e5e5ea;
+            color: #1d1d1f;
+        }
 
         .chat-messages {
             max-width: 760px;
@@ -821,11 +789,11 @@
             margin: 20px 0 12px;
         }
 
-            .date-separator span {
-                font-size: 12px;
-                font-weight: 500;
-                color: var(--date-text);
-            }
+        .date-separator span {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--date-text);
+        }
 
         /* ── Message rows ── */
         .message-row {
@@ -834,23 +802,14 @@
             width: 100%;
         }
 
-            .message-row.me {
-                justify-content: flex-end;
-            }
+        .message-row.me { justify-content: flex-end; }
+        .message-row.them { justify-content: flex-start; }
 
-            .message-row.them {
-                justify-content: flex-start;
-            }
+        .message-row.group-middle,
+        .message-row.group-end { margin-top: 2px; }
 
-            .message-row.group-middle,
-            .message-row.group-end {
-                margin-top: 2px;
-            }
-
-            .message-row.group-start,
-            .message-row.group-single {
-                margin-top: 10px;
-            }
+        .message-row.group-start,
+        .message-row.group-single { margin-top: 10px; }
 
         .message-bubble-wrap {
             max-width: 70%;
@@ -859,17 +818,9 @@
             position: relative;
         }
 
-        .message-row.me .message-bubble-wrap {
-            align-items: flex-end;
-        }
-
-        .message-row.them .message-bubble-wrap {
-            align-items: flex-start;
-        }
-
-        .message-bubble-wrap.has-reactions {
-            padding-top: 10px;
-        }
+        .message-row.me .message-bubble-wrap { align-items: flex-end; }
+        .message-row.them .message-bubble-wrap { align-items: flex-start; }
+        .message-bubble-wrap.has-reactions { padding-top: 10px; }
 
         .message-bubble {
             position: relative;
@@ -881,15 +832,8 @@
             box-shadow: 0 0.5px 1px rgba(0,0,0,0.06);
         }
 
-        .message-row.me .message-bubble {
-            background: var(--bubble-me);
-            color: var(--bubble-me-text);
-        }
-
-        .message-row.them .message-bubble {
-            background: var(--bubble-them);
-            color: var(--bubble-them-text);
-        }
+        .message-row.me .message-bubble { background: var(--bubble-me); color: var(--bubble-me-text); }
+        .message-row.them .message-bubble { background: var(--bubble-them); color: var(--bubble-them-text); }
 
         /* Bubble tail on last message in group and single messages */
         .message-row.me.group-end .message-bubble,
@@ -902,10 +846,7 @@
             border-bottom-left-radius: 4px;
         }
 
-        .attachment-bubble {
-            font-style: italic;
-            opacity: 0.8;
-        }
+        .attachment-bubble { font-style: italic; opacity: 0.8; }
 
         .message-time {
             font-size: 11px;
@@ -914,15 +855,13 @@
         }
 
         .message-row.group-start .message-time,
-        .message-row.group-middle .message-time {
-            display: none;
-        }
+        .message-row.group-middle .message-time { display: none; }
 
         /* ── Reaction badges (asset-based SVG) ── */
         .reaction-badges {
             position: absolute;
-            top: 2px;
-            transform: translateY(-50%);
+            top: 0px;
+            transform: translateY(-35%);
             display: flex;
             gap: 1px;
             z-index: 2;
@@ -960,28 +899,179 @@
             color: var(--badge-them);
         }
 
-        /* Emoji centered on the main circle of each SVG variant */
         .reaction-emoji {
             position: absolute;
             font-size: 15px;
             line-height: 1;
+            transform: translate(-50%, -50%);
         }
 
-        /* Left SVG: main circle center at 56.4%, 44.3% of viewBox */
+        /* Left SVG: circle center at 56.4%, 44.3% */
         .message-row.me .reaction-emoji {
             top: 44%;
             left: 56%;
-            transform: translate(-50%, -50%);
         }
 
-        /* Right SVG: main circle center at 43.6%, 44.3% of viewBox */
+        /* Right SVG: circle center at 43.6%, 44.3% */
         .message-row.them .reaction-emoji {
             top: 44%;
             left: 44%;
-            transform: translate(-50%, -50%);
         }
 
         /* ── Trust bar (landing) ── */
+
+        /* ── Search bar ── */
+        .search-bar {
+            display: none;
+            position: sticky;
+            top: 0;
+            z-index: 9;
+            padding: 8px 16px;
+            background: var(--chat-header-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--chat-header-border);
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-bar.active { display: flex; }
+
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--chat-header-border);
+            background: var(--chat-bg);
+            color: var(--bubble-them-text);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .search-input::placeholder { color: var(--chat-text-secondary); }
+
+        .search-nav {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--chat-text-secondary);
+            white-space: nowrap;
+        }
+
+        .search-nav-btn {
+            background: none;
+            border: none;
+            color: #007aff;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 2px 6px;
+            line-height: 1;
+        }
+
+        .search-nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+        .search-close {
+            background: none;
+            border: none;
+            color: #007aff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        /* Search highlight on matching messages */
+        .message-bubble.search-match {
+            outline: 2px solid #007aff;
+            outline-offset: 2px;
+        }
+
+        .message-bubble.search-current {
+            outline: 2px solid #ff9500;
+            outline-offset: 2px;
+        }
+
+        /* ── Selection mode ── */
+        .message-row.selectable { cursor: pointer; }
+        .message-row.selectable:hover .message-bubble { opacity: 0.85; }
+
+        .message-row.selected .message-bubble {
+            outline: 2px solid #007aff;
+            outline-offset: 1px;
+        }
+
+        .selection-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 20px;
+            background: rgba(245, 245, 247, 0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid #d2d2d7;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .selection-bar {
+                background: rgba(28, 28, 30, 0.96);
+                border-top: 1px solid #38383a;
+            }
+        }
+
+        .selection-bar.active { display: flex; }
+
+        .selection-count {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1d1d1f;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .selection-count { color: #f2f2f7; }
+        }
+
+        .selection-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .selection-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.15s;
+        }
+
+        .selection-btn:hover { opacity: 0.85; }
+
+        .selection-btn.clear {
+            background: #e5e5ea;
+            color: #1d1d1f;
+        }
+
+        .selection-btn.continue {
+            background: #007aff;
+            color: white;
+        }
+
+        /* Search icon button in header */
+        .header-btn.icon-btn {
+            background: none;
+            color: #007aff;
+            padding: 6px;
+            font-size: 18px;
+        }
+
         .trust-bar {
             display: flex;
             align-items: center;
@@ -1000,9 +1090,9 @@
             font-weight: 500;
         }
 
-            .trust-item svg {
-                flex-shrink: 0;
-            }
+        .trust-item svg {
+            flex-shrink: 0;
+        }
 
         .trust-divider {
             width: 3px;
@@ -1024,9 +1114,9 @@
             margin-top: 4px;
         }
 
-            .how-it-works-toggle:hover {
-                text-decoration: underline;
-            }
+        .how-it-works-toggle:hover {
+            text-decoration: underline;
+        }
 
         .how-it-works-panel {
             display: none;
@@ -1034,9 +1124,9 @@
             margin-top: 12px;
         }
 
-            .how-it-works-panel.open {
-                display: block;
-            }
+        .how-it-works-panel.open {
+            display: block;
+        }
 
         .how-it-works-inner {
             background: white;
@@ -1045,20 +1135,20 @@
             padding: 20px 22px;
         }
 
-            .how-it-works-inner p {
-                font-size: 14px;
-                line-height: 1.6;
-                color: #48484a;
-                margin: 0 0 10px;
-            }
+        .how-it-works-inner p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #48484a;
+            margin: 0 0 10px;
+        }
 
-                .how-it-works-inner p:last-child {
-                    margin-bottom: 0;
-                }
+        .how-it-works-inner p:last-child {
+            margin-bottom: 0;
+        }
 
-            .how-it-works-inner strong {
-                color: #1d1d1f;
-            }
+        .how-it-works-inner strong {
+            color: #1d1d1f;
+        }
 
         .how-it-works-tech {
             font-size: 12px !important;
@@ -1068,9 +1158,9 @@
             margin-top: 12px !important;
         }
 
-            .how-it-works-tech a {
-                color: #007aff;
-            }
+        .how-it-works-tech a {
+            color: #007aff;
+        }
 
         .how-it-works-details {
             margin-top: 12px;
@@ -1078,22 +1168,22 @@
             padding-top: 10px;
         }
 
-            .how-it-works-details summary {
-                font-size: 12px;
-                color: #86868b;
-                cursor: pointer;
-                font-weight: 500;
-            }
+        .how-it-works-details summary {
+            font-size: 12px;
+            color: #86868b;
+            cursor: pointer;
+            font-weight: 500;
+        }
 
-                .how-it-works-details summary:hover {
-                    color: #6e6e73;
-                }
+        .how-it-works-details summary:hover {
+            color: #6e6e73;
+        }
 
-            .how-it-works-details .how-it-works-tech {
-                border-top: none;
-                padding-top: 6px;
-                margin-top: 4px !important;
-            }
+        .how-it-works-details .how-it-works-tech {
+            border-top: none;
+            padding-top: 6px;
+            margin-top: 4px !important;
+        }
 
         /* ── Inline trust notes (guide steps, etc.) ── */
         .inline-trust-note {
@@ -1108,9 +1198,9 @@
             border-radius: 8px;
         }
 
-            .inline-trust-note svg {
-                flex-shrink: 0;
-            }
+        .inline-trust-note svg {
+            flex-shrink: 0;
+        }
 
         /* ── Trouble reassurance callout ── */
         .trouble-reassurance {
@@ -1124,9 +1214,9 @@
             color: #2d6a3f;
         }
 
-            .trouble-reassurance strong {
-                color: #1a5430;
-            }
+        .trouble-reassurance strong {
+            color: #1a5430;
+        }
 
         /* ── Loading overlay ── */
         .loading-trust {
@@ -1148,9 +1238,7 @@
             gap: 16px;
         }
 
-            .loading-overlay.active {
-                display: flex;
-            }
+        .loading-overlay.active { display: flex; }
 
         .loading-spinner {
             width: 36px;
@@ -1161,11 +1249,7 @@
             animation: spin 0.7s linear infinite;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .loading-text {
             font-size: 15px;
@@ -1227,22 +1311,22 @@
 
             <div class="trust-bar">
                 <div class="trust-item">
-                    <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     Processed on your device
                 </div>
                 <div class="trust-divider"></div>
                 <div class="trust-item">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" /><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     No data uploaded
                 </div>
                 <div class="trust-divider"></div>
                 <div class="trust-item">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5l-7 7L3 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5l-7 7L3 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     No account needed
                 </div>
             </div>
 
-            <button class="how-it-works-toggle" id="howItWorksToggle">
+            <button type="button" class="how-it-works-toggle" id="howItWorksToggle">
                 How does this work?
             </button>
             <div class="how-it-works-panel" id="howItWorksPanel">
@@ -1265,7 +1349,7 @@
     <div class="guide-view" id="guideView">
         <div class="guide-container">
             <div class="guide-header">
-                <button class="guide-back" id="guideBack">&#8592; Back</button>
+                <button type="button" class="guide-back" id="guideBack">&#8592; Back</button>
                 <div class="guide-header-title">Get your Mac Messages</div>
                 <div class="guide-header-sub">3 quick steps — everything stays on your computer</div>
             </div>
@@ -1303,7 +1387,7 @@
                 <p>Copy the path below and paste it into the dialog box:</p>
                 <div class="copy-path-row">
                     <div class="path-display" id="pathDisplay">~/Library/Messages/</div>
-                    <button class="copy-btn" id="copyPathBtn">Copy</button>
+                    <button type="button" class="copy-btn" id="copyPathBtn">Copy</button>
                 </div>
                 <p>Finder will open your Messages folder. Look for <strong>chat.db</strong>.</p>
                 <div class="finder-mock">
@@ -1332,14 +1416,14 @@
                 <input type="file" id="dbFileInput" accept=".db" />
                 <div class="status" id="guideStatus"></div>
                 <div class="inline-trust-note">
-                    <svg width="12" height="14" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <svg width="12" height="14" viewBox="0 0 14 16" fill="none"><path d="M3 7V5a4 4 0 1 1 8 0v2M1 7h12v8H1V7z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     Opens locally, nothing leaves your computer
                 </div>
             </div>
 
             <!-- Troubleshooting / Permissions -->
             <div class="trouble-section">
-                <button class="trouble-toggle" id="troubleToggle">
+                <button type="button" class="trouble-toggle" id="troubleToggle">
                     <span class="trouble-toggle-arrow">▶</span>
                     Folder won't open? Here's why and how to fix it
                 </button>
@@ -1373,7 +1457,7 @@
     <div class="txt-upload-view" id="txtUploadView">
         <div class="txt-container">
             <div class="txt-header">
-                <button class="guide-back" id="txtBack">&#8592; Back</button>
+                <button type="button" class="guide-back" id="txtBack">&#8592; Back</button>
                 <div class="guide-header-title">Load an export file</div>
                 <div class="guide-header-sub">Drop your previously exported .txt file below</div>
             </div>
@@ -1393,7 +1477,7 @@
     ════════════════════════════════════════════ -->
     <div class="contact-picker" id="contactPicker">
         <div class="picker-header">
-            <button class="picker-back" id="pickerBack">&#8592; Back</button>
+            <button type="button" class="picker-back" id="pickerBack">&#8592; Back</button>
             <div class="picker-title">Choose a conversation</div>
             <div class="picker-subtitle" id="pickerSubtitle"></div>
             <input type="text" class="picker-search" id="pickerSearch" placeholder="Search by name or number…" />
@@ -1411,19 +1495,39 @@
                 <div class="chat-header-meta" id="chatHeaderMeta"></div>
             </div>
             <div class="chat-header-actions">
-                <button class="header-btn secondary" id="backToPickerBtn" style="display:none;">&#8592; Conversations</button>
-                <button class="header-btn" id="downloadBtn">Save conversation</button>
+                <button type="button" class="header-btn icon-btn" id="searchBtn" title="Search messages">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M12 12l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </button>
+                <button type="button" class="header-btn secondary" id="backToPickerBtn" style="display:none;">&#8592; Conversations</button>
+                <button type="button" class="header-btn" id="downloadBtn">Save conversation</button>
             </div>
         </div>
+        <div class="search-bar" id="searchBar">
+            <input class="search-input" id="searchInput" type="text" placeholder="Search messages…" autocomplete="off">
+            <div class="search-nav">
+                <span id="searchCount"></span>
+                <button type="button" class="search-nav-btn" id="searchPrev" disabled>&#8593;</button>
+                <button type="button" class="search-nav-btn" id="searchNext" disabled>&#8595;</button>
+            </div>
+            <button type="button" class="search-close" id="searchClose">Done</button>
+        </div>
         <div class="chat-messages" id="chatMessages"></div>
+        <div class="selection-bar" id="selectionBar">
+            <span class="selection-count" id="selectionCount"></span>
+            <div class="selection-actions">
+                <button type="button" class="selection-btn clear" id="selectionClear">Clear</button>
+                <button type="button" class="selection-btn continue" id="selectionContinue">Continue →</button>
+            </div>
+        </div>
     </div>
 
     <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
-    <script>/* ─────────────────────────────────────────────
-                   DOM references
-                ───────────────────────────────────────────── */
+    <script>
+        /* ─────────────────────────────────────────────
+           DOM references
+        ───────────────────────────────────────────── */
         const landing = document.getElementById('landing');
         const guideView = document.getElementById('guideView');
         const txtUploadView = document.getElementById('txtUploadView');
@@ -1734,18 +1838,18 @@
         ───────────────────────────────────────────── */
         function extractConversationList(db) {
             const result = db.exec(`
-                        SELECT
-                            c.ROWID as chat_id,
-                            c.chat_identifier,
-                            c.display_name,
-                            c.style,
-                            COUNT(cmj.message_id) as msg_count
-                        FROM chat c
-                        JOIN chat_message_join cmj ON cmj.chat_id = c.ROWID
-                        GROUP BY c.ROWID
-                        HAVING msg_count > 0
-                        ORDER BY msg_count DESC
-                    `);
+                SELECT
+                    c.ROWID as chat_id,
+                    c.chat_identifier,
+                    c.display_name,
+                    c.style,
+                    COUNT(cmj.message_id) as msg_count
+                FROM chat c
+                JOIN chat_message_join cmj ON cmj.chat_id = c.ROWID
+                GROUP BY c.ROWID
+                HAVING msg_count > 0
+                ORDER BY msg_count DESC
+            `);
 
             if (!result.length) return [];
 
@@ -1771,22 +1875,22 @@
             const APPLE_EPOCH = 978307200;
 
             const result = db.exec(`
-                        SELECT
-                            m.ROWID,
-                            m.text,
-                            m.date,
-                            m.is_from_me,
-                            m.cache_has_attachments,
-                            m.associated_message_type,
-                            m.associated_message_guid,
-                            m.guid,
-                            h.id as handle_id
-                        FROM message m
-                        JOIN chat_message_join cmj ON cmj.message_id = m.ROWID
-                        LEFT JOIN handle h ON h.ROWID = m.handle_id
-                        WHERE cmj.chat_id = ?
-                        ORDER BY m.date ASC
-                    `, [chatId]);
+                SELECT
+                    m.ROWID,
+                    m.text,
+                    m.date,
+                    m.is_from_me,
+                    m.cache_has_attachments,
+                    m.associated_message_type,
+                    m.associated_message_guid,
+                    m.guid,
+                    h.id as handle_id
+                FROM message m
+                JOIN chat_message_join cmj ON cmj.message_id = m.ROWID
+                LEFT JOIN handle h ON h.ROWID = m.handle_id
+                WHERE cmj.chat_id = ?
+                ORDER BY m.date ASC
+            `, [chatId]);
 
             if (!result.length) return [];
 
@@ -2043,13 +2147,13 @@
                 const avatarClass = conv.isGroup ? 'contact-avatar group' : 'contact-avatar';
 
                 item.innerHTML = `
-                            <div class="${avatarClass}">${conv.isGroup ? '👥' : escapeHTML(initials)}</div>
-                            <div class="contact-info">
-                                <div class="contact-name">${escapeHTML(conv.name)}</div>
-                                <div class="contact-meta">${escapeHTML(conv.chatIdentifier)}</div>
-                            </div>
-                            <div class="contact-count">${conv.messageCount.toLocaleString()} messages</div>
-                        `;
+                    <div class="${avatarClass}">${conv.isGroup ? '👥' : escapeHTML(initials)}</div>
+                    <div class="contact-info">
+                        <div class="contact-name">${escapeHTML(conv.name)}</div>
+                        <div class="contact-meta">${escapeHTML(conv.chatIdentifier)}</div>
+                    </div>
+                    <div class="contact-count">${conv.messageCount.toLocaleString()} messages</div>
+                `;
 
                 item.onclick = () => openConversation(conv);
                 contactList.appendChild(item);
@@ -2423,7 +2527,8 @@
                 }
 
                 const row = document.createElement('div');
-                row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'} ${groupType}`;
+                row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'} ${groupType} selectable`;
+                row.setAttribute('data-index', i);
 
                 const wrap = document.createElement('div');
                 wrap.className = 'message-bubble-wrap';
@@ -2581,6 +2686,23 @@
             const appHeader = cloned.querySelector('.chat-header');
             if (appHeader) appHeader.remove();
 
+            // Strip transient search/selection UI from export
+            const searchBarExport = cloned.querySelector('.search-bar');
+            if (searchBarExport) searchBarExport.remove();
+            const selBarExport = cloned.querySelector('.selection-bar');
+            if (selBarExport) selBarExport.remove();
+            // Remove search highlights and selection outlines
+            cloned.querySelectorAll('.search-match, .search-current').forEach(el => {
+                el.classList.remove('search-match', 'search-current');
+            });
+            cloned.querySelectorAll('.message-row.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            // Remove selectable class (no click behavior in export)
+            cloned.querySelectorAll('.message-row.selectable').forEach(el => {
+                el.classList.remove('selectable');
+            });
+
             const exportName = chatHeaderName.innerText || 'Conversation';
             const messages = window.chatMessagesData || [];
             const msgCount = messages.length;
@@ -2603,23 +2725,23 @@
             // Keepsake header HTML
             const keepsakeHeader = `
 <div class="keepsake-header">
-            <div class="keepsake-name">${escapeHTML(exportName)}</div>
-            ${dateRangeText ? `<div class="keepsake-dates">${dateRangeText}</div>` : ''}
-            <div class="keepsake-count">${msgCount.toLocaleString()} messages</div>
+    <div class="keepsake-name">${escapeHTML(exportName)}</div>
+    ${dateRangeText ? `<div class="keepsake-dates">${dateRangeText}</div>` : ''}
+    <div class="keepsake-count">${msgCount.toLocaleString()} messages</div>
 </div>`;
 
             // Keepsake footer HTML
             const keepsakeFooter = `
 <div class="keepsake-footer">
-            <div class="keepsake-footer-line"></div>
-            <div class="keepsake-footer-text">Recovered with Chat Vault</div>
+    <div class="keepsake-footer-line"></div>
+    <div class="keepsake-footer-text">Recovered with Chat Vault</div>
 </div>`;
 
             // Print button with tip (only in export, hidden when printing)
             const printBtn = `
 <div class="export-actions no-print">
-            <button onclick="window.print()" class="export-print-btn">Print / Save as PDF</button>
-            <div class="export-print-tip">For the cleanest result, uncheck "Headers and footers" in the print dialog</div>
+    <button type="button" onclick="window.print()" class="export-print-btn">Print / Save as PDF</button>
+    <div class="export-print-tip">For the cleanest result, uncheck "Headers and footers" in the print dialog</div>
 </div>`;
 
             // Export-specific styles (keepsake header, footer, print stylesheet)
@@ -2627,163 +2749,163 @@
 
 /* ── Keepsake header ── */
 .keepsake-header {
-            text-align: center;
-            padding: 48px 24px 36px;
-            border-bottom: 1px solid #e5e5ea;
-            background: #f5f5f7;
+    text-align: center;
+    padding: 48px 24px 36px;
+    border-bottom: 1px solid #e5e5ea;
+    background: #f5f5f7;
 }
 
 .keepsake-name {
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: -0.4px;
-            color: #1d1d1f;
-            margin-bottom: 8px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #1d1d1f;
+    margin-bottom: 8px;
 }
 
 .keepsake-dates {
-            font-size: 14px;
-            color: #6e6e73;
-            margin-bottom: 4px;
+    font-size: 14px;
+    color: #6e6e73;
+    margin-bottom: 4px;
 }
 
 .keepsake-count {
-            font-size: 13px;
-            color: #86868b;
+    font-size: 13px;
+    color: #86868b;
 }
 
 /* ── Keepsake footer ── */
 .keepsake-footer {
-            text-align: center;
-            padding: 40px 24px 48px;
+    text-align: center;
+    padding: 40px 24px 48px;
 }
 
 .keepsake-footer-line {
-            width: 40px;
-            height: 1px;
-            background: #d2d2d7;
-            margin: 0 auto 16px;
+    width: 40px;
+    height: 1px;
+    background: #d2d2d7;
+    margin: 0 auto 16px;
 }
 
 .keepsake-footer-text {
-            font-size: 12px;
-            color: #c7c7cc;
-            letter-spacing: 0.3px;
+    font-size: 12px;
+    color: #c7c7cc;
+    letter-spacing: 0.3px;
 }
 
 /* ── Export actions ── */
 .export-actions {
-            text-align: center;
-            padding: 16px;
-            background: rgba(245,245,247,0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            border-bottom: 1px solid #e5e5ea;
+    text-align: center;
+    padding: 16px;
+    background: rgba(245,245,247,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #e5e5ea;
 }
 
 .export-print-btn {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            color: #007aff;
-            background: white;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
-            padding: 8px 20px;
-            cursor: pointer;
-            transition: background 0.15s;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #007aff;
+    background: white;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
 }
 
 .export-print-btn:hover {
-            background: #f0f7ff;
+    background: #f0f7ff;
 }
 
 .export-print-tip {
-            font-size: 12px;
-            color: #86868b;
-            margin-top: 8px;
+    font-size: 12px;
+    color: #86868b;
+    margin-top: 8px;
 }
 
 /* ── Print / PDF styles (export only) ── */
 @media print {
-            .no-print { display: none !important; }
+    .no-print { display: none !important; }
 
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
 
-            body {
-                background: white !important;
-            }
+    body {
+        background: white !important;
+    }
 
-            .chat-view {
-                min-height: auto !important;
-                background: white !important;
-            }
+    .chat-view {
+        min-height: auto !important;
+        background: white !important;
+        --chat-bg: white;
+        --bubble-me: #007aff;
+        --bubble-me-text: #ffffff;
+        --bubble-them: #e5e5ea;
+        --bubble-them-text: #000000;
+        --badge-me: #007aff;
+        --badge-them: #b0b0b4;
+        --chat-text-secondary: #86868b;
+        --date-text: #6e6e73;
+    }
 
-            .chat-messages {
-                padding: 8px 0 !important;
-                max-width: 100% !important;
-            }
+    .chat-messages {
+        padding: 8px 0 !important;
+        max-width: 100% !important;
+    }
 
-            .keepsake-header {
-                background: white !important;
-                padding: 32px 0 24px !important;
-                page-break-after: avoid;
-                break-after: avoid;
-            }
+    .keepsake-header {
+        background: white !important;
+        padding: 32px 0 24px !important;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
 
-            .keepsake-footer {
-                page-break-before: avoid;
-                break-before: avoid;
-                padding: 32px 0 24px !important;
-            }
+    .keepsake-footer {
+        page-break-before: avoid;
+        break-before: avoid;
+        padding: 32px 0 24px !important;
+    }
 
-            .message-row {
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
+    .message-row {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
 
-            .message-bubble-wrap {
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
+    .message-bubble-wrap {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
 
-            .date-separator {
-                page-break-after: avoid;
-                break-after: avoid;
-            }
+    .date-separator {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
 
-            .message-row.group-start {
-                page-break-after: avoid;
-                break-after: avoid;
-            }
+    .message-bubble {
+        box-shadow: none !important;
+    }
 
-            .message-bubble {
-                box-shadow: none !important;
-            }
+    .message-row.me .message-bubble {
+        background: #007aff !important;
+        color: white !important;
+    }
 
-            .reaction-badge {
-                box-shadow: none !important;
-            }
+    .message-row.them .message-bubble {
+        background: #e5e5ea !important;
+        color: black !important;
+    }
 
-            .message-row.me .message-bubble {
-                background: #007aff !important;
-                color: white !important;
-            }
-
-            .message-row.them .message-bubble {
-                background: #f2f2f7 !important;
-                color: black !important;
-            }
-
-            @page {
-                margin: 2cm 1.5cm;
-            }
+    @page {
+        margin: 2cm 1.5cm;
+    }
 }`;
 
             return `<!DOCTYPE html>
@@ -2801,7 +2923,252 @@ ${cloned.outerHTML}
 ${keepsakeFooter}
 </body>
 </html>`;
-        }</script>
+        }
+        /* ─────────────────────────────────────────────
+           Conversation Search (clean replacement)
+        ───────────────────────────────────────────── */
+        // DOM refs
+        const _searchBtn = document.getElementById('searchBtn');
+        const _searchBar = document.getElementById('searchBar');
+        const _searchInput = document.getElementById('searchInput');
+        const _searchCount = document.getElementById('searchCount');
+        const _searchPrevBtn = document.getElementById('searchPrev');
+        const _searchNextBtn = document.getElementById('searchNext');
+        const _searchDoneBtn = document.getElementById('searchClose');
+        const _chatHeader = document.querySelector('.chat-header');
+
+        // State
+        const _searchState = {
+            open: false,
+            query: '',
+            matches: [],
+            currentIndex: -1
+        };
+
+        // ── Core functions ──
+
+        function syncSearchInput() {
+            if (_searchInput.value !== _searchState.query) {
+                _searchInput.value = _searchState.query;
+            }
+        }
+
+        function focusSearchInput() {
+            if (!_searchState.open) return;
+            _searchInput.focus({ preventScroll: true });
+            if (typeof _searchInput.setSelectionRange === 'function') {
+                const caret = _searchInput.value.length;
+                _searchInput.setSelectionRange(caret, caret);
+            }
+        }
+
+        function syncSearchBarPosition() {
+            const headerHeight = _chatHeader ? Math.ceil(_chatHeader.getBoundingClientRect().height) : 0;
+            _searchBar.style.top = headerHeight + 'px';
+        }
+
+        function clearSearchResults() {
+            removeAllHighlights();
+            _searchState.matches = [];
+            _searchState.currentIndex = -1;
+        }
+
+        function openSearch() {
+            _searchState.open = true;
+            syncSearchBarPosition();
+            _searchBar.classList.add('active');
+            renderSearchUI();
+            requestAnimationFrame(focusSearchInput);
+        }
+
+        function closeSearch() {
+            _searchState.open = false;
+            _searchState.query = '';
+            clearSearchResults();
+            _searchBar.classList.remove('active');
+            _searchInput.value = '';
+            renderSearchUI();
+        }
+
+        function runSearch() {
+            _searchState.query = _searchInput.value;
+            clearSearchResults();
+
+            const q = _searchState.query.trim().toLowerCase();
+            if (q.length < 2) {
+                renderSearchUI();
+                return;
+            }
+
+            chatMessages.querySelectorAll('.message-bubble').forEach(bubble => {
+                if (bubble.textContent.toLowerCase().includes(q)) {
+                    _searchState.matches.push(bubble);
+                }
+            });
+
+            if (_searchState.matches.length > 0) {
+                _searchState.currentIndex = 0;
+                applyHighlights();
+            }
+            renderSearchUI();
+        }
+
+        function navigateSearch(step) {
+            if (_searchState.matches.length === 0) return;
+            _searchState.currentIndex =
+                (_searchState.currentIndex + step + _searchState.matches.length) % _searchState.matches.length;
+            applyHighlights();
+            _searchState.matches[_searchState.currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            renderSearchUI();
+            requestAnimationFrame(focusSearchInput);
+        }
+
+        function goToNextMatch() {
+            navigateSearch(1);
+        }
+
+        function goToPrevMatch() {
+            navigateSearch(-1);
+        }
+
+        function applyHighlights() {
+            removeAllHighlights();
+            _searchState.matches.forEach((el, i) => {
+                el.classList.add(i === _searchState.currentIndex ? 'search-current' : 'search-match');
+            });
+        }
+
+        function removeAllHighlights() {
+            document.querySelectorAll('.search-match, .search-current').forEach(el => {
+                el.classList.remove('search-match', 'search-current');
+            });
+        }
+
+        function renderSearchUI() {
+            syncSearchInput();
+
+            if (_searchState.matches.length > 0) {
+                _searchCount.textContent = (_searchState.currentIndex + 1) + ' of ' + _searchState.matches.length;
+                _searchPrevBtn.disabled = false;
+                _searchNextBtn.disabled = false;
+            } else {
+                const q = _searchState.query.trim();
+                _searchCount.textContent = q.length >= 2 ? '0 results' : '';
+                _searchPrevBtn.disabled = true;
+                _searchNextBtn.disabled = true;
+            }
+        }
+
+        // ── Event wiring ──
+
+        _searchBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (_searchState.open) { closeSearch(); } else { openSearch(); }
+        });
+
+        _searchDoneBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeSearch();
+        });
+
+        _searchInput.addEventListener('input', function() {
+            runSearch();
+        });
+
+        _searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                if (e.shiftKey) { goToPrevMatch(); } else { goToNextMatch(); }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
+                closeSearch();
+            }
+        });
+
+        [_searchPrevBtn, _searchNextBtn].forEach(btn => {
+            btn.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+            });
+        });
+
+        window.addEventListener('resize', function() {
+            if (_searchState.open) {
+                syncSearchBarPosition();
+            }
+        });
+
+        _searchPrevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            goToPrevMatch();
+        });
+
+        _searchNextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            goToNextMatch();
+        });
+
+        /* ─────────────────────────────────────────────
+           Message selection
+        ───────────────────────────────────────────── */
+        const selectionBar = document.getElementById('selectionBar');
+        const selectionCount = document.getElementById('selectionCount');
+        const selectionClear = document.getElementById('selectionClear');
+        const selectionContinue = document.getElementById('selectionContinue');
+        const selectedIndices = new Set();
+
+        chatMessages.addEventListener('click', (e) => {
+            const row = e.target.closest('.message-row.selectable');
+            if (!row) return;
+            // Don't select if clicking inside the search bar itself
+            if (e.target.closest('.search-bar')) return;
+
+            const idx = parseInt(row.getAttribute('data-index'));
+            if (isNaN(idx)) return;
+
+            if (selectedIndices.has(idx)) {
+                selectedIndices.delete(idx);
+                row.classList.remove('selected');
+            } else {
+                selectedIndices.add(idx);
+                row.classList.add('selected');
+            }
+
+            updateSelectionBar();
+        });
+
+        selectionClear.addEventListener('click', () => {
+            selectedIndices.clear();
+            document.querySelectorAll('.message-row.selected').forEach(r => r.classList.remove('selected'));
+            updateSelectionBar();
+        });
+
+        selectionContinue.addEventListener('click', () => {
+            if (selectedIndices.size === 0) return;
+            const messages = window.chatMessagesData || [];
+            const selected = [...selectedIndices].sort((a, b) => a - b).map(i => messages[i]).filter(Boolean);
+            // Placeholder: show what was selected
+            const count = selected.length;
+            const preview = selected.slice(0, 3).map(m => `"${m.text.slice(0, 40)}${m.text.length > 40 ? '…' : ''}"`).join(', ');
+            alert(`${count} message${count > 1 ? 's' : ''} selected for keepsake.\n\nPreview: ${preview}\n\n(Keepsake creation coming soon)`);
+        });
+
+        function updateSelectionBar() {
+            const count = selectedIndices.size;
+            if (count > 0) {
+                selectionBar.classList.add('active');
+                selectionCount.textContent = `${count} message${count > 1 ? 's' : ''} selected`;
+            } else {
+                selectionBar.classList.remove('active');
+            }
+        }
+
+    </script>
 
 </body>
 </html>
