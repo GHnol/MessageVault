@@ -1117,6 +1117,15 @@
             display: none;
             min-height: 100vh;
             background: #f5f5f7;
+            /* Bubble token vars — mirrors .chat-view so bubble CSS works inside review */
+            --chat-bg: #f2f2f7;
+            --bubble-me: #007aff;
+            --bubble-me-text: #ffffff;
+            --bubble-them: #e5e5ea;
+            --bubble-them-text: #000000;
+            --badge-me: #007aff;
+            --badge-them: #b0b0b4;
+            --chat-text-secondary: #86868b;
         }
 
         .review-header {
@@ -1151,97 +1160,90 @@
 
         .keepsake-group {
             background: white;
-            border-radius: 16px;
-            border: 1px solid #e5e5ea;
+            border-radius: 20px;
+            border: 1px solid #e8e8ed;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05), 0 0 0 0.5px rgba(0,0,0,0.03);
         }
 
         .keepsake-group-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 18px;
-            border-bottom: 1px solid #f0f0f5;
+            padding: 14px 20px 12px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .keepsake-group-label {
             font-size: 11px;
             font-weight: 700;
-            color: #86868b;
+            color: #aeaeb2;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
         }
 
         .keepsake-group-count {
             font-size: 12px;
+            font-weight: 500;
             color: #c7c7cc;
         }
 
-        .review-msg {
-            padding: 14px 18px;
-            border-bottom: 1px solid #f5f5f7;
+        .review-intro {
+            font-size: 14px;
+            color: #86868b;
+            line-height: 1.55;
+            margin: 0 0 20px;
+            text-align: center;
         }
 
-        .review-msg:last-child { border-bottom: none; }
+        /* Bubble canvas inside each keepsake group */
+        .review-bubble-rows {
+            background: var(--chat-bg);
+            padding: 4px 16px 16px;
+        }
 
-        .review-msg-meta {
+        /* More breathing room between standalone moments */
+        .review-bubble-rows .message-row.group-single {
+            margin-top: 18px;
+            margin-bottom: 2px;
+        }
+
+        /* Time + remove inline below each bubble */
+        .review-time-row {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 7px;
+            gap: 10px;
+            margin-top: 4px;
         }
 
-        .review-msg-sender {
+        /* For me-messages (right-aligned): flip so timestamp is outermost */
+        .message-row.me .review-time-row { flex-direction: row-reverse; }
+
+        .review-time-label {
             font-size: 11px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 10px;
-            color: white;
+            color: var(--chat-text-secondary);
         }
 
-        .review-msg-sender.sender-me { background: #007aff; }
-        .review-msg-sender.sender-them { background: #8e8e93; }
-
-        .review-msg-time {
-            font-size: 12px;
-            color: #86868b;
-            flex: 1;
-        }
-
-        .review-msg-remove {
+        .review-remove-btn {
             background: none;
             border: none;
+            font-size: 11px;
+            font-family: inherit;
             color: #c7c7cc;
-            font-size: 20px;
-            line-height: 1;
             cursor: pointer;
-            padding: 0 0 0 4px;
+            padding: 0;
             transition: color 0.15s;
         }
 
-        .review-msg-remove:hover { color: #ff3b30; }
-
-        .review-msg-text {
-            font-size: 15px;
-            line-height: 1.45;
-            color: #1d1d1f;
-            display: -webkit-box;
-            -webkit-line-clamp: 5;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .review-msg-text.attachment-text {
-            font-style: italic;
-            color: #86868b;
-        }
+        .review-remove-btn:hover { color: #ff3b30; }
 
         .review-group-empty {
-            padding: 30px 20px;
+            padding: 32px 20px;
             text-align: center;
             font-size: 14px;
-            color: #86868b;
+            color: #aeaeb2;
+            line-height: 1.55;
         }
 
         .review-footer {
@@ -1286,7 +1288,15 @@
         }
 
         @media (prefers-color-scheme: dark) {
-            .review-view { background: #000; }
+            .review-view {
+                background: #000;
+                /* Dark bubble tokens — mirrors .chat-view dark vars */
+                --chat-bg: #000000;
+                --bubble-them: #2c2c2e;
+                --bubble-them-text: #ffffff;
+                --badge-them: #636366;
+                --chat-text-secondary: #8e8e93;
+            }
             .review-header {
                 background: rgba(28,28,30,0.92);
                 border-bottom-color: #38383a;
@@ -1295,11 +1305,9 @@
             .keepsake-group {
                 background: #1c1c1e;
                 border-color: #38383a;
+                box-shadow: 0 2px 16px rgba(0,0,0,0.3);
             }
-            .keepsake-group-header { border-bottom-color: #2c2c2e; }
-            .review-msg { border-bottom-color: #2c2c2e; }
-            .review-msg-sender.sender-them { background: #636366; }
-            .review-msg-text { color: #f2f2f7; }
+            .keepsake-group-header { border-bottom-color: rgba(255,255,255,0.07); }
             .review-footer {
                 background: rgba(28,28,30,0.96);
                 border-top-color: #38383a;
@@ -2819,39 +2827,7 @@
                 wrap.appendChild(bubble);
 
                 if (m.reactions && m.reactions.length) {
-                    const reactionContainer = document.createElement('div');
-                    reactionContainer.className = 'reaction-badges';
-
-                    // Collapse by emoji, track reactor identity for coloring
-                    const emojiGroups = {};
-                    for (const reaction of m.reactions) {
-                        if (!emojiGroups[reaction.emoji]) {
-                            emojiGroups[reaction.emoji] = { count: 0, reactors: [], isMe: false };
-                        }
-                        emojiGroups[reaction.emoji].count++;
-                        emojiGroups[reaction.emoji].reactors.push(reaction.reactor);
-                        if (reaction.reactor === 'Me') {
-                            emojiGroups[reaction.emoji].isMe = true;
-                        }
-                    }
-
-                    for (const [emoji, group] of Object.entries(emojiGroups)) {
-                        const badge = document.createElement('div');
-                        const reactorClass = group.isMe ? 'reactor-me' : 'reactor-them';
-                        badge.className = `reaction-badge ${reactorClass}`;
-                        badge.title = group.reactors.join(', ');
-
-                        // Asset-based SVG from Figma: left variant for me-messages, right for them-messages
-                        const isMe = m.sender === 'Me';
-                        const svgPath = isMe
-                            ? `<path d="M8.5 98.5C12.9183 98.5 16.5 102.082 16.5 106.5C16.5 110.918 12.9183 114.5 8.5 114.5C4.08172 114.5 0.5 110.918 0.5 106.5C0.5 102.082 4.08172 98.5 8.5 98.5ZM66 0.5C93.8904 0.5 116.5 23.1096 116.5 51C116.5 78.8904 93.8904 101.5 66 101.5C57.2495 101.5 49.0194 99.2734 41.8438 95.3574C39.3538 100.193 34.3133 103.5 28.5 103.5C20.2157 103.5 13.5 96.7843 13.5 88.5C13.5 82.6868 16.8064 77.6453 21.6416 75.1553C17.726 67.9799 15.5 59.75 15.5 51C15.5 23.1096 38.1096 0.5 66 0.5Z" fill="currentColor"/>`
-                            : `<path d="M108.5 98.5C104.082 98.5 100.5 102.082 100.5 106.5C100.5 110.918 104.082 114.5 108.5 114.5C112.918 114.5 116.5 110.918 116.5 106.5C116.5 102.082 112.918 98.5 108.5 98.5ZM51 0.5C23.1096 0.5 0.5 23.1096 0.5 51C0.5 78.8904 23.1096 101.5 51 101.5C59.7505 101.5 67.9806 99.2734 75.1562 95.3574C77.6462 100.193 82.6867 103.5 88.5 103.5C96.7843 103.5 103.5 96.7843 103.5 88.5C103.5 82.6868 100.194 77.6453 95.3584 75.1553C99.274 67.9799 101.5 59.75 101.5 51C101.5 23.1096 78.8904 0.5 51 0.5Z" fill="currentColor"/>`;
-
-                        badge.innerHTML = `<svg class="reaction-shape" viewBox="0 0 117 115" xmlns="http://www.w3.org/2000/svg">${svgPath}</svg><span class="reaction-emoji">${group.count > 1 ? `${emoji} ${group.count}` : emoji}</span>`;
-                        reactionContainer.appendChild(badge);
-                    }
-
-                    wrap.appendChild(reactionContainer);
+                    wrap.appendChild(buildReactionBadgesEl(m));
                 }
 
                 const time = document.createElement('div');
@@ -2873,6 +2849,40 @@
                 top: document.body.scrollHeight,
                 behavior: 'auto'
             });
+        }
+
+        /* ─────────────────────────────────────────────
+           Shared reaction badge builder
+           Used by both renderConversation and buildReviewBubbleEl
+        ───────────────────────────────────────────── */
+        function buildReactionBadgesEl(m) {
+            const reactionContainer = document.createElement('div');
+            reactionContainer.className = 'reaction-badges';
+
+            const emojiGroups = {};
+            for (const reaction of m.reactions) {
+                if (!emojiGroups[reaction.emoji]) {
+                    emojiGroups[reaction.emoji] = { count: 0, reactors: [], isMe: false };
+                }
+                emojiGroups[reaction.emoji].count++;
+                emojiGroups[reaction.emoji].reactors.push(reaction.reactor);
+                if (reaction.reactor === 'Me') emojiGroups[reaction.emoji].isMe = true;
+            }
+
+            const isMe = m.sender === 'Me';
+            const svgPath = isMe
+                ? `<path d="M8.5 98.5C12.9183 98.5 16.5 102.082 16.5 106.5C16.5 110.918 12.9183 114.5 8.5 114.5C4.08172 114.5 0.5 110.918 0.5 106.5C0.5 102.082 4.08172 98.5 8.5 98.5ZM66 0.5C93.8904 0.5 116.5 23.1096 116.5 51C116.5 78.8904 93.8904 101.5 66 101.5C57.2495 101.5 49.0194 99.2734 41.8438 95.3574C39.3538 100.193 34.3133 103.5 28.5 103.5C20.2157 103.5 13.5 96.7843 13.5 88.5C13.5 82.6868 16.8064 77.6453 21.6416 75.1553C17.726 67.9799 15.5 59.75 15.5 51C15.5 23.1096 38.1096 0.5 66 0.5Z" fill="currentColor"/>`
+                : `<path d="M108.5 98.5C104.082 98.5 100.5 102.082 100.5 106.5C100.5 110.918 104.082 114.5 108.5 114.5C112.918 114.5 116.5 110.918 116.5 106.5C116.5 102.082 112.918 98.5 108.5 98.5ZM51 0.5C23.1096 0.5 0.5 23.1096 0.5 51C0.5 78.8904 23.1096 101.5 51 101.5C59.7505 101.5 67.9806 99.2734 75.1562 95.3574C77.6462 100.193 82.6867 103.5 88.5 103.5C96.7843 103.5 103.5 96.7843 103.5 88.5C103.5 82.6868 100.194 77.6453 95.3584 75.1553C99.274 67.9799 101.5 59.75 101.5 51C101.5 23.1096 78.8904 0.5 51 0.5Z" fill="currentColor"/>`;
+
+            for (const [emoji, group] of Object.entries(emojiGroups)) {
+                const badge = document.createElement('div');
+                badge.className = `reaction-badge ${group.isMe ? 'reactor-me' : 'reactor-them'}`;
+                badge.title = group.reactors.join(', ');
+                badge.innerHTML = `<svg class="reaction-shape" viewBox="0 0 117 115" xmlns="http://www.w3.org/2000/svg">${svgPath}</svg><span class="reaction-emoji">${group.count > 1 ? `${emoji} ${group.count}` : emoji}</span>`;
+                reactionContainer.appendChild(badge);
+            }
+
+            return reactionContainer;
         }
 
         function parseTimestamp(timestamp) {
@@ -3477,13 +3487,22 @@ ${keepsakeFooter}
 
         function showReviewView() {
             const convName = chatHeaderName.innerText || 'Conversation';
-            reviewHeaderSub.textContent = `From your conversation with ${convName}`;
+            reviewHeaderSub.textContent = `Your conversation with ${convName}`;
             showView(reviewView);
             renderReviewView();
         }
 
         function renderReviewView() {
             reviewBody.innerHTML = '';
+
+            // Intro copy — frames curation, not management
+            const totalMoments = keepsakeGroups.reduce((s, g) => s + g.messages.length, 0);
+            if (totalMoments > 0) {
+                const intro = document.createElement('p');
+                intro.className = 'review-intro';
+                intro.textContent = 'Remove anything that doesn\u2019t belong. What remains becomes your keepsake.';
+                reviewBody.appendChild(intro);
+            }
 
             for (const group of keepsakeGroups) {
                 const groupEl = document.createElement('div');
@@ -3494,53 +3513,68 @@ ${keepsakeFooter}
                 countEl.className = 'keepsake-group-header';
                 countEl.innerHTML = `
                     <span class="keepsake-group-label">${escapeHTML(group.label)}</span>
-                    <span class="keepsake-group-count" id="gc-count-${group.id}">${count} message${count !== 1 ? 's' : ''}</span>
+                    <span class="keepsake-group-count" id="gc-count-${group.id}">${count} moment${count !== 1 ? 's' : ''}</span>
                 `;
                 groupEl.appendChild(countEl);
 
-                const msgsEl = document.createElement('div');
-                msgsEl.id = `gc-msgs-${group.id}`;
+                const bubblesEl = document.createElement('div');
+                bubblesEl.className = 'review-bubble-rows';
+                bubblesEl.id = `gc-msgs-${group.id}`;
 
                 if (count === 0) {
-                    msgsEl.innerHTML = '<div class="review-group-empty">No messages in this set.</div>';
+                    bubblesEl.innerHTML = '<div class="review-group-empty">All moments removed.<br>Go back to add more.</div>';
                 } else {
                     for (let i = 0; i < group.messages.length; i++) {
-                        msgsEl.appendChild(buildReviewMsgEl(group.id, i, group.messages[i]));
+                        bubblesEl.appendChild(buildReviewBubbleEl(group.id, i, group.messages[i]));
                     }
                 }
 
-                groupEl.appendChild(msgsEl);
+                groupEl.appendChild(bubblesEl);
                 reviewBody.appendChild(groupEl);
             }
 
             syncReviewContinueBtn();
         }
 
-        function buildReviewMsgEl(groupId, msgIdx, m) {
-            const el = document.createElement('div');
-            el.className = 'review-msg';
+        function buildReviewBubbleEl(groupId, msgIdx, m) {
+            const row = document.createElement('div');
+            row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'} group-single`;
 
-            const isMe = m.sender === 'Me';
-            const senderLabel = isMe ? 'Me' : escapeHTML(m.sender);
-            const senderClass = isMe ? 'sender-me' : 'sender-them';
-            const timeLabel = m.timestamp ? formatTimestamp(m.timestamp) : '';
-            const rawText = m.text || '';
-            const textClass = m.isAttachmentOnly
-                ? 'review-msg-text attachment-text'
-                : 'review-msg-text';
+            const wrap = document.createElement('div');
+            wrap.className = 'message-bubble-wrap';
+            if (m.reactions && m.reactions.length) wrap.classList.add('has-reactions');
 
-            el.innerHTML = `
-                <div class="review-msg-meta">
-                    <span class="review-msg-sender ${senderClass}">${senderLabel}</span>
-                    <span class="review-msg-time">${timeLabel}</span>
-                    <button type="button" class="review-msg-remove"
-                        data-group="${groupId}" data-idx="${msgIdx}"
-                        aria-label="Remove message">&times;</button>
-                </div>
-                <div class="${textClass}">${escapeHTML(rawText)}</div>
-            `;
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            if (m.isAttachmentOnly) bubble.classList.add('attachment-bubble');
+            bubble.textContent = m.text || '';
+            wrap.appendChild(bubble);
 
-            return el;
+            if (m.reactions && m.reactions.length) {
+                wrap.appendChild(buildReactionBadgesEl(m));
+            }
+
+            // Timestamp + remove inline below the bubble
+            const timeRow = document.createElement('div');
+            timeRow.className = 'review-time-row';
+
+            const timeEl = document.createElement('span');
+            timeEl.className = 'review-time-label';
+            timeEl.textContent = m.timestamp ? formatTimestamp(m.timestamp) : '';
+            timeRow.appendChild(timeEl);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'review-remove-btn';
+            removeBtn.setAttribute('data-group', groupId);
+            removeBtn.setAttribute('data-idx', String(msgIdx));
+            removeBtn.setAttribute('aria-label', 'Remove moment');
+            removeBtn.textContent = '\u00d7 Remove';
+            timeRow.appendChild(removeBtn);
+
+            wrap.appendChild(timeRow);
+            row.appendChild(wrap);
+            return row;
         }
 
         function syncReviewContinueBtn() {
@@ -3548,9 +3582,9 @@ ${keepsakeFooter}
             reviewContinueBtn.disabled = total === 0;
         }
 
-        // Remove a message from its group and sync back to conversation selection state
+        // Remove a moment from its group and sync back to conversation selection state
         reviewBody.addEventListener('click', (e) => {
-            const btn = e.target.closest('.review-msg-remove');
+            const btn = e.target.closest('.review-remove-btn');
             if (!btn) return;
             const groupId = btn.getAttribute('data-group');
             const idx = parseInt(btn.getAttribute('data-idx'), 10);
