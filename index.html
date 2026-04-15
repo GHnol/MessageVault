@@ -1112,6 +1112,204 @@
             color: white;
         }
 
+        /* ── Review / Keepsake view (Phase C2a) ── */
+        .review-view {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f7;
+        }
+
+        .review-header {
+            position: sticky;
+            top: 0;
+            background: rgba(245,245,247,0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #d2d2d7;
+            padding: 14px 20px 16px;
+            z-index: 10;
+        }
+
+        .review-header-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #1d1d1f;
+        }
+
+        .review-header-sub {
+            font-size: 13px;
+            color: #86868b;
+            margin-top: 2px;
+        }
+
+        .review-body {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 24px 20px 100px;
+        }
+
+        .keepsake-group {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e5ea;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .keepsake-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            border-bottom: 1px solid #f0f0f5;
+        }
+
+        .keepsake-group-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .keepsake-group-count {
+            font-size: 12px;
+            color: #c7c7cc;
+        }
+
+        .review-msg {
+            padding: 14px 18px;
+            border-bottom: 1px solid #f5f5f7;
+        }
+
+        .review-msg:last-child { border-bottom: none; }
+
+        .review-msg-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .review-msg-sender {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .review-msg-sender.sender-me { background: #007aff; }
+        .review-msg-sender.sender-them { background: #8e8e93; }
+
+        .review-msg-time {
+            font-size: 12px;
+            color: #86868b;
+            flex: 1;
+        }
+
+        .review-msg-remove {
+            background: none;
+            border: none;
+            color: #c7c7cc;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0 0 0 4px;
+            transition: color 0.15s;
+        }
+
+        .review-msg-remove:hover { color: #ff3b30; }
+
+        .review-msg-text {
+            font-size: 15px;
+            line-height: 1.45;
+            color: #1d1d1f;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .review-msg-text.attachment-text {
+            font-style: italic;
+            color: #86868b;
+        }
+
+        .review-group-empty {
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #86868b;
+        }
+
+        .review-footer {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            padding: 12px 20px;
+            background: rgba(245,245,247,0.96);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid #d2d2d7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .review-footer-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.15s;
+        }
+
+        .review-footer-btn:hover { opacity: 0.85; }
+
+        .review-footer-btn.back {
+            background: #e5e5ea;
+            color: #1d1d1f;
+        }
+
+        .review-footer-btn.continue {
+            background: #007aff;
+            color: white;
+        }
+
+        .review-footer-btn.continue:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .review-view { background: #000; }
+            .review-header {
+                background: rgba(28,28,30,0.92);
+                border-bottom-color: #38383a;
+            }
+            .review-header-title { color: #f2f2f7; }
+            .keepsake-group {
+                background: #1c1c1e;
+                border-color: #38383a;
+            }
+            .keepsake-group-header { border-bottom-color: #2c2c2e; }
+            .review-msg { border-bottom-color: #2c2c2e; }
+            .review-msg-sender.sender-them { background: #636366; }
+            .review-msg-text { color: #f2f2f7; }
+            .review-footer {
+                background: rgba(28,28,30,0.96);
+                border-top-color: #38383a;
+            }
+            .review-footer-btn.back {
+                background: #2c2c2e;
+                color: #f2f2f7;
+            }
+        }
+
         /* Search icon button in header */
         .header-btn.icon-btn {
             background: none;
@@ -1570,6 +1768,22 @@
     </div>
 
     <!-- ════════════════════════════════════════════
+         REVIEW VIEW (Phase C2a)
+    ════════════════════════════════════════════ -->
+    <div class="review-view" id="reviewView">
+        <div class="review-header">
+            <button type="button" class="guide-back" id="reviewBack">&#8592; Back to conversation</button>
+            <div class="review-header-title">Review your moments</div>
+            <div class="review-header-sub" id="reviewHeaderSub">These are the moments you chose</div>
+        </div>
+        <div class="review-body" id="reviewBody"></div>
+        <div class="review-footer">
+            <button type="button" class="review-footer-btn back" id="reviewBackBtn">&#8592; Back</button>
+            <button type="button" class="review-footer-btn continue" id="reviewContinueBtn">Continue &#8594;</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>
@@ -1614,6 +1828,14 @@
         const pickerBack = document.getElementById('pickerBack');
         const backToPickerBtn = document.getElementById('backToPickerBtn');
 
+        // Review view (Phase C2a)
+        const reviewView = document.getElementById('reviewView');
+        const reviewBody = document.getElementById('reviewBody');
+        const reviewHeaderSub = document.getElementById('reviewHeaderSub');
+        const reviewBack = document.getElementById('reviewBack');
+        const reviewBackBtn = document.getElementById('reviewBackBtn');
+        const reviewContinueBtn = document.getElementById('reviewContinueBtn');
+
         // Loading
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
@@ -1634,6 +1856,7 @@
             txtUploadView.style.display = 'none';
             contactPicker.style.display = 'none';
             chatView.style.display = 'none';
+            reviewView.style.display = 'none';
         }
 
         function showView(view) {
@@ -3216,12 +3439,8 @@ ${keepsakeFooter}
 
         selectionContinue.addEventListener('click', () => {
             if (selectedIndices.size === 0) return;
-            const messages = window.chatMessagesData || [];
-            const selected = [...selectedIndices].sort((a, b) => a - b).map(i => messages[i]).filter(Boolean);
-            // Placeholder: show what was selected
-            const count = selected.length;
-            const preview = selected.slice(0, 3).map(m => `"${m.text.slice(0, 40)}${m.text.length > 40 ? '…' : ''}"`).join(', ');
-            alert(`${count} message${count > 1 ? 's' : ''} selected for keepsake.\n\nPreview: ${preview}\n\n(Keepsake creation coming soon)`);
+            keepsakeGroups = buildKeepsakeGroups(selectedIndices, window.chatMessagesData || []);
+            showReviewView();
         });
 
         function updateSelectionBar() {
@@ -3233,6 +3452,136 @@ ${keepsakeFooter}
                 selectionBar.classList.remove('active');
             }
         }
+
+        /* ─────────────────────────────────────────────
+           Phase C2a: Keepsake Groups
+           Data shape: keepsakeGroups = [
+             { id: String, label: String, messages: [...] }
+           ]
+           One group for now; structure ready for multiple.
+        ───────────────────────────────────────────── */
+        let keepsakeGroups = [];
+
+        function buildKeepsakeGroups(indices, allMessages) {
+            const sortedIndices = [...indices].sort((a, b) => a - b);
+            const messages = [];
+            const messageIndices = []; // parallel array: original chatMessagesData index per message
+            for (const i of sortedIndices) {
+                if (allMessages[i]) {
+                    messages.push(allMessages[i]);
+                    messageIndices.push(i);
+                }
+            }
+            return [{ id: 'group-1', label: 'Keepsake Set 1', messages, messageIndices }];
+        }
+
+        function showReviewView() {
+            const convName = chatHeaderName.innerText || 'Conversation';
+            reviewHeaderSub.textContent = `From your conversation with ${convName}`;
+            showView(reviewView);
+            renderReviewView();
+        }
+
+        function renderReviewView() {
+            reviewBody.innerHTML = '';
+
+            for (const group of keepsakeGroups) {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'keepsake-group';
+
+                const count = group.messages.length;
+                const countEl = document.createElement('div');
+                countEl.className = 'keepsake-group-header';
+                countEl.innerHTML = `
+                    <span class="keepsake-group-label">${escapeHTML(group.label)}</span>
+                    <span class="keepsake-group-count" id="gc-count-${group.id}">${count} message${count !== 1 ? 's' : ''}</span>
+                `;
+                groupEl.appendChild(countEl);
+
+                const msgsEl = document.createElement('div');
+                msgsEl.id = `gc-msgs-${group.id}`;
+
+                if (count === 0) {
+                    msgsEl.innerHTML = '<div class="review-group-empty">No messages in this set.</div>';
+                } else {
+                    for (let i = 0; i < group.messages.length; i++) {
+                        msgsEl.appendChild(buildReviewMsgEl(group.id, i, group.messages[i]));
+                    }
+                }
+
+                groupEl.appendChild(msgsEl);
+                reviewBody.appendChild(groupEl);
+            }
+
+            syncReviewContinueBtn();
+        }
+
+        function buildReviewMsgEl(groupId, msgIdx, m) {
+            const el = document.createElement('div');
+            el.className = 'review-msg';
+
+            const isMe = m.sender === 'Me';
+            const senderLabel = isMe ? 'Me' : escapeHTML(m.sender);
+            const senderClass = isMe ? 'sender-me' : 'sender-them';
+            const timeLabel = m.timestamp ? formatTimestamp(m.timestamp) : '';
+            const rawText = m.text || '';
+            const textClass = m.isAttachmentOnly
+                ? 'review-msg-text attachment-text'
+                : 'review-msg-text';
+
+            el.innerHTML = `
+                <div class="review-msg-meta">
+                    <span class="review-msg-sender ${senderClass}">${senderLabel}</span>
+                    <span class="review-msg-time">${timeLabel}</span>
+                    <button type="button" class="review-msg-remove"
+                        data-group="${groupId}" data-idx="${msgIdx}"
+                        aria-label="Remove message">&times;</button>
+                </div>
+                <div class="${textClass}">${escapeHTML(rawText)}</div>
+            `;
+
+            return el;
+        }
+
+        function syncReviewContinueBtn() {
+            const total = keepsakeGroups.reduce((s, g) => s + g.messages.length, 0);
+            reviewContinueBtn.disabled = total === 0;
+        }
+
+        // Remove a message from its group and sync back to conversation selection state
+        reviewBody.addEventListener('click', (e) => {
+            const btn = e.target.closest('.review-msg-remove');
+            if (!btn) return;
+            const groupId = btn.getAttribute('data-group');
+            const idx = parseInt(btn.getAttribute('data-idx'), 10);
+            const group = keepsakeGroups.find(g => g.id === groupId);
+            if (!group || isNaN(idx)) return;
+
+            // Sync: remove from selectedIndices and deselect in conversation DOM
+            const sourceIndex = group.messageIndices[idx];
+            if (sourceIndex !== undefined) {
+                selectedIndices.delete(sourceIndex);
+                const row = chatMessages.querySelector(`.message-row[data-index="${sourceIndex}"]`);
+                if (row) row.classList.remove('selected');
+                updateSelectionBar();
+            }
+
+            group.messages.splice(idx, 1);
+            group.messageIndices.splice(idx, 1);
+            renderReviewView();
+        });
+
+        // Back to conversation — selection state is preserved
+        reviewBack.addEventListener('click', () => showView(chatView));
+        reviewBackBtn.addEventListener('click', () => showView(chatView));
+
+        // Continue — placeholder for next phase
+        reviewContinueBtn.addEventListener('click', () => {
+            if (reviewContinueBtn.disabled) return;
+            // Phase C2b will replace this
+            const total = keepsakeGroups.reduce((s, g) => s + g.messages.length, 0);
+            alert(`${total} message${total !== 1 ? 's' : ''} ready.\n\n(Keepsake creation — next phase)`);
+        });
 
     </script>
 
