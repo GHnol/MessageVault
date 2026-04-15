@@ -1200,7 +1200,7 @@
         /* Bubble canvas inside each keepsake group */
         .review-bubble-rows {
             background: var(--chat-bg);
-            padding: 4px 16px 16px;
+            padding: 16px 16px 16px;
         }
 
         /* More breathing room between standalone moments */
@@ -1209,21 +1209,87 @@
             margin-bottom: 2px;
         }
 
-        /* Time + remove inline below each bubble */
-        .review-time-row {
+        /* Group header right side (count + optional delete) */
+        .keepsake-group-header-right {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 4px;
         }
 
-        /* For me-messages (right-aligned): flip so timestamp is outermost */
-        .message-row.me .review-time-row { flex-direction: row-reverse; }
+        .review-delete-group-btn {
+            background: none;
+            border: none;
+            font-size: 11px;
+            font-family: inherit;
+            color: #c7c7cc;
+            cursor: pointer;
+            padding: 0;
+            transition: color 0.15s;
+        }
+
+        .review-delete-group-btn:hover { color: #ff3b30; }
+
+        /* Actions row below each bubble: timestamp + move trigger + remove */
+        .review-time-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px 8px;
+            margin-top: 4px;
+            position: relative;
+        }
 
         .review-time-label {
             font-size: 11px;
             color: var(--chat-text-secondary);
+            margin-right: 2px;
         }
+
+        /* Compact Move → trigger */
+        .review-move-trigger {
+            background: none;
+            border: none;
+            font-size: 11px;
+            font-family: inherit;
+            color: #aeaeb2;
+            cursor: pointer;
+            padding: 0;
+            white-space: nowrap;
+            transition: color 0.15s;
+        }
+        .review-move-trigger:hover, .review-move-trigger.open { color: #007aff; }
+
+        /* Chooser popover */
+        .review-move-chooser {
+            display: none;
+            position: absolute;
+            z-index: 10;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.06);
+            padding: 4px 0;
+            min-width: 150px;
+            top: calc(100% + 4px);
+            left: 0;
+        }
+        .review-move-chooser.open { display: block; }
+
+        .review-move-choice, .review-move-new-choice {
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+            font-family: inherit;
+            color: #1c1c1e;
+            cursor: pointer;
+            padding: 8px 14px;
+            white-space: nowrap;
+            transition: background 0.1s;
+            display: block;
+        }
+        .review-move-choice:hover, .review-move-new-choice:hover { background: #f2f2f7; }
+        .review-move-new-choice { color: #007aff; }
 
         .review-remove-btn {
             background: none;
@@ -1233,6 +1299,7 @@
             color: #c7c7cc;
             cursor: pointer;
             padding: 0;
+            white-space: nowrap;
             transition: color 0.15s;
         }
 
@@ -3433,6 +3500,8 @@ ${keepsakeFooter}
             if (selectedIndices.has(idx)) {
                 selectedIndices.delete(idx);
                 row.classList.remove('selected');
+                // Sync deselection into any keepsake group that contains this message
+                removeIndexFromGroups(idx);
             } else {
                 selectedIndices.add(idx);
                 row.classList.add('selected');
@@ -3443,13 +3512,97 @@ ${keepsakeFooter}
 
         selectionClear.addEventListener('click', () => {
             selectedIndices.clear();
+            keepsakeGroups = [];
             document.querySelectorAll('.message-row.selected').forEach(r => r.classList.remove('selected'));
             updateSelectionBar();
         });
 
+        // Normalize grouping state after any mutation:
+        //   Step 1 — prune: staging removed when empty; real groups removed when empty only if others exist.
+        //   Step 2 — promote: if the sole real group is empty and staging has messages, absorb staging into it.
+        function normalizeGroups() {
+            // Step 1: prune
+            const realCount = keepsakeGroups.filter(g => g.id !== 'group-staging').length;
+            keepsakeGroups = keepsakeGroups.filter(g => {
+                if (g.id === 'group-staging') return g.messages.length > 0;
+                if (realCount > 1) return g.messages.length > 0;
+                return true; // keep last real group even if empty
+            });
+
+            // Step 2: promote staging into the sole empty real group
+            const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging');
+            const staging = keepsakeGroups.find(g => g.id === 'group-staging');
+            if (
+                realGroups.length === 1 &&
+                realGroups[0].messages.length === 0 &&
+                staging && staging.messages.length > 0
+            ) {
+                realGroups[0].messages = staging.messages;
+                realGroups[0].messageIndices = staging.messageIndices;
+                keepsakeGroups = keepsakeGroups.filter(g => g.id !== 'group-staging');
+            }
+        }
+
+        // Remove a single pool index from whichever group contains it (used on conversation deselect)
+        function removeIndexFromGroups(dataIdx) {
+            for (const g of keepsakeGroups) {
+                const pos = g.messageIndices.indexOf(dataIdx);
+                if (pos !== -1) {
+                    g.messages.splice(pos, 1);
+                    g.messageIndices.splice(pos, 1);
+                    break;
+                }
+            }
+            normalizeGroups();
+        }
+
         selectionContinue.addEventListener('click', () => {
             if (selectedIndices.size === 0) return;
-            keepsakeGroups = buildKeepsakeGroups(selectedIndices, window.chatMessagesData || []);
+
+            if (keepsakeGroups.length === 0) {
+                // No grouping work yet — build the initial single set
+                keepsakeGroups = buildKeepsakeGroups(selectedIndices, window.chatMessagesData || []);
+            } else {
+                // Grouping has already begun — preserve existing sets.
+                // Find any selected messages not yet assigned to a group.
+                const assigned = new Set();
+                for (const g of keepsakeGroups) {
+                    for (const idx of g.messageIndices) assigned.add(idx);
+                }
+                const unassigned = [...selectedIndices]
+                    .filter(idx => !assigned.has(idx))
+                    .sort((a, b) => a - b);
+
+                if (unassigned.length > 0) {
+                    const allMessages = window.chatMessagesData || [];
+                    // If there is exactly one real keepsake set and it is empty, refill it directly
+                    const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging');
+                    let target;
+                    if (realGroups.length === 1 && realGroups[0].messages.length === 0) {
+                        target = realGroups[0];
+                    } else {
+                        // Route into staging (always at the end)
+                        target = keepsakeGroups.find(g => g.id === 'group-staging');
+                        if (!target) {
+                            target = { id: 'group-staging', label: 'Newly Selected', messages: [], messageIndices: [] };
+                            keepsakeGroups.push(target);
+                        }
+                    }
+                    for (const idx of unassigned) {
+                        if (!allMessages[idx]) continue;
+                        // Insert maintaining conversation order
+                        let pos = target.messageIndices.length;
+                        for (let i = 0; i < target.messageIndices.length; i++) {
+                            if (target.messageIndices[i] > idx) { pos = i; break; }
+                        }
+                        target.messages.splice(pos, 0, allMessages[idx]);
+                        target.messageIndices.splice(pos, 0, idx);
+                    }
+                }
+                // If nothing new: existing groups are preserved as-is.
+            }
+
+            normalizeGroups();
             showReviewView();
         });
 
@@ -3471,6 +3624,7 @@ ${keepsakeFooter}
            One group for now; structure ready for multiple.
         ───────────────────────────────────────────── */
         let keepsakeGroups = [];
+        let activeChooser = null; // tracks the currently open move chooser
 
         function buildKeepsakeGroups(indices, allMessages) {
             const sortedIndices = [...indices].sort((a, b) => a - b);
@@ -3495,34 +3649,66 @@ ${keepsakeFooter}
         function renderReviewView() {
             reviewBody.innerHTML = '';
 
-            // Intro copy — frames curation, not management
             const totalMoments = keepsakeGroups.reduce((s, g) => s + g.messages.length, 0);
-            if (totalMoments > 0) {
-                const intro = document.createElement('p');
-                intro.className = 'review-intro';
-                intro.textContent = 'Remove anything that doesn\u2019t belong. What remains becomes your keepsake.';
-                reviewBody.appendChild(intro);
-            }
+            const intro = document.createElement('p');
+            intro.className = 'review-intro';
+            const realGroupCount = keepsakeGroups.filter(g => g.id !== 'group-staging').length;
+            intro.textContent = realGroupCount > 1
+                ? 'Move moments between sets, or remove from your selection entirely.'
+                : 'Remove anything that doesn\u2019t belong. What remains becomes your keepsake.';
+            reviewBody.appendChild(intro);
 
-            for (const group of keepsakeGroups) {
+            // Staging group always renders last; sort real groups first
+            const renderOrder = [
+                ...keepsakeGroups.filter(g => g.id !== 'group-staging'),
+                ...keepsakeGroups.filter(g => g.id === 'group-staging'),
+            ];
+
+            for (const group of renderOrder) {
                 const groupEl = document.createElement('div');
                 groupEl.className = 'keepsake-group';
 
-                const count = group.messages.length;
-                const countEl = document.createElement('div');
-                countEl.className = 'keepsake-group-header';
-                countEl.innerHTML = `
-                    <span class="keepsake-group-label">${escapeHTML(group.label)}</span>
-                    <span class="keepsake-group-count" id="gc-count-${group.id}">${count} moment${count !== 1 ? 's' : ''}</span>
-                `;
-                groupEl.appendChild(countEl);
+                // Group header — built programmatically to support delete button
+                const headerEl = document.createElement('div');
+                headerEl.className = 'keepsake-group-header';
 
+                const labelEl = document.createElement('span');
+                labelEl.className = 'keepsake-group-label';
+                labelEl.textContent = group.label;
+                headerEl.appendChild(labelEl);
+
+                const headerRight = document.createElement('div');
+                headerRight.className = 'keepsake-group-header-right';
+
+                const countSpan = document.createElement('span');
+                countSpan.className = 'keepsake-group-count';
+                countSpan.textContent = `${group.messages.length} moment${group.messages.length !== 1 ? 's' : ''}`;
+                headerRight.appendChild(countSpan);
+
+                // Delete button: only on empty real keepsake groups (never on staging)
+                if (group.id !== 'group-staging' && group.messages.length === 0 && keepsakeGroups.length > 1) {
+                    const delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.className = 'review-delete-group-btn';
+                    delBtn.setAttribute('data-group', group.id);
+                    delBtn.setAttribute('aria-label', `Remove ${group.label}`);
+                    delBtn.textContent = 'Remove set';
+                    headerRight.appendChild(delBtn);
+                }
+
+                headerEl.appendChild(headerRight);
+                groupEl.appendChild(headerEl);
+
+                // Bubble canvas
                 const bubblesEl = document.createElement('div');
                 bubblesEl.className = 'review-bubble-rows';
                 bubblesEl.id = `gc-msgs-${group.id}`;
 
-                if (count === 0) {
-                    bubblesEl.innerHTML = '<div class="review-group-empty">All moments removed.<br>Go back to add more.</div>';
+                if (group.messages.length === 0) {
+                    const emptyEl = document.createElement('div');
+                    emptyEl.className = 'review-group-empty';
+                    emptyEl.textContent = 'Move moments here from another set.';
+                    bubblesEl.appendChild(emptyEl);
                 } else {
                     for (let i = 0; i < group.messages.length; i++) {
                         bubblesEl.appendChild(buildReviewBubbleEl(group.id, i, group.messages[i]));
@@ -3554,7 +3740,7 @@ ${keepsakeFooter}
                 wrap.appendChild(buildReactionBadgesEl(m));
             }
 
-            // Timestamp + remove inline below the bubble
+            // Actions row: timestamp · Move → (trigger+chooser) · remove
             const timeRow = document.createElement('div');
             timeRow.className = 'review-time-row';
 
@@ -3563,12 +3749,59 @@ ${keepsakeFooter}
             timeEl.textContent = m.timestamp ? formatTimestamp(m.timestamp) : '';
             timeRow.appendChild(timeEl);
 
+            // Build other-group targets — staging is never a move destination
+            const otherGroups = keepsakeGroups.filter(g => g.id !== groupId && g.id !== 'group-staging');
+            const currentGroup = keepsakeGroups.find(g => g.id === groupId);
+            const canMoveToNew = currentGroup && currentGroup.messages.length > 1;
+
+            if (otherGroups.length > 0 || canMoveToNew) {
+                // Trigger button
+                const trigger = document.createElement('button');
+                trigger.type = 'button';
+                trigger.className = 'review-move-trigger';
+                trigger.setAttribute('data-group', groupId);
+                trigger.setAttribute('data-idx', String(msgIdx));
+                trigger.setAttribute('aria-label', 'Move to another set');
+                trigger.textContent = 'Move \u2192';
+                timeRow.appendChild(trigger);
+
+                // Chooser popover
+                const chooser = document.createElement('div');
+                chooser.className = 'review-move-chooser';
+
+                for (const tgt of otherGroups) {
+                    const choice = document.createElement('button');
+                    choice.type = 'button';
+                    choice.className = 'review-move-choice';
+                    choice.setAttribute('data-group', groupId);
+                    choice.setAttribute('data-idx', String(msgIdx));
+                    choice.setAttribute('data-target', tgt.id);
+                    choice.setAttribute('aria-label', `Move to ${tgt.label}`);
+                    choice.textContent = tgt.label;
+                    chooser.appendChild(choice);
+                }
+
+                if (canMoveToNew) {
+                    const newChoice = document.createElement('button');
+                    newChoice.type = 'button';
+                    newChoice.className = 'review-move-new-choice';
+                    newChoice.setAttribute('data-group', groupId);
+                    newChoice.setAttribute('data-idx', String(msgIdx));
+                    newChoice.setAttribute('aria-label', 'Move to new keepsake set');
+                    newChoice.textContent = '+ New set';
+                    chooser.appendChild(newChoice);
+                }
+
+                timeRow.appendChild(chooser);
+            }
+
+            // Remove from selection entirely
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
             removeBtn.className = 'review-remove-btn';
             removeBtn.setAttribute('data-group', groupId);
             removeBtn.setAttribute('data-idx', String(msgIdx));
-            removeBtn.setAttribute('aria-label', 'Remove moment');
+            removeBtn.setAttribute('aria-label', 'Remove from selection');
             removeBtn.textContent = '\u00d7 Remove';
             timeRow.appendChild(removeBtn);
 
@@ -3582,27 +3815,137 @@ ${keepsakeFooter}
             reviewContinueBtn.disabled = total === 0;
         }
 
-        // Remove a moment from its group and sync back to conversation selection state
-        reviewBody.addEventListener('click', (e) => {
-            const btn = e.target.closest('.review-remove-btn');
-            if (!btn) return;
-            const groupId = btn.getAttribute('data-group');
-            const idx = parseInt(btn.getAttribute('data-idx'), 10);
-            const group = keepsakeGroups.find(g => g.id === groupId);
-            if (!group || isNaN(idx)) return;
+        /* ─────────────────────────────────────────────
+           Phase C2c: Group management helpers
+           Pool (selectedIndices) is separate from membership (group.messageIndices).
+           Move operations never touch selectedIndices.
+           Only removeFromSelection does.
+        ───────────────────────────────────────────── */
 
-            // Sync: remove from selectedIndices and deselect in conversation DOM
-            const sourceIndex = group.messageIndices[idx];
+        function removeFromSelection(groupId, msgIdx) {
+            const group = keepsakeGroups.find(g => g.id === groupId);
+            if (!group || isNaN(msgIdx)) return;
+            const sourceIndex = group.messageIndices[msgIdx];
             if (sourceIndex !== undefined) {
                 selectedIndices.delete(sourceIndex);
-                const row = chatMessages.querySelector(`.message-row[data-index="${sourceIndex}"]`);
-                if (row) row.classList.remove('selected');
+                const convRow = chatMessages.querySelector(`.message-row[data-index="${sourceIndex}"]`);
+                if (convRow) convRow.classList.remove('selected');
                 updateSelectionBar();
             }
-
-            group.messages.splice(idx, 1);
-            group.messageIndices.splice(idx, 1);
+            group.messages.splice(msgIdx, 1);
+            group.messageIndices.splice(msgIdx, 1);
+            normalizeGroups();
             renderReviewView();
+        }
+
+        function moveToGroup(srcGroupId, msgIdx, tgtGroupId) {
+            const src = keepsakeGroups.find(g => g.id === srcGroupId);
+            const tgt = keepsakeGroups.find(g => g.id === tgtGroupId);
+            if (!src || !tgt || src === tgt) return;
+
+            const [msg] = src.messages.splice(msgIdx, 1);
+            const [dataIdx] = src.messageIndices.splice(msgIdx, 1);
+
+            // Insert into target maintaining original conversation order
+            let pos = tgt.messageIndices.length;
+            for (let i = 0; i < tgt.messageIndices.length; i++) {
+                if (tgt.messageIndices[i] > dataIdx) { pos = i; break; }
+            }
+            tgt.messages.splice(pos, 0, msg);
+            tgt.messageIndices.splice(pos, 0, dataIdx);
+
+            normalizeGroups();
+            renderReviewView();
+        }
+
+        function moveToNewGroup(srcGroupId, msgIdx) {
+            // Count only real keepsake sets (not the staging group) for numbering
+            const realCount = keepsakeGroups.filter(g => g.id !== 'group-staging').length;
+            const newGroup = {
+                id: `group-${Date.now()}`,
+                label: `Keepsake Set ${realCount + 1}`,
+                messages: [],
+                messageIndices: []
+            };
+            keepsakeGroups.push(newGroup);
+            moveToGroup(srcGroupId, msgIdx, newGroup.id);
+        }
+
+        function removeEmptyGroup(groupId) {
+            if (keepsakeGroups.length <= 1) return;
+            const idx = keepsakeGroups.findIndex(g => g.id === groupId);
+            if (idx === -1 || keepsakeGroups[idx].messages.length > 0) return;
+            keepsakeGroups.splice(idx, 1);
+            renderReviewView();
+        }
+
+        function closeActiveChooser() {
+            if (activeChooser) {
+                activeChooser.classList.remove('open');
+                const trigger = activeChooser.previousElementSibling;
+                if (trigger && trigger.classList.contains('review-move-trigger')) {
+                    trigger.classList.remove('open');
+                }
+                activeChooser = null;
+            }
+        }
+
+        // Multi-action event delegation for the review body
+        reviewBody.addEventListener('click', (e) => {
+            // Toggle move chooser
+            const trigger = e.target.closest('.review-move-trigger');
+            if (trigger) {
+                const chooser = trigger.nextElementSibling;
+                if (!chooser || !chooser.classList.contains('review-move-chooser')) return;
+                if (chooser === activeChooser) {
+                    closeActiveChooser();
+                } else {
+                    closeActiveChooser();
+                    chooser.classList.add('open');
+                    trigger.classList.add('open');
+                    activeChooser = chooser;
+                }
+                return;
+            }
+            // Move to existing group (chooser choice)
+            const moveChoice = e.target.closest('.review-move-choice');
+            if (moveChoice) {
+                closeActiveChooser();
+                const gId = moveChoice.getAttribute('data-group');
+                const idx = parseInt(moveChoice.getAttribute('data-idx'), 10);
+                const tgtId = moveChoice.getAttribute('data-target');
+                if (!isNaN(idx) && tgtId) moveToGroup(gId, idx, tgtId);
+                return;
+            }
+            // Move to new group (chooser choice)
+            const moveNewChoice = e.target.closest('.review-move-new-choice');
+            if (moveNewChoice) {
+                closeActiveChooser();
+                const gId = moveNewChoice.getAttribute('data-group');
+                const idx = parseInt(moveNewChoice.getAttribute('data-idx'), 10);
+                if (!isNaN(idx)) moveToNewGroup(gId, idx);
+                return;
+            }
+            // Remove from selection entirely (syncs back to conversation)
+            const removeBtn = e.target.closest('.review-remove-btn');
+            if (removeBtn) {
+                closeActiveChooser();
+                const gId = removeBtn.getAttribute('data-group');
+                const idx = parseInt(removeBtn.getAttribute('data-idx'), 10);
+                if (!isNaN(idx)) removeFromSelection(gId, idx);
+                return;
+            }
+            // Delete empty group
+            const delGroupBtn = e.target.closest('.review-delete-group-btn');
+            if (delGroupBtn) {
+                closeActiveChooser();
+                removeEmptyGroup(delGroupBtn.getAttribute('data-group'));
+                return;
+            }
+            // Click outside any chooser — close
+            if (!e.target.closest('.review-move-chooser')) {
+                closeActiveChooser();
+            }
         });
 
         // Back to conversation — selection state is preserved
