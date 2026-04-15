@@ -20,6 +20,13 @@
             --date-text: #6e6e73;
             --chat-header-bg: rgba(245, 245, 247, 0.92);
             --chat-header-border: #d2d2d7;
+            --search-match-ring: rgba(10, 132, 255, 0.82);
+            --search-match-glow: rgba(10, 132, 255, 0.14);
+            --search-current-ring: #ff9f0a;
+            --search-current-glow: rgba(255, 159, 10, 0.2);
+            --selection-ring: #1f9d74;
+            --selection-glow: rgba(31, 157, 116, 0.18);
+            --selection-lift: rgba(15, 23, 42, 0.1);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -35,6 +42,13 @@
                 --date-text: #8e8e93;
                 --chat-header-bg: rgba(28, 28, 30, 0.92);
                 --chat-header-border: #38383a;
+                --search-match-ring: rgba(84, 176, 255, 0.9);
+                --search-match-glow: rgba(84, 176, 255, 0.18);
+                --search-current-ring: #ffb340;
+                --search-current-glow: rgba(255, 179, 64, 0.24);
+                --selection-ring: #48cfa2;
+                --selection-glow: rgba(72, 207, 162, 0.22);
+                --selection-lift: rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -830,6 +844,7 @@
             white-space: pre-wrap;
             word-break: break-word;
             box-shadow: 0 0.5px 1px rgba(0,0,0,0.06);
+            transition: box-shadow 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
         }
 
         .message-row.me .message-bubble { background: var(--bubble-me); color: var(--bubble-me-text); }
@@ -984,13 +999,20 @@
 
         /* Search highlight on matching messages */
         .message-bubble.search-match {
-            outline: 2px solid #007aff;
-            outline-offset: 2px;
+            outline: none;
+            box-shadow:
+                0 0 0 1.5px var(--search-match-ring),
+                0 0 0 5px var(--search-match-glow),
+                0 0.5px 1px rgba(0,0,0,0.06);
         }
 
         .message-bubble.search-current {
-            outline: 2px solid #ff9500;
-            outline-offset: 2px;
+            outline: none;
+            box-shadow:
+                0 0 0 2px var(--search-current-ring),
+                0 0 0 6px var(--search-current-glow),
+                0 10px 22px rgba(255, 159, 10, 0.16),
+                0 0.5px 1px rgba(0,0,0,0.06);
         }
 
         /* ── Selection mode ── */
@@ -998,8 +1020,34 @@
         .message-row.selectable:hover .message-bubble { opacity: 0.85; }
 
         .message-row.selected .message-bubble {
-            outline: 2px solid #007aff;
-            outline-offset: 1px;
+            outline: none;
+            transform: translateY(-1px);
+            box-shadow:
+                0 0 0 2px var(--selection-ring),
+                0 0 0 5px var(--selection-glow),
+                0 10px 24px var(--selection-lift),
+                0 0.5px 1px rgba(0,0,0,0.06);
+        }
+
+        .message-row.selected .message-bubble.search-match {
+            box-shadow:
+                0 0 0 2px var(--selection-ring),
+                0 0 0 5px var(--selection-glow),
+                0 0 0 1.5px var(--search-match-ring),
+                0 0 0 8px var(--search-match-glow),
+                0 10px 24px var(--selection-lift),
+                0 0.5px 1px rgba(0,0,0,0.06);
+        }
+
+        .message-row.selected .message-bubble.search-current {
+            box-shadow:
+                0 0 0 2px var(--selection-ring),
+                0 0 0 5px var(--selection-glow),
+                0 0 0 2px var(--search-current-ring),
+                0 0 0 9px var(--search-current-glow),
+                0 10px 22px rgba(255, 159, 10, 0.16),
+                0 14px 28px var(--selection-lift),
+                0 0.5px 1px rgba(0,0,0,0.06);
         }
 
         .selection-bar {
@@ -2967,6 +3015,18 @@ ${keepsakeFooter}
             _searchBar.style.top = headerHeight + 'px';
         }
 
+        function scrollSearchMatchIntoView(match, behavior) {
+            if (!match) return;
+            const headerHeight = _chatHeader ? Math.ceil(_chatHeader.getBoundingClientRect().height) : 0;
+            const searchHeight = _searchState.open ? Math.ceil(_searchBar.getBoundingClientRect().height) : 0;
+            const safeTop = headerHeight + searchHeight + 16;
+            const safeBottom = window.innerHeight - 24;
+            const rect = match.getBoundingClientRect();
+
+            if (rect.top >= safeTop && rect.bottom <= safeBottom) return;
+            match.scrollIntoView({ behavior: behavior || 'auto', block: 'center' });
+        }
+
         function clearSearchResults() {
             removeAllHighlights();
             _searchState.matches = [];
@@ -3011,6 +3071,12 @@ ${keepsakeFooter}
                 applyHighlights();
             }
             renderSearchUI();
+
+            if (_searchState.currentIndex >= 0) {
+                requestAnimationFrame(function() {
+                    scrollSearchMatchIntoView(_searchState.matches[_searchState.currentIndex], 'auto');
+                });
+            }
         }
 
         function navigateSearch(step) {
@@ -3018,7 +3084,7 @@ ${keepsakeFooter}
             _searchState.currentIndex =
                 (_searchState.currentIndex + step + _searchState.matches.length) % _searchState.matches.length;
             applyHighlights();
-            _searchState.matches[_searchState.currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            scrollSearchMatchIntoView(_searchState.matches[_searchState.currentIndex], 'smooth');
             renderSearchUI();
             requestAnimationFrame(focusSearchInput);
         }
