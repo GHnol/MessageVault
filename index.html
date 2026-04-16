@@ -1229,6 +1229,62 @@
 
         .review-delete-group-btn:hover { color: #ff3b30; }
 
+        /* ── Keepsake eligibility section ── */
+        .keepsake-eligibility {
+            padding: 12px 20px 14px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .keepsake-elig-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #aeaeb2;
+            user-select: none;
+        }
+
+        .keepsake-elig-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .keepsake-elig-chip {
+            font-size: 12px;
+            font-family: inherit;
+            border-radius: 20px;
+            padding: 3px 11px;
+            line-height: 1.5;
+            white-space: nowrap;
+            border: 1px solid transparent;
+            transition: background 0.1s, border-color 0.1s;
+        }
+
+        /* Eligible — active, encouraging, clearly actionable in the future */
+        .keepsake-elig-chip.eligible {
+            color: #007aff;
+            background: rgba(0,122,255,0.07);
+            border-color: rgba(0,122,255,0.18);
+            cursor: pointer;
+        }
+        .keepsake-elig-chip.eligible:hover {
+            background: rgba(0,122,255,0.12);
+            border-color: rgba(0,122,255,0.28);
+        }
+
+        /* Ineligible — gently unavailable, not error-like */
+        .keepsake-elig-chip.ineligible {
+            color: #c7c7cc;
+            background: rgba(0,0,0,0.025);
+            border-color: rgba(0,0,0,0.06);
+            cursor: default;
+        }
+
         /* Column wrapper: separates bubble+reactions (stable height) from action rows */
         .review-msg-col {
             display: flex;
@@ -1452,6 +1508,23 @@
             .review-move-new-chip:active { background: rgba(0,122,255,0.18); }
             /* Middot separator — dark mode */
             .review-chip-sep { color: rgba(255,255,255,0.25); }
+            /* Eligibility section — dark mode */
+            .keepsake-eligibility { border-top-color: rgba(255,255,255,0.07); }
+            .keepsake-elig-label { color: rgba(255,255,255,0.30); }
+            .keepsake-elig-chip.eligible {
+                color: #4da3ff;
+                background: rgba(0,122,255,0.10);
+                border-color: rgba(0,122,255,0.28);
+            }
+            .keepsake-elig-chip.eligible:hover {
+                background: rgba(0,122,255,0.16);
+                border-color: rgba(0,122,255,0.40);
+            }
+            .keepsake-elig-chip.ineligible {
+                color: rgba(255,255,255,0.22);
+                background: rgba(255,255,255,0.03);
+                border-color: rgba(255,255,255,0.07);
+            }
         }
 
         /* Search icon button in header */
@@ -3715,6 +3788,95 @@ ${keepsakeFooter}
             renderReviewView();
         }
 
+        /* ─────────────────────────────────────────────
+           Phase C3: Per-group keepsake eligibility
+           Each group is evaluated independently based
+           on its own contents — count, text, senders.
+        ───────────────────────────────────────────── */
+        const KEEPSAKE_TYPES = [
+            {
+                id: 'quote-card',
+                label: 'Quote Card',
+                check(msgs) {
+                    if (msgs.length > 3) return { eligible: false, reason: 'works best with 1–3 messages' };
+                    const hasSubstantial = msgs.some(m => (m.text || '').length >= 12);
+                    if (!hasSubstantial) return { eligible: false, reason: 'needs a more substantial message' };
+                    return { eligible: true };
+                }
+            },
+            {
+                id: 'framed-print',
+                label: 'Framed Print',
+                check(msgs) {
+                    if (msgs.length < 2) return { eligible: false, reason: 'needs at least 2 messages' };
+                    if (msgs.length > 8) return { eligible: false, reason: 'works best with fewer messages' };
+                    const totalChars = msgs.reduce((s, m) => s + (m.text || '').length, 0);
+                    if (totalChars > 600) return { eligible: false, reason: 'too much text for a single print' };
+                    return { eligible: true };
+                }
+            },
+            {
+                id: 'mini-story',
+                label: 'Mini Story',
+                check(msgs) {
+                    if (msgs.length < 5) return { eligible: false, reason: 'needs at least 5 messages' };
+                    const totalChars = msgs.reduce((s, m) => s + (m.text || '').length, 0);
+                    if (totalChars < 80) return { eligible: false, reason: 'needs more text to tell a story' };
+                    return { eligible: true };
+                }
+            },
+            {
+                id: 'conversation-page',
+                label: 'Conversation Page',
+                check(msgs) {
+                    if (msgs.length < 4) return { eligible: false, reason: 'needs at least 4 messages' };
+                    const senders = new Set(msgs.map(m => m.sender));
+                    if (senders.size < 2) return { eligible: false, reason: 'needs both sides of the conversation' };
+                    return { eligible: true };
+                }
+            },
+        ];
+
+        function getGroupEligibility(group) {
+            return KEEPSAKE_TYPES.map(t => ({
+                id: t.id,
+                label: t.label,
+                ...t.check(group.messages),
+            }));
+        }
+
+        function buildEligibilitySection(group) {
+            const results = getGroupEligibility(group);
+            const section = document.createElement('div');
+            section.className = 'keepsake-eligibility';
+
+            const label = document.createElement('span');
+            label.className = 'keepsake-elig-label';
+            label.textContent = 'Can become';
+            section.appendChild(label);
+
+            const chipsRow = document.createElement('div');
+            chipsRow.className = 'keepsake-elig-chips';
+
+            for (const r of results) {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = `keepsake-elig-chip ${r.eligible ? 'eligible' : 'ineligible'}`;
+                chip.textContent = r.label;
+                if (!r.eligible && r.reason) {
+                    chip.title = r.reason;
+                    chip.setAttribute('aria-label', `${r.label} — ${r.reason}`);
+                    chip.disabled = false; // visual only; will be wired up in a later phase
+                } else {
+                    chip.setAttribute('aria-label', `${r.label} — available`);
+                }
+                chipsRow.appendChild(chip);
+            }
+
+            section.appendChild(chipsRow);
+            return section;
+        }
+
         function renderReviewView() {
             reviewBody.innerHTML = '';
 
@@ -3785,6 +3947,12 @@ ${keepsakeFooter}
                 }
 
                 groupEl.appendChild(bubblesEl);
+
+                // Eligibility section — only for real non-empty groups
+                if (group.id !== 'group-staging' && group.messages.length > 0) {
+                    groupEl.appendChild(buildEligibilitySection(group));
+                }
+
                 reviewBody.appendChild(groupEl);
             }
 
