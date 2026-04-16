@@ -1229,80 +1229,122 @@
 
         .review-delete-group-btn:hover { color: #ff3b30; }
 
-        /* Actions row below each bubble: timestamp + move trigger + remove */
+        /* Column wrapper: separates bubble+reactions (stable height) from action rows */
+        .review-msg-col {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+        }
+        .message-row.me   .review-msg-col { align-items: flex-end; }
+        .message-row.them .review-msg-col { align-items: flex-start; }
+        /* Bubble wrap inside col: max-width now governed by the col */
+        .review-msg-col .message-bubble-wrap { max-width: 100%; }
+
+        /* Stable metadata row — never wraps, anchors stay put */
         .review-time-row {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: center;
-            gap: 4px 8px;
-            margin-top: 4px;
-            position: relative;
+            gap: 5px 7px;
+            margin-top: 7px;
         }
 
         .review-time-label {
             font-size: 11px;
             color: var(--chat-text-secondary);
-            margin-right: 2px;
         }
 
-        /* Compact Move → trigger */
+        /* Move control: wraps only the trigger pill */
+        .review-move-control { display: flex; align-items: center; }
+
+        /* Trigger pill */
         .review-move-trigger {
-            background: none;
-            border: none;
             font-size: 11px;
             font-family: inherit;
-            color: #aeaeb2;
+            color: #636366;
+            background: rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.09);
+            border-radius: 20px;
+            padding: 2px 9px;
             cursor: pointer;
-            padding: 0;
             white-space: nowrap;
-            transition: color 0.15s;
+            line-height: 1.45;
+            transition: background 0.1s, border-color 0.1s, color 0.1s;
         }
-        .review-move-trigger:hover, .review-move-trigger.open { color: #007aff; }
+        .review-move-trigger:hover {
+            background: rgba(0,122,255,0.05);
+            border-color: rgba(0,122,255,0.22);
+            color: #007aff;
+        }
+        /* When col is open: hide trigger, show chip row */
+        .review-msg-col.move-open .review-move-trigger { display: none; }
 
-        /* Chooser popover */
-        .review-move-chooser {
+        /* Chip row: sibling of .review-time-row, expands below without touching it */
+        .review-move-chips {
             display: none;
-            position: absolute;
-            z-index: 10;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.06);
-            padding: 4px 0;
-            min-width: 150px;
-            top: calc(100% + 4px);
-            left: 0;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 5px;
         }
-        .review-move-chooser.open { display: block; }
+        .review-msg-col.move-open .review-move-chips { display: flex; }
 
-        .review-move-choice, .review-move-new-choice {
-            background: none;
-            border: none;
-            width: 100%;
-            text-align: left;
-            font-size: 13px;
+        /* Destination chip */
+        .review-move-chip {
+            font-size: 11px;
             font-family: inherit;
             color: #1c1c1e;
+            background: rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.30);
+            border-radius: 20px;
+            padding: 2px 9px;
             cursor: pointer;
-            padding: 8px 14px;
             white-space: nowrap;
-            transition: background 0.1s;
-            display: block;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.45;
+            transition: background 0.08s, border-color 0.08s;
         }
-        .review-move-choice:hover, .review-move-new-choice:hover { background: #f2f2f7; }
-        .review-move-new-choice { color: #007aff; }
+        .review-move-chip:hover  { background: rgba(0,0,0,0.07); border-color: rgba(0,0,0,0.44); }
+        .review-move-chip:active { background: rgba(0,0,0,0.11); }
+
+        /* New set chip */
+        .review-move-new-chip {
+            font-size: 11px;
+            font-family: inherit;
+            color: #007aff;
+            background: none;
+            border: 1px solid rgba(0,122,255,0.32);
+            border-radius: 20px;
+            padding: 2px 9px;
+            cursor: pointer;
+            white-space: nowrap;
+            line-height: 1.45;
+            transition: background 0.08s, border-color 0.08s;
+        }
+        .review-move-new-chip:hover  { background: rgba(0,122,255,0.06); border-color: rgba(0,122,255,0.48); }
+        .review-move-new-chip:active { background: rgba(0,122,255,0.12); }
+
+        /* Middot separator between destination chips and New set */
+        .review-chip-sep {
+            font-size: 10px;
+            color: rgba(0,0,0,0.25);
+            user-select: none;
+            line-height: 1;
+        }
 
         .review-remove-btn {
-            background: none;
-            border: none;
             font-size: 11px;
             font-family: inherit;
             color: #c7c7cc;
+            background: none;
+            border: none;
             cursor: pointer;
             padding: 0;
             white-space: nowrap;
-            transition: color 0.15s;
+            transition: color 0.1s;
         }
-
         .review-remove-btn:hover { color: #ff3b30; }
 
         .review-group-empty {
@@ -1383,6 +1425,33 @@
                 background: #2c2c2e;
                 color: #f2f2f7;
             }
+            /* Move trigger pill — dark mode */
+            .review-move-trigger {
+                color: #8e8e93;
+                background: rgba(255,255,255,0.07);
+                border-color: rgba(255,255,255,0.13);
+            }
+            .review-move-trigger:hover {
+                background: rgba(0,122,255,0.12);
+                border-color: rgba(0,122,255,0.40);
+                color: #007aff;
+            }
+            /* Destination chips — dark mode: recessed neutral, subordinate to New set */
+            .review-move-chip {
+                color: rgba(255,255,255,0.45);
+                background: rgba(255,255,255,0.035);
+                border-color: rgba(255,255,255,0.10);
+            }
+            .review-move-chip:hover  { background: rgba(255,255,255,0.065); border-color: rgba(255,255,255,0.16); }
+            .review-move-chip:active { background: rgba(255,255,255,0.09); }
+            /* New set chip — dark mode: border slightly stronger */
+            .review-move-new-chip {
+                border-color: rgba(0,122,255,0.45);
+            }
+            .review-move-new-chip:hover  { background: rgba(0,122,255,0.12); border-color: rgba(0,122,255,0.60); }
+            .review-move-new-chip:active { background: rgba(0,122,255,0.18); }
+            /* Middot separator — dark mode */
+            .review-chip-sep { color: rgba(255,255,255,0.25); }
         }
 
         /* Search icon button in header */
@@ -3726,76 +3795,48 @@ ${keepsakeFooter}
             const row = document.createElement('div');
             row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'} group-single`;
 
+            // col: max-width container — bubble-wrap height stays permanently stable
+            const col = document.createElement('div');
+            col.className = 'review-msg-col';
+
+            // Bubble wrap: bubble + reactions only, nothing else
             const wrap = document.createElement('div');
             wrap.className = 'message-bubble-wrap';
             if (m.reactions && m.reactions.length) wrap.classList.add('has-reactions');
-
             const bubble = document.createElement('div');
             bubble.className = 'message-bubble';
             if (m.isAttachmentOnly) bubble.classList.add('attachment-bubble');
             bubble.textContent = m.text || '';
             wrap.appendChild(bubble);
+            if (m.reactions && m.reactions.length) wrap.appendChild(buildReactionBadgesEl(m));
+            col.appendChild(wrap);
 
-            if (m.reactions && m.reactions.length) {
-                wrap.appendChild(buildReactionBadgesEl(m));
-            }
+            // Determine move options
+            const otherGroups = keepsakeGroups.filter(g => g.id !== groupId && g.id !== 'group-staging');
+            const currentGroup = keepsakeGroups.find(g => g.id === groupId);
+            const canMoveToNew = currentGroup && currentGroup.messages.length > 1;
+            const hasMoveOptions = otherGroups.length > 0 || canMoveToNew;
 
-            // Actions row: timestamp · Move → (trigger+chooser) · remove
+            // Stable metadata row: never wraps, timestamp/remove stay anchored
             const timeRow = document.createElement('div');
             timeRow.className = 'review-time-row';
-
             const timeEl = document.createElement('span');
             timeEl.className = 'review-time-label';
             timeEl.textContent = m.timestamp ? formatTimestamp(m.timestamp) : '';
             timeRow.appendChild(timeEl);
 
-            // Build other-group targets — staging is never a move destination
-            const otherGroups = keepsakeGroups.filter(g => g.id !== groupId && g.id !== 'group-staging');
-            const currentGroup = keepsakeGroups.find(g => g.id === groupId);
-            const canMoveToNew = currentGroup && currentGroup.messages.length > 1;
-
-            if (otherGroups.length > 0 || canMoveToNew) {
-                // Trigger button
+            if (hasMoveOptions) {
+                const control = document.createElement('div');
+                control.className = 'review-move-control';
                 const trigger = document.createElement('button');
                 trigger.type = 'button';
                 trigger.className = 'review-move-trigger';
-                trigger.setAttribute('data-group', groupId);
-                trigger.setAttribute('data-idx', String(msgIdx));
                 trigger.setAttribute('aria-label', 'Move to another set');
-                trigger.textContent = 'Move \u2192';
-                timeRow.appendChild(trigger);
-
-                // Chooser popover
-                const chooser = document.createElement('div');
-                chooser.className = 'review-move-chooser';
-
-                for (const tgt of otherGroups) {
-                    const choice = document.createElement('button');
-                    choice.type = 'button';
-                    choice.className = 'review-move-choice';
-                    choice.setAttribute('data-group', groupId);
-                    choice.setAttribute('data-idx', String(msgIdx));
-                    choice.setAttribute('data-target', tgt.id);
-                    choice.setAttribute('aria-label', `Move to ${tgt.label}`);
-                    choice.textContent = tgt.label;
-                    chooser.appendChild(choice);
-                }
-
-                if (canMoveToNew) {
-                    const newChoice = document.createElement('button');
-                    newChoice.type = 'button';
-                    newChoice.className = 'review-move-new-choice';
-                    newChoice.setAttribute('data-group', groupId);
-                    newChoice.setAttribute('data-idx', String(msgIdx));
-                    newChoice.setAttribute('aria-label', 'Move to new keepsake set');
-                    newChoice.textContent = '+ New set';
-                    chooser.appendChild(newChoice);
-                }
-
-                timeRow.appendChild(chooser);
+                trigger.textContent = 'Move';
+                control.appendChild(trigger);
+                timeRow.appendChild(control);
             }
 
-            // Remove from selection entirely
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';
             removeBtn.className = 'review-remove-btn';
@@ -3804,9 +3845,45 @@ ${keepsakeFooter}
             removeBtn.setAttribute('aria-label', 'Remove from selection');
             removeBtn.textContent = '\u00d7 Remove';
             timeRow.appendChild(removeBtn);
+            col.appendChild(timeRow);
 
-            wrap.appendChild(timeRow);
-            row.appendChild(wrap);
+            // Chip area: sibling of metadata row, expands below without touching it
+            if (hasMoveOptions) {
+                const chips = document.createElement('div');
+                chips.className = 'review-move-chips';
+
+                for (const tgt of otherGroups) {
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'review-move-chip';
+                    chip.setAttribute('data-group', groupId);
+                    chip.setAttribute('data-idx', String(msgIdx));
+                    chip.setAttribute('data-target', tgt.id);
+                    chip.setAttribute('aria-label', `Move to ${tgt.label}`);
+                    chip.textContent = tgt.label;
+                    chips.appendChild(chip);
+                }
+                if (otherGroups.length > 0 && canMoveToNew) {
+                    const sep = document.createElement('span');
+                    sep.className = 'review-chip-sep';
+                    sep.setAttribute('aria-hidden', 'true');
+                    sep.textContent = '\u00b7';
+                    chips.appendChild(sep);
+                }
+                if (canMoveToNew) {
+                    const newChip = document.createElement('button');
+                    newChip.type = 'button';
+                    newChip.className = 'review-move-new-chip';
+                    newChip.setAttribute('data-group', groupId);
+                    newChip.setAttribute('data-idx', String(msgIdx));
+                    newChip.setAttribute('aria-label', 'Move to new keepsake set');
+                    newChip.textContent = 'New set';
+                    chips.appendChild(newChip);
+                }
+                col.appendChild(chips);
+            }
+
+            row.appendChild(col);
             return row;
         }
 
@@ -3879,50 +3956,46 @@ ${keepsakeFooter}
             renderReviewView();
         }
 
+        // activeChooser tracks the .review-msg-col with move-open class
         function closeActiveChooser() {
             if (activeChooser) {
-                activeChooser.classList.remove('open');
-                const trigger = activeChooser.previousElementSibling;
-                if (trigger && trigger.classList.contains('review-move-trigger')) {
-                    trigger.classList.remove('open');
-                }
+                activeChooser.classList.remove('move-open');
                 activeChooser = null;
             }
         }
 
         // Multi-action event delegation for the review body
         reviewBody.addEventListener('click', (e) => {
-            // Toggle move chooser
+            // Toggle move chip row open/closed
             const trigger = e.target.closest('.review-move-trigger');
             if (trigger) {
-                const chooser = trigger.nextElementSibling;
-                if (!chooser || !chooser.classList.contains('review-move-chooser')) return;
-                if (chooser === activeChooser) {
+                const col = trigger.closest('.review-msg-col');
+                if (!col) return;
+                if (col === activeChooser) {
                     closeActiveChooser();
                 } else {
                     closeActiveChooser();
-                    chooser.classList.add('open');
-                    trigger.classList.add('open');
-                    activeChooser = chooser;
+                    col.classList.add('move-open');
+                    activeChooser = col;
                 }
                 return;
             }
-            // Move to existing group (chooser choice)
-            const moveChoice = e.target.closest('.review-move-choice');
-            if (moveChoice) {
+            // Move to existing group via chip
+            const chip = e.target.closest('.review-move-chip');
+            if (chip) {
                 closeActiveChooser();
-                const gId = moveChoice.getAttribute('data-group');
-                const idx = parseInt(moveChoice.getAttribute('data-idx'), 10);
-                const tgtId = moveChoice.getAttribute('data-target');
+                const gId = chip.getAttribute('data-group');
+                const idx = parseInt(chip.getAttribute('data-idx'), 10);
+                const tgtId = chip.getAttribute('data-target');
                 if (!isNaN(idx) && tgtId) moveToGroup(gId, idx, tgtId);
                 return;
             }
-            // Move to new group (chooser choice)
-            const moveNewChoice = e.target.closest('.review-move-new-choice');
-            if (moveNewChoice) {
+            // Move to new group via chip
+            const newChip = e.target.closest('.review-move-new-chip');
+            if (newChip) {
                 closeActiveChooser();
-                const gId = moveNewChoice.getAttribute('data-group');
-                const idx = parseInt(moveNewChoice.getAttribute('data-idx'), 10);
+                const gId = newChip.getAttribute('data-group');
+                const idx = parseInt(newChip.getAttribute('data-idx'), 10);
                 if (!isNaN(idx)) moveToNewGroup(gId, idx);
                 return;
             }
@@ -3942,8 +4015,8 @@ ${keepsakeFooter}
                 removeEmptyGroup(delGroupBtn.getAttribute('data-group'));
                 return;
             }
-            // Click outside any chooser — close
-            if (!e.target.closest('.review-move-chooser')) {
+            // Outside click — close any open control
+            if (!e.target.closest('.review-msg-col')) {
                 closeActiveChooser();
             }
         });
