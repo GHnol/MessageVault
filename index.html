@@ -1503,6 +1503,16 @@
             cursor: default;
         }
 
+        /* Secondary Message Book action in review footer */
+        .review-footer-btn.book {
+            background: none;
+            border: 1px solid rgba(0,0,0,0.14);
+            color: #3a3a3c;
+            font-size: 13px;
+            padding: 8px 14px;
+        }
+        .review-footer-btn.book:hover { background: rgba(0,0,0,0.04); }
+
         @media (prefers-color-scheme: dark) {
             .review-view {
                 background: #000;
@@ -1532,6 +1542,11 @@
                 background: #2c2c2e;
                 color: #f2f2f7;
             }
+            .review-footer-btn.book {
+                border-color: rgba(255,255,255,0.14);
+                color: #aeaeb2;
+            }
+            .review-footer-btn.book:hover { background: rgba(255,255,255,0.05); }
             /* Move trigger pill — dark mode */
             .review-move-trigger {
                 color: #8e8e93;
@@ -2281,7 +2296,13 @@
             letter-spacing: -0.2px;
         }
 
-        .ks-header-end { width: 72px; }
+        .ks-header-end { width: 72px; display: flex; justify-content: flex-end; }
+        .ks-header-book-btn {
+            background: none; border: none; cursor: pointer;
+            color: #007aff; font-size: 13px; font-weight: 400;
+            padding: 4px 0; letter-spacing: -0.1px; white-space: nowrap;
+        }
+        .ks-header-book-btn:hover { opacity: 0.72; }
 
         /* Body: centered content rail, single → 2-column grid */
         .ks-body {
@@ -2428,6 +2449,7 @@
 
             .ks-back-btn  { color: #0a84ff; }
             .ks-header-title { color: #f2f2f7; }
+            .ks-header-book-btn { color: #0a84ff; }
 
             .ks-intro { color: #8e8e93; }
 
@@ -2460,6 +2482,315 @@
             .ks-card-clear-btn { color: #48484a; }
             .ks-card-clear-btn:hover { color: #636366; }
             .ks-card-action-btn { color: #0a84ff; }
+        }
+
+        /* ════════════════════════════════════════════
+           Phase MB1: Message Book View
+        ════════════════════════════════════════════ */
+
+        /* Keepsakes summary: Message Book CTA strip */
+        .ks-book-cta {
+            grid-column: 1 / -1;
+            margin-top: 8px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .ks-book-cta-label {
+            font-size: 11px;
+            color: #aeaeb2;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .ks-book-cta-btn {
+            background: #1c1c1e;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 13px 28px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: -0.2px;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+        }
+        .ks-book-cta-btn:hover { background: #3a3a3c; }
+
+        /* Book view — full-width surface */
+        .book-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background: #e8e8ed;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+        }
+        .book-header {
+            width: 100%;
+            background: rgba(232,232,237,0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.09);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .book-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 14px 24px 12px;
+        }
+        .book-back-btn {
+            background: none; border: none; cursor: pointer;
+            color: #007aff; font-size: 15px; font-weight: 400;
+            padding: 4px 0; letter-spacing: -0.1px;
+        }
+        .book-back-btn:hover { opacity: 0.72; }
+        .book-header-title { font-size: 15px; font-weight: 600; color: #1c1c1e; letter-spacing: -0.2px; }
+        .book-header-end { width: 72px; }
+
+        /* Shell: centers the content rail */
+        .book-shell {
+            max-width: 1040px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 24px 24px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Controls bar: horizontal row of minimal labeled toggles */
+        .book-controls-bar {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.06);
+        }
+        .book-controls-label {
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.4px;
+            color: #aeaeb2; flex-basis: 100%; margin-bottom: 2px;
+        }
+        .book-control-group { display: flex; align-items: center; gap: 7px; }
+        .book-control-name { font-size: 12px; color: #48484a; font-weight: 400; white-space: nowrap; }
+        .book-toggle-btn {
+            display: flex; background: #f2f2f7; border: none;
+            border-radius: 20px; overflow: hidden; cursor: default; padding: 0;
+        }
+        .book-toggle-opt {
+            padding: 4px 10px; font-size: 11px; font-weight: 500;
+            color: #8e8e93; background: transparent; border: none;
+            cursor: pointer; letter-spacing: -0.1px;
+        }
+        .book-toggle-opt.active { background: #007aff; color: #fff; border-radius: 20px; }
+
+        /* Page count + limit warning */
+        .book-page-indicator {
+            font-size: 12px; color: #8e8e93; letter-spacing: -0.1px;
+        }
+        .book-page-indicator.over-limit { color: #ff3b30; font-weight: 500; }
+        .book-limit-warning {
+            background: rgba(255,59,48,0.07);
+            border: 1px solid rgba(255,59,48,0.18);
+            border-radius: 10px; padding: 12px 16px;
+            font-size: 13px; color: #c0392b; line-height: 1.55;
+        }
+
+        /* Scrollable book canvas */
+        .book-canvas {
+            display: flex; flex-direction: column; align-items: center; gap: 0;
+        }
+
+        /* Each book page: simulated paper surface */
+        .book-page {
+            background: #fff;
+            width: 100%; max-width: 440px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(0,0,0,0.05);
+            padding: 48px 44px 40px;
+        }
+        .book-page + .book-page { margin-top: 12px; }
+        .book-page-break { height: 12px; }  /* gap between logical page groups */
+
+        /* Title page */
+        .book-title-page {
+            min-height: 300px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; gap: 10px;
+        }
+        .book-title-eyebrow {
+            font-size: 10px; font-weight: 600; letter-spacing: 1.2px;
+            text-transform: uppercase; color: #aeaeb2;
+        }
+        .book-title-text { font-size: 24px; font-weight: 700; color: #1c1c1e; letter-spacing: -0.5px; line-height: 1.2; }
+        .book-title-sub { font-size: 13px; color: #8e8e93; }
+
+        /* Dedication page */
+        .book-dedication-page {
+            min-height: 260px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; gap: 10px;
+        }
+        .book-dedication-eyebrow {
+            font-size: 10px; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; color: #d1d1d6;
+        }
+        .book-dedication-text { font-size: 16px; font-style: italic; color: #48484a; line-height: 1.55; max-width: 280px; }
+        .book-dedication-placeholder { font-size: 13px; color: #c7c7cc; font-style: italic; }
+
+        /* Sparse divider between sections — centered dots, unmistakable against canvas */
+        .book-divider {
+            width: 100%; max-width: 440px;
+            display: flex; align-items: center; justify-content: center;
+            height: 36px;
+            font-size: 18px;
+            color: #8e8e93;
+            letter-spacing: 10px;
+            user-select: none;
+        }
+
+        /* Section block */
+        .book-section-header {
+            font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+            text-transform: uppercase; color: #aeaeb2; margin-bottom: 16px;
+        }
+
+        /* Message runs: same-sender groups */
+        .book-msg-run { display: flex; flex-direction: column; margin-bottom: 10px; }
+        .book-msg-run.sender-me { align-items: flex-end; }
+        .book-msg-run.sender-them { align-items: flex-start; }
+
+        .book-run-attr {
+            font-size: 10px; font-weight: 600; letter-spacing: 0.2px;
+            color: #aeaeb2; margin-bottom: 4px; text-transform: uppercase;
+        }
+        .book-msg-run.sender-me .book-run-attr { text-align: right; }
+
+        .book-msg-item { display: flex; flex-direction: column; max-width: 82%; margin-bottom: 3px; }
+        .book-msg-run.sender-me .book-msg-item { align-items: flex-end; }
+        .book-msg-run.sender-them .book-msg-item { align-items: flex-start; }
+
+        /* Bubble wrap: relative container for attached reaction badge */
+        .book-bubble-wrap { position: relative; }
+        .book-bubble-wrap.has-reactions { padding-top: 18px; }
+
+        .book-msg-bubble {
+            font-size: 12px; line-height: 1.5; padding: 7px 11px;
+            border-radius: 14px; word-break: break-word; letter-spacing: -0.1px;
+        }
+        .book-msg-run.sender-me .book-msg-bubble {
+            background: #007aff; color: #fff; border-bottom-right-radius: 4px;
+        }
+        .book-msg-run.sender-them .book-msg-bubble {
+            background: #f2f2f7; color: #1c1c1e; border-bottom-left-radius: 4px;
+        }
+        .book-msg-bubble.attachment { color: #8e8e93; font-style: italic; background: #f9f9fb; }
+
+        .book-msg-ts {
+            font-size: 9px; color: #aeaeb2; letter-spacing: -0.1px; margin-top: 2px;
+        }
+        .book-msg-run.sender-me .book-msg-ts { text-align: right; }
+
+        /* Reactions: absolutely attached to the bubble, same-side logic as chat/review */
+        .book-reactions {
+            position: absolute;
+            top: 2px;
+            display: flex;
+            gap: 2px;
+            z-index: 1;
+        }
+        /* them bubble (left-aligned) → reaction badge anchors to upper-right outside edge */
+        .book-msg-run.sender-them .book-reactions { right: 0; left: auto; }
+        /* me bubble (right-aligned) → reaction badge anchors to upper-left outside edge */
+        .book-msg-run.sender-me .book-reactions { left: 0; right: auto; }
+
+        .book-reaction-badge {
+            font-size: 11px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.10);
+            border-radius: 10px;
+            padding: 1px 6px;
+            color: #48484a;
+            white-space: nowrap;
+        }
+        .book-reaction-badge.by-me {
+            background: rgba(0,122,255,0.10);
+            color: #007aff;
+            border-color: rgba(0,122,255,0.15);
+        }
+
+        /* Page numbers */
+        .book-page-num {
+            text-align: center;
+            font-size: 10px;
+            color: #c7c7cc;
+            letter-spacing: 0.3px;
+            margin-top: 28px;
+            font-weight: 400;
+            user-select: none;
+        }
+
+        /* Ending page */
+        .book-ending-page {
+            min-height: 180px; display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+            text-align: center; gap: 4px;
+        }
+        .book-ending-brand {
+            font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+            text-transform: uppercase; color: #d1d1d6;
+        }
+        .book-ending-tagline { font-size: 10px; color: #e0e0e5; letter-spacing: 0.2px; }
+
+        @media (prefers-color-scheme: dark) {
+            .ks-book-cta { border-top-color: rgba(255,255,255,0.08); }
+            .ks-book-cta-label { color: #48484a; }
+            .ks-book-cta-btn { background: #f2f2f7; color: #1c1c1e; }
+            .ks-book-cta-btn:hover { background: #e5e5ea; }
+
+            .book-view { background: #2c2c2e; }
+            .book-header { background: rgba(44,44,46,0.92); border-bottom-color: rgba(255,255,255,0.09); }
+            .book-back-btn { color: #0a84ff; }
+            .book-header-title { color: #f2f2f7; }
+
+            .book-controls-bar {
+                background: #1c1c1e;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.35), 0 0 0 0.5px rgba(255,255,255,0.06);
+            }
+            .book-control-name { color: #aeaeb2; }
+            .book-toggle-btn { background: #2c2c2e; }
+            .book-toggle-opt { color: #636366; }
+            .book-toggle-opt.active { background: #0a84ff; color: #fff; }
+
+            .book-page {
+                background: #1c1c1e;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.40), 0 0 0 0.5px rgba(255,255,255,0.05);
+            }
+            .book-title-text { color: #f2f2f7; }
+            .book-title-sub { color: #636366; }
+            .book-dedication-text { color: #aeaeb2; }
+
+            .book-divider { color: #636366; }
+            .book-section-header { color: #48484a; }
+            .book-run-attr { color: #48484a; }
+            .book-msg-run.sender-them .book-msg-bubble { background: #2c2c2e; color: #e5e5ea; }
+            .book-msg-bubble.attachment { background: #2c2c2e; }
+            .book-msg-ts { color: #48484a; }
+            .book-reaction-badge { background: #1c1c1e; border-color: rgba(255,255,255,0.10); color: #aeaeb2; }
+            .book-reaction-badge.by-me { background: rgba(10,132,255,0.14); color: #0a84ff; border-color: rgba(10,132,255,0.20); }
+            .book-page-num { color: #3a3a3c; }
+            .book-ending-brand { color: #3a3a3c; }
+            .book-ending-tagline { color: #2c2c2e; }
+            .book-limit-warning { background: rgba(255,69,58,0.10); border-color: rgba(255,69,58,0.22); color: #ff453a; }
         }
     </style>
 </head>
@@ -2714,6 +3045,23 @@
     </div>
 
     <!-- ════════════════════════════════════════════
+         MESSAGE BOOK VIEW (Phase MB1)
+    ════════════════════════════════════════════ -->
+    <div class="book-view" id="bookView">
+        <div class="book-header">
+            <div class="book-header-inner">
+                <button type="button" class="book-back-btn" id="bookBackBtn">&#8592; Keepsakes</button>
+                <div class="book-header-title">Message Book</div>
+                <div class="book-header-end"></div>
+            </div>
+        </div>
+        <div class="book-shell">
+            <div class="book-controls-bar" id="bookControlsBar"></div>
+            <div class="book-canvas" id="bookCanvas"></div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
          REVIEW VIEW (Phase C2a)
     ════════════════════════════════════════════ -->
     <div class="review-view" id="reviewView">
@@ -2725,6 +3073,7 @@
         <div class="review-body" id="reviewBody"></div>
         <div class="review-footer">
             <button type="button" class="review-footer-btn back" id="reviewBackBtn">&#8592; Back</button>
+            <button type="button" class="review-footer-btn book" id="reviewBookBtn" style="display:none">Message Book</button>
             <button type="button" class="review-footer-btn continue" id="reviewContinueBtn">Make keepsake &#8594;</button>
         </div>
     </div>
@@ -2757,7 +3106,9 @@
             <div class="ks-header-inner">
                 <button type="button" class="ks-back-btn" id="ksBackBtn">&#8592; Review</button>
                 <div class="ks-header-title">Your Keepsakes</div>
-                <div class="ks-header-end"></div>
+                <div class="ks-header-end">
+                    <button type="button" class="ks-header-book-btn" id="ksBookBtn">Message Book</button>
+                </div>
             </div>
         </div>
         <div class="ks-body" id="ksBody"></div>
@@ -2829,6 +3180,14 @@
         const keepsakesView = document.getElementById('keepsakesView');
         const ksBody = document.getElementById('ksBody');
         const ksBackBtn = document.getElementById('ksBackBtn');
+        const ksBookBtn = document.getElementById('ksBookBtn');
+
+        // Message Book view (Phase MB1)
+        const bookView = document.getElementById('bookView');
+        const bookBackBtn = document.getElementById('bookBackBtn');
+        const bookControlsBar = document.getElementById('bookControlsBar');
+        const bookCanvas = document.getElementById('bookCanvas');
+        const reviewBookBtn = document.getElementById('reviewBookBtn');
 
         // Loading
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -2854,11 +3213,12 @@
             reviewView.style.display = 'none';
             compositionView.style.display = 'none';
             keepsakesView.style.display = 'none';
+            bookView.style.display = 'none';
         }
 
         function showView(view) {
             hideAllViews();
-            const flexViews = [landing, compositionView, keepsakesView];
+            const flexViews = [landing, compositionView, keepsakesView, bookView];
             view.style.display = flexViews.includes(view) ? 'flex' : 'block';
         }
 
@@ -4979,21 +5339,23 @@ ${keepsakeFooter}
         function syncReviewContinueBtn() {
             const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging' && g.messages.length > 0);
 
-            // No sets at all — disabled placeholder
+            // No sets at all — disabled placeholder; hide book button
             if (realGroups.length === 0) {
                 reviewContinueBtn.disabled = true;
                 reviewContinueBtn.textContent = 'Make keepsake \u2192';
+                reviewBookBtn.style.display = 'none';
                 return;
             }
 
-            // 2+ real sets — always route to summary, always enabled
+            // 2+ real sets — route to summary; book is accessible via keepsakes summary
             if (realGroups.length >= 2) {
                 reviewContinueBtn.disabled = false;
                 reviewContinueBtn.textContent = 'View keepsakes \u2192';
+                reviewBookBtn.style.display = 'none';
                 return;
             }
 
-            // Exactly 1 real set — direct composition path
+            // Exactly 1 real set — direct composition path + Message Book secondary action
             const group = realGroups[0];
             const results = getGroupEligibility(group);
             const hasEligible = results.some(r => r.eligible);
@@ -5001,6 +5363,9 @@ ${keepsakeFooter}
 
             const isResuming = group.chosenTypeId && results.some(r => r.id === group.chosenTypeId && r.eligible);
             reviewContinueBtn.textContent = isResuming ? 'Resume keepsake \u2192' : 'Make keepsake \u2192';
+
+            // Show Message Book secondary action when 1 real non-empty set exists
+            reviewBookBtn.style.display = '';
         }
 
         /* ─────────────────────────────────────────────
@@ -5646,6 +6011,24 @@ ${keepsakeFooter}
             for (const group of realGroups) {
                 ksBody.appendChild(buildKeepsakeCard(group, contactName));
             }
+
+            // Message Book CTA — product-level entry point, separate from per-set actions
+            const bookCta = document.createElement('div');
+            bookCta.className = 'ks-book-cta';
+
+            const ctaLabel = document.createElement('div');
+            ctaLabel.className = 'ks-book-cta-label';
+            ctaLabel.textContent = 'Or combine everything';
+
+            const ctaBtn = document.createElement('button');
+            ctaBtn.type = 'button';
+            ctaBtn.className = 'ks-book-cta-btn';
+            ctaBtn.textContent = 'Create Message Book \u2192';
+            ctaBtn.addEventListener('click', showBookView);
+
+            bookCta.appendChild(ctaLabel);
+            bookCta.appendChild(ctaBtn);
+            ksBody.appendChild(bookCta);
         }
 
         function showKeepsakesView() {
@@ -5657,6 +6040,482 @@ ${keepsakeFooter}
             renderReviewView();
             showView(reviewView);
         });
+
+        /* ═══════════════════════════════════════════════════════
+           Phase MB1: Message Book — State, Sections, Rendering
+           Entirely separate from standalone compositionState.
+        ═══════════════════════════════════════════════════════ */
+
+        let messageBookState = null;  // null until first showBookView call
+        let bookReturnView   = null;  // which view to return to from book back-press
+
+        function initMessageBookState() {
+            if (messageBookState) return; // preserve settings across visits
+            const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+            messageBookState = {
+                // ── Format ──────────────────────────────────────────────
+                format: {
+                    trimWidthIn:  7,
+                    trimHeightIn: 10,
+                    maxPages:     250
+                },
+                // ── Opening ─────────────────────────────────────────────
+                opening: {
+                    title:             contactName || 'Our Conversation',
+                    dedicationEnabled: false,
+                    dedicationText:    ''
+                },
+                // ── Body settings ────────────────────────────────────────
+                body: {
+                    timestampMode: 'on',      // 'on' | 'off' — book-level, all or nothing
+                    pageNumberMode: 'on',     // 'on' | 'off'
+                    dividerMode:   'sparse',  // 'sparse' | 'none'
+                    endingMode:    'branded', // 'branded' | 'none'
+                    flowMode:      'sectioned' // 'sectioned' | 'emotional'
+                },
+                // ── Sections (derived; not sorted by recency) ────────────
+                sections: [],
+                // ── Estimation ───────────────────────────────────────────
+                estimatedPageCount: 0,
+                exceedsPageLimit:   false
+            };
+        }
+
+        // Derive Message Book sections from current real keepsake groups.
+        // Ordering: array order of keepsakeGroups (review order), NOT recency.
+        // This is a parallel derived layer — groups are not modified.
+        function syncBookSections() {
+            const realGroups = keepsakeGroups.filter(
+                g => g.id !== 'group-staging' && g.messages.length > 0
+            );
+            messageBookState.sections = realGroups.map((group, i) => ({
+                id:                         `book-section-${group.id}`,
+                sourceGroupId:              group.id,
+                customName:                 group.customName || null,
+                messages:                   [...group.messages],   // shallow copy — not a reference
+                forcePageBreakBefore:       false,
+                showDividerBefore:          i > 0,                 // first section has no preceding divider
+                featuredMode:               null,                  // placeholder — not implemented yet
+                preserveSameSenderRuns:     true,
+                preserveShortExchangeClusters: true
+            }));
+        }
+
+        // First-pass deterministic page estimator.
+        // Uses message count and text density; accounts for opening/ending/dividers.
+        // Not exact pagination — labeled as estimate throughout UI.
+        function estimateBookPageCount() {
+            const state = messageBookState;
+            const sections = state.sections;
+
+            const totalMessages = sections.reduce((s, sec) => s + sec.messages.length, 0);
+            const totalChars    = sections.reduce((s, sec) =>
+                s + sec.messages.reduce((cs, m) => cs + (m.text || '').length, 0), 0);
+
+            const openingPages  = 1 + (state.opening.dedicationEnabled ? 1 : 0);
+            const endingPages   = state.body.endingMode === 'branded' ? 1 : 0;
+
+            // Sparse dividers: each section boundary ≈ 0.3 pages of overhead
+            const dividerOverhead = state.body.dividerMode === 'sparse' && sections.length > 1
+                ? (sections.length - 1) * 0.3 : 0;
+
+            // Chat-message density in a 7×10 format:
+            // Short messages → ~10/page; medium → ~7/page; long → ~5/page
+            let messagePages = 0;
+            if (totalMessages > 0) {
+                const avg = totalChars / totalMessages;
+                const perPage = avg > 100 ? 5 : avg > 50 ? 7 : 10;
+                messagePages = Math.ceil(totalMessages / perPage);
+            }
+
+            const estimate = Math.ceil(openingPages + messagePages + dividerOverhead + endingPages);
+            state.estimatedPageCount = estimate;
+            state.exceedsPageLimit   = estimate > state.format.maxPages;
+            return estimate;
+        }
+
+        // Group consecutive same-sender messages into runs.
+        // Supports preserveSameSenderRuns soft-composition behavior.
+        function groupIntoRuns(messages) {
+            const runs = [];
+            for (const msg of messages) {
+                const last = runs[runs.length - 1];
+                if (last && last.sender === msg.sender) {
+                    last.messages.push(msg);
+                } else {
+                    runs.push({ sender: msg.sender, messages: [msg] });
+                }
+            }
+            return runs;
+        }
+
+        // Build inline reaction badges for book context.
+        // Deliberately NOT absolute-positioned — book layout is document flow.
+        function buildBookReactionEl(m) {
+            if (!m.reactions || !m.reactions.length) return null;
+            const groups = {};
+            for (const r of m.reactions) {
+                if (!groups[r.emoji]) groups[r.emoji] = { count: 0, isMe: false };
+                groups[r.emoji].count++;
+                if (r.reactor === 'Me') groups[r.emoji].isMe = true;
+            }
+            const el = document.createElement('div');
+            el.className = 'book-reactions';
+            for (const [emoji, g] of Object.entries(groups)) {
+                const badge = document.createElement('span');
+                badge.className = 'book-reaction-badge' + (g.isMe ? ' by-me' : '');
+                badge.textContent = g.count > 1 ? `${emoji}\u202f${g.count}` : emoji;
+                el.appendChild(badge);
+            }
+            return el;
+        }
+
+        // Build a single message item within a run.
+        // Reactions are absolutely positioned inside .book-bubble-wrap, attached to the bubble edge.
+        function buildBookMsgItem(m, showTimestamp) {
+            const item = document.createElement('div');
+            item.className = 'book-msg-item';
+
+            // Bubble wrap: relative container so reactions can anchor to the bubble's outside edge
+            const wrap = document.createElement('div');
+            wrap.className = 'book-bubble-wrap';
+
+            const rxEl = buildBookReactionEl(m);
+            if (rxEl) wrap.classList.add('has-reactions');
+
+            const bubble = document.createElement('div');
+            bubble.className = 'book-msg-bubble' + (m.isAttachmentOnly ? ' attachment' : '');
+            bubble.textContent = m.text || '[Attachment]';
+            wrap.appendChild(bubble);
+
+            if (rxEl) wrap.appendChild(rxEl);
+
+            item.appendChild(wrap);
+
+            if (showTimestamp && m.timestamp) {
+                const ts = document.createElement('div');
+                ts.className = 'book-msg-ts';
+                ts.textContent = formatTimestamp(m.timestamp);
+                item.appendChild(ts);
+            }
+
+            return item;
+        }
+
+        // Build a same-sender run block.
+        function buildBookMsgRun(run, contactName, showTimestamp) {
+            const runEl = document.createElement('div');
+            runEl.className = `book-msg-run sender-${run.sender === 'Me' ? 'me' : 'them'}`;
+
+            // Sender attribution at start of run
+            const attr = document.createElement('div');
+            attr.className = 'book-run-attr';
+            attr.textContent = run.sender === 'Me' ? 'Me' : (contactName || 'Them');
+            runEl.appendChild(attr);
+
+            for (const msg of run.messages) {
+                runEl.appendChild(buildBookMsgItem(msg, showTimestamp));
+            }
+            return runEl;
+        }
+
+        // Build the title page element.
+        function buildBookTitlePage(state, contactName) {
+            const page = document.createElement('div');
+            page.className = 'book-page';
+
+            const inner = document.createElement('div');
+            inner.className = 'book-title-page';
+
+            const eyebrow = document.createElement('div');
+            eyebrow.className = 'book-title-eyebrow';
+            eyebrow.textContent = 'KeepMees \u00b7 Message Book';
+
+            const title = document.createElement('div');
+            title.className = 'book-title-text';
+            title.textContent = state.opening.title || contactName || 'Our Conversation';
+
+            const sub = document.createElement('div');
+            sub.className = 'book-title-sub';
+            const msgTotal = state.sections.reduce((s, sec) => s + sec.messages.length, 0);
+            sub.textContent = `${msgTotal} message${msgTotal !== 1 ? 's' : ''} \u00b7 ${state.sections.length} section${state.sections.length !== 1 ? 's' : ''}`;
+
+            inner.appendChild(eyebrow);
+            inner.appendChild(title);
+            inner.appendChild(sub);
+            page.appendChild(inner);
+            return page;
+        }
+
+        // Build the dedication page element (only when dedicationEnabled).
+        function buildBookDedicationPage(state) {
+            const page = document.createElement('div');
+            page.className = 'book-page';
+
+            const inner = document.createElement('div');
+            inner.className = 'book-dedication-page';
+
+            const eyebrow = document.createElement('div');
+            eyebrow.className = 'book-dedication-eyebrow';
+            eyebrow.textContent = 'Dedication';
+
+            const text = document.createElement('div');
+            if (state.opening.dedicationText && state.opening.dedicationText.trim()) {
+                text.className = 'book-dedication-text';
+                text.textContent = state.opening.dedicationText.trim();
+            } else {
+                text.className = 'book-dedication-placeholder';
+                text.textContent = 'Dedication text will appear here.';
+            }
+
+            inner.appendChild(eyebrow);
+            inner.appendChild(text);
+            page.appendChild(inner);
+            return page;
+        }
+
+        // Build one section block (may span multiple logical pages in future exact pagination).
+        function buildBookSectionBlock(section, state, contactName) {
+            const page = document.createElement('div');
+            page.className = 'book-page';
+
+            // Section header — show custom name if set, else positional name from groups
+            const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
+            const displayName = section.customName && section.customName.trim()
+                ? section.customName.trim()
+                : (srcGroup ? getGroupDisplayName(srcGroup) : '');
+
+            if (displayName) {
+                const header = document.createElement('div');
+                header.className = 'book-section-header';
+                header.textContent = displayName;
+                page.appendChild(header);
+            }
+
+            const showTs = state.body.timestampMode === 'on';
+
+            if (section.preserveSameSenderRuns) {
+                const runs = groupIntoRuns(section.messages);
+                for (const run of runs) {
+                    page.appendChild(buildBookMsgRun(run, contactName, showTs));
+                }
+            } else {
+                // Flat rendering: no run grouping (preserveSameSenderRuns=false future path)
+                for (const m of section.messages) {
+                    const item = buildBookMsgItem(m, showTs);
+                    page.appendChild(item);
+                }
+            }
+
+            return page;
+        }
+
+        // Build the ending page element.
+        function buildBookEndingPage() {
+            const page = document.createElement('div');
+            page.className = 'book-page';
+
+            const inner = document.createElement('div');
+            inner.className = 'book-ending-page';
+
+            const brand = document.createElement('div');
+            brand.className = 'book-ending-brand';
+            brand.textContent = 'KeepMees';
+
+            const tagline = document.createElement('div');
+            tagline.className = 'book-ending-tagline';
+            tagline.textContent = 'Memories worth keeping.';
+
+            inner.appendChild(brand);
+            inner.appendChild(tagline);
+            page.appendChild(inner);
+            return page;
+        }
+
+        // Build the controls bar from current state.
+        function buildBookControlsBar(state) {
+            bookControlsBar.innerHTML = '';
+
+            const label = document.createElement('div');
+            label.className = 'book-controls-label';
+            label.textContent = 'Book Settings';
+            bookControlsBar.appendChild(label);
+
+            const controls = [
+                {
+                    name: 'Timestamps',
+                    key: 'timestampMode',
+                    target: 'body',
+                    opts: [{ value: 'on', label: 'On' }, { value: 'off', label: 'Off' }]
+                },
+                {
+                    name: 'Page numbers',
+                    key: 'pageNumberMode',
+                    target: 'body',
+                    opts: [{ value: 'on', label: 'On' }, { value: 'off', label: 'Off' }]
+                },
+                {
+                    name: 'Dividers',
+                    key: 'dividerMode',
+                    target: 'body',
+                    opts: [{ value: 'sparse', label: 'Sparse' }, { value: 'none', label: 'None' }]
+                },
+                {
+                    name: 'Dedication',
+                    key: 'dedicationEnabled',
+                    target: 'opening',
+                    opts: [{ value: true, label: 'On' }, { value: false, label: 'Off' }]
+                },
+                {
+                    name: 'Ending',
+                    key: 'endingMode',
+                    target: 'body',
+                    opts: [{ value: 'branded', label: 'Branded' }, { value: 'none', label: 'None' }]
+                },
+            ];
+
+            for (const ctrl of controls) {
+                const group = document.createElement('div');
+                group.className = 'book-control-group';
+
+                const nameEl = document.createElement('span');
+                nameEl.className = 'book-control-name';
+                nameEl.textContent = ctrl.name;
+
+                const toggleBtn = document.createElement('div');
+                toggleBtn.className = 'book-toggle-btn';
+                toggleBtn.setAttribute('role', 'group');
+                toggleBtn.setAttribute('aria-label', ctrl.name);
+
+                const currentVal = state[ctrl.target][ctrl.key];
+
+                for (const opt of ctrl.opts) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'book-toggle-opt' + (currentVal === opt.value ? ' active' : '');
+                    btn.textContent = opt.label;
+                    btn.addEventListener('click', () => {
+                        state[ctrl.target][ctrl.key] = opt.value;
+                        renderBookView();
+                    });
+                    toggleBtn.appendChild(btn);
+                }
+
+                group.appendChild(nameEl);
+                group.appendChild(toggleBtn);
+                bookControlsBar.appendChild(group);
+            }
+
+            // Page count indicator
+            const indicator = document.createElement('div');
+            indicator.className = 'book-page-indicator' + (state.exceedsPageLimit ? ' over-limit' : '');
+            indicator.textContent = `~${state.estimatedPageCount} est. pages`;
+            bookControlsBar.appendChild(indicator);
+        }
+
+        // Append a page number footer to a .book-page element.
+        function addPageNumber(pageEl, num) {
+            const pn = document.createElement('div');
+            pn.className = 'book-page-num';
+            pn.textContent = String(num);
+            pageEl.appendChild(pn);
+        }
+
+        // Render the full book canvas.
+        function renderBookView() {
+            syncBookSections();
+            estimateBookPageCount();
+
+            const state = messageBookState;
+            const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+
+            // Update back button label based on return destination
+            const backLabel = bookReturnView === reviewView ? 'Review' : 'Keepsakes';
+            bookBackBtn.textContent = `\u2190 ${backLabel}`;
+
+            // Rebuild controls bar
+            buildBookControlsBar(state);
+
+            // Rebuild canvas
+            bookCanvas.innerHTML = '';
+
+            // Page limit warning — appears above the canvas if exceeded
+            if (state.exceedsPageLimit) {
+                const warning = document.createElement('div');
+                warning.className = 'book-limit-warning';
+                warning.innerHTML = `<strong>Page limit approaching:</strong> This book is estimated at ${state.estimatedPageCount} pages, which exceeds the ${state.format.maxPages}-page maximum for a single volume. Consider splitting into two volumes — one per time period or relationship theme.`;
+                bookCanvas.appendChild(warning);
+            }
+
+            let pageNum = 0;
+            const showPgNums = state.body.pageNumberMode === 'on';
+
+            // Title page
+            const titlePage = buildBookTitlePage(state, contactName);
+            if (showPgNums) addPageNumber(titlePage, ++pageNum);
+            else pageNum++;
+            bookCanvas.appendChild(titlePage);
+
+            // Dedication page (optional)
+            if (state.opening.dedicationEnabled) {
+                const dedPage = buildBookDedicationPage(state);
+                if (showPgNums) addPageNumber(dedPage, ++pageNum);
+                else pageNum++;
+                bookCanvas.appendChild(dedPage);
+            }
+
+            // Sections with sparse dividers and page numbers
+            for (let i = 0; i < state.sections.length; i++) {
+                const section = state.sections[i];
+
+                if (section.showDividerBefore && state.body.dividerMode === 'sparse') {
+                    // Divider sits in the canvas gap — centered dots, visible on grey background
+                    const divEl = document.createElement('div');
+                    divEl.className = 'book-divider';
+                    divEl.setAttribute('aria-hidden', 'true');
+                    divEl.textContent = '\u00b7\u2003\u00b7\u2003\u00b7'; // · · ·
+                    bookCanvas.appendChild(divEl);
+                }
+
+                const sectionPage = buildBookSectionBlock(section, state, contactName);
+                if (showPgNums) addPageNumber(sectionPage, ++pageNum);
+                else pageNum++;
+                bookCanvas.appendChild(sectionPage);
+            }
+
+            // Ending page (optional)
+            if (state.body.endingMode === 'branded') {
+                const endPage = buildBookEndingPage();
+                if (showPgNums) addPageNumber(endPage, ++pageNum);
+                bookCanvas.appendChild(endPage);
+            }
+        }
+
+        function showBookView(returnView) {
+            initMessageBookState();
+            bookReturnView = returnView || keepsakesView;
+            renderBookView();
+            showView(bookView);
+            bookCanvas.scrollTop = 0;
+        }
+
+        bookBackBtn.addEventListener('click', () => {
+            const dest = bookReturnView || keepsakesView;
+            bookReturnView = null;
+            if (dest === reviewView) {
+                renderReviewView();
+                showView(reviewView);
+            } else {
+                renderKeepsakesView();
+                showView(keepsakesView);
+            }
+        });
+
+        // Entry from review footer (single set path)
+        reviewBookBtn.addEventListener('click', () => showBookView(reviewView));
+
+        // Entry from keepsakes summary header
+        ksBookBtn.addEventListener('click', () => showBookView(keepsakesView));
 
     </script>
 
