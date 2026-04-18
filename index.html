@@ -1306,6 +1306,28 @@
             vertical-align: middle;
         }
 
+        /* Chosen chip — the type this set is currently in-progress for */
+        .keepsake-elig-chip.chosen {
+            background: rgba(0,122,255,0.15);
+            border-color: rgba(0,122,255,0.40);
+            font-weight: 500;
+        }
+        .keepsake-elig-chip.chosen:hover {
+            background: rgba(0,122,255,0.21);
+            border-color: rgba(0,122,255,0.54);
+        }
+
+        /* "Selected" micro-label inside chosen chip — same size as Recommended */
+        .elig-chosen-tag {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            margin-left: 6px;
+            opacity: 0.65;
+            vertical-align: middle;
+        }
+
         /* Unlock hint — single actionable line below chips */
         .keepsake-elig-hint {
             font-size: 11px;
@@ -1561,6 +1583,14 @@
             .keepsake-elig-chip.best-fit:hover {
                 background: rgba(0,122,255,0.22);
                 border-color: rgba(0,122,255,0.52);
+            }
+            .keepsake-elig-chip.chosen {
+                background: rgba(0,122,255,0.22);
+                border-color: rgba(0,122,255,0.52);
+            }
+            .keepsake-elig-chip.chosen:hover {
+                background: rgba(0,122,255,0.30);
+                border-color: rgba(0,122,255,0.65);
             }
             .keepsake-elig-hint { color: rgba(255,255,255,0.28); }
         }
@@ -2204,6 +2234,233 @@
             font-size: 22px;
             font-weight: 700;
         }
+
+        /* ════════════════════════════════════════════
+           Phase C5: Keepsakes Summary View
+        ════════════════════════════════════════════ */
+
+        /* Outer shell fills the full viewport — no narrow strip */
+        .keepsakes-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background: #f2f2f7;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+        }
+
+        /* Header shell: sticky full-width backdrop */
+        .ks-header {
+            width: 100%;
+            background: rgba(242,242,247,0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.09);
+            position: sticky; top: 0; z-index: 10;
+        }
+
+        /* Header inner: centered flex row, matches content width */
+        .ks-header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 14px 24px 12px;
+        }
+
+        .ks-back-btn {
+            background: none; border: none; cursor: pointer;
+            color: #007aff; font-size: 15px; font-weight: 400;
+            padding: 4px 0; letter-spacing: -0.1px;
+        }
+        .ks-back-btn:hover { opacity: 0.72; }
+
+        .ks-header-title {
+            font-size: 15px; font-weight: 600; color: #1c1c1e;
+            letter-spacing: -0.2px;
+        }
+
+        .ks-header-end { width: 72px; }
+
+        /* Body: centered content rail, single → 2-column grid */
+        .ks-body {
+            max-width: 1040px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 28px 24px 60px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 600px) {
+            .ks-body { grid-template-columns: 1fr 1fr; }
+        }
+
+        .ks-intro {
+            grid-column: 1 / -1;
+            margin: 0 0 2px;
+            font-size: 13px;
+            color: #6e6e73;
+            letter-spacing: -0.1px;
+        }
+
+        .ks-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 18px 14px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+        }
+        .ks-card.has-chosen {
+            box-shadow: 0 1px 5px rgba(0,0,0,0.07),
+                        0 0 0 1.5px rgba(0,122,255,0.24);
+        }
+
+        /* Eyebrow row: set label + status pill */
+        .ks-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .ks-card-set-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #aeaeb2;
+        }
+
+        .ks-card-status {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .ks-card-status.status-draft {
+            background: rgba(0,122,255,0.10);
+            color: #007aff;
+        }
+        .ks-card-status.status-new {
+            background: rgba(52,199,89,0.10);
+            color: #34a853;
+        }
+
+        /* Excerpt is the hero — shows the content, not the metadata */
+        .ks-card-excerpt {
+            font-size: 14px;
+            font-weight: 400;
+            color: #1c1c1e;
+            line-height: 1.50;
+            letter-spacing: -0.15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .ks-card-excerpt.no-content {
+            color: #aeaeb2;
+            font-style: italic;
+        }
+
+        /* Type label sits below the excerpt */
+        .ks-card-type {
+            font-size: 12px;
+            font-weight: 600;
+            color: #007aff;
+            letter-spacing: -0.1px;
+            margin-bottom: 6px;
+        }
+        .ks-card-type.unpicked {
+            font-weight: 400;
+            color: #aeaeb2;
+        }
+
+        .ks-card-meta {
+            font-size: 11px;
+            color: #aeaeb2;
+            letter-spacing: -0.1px;
+            margin-top: auto;
+            padding-top: 10px;
+        }
+
+        /* Action row: clear on left, primary on right */
+        .ks-card-action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .ks-card-clear-btn {
+            background: none; border: none; cursor: pointer;
+            color: #aeaeb2; font-size: 12px; font-weight: 400;
+            padding: 4px 0; letter-spacing: -0.1px;
+            visibility: hidden; /* shown only for chosen cards */
+        }
+        .ks-card-clear-btn.visible { visibility: visible; }
+        .ks-card-clear-btn:hover { color: #8e8e93; }
+
+        .ks-card-action-btn {
+            background: none; border: none; cursor: pointer;
+            color: #007aff; font-size: 14px; font-weight: 500;
+            padding: 4px 0; letter-spacing: -0.1px;
+            margin-left: auto;
+        }
+        .ks-card-action-btn:hover { opacity: 0.72; }
+
+        @media (prefers-color-scheme: dark) {
+            .keepsakes-view { background: #1c1c1e; }
+
+            .ks-header {
+                background: rgba(28,28,30,0.92);
+                border-bottom-color: rgba(255,255,255,0.09);
+            }
+
+            .ks-back-btn  { color: #0a84ff; }
+            .ks-header-title { color: #f2f2f7; }
+
+            .ks-intro { color: #8e8e93; }
+
+            .ks-card {
+                background: #2c2c2e;
+                box-shadow: 0 1px 5px rgba(0,0,0,0.35), 0 0 0 0.5px rgba(255,255,255,0.06);
+            }
+            .ks-card.has-chosen {
+                box-shadow: 0 1px 5px rgba(0,0,0,0.35),
+                            0 0 0 1.5px rgba(10,132,255,0.32);
+            }
+
+            .ks-card-set-label { color: #48484a; }
+
+            .ks-card-status.status-draft {
+                background: rgba(10,132,255,0.14);
+                color: #0a84ff;
+            }
+            .ks-card-status.status-new {
+                background: rgba(48,209,88,0.12);
+                color: #30d158;
+            }
+
+            .ks-card-excerpt { color: #e5e5ea; }
+            .ks-card-excerpt.no-content { color: #48484a; }
+            .ks-card-type { color: #0a84ff; }
+            .ks-card-type.unpicked { color: #48484a; }
+            .ks-card-meta { color: #48484a; }
+            .ks-card-action-row { border-top-color: rgba(255,255,255,0.07); }
+            .ks-card-clear-btn { color: #48484a; }
+            .ks-card-clear-btn:hover { color: #636366; }
+            .ks-card-action-btn { color: #0a84ff; }
+        }
     </style>
 </head>
 <body>
@@ -2493,6 +2750,20 @@
     </div>
 
     <!-- ════════════════════════════════════════════
+         KEEPSAKES SUMMARY VIEW (Phase C5)
+    ════════════════════════════════════════════ -->
+    <div class="keepsakes-view" id="keepsakesView">
+        <div class="ks-header">
+            <div class="ks-header-inner">
+                <button type="button" class="ks-back-btn" id="ksBackBtn">&#8592; Review</button>
+                <div class="ks-header-title">Your Keepsakes</div>
+                <div class="ks-header-end"></div>
+            </div>
+        </div>
+        <div class="ks-body" id="ksBody"></div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>
@@ -2554,6 +2825,11 @@
         const compPreview = document.getElementById('compPreview');
         const compContinueBtn = document.getElementById('compContinueBtn');
 
+        // Keepsakes summary view (Phase C5)
+        const keepsakesView = document.getElementById('keepsakesView');
+        const ksBody = document.getElementById('ksBody');
+        const ksBackBtn = document.getElementById('ksBackBtn');
+
         // Loading
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
@@ -2577,11 +2853,12 @@
             chatView.style.display = 'none';
             reviewView.style.display = 'none';
             compositionView.style.display = 'none';
+            keepsakesView.style.display = 'none';
         }
 
         function showView(view) {
             hideAllViews();
-            const flexViews = [landing, compositionView];
+            const flexViews = [landing, compositionView, keepsakesView];
             view.style.display = flexViews.includes(view) ? 'flex' : 'block';
         }
 
@@ -4166,6 +4443,17 @@ ${keepsakeFooter}
         // Normalize grouping state after any mutation:
         //   Step 1 — prune: staging removed when empty; real groups removed when empty only if others exist.
         //   Step 2 — promote: if the sole real group is empty and staging has messages, absorb staging into it.
+        // Derive the visible display name for a group from its current position in the
+        // canonical real-set list (non-staging, in keepsakeGroups array order).
+        // Staging always returns its fixed label. customName, if set, overrides the default.
+        function getGroupDisplayName(group) {
+            if (group.id === 'group-staging') return 'Newly Selected';
+            if (group.customName && group.customName.trim()) return group.customName.trim();
+            const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging');
+            const idx = realGroups.indexOf(group);
+            return `Keepsake Set ${idx >= 0 ? idx + 1 : '?'}`;
+        }
+
         function normalizeGroups() {
             // Step 1: prune
             const realCount = keepsakeGroups.filter(g => g.id !== 'group-staging').length;
@@ -4196,6 +4484,7 @@ ${keepsakeFooter}
                 if (pos !== -1) {
                     g.messages.splice(pos, 1);
                     g.messageIndices.splice(pos, 1);
+                    touchGroup(g.id);
                     break;
                 }
             }
@@ -4271,6 +4560,7 @@ ${keepsakeFooter}
         ───────────────────────────────────────────── */
         let keepsakeGroups = [];
         let activeChooser = null; // tracks the currently open move chooser
+        let compositionReturnView = null; // which view to return to on comp back-press
 
         function buildKeepsakeGroups(indices, allMessages) {
             const sortedIndices = [...indices].sort((a, b) => a - b);
@@ -4282,7 +4572,7 @@ ${keepsakeFooter}
                     messageIndices.push(i);
                 }
             }
-            return [{ id: 'group-1', label: 'Keepsake Set 1', messages, messageIndices }];
+            return [{ id: 'group-1', messages, messageIndices, customName: null, chosenTypeId: null, lastComposedAt: null }];
         }
 
         function showReviewView() {
@@ -4454,17 +4744,29 @@ ${keepsakeFooter}
             chipsRow.className = 'keepsake-elig-chips';
 
             for (const r of results) {
-                const isBest = r.eligible && r.id === bestFitId;
+                const isChosen = r.eligible && r.id === group.chosenTypeId;
+                // Suppress "Recommended" when this type is already the chosen one
+                const isBest  = r.eligible && r.id === bestFitId && !isChosen;
                 const chip = document.createElement('button');
                 chip.type = 'button';
-                chip.className = `keepsake-elig-chip ${r.eligible ? 'eligible' : 'ineligible'}${isBest ? ' best-fit' : ''}`;
+                chip.className = [
+                    'keepsake-elig-chip',
+                    r.eligible ? 'eligible' : 'ineligible',
+                    isChosen ? 'chosen' : isBest ? 'best-fit' : ''
+                ].filter(Boolean).join(' ');
                 chip.setAttribute('data-type', r.id);
 
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = r.label;
                 chip.appendChild(nameSpan);
 
-                if (isBest) {
+                if (isChosen) {
+                    const tag = document.createElement('span');
+                    tag.className = 'elig-chosen-tag';
+                    tag.setAttribute('aria-hidden', 'true');
+                    tag.textContent = 'Selected';
+                    chip.appendChild(tag);
+                } else if (isBest) {
                     const tag = document.createElement('span');
                     tag.className = 'elig-best-tag';
                     tag.setAttribute('aria-hidden', 'true');
@@ -4476,7 +4778,8 @@ ${keepsakeFooter}
                     chip.title = r.reason;
                     chip.setAttribute('aria-label', `${r.label} — ${r.reason}`);
                 } else {
-                    chip.setAttribute('aria-label', isBest ? `${r.label} — recommended` : `${r.label} — available`);
+                    const ariaNote = isChosen ? 'selected' : isBest ? 'recommended' : 'available';
+                    chip.setAttribute('aria-label', `${r.label} — ${ariaNote}`);
                 }
 
                 chipsRow.appendChild(chip);
@@ -4515,6 +4818,7 @@ ${keepsakeFooter}
             for (const group of renderOrder) {
                 const groupEl = document.createElement('div');
                 groupEl.className = 'keepsake-group';
+                groupEl.setAttribute('data-group-id', group.id);
 
                 // Group header — built programmatically to support delete button
                 const headerEl = document.createElement('div');
@@ -4522,7 +4826,7 @@ ${keepsakeFooter}
 
                 const labelEl = document.createElement('span');
                 labelEl.className = 'keepsake-group-label';
-                labelEl.textContent = group.label;
+                labelEl.textContent = getGroupDisplayName(group);
                 headerEl.appendChild(labelEl);
 
                 const headerRight = document.createElement('div');
@@ -4539,7 +4843,7 @@ ${keepsakeFooter}
                     delBtn.type = 'button';
                     delBtn.className = 'review-delete-group-btn';
                     delBtn.setAttribute('data-group', group.id);
-                    delBtn.setAttribute('aria-label', `Remove ${group.label}`);
+                    delBtn.setAttribute('aria-label', `Remove ${getGroupDisplayName(group)}`);
                     delBtn.textContent = 'Remove set';
                     headerRight.appendChild(delBtn);
                 }
@@ -4644,8 +4948,8 @@ ${keepsakeFooter}
                     chip.setAttribute('data-group', groupId);
                     chip.setAttribute('data-idx', String(msgIdx));
                     chip.setAttribute('data-target', tgt.id);
-                    chip.setAttribute('aria-label', `Move to ${tgt.label}`);
-                    chip.textContent = tgt.label;
+                    chip.setAttribute('aria-label', `Move to ${getGroupDisplayName(tgt)}`);
+                    chip.textContent = getGroupDisplayName(tgt);
                     chips.appendChild(chip);
                 }
                 if (otherGroups.length > 0 && canMoveToNew) {
@@ -4674,13 +4978,29 @@ ${keepsakeFooter}
 
         function syncReviewContinueBtn() {
             const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging' && g.messages.length > 0);
+
+            // No sets at all — disabled placeholder
             if (realGroups.length === 0) {
                 reviewContinueBtn.disabled = true;
+                reviewContinueBtn.textContent = 'Make keepsake \u2192';
                 return;
             }
-            // Enable only when the primary group has at least one eligible type to compose
-            const hasEligible = realGroups.some(g => getGroupEligibility(g).some(r => r.eligible));
+
+            // 2+ real sets — always route to summary, always enabled
+            if (realGroups.length >= 2) {
+                reviewContinueBtn.disabled = false;
+                reviewContinueBtn.textContent = 'View keepsakes \u2192';
+                return;
+            }
+
+            // Exactly 1 real set — direct composition path
+            const group = realGroups[0];
+            const results = getGroupEligibility(group);
+            const hasEligible = results.some(r => r.eligible);
             reviewContinueBtn.disabled = !hasEligible;
+
+            const isResuming = group.chosenTypeId && results.some(r => r.id === group.chosenTypeId && r.eligible);
+            reviewContinueBtn.textContent = isResuming ? 'Resume keepsake \u2192' : 'Make keepsake \u2192';
         }
 
         /* ─────────────────────────────────────────────
@@ -4702,6 +5022,7 @@ ${keepsakeFooter}
             }
             group.messages.splice(msgIdx, 1);
             group.messageIndices.splice(msgIdx, 1);
+            touchGroup(groupId);
             normalizeGroups();
             renderReviewView();
         }
@@ -4722,6 +5043,10 @@ ${keepsakeFooter}
             tgt.messages.splice(pos, 0, msg);
             tgt.messageIndices.splice(pos, 0, dataIdx);
 
+            // Touch both sides — both sets were edited by this move
+            touchGroup(srcGroupId);
+            touchGroup(tgtGroupId);
+
             normalizeGroups();
             renderReviewView();
         }
@@ -4731,12 +5056,19 @@ ${keepsakeFooter}
             const realCount = keepsakeGroups.filter(g => g.id !== 'group-staging').length;
             const newGroup = {
                 id: `group-${Date.now()}`,
-                label: `Keepsake Set ${realCount + 1}`,
                 messages: [],
-                messageIndices: []
+                messageIndices: [],
+                customName: null,
+                chosenTypeId: null,
+                lastComposedAt: null
             };
             keepsakeGroups.push(newGroup);
             moveToGroup(srcGroupId, msgIdx, newGroup.id);
+            // Guarantee new set sorts ahead of source in keepsakes summary.
+            // moveToGroup touches both at effectively the same timestamp; adding 1ms
+            // to the new set's timestamp makes the sort deterministic.
+            const src = keepsakeGroups.find(g => g.id === srcGroupId);
+            newGroup.lastComposedAt = (src ? src.lastComposedAt || 0 : 0) + 1;
         }
 
         function removeEmptyGroup(groupId) {
@@ -4745,6 +5077,12 @@ ${keepsakeFooter}
             if (idx === -1 || keepsakeGroups[idx].messages.length > 0) return;
             keepsakeGroups.splice(idx, 1);
             renderReviewView();
+        }
+
+        // Mark a set as recently edited — used by every operation that changes set contents.
+        function touchGroup(groupId) {
+            const g = keepsakeGroups.find(g => g.id === groupId);
+            if (g) g.lastComposedAt = Date.now();
         }
 
         // activeChooser tracks the .review-msg-col with move-open class
@@ -4987,9 +5325,11 @@ ${keepsakeFooter}
             const typeInfo = KEEPSAKE_TYPES.find(t => t.id === typeId);
             const contactName = chatHeaderName.innerText || 'Conversation';
 
-            compSetLabel.textContent = group.label;
+            compSetLabel.textContent = getGroupDisplayName(group);
             compTypeLabel.textContent = typeInfo ? typeInfo.label : typeId;
-            compBackBtn.setAttribute('aria-label', `Back to review — ${group.label}`);
+            const backDest = compositionReturnView === keepsakesView ? 'Keepsakes' : 'Review';
+            compBackBtn.textContent = `\u2190 ${backDest}`;
+            compBackBtn.setAttribute('aria-label', `Back to ${backDest.toLowerCase()} — ${getGroupDisplayName(group)}`);
 
             compPreview.className = `comp-preview type-${typeId}`;
             compPreview.innerHTML = '';
@@ -5000,20 +5340,31 @@ ${keepsakeFooter}
             else if (typeId === 'conversation-page') buildConversationPagePreview(compPreview, group, contactName);
         }
 
-        function enterComposition(groupId, typeId) {
+        function enterComposition(groupId, typeId, returnView) {
             const group = keepsakeGroups.find(g => g.id === groupId);
             if (!group) return;
+            // Persist the chosen type and recency on the group
+            group.chosenTypeId = typeId;
+            touchGroup(groupId);
             compositionState = { groupId, typeId };
+            compositionReturnView = returnView || reviewView;
             renderCompositionView();
             showView(compositionView);
             // Always start at the top of the canvas — consistent for short and long previews
             compCanvas.scrollTop = 0;
         }
 
-        // Back from composition → review (compositionState reset; review body not re-rendered)
+        // Back from composition → review or keepsakes summary, depending on entry point.
         compBackBtn.addEventListener('click', () => {
             compositionState = null;
-            showView(reviewView);
+            const dest = compositionReturnView || reviewView;
+            compositionReturnView = null;
+            if (dest === keepsakesView) {
+                renderKeepsakesView();
+            } else {
+                renderReviewView();
+            }
+            showView(dest);
         });
 
         // Save keepsake — Phase C5 will implement real persistence.
@@ -5095,11 +5446,7 @@ ${keepsakeFooter}
                 closeActiveChooser();
                 const groupEl = eligChip.closest('.keepsake-group');
                 if (!groupEl) return;
-                // Find the group by matching the label text in the header
-                const labelEl = groupEl.querySelector('.keepsake-group-label');
-                const group = labelEl
-                    ? keepsakeGroups.find(g => g.label === labelEl.textContent)
-                    : null;
+                const group = keepsakeGroups.find(g => g.id === groupEl.getAttribute('data-group-id'));
                 if (!group) return;
                 // Derive typeId from chip classes (class list: keepsake-elig-chip eligible [best-fit])
                 // We store the type via data attribute set during build
@@ -5117,22 +5464,198 @@ ${keepsakeFooter}
         reviewBack.addEventListener('click', () => showView(chatView));
         reviewBackBtn.addEventListener('click', () => showView(chatView));
 
-        // "Make keepsake" — routes to best-fit composition for the primary real group.
-        // "Primary" = first real (non-staging) group with messages and at least one eligible type.
-        // Choosing best-fit automatically removes the need to hunt for the right chip in the
-        // common case where the user has a single set and just wants to continue.
+        // Continue button routing:
+        //   1 real set  → direct composition (resume chosen or open best-fit)
+        //   2+ real sets → Keepsakes Summary view, always
         reviewContinueBtn.addEventListener('click', () => {
             if (reviewContinueBtn.disabled) return;
             const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging' && g.messages.length > 0);
-            for (const group of realGroups) {
+
+            // 2+ sets — project-level summary is the right entry point
+            if (realGroups.length >= 2) {
+                showKeepsakesView();
+                return;
+            }
+
+            // Exactly 1 set — go directly into composition
+            if (realGroups.length === 1) {
+                const group = realGroups[0];
                 const results = getGroupEligibility(group);
-                const bestFitId = getBestFitId(results, group.messages);
-                if (bestFitId) {
-                    enterComposition(group.id, bestFitId);
-                    return;
+                const isResuming = group.chosenTypeId && results.some(r => r.id === group.chosenTypeId && r.eligible);
+                if (isResuming) {
+                    enterComposition(group.id, group.chosenTypeId);
+                } else {
+                    const bestFitId = getBestFitId(results, group.messages);
+                    if (bestFitId) enterComposition(group.id, bestFitId);
                 }
             }
-            // Fallback: no eligible type found (button should already be disabled, but be safe)
+        });
+
+        /* ─────────────────────────────────────────────
+           Phase C5: Keepsakes Summary View
+        ───────────────────────────────────────────── */
+
+        function formatRelativeTime(ts) {
+            if (!ts) return null;
+            const diffMs = Date.now() - ts;
+            const mins = Math.floor(diffMs / 60000);
+            if (mins < 1) return 'just now';
+            if (mins < 60) return `${mins}m ago`;
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return `${hrs}h ago`;
+            const days = Math.floor(hrs / 24);
+            if (days === 1) return 'yesterday';
+            if (days < 7) return `${days}d ago`;
+            const wks = Math.floor(days / 7);
+            if (wks === 1) return '1 week ago';
+            if (wks < 5) return `${wks} weeks ago`;
+            const mos = Math.floor(days / 30);
+            return `${mos} month${mos !== 1 ? 's' : ''} ago`;
+        }
+
+        function buildKeepsakeCard(group, contactName) {
+            const results = getGroupEligibility(group);
+            const isChosen = group.chosenTypeId &&
+                results.some(r => r.id === group.chosenTypeId && r.eligible);
+            const typeInfo = isChosen ? KEEPSAKE_TYPES.find(t => t.id === group.chosenTypeId) : null;
+            const bestFitId = getBestFitId(results, group.messages);
+
+            const card = document.createElement('div');
+            card.className = 'ks-card' + (isChosen ? ' has-chosen' : '');
+
+            // Eyebrow: set label + status pill
+            const top = document.createElement('div');
+            top.className = 'ks-card-top';
+
+            const setLabel = document.createElement('span');
+            setLabel.className = 'ks-card-set-label';
+            setLabel.textContent = getGroupDisplayName(group);
+
+            const status = document.createElement('span');
+            status.className = 'ks-card-status ' + (isChosen ? 'status-draft' : 'status-new');
+            status.textContent = isChosen ? 'Draft' : 'New';
+
+            top.appendChild(setLabel);
+            top.appendChild(status);
+            card.appendChild(top);
+
+            // Excerpt — hero of the card; shows the content, not the metadata
+            const firstMsg = group.messages.find(m => m.text && m.text.trim());
+            const excerpt = document.createElement('div');
+            if (firstMsg) {
+                excerpt.className = 'ks-card-excerpt';
+                excerpt.textContent = firstMsg.text.trim();
+            } else {
+                excerpt.className = 'ks-card-excerpt no-content';
+                excerpt.textContent = 'No text messages in this set yet.';
+            }
+            card.appendChild(excerpt);
+
+            // Type label — secondary identifier, sits below the content
+            const typeLine = document.createElement('div');
+            if (isChosen && typeInfo) {
+                typeLine.className = 'ks-card-type';
+                typeLine.textContent = typeInfo.label;
+            } else {
+                typeLine.className = 'ks-card-type unpicked';
+                typeLine.textContent = 'No type chosen';
+            }
+            card.appendChild(typeLine);
+
+            // Meta: message count + recency
+            const meta = document.createElement('div');
+            meta.className = 'ks-card-meta';
+            const msgCount = group.messages.length;
+            let metaText = `${msgCount} message${msgCount !== 1 ? 's' : ''}`;
+            if (group.lastComposedAt) {
+                const rel = formatRelativeTime(group.lastComposedAt);
+                if (rel) metaText += `\u2002\u00b7\u2002${rel}`;
+            }
+            meta.textContent = metaText;
+            card.appendChild(meta);
+
+            // Action row: clear (left, chosen cards only) + primary action (right)
+            const actionRow = document.createElement('div');
+            actionRow.className = 'ks-card-action-row';
+
+            // Clear button — removes the chosen type, leaving messages intact
+            const clearBtn = document.createElement('button');
+            clearBtn.type = 'button';
+            clearBtn.className = 'ks-card-clear-btn' + (isChosen ? ' visible' : '');
+            clearBtn.textContent = 'Clear type';
+            clearBtn.setAttribute('aria-label', `Clear chosen keepsake type for ${getGroupDisplayName(group)}`);
+            clearBtn.addEventListener('click', () => {
+                group.chosenTypeId = null;
+                touchGroup(group.id);
+                renderKeepsakesView();
+            });
+
+            const actionBtn = document.createElement('button');
+            actionBtn.type = 'button';
+            actionBtn.className = 'ks-card-action-btn';
+
+            if (isChosen) {
+                // Has a chosen eligible type — resume that composition
+                actionBtn.textContent = 'Resume \u2192';
+                actionBtn.addEventListener('click', () => {
+                    enterComposition(group.id, group.chosenTypeId, keepsakesView);
+                });
+            } else if (bestFitId) {
+                // No chosen type, but at least one eligible type available
+                actionBtn.textContent = 'Choose type \u2192';
+                actionBtn.addEventListener('click', () => {
+                    enterComposition(group.id, bestFitId, keepsakesView);
+                });
+            } else {
+                // Not yet eligible for any type — send back to review to keep editing
+                actionBtn.textContent = 'Review set \u2192';
+                actionBtn.addEventListener('click', () => {
+                    renderReviewView();
+                    showView(reviewView);
+                });
+            }
+
+            actionRow.appendChild(clearBtn);
+            actionRow.appendChild(actionBtn);
+            card.appendChild(actionRow);
+
+            return card;
+        }
+
+        function renderKeepsakesView() {
+            const contactName = chatHeaderName ? chatHeaderName.innerText || 'this conversation' : 'this conversation';
+            const realGroups = keepsakeGroups
+                .filter(g => g.id !== 'group-staging' && g.messages.length > 0)
+                .sort((a, b) => (b.lastComposedAt || 0) - (a.lastComposedAt || 0));
+
+            ksBody.innerHTML = '';
+
+            if (realGroups.length === 0) {
+                const empty = document.createElement('p');
+                empty.className = 'ks-intro';
+                empty.textContent = 'No keepsake sets yet. Go back to review to create one.';
+                ksBody.appendChild(empty);
+                return;
+            }
+
+            const intro = document.createElement('p');
+            intro.className = 'ks-intro';
+            intro.textContent = `${realGroups.length} set${realGroups.length !== 1 ? 's' : ''} from your conversation with ${contactName}.`;
+            ksBody.appendChild(intro);
+
+            for (const group of realGroups) {
+                ksBody.appendChild(buildKeepsakeCard(group, contactName));
+            }
+        }
+
+        function showKeepsakesView() {
+            renderKeepsakesView();
+            showView(keepsakesView);
+        }
+
+        ksBackBtn.addEventListener('click', () => {
+            renderReviewView();
+            showView(reviewView);
         });
 
     </script>
