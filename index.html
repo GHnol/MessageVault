@@ -1565,6 +1565,440 @@
             .keepsake-elig-hint { color: rgba(255,255,255,0.28); }
         }
 
+        /* ── Phase C4: Composition view ── */
+        .composition-view {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f7;
+            flex-direction: column;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+        }
+
+        .comp-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: rgba(245,245,247,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+
+        .comp-back-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #007aff;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 0;
+            min-width: 80px;
+            text-align: left;
+        }
+        .comp-back-btn:hover { opacity: 0.75; }
+
+        .comp-header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .comp-set-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #aeaeb2;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            user-select: none;
+        }
+
+        .comp-type-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+
+        .comp-header-end { min-width: 80px; }
+
+        .comp-canvas {
+            flex: 1;
+            padding: 36px 20px 48px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        /* ── Quote Card preview ── */
+        .comp-preview.type-quote-card {
+            width: 100%;
+            max-width: 380px;
+            background: #16213e;
+            border-radius: 24px;
+            padding: 52px 40px 44px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0;
+        }
+
+        .comp-qc-mark {
+            font-size: 52px;
+            line-height: 1;
+            color: rgba(255,255,255,0.12);
+            font-family: Georgia, serif;
+            margin-bottom: 8px;
+            user-select: none;
+        }
+
+        .comp-qc-text {
+            font-size: 20px;
+            line-height: 1.60;
+            color: rgba(255,255,255,0.88);
+            font-weight: 400;
+            font-style: italic;
+            font-family: Georgia, 'Times New Roman', serif;
+            margin-bottom: 28px;
+        }
+
+        /* Emoji within quote text — reset italic and switch to system emoji font */
+        .comp-qc-emoji {
+            font-style: normal;
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+        }
+
+        .comp-qc-rule {
+            width: 36px;
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            margin: 0 auto 20px;
+        }
+
+        .comp-qc-attribution {
+            font-size: 11px;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+
+        /* ── Framed Print preview ── */
+        .comp-preview.type-framed-print {
+            width: 100%;
+            max-width: 420px;
+            background: #fafaf8;
+            border-radius: 3px;
+            /* Double-border frame effect */
+            box-shadow:
+                0 0 0 1px #d8cfc0,
+                0 0 0 10px #fafaf8,
+                0 0 0 11px #d8cfc0,
+                0 6px 32px rgba(0,0,0,0.12);
+            padding: 44px 40px 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comp-fp-heading {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .comp-fp-name {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #3a3530;
+        }
+
+        .comp-fp-date {
+            font-size: 11px;
+            color: #b0a898;
+            margin-top: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .comp-fp-rule {
+            border: none;
+            border-top: 1px solid #e0d8c8;
+            margin: 0 0 24px;
+        }
+
+        .comp-fp-message {
+            margin-bottom: 18px;
+        }
+        .comp-fp-message:last-child { margin-bottom: 0; }
+
+        .comp-fp-sender {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #b0a898;
+            margin-bottom: 4px;
+        }
+
+        .comp-fp-text {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #2c2822;
+            font-family: Georgia, serif;
+        }
+
+        /* ── Mini Story preview — memory-page journal ── */
+        .comp-preview.type-mini-story {
+            width: 100%;
+            max-width: 420px;
+            background: #f7f4ef;
+            border-radius: 8px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1px 6px rgba(0,0,0,0.06);
+            padding: 44px 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Centered minimal header — names + date */
+        .comp-ms-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .comp-ms-participants {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #b8aea0;
+            margin-bottom: 5px;
+        }
+
+        .comp-ms-date-header {
+            font-size: 11px;
+            color: #c8bfb4;
+        }
+
+        /* Ornamental separator between header and entries */
+        .comp-ms-ornament {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+
+        .comp-ms-orn-line {
+            flex: 1;
+            border: none;
+            border-top: 1px solid #e4ddd4;
+        }
+
+        .comp-ms-orn-dot {
+            font-size: 8px;
+            color: #d0c8be;
+            line-height: 1;
+            user-select: none;
+        }
+
+        /* Individual memory entry — text first, attribution below */
+        .comp-ms-entry {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+
+        .comp-ms-entry-text {
+            font-size: 16px;
+            line-height: 1.78;
+            color: #2c2822;
+            font-family: Georgia, serif;
+            margin-bottom: 8px;
+        }
+
+        /* Attribution line: sender · timestamp — quiet annotation */
+        .comp-ms-entry-attr {
+            font-size: 10px;
+            letter-spacing: 0.9px;
+            text-transform: uppercase;
+            color: #b8aea0;
+        }
+
+        /* Thin centered rule between entries */
+        .comp-ms-entry-div {
+            width: 24px;
+            border: none;
+            border-top: 1px solid #e4ddd4;
+            margin: 24px auto;
+        }
+
+        /* ── Conversation Page preview ── */
+        .comp-preview.type-conversation-page {
+            width: 100%;
+            max-width: 460px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 24px rgba(0,0,0,0.07);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comp-cp-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .comp-cp-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1c1c1e;
+        }
+
+        .comp-cp-date {
+            font-size: 11px;
+            color: #aeaeb2;
+            margin-top: 3px;
+        }
+
+        .comp-cp-messages {
+            padding: 20px 16px;
+            background: #f2f2f7;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .comp-cp-row { display: flex; }
+        .comp-cp-row.me  { justify-content: flex-end; }
+        .comp-cp-row.them { justify-content: flex-start; }
+
+        .comp-cp-bubble {
+            max-width: 74%;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .comp-cp-row.me   .comp-cp-bubble { background: #007aff; color: white; border-bottom-right-radius: 4px; }
+        .comp-cp-row.them .comp-cp-bubble { background: white; color: #1c1c1e; border-bottom-left-radius: 4px; }
+
+        .comp-cp-count {
+            padding: 12px 16px;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            font-size: 11px;
+            color: #c7c7cc;
+        }
+
+        /* ── Composition footer ── */
+        .comp-footer {
+            position: sticky;
+            bottom: 0;
+            background: rgba(245,245,247,0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0,0,0,0.07);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .comp-footer-btn {
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 22px;
+            padding: 10px 26px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.12s, opacity 0.12s;
+        }
+        .comp-footer-btn:hover { background: #0071eb; }
+
+        /* Viewport-fixed confirmation bar — shown after "Save keepsake" tap.
+           Fixed just above the sticky comp-footer so it is always visible
+           regardless of canvas scroll, and reads as part of the composition chrome. */
+        .comp-confirm-bar {
+            position: fixed;
+            bottom: 70px; /* clears the sticky comp-footer (~62px tall) */
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: rgba(245,245,247,0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(52,199,89,0.30);
+            padding: 11px 20px;
+            text-align: center;
+            color: #28a745;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+            pointer-events: none;
+            animation: comp-bar-in 0.20s ease, comp-bar-out 0.40s ease 2.6s forwards;
+        }
+
+        @keyframes comp-bar-in  { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes comp-bar-out { from { opacity: 1; } to { opacity: 0; } }
+
+        /* ── Dark mode: composition view ── */
+        @media (prefers-color-scheme: dark) {
+            .composition-view {
+                background: #000;
+            }
+            .comp-header {
+                background: rgba(28,28,30,0.92);
+                border-bottom-color: #38383a;
+            }
+            .comp-set-label { color: rgba(255,255,255,0.30); }
+            .comp-type-label { color: #f2f2f7; }
+            /* Quote Card: dark surface already dark-native */
+            /* Framed Print: keep warm cream tones (print aesthetic, always light) */
+            /* Mini Story: dark surface */
+            .comp-preview.type-mini-story {
+                background: #1c1c1e;
+                box-shadow: 0 2px 24px rgba(0,0,0,0.30);
+            }
+            /* Mini Story dark — warm paper inverted to warm dark */
+            .comp-preview.type-mini-story { background: #1e1b17; box-shadow: 0 4px 24px rgba(0,0,0,0.40); }
+            .comp-ms-participants { color: rgba(255,255,255,0.28); }
+            .comp-ms-date-header { color: rgba(255,255,255,0.20); }
+            .comp-ms-orn-line { border-top-color: rgba(255,255,255,0.08); }
+            .comp-ms-orn-dot { color: rgba(255,255,255,0.15); }
+            .comp-ms-entry-text { color: rgba(255,255,255,0.82); }
+            .comp-ms-entry-attr { color: rgba(255,255,255,0.25); }
+            .comp-ms-entry-div { border-top-color: rgba(255,255,255,0.08); }
+            /* Conversation Page: dark surface */
+            .comp-preview.type-conversation-page {
+                background: #1c1c1e;
+                box-shadow: 0 2px 24px rgba(0,0,0,0.30);
+            }
+            .comp-cp-header { border-bottom-color: rgba(255,255,255,0.07); }
+            .comp-cp-name { color: #f2f2f7; }
+            .comp-cp-messages { background: #000; }
+            .comp-cp-row.them .comp-cp-bubble { background: #2c2c2e; color: #f2f2f7; }
+            .comp-cp-count { border-top-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.22); }
+            .comp-footer {
+                background: rgba(28,28,30,0.96);
+                border-top-color: #38383a;
+            }
+            .comp-confirm-bar {
+                background: rgba(28,28,30,0.96);
+                border-top-color: rgba(48,209,88,0.28);
+                color: #30d158;
+            }
+        }
+
         /* Search icon button in header */
         .header-btn.icon-btn {
             background: none;
@@ -2034,7 +2468,27 @@
         <div class="review-body" id="reviewBody"></div>
         <div class="review-footer">
             <button type="button" class="review-footer-btn back" id="reviewBackBtn">&#8592; Back</button>
-            <button type="button" class="review-footer-btn continue" id="reviewContinueBtn">Continue &#8594;</button>
+            <button type="button" class="review-footer-btn continue" id="reviewContinueBtn">Make keepsake &#8594;</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         COMPOSITION VIEW (Phase C4)
+    ════════════════════════════════════════════ -->
+    <div class="composition-view" id="compositionView">
+        <div class="comp-header">
+            <button type="button" class="comp-back-btn" id="compBackBtn">&#8592; Review</button>
+            <div class="comp-header-center">
+                <span class="comp-set-label" id="compSetLabel"></span>
+                <span class="comp-type-label" id="compTypeLabel"></span>
+            </div>
+            <div class="comp-header-end"></div>
+        </div>
+        <div class="comp-canvas" id="compCanvas">
+            <div class="comp-preview" id="compPreview"></div>
+        </div>
+        <div class="comp-footer">
+            <button type="button" class="comp-footer-btn" id="compContinueBtn">Save keepsake &#8594;</button>
         </div>
     </div>
 
@@ -2091,6 +2545,15 @@
         const reviewBackBtn = document.getElementById('reviewBackBtn');
         const reviewContinueBtn = document.getElementById('reviewContinueBtn');
 
+        // Composition view (Phase C4)
+        const compositionView = document.getElementById('compositionView');
+        const compBackBtn = document.getElementById('compBackBtn');
+        const compSetLabel = document.getElementById('compSetLabel');
+        const compTypeLabel = document.getElementById('compTypeLabel');
+        const compCanvas = document.getElementById('compCanvas');
+        const compPreview = document.getElementById('compPreview');
+        const compContinueBtn = document.getElementById('compContinueBtn');
+
         // Loading
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
@@ -2101,6 +2564,7 @@
         let dbConversations = null;
         let sqlDB = null;
         let cameFromGuide = false;
+        let compositionState = null; // { groupId, typeId }
 
         /* ─────────────────────────────────────────────
            View navigation
@@ -2112,11 +2576,13 @@
             contactPicker.style.display = 'none';
             chatView.style.display = 'none';
             reviewView.style.display = 'none';
+            compositionView.style.display = 'none';
         }
 
         function showView(view) {
             hideAllViews();
-            view.style.display = view === landing ? 'flex' : 'block';
+            const flexViews = [landing, compositionView];
+            view.style.display = flexViews.includes(view) ? 'flex' : 'block';
         }
 
         // Landing → Guide
@@ -3992,6 +4458,7 @@ ${keepsakeFooter}
                 const chip = document.createElement('button');
                 chip.type = 'button';
                 chip.className = `keepsake-elig-chip ${r.eligible ? 'eligible' : 'ineligible'}${isBest ? ' best-fit' : ''}`;
+                chip.setAttribute('data-type', r.id);
 
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = r.label;
@@ -4206,8 +4673,14 @@ ${keepsakeFooter}
         }
 
         function syncReviewContinueBtn() {
-            const total = keepsakeGroups.reduce((s, g) => s + g.messages.length, 0);
-            reviewContinueBtn.disabled = total === 0;
+            const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging' && g.messages.length > 0);
+            if (realGroups.length === 0) {
+                reviewContinueBtn.disabled = true;
+                return;
+            }
+            // Enable only when the primary group has at least one eligible type to compose
+            const hasEligible = realGroups.some(g => getGroupEligibility(g).some(r => r.eligible));
+            reviewContinueBtn.disabled = !hasEligible;
         }
 
         /* ─────────────────────────────────────────────
@@ -4282,6 +4755,289 @@ ${keepsakeFooter}
             }
         }
 
+        /* ─────────────────────────────────────────────
+           Phase C4: Composition
+        ───────────────────────────────────────────── */
+
+        // Returns the date range string for a set of messages
+        function getDateRange(msgs) {
+            const dates = msgs.filter(m => m.timestamp)
+                .map(m => new Date(m.timestamp.replace(' ', 'T')))
+                .filter(d => !isNaN(d.getTime()));
+            if (dates.length === 0) return '';
+            const min = new Date(Math.min(...dates));
+            const max = new Date(Math.max(...dates));
+            const fmt = { month: 'long', year: 'numeric' };
+            if (min.toDateString() === max.toDateString()) return min.toLocaleDateString([], fmt);
+            const fmtShort = { month: 'short', year: 'numeric' };
+            const minStr = min.toLocaleDateString([], fmtShort);
+            const maxStr = max.toLocaleDateString([], fmtShort);
+            return minStr === maxStr ? minStr : `${minStr} – ${maxStr}`;
+        }
+
+        // ── Type-specific preview builders ──
+        // Each takes the container el + group + contact name, fills it in place.
+
+        // Fills a <p> element with text, wrapping emoji in .comp-qc-emoji spans
+        // so they opt out of the italic font treatment. Uses textNodes — no innerHTML.
+        function appendQuoteText(p, text) {
+            // Match emoji: broad Unicode ranges covering most pictographs and symbols.
+            // The `u` flag enables \u{...} syntax and proper surrogate-pair handling.
+            const emojiRx = /[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2300}-\u{23FF}\u{2100}-\u{214F}\u{FE00}-\u{FE0F}]+/gu;
+            let last = 0;
+            let m;
+            while ((m = emojiRx.exec(text)) !== null) {
+                if (m.index > last) {
+                    p.appendChild(document.createTextNode(text.slice(last, m.index)));
+                }
+                const emojiSpan = document.createElement('span');
+                emojiSpan.className = 'comp-qc-emoji';
+                emojiSpan.textContent = m[0];
+                p.appendChild(emojiSpan);
+                last = m.index + m[0].length;
+            }
+            if (last < text.length) {
+                p.appendChild(document.createTextNode(text.slice(last)));
+            }
+        }
+
+        function buildQuoteCardPreview(el, group, contactName) {
+            // Pick the most substantial single message for the quote
+            const best = group.messages.reduce((a, b) =>
+                (b.text || '').length > (a.text || '').length ? b : a, group.messages[0]);
+
+            const mark = document.createElement('div');
+            mark.className = 'comp-qc-mark';
+            mark.setAttribute('aria-hidden', 'true');
+            mark.textContent = '\u201c';
+            el.appendChild(mark);
+
+            const text = document.createElement('p');
+            text.className = 'comp-qc-text';
+            appendQuoteText(text, best.text || '');
+            el.appendChild(text);
+
+            const rule = document.createElement('hr');
+            rule.className = 'comp-qc-rule';
+            el.appendChild(rule);
+
+            const attr = document.createElement('p');
+            attr.className = 'comp-qc-attribution';
+            const dateStr = getDateRange(group.messages);
+            const sender = best.sender === 'Me' ? 'Me' : contactName;
+            attr.textContent = dateStr ? `${sender}\u2002\u00b7\u2002${dateStr}` : sender;
+            el.appendChild(attr);
+        }
+
+        function buildFramedPrintPreview(el, group, contactName) {
+            const heading = document.createElement('div');
+            heading.className = 'comp-fp-heading';
+            const name = document.createElement('p');
+            name.className = 'comp-fp-name';
+            name.textContent = contactName;
+            const date = document.createElement('p');
+            date.className = 'comp-fp-date';
+            date.textContent = getDateRange(group.messages);
+            heading.appendChild(name);
+            if (date.textContent) heading.appendChild(date);
+            el.appendChild(heading);
+
+            const rule = document.createElement('hr');
+            rule.className = 'comp-fp-rule';
+            el.appendChild(rule);
+
+            for (const m of group.messages) {
+                if (!m.text) continue;
+                const row = document.createElement('div');
+                row.className = 'comp-fp-message';
+                const senderEl = document.createElement('p');
+                senderEl.className = 'comp-fp-sender';
+                senderEl.textContent = m.sender === 'Me' ? 'Me' : contactName;
+                const textEl = document.createElement('p');
+                textEl.className = 'comp-fp-text';
+                textEl.textContent = m.text;
+                row.appendChild(senderEl);
+                row.appendChild(textEl);
+                el.appendChild(row);
+            }
+        }
+
+        function buildMiniStoryPreview(el, group, contactName) {
+            // Header — quiet, centered, no bold headline
+            const header = document.createElement('div');
+            header.className = 'comp-ms-header';
+            const parts = document.createElement('p');
+            parts.className = 'comp-ms-participants';
+            parts.textContent = `${contactName} & Me`;
+            header.appendChild(parts);
+            const dateStr = getDateRange(group.messages);
+            if (dateStr) {
+                const dateEl = document.createElement('p');
+                dateEl.className = 'comp-ms-date-header';
+                dateEl.textContent = dateStr;
+                header.appendChild(dateEl);
+            }
+            el.appendChild(header);
+
+            // Ornamental separator
+            const orn = document.createElement('div');
+            orn.className = 'comp-ms-ornament';
+            const line1 = document.createElement('hr'); line1.className = 'comp-ms-orn-line';
+            const dot  = document.createElement('span'); dot.className = 'comp-ms-orn-dot';
+            dot.setAttribute('aria-hidden', 'true'); dot.textContent = '◆';
+            const line2 = document.createElement('hr'); line2.className = 'comp-ms-orn-line';
+            orn.appendChild(line1); orn.appendChild(dot); orn.appendChild(line2);
+            el.appendChild(orn);
+
+            // Memory entries — text first, attribution below
+            const msgsWithText = group.messages.filter(m => m.text);
+            for (let i = 0; i < msgsWithText.length; i++) {
+                const m = msgsWithText[i];
+                const isMe = m.sender === 'Me';
+
+                const entry = document.createElement('div');
+                entry.className = 'comp-ms-entry';
+
+                const textEl = document.createElement('p');
+                textEl.className = 'comp-ms-entry-text';
+                textEl.textContent = m.text;
+                entry.appendChild(textEl);
+
+                const attr = document.createElement('p');
+                attr.className = 'comp-ms-entry-attr';
+                const senderLabel = isMe ? 'Me' : contactName;
+                const ts = m.timestamp ? formatTimestamp(m.timestamp) : '';
+                attr.textContent = ts ? `${senderLabel}\u2002\u00b7\u2002${ts}` : senderLabel;
+                entry.appendChild(attr);
+
+                el.appendChild(entry);
+
+                // Thin centered rule between entries (not after last)
+                if (i < msgsWithText.length - 1) {
+                    const div = document.createElement('hr');
+                    div.className = 'comp-ms-entry-div';
+                    el.appendChild(div);
+                }
+            }
+        }
+
+        function buildConversationPagePreview(el, group, contactName) {
+            const header = document.createElement('div');
+            header.className = 'comp-cp-header';
+            const nameEl = document.createElement('p');
+            nameEl.className = 'comp-cp-name';
+            nameEl.textContent = contactName;
+            const dateEl = document.createElement('p');
+            dateEl.className = 'comp-cp-date';
+            dateEl.textContent = getDateRange(group.messages);
+            header.appendChild(nameEl);
+            if (dateEl.textContent) header.appendChild(dateEl);
+            el.appendChild(header);
+
+            const msgs = document.createElement('div');
+            msgs.className = 'comp-cp-messages';
+            for (const m of group.messages) {
+                if (!m.text) continue;
+                const row = document.createElement('div');
+                row.className = `comp-cp-row ${m.sender === 'Me' ? 'me' : 'them'}`;
+                const bubble = document.createElement('div');
+                bubble.className = 'comp-cp-bubble';
+                bubble.textContent = m.text;
+                row.appendChild(bubble);
+                msgs.appendChild(row);
+            }
+            el.appendChild(msgs);
+
+            const count = document.createElement('div');
+            count.className = 'comp-cp-count';
+            count.textContent = `${group.messages.length} message${group.messages.length !== 1 ? 's' : ''}`;
+            el.appendChild(count);
+        }
+
+        /*
+         * Composition state contract (Phase C4)
+         * ──────────────────────────────────────
+         * compositionState = { groupId, typeId }  or  null
+         *
+         * SET:   enterComposition(groupId, typeId) — always writes a fresh state.
+         *        Calling it a second time (different type, different group) fully
+         *        replaces the previous state. No merge, no inheritance.
+         *
+         * RESET: compBackBtn click → null. The review screen is shown exactly as
+         *        the user left it; renderReviewView() is NOT called again.
+         *
+         * STALE: If the user returns to review, changes groupings, then re-enters
+         *        composition, enterComposition is always called fresh from the
+         *        eligible chip or reviewContinueBtn — so stale state is impossible.
+         *
+         * NULL GUARD: renderCompositionView() silently no-ops if compositionState
+         *        is null or if the referenced group no longer exists in keepsakeGroups.
+         */
+
+        function renderCompositionView() {
+            if (!compositionState) return;
+            const { groupId, typeId } = compositionState;
+            const group = keepsakeGroups.find(g => g.id === groupId);
+            if (!group) {
+                // Group was removed while composition was open — go back to review
+                compositionState = null;
+                showView(reviewView);
+                return;
+            }
+            const typeInfo = KEEPSAKE_TYPES.find(t => t.id === typeId);
+            const contactName = chatHeaderName.innerText || 'Conversation';
+
+            compSetLabel.textContent = group.label;
+            compTypeLabel.textContent = typeInfo ? typeInfo.label : typeId;
+            compBackBtn.setAttribute('aria-label', `Back to review — ${group.label}`);
+
+            compPreview.className = `comp-preview type-${typeId}`;
+            compPreview.innerHTML = '';
+
+            if (typeId === 'quote-card')             buildQuoteCardPreview(compPreview, group, contactName);
+            else if (typeId === 'framed-print')      buildFramedPrintPreview(compPreview, group, contactName);
+            else if (typeId === 'mini-story')        buildMiniStoryPreview(compPreview, group, contactName);
+            else if (typeId === 'conversation-page') buildConversationPagePreview(compPreview, group, contactName);
+        }
+
+        function enterComposition(groupId, typeId) {
+            const group = keepsakeGroups.find(g => g.id === groupId);
+            if (!group) return;
+            compositionState = { groupId, typeId };
+            renderCompositionView();
+            showView(compositionView);
+            // Always start at the top of the canvas — consistent for short and long previews
+            compCanvas.scrollTop = 0;
+        }
+
+        // Back from composition → review (compositionState reset; review body not re-rendered)
+        compBackBtn.addEventListener('click', () => {
+            compositionState = null;
+            showView(reviewView);
+        });
+
+        // Save keepsake — Phase C5 will implement real persistence.
+        // For now: show an in-view confirmation banner, then stay on the composition.
+        compContinueBtn.addEventListener('click', () => {
+            if (!compositionState) return;
+            const typeInfo = KEEPSAKE_TYPES.find(t => t.id === compositionState.typeId);
+            const typeName = typeInfo ? typeInfo.label : 'Keepsake';
+
+            // Remove any previous bar before showing a fresh one
+            const existing = document.querySelector('.comp-confirm-bar');
+            if (existing) existing.remove();
+
+            // Appended to body so position:fixed is relative to the viewport,
+            // not a transformed/scrolled ancestor. Always visible above the footer.
+            const bar = document.createElement('div');
+            bar.className = 'comp-confirm-bar';
+            bar.textContent = `${typeName} queued — saving will be available in the next version.`;
+            document.body.appendChild(bar);
+
+            // Auto-remove after animation completes (0.20s in + 2.6s hold + 0.40s out)
+            setTimeout(() => { if (bar.parentNode) bar.remove(); }, 3200);
+        });
+
         // Multi-action event delegation for the review body
         reviewBody.addEventListener('click', (e) => {
             // Toggle move chip row open/closed
@@ -4333,6 +5089,24 @@ ${keepsakeFooter}
                 removeEmptyGroup(delGroupBtn.getAttribute('data-group'));
                 return;
             }
+            // Enter composition for an eligible keepsake type
+            const eligChip = e.target.closest('.keepsake-elig-chip.eligible');
+            if (eligChip) {
+                closeActiveChooser();
+                const groupEl = eligChip.closest('.keepsake-group');
+                if (!groupEl) return;
+                // Find the group by matching the label text in the header
+                const labelEl = groupEl.querySelector('.keepsake-group-label');
+                const group = labelEl
+                    ? keepsakeGroups.find(g => g.label === labelEl.textContent)
+                    : null;
+                if (!group) return;
+                // Derive typeId from chip classes (class list: keepsake-elig-chip eligible [best-fit])
+                // We store the type via data attribute set during build
+                const typeId = eligChip.getAttribute('data-type');
+                if (typeId) enterComposition(group.id, typeId);
+                return;
+            }
             // Outside click — close any open control
             if (!e.target.closest('.review-msg-col')) {
                 closeActiveChooser();
@@ -4343,12 +5117,22 @@ ${keepsakeFooter}
         reviewBack.addEventListener('click', () => showView(chatView));
         reviewBackBtn.addEventListener('click', () => showView(chatView));
 
-        // Continue — placeholder for next phase
+        // "Make keepsake" — routes to best-fit composition for the primary real group.
+        // "Primary" = first real (non-staging) group with messages and at least one eligible type.
+        // Choosing best-fit automatically removes the need to hunt for the right chip in the
+        // common case where the user has a single set and just wants to continue.
         reviewContinueBtn.addEventListener('click', () => {
             if (reviewContinueBtn.disabled) return;
-            // Phase C2b will replace this
-            const total = keepsakeGroups.reduce((s, g) => s + g.messages.length, 0);
-            alert(`${total} message${total !== 1 ? 's' : ''} ready.\n\n(Keepsake creation — next phase)`);
+            const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging' && g.messages.length > 0);
+            for (const group of realGroups) {
+                const results = getGroupEligibility(group);
+                const bestFitId = getBestFitId(results, group.messages);
+                if (bestFitId) {
+                    enterComposition(group.id, bestFitId);
+                    return;
+                }
+            }
+            // Fallback: no eligible type found (button should already be disabled, but be safe)
         });
 
     </script>
