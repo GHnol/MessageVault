@@ -6392,53 +6392,6 @@ ${keepsakeFooter}
             });
         }
 
-        // Per-volume deterministic page estimator.
-        // Runs for each volume independently using only that volume's included sections.
-        // Opening/ending overhead applies to each volume (each is a separate book).
-        // Not exact pagination — labeled as estimate throughout UI.
-        function estimateBookPageCount() {
-            const state = messageBookState;
-
-            for (const vol of state.volumes) {
-                const sections = state.sections.filter(
-                    s => s.volumeId === vol.id && s.included
-                );
-
-                const totalMessages = sections.reduce((s, sec) => s + sec.messages.length, 0);
-                const totalChars    = sections.reduce((s, sec) =>
-                    s + sec.messages.reduce((cs, m) => cs + (m.text || '').length, 0), 0);
-
-                const openingPages  = 1 + (state.opening.dedicationEnabled ? 1 : 0);
-                const endingPages   = state.body.endingMode === 'branded' ? 1 : 0;
-
-                // Sparse dividers: each section boundary ≈ 0.3 pages of overhead
-                const dividerOverhead = state.body.dividerMode === 'sparse' && sections.length > 1
-                    ? (sections.length - 1) * 0.3 : 0;
-
-                // Chat-message density in a 7×10 format:
-                // Short messages → ~10/page; medium → ~7/page; long → ~5/page
-                let messagePages = 0;
-                if (totalMessages > 0) {
-                    const avg = totalChars / totalMessages;
-                    const perPage = avg > 100 ? 5 : avg > 50 ? 7 : 10;
-                    messagePages = Math.ceil(totalMessages / perPage);
-                }
-
-                const estimate = Math.ceil(openingPages + messagePages + dividerOverhead + endingPages);
-                vol.estimatedPageCount = estimate;
-                vol.exceedsPageLimit   = estimate > state.format.maxPages;
-            }
-
-            // Mirror active volume stats to top-level for controls-bar display
-            const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
-            if (activeVol) {
-                state.estimatedPageCount = activeVol.estimatedPageCount;
-                state.exceedsPageLimit   = activeVol.exceedsPageLimit;
-            }
-
-            return state.estimatedPageCount;
-        }
-
         // Group consecutive same-sender messages into runs.
         // Supports preserveSameSenderRuns soft-composition behavior.
         function groupIntoRuns(messages) {
@@ -6649,19 +6602,30 @@ ${keepsakeFooter}
                     units.push({ type: 'force-page-break' });
                 }
 
-                if (!section.forcePageBreakBefore && state.body.dividerMode === 'sparse' && si > 0) {
-                    units.push({ type: 'divider', lines: BOOK_DIVIDER_LINES });
-                }
-
                 const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
                 const displayName = section.customName && section.customName.trim()
                     ? section.customName.trim()
                     : (srcGroup ? getGroupDisplayName(srcGroup) : '');
 
+                // Sparse divider: bind it to the section-header so they move together.
+                // A standalone divider unit would be placed before the orphan guard runs
+                // on the section-header, allowing it to strand at the bottom of a page.
+                // When hasDivider is true the section-header's line cost includes the
+                // divider lines, so the orphan guard automatically keeps all three
+                // (divider + header + opening content) together on the same page.
+                const hasSectionDivider = !section.forcePageBreakBefore &&
+                    state.body.dividerMode === 'sparse' && si > 0;
+
+                if (hasSectionDivider && !displayName) {
+                    // No section-header to bind to; fall back to standalone divider.
+                    units.push({ type: 'divider', lines: BOOK_DIVIDER_LINES });
+                }
+
                 if (displayName) {
                     units.push({
                         type: 'section-header',
-                        lines: BOOK_HEADER_LINES,
+                        lines: BOOK_HEADER_LINES + (hasSectionDivider ? BOOK_DIVIDER_LINES : 0),
+                        hasDivider: hasSectionDivider,
                         keepWithNext: true,   // orphan guard: stays with first content unit
                         displayName,
                         featured: section.featured
@@ -6929,6 +6893,15 @@ ${keepsakeFooter}
             if (page.featured) pageEl.classList.add('featured');
 
             for (const unit of page.units) {
+                // Divider is bound to section-header to prevent stranding.
+                // Render the divider element first, then the header element.
+                if (unit.type === 'section-header' && unit.hasDivider) {
+                    const divEl = document.createElement('div');
+                    divEl.className = 'book-divider';
+                    divEl.setAttribute('aria-hidden', 'true');
+                    divEl.textContent = '\u00b7\u2003\u00b7\u2003\u00b7';
+                    pageEl.appendChild(divEl);
+                }
                 const el = renderUnitToDOM(unit);
                 if (el) pageEl.appendChild(el);
             }
@@ -7068,7 +7041,7 @@ ${keepsakeFooter}
             // Page count indicator (reflects active volume)
             const indicator = document.createElement('div');
             indicator.className = 'book-page-indicator' + (state.exceedsPageLimit ? ' over-limit' : '');
-            indicator.textContent = `~${state.estimatedPageCount} est. pages`;
+            indicator.textContent = `${state.estimatedPageCount} pages`;
             bookControlsBar.appendChild(indicator);
         }
 
@@ -7222,16 +7195,37 @@ ${keepsakeFooter}
         // Sections are rendered in orderIndex order (independent from keepsakes summary sort).
         function renderBookView() {
             syncBookSections();
-            estimateBookPageCount();
 
             const state = messageBookState;
             const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+
+            // Paginate every volume up front to get real page counts before building
+            // the controls bar. Active volume pages are kept for rendering — no
+            // second pagination pass. Inactive volumes are paginated for count only.
+            let activePages = [];
+            const savedActiveVol = state.activeVolumeId;
+            for (const vol of state.volumes) {
+                state.activeVolumeId = vol.id;
+                const volUnits = generateCompositionUnits(state, contactName);
+                const volPages = paginateUnits(volUnits);
+                vol.estimatedPageCount = volPages.length;
+                vol.exceedsPageLimit   = volPages.length > state.format.maxPages;
+                if (vol.id === savedActiveVol) activePages = volPages;
+            }
+            state.activeVolumeId = savedActiveVol;
+
+            // Mirror active-volume real counts to top-level for controls-bar helpers
+            const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
+            if (activeVol) {
+                state.estimatedPageCount = activeVol.estimatedPageCount;
+                state.exceedsPageLimit   = activeVol.exceedsPageLimit;
+            }
 
             // Update back button label based on return destination
             const backLabel = bookReturnView === reviewView ? 'Review' : 'Keepsakes';
             bookBackBtn.textContent = `\u2190 ${backLabel}`;
 
-            // Rebuild controls bar (volume tabs + settings)
+            // Rebuild controls bar (volume tabs + settings) — uses real page counts
             buildBookControlsBar(state);
 
             // Rebuild sections management bar
@@ -7241,21 +7235,17 @@ ${keepsakeFooter}
             bookCanvas.innerHTML = '';
 
             // Per-volume page limit warning (outside canvas, before pages)
-            const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
             if (state.exceedsPageLimit) {
                 const warning = document.createElement('div');
                 warning.className = 'book-limit-warning';
                 const volLabel = activeVol ? activeVol.name : 'this volume';
-                warning.innerHTML = `<strong>${volLabel} page limit:</strong> ~${state.estimatedPageCount} est. pages exceeds the ${state.format.maxPages}-page maximum. Move sections to Volume 2 using the Sections panel, or exclude sections from this volume.`;
+                warning.innerHTML = `<strong>${volLabel} page limit:</strong> ${state.estimatedPageCount} pages exceeds the ${state.format.maxPages}-page maximum. Move sections to Volume 2 using the Sections panel, or exclude sections from this volume.`;
                 bookCanvas.appendChild(warning);
             }
 
-            // MB4 pipeline: generate units → paginate → render pages
-            const units = generateCompositionUnits(state, contactName);
-            const pages = paginateUnits(units);
+            // Render active-volume pages
             const showPgNums = state.body.pageNumberMode === 'on';
-
-            pages.forEach((page, i) => {
+            activePages.forEach((page, i) => {
                 bookCanvas.appendChild(buildPageDOMElement(page, i + 1, showPgNums));
             });
         }
