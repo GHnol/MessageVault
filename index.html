@@ -6734,44 +6734,88 @@ ${keepsakeFooter}
             return chunks;
         }
 
+        // Extract an opening slice of a sender-run that fits within availableLines.
+        // Splits only at message boundaries; reactions stay attached to their message
+        // because msgLineCount already accounts for the reaction line within each message.
+        // Returns { opening: Unit|null, continuation: Unit|null }
+        //   opening:      first N messages that fit (attribution + N messages ≤ availableLines),
+        //                 or null if not even one message fits
+        //   continuation: remaining messages as a new unit, or null if all messages fit
+        function splitRunForPage(unit, availableLines) {
+            const messages = unit.run.messages;
+            if (messages.length === 0) return { opening: null, continuation: null };
+
+            let accumulated = 1; // attribution line cost
+            let end = 0;
+            for (let i = 0; i < messages.length; i++) {
+                const cost = msgLineCount(messages[i]);
+                if (accumulated + cost > availableLines) break;
+                accumulated += cost;
+                end = i + 1;
+            }
+
+            if (end === 0) return { opening: null, continuation: unit }; // nothing fits
+            if (end === messages.length) return { opening: unit, continuation: null }; // all fits
+
+            const openRun = { sender: unit.run.sender, messages: messages.slice(0, end) };
+            const tailRun = { sender: unit.run.sender, messages: messages.slice(end) };
+            return {
+                opening: {
+                    type: 'sender-run', lines: runLineCount(openRun),
+                    run: openRun, contactName: unit.contactName,
+                    showTs: unit.showTs, featured: unit.featured, isContinuation: false
+                },
+                continuation: {
+                    type: 'sender-run', lines: runLineCount(tailRun),
+                    run: tailRun, contactName: unit.contactName,
+                    showTs: unit.showTs, featured: unit.featured, isContinuation: true
+                }
+            };
+        }
+
         // Pack composition units into page objects.
         // Returns: Array<{ units: Unit[], linesUsed: number, featured: boolean }>
         //
-        // Rules (in order of priority):
-        //   1. force-page-break  → flush current page immediately
-        //   2. alwaysOwnPage     → flush, place alone, flush again
-        //   3. section-header orphan guard → flush if header + next unit won't fit
-        //      (safe after pre-splitting: all run chunks ≤ BOOK_PAGE_LINES - BOOK_HEADER_LINES)
-        //   4. sender-run soft keep-together → flush to new page if run won't fit
-        //      (but run still CAN span multiple pages via pre-split chunks)
+        // Rule priority:
+        //   1. force-page-break  → flush immediately
+        //   2. alwaysOwnPage     → isolate on its own page
+        //   3. section-header smart placement:
+        //        a. if header + next full chunk fit → place both normally
+        //        b. if header fits but full chunk doesn't → carve an opening slice
+        //           that fills the remaining space (message-boundary split); place
+        //           header + opening slice, flush, continue run on next page
+        //        c. if header itself doesn't fit OR no opening slice is possible →
+        //           flush to new page, place header there with its full first chunk
+        //   4. sender-run soft keep-together → flush to new page when run won't fit
+        //      (after pre-splitting, all chunks ≤ RUN_MAX_LINES ≤ BOOK_PAGE_LINES)
         //   5. normal placement  → place on current page; flush when full
         //
-        // Pre-processing pass splits oversized sender-runs at message boundaries so that:
-        //   a) no single unit creates a giant pseudo-page, and
-        //   b) header + any run chunk always fits on one standard page.
+        // Pre-processing splits oversized runs so no chunk exceeds RUN_MAX_LINES lines.
+        // RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_HEADER_LINES guarantees header + chunk ≤ page.
+        // The queue-based loop allows inline run splits without re-indexing.
         function paginateUnits(rawUnits) {
-            // Pre-processing: explode sender-runs that exceed the safe per-chunk budget.
-            // RUN_MAX_LINES guarantees: header.lines + chunk.lines ≤ BOOK_PAGE_LINES.
+            // Pre-processing: split runs that exceed RUN_MAX_LINES at message boundaries.
             const RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_HEADER_LINES;
-            const units = [];
+            const preUnits = [];
             for (const u of rawUnits) {
                 if (u.type === 'sender-run' && u.lines > RUN_MAX_LINES) {
-                    units.push(...splitRunIntoChunks(u, RUN_MAX_LINES));
+                    preUnits.push(...splitRunIntoChunks(u, RUN_MAX_LINES));
                 } else {
-                    units.push(u);
+                    preUnits.push(u);
                 }
             }
 
             const pages = [];
             let cur = { units: [], linesUsed: 0, featured: false };
+            const queue = [...preUnits]; // mutable work queue; opening-slice tails are unshifted back
 
             function flush() {
                 if (cur.units.length > 0) pages.push(cur);
                 cur = { units: [], linesUsed: 0, featured: false };
             }
 
-            for (let i = 0; i < units.length; i++) {
-                const u = units[i];
+            while (queue.length > 0) {
+                const u = queue.shift();
 
                 // Rule 1
                 if (u.type === 'force-page-break') { flush(); continue; }
@@ -6785,23 +6829,49 @@ ${keepsakeFooter}
                     continue;
                 }
 
-                // Rule 3 — section-header orphan guard.
-                // After pre-processing, all run chunks ≤ RUN_MAX_LINES, so
-                // header.lines + next.lines ≤ BOOK_PAGE_LINES is guaranteed.
-                // Flush the header to a fresh page if both header and its first
-                // following content unit won't fit in remaining space together.
+                // Rule 3 — section-header smart placement.
+                // Only engages when there is already content on the current page
+                // (orphan guard has no meaning at the very start of a fresh page).
                 if (u.type === 'section-header' && cur.units.length > 0) {
-                    const next = i + 1 < units.length ? units[i + 1] : null;
+                    const next      = queue.length > 0 ? queue[0] : null;
+                    const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
+
                     if (next && !next.alwaysOwnPage && next.type !== 'force-page-break') {
-                        const needed    = u.lines + next.lines;
-                        const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
-                        if (spaceLeft < needed) flush();
+                        const needed = u.lines + next.lines;
+
+                        if (spaceLeft < needed) {
+                            // Header + full next chunk won't both fit on the current page.
+                            if (u.lines <= spaceLeft && next.type === 'sender-run') {
+                                // Header fits; try to carve an opening slice from the run.
+                                const spaceAfterHeader = spaceLeft - u.lines;
+                                const split = splitRunForPage(next, spaceAfterHeader);
+
+                                if (split.opening !== null) {
+                                    // Place header + opening slice; fill this page, then flush.
+                                    cur.units.push(u);
+                                    cur.linesUsed += u.lines;
+                                    cur.units.push(split.opening);
+                                    cur.linesUsed += split.opening.lines;
+                                    if (split.opening.featured) cur.featured = true;
+                                    queue.shift(); // consume the original run (already split)
+                                    if (split.continuation) queue.unshift(split.continuation);
+                                    flush();
+                                    continue; // u is already placed; skip Rules 4 & 5
+                                }
+                                // Opening slice not possible — fall through to flush below.
+                            }
+                            // Header doesn't fit alone, or no opening possible: push whole
+                            // section to a fresh page so the header is never orphaned.
+                            flush();
+                            // Fall through to Rules 4 & 5 — header placed on fresh page.
+                        }
+                        // else: needed ≤ spaceLeft — both fit, no action needed.
                     }
                 }
 
                 // Rule 4 — sender-run soft keep-together.
-                // All run chunks are ≤ RUN_MAX_LINES ≤ BOOK_PAGE_LINES after pre-processing.
-                // Flush to a fresh page if the run won't fit in remaining space.
+                // All chunks ≤ RUN_MAX_LINES after pre-processing.
+                // Flush to a fresh page if the run won't fit remaining space.
                 if (u.type === 'sender-run') {
                     const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
                     if (u.lines > spaceLeft && cur.units.length > 0) flush();
@@ -6815,7 +6885,7 @@ ${keepsakeFooter}
                 if (cur.linesUsed >= BOOK_PAGE_LINES) flush();
             }
 
-            flush(); // remaining content
+            flush(); // any remaining content
             return pages;
         }
 
