@@ -2660,7 +2660,7 @@
             font-size: 10px; font-weight: 600; letter-spacing: 1.2px;
             text-transform: uppercase; color: #aeaeb2;
         }
-        .book-title-text { font-size: 24px; font-weight: 700; color: #1c1c1e; letter-spacing: -0.5px; line-height: 1.2; }
+        .book-title-text { font-size: 24px; font-weight: 700; color: #1c1c1e; letter-spacing: -0.5px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word; overflow-wrap: break-word; max-width: 100%; }
         .book-title-sub { font-size: 13px; color: #8e8e93; }
 
         /* Dedication page */
@@ -2673,7 +2673,7 @@
             font-size: 10px; font-weight: 600; letter-spacing: 1px;
             text-transform: uppercase; color: #d1d1d6;
         }
-        .book-dedication-text { font-size: 16px; font-style: italic; color: #48484a; line-height: 1.55; max-width: 280px; }
+        .book-dedication-text { font-size: 16px; font-style: italic; color: #48484a; line-height: 1.55; max-width: 280px; white-space: pre-wrap; overflow-wrap: break-word; }
         .book-dedication-placeholder { font-size: 13px; color: #c7c7cc; font-style: italic; }
 
         /* Sparse divider between sections — centered dots, unmistakable against canvas */
@@ -2691,6 +2691,7 @@
         .book-section-header {
             font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
             text-transform: uppercase; color: #aeaeb2; margin-bottom: 16px;
+            overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: break-word;
         }
 
         /* Message runs: same-sender groups */
@@ -2872,10 +2873,16 @@
         }
         .book-editorial-input:focus { border-color: #007aff; background: #fff; }
         .book-editorial-input.multiline { min-height: 54px; resize: vertical; }
+        .book-editorial-input.invalid { border-color: #ff3b30; background: #fff8f8; }
+        .book-editorial-error { font-size: 10px; color: #ff3b30; font-weight: 500; margin-top: -2px; }
+
+        /* Section title cell: flex wrapper so error can appear below the input */
+        .book-section-title-cell { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+        .book-section-title-error { font-size: 10px; color: #ff3b30; font-weight: 500; }
 
         /* Section title inline input — lives in section rows */
         .book-section-title-input {
-            flex: 1; min-width: 0;
+            width: 100%; box-sizing: border-box; min-width: 0;
             font-size: 13px; font-family: inherit;
             padding: 2px 5px; margin: -2px -5px;
             border: 1px solid transparent; border-radius: 4px;
@@ -2884,6 +2891,7 @@
         .book-section-title-input::placeholder { color: #c7c7cc; font-style: italic; }
         .book-section-title-input:hover { border-color: #e5e5ea; background: #f9f9fb; }
         .book-section-title-input:focus { border-color: #007aff; background: #fff; }
+        .book-section-title-input.invalid { border-color: #ff3b30; background: #fff8f8; }
         .book-section-title-input.excluded { color: #aeaeb2; text-decoration: line-through; }
 
         /* Featured section header — compositionally distinct from normal section-header.
@@ -2894,6 +2902,7 @@
             padding: 18px 0 10px;
             border-bottom: 1px solid #e5e5ea;
             margin-bottom: 18px;
+            overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
         }
 
         /* Quiet continuation marker — restrained signal that the section is still in progress.
@@ -2961,9 +2970,11 @@
             .book-section-continuation.featured-continuation { color: #ff9f0a; }
             .book-editorial-input { background: #2c2c2e; border-color: #3a3a3c; color: #f2f2f7; }
             .book-editorial-input:focus { border-color: #0a84ff; background: #1c1c1e; }
+            .book-editorial-input.invalid { border-color: #ff453a; background: #2c1c1c; }
             .book-section-title-input { color: #f2f2f7; }
             .book-section-title-input:hover { border-color: #3a3a3c; background: #2c2c2e; }
             .book-section-title-input:focus { border-color: #0a84ff; background: #1c1c1e; }
+            .book-section-title-input.invalid { border-color: #ff453a; background: #2c1c1c; }
             .book-section-title-input.excluded { color: #48484a; }
             .book-run-attr { color: #48484a; }
             .book-msg-run.sender-them .book-msg-bubble { background: #2c2c2e; color: #e5e5ea; }
@@ -6535,6 +6546,44 @@ ${keepsakeFooter}
             return runEl;
         }
 
+        // Centralized editorial normalization and validation for Message Book inputs.
+        // Constraints are soft limits (warn + prevent canvas overflow); blur normalizes whitespace.
+        const bookEditorial = {
+            TITLE_MAX: 60,
+            DEDICATION_MAX: 500,
+            SECTION_TITLE_MAX: 45,
+
+            // Collapse all whitespace and line-breaks into a single space; trim.
+            normalizeSingleLine(text) {
+                if (!text) return '';
+                return text.replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+            },
+
+            // Collapse runs of spaces/tabs per line; collapse 3+ blank lines to 2; trim.
+            normalizeDedication(text) {
+                if (!text) return '';
+                return text.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+            },
+
+            validateTitle(text) {
+                const n = bookEditorial.normalizeSingleLine(text);
+                if (n.length > bookEditorial.TITLE_MAX) return `${n.length}\u202f/\u202f${bookEditorial.TITLE_MAX} chars`;
+                return null;
+            },
+
+            validateSectionTitle(text) {
+                const n = bookEditorial.normalizeSingleLine(text);
+                if (n.length > bookEditorial.SECTION_TITLE_MAX) return `${n.length}\u202f/\u202f${bookEditorial.SECTION_TITLE_MAX} chars`;
+                return null;
+            },
+
+            validateDedication(text) {
+                const n = bookEditorial.normalizeDedication(text);
+                if (n.length > bookEditorial.DEDICATION_MAX) return `${n.length}\u202f/\u202f${bookEditorial.DEDICATION_MAX} chars`;
+                return null;
+            }
+        };
+
         // Build the title page inner content element.
         // Returns .book-title-page (not a .book-page wrapper — buildPageDOMElement wraps it).
         // volumeSections: the filtered+sorted sections for the active volume (included only).
@@ -6550,7 +6599,7 @@ ${keepsakeFooter}
 
             const title = document.createElement('div');
             title.className = 'book-title-text';
-            title.textContent = state.opening.title || contactName || 'Our Conversation';
+            title.textContent = bookEditorial.normalizeSingleLine(state.opening.title) || contactName || 'Our Conversation';
 
             const sub = document.createElement('div');
             sub.className = 'book-title-sub';
@@ -6575,13 +6624,8 @@ ${keepsakeFooter}
             eyebrow.textContent = 'Dedication';
 
             const text = document.createElement('div');
-            if (state.opening.dedicationText && state.opening.dedicationText.trim()) {
-                text.className = 'book-dedication-text';
-                text.textContent = state.opening.dedicationText.trim();
-            } else {
-                text.className = 'book-dedication-placeholder';
-                text.textContent = 'Dedication text will appear here.';
-            }
+            text.className = 'book-dedication-text';
+            text.textContent = bookEditorial.normalizeDedication(state.opening.dedicationText);
 
             inner.appendChild(eyebrow);
             inner.appendChild(text);
@@ -6653,7 +6697,10 @@ ${keepsakeFooter}
             });
 
             if (state.opening.dedicationEnabled) {
-                units.push({ type: 'dedication-page', alwaysOwnPage: true, state });
+                const normalizedDed = bookEditorial.normalizeDedication(state.opening.dedicationText);
+                if (normalizedDed) {
+                    units.push({ type: 'dedication-page', alwaysOwnPage: true, state });
+                }
             }
 
             // ── Body sections ────────────────────────────────────────────
@@ -6673,7 +6720,7 @@ ${keepsakeFooter}
                 const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
                 // Priority: MB editorial title → keepsake-group custom name → derived group name
                 const displayName = (section.customTitle && section.customTitle.trim())
-                    ? section.customTitle.trim()
+                    ? bookEditorial.normalizeSingleLine(section.customTitle)
                     : (section.customName && section.customName.trim())
                         ? section.customName.trim()
                         : (srcGroup ? getGroupDisplayName(srcGroup) : '');
@@ -7181,11 +7228,50 @@ ${keepsakeFooter}
             titleInput.className = 'book-editorial-input';
             titleInput.value = state.opening.title || '';
             titleInput.placeholder = 'Enter a title…';
+
+            const titleError = document.createElement('div');
+            titleError.className = 'book-editorial-error';
+            titleError.style.display = 'none';
+
+            titleInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') e.preventDefault();
+            });
+            titleInput.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const raw = (e.clipboardData || window.clipboardData).getData('text');
+                const cleaned = bookEditorial.normalizeSingleLine(raw);
+                const s = titleInput.selectionStart, en = titleInput.selectionEnd;
+                titleInput.value = titleInput.value.slice(0, s) + cleaned + titleInput.value.slice(en);
+                titleInput.dispatchEvent(new Event('input'));
+            });
             titleInput.addEventListener('input', () => {
-                state.opening.title = titleInput.value;
+                const err = bookEditorial.validateTitle(titleInput.value);
+                if (err) {
+                    titleInput.classList.add('invalid');
+                    titleError.textContent = err;
+                    titleError.style.display = '';
+                    // State and canvas are NOT updated while over-limit — preview stays at last valid value.
+                } else {
+                    titleInput.classList.remove('invalid');
+                    titleError.style.display = 'none';
+                    state.opening.title = titleInput.value;
+                    renderBookCanvas();
+                }
+            });
+            titleInput.addEventListener('blur', () => {
+                let normalized = bookEditorial.normalizeSingleLine(titleInput.value);
+                if (normalized.length > bookEditorial.TITLE_MAX) {
+                    normalized = normalized.slice(0, bookEditorial.TITLE_MAX);
+                }
+                titleInput.value = normalized;
+                state.opening.title = normalized;
+                titleInput.classList.remove('invalid');
+                titleError.style.display = 'none';
                 renderBookCanvas();
             });
+
             titleGroup.appendChild(titleInput);
+            titleGroup.appendChild(titleError);
             bookControlsBar.appendChild(titleGroup);
 
             // ── Dedication text editorial input (only when enabled) ───────
@@ -7202,11 +7288,39 @@ ${keepsakeFooter}
                 dedInput.className = 'book-editorial-input multiline';
                 dedInput.value = state.opening.dedicationText || '';
                 dedInput.placeholder = 'Write a dedication…';
+
+                const dedError = document.createElement('div');
+                dedError.className = 'book-editorial-error';
+                dedError.style.display = 'none';
+
                 dedInput.addEventListener('input', () => {
-                    state.opening.dedicationText = dedInput.value;
+                    const err = bookEditorial.validateDedication(dedInput.value);
+                    if (err) {
+                        dedInput.classList.add('invalid');
+                        dedError.textContent = err;
+                        dedError.style.display = '';
+                        // State and canvas are NOT updated while over-limit — preview stays at last valid value.
+                    } else {
+                        dedInput.classList.remove('invalid');
+                        dedError.style.display = 'none';
+                        state.opening.dedicationText = dedInput.value;
+                        renderBookCanvas();
+                    }
+                });
+                dedInput.addEventListener('blur', () => {
+                    let normalized = bookEditorial.normalizeDedication(dedInput.value);
+                    if (normalized.length > bookEditorial.DEDICATION_MAX) {
+                        normalized = normalized.slice(0, bookEditorial.DEDICATION_MAX);
+                    }
+                    dedInput.value = normalized;
+                    state.opening.dedicationText = normalized;
+                    dedInput.classList.remove('invalid');
+                    dedError.style.display = 'none';
                     renderBookCanvas();
                 });
+
                 dedGroup.appendChild(dedInput);
+                dedGroup.appendChild(dedError);
                 bookControlsBar.appendChild(dedGroup);
             }
 
@@ -7354,21 +7468,61 @@ ${keepsakeFooter}
                     ? section.customName.trim()
                     : (srcGroup ? getGroupDisplayName(srcGroup) : section.id);
 
+                const titleCell = document.createElement('div');
+                titleCell.className = 'book-section-title-cell';
+
                 const titleInput = document.createElement('input');
                 titleInput.type = 'text';
                 titleInput.className = 'book-section-title-input' + (section.included ? '' : ' excluded');
                 titleInput.value = section.customTitle || '';
                 titleInput.placeholder = fallbackName;
+
+                const titleError = document.createElement('div');
+                titleError.className = 'book-section-title-error';
+                titleError.style.display = 'none';
+
+                titleInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') e.preventDefault();
+                });
+                titleInput.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const raw = (e.clipboardData || window.clipboardData).getData('text');
+                    const cleaned = bookEditorial.normalizeSingleLine(raw);
+                    const s = titleInput.selectionStart, en = titleInput.selectionEnd;
+                    titleInput.value = titleInput.value.slice(0, s) + cleaned + titleInput.value.slice(en);
+                    titleInput.dispatchEvent(new Event('input'));
+                });
                 // Live-preview: update canvas while typing; no full re-render needed.
                 titleInput.addEventListener('input', () => {
-                    section.customTitle = titleInput.value.trim() || null;
-                    renderBookCanvas();
+                    const err = bookEditorial.validateSectionTitle(titleInput.value);
+                    if (err) {
+                        titleInput.classList.add('invalid');
+                        titleError.textContent = err;
+                        titleError.style.display = '';
+                        // State and canvas are NOT updated while over-limit — preview stays at last valid value.
+                    } else {
+                        titleInput.classList.remove('invalid');
+                        titleError.style.display = 'none';
+                        section.customTitle = titleInput.value.trim() || null;
+                        renderBookCanvas();
+                    }
                 });
                 // Full re-render on blur to sync the sections bar placeholder labels.
                 titleInput.addEventListener('blur', () => {
+                    let normalized = bookEditorial.normalizeSingleLine(titleInput.value);
+                    if (normalized.length > bookEditorial.SECTION_TITLE_MAX) {
+                        normalized = normalized.slice(0, bookEditorial.SECTION_TITLE_MAX);
+                    }
+                    titleInput.value = normalized;
+                    section.customTitle = normalized || null;
+                    titleInput.classList.remove('invalid');
+                    titleError.style.display = 'none';
                     renderBookView();
                 });
-                row.appendChild(titleInput);
+
+                titleCell.appendChild(titleInput);
+                titleCell.appendChild(titleError);
+                row.appendChild(titleCell);
 
                 const actions = document.createElement('div');
                 actions.className = 'book-section-row-actions';
