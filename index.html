@@ -2853,6 +2853,39 @@
         .book-section-order-btn:hover:not(:disabled) { background: #e5e5ea; color: #1c1c1e; }
         .book-section-order-btn:disabled { opacity: 0.28; cursor: default; }
 
+        /* ── Editorial input fields: book title, dedication text, section titles ── */
+        .book-editorial-group {
+            flex-basis: 100%; display: flex; flex-direction: column; gap: 5px;
+            padding-bottom: 4px;
+        }
+        .book-editorial-label {
+            font-size: 10px; font-weight: 600; letter-spacing: 0.3px;
+            text-transform: uppercase; color: #aeaeb2;
+        }
+        .book-editorial-input {
+            width: 100%; box-sizing: border-box;
+            font-size: 12px; font-family: inherit; line-height: 1.4;
+            padding: 6px 9px;
+            border: 1px solid #e5e5ea; border-radius: 6px;
+            background: #f9f9fb; color: #1c1c1e;
+            outline: none; resize: none;
+        }
+        .book-editorial-input:focus { border-color: #007aff; background: #fff; }
+        .book-editorial-input.multiline { min-height: 54px; resize: vertical; }
+
+        /* Section title inline input — lives in section rows */
+        .book-section-title-input {
+            flex: 1; min-width: 0;
+            font-size: 13px; font-family: inherit;
+            padding: 2px 5px; margin: -2px -5px;
+            border: 1px solid transparent; border-radius: 4px;
+            background: transparent; color: #1c1c1e; outline: none;
+        }
+        .book-section-title-input::placeholder { color: #c7c7cc; font-style: italic; }
+        .book-section-title-input:hover { border-color: #e5e5ea; background: #f9f9fb; }
+        .book-section-title-input:focus { border-color: #007aff; background: #fff; }
+        .book-section-title-input.excluded { color: #aeaeb2; text-decoration: line-through; }
+
         /* Featured section header — compositionally distinct from normal section-header.
            More vertical weight; centered display signals a section of higher importance. */
         .book-featured-header {
@@ -2926,6 +2959,12 @@
             .book-featured-header { color: #f2f2f7; border-bottom-color: #3a3a3c; }
             .book-section-continuation { color: #3a3a3c; }
             .book-section-continuation.featured-continuation { color: #ff9f0a; }
+            .book-editorial-input { background: #2c2c2e; border-color: #3a3a3c; color: #f2f2f7; }
+            .book-editorial-input:focus { border-color: #0a84ff; background: #1c1c1e; }
+            .book-section-title-input { color: #f2f2f7; }
+            .book-section-title-input:hover { border-color: #3a3a3c; background: #2c2c2e; }
+            .book-section-title-input:focus { border-color: #0a84ff; background: #1c1c1e; }
+            .book-section-title-input.excluded { color: #48484a; }
             .book-run-attr { color: #48484a; }
             .book-msg-run.sender-them .book-msg-bubble { background: #2c2c2e; color: #e5e5ea; }
             .book-msg-bubble.attachment { background: #2c2c2e; }
@@ -6395,7 +6434,8 @@ ${keepsakeFooter}
                 return {
                     id:                           `book-section-${group.id}`,
                     sourceGroupId:                group.id,
-                    customName:                   group.customName || null,
+                    customName:                   group.customName || null, // keepsake-group name (shared)
+                    customTitle:                  ex ? ex.customTitle : null, // MB-only editorial title
                     messages:                     [...group.messages],  // always refresh from source
                     // Preserved section-level state (or defaults on first encounter):
                     volumeId:                     ex ? ex.volumeId : defaultVolId,
@@ -6631,9 +6671,12 @@ ${keepsakeFooter}
                 }
 
                 const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
-                const displayName = section.customName && section.customName.trim()
-                    ? section.customName.trim()
-                    : (srcGroup ? getGroupDisplayName(srcGroup) : '');
+                // Priority: MB editorial title → keepsake-group custom name → derived group name
+                const displayName = (section.customTitle && section.customTitle.trim())
+                    ? section.customTitle.trim()
+                    : (section.customName && section.customName.trim())
+                        ? section.customName.trim()
+                        : (srcGroup ? getGroupDisplayName(srcGroup) : '');
 
                 // Sparse divider: bind it to the section-header so they move together.
                 // Featured sections get a fresh page instead — the page break already
@@ -7124,6 +7167,49 @@ ${keepsakeFooter}
             label.textContent = 'Book Settings';
             bookControlsBar.appendChild(label);
 
+            // ── Book title editorial input ────────────────────────────────
+            const titleGroup = document.createElement('div');
+            titleGroup.className = 'book-editorial-group';
+
+            const titleLabel = document.createElement('div');
+            titleLabel.className = 'book-editorial-label';
+            titleLabel.textContent = 'Book title';
+            titleGroup.appendChild(titleLabel);
+
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text';
+            titleInput.className = 'book-editorial-input';
+            titleInput.value = state.opening.title || '';
+            titleInput.placeholder = 'Enter a title…';
+            titleInput.addEventListener('input', () => {
+                state.opening.title = titleInput.value;
+                renderBookCanvas();
+            });
+            titleGroup.appendChild(titleInput);
+            bookControlsBar.appendChild(titleGroup);
+
+            // ── Dedication text editorial input (only when enabled) ───────
+            if (state.opening.dedicationEnabled) {
+                const dedGroup = document.createElement('div');
+                dedGroup.className = 'book-editorial-group';
+
+                const dedLabel = document.createElement('div');
+                dedLabel.className = 'book-editorial-label';
+                dedLabel.textContent = 'Dedication text';
+                dedGroup.appendChild(dedLabel);
+
+                const dedInput = document.createElement('textarea');
+                dedInput.className = 'book-editorial-input multiline';
+                dedInput.value = state.opening.dedicationText || '';
+                dedInput.placeholder = 'Write a dedication…';
+                dedInput.addEventListener('input', () => {
+                    state.opening.dedicationText = dedInput.value;
+                    renderBookCanvas();
+                });
+                dedGroup.appendChild(dedInput);
+                bookControlsBar.appendChild(dedGroup);
+            }
+
             const controls = [
                 {
                     name: 'Timestamps',
@@ -7261,16 +7347,28 @@ ${keepsakeFooter}
                 orderBtns.appendChild(downBtn);
                 row.appendChild(orderBtns);
 
-                // ── Section name ──────────────────────────────────────────
+                // ── Section title (editable) ──────────────────────────────
                 const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
-                const displayName = section.customName && section.customName.trim()
+                // Derive the fallback name the same way generateCompositionUnits does.
+                const fallbackName = (section.customName && section.customName.trim())
                     ? section.customName.trim()
                     : (srcGroup ? getGroupDisplayName(srcGroup) : section.id);
 
-                const nameEl = document.createElement('div');
-                nameEl.className = 'book-section-row-name' + (section.included ? '' : ' excluded');
-                nameEl.textContent = displayName;
-                row.appendChild(nameEl);
+                const titleInput = document.createElement('input');
+                titleInput.type = 'text';
+                titleInput.className = 'book-section-title-input' + (section.included ? '' : ' excluded');
+                titleInput.value = section.customTitle || '';
+                titleInput.placeholder = fallbackName;
+                // Live-preview: update canvas while typing; no full re-render needed.
+                titleInput.addEventListener('input', () => {
+                    section.customTitle = titleInput.value.trim() || null;
+                    renderBookCanvas();
+                });
+                // Full re-render on blur to sync the sections bar placeholder labels.
+                titleInput.addEventListener('blur', () => {
+                    renderBookView();
+                });
+                row.appendChild(titleInput);
 
                 const actions = document.createElement('div');
                 actions.className = 'book-section-row-actions';
@@ -7344,6 +7442,33 @@ ${keepsakeFooter}
         // Render the full book canvas for the active volume.
         // Only sections where volumeId === activeVolumeId && included are rendered.
         // Sections are rendered in orderIndex order (independent from keepsakes summary sort).
+        // Rebuild only the book canvas for the active volume.
+        // Does NOT update the controls bar, sections bar, or page counts.
+        // Called from editorial input handlers so focus is not disturbed.
+        // Assumes state.exceedsPageLimit / state.estimatedPageCount are already current.
+        function renderBookCanvas() {
+            const state = messageBookState;
+            const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+            const units  = generateCompositionUnits(state, contactName);
+            const pages  = paginateUnits(units);
+            const showPgNums = state.body.pageNumberMode === 'on';
+
+            bookCanvas.innerHTML = '';
+
+            if (state.exceedsPageLimit) {
+                const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
+                const warning = document.createElement('div');
+                warning.className = 'book-limit-warning';
+                const volLabel = activeVol ? activeVol.name : 'this volume';
+                warning.innerHTML = `<strong>${volLabel} page limit:</strong> ${state.estimatedPageCount} pages exceeds the ${state.format.maxPages}-page maximum. Move sections to Volume 2 using the Sections panel, or exclude sections from this volume.`;
+                bookCanvas.appendChild(warning);
+            }
+
+            pages.forEach((page, i) => {
+                bookCanvas.appendChild(buildPageDOMElement(page, i + 1, showPgNums));
+            });
+        }
+
         function renderBookView() {
             syncBookSections();
 
