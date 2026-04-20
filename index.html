@@ -2853,10 +2853,25 @@
         .book-section-order-btn:hover:not(:disabled) { background: #e5e5ea; color: #1c1c1e; }
         .book-section-order-btn:disabled { opacity: 0.28; cursor: default; }
 
-        /* ── Featured marker on section header ── */
-        .book-section-header.featured-header::after {
-            content: ' \2605'; /* ★ */
-            color: #ff9500; font-size: 9px; vertical-align: middle;
+        /* Featured section header — compositionally distinct from normal section-header.
+           More vertical weight; centered display signals a section of higher importance. */
+        .book-featured-header {
+            font-size: 15px; font-weight: 700; letter-spacing: -0.2px;
+            color: #1c1c1e; text-align: center;
+            padding: 18px 0 10px;
+            border-bottom: 1px solid #e5e5ea;
+            margin-bottom: 18px;
+        }
+
+        /* Quiet continuation marker — restrained signal that the section is still in progress.
+           Small caps, muted, right-aligned to stay out of reading flow. */
+        .book-section-continuation {
+            font-size: 9px; font-weight: 500; letter-spacing: 0.4px;
+            text-transform: uppercase; color: #c7c7cc;
+            text-align: right; margin-bottom: 10px;
+        }
+        .book-section-continuation.featured-continuation {
+            color: #ff9500;
         }
 
         /* ── Force page break visual marker ── */
@@ -2908,6 +2923,9 @@
 
             .book-divider { color: #636366; }
             .book-section-header { color: #48484a; }
+            .book-featured-header { color: #f2f2f7; border-bottom-color: #3a3a3c; }
+            .book-section-continuation { color: #3a3a3c; }
+            .book-section-continuation.featured-continuation { color: #ff9f0a; }
             .book-run-attr { color: #48484a; }
             .book-msg-run.sender-them .book-msg-bubble { background: #2c2c2e; color: #e5e5ea; }
             .book-msg-bubble.attachment { background: #2c2c2e; }
@@ -6543,9 +6561,11 @@ ${keepsakeFooter}
         // Normalized line-budget constants for a 7×10 trim book.
         // ~44 lines of body text per page at standard margins and 12pt leading.
         // These govern pagination decisions, not pixel layout.
-        const BOOK_PAGE_LINES     = 44;
-        const BOOK_HEADER_LINES   = 4;  // section header label + surrounding whitespace
-        const BOOK_DIVIDER_LINES  = 3;  // sparse section divider
+        const BOOK_PAGE_LINES            = 44;
+        const BOOK_HEADER_LINES          = 4;   // section header label + surrounding whitespace
+        const BOOK_DIVIDER_LINES         = 3;   // sparse section divider
+        const BOOK_FEATURED_HEADER_LINES = 8;   // featured section header: 2× normal vertical weight
+        const BOOK_CONTINUATION_LINES    = 2;   // quiet "cont'd" marker on section-spanning pages
 
         // Estimate normalized lines for a single message bubble.
         // Chat bubbles occupy roughly 35 chars/line in this trim size.
@@ -6564,14 +6584,16 @@ ${keepsakeFooter}
         }
 
         // Unit types:
-        //   title-page      — alwaysOwnPage, full-page frontmatter
-        //   dedication-page — alwaysOwnPage
-        //   ending-page     — alwaysOwnPage
-        //   section-header  — keepWithNext (orphan-guard)
-        //   sender-run      — atomic (never split internally)
-        //   message         — atomic (flat rendering path)
-        //   divider         — sparse section separator
-        //   force-page-break — triggers immediate page flush, consumes no lines
+        //   title-page           — alwaysOwnPage, full-page frontmatter
+        //   dedication-page      — alwaysOwnPage
+        //   ending-page          — alwaysOwnPage
+        //   section-header       — keepWithNext (orphan-guard); carries hasDivider, sectionId
+        //   featured-header      — keepWithNext; featured section opener, more vertical weight
+        //   section-continuation — injected by paginator on continuation pages; not in raw units
+        //   sender-run           — atomic (never split internally); carries sectionId
+        //   message              — atomic (flat rendering path); carries sectionId
+        //   divider              — sparse section separator (standalone fallback only)
+        //   force-page-break     — triggers immediate page flush, consumes no lines
 
         // Generate the flat composition unit sequence for the active volume.
         // Pure data — no DOM creation happens here.
@@ -6597,8 +6619,14 @@ ${keepsakeFooter}
             // ── Body sections ────────────────────────────────────────────
             for (let si = 0; si < volumeSections.length; si++) {
                 const section = volumeSections[si];
+                // Stable identifier for this section within the volume's ordered list.
+                // Used by the paginator to track section-spanning pages and inject
+                // continuation headers; not persisted beyond this render pass.
+                const sectionId = si;
 
-                if (section.forcePageBreakBefore && si > 0) {
+                // Featured sections always start on a fresh page — stronger presence than
+                // a sparse divider. Non-featured sections obey forcePageBreakBefore.
+                if (section.featured || (section.forcePageBreakBefore && si > 0)) {
                     units.push({ type: 'force-page-break' });
                 }
 
@@ -6608,12 +6636,11 @@ ${keepsakeFooter}
                     : (srcGroup ? getGroupDisplayName(srcGroup) : '');
 
                 // Sparse divider: bind it to the section-header so they move together.
-                // A standalone divider unit would be placed before the orphan guard runs
-                // on the section-header, allowing it to strand at the bottom of a page.
-                // When hasDivider is true the section-header's line cost includes the
-                // divider lines, so the orphan guard automatically keeps all three
-                // (divider + header + opening content) together on the same page.
-                const hasSectionDivider = !section.forcePageBreakBefore &&
+                // Featured sections get a fresh page instead — the page break already
+                // signals the boundary; a divider before the featured header would land
+                // on the wrong page.
+                const hasSectionDivider = !section.featured &&
+                    !section.forcePageBreakBefore &&
                     state.body.dividerMode === 'sparse' && si > 0;
 
                 if (hasSectionDivider && !displayName) {
@@ -6622,14 +6649,28 @@ ${keepsakeFooter}
                 }
 
                 if (displayName) {
-                    units.push({
-                        type: 'section-header',
-                        lines: BOOK_HEADER_LINES + (hasSectionDivider ? BOOK_DIVIDER_LINES : 0),
-                        hasDivider: hasSectionDivider,
-                        keepWithNext: true,   // orphan guard: stays with first content unit
-                        displayName,
-                        featured: section.featured
-                    });
+                    if (section.featured) {
+                        // Featured header: compositionally distinct unit with extra vertical weight.
+                        // Paginator treats it identically to section-header for orphan-guard purposes.
+                        units.push({
+                            type: 'featured-header',
+                            lines: BOOK_FEATURED_HEADER_LINES,
+                            keepWithNext: true,
+                            displayName,
+                            featured: true,
+                            sectionId
+                        });
+                    } else {
+                        units.push({
+                            type: 'section-header',
+                            lines: BOOK_HEADER_LINES + (hasSectionDivider ? BOOK_DIVIDER_LINES : 0),
+                            hasDivider: hasSectionDivider,
+                            keepWithNext: true,
+                            displayName,
+                            featured: false,
+                            sectionId
+                        });
+                    }
                 }
 
                 if (section.preserveSameSenderRuns) {
@@ -6638,9 +6679,10 @@ ${keepsakeFooter}
                         units.push({
                             type: 'sender-run',
                             lines: runLineCount(run),
-                            atomic: true,           // never broken internally
+                            atomic: true,
                             run, contactName, showTs,
-                            featured: section.featured
+                            featured: section.featured,
+                            sectionId
                         });
                     }
                 } else {
@@ -6650,7 +6692,8 @@ ${keepsakeFooter}
                             lines: msgLineCount(m),
                             atomic: true,
                             m, showTs,
-                            featured: section.featured
+                            featured: section.featured,
+                            sectionId
                         });
                     }
                 }
@@ -6691,6 +6734,7 @@ ${keepsakeFooter}
                     contactName: unit.contactName,
                     showTs: unit.showTs,
                     featured: unit.featured,
+                    sectionId: unit.sectionId,
                     isContinuation: start > 0
                 });
                 start = end;
@@ -6727,23 +6771,32 @@ ${keepsakeFooter}
                 opening: {
                     type: 'sender-run', lines: runLineCount(openRun),
                     run: openRun, contactName: unit.contactName,
-                    showTs: unit.showTs, featured: unit.featured, isContinuation: false
+                    showTs: unit.showTs, featured: unit.featured,
+                    sectionId: unit.sectionId, isContinuation: false
                 },
                 continuation: {
                     type: 'sender-run', lines: runLineCount(tailRun),
                     run: tailRun, contactName: unit.contactName,
-                    showTs: unit.showTs, featured: unit.featured, isContinuation: true
+                    showTs: unit.showTs, featured: unit.featured,
+                    sectionId: unit.sectionId, isContinuation: true
                 }
             };
         }
 
         // Pack composition units into page objects.
-        // Returns: Array<{ units: Unit[], linesUsed: number, featured: boolean }>
+        // Returns: Array<Page>  where Page = {
+        //   units:               Unit[],
+        //   linesUsed:           number,
+        //   featured:            boolean,  // page contains featured content
+        //   isSectionStart:      boolean,  // page opens a section (has header/featured-header)
+        //   isSectionContinuation: boolean, // page continues a prior page's section
+        //   sectionId:           number|null
+        // }
         //
         // Rule priority:
-        //   1. force-page-break  → flush immediately
-        //   2. alwaysOwnPage     → isolate on its own page
-        //   3. section-header smart placement:
+        //   1. force-page-break  → flush immediately; clears needsContinuation
+        //   2. alwaysOwnPage     → isolate on its own page; clears section context
+        //   3. section-header / featured-header smart placement (orphan guard):
         //        a. if header + next full chunk fit → place both normally
         //        b. if header fits but full chunk doesn't → carve an opening slice
         //           that fills the remaining space (message-boundary split); place
@@ -6754,12 +6807,18 @@ ${keepsakeFooter}
         //      (after pre-splitting, all chunks ≤ RUN_MAX_LINES ≤ BOOK_PAGE_LINES)
         //   5. normal placement  → place on current page; flush when full
         //
+        // Continuation injection: when a section spans a page boundary, the paginator
+        // injects a section-continuation unit at the top of each continuation page.
+        // This unit is synthetic — it does not appear in the raw composition units.
+        //
         // Pre-processing splits oversized runs so no chunk exceeds RUN_MAX_LINES lines.
-        // RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_HEADER_LINES guarantees header + chunk ≤ page.
-        // The queue-based loop allows inline run splits without re-indexing.
+        // RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_FEATURED_HEADER_LINES (the larger of the
+        // two header sizes) guarantees header + chunk ≤ page for both header types.
         function paginateUnits(rawUnits) {
-            // Pre-processing: split runs that exceed RUN_MAX_LINES at message boundaries.
-            const RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_HEADER_LINES;
+            // Pre-processing: split runs that exceed the safe max at message boundaries.
+            // Use BOOK_FEATURED_HEADER_LINES (the larger header) as the cap so chunks
+            // are safe regardless of whether the section is featured.
+            const RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_FEATURED_HEADER_LINES;
             const preUnits = [];
             for (const u of rawUnits) {
                 if (u.type === 'sender-run' && u.lines > RUN_MAX_LINES) {
@@ -6770,33 +6829,90 @@ ${keepsakeFooter}
             }
 
             const pages = [];
-            let cur = { units: [], linesUsed: 0, featured: false };
-            const queue = [...preUnits]; // mutable work queue; opening-slice tails are unshifted back
+
+            // Section-tracking state — updated as headers and content units are placed.
+            let activeSectionId       = null;
+            let activeSectionLabel    = null;
+            let activeSectionFeatured = false;
+            let needsContinuation     = false; // true after a flush while a section is active
+
+            function newCur() {
+                return { units: [], linesUsed: 0, featured: false,
+                         isSectionStart: false, isSectionContinuation: false, sectionId: null };
+            }
+            let cur = newCur();
+            const queue = [...preUnits];
 
             function flush() {
-                if (cur.units.length > 0) pages.push(cur);
-                cur = { units: [], linesUsed: 0, featured: false };
+                if (cur.units.length > 0) {
+                    pages.push(cur);
+                    needsContinuation = activeSectionId !== null;
+                } else {
+                    needsContinuation = false;
+                }
+                cur = newCur();
+            }
+
+            // Mark the current page as a section start and record the active section.
+            function markSectionStart(u) {
+                activeSectionId       = u.sectionId ?? null;
+                activeSectionLabel    = u.displayName;
+                activeSectionFeatured = u.featured || false;
+                needsContinuation     = false;
+                cur.isSectionStart    = true;
+                cur.sectionId         = activeSectionId;
+                if (u.featured) cur.featured = true;
             }
 
             while (queue.length > 0) {
                 const u = queue.shift();
 
-                // Rule 1
-                if (u.type === 'force-page-break') { flush(); continue; }
+                // ── Continuation injection ─────────────────────────────────
+                // At the very start of a fresh page, if the active section is
+                // continuing from the previous page, prepend a quiet cont'd header.
+                // Guard: only inject for content units (not headers or structural units),
+                // and only when the unit actually belongs to the same section.
+                if (needsContinuation &&
+                    cur.units.length === 0 &&
+                    (u.type === 'sender-run' || u.type === 'message') &&
+                    u.sectionId === activeSectionId) {
+                    const contUnit = {
+                        type: 'section-continuation',
+                        lines: BOOK_CONTINUATION_LINES,
+                        displayName: activeSectionLabel,
+                        featured: activeSectionFeatured,
+                        sectionId: activeSectionId
+                    };
+                    cur.units.push(contUnit);
+                    cur.linesUsed += BOOK_CONTINUATION_LINES;
+                    cur.isSectionContinuation = true;
+                    cur.sectionId = activeSectionId;
+                    if (contUnit.featured) cur.featured = true;
+                    needsContinuation = false;
+                }
 
-                // Rule 2
+                // Rule 1 — force-page-break
+                if (u.type === 'force-page-break') {
+                    flush();
+                    needsContinuation = false; // explicit break clears continuation
+                    continue;
+                }
+
+                // Rule 2 — alwaysOwnPage (frontmatter / backmatter)
                 if (u.alwaysOwnPage) {
                     flush();
+                    needsContinuation  = false;
+                    activeSectionId    = null; // frontmatter clears section context
                     cur.units.push(u);
                     cur.linesUsed = BOOK_PAGE_LINES;
                     flush();
                     continue;
                 }
 
-                // Rule 3 — section-header smart placement.
-                // Only engages when there is already content on the current page
-                // (orphan guard has no meaning at the very start of a fresh page).
-                if (u.type === 'section-header' && cur.units.length > 0) {
+                // Rule 3 — section-header / featured-header smart placement (orphan guard).
+                // Engages only when there is already content on the current page.
+                const isHeader = u.type === 'section-header' || u.type === 'featured-header';
+                if (isHeader && cur.units.length > 0) {
                     const next      = queue.length > 0 ? queue[0] : null;
                     const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
 
@@ -6804,52 +6920,72 @@ ${keepsakeFooter}
                         const needed = u.lines + next.lines;
 
                         if (spaceLeft < needed) {
-                            // Header + full next chunk won't both fit on the current page.
                             if (u.lines <= spaceLeft && next.type === 'sender-run') {
                                 // Header fits; try to carve an opening slice from the run.
                                 const spaceAfterHeader = spaceLeft - u.lines;
                                 const split = splitRunForPage(next, spaceAfterHeader);
 
                                 if (split.opening !== null) {
-                                    // Place header + opening slice; fill this page, then flush.
+                                    // Place header + opening slice on this page, then flush.
                                     cur.units.push(u);
                                     cur.linesUsed += u.lines;
+                                    markSectionStart(u);
                                     cur.units.push(split.opening);
                                     cur.linesUsed += split.opening.lines;
                                     if (split.opening.featured) cur.featured = true;
-                                    queue.shift(); // consume the original run (already split)
+                                    queue.shift(); // consume the original run
                                     if (split.continuation) queue.unshift(split.continuation);
                                     flush();
-                                    continue; // u is already placed; skip Rules 4 & 5
+                                    continue;
                                 }
-                                // Opening slice not possible — fall through to flush below.
                             }
-                            // Header doesn't fit alone, or no opening possible: push whole
-                            // section to a fresh page so the header is never orphaned.
+                            // Header doesn't fit or no opening slice possible:
+                            // push the whole section to a fresh page.
                             flush();
-                            // Fall through to Rules 4 & 5 — header placed on fresh page.
                         }
-                        // else: needed ≤ spaceLeft — both fit, no action needed.
                     }
                 }
 
+                // Update section tracking when a header lands (Rule 3 fallthrough or fresh page).
+                if (isHeader) markSectionStart(u);
+
                 // Rule 4 — sender-run soft keep-together.
-                // All chunks ≤ RUN_MAX_LINES after pre-processing.
-                // Flush to a fresh page if the run won't fit remaining space.
                 if (u.type === 'sender-run') {
                     const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
-                    if (u.lines > spaceLeft && cur.units.length > 0) flush();
+                    if (u.lines > spaceLeft && cur.units.length > 0) {
+                        flush();
+                        // The top-of-loop injection check only fires when entering a fresh
+                        // iteration. Rule 4 flushes mid-iteration and then falls through to
+                        // Rule 5 without going back to the loop top, so we must re-check
+                        // injection here. cur is guaranteed empty after flush().
+                        if (needsContinuation && u.sectionId === activeSectionId) {
+                            cur.units.push({
+                                type: 'section-continuation',
+                                lines: BOOK_CONTINUATION_LINES,
+                                displayName: activeSectionLabel,
+                                featured: activeSectionFeatured,
+                                sectionId: activeSectionId
+                            });
+                            cur.linesUsed      += BOOK_CONTINUATION_LINES;
+                            cur.isSectionContinuation = true;
+                            cur.sectionId       = activeSectionId;
+                            if (activeSectionFeatured) cur.featured = true;
+                            needsContinuation   = false;
+                        }
+                    }
                 }
 
                 // Rule 5 — place unit
                 cur.units.push(u);
                 cur.linesUsed += (u.lines || 0);
                 if (u.featured) cur.featured = true;
+                // Track sectionId for content units that land without a header on this page
+                if (cur.sectionId === null && u.sectionId != null) cur.sectionId = u.sectionId;
 
                 if (cur.linesUsed >= BOOK_PAGE_LINES) flush();
             }
 
-            flush(); // any remaining content
+            flush(); // drain any remaining content
             return pages;
         }
 
@@ -6865,8 +7001,21 @@ ${keepsakeFooter}
                     return buildBookEndingPage();
                 case 'section-header': {
                     const el = document.createElement('div');
-                    el.className = 'book-section-header' + (unit.featured ? ' featured-header' : '');
+                    el.className = 'book-section-header';
                     el.textContent = unit.displayName;
+                    return el;
+                }
+                case 'featured-header': {
+                    const el = document.createElement('div');
+                    el.className = 'book-featured-header';
+                    el.textContent = unit.displayName;
+                    return el;
+                }
+                case 'section-continuation': {
+                    const el = document.createElement('div');
+                    el.className = 'book-section-continuation' +
+                        (unit.featured ? ' featured-continuation' : '');
+                    el.textContent = `${unit.displayName} \u2014 cont\u2019d`;
                     return el;
                 }
                 case 'divider': {
@@ -6890,7 +7039,9 @@ ${keepsakeFooter}
         function buildPageDOMElement(page, pageNum, showPgNums) {
             const pageEl = document.createElement('div');
             pageEl.className = 'book-page';
-            if (page.featured) pageEl.classList.add('featured');
+            if (page.featured)              pageEl.classList.add('featured');
+            if (page.isSectionStart)        pageEl.classList.add('section-start');
+            if (page.isSectionContinuation) pageEl.classList.add('section-continuation');
 
             for (const unit of page.units) {
                 // Divider is bound to section-header to prevent stranding.
