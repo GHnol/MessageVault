@@ -2751,6 +2751,92 @@
         }
         .book-ending-tagline { font-size: 10px; color: #e0e0e5; letter-spacing: 0.2px; }
 
+        /* ── Volume tabs ── */
+        .book-vol-row {
+            display: flex; align-items: center; gap: 6px;
+            flex-basis: 100%; margin-bottom: 4px;
+        }
+        .book-vol-tab {
+            padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 500;
+            border: none; cursor: pointer; background: #f2f2f7; color: #8e8e93;
+            transition: background 0.12s, color 0.12s;
+        }
+        .book-vol-tab.active { background: #007aff; color: #fff; }
+        .book-vol-add {
+            padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+            border: 1px dashed #c7c7cc; cursor: pointer; background: transparent; color: #8e8e93;
+        }
+        .book-vol-add:hover { border-color: #007aff; color: #007aff; }
+
+        /* ── Sections management bar ── */
+        .book-sections-bar {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.06);
+        }
+        .book-sections-label {
+            font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.4px;
+            color: #aeaeb2; margin-bottom: 10px;
+        }
+        .book-section-row {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 0;
+            border-top: 1px solid #f2f2f7;
+        }
+        .book-section-rows-container .book-section-row:first-child { border-top: none; }
+        .book-section-row-name {
+            flex: 1; font-size: 13px; color: #1c1c1e; font-weight: 400;
+            min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .book-section-row-name.excluded { color: #aeaeb2; text-decoration: line-through; }
+        .book-section-row-actions { display: flex; gap: 5px; flex-shrink: 0; }
+        .book-section-pill {
+            padding: 3px 9px; border-radius: 10px; font-size: 10px; font-weight: 500;
+            border: none; cursor: pointer;
+            background: #f2f2f7; color: #48484a;
+            transition: background 0.1s, color 0.1s;
+        }
+        .book-section-pill:hover { background: #e5e5ea; }
+        .book-section-pill.active { background: #007aff; color: #fff; }
+        .book-section-pill.excluded-pill { background: rgba(255,59,48,0.08); color: #ff3b30; }
+        .book-section-vol-group { display: flex; gap: 3px; }
+        .book-section-vol-pill {
+            padding: 3px 8px; border-radius: 8px; font-size: 10px; font-weight: 500;
+            border: 1px solid #d2d2d7; cursor: pointer;
+            background: transparent; color: #636366;
+        }
+        .book-section-vol-pill.active {
+            border-color: #007aff;
+            background: rgba(0,122,255,0.08); color: #007aff;
+        }
+
+        /* ── Featured marker on section block ── */
+        .book-page.featured > .book-section-header::after {
+            content: ' \2605'; /* ★ */
+            color: #ff9500; font-size: 9px; vertical-align: middle;
+        }
+
+        /* ── Force page break visual marker ── */
+        .book-page-break-marker {
+            width: 100%; max-width: 440px;
+            display: flex; align-items: center; gap: 8px;
+            height: 28px;
+        }
+        .book-page-break-marker::before,
+        .book-page-break-marker::after {
+            content: ''; flex: 1; height: 1px;
+            background: repeating-linear-gradient(
+                90deg, #c7c7cc 0, #c7c7cc 4px, transparent 4px, transparent 8px
+            );
+        }
+        .book-page-break-marker span {
+            font-size: 9px; color: #c7c7cc; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+            user-select: none;
+        }
+
         @media (prefers-color-scheme: dark) {
             .ks-book-cta { border-top-color: rgba(255,255,255,0.08); }
             .ks-book-cta-label { color: #48484a; }
@@ -2791,6 +2877,26 @@
             .book-ending-brand { color: #3a3a3c; }
             .book-ending-tagline { color: #2c2c2e; }
             .book-limit-warning { background: rgba(255,69,58,0.10); border-color: rgba(255,69,58,0.22); color: #ff453a; }
+
+            .book-vol-tab { background: #2c2c2e; color: #636366; }
+            .book-vol-tab.active { background: #0a84ff; color: #fff; }
+            .book-vol-add { border-color: #3a3a3c; color: #636366; }
+
+            .book-sections-bar {
+                background: #1c1c1e;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.35), 0 0 0 0.5px rgba(255,255,255,0.06);
+            }
+            .book-section-row { border-top-color: #2c2c2e; }
+            .book-section-row-name { color: #f2f2f7; }
+            .book-section-row-name.excluded { color: #48484a; }
+            .book-section-pill { background: #2c2c2e; color: #aeaeb2; }
+            .book-section-pill:hover { background: #3a3a3c; }
+            .book-section-pill.active { background: #0a84ff; color: #fff; }
+            .book-section-vol-pill { border-color: #3a3a3c; color: #636366; }
+            .book-section-vol-pill.active { border-color: #0a84ff; background: rgba(10,132,255,0.14); color: #0a84ff; }
+            .book-page-break-marker::before,
+            .book-page-break-marker::after { background: repeating-linear-gradient(90deg, #3a3a3c 0, #3a3a3c 4px, transparent 4px, transparent 8px); }
+            .book-page-break-marker span { color: #3a3a3c; }
         }
     </style>
 </head>
@@ -3058,6 +3164,7 @@
         </div>
         <div class="book-shell">
             <div class="book-controls-bar" id="bookControlsBar"></div>
+            <div class="book-sections-bar" id="bookSectionsBar"></div>
             <div class="book-canvas" id="bookCanvas"></div>
         </div>
     </div>
@@ -3187,6 +3294,7 @@
         const bookView = document.getElementById('bookView');
         const bookBackBtn = document.getElementById('bookBackBtn');
         const bookControlsBar = document.getElementById('bookControlsBar');
+        const bookSectionsBar = document.getElementById('bookSectionsBar');
         const bookCanvas = document.getElementById('bookCanvas');
         const reviewBookBtn = document.getElementById('reviewBookBtn');
 
@@ -6094,63 +6202,101 @@ ${keepsakeFooter}
                 },
                 // ── Sections (derived; not sorted by recency) ────────────
                 sections: [],
-                // ── Estimation ───────────────────────────────────────────
+                // ── Volumes ──────────────────────────────────────────────
+                // Architecture supports multiple volumes; always at least 1.
+                // Sections are assigned to a volume via section.volumeId.
+                volumes: [
+                    { id: 'vol-1', name: 'Volume 1', estimatedPageCount: 0, exceedsPageLimit: false }
+                ],
+                activeVolumeId: 'vol-1',
+                // ── Estimation (mirrors active volume; kept for controls-bar display) ──
                 estimatedPageCount: 0,
                 exceedsPageLimit:   false
             };
         }
 
         // Derive Message Book sections from current real keepsake groups.
-        // Ordering: array order of keepsakeGroups (review order), NOT recency.
-        // This is a parallel derived layer — groups are not modified.
+        // Merge strategy: preserve per-section state (volumeId, included, orderIndex,
+        // featured, forcePageBreakBefore) for groups that already have a section entry.
+        // New groups get default values. Stale sections (deleted groups) are pruned.
+        // Always refreshes messages[] from the source group (not reactive otherwise).
+        // Ordering in the sections array: review (keepsakeGroups array) order.
+        // This is independent from render order, which uses section.orderIndex.
         function syncBookSections() {
+            const state = messageBookState;
+            const defaultVolId = state.volumes[0] ? state.volumes[0].id : 'vol-1';
             const realGroups = keepsakeGroups.filter(
                 g => g.id !== 'group-staging' && g.messages.length > 0
             );
-            messageBookState.sections = realGroups.map((group, i) => ({
-                id:                         `book-section-${group.id}`,
-                sourceGroupId:              group.id,
-                customName:                 group.customName || null,
-                messages:                   [...group.messages],   // shallow copy — not a reference
-                forcePageBreakBefore:       false,
-                showDividerBefore:          i > 0,                 // first section has no preceding divider
-                featuredMode:               null,                  // placeholder — not implemented yet
-                preserveSameSenderRuns:     true,
-                preserveShortExchangeClusters: true
-            }));
+
+            // Index existing sections by sourceGroupId for merge
+            const existing = new Map(state.sections.map(s => [s.sourceGroupId, s]));
+
+            state.sections = realGroups.map((group, i) => {
+                const ex = existing.get(group.id);
+                return {
+                    id:                           `book-section-${group.id}`,
+                    sourceGroupId:                group.id,
+                    customName:                   group.customName || null,
+                    messages:                     [...group.messages],  // always refresh from source
+                    // Preserved section-level state (or defaults on first encounter):
+                    volumeId:                     ex ? ex.volumeId : defaultVolId,
+                    included:                     ex ? ex.included : true,
+                    orderIndex:                   ex !== undefined ? ex.orderIndex : i,
+                    featured:                     ex ? ex.featured : false,
+                    forcePageBreakBefore:         ex ? ex.forcePageBreakBefore : false,
+                    showDividerBefore:            ex !== undefined ? ex.showDividerBefore : (i > 0),
+                    preserveSameSenderRuns:       true,
+                    preserveShortExchangeClusters: true
+                };
+            });
         }
 
-        // First-pass deterministic page estimator.
-        // Uses message count and text density; accounts for opening/ending/dividers.
+        // Per-volume deterministic page estimator.
+        // Runs for each volume independently using only that volume's included sections.
+        // Opening/ending overhead applies to each volume (each is a separate book).
         // Not exact pagination — labeled as estimate throughout UI.
         function estimateBookPageCount() {
             const state = messageBookState;
-            const sections = state.sections;
 
-            const totalMessages = sections.reduce((s, sec) => s + sec.messages.length, 0);
-            const totalChars    = sections.reduce((s, sec) =>
-                s + sec.messages.reduce((cs, m) => cs + (m.text || '').length, 0), 0);
+            for (const vol of state.volumes) {
+                const sections = state.sections.filter(
+                    s => s.volumeId === vol.id && s.included
+                );
 
-            const openingPages  = 1 + (state.opening.dedicationEnabled ? 1 : 0);
-            const endingPages   = state.body.endingMode === 'branded' ? 1 : 0;
+                const totalMessages = sections.reduce((s, sec) => s + sec.messages.length, 0);
+                const totalChars    = sections.reduce((s, sec) =>
+                    s + sec.messages.reduce((cs, m) => cs + (m.text || '').length, 0), 0);
 
-            // Sparse dividers: each section boundary ≈ 0.3 pages of overhead
-            const dividerOverhead = state.body.dividerMode === 'sparse' && sections.length > 1
-                ? (sections.length - 1) * 0.3 : 0;
+                const openingPages  = 1 + (state.opening.dedicationEnabled ? 1 : 0);
+                const endingPages   = state.body.endingMode === 'branded' ? 1 : 0;
 
-            // Chat-message density in a 7×10 format:
-            // Short messages → ~10/page; medium → ~7/page; long → ~5/page
-            let messagePages = 0;
-            if (totalMessages > 0) {
-                const avg = totalChars / totalMessages;
-                const perPage = avg > 100 ? 5 : avg > 50 ? 7 : 10;
-                messagePages = Math.ceil(totalMessages / perPage);
+                // Sparse dividers: each section boundary ≈ 0.3 pages of overhead
+                const dividerOverhead = state.body.dividerMode === 'sparse' && sections.length > 1
+                    ? (sections.length - 1) * 0.3 : 0;
+
+                // Chat-message density in a 7×10 format:
+                // Short messages → ~10/page; medium → ~7/page; long → ~5/page
+                let messagePages = 0;
+                if (totalMessages > 0) {
+                    const avg = totalChars / totalMessages;
+                    const perPage = avg > 100 ? 5 : avg > 50 ? 7 : 10;
+                    messagePages = Math.ceil(totalMessages / perPage);
+                }
+
+                const estimate = Math.ceil(openingPages + messagePages + dividerOverhead + endingPages);
+                vol.estimatedPageCount = estimate;
+                vol.exceedsPageLimit   = estimate > state.format.maxPages;
             }
 
-            const estimate = Math.ceil(openingPages + messagePages + dividerOverhead + endingPages);
-            state.estimatedPageCount = estimate;
-            state.exceedsPageLimit   = estimate > state.format.maxPages;
-            return estimate;
+            // Mirror active volume stats to top-level for controls-bar display
+            const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
+            if (activeVol) {
+                state.estimatedPageCount = activeVol.estimatedPageCount;
+                state.exceedsPageLimit   = activeVol.exceedsPageLimit;
+            }
+
+            return state.estimatedPageCount;
         }
 
         // Group consecutive same-sender messages into runs.
@@ -6239,7 +6385,8 @@ ${keepsakeFooter}
         }
 
         // Build the title page element.
-        function buildBookTitlePage(state, contactName) {
+        // volumeSections: the filtered+sorted sections for the active volume (included only).
+        function buildBookTitlePage(state, contactName, volumeSections) {
             const page = document.createElement('div');
             page.className = 'book-page';
 
@@ -6248,7 +6395,9 @@ ${keepsakeFooter}
 
             const eyebrow = document.createElement('div');
             eyebrow.className = 'book-title-eyebrow';
-            eyebrow.textContent = 'KeepMees \u00b7 Message Book';
+            const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
+            const volSuffix = state.volumes.length > 1 && activeVol ? ` \u00b7 ${activeVol.name}` : '';
+            eyebrow.textContent = `KeepMees \u00b7 Message Book${volSuffix}`;
 
             const title = document.createElement('div');
             title.className = 'book-title-text';
@@ -6256,8 +6405,9 @@ ${keepsakeFooter}
 
             const sub = document.createElement('div');
             sub.className = 'book-title-sub';
-            const msgTotal = state.sections.reduce((s, sec) => s + sec.messages.length, 0);
-            sub.textContent = `${msgTotal} message${msgTotal !== 1 ? 's' : ''} \u00b7 ${state.sections.length} section${state.sections.length !== 1 ? 's' : ''}`;
+            const secs = volumeSections || state.sections;
+            const msgTotal = secs.reduce((s, sec) => s + sec.messages.length, 0);
+            sub.textContent = `${msgTotal} message${msgTotal !== 1 ? 's' : ''} \u00b7 ${secs.length} section${secs.length !== 1 ? 's' : ''}`;
 
             inner.appendChild(eyebrow);
             inner.appendChild(title);
@@ -6355,6 +6505,41 @@ ${keepsakeFooter}
         function buildBookControlsBar(state) {
             bookControlsBar.innerHTML = '';
 
+            // ── Volume tabs row ──────────────────────────────────────────
+            const volRow = document.createElement('div');
+            volRow.className = 'book-vol-row';
+
+            for (const vol of state.volumes) {
+                const tab = document.createElement('button');
+                tab.type = 'button';
+                tab.className = 'book-vol-tab' + (vol.id === state.activeVolumeId ? ' active' : '');
+                tab.textContent = vol.name;
+                if (vol.exceedsPageLimit) tab.textContent += ' ⚠';
+                tab.addEventListener('click', () => {
+                    state.activeVolumeId = vol.id;
+                    renderBookView();
+                });
+                volRow.appendChild(tab);
+            }
+
+            // "Add Volume 2" only when exactly 1 volume exists
+            if (state.volumes.length < 2) {
+                const addBtn = document.createElement('button');
+                addBtn.type = 'button';
+                addBtn.className = 'book-vol-add';
+                addBtn.textContent = '+ Add Volume 2';
+                addBtn.addEventListener('click', () => {
+                    state.volumes.push({
+                        id: 'vol-2', name: 'Volume 2',
+                        estimatedPageCount: 0, exceedsPageLimit: false
+                    });
+                    renderBookView();
+                });
+                volRow.appendChild(addBtn);
+            }
+            bookControlsBar.appendChild(volRow);
+
+            // ── Book Settings label ──────────────────────────────────────
             const label = document.createElement('div');
             label.className = 'book-controls-label';
             label.textContent = 'Book Settings';
@@ -6425,11 +6610,108 @@ ${keepsakeFooter}
                 bookControlsBar.appendChild(group);
             }
 
-            // Page count indicator
+            // Page count indicator (reflects active volume)
             const indicator = document.createElement('div');
             indicator.className = 'book-page-indicator' + (state.exceedsPageLimit ? ' over-limit' : '');
             indicator.textContent = `~${state.estimatedPageCount} est. pages`;
             bookControlsBar.appendChild(indicator);
+        }
+
+        // Build the sections management bar.
+        // Shows all sections with per-section controls: include/exclude, featured,
+        // force page break, and (if multiple volumes) volume assignment.
+        function buildBookSectionsBar(state) {
+            bookSectionsBar.innerHTML = '';
+            if (state.sections.length === 0) return;
+
+            const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+            const multiVol = state.volumes.length > 1;
+
+            const labelEl = document.createElement('div');
+            labelEl.className = 'book-sections-label';
+            labelEl.textContent = 'Sections';
+            bookSectionsBar.appendChild(labelEl);
+
+            const container = document.createElement('div');
+            container.className = 'book-section-rows-container';
+
+            // Sort sections by orderIndex for display
+            const sorted = [...state.sections].sort((a, b) => a.orderIndex - b.orderIndex);
+
+            for (const section of sorted) {
+                const row = document.createElement('div');
+                row.className = 'book-section-row';
+
+                // Section name
+                const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
+                const displayName = section.customName && section.customName.trim()
+                    ? section.customName.trim()
+                    : (srcGroup ? getGroupDisplayName(srcGroup) : section.id);
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'book-section-row-name' + (section.included ? '' : ' excluded');
+                nameEl.textContent = displayName;
+                row.appendChild(nameEl);
+
+                const actions = document.createElement('div');
+                actions.className = 'book-section-row-actions';
+
+                // Include / Exclude toggle
+                const inclBtn = document.createElement('button');
+                inclBtn.type = 'button';
+                inclBtn.className = 'book-section-pill' + (section.included ? '' : ' excluded-pill');
+                inclBtn.textContent = section.included ? 'Included' : 'Excluded';
+                inclBtn.addEventListener('click', () => {
+                    section.included = !section.included;
+                    renderBookView();
+                });
+                actions.appendChild(inclBtn);
+
+                // Featured toggle
+                const featBtn = document.createElement('button');
+                featBtn.type = 'button';
+                featBtn.className = 'book-section-pill' + (section.featured ? ' active' : '');
+                featBtn.textContent = 'Featured';
+                featBtn.addEventListener('click', () => {
+                    section.featured = !section.featured;
+                    renderBookView();
+                });
+                actions.appendChild(featBtn);
+
+                // Force page break toggle (only meaningful for non-first sections in a volume)
+                const pbBtn = document.createElement('button');
+                pbBtn.type = 'button';
+                pbBtn.className = 'book-section-pill' + (section.forcePageBreakBefore ? ' active' : '');
+                pbBtn.textContent = 'Page break';
+                pbBtn.addEventListener('click', () => {
+                    section.forcePageBreakBefore = !section.forcePageBreakBefore;
+                    renderBookView();
+                });
+                actions.appendChild(pbBtn);
+
+                // Volume assignment (only when multiple volumes exist)
+                if (multiVol) {
+                    const volGroup = document.createElement('div');
+                    volGroup.className = 'book-section-vol-group';
+                    for (const vol of state.volumes) {
+                        const vBtn = document.createElement('button');
+                        vBtn.type = 'button';
+                        vBtn.className = 'book-section-vol-pill' + (section.volumeId === vol.id ? ' active' : '');
+                        vBtn.textContent = vol.name;
+                        vBtn.addEventListener('click', () => {
+                            section.volumeId = vol.id;
+                            renderBookView();
+                        });
+                        volGroup.appendChild(vBtn);
+                    }
+                    actions.appendChild(volGroup);
+                }
+
+                row.appendChild(actions);
+                container.appendChild(row);
+            }
+
+            bookSectionsBar.appendChild(container);
         }
 
         // Append a page number footer to a .book-page element.
@@ -6440,7 +6722,9 @@ ${keepsakeFooter}
             pageEl.appendChild(pn);
         }
 
-        // Render the full book canvas.
+        // Render the full book canvas for the active volume.
+        // Only sections where volumeId === activeVolumeId && included are rendered.
+        // Sections are rendered in orderIndex order (independent from keepsakes summary sort).
         function renderBookView() {
             syncBookSections();
             estimateBookPageCount();
@@ -6452,25 +6736,38 @@ ${keepsakeFooter}
             const backLabel = bookReturnView === reviewView ? 'Review' : 'Keepsakes';
             bookBackBtn.textContent = `\u2190 ${backLabel}`;
 
-            // Rebuild controls bar
+            // Rebuild controls bar (volume tabs + settings)
             buildBookControlsBar(state);
+
+            // Rebuild sections management bar
+            buildBookSectionsBar(state);
 
             // Rebuild canvas
             bookCanvas.innerHTML = '';
 
-            // Page limit warning — appears above the canvas if exceeded
+            // Active volume — filter and sort sections
+            const activeVolId = state.activeVolumeId;
+            const activeVol = state.volumes.find(v => v.id === activeVolId);
+
+            // Per-volume page limit warning
             if (state.exceedsPageLimit) {
                 const warning = document.createElement('div');
                 warning.className = 'book-limit-warning';
-                warning.innerHTML = `<strong>Page limit approaching:</strong> This book is estimated at ${state.estimatedPageCount} pages, which exceeds the ${state.format.maxPages}-page maximum for a single volume. Consider splitting into two volumes — one per time period or relationship theme.`;
+                const volLabel = activeVol ? activeVol.name : 'this volume';
+                warning.innerHTML = `<strong>${volLabel} page limit:</strong> ~${state.estimatedPageCount} est. pages exceeds the ${state.format.maxPages}-page maximum. Move sections to Volume 2 using the Sections panel, or exclude sections from this volume.`;
                 bookCanvas.appendChild(warning);
             }
+
+            // Active-volume sections: included only, sorted by orderIndex
+            const volumeSections = state.sections
+                .filter(s => s.volumeId === activeVolId && s.included)
+                .sort((a, b) => a.orderIndex - b.orderIndex);
 
             let pageNum = 0;
             const showPgNums = state.body.pageNumberMode === 'on';
 
-            // Title page
-            const titlePage = buildBookTitlePage(state, contactName);
+            // Title page (counts once per volume in the preview)
+            const titlePage = buildBookTitlePage(state, contactName, volumeSections);
             if (showPgNums) addPageNumber(titlePage, ++pageNum);
             else pageNum++;
             bookCanvas.appendChild(titlePage);
@@ -6484,11 +6781,22 @@ ${keepsakeFooter}
             }
 
             // Sections with sparse dividers and page numbers
-            for (let i = 0; i < state.sections.length; i++) {
-                const section = state.sections[i];
+            for (let i = 0; i < volumeSections.length; i++) {
+                const section = volumeSections[i];
 
-                if (section.showDividerBefore && state.body.dividerMode === 'sparse') {
-                    // Divider sits in the canvas gap — centered dots, visible on grey background
+                // Force page break marker — dashed rule with "New page" label
+                if (section.forcePageBreakBefore && i > 0) {
+                    const marker = document.createElement('div');
+                    marker.className = 'book-page-break-marker';
+                    const lbl = document.createElement('span');
+                    lbl.textContent = 'New page';
+                    marker.appendChild(lbl);
+                    bookCanvas.appendChild(marker);
+                }
+
+                // Sparse divider between sections (when no forced page break overrides it)
+                // Use i > 0 as the guard — showDividerBefore was set before volume filtering
+                if (!section.forcePageBreakBefore && state.body.dividerMode === 'sparse' && i > 0) {
                     const divEl = document.createElement('div');
                     divEl.className = 'book-divider';
                     divEl.setAttribute('aria-hidden', 'true');
@@ -6497,6 +6805,8 @@ ${keepsakeFooter}
                 }
 
                 const sectionPage = buildBookSectionBlock(section, state, contactName);
+                // Featured flag: add class to the page element
+                if (section.featured) sectionPage.classList.add('featured');
                 if (showPgNums) addPageNumber(sectionPage, ++pageNum);
                 else pageNum++;
                 bookCanvas.appendChild(sectionPage);
