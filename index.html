@@ -1229,6 +1229,29 @@
 
         .review-delete-group-btn:hover { color: #ff3b30; }
 
+        /* ── Staging bulk-move bar ── */
+        .staging-bulk-move {
+            display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+            padding: 7px 16px 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .staging-bulk-label {
+            font-size: 11px; color: #86868b; flex-shrink: 0;
+        }
+        .staging-bulk-chip {
+            padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500;
+            border: 1px solid rgba(0,0,0,0.14); cursor: pointer;
+            background: #f2f2f7; color: #1c1c1e;
+        }
+        .staging-bulk-chip:hover { background: #e5e5ea; }
+        .staging-bulk-new-chip {
+            padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500;
+            border: 1px solid rgba(0,122,255,0.35); cursor: pointer;
+            background: transparent; color: #007aff;
+        }
+        .staging-bulk-new-chip:hover { background: rgba(0,122,255,0.07); }
+        .staging-bulk-sep { color: #aeaeb2; font-size: 11px; }
+
         /* ── Keepsake eligibility section ── */
         .keepsake-eligibility {
             padding: 12px 20px 14px;
@@ -1572,6 +1595,12 @@
             }
             .review-move-new-chip:hover  { background: rgba(0,122,255,0.12); border-color: rgba(0,122,255,0.60); }
             .review-move-new-chip:active { background: rgba(0,122,255,0.18); }
+            /* Staging bulk-move bar — dark mode */
+            .staging-bulk-move { border-bottom-color: rgba(255,255,255,0.06); }
+            .staging-bulk-chip { background: #2c2c2e; border-color: rgba(255,255,255,0.10); color: #f2f2f7; }
+            .staging-bulk-chip:hover { background: #3a3a3c; }
+            .staging-bulk-new-chip { border-color: rgba(0,122,255,0.40); color: #0a84ff; }
+            .staging-bulk-new-chip:hover { background: rgba(0,122,255,0.10); }
             /* Middot separator — dark mode */
             .review-chip-sep { color: rgba(255,255,255,0.25); }
             /* Eligibility section — dark mode */
@@ -2824,8 +2853,8 @@
         .book-section-order-btn:hover:not(:disabled) { background: #e5e5ea; color: #1c1c1e; }
         .book-section-order-btn:disabled { opacity: 0.28; cursor: default; }
 
-        /* ── Featured marker on section block ── */
-        .book-page.featured > .book-section-header::after {
+        /* ── Featured marker on section header ── */
+        .book-section-header.featured-header::after {
             content: ' \2605'; /* ★ */
             color: #ff9500; font-size: 9px; vertical-align: middle;
         }
@@ -5298,6 +5327,46 @@ ${keepsakeFooter}
             return section;
         }
 
+        // Build the bulk-move action bar shown at the top of the Newly Selected (staging) group.
+        // Provides "Move all to →" chips for every real set and a "New set" chip.
+        function buildStagingBulkMove() {
+            const bar = document.createElement('div');
+            bar.className = 'staging-bulk-move';
+
+            const label = document.createElement('span');
+            label.className = 'staging-bulk-label';
+            label.textContent = 'Move all to\u2192';
+            bar.appendChild(label);
+
+            const realGroups = keepsakeGroups.filter(g => g.id !== 'group-staging');
+
+            for (const tgt of realGroups) {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'staging-bulk-chip';
+                chip.textContent = getGroupDisplayName(tgt);
+                chip.addEventListener('click', () => moveAllFromGroup('group-staging', tgt.id));
+                bar.appendChild(chip);
+            }
+
+            if (realGroups.length > 0) {
+                const sep = document.createElement('span');
+                sep.className = 'staging-bulk-sep';
+                sep.setAttribute('aria-hidden', 'true');
+                sep.textContent = '\u00b7';
+                bar.appendChild(sep);
+            }
+
+            const newChip = document.createElement('button');
+            newChip.type = 'button';
+            newChip.className = 'staging-bulk-new-chip';
+            newChip.textContent = 'New set';
+            newChip.addEventListener('click', () => moveAllFromGroupToNew('group-staging'));
+            bar.appendChild(newChip);
+
+            return bar;
+        }
+
         function renderReviewView() {
             reviewBody.innerHTML = '';
 
@@ -5351,6 +5420,11 @@ ${keepsakeFooter}
 
                 headerEl.appendChild(headerRight);
                 groupEl.appendChild(headerEl);
+
+                // Staging bulk-move bar: shown when Newly Selected group has messages
+                if (group.id === 'group-staging' && group.messages.length > 0) {
+                    groupEl.appendChild(buildStagingBulkMove());
+                }
 
                 // Bubble canvas
                 const bubblesEl = document.createElement('div');
@@ -5575,6 +5649,51 @@ ${keepsakeFooter}
             // to the new set's timestamp makes the sort deterministic.
             const src = keepsakeGroups.find(g => g.id === srcGroupId);
             newGroup.lastComposedAt = (src ? src.lastComposedAt || 0 : 0) + 1;
+        }
+
+        // Move ALL messages from srcGroupId into tgtGroupId, maintaining conversation order.
+        // Intended for bulk-moving the staging group into an existing real set.
+        function moveAllFromGroup(srcGroupId, tgtGroupId) {
+            const src = keepsakeGroups.find(g => g.id === srcGroupId);
+            const tgt = keepsakeGroups.find(g => g.id === tgtGroupId);
+            if (!src || !tgt || src === tgt || src.messages.length === 0) return;
+
+            // Merge and re-sort by original conversation index
+            const combined = tgt.messageIndices.map((idx, i) => ({ idx, msg: tgt.messages[i] }))
+                .concat(src.messageIndices.map((idx, i) => ({ idx, msg: src.messages[i] })));
+            combined.sort((a, b) => a.idx - b.idx);
+
+            tgt.messages       = combined.map(z => z.msg);
+            tgt.messageIndices = combined.map(z => z.idx);
+            src.messages       = [];
+            src.messageIndices = [];
+
+            touchGroup(tgtGroupId);
+            touchGroup(srcGroupId);
+            normalizeGroups();
+            renderReviewView();
+        }
+
+        // Move ALL messages from srcGroupId into a freshly created group.
+        function moveAllFromGroupToNew(srcGroupId) {
+            const src = keepsakeGroups.find(g => g.id === srcGroupId);
+            if (!src || src.messages.length === 0) return;
+
+            const newGroup = {
+                id: `group-${Date.now()}`,
+                messages:       [...src.messages],
+                messageIndices: [...src.messageIndices],
+                customName:     null,
+                chosenTypeId:   null,
+                lastComposedAt: Date.now()
+            };
+            src.messages       = [];
+            src.messageIndices = [];
+
+            keepsakeGroups.push(newGroup);
+            touchGroup(srcGroupId);
+            normalizeGroups();
+            renderReviewView();
         }
 
         function removeEmptyGroup(groupId) {
@@ -6405,12 +6524,10 @@ ${keepsakeFooter}
             return runEl;
         }
 
-        // Build the title page element.
+        // Build the title page inner content element.
+        // Returns .book-title-page (not a .book-page wrapper — buildPageDOMElement wraps it).
         // volumeSections: the filtered+sorted sections for the active volume (included only).
         function buildBookTitlePage(state, contactName, volumeSections) {
-            const page = document.createElement('div');
-            page.className = 'book-page';
-
             const inner = document.createElement('div');
             inner.className = 'book-title-page';
 
@@ -6433,15 +6550,12 @@ ${keepsakeFooter}
             inner.appendChild(eyebrow);
             inner.appendChild(title);
             inner.appendChild(sub);
-            page.appendChild(inner);
-            return page;
+            return inner;
         }
 
-        // Build the dedication page element (only when dedicationEnabled).
+        // Build the dedication page inner content element.
+        // Returns .book-dedication-page (not a .book-page wrapper).
         function buildBookDedicationPage(state) {
-            const page = document.createElement('div');
-            page.className = 'book-page';
-
             const inner = document.createElement('div');
             inner.className = 'book-dedication-page';
 
@@ -6460,51 +6574,302 @@ ${keepsakeFooter}
 
             inner.appendChild(eyebrow);
             inner.appendChild(text);
-            page.appendChild(inner);
-            return page;
+            return inner;
         }
 
-        // Build one section block (may span multiple logical pages in future exact pagination).
-        function buildBookSectionBlock(section, state, contactName) {
-            const page = document.createElement('div');
-            page.className = 'book-page';
+        /* ═══════════════════════════════════════════════════════
+           MB4: Composition unit layer + pagination
+           ═══════════════════════════════════════════════════════
+           Pipeline:
+             generateCompositionUnits → paginateUnits → buildPageDOMElement
+           No DOM is created during unit generation or pagination.
+           Units are pure data objects. Pages are pure data objects.
+           DOM is created only in buildPageDOMElement and renderUnitToDOM.
+        ═══════════════════════════════════════════════════════ */
 
-            // Section header — show custom name if set, else positional name from groups
-            const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
-            const displayName = section.customName && section.customName.trim()
-                ? section.customName.trim()
-                : (srcGroup ? getGroupDisplayName(srcGroup) : '');
+        // Normalized line-budget constants for a 7×10 trim book.
+        // ~44 lines of body text per page at standard margins and 12pt leading.
+        // These govern pagination decisions, not pixel layout.
+        const BOOK_PAGE_LINES     = 44;
+        const BOOK_HEADER_LINES   = 4;  // section header label + surrounding whitespace
+        const BOOK_DIVIDER_LINES  = 3;  // sparse section divider
 
-            if (displayName) {
-                const header = document.createElement('div');
-                header.className = 'book-section-header';
-                header.textContent = displayName;
-                page.appendChild(header);
-            }
+        // Estimate normalized lines for a single message bubble.
+        // Chat bubbles occupy roughly 35 chars/line in this trim size.
+        function msgLineCount(m) {
+            const chars = (m.text || '').length;
+            if (chars === 0) return 2;  // attachment placeholder
+            const textLines = Math.max(1, Math.ceil(chars / 35));
+            const rxLines   = (m.reactions && m.reactions.length) ? 1 : 0;
+            return textLines + rxLines + 1; // +1 for inter-bubble gap
+        }
 
+        // Estimate normalized lines for a same-sender run block.
+        function runLineCount(run) {
+            // 1 attribution line + sum of message line costs
+            return 1 + run.messages.reduce((s, m) => s + msgLineCount(m), 0);
+        }
+
+        // Unit types:
+        //   title-page      — alwaysOwnPage, full-page frontmatter
+        //   dedication-page — alwaysOwnPage
+        //   ending-page     — alwaysOwnPage
+        //   section-header  — keepWithNext (orphan-guard)
+        //   sender-run      — atomic (never split internally)
+        //   message         — atomic (flat rendering path)
+        //   divider         — sparse section separator
+        //   force-page-break — triggers immediate page flush, consumes no lines
+
+        // Generate the flat composition unit sequence for the active volume.
+        // Pure data — no DOM creation happens here.
+        function generateCompositionUnits(state, contactName) {
+            const units = [];
+            const activeVolId = state.activeVolumeId;
             const showTs = state.body.timestampMode === 'on';
 
-            if (section.preserveSameSenderRuns) {
-                const runs = groupIntoRuns(section.messages);
-                for (const run of runs) {
-                    page.appendChild(buildBookMsgRun(run, contactName, showTs));
+            const volumeSections = state.sections
+                .filter(s => s.volumeId === activeVolId && s.included)
+                .sort((a, b) => a.orderIndex - b.orderIndex);
+
+            // ── Frontmatter ──────────────────────────────────────────────
+            units.push({
+                type: 'title-page', alwaysOwnPage: true,
+                state, contactName, volumeSections
+            });
+
+            if (state.opening.dedicationEnabled) {
+                units.push({ type: 'dedication-page', alwaysOwnPage: true, state });
+            }
+
+            // ── Body sections ────────────────────────────────────────────
+            for (let si = 0; si < volumeSections.length; si++) {
+                const section = volumeSections[si];
+
+                if (section.forcePageBreakBefore && si > 0) {
+                    units.push({ type: 'force-page-break' });
                 }
-            } else {
-                // Flat rendering: no run grouping (preserveSameSenderRuns=false future path)
-                for (const m of section.messages) {
-                    const item = buildBookMsgItem(m, showTs);
-                    page.appendChild(item);
+
+                if (!section.forcePageBreakBefore && state.body.dividerMode === 'sparse' && si > 0) {
+                    units.push({ type: 'divider', lines: BOOK_DIVIDER_LINES });
+                }
+
+                const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
+                const displayName = section.customName && section.customName.trim()
+                    ? section.customName.trim()
+                    : (srcGroup ? getGroupDisplayName(srcGroup) : '');
+
+                if (displayName) {
+                    units.push({
+                        type: 'section-header',
+                        lines: BOOK_HEADER_LINES,
+                        keepWithNext: true,   // orphan guard: stays with first content unit
+                        displayName,
+                        featured: section.featured
+                    });
+                }
+
+                if (section.preserveSameSenderRuns) {
+                    const runs = groupIntoRuns(section.messages);
+                    for (const run of runs) {
+                        units.push({
+                            type: 'sender-run',
+                            lines: runLineCount(run),
+                            atomic: true,           // never broken internally
+                            run, contactName, showTs,
+                            featured: section.featured
+                        });
+                    }
+                } else {
+                    for (const m of section.messages) {
+                        units.push({
+                            type: 'message',
+                            lines: msgLineCount(m),
+                            atomic: true,
+                            m, showTs,
+                            featured: section.featured
+                        });
+                    }
                 }
             }
 
-            return page;
+            // ── Backmatter ───────────────────────────────────────────────
+            if (state.body.endingMode === 'branded') {
+                units.push({ type: 'ending-page', alwaysOwnPage: true });
+            }
+
+            return units;
         }
 
-        // Build the ending page element.
-        function buildBookEndingPage() {
-            const page = document.createElement('div');
-            page.className = 'book-page';
+        // Split a sender-run unit into page-safe chunks at message boundaries.
+        // maxLines = BOOK_PAGE_LINES - BOOK_HEADER_LINES ensures header + chunk ≤ BOOK_PAGE_LINES.
+        // This guarantees the orphan guard can always flush a header with its first run onto
+        // a single page without overflow. Continuation chunks are marked isContinuation:true.
+        function splitRunIntoChunks(unit, maxLines) {
+            const messages = unit.run.messages;
+            if (messages.length <= 1) return [unit]; // single message — indivisible
+            const chunks = [];
+            let start = 0;
+            while (start < messages.length) {
+                let accumulated = 1; // attribution line
+                let end = start;
+                while (end < messages.length) {
+                    const cost = msgLineCount(messages[end]);
+                    if (accumulated + cost > maxLines && end > start) break;
+                    accumulated += cost;
+                    end++;
+                }
+                if (end === start) end = start + 1; // always advance at least one message
+                const sliceRun = { sender: unit.run.sender, messages: messages.slice(start, end) };
+                chunks.push({
+                    type: 'sender-run',
+                    lines: runLineCount(sliceRun),
+                    run: sliceRun,
+                    contactName: unit.contactName,
+                    showTs: unit.showTs,
+                    featured: unit.featured,
+                    isContinuation: start > 0
+                });
+                start = end;
+            }
+            return chunks;
+        }
 
+        // Pack composition units into page objects.
+        // Returns: Array<{ units: Unit[], linesUsed: number, featured: boolean }>
+        //
+        // Rules (in order of priority):
+        //   1. force-page-break  → flush current page immediately
+        //   2. alwaysOwnPage     → flush, place alone, flush again
+        //   3. section-header orphan guard → flush if header + next unit won't fit
+        //      (safe after pre-splitting: all run chunks ≤ BOOK_PAGE_LINES - BOOK_HEADER_LINES)
+        //   4. sender-run soft keep-together → flush to new page if run won't fit
+        //      (but run still CAN span multiple pages via pre-split chunks)
+        //   5. normal placement  → place on current page; flush when full
+        //
+        // Pre-processing pass splits oversized sender-runs at message boundaries so that:
+        //   a) no single unit creates a giant pseudo-page, and
+        //   b) header + any run chunk always fits on one standard page.
+        function paginateUnits(rawUnits) {
+            // Pre-processing: explode sender-runs that exceed the safe per-chunk budget.
+            // RUN_MAX_LINES guarantees: header.lines + chunk.lines ≤ BOOK_PAGE_LINES.
+            const RUN_MAX_LINES = BOOK_PAGE_LINES - BOOK_HEADER_LINES;
+            const units = [];
+            for (const u of rawUnits) {
+                if (u.type === 'sender-run' && u.lines > RUN_MAX_LINES) {
+                    units.push(...splitRunIntoChunks(u, RUN_MAX_LINES));
+                } else {
+                    units.push(u);
+                }
+            }
+
+            const pages = [];
+            let cur = { units: [], linesUsed: 0, featured: false };
+
+            function flush() {
+                if (cur.units.length > 0) pages.push(cur);
+                cur = { units: [], linesUsed: 0, featured: false };
+            }
+
+            for (let i = 0; i < units.length; i++) {
+                const u = units[i];
+
+                // Rule 1
+                if (u.type === 'force-page-break') { flush(); continue; }
+
+                // Rule 2
+                if (u.alwaysOwnPage) {
+                    flush();
+                    cur.units.push(u);
+                    cur.linesUsed = BOOK_PAGE_LINES;
+                    flush();
+                    continue;
+                }
+
+                // Rule 3 — section-header orphan guard.
+                // After pre-processing, all run chunks ≤ RUN_MAX_LINES, so
+                // header.lines + next.lines ≤ BOOK_PAGE_LINES is guaranteed.
+                // Flush the header to a fresh page if both header and its first
+                // following content unit won't fit in remaining space together.
+                if (u.type === 'section-header' && cur.units.length > 0) {
+                    const next = i + 1 < units.length ? units[i + 1] : null;
+                    if (next && !next.alwaysOwnPage && next.type !== 'force-page-break') {
+                        const needed    = u.lines + next.lines;
+                        const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
+                        if (spaceLeft < needed) flush();
+                    }
+                }
+
+                // Rule 4 — sender-run soft keep-together.
+                // All run chunks are ≤ RUN_MAX_LINES ≤ BOOK_PAGE_LINES after pre-processing.
+                // Flush to a fresh page if the run won't fit in remaining space.
+                if (u.type === 'sender-run') {
+                    const spaceLeft = BOOK_PAGE_LINES - cur.linesUsed;
+                    if (u.lines > spaceLeft && cur.units.length > 0) flush();
+                }
+
+                // Rule 5 — place unit
+                cur.units.push(u);
+                cur.linesUsed += (u.lines || 0);
+                if (u.featured) cur.featured = true;
+
+                if (cur.linesUsed >= BOOK_PAGE_LINES) flush();
+            }
+
+            flush(); // remaining content
+            return pages;
+        }
+
+        // Render a single composition unit to a DOM element.
+        // Returns an element suitable for appending inside a .book-page, or null.
+        function renderUnitToDOM(unit) {
+            switch (unit.type) {
+                case 'title-page':
+                    return buildBookTitlePage(unit.state, unit.contactName, unit.volumeSections);
+                case 'dedication-page':
+                    return buildBookDedicationPage(unit.state);
+                case 'ending-page':
+                    return buildBookEndingPage();
+                case 'section-header': {
+                    const el = document.createElement('div');
+                    el.className = 'book-section-header' + (unit.featured ? ' featured-header' : '');
+                    el.textContent = unit.displayName;
+                    return el;
+                }
+                case 'divider': {
+                    const el = document.createElement('div');
+                    el.className = 'book-divider';
+                    el.setAttribute('aria-hidden', 'true');
+                    el.textContent = '\u00b7\u2003\u00b7\u2003\u00b7';
+                    return el;
+                }
+                case 'sender-run':
+                    return buildBookMsgRun(unit.run, unit.contactName, unit.showTs);
+                case 'message':
+                    return buildBookMsgItem(unit.m, unit.showTs);
+                default:
+                    return null;
+            }
+        }
+
+        // Build the .book-page DOM element for one paginated page.
+        // All page wrappers are created here — no builder function creates its own .book-page.
+        function buildPageDOMElement(page, pageNum, showPgNums) {
+            const pageEl = document.createElement('div');
+            pageEl.className = 'book-page';
+            if (page.featured) pageEl.classList.add('featured');
+
+            for (const unit of page.units) {
+                const el = renderUnitToDOM(unit);
+                if (el) pageEl.appendChild(el);
+            }
+
+            if (showPgNums) addPageNumber(pageEl, pageNum);
+            return pageEl;
+        }
+
+        // Build the ending page inner content element.
+        // Returns .book-ending-page (not a .book-page wrapper).
+        function buildBookEndingPage() {
             const inner = document.createElement('div');
             inner.className = 'book-ending-page';
 
@@ -6518,8 +6883,7 @@ ${keepsakeFooter}
 
             inner.appendChild(brand);
             inner.appendChild(tagline);
-            page.appendChild(inner);
-            return page;
+            return inner;
         }
 
         // Build the controls bar from current state.
@@ -6806,11 +7170,8 @@ ${keepsakeFooter}
             // Rebuild canvas
             bookCanvas.innerHTML = '';
 
-            // Active volume — filter and sort sections
-            const activeVolId = state.activeVolumeId;
-            const activeVol = state.volumes.find(v => v.id === activeVolId);
-
-            // Per-volume page limit warning
+            // Per-volume page limit warning (outside canvas, before pages)
+            const activeVol = state.volumes.find(v => v.id === state.activeVolumeId);
             if (state.exceedsPageLimit) {
                 const warning = document.createElement('div');
                 warning.className = 'book-limit-warning';
@@ -6819,66 +7180,14 @@ ${keepsakeFooter}
                 bookCanvas.appendChild(warning);
             }
 
-            // Active-volume sections: included only, sorted by orderIndex
-            const volumeSections = state.sections
-                .filter(s => s.volumeId === activeVolId && s.included)
-                .sort((a, b) => a.orderIndex - b.orderIndex);
-
-            let pageNum = 0;
+            // MB4 pipeline: generate units → paginate → render pages
+            const units = generateCompositionUnits(state, contactName);
+            const pages = paginateUnits(units);
             const showPgNums = state.body.pageNumberMode === 'on';
 
-            // Title page (counts once per volume in the preview)
-            const titlePage = buildBookTitlePage(state, contactName, volumeSections);
-            if (showPgNums) addPageNumber(titlePage, ++pageNum);
-            else pageNum++;
-            bookCanvas.appendChild(titlePage);
-
-            // Dedication page (optional)
-            if (state.opening.dedicationEnabled) {
-                const dedPage = buildBookDedicationPage(state);
-                if (showPgNums) addPageNumber(dedPage, ++pageNum);
-                else pageNum++;
-                bookCanvas.appendChild(dedPage);
-            }
-
-            // Sections with sparse dividers and page numbers
-            for (let i = 0; i < volumeSections.length; i++) {
-                const section = volumeSections[i];
-
-                // Force page break marker — dashed rule with "New page" label
-                if (section.forcePageBreakBefore && i > 0) {
-                    const marker = document.createElement('div');
-                    marker.className = 'book-page-break-marker';
-                    const lbl = document.createElement('span');
-                    lbl.textContent = 'New page';
-                    marker.appendChild(lbl);
-                    bookCanvas.appendChild(marker);
-                }
-
-                // Sparse divider between sections (when no forced page break overrides it)
-                // Use i > 0 as the guard — showDividerBefore was set before volume filtering
-                if (!section.forcePageBreakBefore && state.body.dividerMode === 'sparse' && i > 0) {
-                    const divEl = document.createElement('div');
-                    divEl.className = 'book-divider';
-                    divEl.setAttribute('aria-hidden', 'true');
-                    divEl.textContent = '\u00b7\u2003\u00b7\u2003\u00b7'; // · · ·
-                    bookCanvas.appendChild(divEl);
-                }
-
-                const sectionPage = buildBookSectionBlock(section, state, contactName);
-                // Featured flag: add class to the page element
-                if (section.featured) sectionPage.classList.add('featured');
-                if (showPgNums) addPageNumber(sectionPage, ++pageNum);
-                else pageNum++;
-                bookCanvas.appendChild(sectionPage);
-            }
-
-            // Ending page (optional)
-            if (state.body.endingMode === 'branded') {
-                const endPage = buildBookEndingPage();
-                if (showPgNums) addPageNumber(endPage, ++pageNum);
-                bookCanvas.appendChild(endPage);
-            }
+            pages.forEach((page, i) => {
+                bookCanvas.appendChild(buildPageDOMElement(page, i + 1, showPgNums));
+            });
         }
 
         function showBookView(returnView) {
