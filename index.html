@@ -2811,6 +2811,18 @@
             border-color: #007aff;
             background: rgba(0,122,255,0.08); color: #007aff;
         }
+        .book-section-order-btns {
+            display: flex; flex-direction: column; gap: 1px; flex-shrink: 0;
+        }
+        .book-section-order-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 22px; height: 17px;
+            border: none; border-radius: 4px; cursor: pointer;
+            font-size: 10px; line-height: 1;
+            background: #f2f2f7; color: #636366; padding: 0;
+        }
+        .book-section-order-btn:hover:not(:disabled) { background: #e5e5ea; color: #1c1c1e; }
+        .book-section-order-btn:disabled { opacity: 0.28; cursor: default; }
 
         /* ── Featured marker on section block ── */
         .book-page.featured > .book-section-header::after {
@@ -2894,6 +2906,8 @@
             .book-section-pill.active { background: #0a84ff; color: #fff; }
             .book-section-vol-pill { border-color: #3a3a3c; color: #636366; }
             .book-section-vol-pill.active { border-color: #0a84ff; background: rgba(10,132,255,0.14); color: #0a84ff; }
+            .book-section-order-btn { background: #2c2c2e; color: #aeaeb2; }
+            .book-section-order-btn:hover:not(:disabled) { background: #3a3a3c; color: #f2f2f7; }
             .book-page-break-marker::before,
             .book-page-break-marker::after { background: repeating-linear-gradient(90deg, #3a3a3c 0, #3a3a3c 4px, transparent 4px, transparent 8px); }
             .book-page-break-marker span { color: #3a3a3c; }
@@ -6232,6 +6246,13 @@ ${keepsakeFooter}
             // Index existing sections by sourceGroupId for merge
             const existing = new Map(state.sections.map(s => [s.sourceGroupId, s]));
 
+            // New sections are appended after the highest existing orderIndex so they
+            // never displace user-defined ordering of sections already in the book.
+            const existingMaxIndex = state.sections.length > 0
+                ? Math.max(...state.sections.map(s => s.orderIndex))
+                : -1;
+            let newSectionOrder = existingMaxIndex + 1;
+
             state.sections = realGroups.map((group, i) => {
                 const ex = existing.get(group.id);
                 return {
@@ -6242,7 +6263,7 @@ ${keepsakeFooter}
                     // Preserved section-level state (or defaults on first encounter):
                     volumeId:                     ex ? ex.volumeId : defaultVolId,
                     included:                     ex ? ex.included : true,
-                    orderIndex:                   ex !== undefined ? ex.orderIndex : i,
+                    orderIndex:                   ex !== undefined ? ex.orderIndex : newSectionOrder++,
                     featured:                     ex ? ex.featured : false,
                     forcePageBreakBefore:         ex ? ex.forcePageBreakBefore : false,
                     showDividerBefore:            ex !== undefined ? ex.showDividerBefore : (i > 0),
@@ -6617,14 +6638,24 @@ ${keepsakeFooter}
             bookControlsBar.appendChild(indicator);
         }
 
+        // Swap orderIndex values between two sections at sorted positions i and j.
+        // Mutates state.sections in place; caller must re-render.
+        function swapSectionOrder(state, idxA, idxB) {
+            const sorted = [...state.sections].sort((a, b) => a.orderIndex - b.orderIndex);
+            if (idxA < 0 || idxB < 0 || idxA >= sorted.length || idxB >= sorted.length) return;
+            const tmp = sorted[idxA].orderIndex;
+            sorted[idxA].orderIndex = sorted[idxB].orderIndex;
+            sorted[idxB].orderIndex = tmp;
+        }
+
         // Build the sections management bar.
-        // Shows all sections with per-section controls: include/exclude, featured,
-        // force page break, and (if multiple volumes) volume assignment.
+        // Shows all sections with per-section controls: order (↑/↓), include/exclude,
+        // featured, force page break, and (if multiple volumes) volume assignment.
+        // Order controls operate across the full section list (not filtered by volume).
         function buildBookSectionsBar(state) {
             bookSectionsBar.innerHTML = '';
             if (state.sections.length === 0) return;
 
-            const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
             const multiVol = state.volumes.length > 1;
 
             const labelEl = document.createElement('div');
@@ -6635,14 +6666,44 @@ ${keepsakeFooter}
             const container = document.createElement('div');
             container.className = 'book-section-rows-container';
 
-            // Sort sections by orderIndex for display
+            // Sort sections by orderIndex for display; this sorted snapshot drives index math.
             const sorted = [...state.sections].sort((a, b) => a.orderIndex - b.orderIndex);
 
-            for (const section of sorted) {
+            sorted.forEach((section, idx) => {
                 const row = document.createElement('div');
                 row.className = 'book-section-row';
 
-                // Section name
+                // ── Order controls (move up / move down) ──────────────────
+                const orderBtns = document.createElement('div');
+                orderBtns.className = 'book-section-order-btns';
+
+                const upBtn = document.createElement('button');
+                upBtn.type = 'button';
+                upBtn.className = 'book-section-order-btn';
+                upBtn.textContent = '↑';
+                upBtn.title = 'Move up';
+                upBtn.disabled = (idx === 0);
+                upBtn.addEventListener('click', () => {
+                    swapSectionOrder(state, idx, idx - 1);
+                    renderBookView();
+                });
+
+                const downBtn = document.createElement('button');
+                downBtn.type = 'button';
+                downBtn.className = 'book-section-order-btn';
+                downBtn.textContent = '↓';
+                downBtn.title = 'Move down';
+                downBtn.disabled = (idx === sorted.length - 1);
+                downBtn.addEventListener('click', () => {
+                    swapSectionOrder(state, idx, idx + 1);
+                    renderBookView();
+                });
+
+                orderBtns.appendChild(upBtn);
+                orderBtns.appendChild(downBtn);
+                row.appendChild(orderBtns);
+
+                // ── Section name ──────────────────────────────────────────
                 const srcGroup = keepsakeGroups.find(g => g.id === section.sourceGroupId);
                 const displayName = section.customName && section.customName.trim()
                     ? section.customName.trim()
@@ -6709,7 +6770,7 @@ ${keepsakeFooter}
 
                 row.appendChild(actions);
                 container.appendChild(row);
-            }
+            });
 
             bookSectionsBar.appendChild(container);
         }
