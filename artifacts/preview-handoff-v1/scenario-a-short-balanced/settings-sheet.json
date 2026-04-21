@@ -1,0 +1,47 @@
+{
+  "scenario": "Scenario A — Short / Balanced",
+  "capturedAt": "2026-04-21T17:47:22.025Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+  "zoomLevel": "100%",
+  "darkMode": false,
+  "bookSettings": {
+    "title": "Messages with Alex",
+    "dedicationEnabled": false,
+    "dedicationText": null,
+    "timestampMode": "on",
+    "pageNumberMode": "on",
+    "dividerMode": "sparse",
+    "volumeCount": 1,
+    "activeVolumeId": "vol-1"
+  },
+  "sectionSummary": [
+    {
+      "id": "book-section-group-1",
+      "customTitle": null,
+      "customName": "The Beginning",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 5
+    },
+    {
+      "id": "book-section-group-2",
+      "customTitle": null,
+      "customName": "Making Plans",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 7
+    },
+    {
+      "id": "book-section-group-3",
+      "customTitle": null,
+      "customName": "The Evening",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 5
+    }
+  ],
+  "estimatedPageCount": 4
+}

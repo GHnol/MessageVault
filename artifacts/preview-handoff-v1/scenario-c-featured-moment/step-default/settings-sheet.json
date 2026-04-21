@@ -1,0 +1,56 @@
+{
+  "scenario": "Scenario C — Featured Moment",
+  "capturedAt": "2026-04-21T17:47:31.111Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+  "zoomLevel": "100%",
+  "darkMode": false,
+  "bookSettings": {
+    "title": "A Year with Alex",
+    "dedicationEnabled": true,
+    "dedicationText": "For the moments that changed everything.\nYou know which ones",
+    "timestampMode": "on",
+    "pageNumberMode": "on",
+    "dividerMode": "sparse",
+    "volumeCount": 1,
+    "activeVolumeId": "vol-1"
+  },
+  "sectionSummary": [
+    {
+      "id": "book-section-group-1",
+      "customTitle": null,
+      "customName": "Before",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 5
+    },
+    {
+      "id": "book-section-group-2",
+      "customTitle": null,
+      "customName": "That Day",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": true,
+      "messageCount": 18
+    },
+    {
+      "id": "book-section-group-3",
+      "customTitle": null,
+      "customName": "The Week After",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 10
+    },
+    {
+      "id": "book-section-group-4",
+      "customTitle": null,
+      "customName": "Planning Ahead",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 5
+    }
+  ],
+  "estimatedPageCount": 8
+}

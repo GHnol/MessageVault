@@ -1,0 +1,211 @@
+{
+  "version": "1",
+  "capturedAt": "2026-04-21T17:47:18.912Z",
+  "mode": "seeded",
+  "chatDbMode": "not-supported",
+  "paginationVersion": "1",
+  "scenarios": [
+    {
+      "id": "scenario-a-short-balanced",
+      "label": "Scenario A — Short / Balanced",
+      "steps": [
+        {
+          "label": "default",
+          "folder": "scenario-a-short-balanced",
+          "pageCount": 4,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        }
+      ],
+      "status": "success"
+    },
+    {
+      "id": "scenario-b-dense-continuation",
+      "label": "Scenario B — Dense Continuation",
+      "steps": [
+        {
+          "label": "default",
+          "folder": "scenario-b-dense-continuation",
+          "pageCount": 10,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "page-08.png",
+            "page-09.png",
+            "page-10.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        }
+      ],
+      "status": "success"
+    },
+    {
+      "id": "scenario-c-featured-moment",
+      "label": "Scenario C — Featured Moment",
+      "steps": [
+        {
+          "label": "default",
+          "folder": "step-default",
+          "pageCount": 8,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "page-08.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        },
+        {
+          "label": "no-dedication",
+          "folder": "step-no-dedication",
+          "pageCount": 7,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        }
+      ],
+      "status": "success"
+    },
+    {
+      "id": "scenario-d-multi-section",
+      "label": "Scenario D — Multi-Section Book",
+      "steps": [
+        {
+          "label": "default",
+          "folder": "step-default",
+          "pageCount": 9,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "page-08.png",
+            "page-09.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        },
+        {
+          "label": "dividers-none",
+          "folder": "step-dividers-none",
+          "pageCount": 9,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "page-08.png",
+            "page-09.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        },
+        {
+          "label": "volume-split",
+          "folder": "step-volume-split",
+          "pageCount": 7,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        },
+        {
+          "label": "section-excluded",
+          "folder": "step-section-excluded",
+          "pageCount": 8,
+          "files": [
+            "page-01.png",
+            "page-02.png",
+            "page-03.png",
+            "page-04.png",
+            "page-05.png",
+            "page-06.png",
+            "page-07.png",
+            "page-08.png",
+            "full-canvas-scroll.png",
+            "controls-ui.png",
+            "sections-ui.png",
+            "book-render-spec.json",
+            "page-metadata.json",
+            "settings-sheet.json",
+            "rough-area-flags.json"
+          ]
+        }
+      ],
+      "status": "success"
+    }
+  ]
+}

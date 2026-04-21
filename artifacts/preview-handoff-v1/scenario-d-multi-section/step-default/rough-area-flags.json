@@ -1,0 +1,16 @@
+{
+  "flags": [
+    "Typography: system font stack (SF Pro / Segoe UI). Final print typeface not yet selected.",
+    "Colors: all hex values are development placeholders — not the final print color system.",
+    "Bubble styling: rounded corners and fills are screen-native. Print treatment not designed.",
+    "Emoji: renders as OS-native (Apple Color Emoji on macOS). Print-safe set not yet applied.",
+    "Page margins: CSS approximations — do not reflect physical 7×10\" trim/bleed/safe-area spec.",
+    "Page number placement: simple centered. Final recto/verso-aware outside-margin placement not implemented.",
+    "Continuation marker: \"Name — cont'd\" treatment is directional placeholder only.",
+    "Featured header: larger/centered/rule is compositional signal — visual treatment is not final.",
+    "Ending page: brand/tagline layout is placeholder. Final ending page design not produced.",
+    "Dark mode: canvas dark mode is development convenience only. Print product is light-mode.",
+    "Page gaps in canvas: scroll-view artifact. No page gaps exist in the physical print file."
+  ],
+  "note": "Do not interpret current browser styling as final print design."
+}

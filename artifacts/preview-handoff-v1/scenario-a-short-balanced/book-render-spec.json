@@ -1,0 +1,120 @@
+{
+  "paginationVersion": "1",
+  "capturedAt": "2026-04-21T17:47:22.018Z",
+  "volumeId": "vol-1",
+  "volumeName": "Volume 1",
+  "contactName": "Alex",
+  "editorial": {
+    "title": "Messages with Alex",
+    "hasDedication": false,
+    "dedicationText": null,
+    "timestampMode": "on",
+    "dividerMode": "sparse",
+    "pageNumberMode": "on"
+  },
+  "sections": [
+    {
+      "sectionIndex": 0,
+      "sectionId": "book-section-group-1",
+      "sourceGroupId": "group-1",
+      "displayName": "The Beginning",
+      "featured": false,
+      "orderIndex": 0,
+      "messageCount": 5
+    },
+    {
+      "sectionIndex": 1,
+      "sectionId": "book-section-group-2",
+      "sourceGroupId": "group-2",
+      "displayName": "Making Plans",
+      "featured": false,
+      "orderIndex": 1,
+      "messageCount": 7
+    },
+    {
+      "sectionIndex": 2,
+      "sectionId": "book-section-group-3",
+      "sourceGroupId": "group-3",
+      "displayName": "The Evening",
+      "featured": false,
+      "orderIndex": 2,
+      "messageCount": 5
+    }
+  ],
+  "totalPhysicalPageCount": 4,
+  "isEvenPageCount": true,
+  "paddingPagesInserted": 0,
+  "pages": [
+    {
+      "physicalPageNumber": 1,
+      "logicalPageType": "title-page",
+      "sectionId": null,
+      "sectionDisplayName": null,
+      "isSectionStart": false,
+      "isSectionContinuation": false,
+      "isFeatured": false,
+      "hasTimestamps": true,
+      "hasDivider": false,
+      "pageNumberVisible": true,
+      "volumeId": "vol-1",
+      "rectoOrVerso": "recto",
+      "messageCount": 0,
+      "isPaddingPage": false
+    },
+    {
+      "physicalPageNumber": 2,
+      "logicalPageType": "section-page",
+      "sectionId": 1,
+      "sectionDisplayName": "Making Plans",
+      "isSectionStart": true,
+      "isSectionContinuation": false,
+      "isFeatured": false,
+      "hasTimestamps": true,
+      "hasDivider": true,
+      "pageNumberVisible": true,
+      "volumeId": "vol-1",
+      "rectoOrVerso": "verso",
+      "messageCount": 8,
+      "isPaddingPage": false
+    },
+    {
+      "physicalPageNumber": 3,
+      "logicalPageType": "continuation-page",
+      "sectionId": 2,
+      "sectionDisplayName": "The Evening",
+      "isSectionStart": true,
+      "isSectionContinuation": true,
+      "isFeatured": false,
+      "hasTimestamps": true,
+      "hasDivider": true,
+      "pageNumberVisible": true,
+      "volumeId": "vol-1",
+      "rectoOrVerso": "recto",
+      "messageCount": 9,
+      "isPaddingPage": false
+    },
+    {
+      "physicalPageNumber": 4,
+      "logicalPageType": "ending-page",
+      "sectionId": null,
+      "sectionDisplayName": null,
+      "isSectionStart": false,
+      "isSectionContinuation": false,
+      "isFeatured": false,
+      "hasTimestamps": true,
+      "hasDivider": false,
+      "pageNumberVisible": true,
+      "volumeId": "vol-1",
+      "rectoOrVerso": "verso",
+      "messageCount": 0,
+      "isPaddingPage": false
+    }
+  ],
+  "productionDependencies": {
+    "interiorPageCountConfirmed": true,
+    "coverGenerationBlocked": true,
+    "spineWidthKnown": false,
+    "stockConfirmed": false,
+    "bindingConfirmed": false
+  }
+}

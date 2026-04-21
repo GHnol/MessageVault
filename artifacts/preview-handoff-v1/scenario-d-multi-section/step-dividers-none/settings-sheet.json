@@ -1,0 +1,74 @@
+{
+  "scenario": "Scenario D — Multi-Section Book",
+  "capturedAt": "2026-04-21T17:47:43.651Z",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+  "zoomLevel": "100%",
+  "darkMode": false,
+  "bookSettings": {
+    "title": "Conversations with Alex",
+    "dedicationEnabled": true,
+    "dedicationText": "Some conversations change things quietly.\nYou don't always k",
+    "timestampMode": "off",
+    "pageNumberMode": "on",
+    "dividerMode": "none",
+    "volumeCount": 1,
+    "activeVolumeId": "vol-1"
+  },
+  "sectionSummary": [
+    {
+      "id": "book-section-group-1",
+      "customTitle": null,
+      "customName": "First Contact",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 6
+    },
+    {
+      "id": "book-section-group-2",
+      "customTitle": null,
+      "customName": "Getting to Know Each Other",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 10
+    },
+    {
+      "id": "book-section-group-3",
+      "customTitle": "How We Really Met",
+      "customName": "The First Real Conversation",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 13
+    },
+    {
+      "id": "book-section-group-4",
+      "customTitle": null,
+      "customName": "A Regular Week",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 9
+    },
+    {
+      "id": "book-section-group-5",
+      "customTitle": "A Particular Blue",
+      "customName": "Something Small",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 7
+    },
+    {
+      "id": "book-section-group-6",
+      "customTitle": null,
+      "customName": "Looking Forward",
+      "volumeId": "vol-1",
+      "included": true,
+      "featured": false,
+      "messageCount": 8
+    }
+  ],
+  "estimatedPageCount": 9
+}

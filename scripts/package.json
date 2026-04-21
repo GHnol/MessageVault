@@ -1,0 +1,18 @@
+{
+  "name": "keepmees-capture-harness",
+  "version": "1.0.0",
+  "description": "Preview Handoff capture harness for Message Book. Temporary — isolated from the main app.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "capture":       "node capture-message-book-packet.mjs",
+    "capture:clean": "node capture-message-book-packet.mjs --clean",
+    "capture:a":     "node capture-message-book-packet.mjs --scenarios a",
+    "capture:b":     "node capture-message-book-packet.mjs --scenarios b",
+    "capture:c":     "node capture-message-book-packet.mjs --scenarios c",
+    "capture:d":     "node capture-message-book-packet.mjs --scenarios d"
+  },
+  "dependencies": {
+    "playwright": "^1.44.0"
+  }
+}

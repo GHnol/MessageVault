@@ -2566,6 +2566,9 @@
             border-bottom: 1px solid rgba(0,0,0,0.09);
             position: sticky; top: 0; z-index: 10;
         }
+        /* Harness-only capture mode — applied by scripts/capture-message-book-packet.mjs.
+           Drops the sticky header to static so it cannot overlay isolated page crops. */
+        body.km-capture-mode .book-header { position: static; }
         .book-header-inner {
             display: flex;
             align-items: center;
@@ -8039,6 +8042,42 @@ ${keepsakeFooter}
 
         // Entry from keepsakes summary header
         ksBookBtn.addEventListener('click', () => showBookView(keepsakesView));
+
+        /* ── Capture harness support ─────────────────────────────────────────────
+           Exposes internal state and functions for scripts/capture-message-book-packet.mjs.
+           keepsakeGroups is a let that normalizeGroups() can reassign, so it must be
+           accessed through getter/setter — a bare reference would stale after reassignment.
+           Remove this block when the harness is no longer needed.
+        ─────────────────────────────────────────────────────────────────────────── */
+        window.__km = {
+            getKeepsakeGroups()      { return keepsakeGroups; },
+            setKeepsakeGroups(groups){ keepsakeGroups = [...groups]; },
+
+            get messageBookState()   { return messageBookState; },
+            set messageBookState(v)  { messageBookState = v; },
+
+            setContactName(name) { chatHeaderName.innerText = name; },
+            getContactName()     { return chatHeaderName.innerText.trim(); },
+
+            showBookView,
+            renderBookView,
+            renderBookCanvas,
+            syncBookSections,
+
+            generateCompositionUnits,
+            paginateUnits,
+            enrichPageMetadata,
+            captureBookRenderSpec,
+
+            bookEditorial,
+            BOOK_PAGINATION_VERSION,
+            BOOK_PARITY,
+            BOOK_PREFLIGHT_SEVERITY,
+            BOOK_PREFLIGHT_CHECK_REGISTRY,
+            createPreflightResult,
+            createPreflightReport,
+            BOOK_PRODUCTION_DEPS,
+        };
 
     </script>
 
