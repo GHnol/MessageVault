@@ -6651,6 +6651,183 @@ ${keepsakeFooter}
         const BOOK_FEATURED_HEADER_LINES = 8;   // featured section header: 2× normal vertical weight
         const BOOK_CONTINUATION_LINES    = 2;   // quiet "cont'd" marker on section-spanning pages
 
+        /* ═══════════════════════════════════════════════════════
+           Production foundation — Parts A–F
+           Schema-only groundwork for manufacturing handoff.
+           No PDF generation. No vendor output.
+           DOM rendering is unaffected by all of the below.
+        ═══════════════════════════════════════════════════════ */
+
+        // Version token embedded in every BookRenderSpec.
+        // Bump when pagination logic changes in a way that alters page assignments.
+        const BOOK_PAGINATION_VERSION = '1';
+
+        // Locked production direction (provisional for planning — not vendor-confirmed).
+        // Object is frozen so callers cannot mutate planning values at runtime.
+        const BOOK_PRODUCTION_DEPS = Object.freeze({
+            TRIM_IN:             Object.freeze({ w: 7, h: 10 }),
+            BLEED_IN:            0.125,
+            SAFE_INSET_IN:       0.125,
+            // Inner gutter wider than outer for casebound; values subject to vendor confirmation.
+            MARGINS_IN:          Object.freeze({ inner: 0.875, outer: 0.75, top: 0.75, bottom: 0.75 }),
+            BINDING:             'casebound-hardcover',   // locked direction
+            PDF_SPEC:            'PDF/X-4',               // locked direction
+            STOCK:               'matte-premium-text',    // single-stock launch direction
+            EMOJI_STRATEGY:      'print-safe-set',        // standardized print-safe emoji set
+            MULTI_VOLUME_MODEL:  'separate-physical-books', // each volume = separate physical book
+
+            // Gate for cover spread generation.
+            // Each volume is a separate physical book; each needs its own spine width.
+            // spine width = (pageCount × paperThicknessPerLeaf) + boardThickness — vendor-supplied.
+            isCoverUnblocked(renderSpec, { stockConfirmed, bindingConfirmed }) {
+                if (!renderSpec) return false;
+                if (!renderSpec.productionDependencies.interiorPageCountConfirmed) return false;
+                if (!stockConfirmed)  return false;
+                if (!bindingConfirmed) return false;
+                return true;
+            },
+        });
+
+        // Page parity model — KeepMees owns explicit padding, not the vendor.
+        // MODULUS=2 (even pages required). May upgrade to 4 if signature binding is confirmed.
+        const BOOK_PARITY = Object.freeze({
+            MODULUS: 2,
+
+            paddingNeeded(rawPageCount) {
+                const r = rawPageCount % BOOK_PARITY.MODULUS;
+                return r === 0 ? 0 : BOOK_PARITY.MODULUS - r;
+            },
+
+            // Minimal padding page descriptor for metadata/preflight purposes.
+            // Not rendered to DOM in screen preview — production render layer handles it.
+            createPaddingPageDescriptor(physicalPageNumber) {
+                return Object.freeze({
+                    physicalPageNumber,
+                    logicalPageType:      'padding-page',
+                    sectionId:            null,
+                    sectionDisplayName:   null,
+                    isSectionStart:       false,
+                    isSectionContinuation: false,
+                    isFeatured:           false,
+                    hasTimestamps:        false,
+                    hasDivider:           false,
+                    pageNumberVisible:    false,
+                    volumeId:             null,
+                    rectoOrVerso:         physicalPageNumber % 2 === 1 ? 'recto' : 'verso',
+                    messageCount:         0,
+                    isPaddingPage:        true,
+                });
+            },
+        });
+
+        /* ── Preflight schema groundwork ───────────────────────
+           Check registry and result factories only.
+           No check runners are implemented in this pass.
+           Runners are a future concern once the render pipeline exists.
+        ─────────────────────────────────────────────────────── */
+
+        const BOOK_PREFLIGHT_SEVERITY = Object.freeze({
+            INFO:    'info',
+            WARNING: 'warning',
+            ERROR:   'error',
+        });
+
+        // Registry of named preflight check definitions.
+        // Each entry declares: what is validated, severity, whether it blocks
+        // manufacturing handoff, and what inputs the future runner requires.
+        const BOOK_PREFLIGHT_CHECK_REGISTRY = Object.freeze({
+            PAGE_COUNT_CONSISTENCY: {
+                name: 'page_count_consistency',
+                description: 'Paginator output page count matches the captured BookRenderSpec.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['bookRenderSpec', 'livePaginatorOutput'],
+            },
+            PAGE_COUNT_PARITY: {
+                name: 'page_count_parity',
+                description: 'Total physical page count is even (parity padding applied if needed).',
+                severity: BOOK_PREFLIGHT_SEVERITY.WARNING,
+                blocking: false,
+                requiredInputs: ['bookRenderSpec'],
+            },
+            FONT_AVAILABILITY: {
+                name: 'font_availability',
+                description: 'All font faces used in the interior are present in the render environment.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['assetManifest', 'renderEnvironment'],
+            },
+            EMOJI_STRATEGY_CONFIRMED: {
+                name: 'emoji_strategy_confirmed',
+                description: 'Print-safe emoji rendering strategy is confirmed and available.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['emojiRenderConfig'],
+            },
+            SAFE_AREA_VIOLATIONS: {
+                name: 'safe_area_violations',
+                description: 'No live content extends into the trim or bleed zone.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['renderedPageDimensions', 'physicalSpec'],
+            },
+            SPINE_WIDTH_KNOWN: {
+                name: 'spine_width_known',
+                description: 'Spine width computed from confirmed page count and stock spec.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true, // blocks cover generation; does not block interior PDF
+                requiredInputs: ['bookRenderSpec', 'stockSpec'],
+            },
+            COVER_INTERIOR_CONSISTENCY: {
+                name: 'cover_interior_consistency',
+                description: 'Spine width was computed from the same page count as the finalized interior.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['coverSpec', 'bookRenderSpec'],
+            },
+            LOW_RESOLUTION_IMAGES: {
+                name: 'low_resolution_images',
+                description: 'No embedded raster images below 300 DPI at final print size.',
+                severity: BOOK_PREFLIGHT_SEVERITY.WARNING,
+                blocking: false,
+                requiredInputs: ['assetManifest', 'physicalSpec'],
+            },
+            PAGINATION_STABILITY: {
+                name: 'pagination_stability',
+                description: 'Two independent pagination passes on the same state produce identical page counts.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['messageBookState'],
+            },
+            OVERFLOW_DETECTION: {
+                name: 'overflow_detection',
+                description: 'No rendered page element overflows the live area boundary.',
+                severity: BOOK_PREFLIGHT_SEVERITY.ERROR,
+                blocking: true,
+                requiredInputs: ['renderedPageDimensions', 'physicalSpec'],
+            },
+        });
+
+        // Factory: one preflight result record.
+        function createPreflightResult(checkName, severity, affectedTarget, message, blocking) {
+            return Object.freeze({ checkName, severity, affectedTarget, message, blocking });
+        }
+
+        // Factory: a preflight report wrapping an array of results.
+        // isManufacturingReady() → true only when zero blocking errors remain.
+        function createPreflightReport(results) {
+            const errorCount   = results.filter(r => r.severity === BOOK_PREFLIGHT_SEVERITY.ERROR).length;
+            const warningCount = results.filter(r => r.severity === BOOK_PREFLIGHT_SEVERITY.WARNING).length;
+            return {
+                results,
+                errorCount,
+                warningCount,
+                isManufacturingReady() {
+                    return !results.some(r => r.blocking && r.severity === BOOK_PREFLIGHT_SEVERITY.ERROR);
+                },
+            };
+        }
+
         // Estimate normalized lines for a single message bubble.
         // Chat bubbles occupy roughly 35 chars/line in this trim size.
         function msgLineCount(m) {
@@ -6877,10 +7054,23 @@ ${keepsakeFooter}
         // Returns: Array<Page>  where Page = {
         //   units:               Unit[],
         //   linesUsed:           number,
-        //   featured:            boolean,  // page contains featured content
-        //   isSectionStart:      boolean,  // page opens a section (has header/featured-header)
-        //   isSectionContinuation: boolean, // page continues a prior page's section
-        //   sectionId:           number|null
+        //   featured:            boolean,       // page contains featured content
+        //   isSectionStart:      boolean,       // page opens a section (has header/featured-header)
+        //   isSectionContinuation: boolean,     // page continues a prior page's section
+        //   sectionId:           number|null,   // 0-based index into sorted volumeSections
+        //   sectionDisplayName:  string|null,   // resolved display name tracked during pagination
+        //   -- Production metadata fields (set by enrichPageMetadata after pagination): --
+        //   physicalPageNumber:  number,        // 1-based physical page number in the volume
+        //   logicalPageType:     string,        // 'title-page'|'dedication-page'|'section-page'|
+        //                                       //   'continuation-page'|'ending-page'|'padding-page'
+        //   isFeatured:          boolean,       // alias of featured for metadata consumers
+        //   hasTimestamps:       boolean,       // whether timestamp mode was on at render time
+        //   hasDivider:          boolean,       // page contains a divider element
+        //   pageNumberVisible:   boolean,       // whether page number is displayed
+        //   volumeId:            string,        // which volume this page belongs to
+        //   rectoOrVerso:        string,        // 'recto' (odd) | 'verso' (even)
+        //   messageCount:        number,        // count of message/sender-run units on page
+        //   isPaddingPage:       boolean,       // true if inserted for even-count parity
         // }
         //
         // Rule priority:
@@ -6928,7 +7118,8 @@ ${keepsakeFooter}
 
             function newCur() {
                 return { units: [], linesUsed: 0, featured: false,
-                         isSectionStart: false, isSectionContinuation: false, sectionId: null };
+                         isSectionStart: false, isSectionContinuation: false,
+                         sectionId: null, sectionDisplayName: null };
             }
             let cur = newCur();
             const queue = [...preUnits];
@@ -6945,12 +7136,13 @@ ${keepsakeFooter}
 
             // Mark the current page as a section start and record the active section.
             function markSectionStart(u) {
-                activeSectionId       = u.sectionId ?? null;
-                activeSectionLabel    = u.displayName;
-                activeSectionFeatured = u.featured || false;
-                needsContinuation     = false;
-                cur.isSectionStart    = true;
-                cur.sectionId         = activeSectionId;
+                activeSectionId        = u.sectionId ?? null;
+                activeSectionLabel     = u.displayName;
+                activeSectionFeatured  = u.featured || false;
+                needsContinuation      = false;
+                cur.isSectionStart     = true;
+                cur.sectionId          = activeSectionId;
+                cur.sectionDisplayName = activeSectionLabel;
                 if (u.featured) cur.featured = true;
             }
 
@@ -6974,9 +7166,10 @@ ${keepsakeFooter}
                         sectionId: activeSectionId
                     };
                     cur.units.push(contUnit);
-                    cur.linesUsed += BOOK_CONTINUATION_LINES;
+                    cur.linesUsed         += BOOK_CONTINUATION_LINES;
                     cur.isSectionContinuation = true;
-                    cur.sectionId = activeSectionId;
+                    cur.sectionId          = activeSectionId;
+                    cur.sectionDisplayName = activeSectionLabel;
                     if (contUnit.featured) cur.featured = true;
                     needsContinuation = false;
                 }
@@ -7056,11 +7249,12 @@ ${keepsakeFooter}
                                 featured: activeSectionFeatured,
                                 sectionId: activeSectionId
                             });
-                            cur.linesUsed      += BOOK_CONTINUATION_LINES;
+                            cur.linesUsed          += BOOK_CONTINUATION_LINES;
                             cur.isSectionContinuation = true;
-                            cur.sectionId       = activeSectionId;
+                            cur.sectionId           = activeSectionId;
+                            cur.sectionDisplayName  = activeSectionLabel;
                             if (activeSectionFeatured) cur.featured = true;
-                            needsContinuation   = false;
+                            needsContinuation       = false;
                         }
                     }
                 }
@@ -7069,14 +7263,144 @@ ${keepsakeFooter}
                 cur.units.push(u);
                 cur.linesUsed += (u.lines || 0);
                 if (u.featured) cur.featured = true;
-                // Track sectionId for content units that land without a header on this page
-                if (cur.sectionId === null && u.sectionId != null) cur.sectionId = u.sectionId;
+                // Track sectionId / sectionDisplayName for content units landing without a header.
+                if (cur.sectionId === null && u.sectionId != null) {
+                    cur.sectionId = u.sectionId;
+                    cur.sectionDisplayName = activeSectionLabel;
+                }
 
                 if (cur.linesUsed >= BOOK_PAGE_LINES) flush();
             }
 
             flush(); // drain any remaining content
             return pages;
+        }
+
+        // Enrich page objects from paginateUnits with production-facing metadata.
+        // Mutates pages in place; returns the same array.
+        // context: { volumeId, hasTimestamps, pageNumberVisible }
+        function enrichPageMetadata(pages, { volumeId, hasTimestamps, pageNumberVisible }) {
+            pages.forEach((page, i) => {
+                page.physicalPageNumber = i + 1;
+                page.rectoOrVerso       = page.physicalPageNumber % 2 === 1 ? 'recto' : 'verso';
+                page.volumeId           = volumeId;
+                page.hasTimestamps      = hasTimestamps;
+                page.pageNumberVisible  = pageNumberVisible;
+                page.isFeatured         = page.featured;
+                page.isPaddingPage      = page.isPaddingPage || false;
+
+                // Derived from unit content
+                page.messageCount = page.units.filter(
+                    u => u.type === 'message' || u.type === 'sender-run'
+                ).length;
+                page.hasDivider = page.units.some(
+                    u => (u.type === 'section-header' && u.hasDivider) || u.type === 'divider'
+                );
+
+                // Logical page type — determined by unit content and pagination flags.
+                if (page.isPaddingPage) {
+                    page.logicalPageType = 'padding-page';
+                } else if (page.units.some(u => u.type === 'title-page')) {
+                    page.logicalPageType = 'title-page';
+                } else if (page.units.some(u => u.type === 'dedication-page')) {
+                    page.logicalPageType = 'dedication-page';
+                } else if (page.units.some(u => u.type === 'ending-page')) {
+                    page.logicalPageType = 'ending-page';
+                } else if (page.isSectionContinuation) {
+                    page.logicalPageType = 'continuation-page';
+                } else {
+                    page.logicalPageType = 'section-page';
+                }
+            });
+            return pages;
+        }
+
+        // Capture a frozen BookRenderSpec snapshot for one volume.
+        // Represents the editorial state and pagination output at a single point in time.
+        // Designed so future proof approval and manufacturing handoff can depend on it.
+        // Does not persist anywhere — calling code decides what to do with the result.
+        function captureBookRenderSpec(state, enrichedPages, volumeId, contactName) {
+            const vol = state.volumes.find(v => v.id === volumeId);
+            const activeVolId = state.activeVolumeId;
+
+            // Build ordered section summary matching the same filter+sort as generateCompositionUnits.
+            const volSections = state.sections
+                .filter(s => s.volumeId === volumeId && s.included)
+                .sort((a, b) => a.orderIndex - b.orderIndex)
+                .map((s, si) => {
+                    const srcGroup = keepsakeGroups.find(g => g.id === s.sourceGroupId);
+                    const displayName = (s.customTitle && s.customTitle.trim())
+                        ? bookEditorial.normalizeSingleLine(s.customTitle)
+                        : (s.customName && s.customName.trim())
+                            ? s.customName.trim()
+                            : (srcGroup ? getGroupDisplayName(srcGroup) : '');
+                    return {
+                        sectionIndex:  si,           // matches sectionId in page metadata
+                        sectionId:     s.id,         // stable session-scoped identifier
+                        sourceGroupId: s.sourceGroupId,
+                        displayName,
+                        featured:      s.featured  || false,
+                        orderIndex:    s.orderIndex,
+                        messageCount:  s.messages  ? s.messages.length : 0,
+                    };
+                });
+
+            const totalPhysicalPageCount = enrichedPages.length;
+            const paddingPagesInserted   = enrichedPages.filter(p => p.isPaddingPage).length;
+
+            return {
+                paginationVersion:      BOOK_PAGINATION_VERSION,
+                capturedAt:             new Date().toISOString(),
+                volumeId,
+                volumeName:             vol ? vol.name : volumeId,
+                contactName:            contactName || '',
+
+                editorial: {
+                    title:           bookEditorial.normalizeSingleLine(state.opening.title)
+                                     || contactName || 'Our Conversation',
+                    hasDedication:   state.opening.dedicationEnabled &&
+                                     !!bookEditorial.normalizeDedication(state.opening.dedicationText),
+                    dedicationText:  state.opening.dedicationEnabled
+                                     ? (bookEditorial.normalizeDedication(state.opening.dedicationText) || null)
+                                     : null,
+                    timestampMode:   state.body.timestampMode,
+                    dividerMode:     state.body.dividerMode,
+                    pageNumberMode:  state.body.pageNumberMode,
+                },
+
+                sections: volSections,
+
+                totalPhysicalPageCount,
+                isEvenPageCount:     totalPhysicalPageCount % 2 === 0,
+                paddingPagesInserted,
+
+                // Per-page production metadata (data only — no DOM references)
+                pages: enrichedPages.map(p => ({
+                    physicalPageNumber:   p.physicalPageNumber,
+                    logicalPageType:      p.logicalPageType,
+                    sectionId:            p.sectionId,
+                    sectionDisplayName:   p.sectionDisplayName,
+                    isSectionStart:       p.isSectionStart,
+                    isSectionContinuation: p.isSectionContinuation,
+                    isFeatured:           p.isFeatured,
+                    hasTimestamps:        p.hasTimestamps,
+                    hasDivider:           p.hasDivider,
+                    pageNumberVisible:    p.pageNumberVisible,
+                    volumeId:             p.volumeId,
+                    rectoOrVerso:         p.rectoOrVerso,
+                    messageCount:         p.messageCount,
+                    isPaddingPage:        p.isPaddingPage,
+                })),
+
+                // Production dependency gate — downstream steps check these before proceeding.
+                productionDependencies: {
+                    interiorPageCountConfirmed: true,  // page count is real (from paginator, not estimated)
+                    coverGenerationBlocked:     true,  // always blocked until vendor spec is confirmed externally
+                    spineWidthKnown:            false,
+                    stockConfirmed:             false,
+                    bindingConfirmed:           false,
+                },
+            };
         }
 
         // Render a single composition unit to a DOM element.
@@ -7606,6 +7930,11 @@ ${keepsakeFooter}
             const units  = generateCompositionUnits(state, contactName);
             const pages  = paginateUnits(units);
             const showPgNums = state.body.pageNumberMode === 'on';
+            enrichPageMetadata(pages, {
+                volumeId:         state.activeVolumeId,
+                hasTimestamps:    state.body.timestampMode  === 'on',
+                pageNumberVisible: showPgNums,
+            });
 
             bookCanvas.innerHTML = '';
 
@@ -7638,6 +7967,11 @@ ${keepsakeFooter}
                 state.activeVolumeId = vol.id;
                 const volUnits = generateCompositionUnits(state, contactName);
                 const volPages = paginateUnits(volUnits);
+                enrichPageMetadata(volPages, {
+                    volumeId:          vol.id,
+                    hasTimestamps:     state.body.timestampMode  === 'on',
+                    pageNumberVisible: state.body.pageNumberMode === 'on',
+                });
                 vol.estimatedPageCount = volPages.length;
                 vol.exceedsPageLimit   = volPages.length > state.format.maxPages;
                 if (vol.id === savedActiveVol) activePages = volPages;
