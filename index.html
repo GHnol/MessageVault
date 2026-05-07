@@ -3337,6 +3337,20 @@
     </div>
 
     <!-- ════════════════════════════════════════════
+         KEEPMEES ENGINE FOUNDATION (Package 1)
+         Load order matters: core before adapters.
+    ════════════════════════════════════════════ -->
+    <script src="src/core/source-platforms.js"></script>
+    <script src="src/core/normalized-memory.js"></script>
+    <script src="src/core/import-adapters.js"></script>
+    <script src="src/adapters/txt-export-adapter.js"></script>
+    <script src="src/adapters/imessage-chatdb-adapter.js"></script>
+    <script src="src/adapters/manual-entry-adapter.js"></script>
+    <script src="src/adapters/future-adapter-stubs.js"></script>
+    <script src="src/core/project-session.js"></script>
+    <script src="src/state/session-serialization.js"></script>
+
+    <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>
@@ -3604,7 +3618,9 @@
                 const messages = parseMessages(text);
                 const normalizedMessages = applyReactions(messages);
 
-                window.chatMessagesData = normalizedMessages;
+                window.chatMessagesData = (window.KMEngine && window.KMEngine.txtExportAdapter)
+                    ? window.KMEngine.txtExportAdapter.normalizeAll(normalizedMessages)
+                    : normalizedMessages;
                 showStatusIn(txtStatus, `Found ${normalizedMessages.length.toLocaleString()} messages — processed locally`);
                 renderConversation(normalizedMessages);
             };
@@ -3800,7 +3816,9 @@
                     sender: raw.sender,
                     text: isAttachmentOnly ? '[Attachment]' : cleanedText,
                     isAttachmentOnly: !!isAttachmentOnly,
-                    reactions: []
+                    reactions: [],
+                    rowid: raw.rowid,
+                    guid: raw.guid || null
                 });
             }
 
@@ -3848,7 +3866,9 @@
                 }
             }
 
-            return messages;
+            return (window.KMEngine && window.KMEngine.chatDbAdapter)
+                ? window.KMEngine.chatDbAdapter.normalizeAll(messages)
+                : messages;
         }
 
         function resolveTargetIdx(tb, messages, guidMap) {
@@ -8077,6 +8097,8 @@ ${keepsakeFooter}
             createPreflightResult,
             createPreflightReport,
             BOOK_PRODUCTION_DEPS,
+            // KeepMees engine foundation (Package 1)
+            KMEngine: window.KMEngine || null,
         };
 
     </script>
