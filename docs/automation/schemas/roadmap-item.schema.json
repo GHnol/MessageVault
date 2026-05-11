@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RoadmapItem",
+  "description": "A roadmap milestone or phase item for KeepMees",
+  "type": "object",
+  "required": ["id", "name", "phase", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (e.g. ROADMAP-001)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Milestone or phase name"
+    },
+    "phase": {
+      "type": "string",
+      "description": "Product/development phase (e.g. engine-foundation, product-system, vendor-readiness, commerce)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "current",
+        "proposed",
+        "gated",
+        "deferred",
+        "needs-coordinator-decision"
+      ]
+    },
+    "description": {
+      "type": "string",
+      "description": "What this milestone represents"
+    },
+    "successCriteria": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Criteria that define this milestone as complete"
+    },
+    "qualityGate": {
+      "type": "string",
+      "description": "Specific check or approval required before declaring success"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of milestones or packages that must complete first"
+    },
+    "unlocksNext": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "What becomes available after this milestone completes"
+    },
+    "coordinatorSyncRequired": {
+      "type": "boolean",
+      "description": "True if Coordinator must review before this milestone closes"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

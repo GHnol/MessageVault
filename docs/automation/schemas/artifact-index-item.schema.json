@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtifactIndexItem",
+  "description": "A single entry in the KeepMees artifact index (docs/ops/artifact-index.md)",
+  "type": "object",
+  "required": ["path", "type", "purpose"],
+  "additionalProperties": false,
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Relative file path from repo root (e.g. src/products/product-catalog.js)"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["application", "module", "adapter", "test", "schema", "template", "protocol", "strategy-doc", "architecture-doc", "ops-doc", "command-center-doc", "config", "ai-instruction"],
+      "description": "Type of artifact"
+    },
+    "exports": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "KMEngine namespace exports from this module (if applicable)"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "What this file does or represents"
+    },
+    "scopeGuarded": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this file or items within it are under the scope guard (do not touch without authorization)"
+    },
+    "scopeGuardItems": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific constants or constructs within this file that are scope-guarded"
+    },
+    "testCount": {
+      "type": "integer",
+      "description": "Number of tests in this file (for test artifacts)"
+    },
+    "package": {
+      "type": "string",
+      "description": "Package that created or last materially updated this artifact"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

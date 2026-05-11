@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StreamUpdatePacket",
+  "description": "Structured packet for routing an update from a stream chat into the KeepMees repo docs",
+  "type": "object",
+  "required": ["packetId", "date", "sourceStream", "streamChatNumber", "summary", "updateType", "status", "coordinatorApprovalRequired"],
+  "additionalProperties": false,
+  "properties": {
+    "packetId": {
+      "type": "string",
+      "description": "Unique packet ID (e.g. SUP-2026-05-10-001)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the stream update (YYYY-MM-DD)"
+    },
+    "sourceStream": {
+      "type": "string",
+      "description": "Name of the stream that produced this update (e.g. Production - Vendor Feasibility)"
+    },
+    "streamChatNumber": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 15,
+      "description": "Chat number (01–15) in the 15-chat operating model"
+    },
+    "preparedBy": {
+      "type": "string",
+      "description": "Agent or human that prepared this packet"
+    },
+    "summary": {
+      "type": "string",
+      "description": "One-paragraph summary of what changed or was decided in this stream update"
+    },
+    "updateType": {
+      "type": "string",
+      "enum": ["decision", "vendor-response", "product-change", "design-update", "competitor-intel", "risk-update", "ai-mastery", "packaging-update", "development-handoff"],
+      "description": "Type of update"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["locked", "current", "owner-approved-target", "proposed", "gated", "deferred", "needs-coordinator-decision", "needs-source"],
+      "description": "Status of the content in this packet"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["text", "authority"],
+        "properties": {
+          "text": { "type": "string" },
+          "authority": { "type": "string", "enum": ["coordinator-locked", "stream-proposed", "owner-approved"] }
+        }
+      },
+      "description": "Decisions made or proposed in this update"
+    },
+    "risks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "New risks surfaced by this update"
+    },
+    "docsToUpdate": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relative file paths of docs that should be updated from this packet"
+    },
+    "actionRequested": {
+      "type": "string",
+      "description": "What action is requested from the recipient of this packet"
+    },
+    "routingTargets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["Coordinator", "Development", "Claude Code", "Product", "Design", "Vendor", "Packaging", "Competitors"]
+      },
+      "description": "Who should receive and act on this packet"
+    },
+    "coordinatorApprovalRequired": {
+      "type": "boolean",
+      "description": "True if Coordinator must approve before any action is taken"
+    },
+    "rawSourceExcerpt": {
+      "type": "string",
+      "description": "Optional: key raw text from the source chat that backs the decisions in this packet"
+    }
+  }
+}

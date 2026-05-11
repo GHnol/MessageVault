@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MasterProjectTruth",
+  "description": "Machine-readable summary of key facts from docs/strategy/master-project-truth.md. Not a replacement for that doc — a structured mirror for automation routing.",
+  "type": "object",
+  "required": ["lastUpdated", "brandName", "repoName", "flagshipProduct", "architectureStatus", "testSuites", "packages"],
+  "additionalProperties": false,
+  "properties": {
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this schema instance was last updated"
+    },
+    "brandName": {
+      "type": "string",
+      "const": "KeepMees"
+    },
+    "repoName": {
+      "type": "string",
+      "const": "MessageVault"
+    },
+    "flagshipProduct": {
+      "type": "string",
+      "const": "Message Book"
+    },
+    "architectureStatus": {
+      "type": "string",
+      "enum": ["active-interim", "transitioning", "stable"],
+      "description": "Current architecture posture"
+    },
+    "paginationVersion": {
+      "type": "string",
+      "description": "Current BOOK_PAGINATION_VERSION value"
+    },
+    "testSuites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "lastKnownCount", "status"],
+        "properties": {
+          "file": { "type": "string" },
+          "lastKnownCount": { "type": "integer" },
+          "status": { "type": "string", "enum": ["passing", "failing", "not-run"] }
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "status"],
+        "properties": {
+          "name": { "type": "string" },
+          "status": { "type": "string", "enum": ["complete", "in-progress", "proposed", "not-started", "needs-coordinator-decision"] },
+          "featureCommit": { "type": "string" },
+          "mergeCommit": { "type": "string" }
+        }
+      }
+    },
+    "physicalLaunchTarget": {
+      "type": "object",
+      "description": "Physical first launch target (owner-approved strategic target)",
+      "properties": {
+        "status": { "type": "string", "enum": ["owner-approved-target", "proposed", "needs-coordinator-decision"] },
+        "skus": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "tier"],
+            "properties": {
+              "name": { "type": "string" },
+              "tier": { "type": "string", "enum": ["hero", "core", "add-on"] },
+              "manufacturingStatus": { "type": "string" },
+              "packagingStatus": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "vendorStatus": {
+      "type": "string",
+      "enum": ["none-confirmed", "evaluation", "confirmed", "committed"],
+      "description": "Current vendor gate state"
+    },
+    "coverUnblocked": {
+      "type": "boolean",
+      "description": "Current value of isCoverUnblocked()"
+    },
+    "mainBranchHead": {
+      "type": "string",
+      "description": "Most recent main branch commit hash"
+    }
+  }
+}

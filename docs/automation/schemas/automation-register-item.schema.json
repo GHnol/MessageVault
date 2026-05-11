@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AutomationRegisterItem",
+  "description": "A single item in the KeepMees AI and automation register (docs/ops/ai-automation-register.md)",
+  "type": "object",
+  "required": ["id", "name", "category", "status", "method"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique ID (e.g. AUTO-001)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the automation"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["workflow-blueprint", "tool-research", "agent-prompt", "automation-build", "case-study", "business-idea", "product-ai-feature"],
+      "description": "AI Mastery hub category"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "proposed",
+        "deferred",
+        "gated",
+        "rejected",
+        "needs-coordinator-decision",
+        "in-progress"
+      ]
+    },
+    "method": {
+      "type": "string",
+      "description": "How this automation is implemented (e.g. Claude Code, n8n, manual, NotebookLM)"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this automation does and why"
+    },
+    "maturityLevel": {
+      "type": "string",
+      "enum": ["idea", "candidate", "designed", "manual-v1", "prototype", "active", "optimized", "parked", "rejected", "deprecated"],
+      "description": "AI Mastery maturity level"
+    },
+    "activateWhen": {
+      "type": "string",
+      "description": "Condition under which this automation should be activated (if deferred/gated)"
+    },
+    "prioritizationScore": {
+      "type": "object",
+      "description": "AI Mastery 1–5 scoring on key axes (optional)",
+      "properties": {
+        "repeatedOften": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "timeConsuming": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "highValue": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "lowRisk": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "easyToTest": { "type": "integer", "minimum": 1, "maximum": 5 }
+      }
+    },
+    "privacyNotes": {
+      "type": "string",
+      "description": "Any privacy considerations (especially for AI features that touch message content)"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

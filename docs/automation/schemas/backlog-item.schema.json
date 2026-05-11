@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BacklogItem",
+  "description": "A single backlog or roadmap item tracked in docs/ops/backlog-roadmap.md",
+  "type": "object",
+  "required": ["id", "name", "type", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (e.g. PKG-3, DEF-11, GATE-02)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Short human-readable name"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["package", "feature", "gated-item", "deferred-item", "fix", "docs"],
+      "description": "Item type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "complete",
+        "in-progress",
+        "not-started",
+        "proposed",
+        "gated",
+        "deferred",
+        "rejected",
+        "needs-coordinator-decision",
+        "needs-product-decision",
+        "needs-development-review"
+      ],
+      "description": "Current status of this backlog item"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this item delivers or addresses"
+    },
+    "scope": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of modules, files, or areas included in this item"
+    },
+    "explicitlyExcludes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Items explicitly out of scope for this package/feature"
+    },
+    "gate": {
+      "type": "string",
+      "description": "What must be true before this item can begin (if gated)"
+    },
+    "blockedBy": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "IDs of items that block this one"
+    },
+    "featureCommit": {
+      "type": "string",
+      "description": "Git commit hash for the feature commit (if complete)"
+    },
+    "mergeCommit": {
+      "type": "string",
+      "description": "Git commit hash for the merge commit (if complete)"
+    },
+    "branch": {
+      "type": "string",
+      "description": "Git branch name"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "Relative priority"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

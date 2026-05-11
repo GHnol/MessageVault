@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CoordinatorSyncPacket",
+  "description": "Packet sent to or from Coordinator (Chat 01) to synchronize cross-stream state and pending decisions",
+  "type": "object",
+  "required": ["packetId", "date", "direction", "preparedBy", "summary", "decisionsNeeded"],
+  "additionalProperties": false,
+  "properties": {
+    "packetId": {
+      "type": "string",
+      "description": "Unique ID (e.g. CSP-2026-05-10-001)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["to-coordinator", "from-coordinator"],
+      "description": "Whether this packet is being sent to Coordinator for review, or is a Coordinator response"
+    },
+    "preparedBy": {
+      "type": "string",
+      "description": "Agent or human that prepared this packet"
+    },
+    "summary": {
+      "type": "string",
+      "description": "High-level summary of what this sync covers"
+    },
+    "deliveredSinceLastSync": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item", "status"],
+        "properties": {
+          "item": { "type": "string" },
+          "status": { "type": "string", "enum": ["complete", "in-progress", "blocked"] },
+          "commit": { "type": "string" }
+        }
+      },
+      "description": "What has been delivered since the last Coordinator sync"
+    },
+    "decisionsNeeded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "urgency"],
+        "properties": {
+          "question": { "type": "string" },
+          "urgency": { "type": "string", "enum": ["immediate", "this-session", "next-session", "low"] },
+          "context": { "type": "string" },
+          "options": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "decisionsLocked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["decision", "decisionId"],
+        "properties": {
+          "decision": { "type": "string" },
+          "decisionId": { "type": "string" }
+        }
+      },
+      "description": "Decisions that have been locked since last sync (Coordinator-approved)"
+    },
+    "risksToFlag": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Risks that Coordinator should be aware of"
+    },
+    "nextRecommendedAction": {
+      "type": "string",
+      "description": "What the Coordinator or Development stream should do next"
+    },
+    "doNotStart": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Explicit list of items that must NOT begin without Coordinator go-ahead"
+    },
+    "streamsSyncNeeded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["stream", "reason"],
+        "properties": {
+          "stream": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}

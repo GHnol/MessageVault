@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Requirement",
+  "description": "A single entry in the KeepMees requirements bank (docs/strategy/requirements-bank.md)",
+  "type": "object",
+  "required": ["id", "requirement", "status", "type"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]+-\\d+[a-z]?$",
+      "description": "Requirement ID (e.g. F-ING-01, NF-01, D-06a)"
+    },
+    "requirement": {
+      "type": "string",
+      "description": "The requirement statement"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "locked",
+        "active",
+        "deferred",
+        "open",
+        "gated",
+        "needs-coordinator-decision",
+        "needs-product-decision"
+      ],
+      "description": "Current status of this requirement"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["functional", "non-functional", "out-of-scope"],
+      "description": "Requirement category"
+    },
+    "category": {
+      "type": "string",
+      "description": "Sub-category (e.g. message-ingestion, product-catalog, persistence)"
+    },
+    "gate": {
+      "type": "string",
+      "description": "Gate condition that must be met before this requirement becomes active (if status is gated or deferred)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional context or clarification"
+    },
+    "relatedDecisions": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^DEC-[A-Z]+-\\d+[A-Z]?$" },
+      "description": "Decision IDs that govern or constrain this requirement"
+    }
+  }
+}
