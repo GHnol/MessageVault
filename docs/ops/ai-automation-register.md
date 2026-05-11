@@ -1,6 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-11
+**Updated by:** Claude Code (Package 3B status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -256,8 +257,9 @@ All `src/tests/*.mjs` files are runnable via `node`. No build step.
 | `product-catalog-tests.mjs` | 127 | Must remain green |
 | `product-eligibility-tests.mjs` | 76 | Must remain green |
 | `project-persistence-tests.mjs` | 111 | Must remain green — Package 3A |
+| `scripts/e2e-regression-harness.mjs` | 29 | Must remain green — Package 3B (Playwright, requires `scripts/node_modules`) |
 
-Required before any future package commit: all 5 suites pass. Total: **453 tests**.
+Required before any future package commit: all 5 Node suites + E2E harness pass. Node total: **453 tests**. E2E: **29 tests**.
 
 ---
 
@@ -376,7 +378,8 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 7. Run Package 2.5B in Claude Code — automation artifacts ✓ (complete — `bb23e8b` / `aa6402c`)
 8. Coordinator evaluates and authorizes Package 3A ✓ (done)
 9. Run Package 3A in Claude Code — local project session save/load ✓ (complete — `8dcc959` / `b40fa2b`)
-10. **Next: Execute Package 3B — Automated E2E Regression Harness Foundation** ← current position
+10. Execute Package 3B — Automated E2E Regression Harness Foundation ✓ (complete — `0ce973a` / `40b4bba`)
+11. **Next: Coordinator authorizes next package** ← current position
 
 ### Advisory: What Package 2.5B does and does not deliver
 
