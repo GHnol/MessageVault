@@ -10,10 +10,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Review and approve Package 2.5B for commit | Coordinator | — |
-| 2 | Authorize Package 3 scope (or redirect) | Coordinator | **[NEEDS APPROVAL]** |
-| 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
-| 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Coordinator to evaluate and authorize next development package | Coordinator | **[NEEDS APPROVAL]** |
+| 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
+| 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
 
 ---
 
@@ -80,6 +79,6 @@ No technical gate blocking Package 3 — authorization gate only.
 | Cloud account persistence | Deferred post-launch | Post-launch + server infra |
 | Visual redesign | Explicitly gated | Coordinator + Design stream authorization |
 | n8n / Make automation workflows | Later — do not build yet | Future phase |
-| docs/automation expansions beyond 2.5B scope | Stay within authorized Package 2.5B scope | Package scope |
+| docs/automation expansions beyond Package 2.5B | Package 2.5B is complete; no further automation artifact scope authorized | Coordinator decision |
 | Acrylic block, apparel, or blanket manufacturing | Not in launch set | Product authority decision |
 | Public product claims | Not yet — public-claim status not ready for any SKU | Multiple gates |

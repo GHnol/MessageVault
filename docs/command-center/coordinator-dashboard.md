@@ -45,7 +45,7 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 1 — KMEngine foundation | COMPLETE | `1f05970` |
 | Package 2 — ProductCatalog, Eligibility, KeepsakeGroup | COMPLETE | `87972c9` / `541a1b8` |
 | Package 2.5A — 16 source-of-truth docs | COMPLETE | `d1c5a44` / `d69dc2c` |
-| Package 2.5B — Automation artifacts | IN PROGRESS | — |
+| Package 2.5B — Automation artifacts | COMPLETE | `bb23e8b` / `aa6402c` |
 | Package 3 — ProductDraft, preflight, session lifecycle | NOT APPROVED | — |
 
 Tests: **342 passing, 0 failures**. No app code changed since Package 2.

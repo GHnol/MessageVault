@@ -107,6 +107,59 @@ Authoritative index of every significant file in the repository — what it is, 
 | `docs/ops/ai-automation-register.md` | AI features and automation tooling |
 | `docs/ops/stream-sync-protocol.md` | AI development relay protocol |
 
+### Command Center (Package 2.5B — `bb23e8b`)
+
+| File | Purpose |
+|---|---|
+| `docs/command-center/README.md` | Entry point and navigation guide for command center docs |
+| `docs/command-center/current-status.md` | Point-in-time snapshot of package delivery, git state, gates, and stream sync |
+| `docs/command-center/next-actions.md` | Immediate actions, upcoming package proposals, and do-not-start list |
+| `docs/command-center/coordinator-dashboard.md` | High-level Coordinator overview: product, delivery, gates, decisions, risks |
+
+### Automation — Schemas (Package 2.5B — `bb23e8b`)
+
+All schemas use JSON Schema Draft-07. All 12 validated.
+
+| File | Purpose |
+|---|---|
+| `docs/automation/schemas/decision.schema.json` | Schema for decision register entries |
+| `docs/automation/schemas/requirement.schema.json` | Schema for requirements bank entries |
+| `docs/automation/schemas/feature.schema.json` | Schema for feature bank entries |
+| `docs/automation/schemas/backlog-item.schema.json` | Schema for backlog/roadmap items |
+| `docs/automation/schemas/roadmap-item.schema.json` | Schema for roadmap milestones |
+| `docs/automation/schemas/stream-update-packet.schema.json` | Schema for routing stream updates from the 15-chat model |
+| `docs/automation/schemas/routing-packet.schema.json` | Schema for routing packets (destination, urgency, do-not-start) |
+| `docs/automation/schemas/coordinator-sync-packet.schema.json` | Schema for Coordinator sync packets (to/from Coordinator) |
+| `docs/automation/schemas/ai-handoff-packet.schema.json` | Schema for Transfer Packets between Claude/Codex sessions |
+| `docs/automation/schemas/automation-register-item.schema.json` | Schema for AI automation register items |
+| `docs/automation/schemas/artifact-index-item.schema.json` | Schema for artifact index entries |
+| `docs/automation/schemas/master-project-truth.schema.json` | Machine-readable mirror of master-project-truth.md |
+
+### Automation — Templates (Package 2.5B — `bb23e8b`)
+
+| File | Purpose |
+|---|---|
+| `docs/automation/templates/stream-update-packet.md` | Template for routing stream updates from any of the 15 chats |
+| `docs/automation/templates/routing-packet.md` | Template for routing packets |
+| `docs/automation/templates/coordinator-sync-packet.md` | Template for Coordinator sync packets |
+| `docs/automation/templates/package-closeout-packet.md` | Template for package closeout reports |
+| `docs/automation/templates/development-review-packet.md` | Template for development review packets |
+| `docs/automation/templates/manual-qa-result.md` | Template for manual QA results (includes scope-guard confirmation checklist) |
+| `docs/automation/templates/decision-record.md` | Template for decision register entries |
+| `docs/automation/templates/backlog-item.md` | Template for backlog items |
+| `docs/automation/templates/roadmap-item.md` | Template for roadmap milestones |
+| `docs/automation/templates/ai-automation-item.md` | Template for AI automation register items |
+
+### Automation — Operator Mode Protocols (Package 2.5B — `bb23e8b`)
+
+| File | Purpose |
+|---|---|
+| `docs/automation/operator-mode/README.md` | Entry point: core rules, status vocabulary, source-of-truth priority, authorization table |
+| `docs/automation/operator-mode/update-project-records-protocol.md` | 8-step protocol for updating docs from stream responses without false authority |
+| `docs/automation/operator-mode/package-closeout-protocol.md` | 10-step commit/merge/closeout process with exact git commands |
+| `docs/automation/operator-mode/stream-routing-protocol.md` | Stream authority map, routing table, and routing decision tree for the 15-chat model |
+| `docs/automation/operator-mode/claude-codex-relay-protocol.md` | Transfer packet format and relay protocol for Claude/Codex session handoffs |
+
 ---
 
 ## Locked / scope-guarded items (do not touch without authorization)

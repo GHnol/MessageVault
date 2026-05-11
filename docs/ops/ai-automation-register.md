@@ -22,7 +22,7 @@ Track AI and automation capabilities, their current status, and their relationsh
 **Constraints:**
 - Scope guard in `CLAUDE.md` explicitly limits what the assistant can touch
 - Memory system at `~/.claude/projects/.../memory/` provides cross-session context
-- Package 2.5 docs are the authoritative cross-session source of truth (supplements memory)
+- Package 2.5A/2.5B docs are the authoritative cross-session source of truth (supplements memory)
 - Does not commit or push without explicit Coordinator instruction
 
 ### ChatGPT (Coordinator + product/design/vendor streams)
@@ -78,15 +78,16 @@ AI Mastery outputs that affect KeepMees must be Coordinator-reviewed and Coordin
 | Automation candidate | Method | Status |
 |---|---|---|
 | Repo source-of-truth document creation | Claude Code | ACTIVE (Package 2.5A) |
-| Schema creation | Claude Code | PROPOSED (Package 2.5B — not yet approved) |
-| Template creation | Claude Code | PROPOSED (Package 2.5B — not yet approved) |
-| Package closeout packets | Claude Code | ACTIVE (used in Packages 1 and 2) |
-| Stream update packet formatting | Claude Code | PROPOSED |
-| Coordinator sync packet formatting | Claude Code | PROPOSED |
-| Claude/Codex handoff packet formatting | Claude Code | PROPOSED |
-| Artifact index entries | Claude Code | PROPOSED |
-| Decision register entries | Claude Code | ACTIVE (this session) |
-| Requirements/feature bank entries | Claude Code | PROPOSED |
+| Schema creation | Claude Code | COMPLETE (Package 2.5B — bb23e8b) |
+| Template creation | Claude Code | COMPLETE (Package 2.5B — bb23e8b) |
+| Operator Mode protocol documentation | Claude Code | COMPLETE (Package 2.5B — bb23e8b) |
+| Package closeout packets | Claude Code | ACTIVE (used in Packages 1, 2, 2.5A, 2.5B) |
+| Stream update packet formatting | Claude Code | READY — template at docs/automation/templates/ |
+| Coordinator sync packet formatting | Claude Code | READY — template at docs/automation/templates/ |
+| Claude/Codex handoff packet formatting | Claude Code | READY — template at docs/automation/templates/ |
+| Artifact index entries | Claude Code | ACTIVE |
+| Decision register entries | Claude Code | ACTIVE |
+| Requirements/feature bank entries | Claude Code | READY — template at docs/automation/templates/ |
 
 ### What gets semi-automated (one paste to Claude)
 
@@ -157,12 +158,12 @@ AI Mastery outputs that affect KeepMees must be Coordinator-reviewed and Coordin
 
 ---
 
-## Schema inventory (proposed for docs/automation/)
+## Schema and template inventory (docs/automation/ — Package 2.5B complete)
 
-**Source:** `_source-intake/keepmees-consolidation-2026-05-09/AI Mastery Automation Build Pack v1.md`
-**Status:** PROPOSED — schemas defined in source but not yet created in repo
+**Status:** COMPLETE — committed in Package 2.5B (`bb23e8b`, merged `aa6402c`)
+**Validation:** All 12 schemas pass JSON.parse validation (JSON Schema Draft-07)
 
-Proposed schema files in `docs/automation/schemas/`:
+JSON schemas in `docs/automation/schemas/` (12):
 - `master-project-truth.schema.json`
 - `decision.schema.json`
 - `requirement.schema.json`
@@ -176,7 +177,7 @@ Proposed schema files in `docs/automation/schemas/`:
 - `automation-register-item.schema.json`
 - `artifact-index-item.schema.json`
 
-Proposed template files in `docs/automation/templates/`:
+Templates in `docs/automation/templates/` (10):
 - `stream-update-packet.md`
 - `routing-packet.md`
 - `coordinator-sync-packet.md`
@@ -188,12 +189,14 @@ Proposed template files in `docs/automation/templates/`:
 - `roadmap-item.md`
 - `ai-automation-item.md`
 
-Proposed operator-mode protocols in `docs/automation/operator-mode/`:
+Operator Mode protocols in `docs/automation/operator-mode/` (5):
 - `README.md`
 - `update-project-records-protocol.md`
 - `package-closeout-protocol.md`
 - `stream-routing-protocol.md`
 - `claude-codex-relay-protocol.md`
+
+**Note:** These artifacts enable the automation layer but are not the automation itself. Actual external routing automation via n8n / Make / Zapier remains a later phase.
 
 ---
 
@@ -361,27 +364,21 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 
 ## LAYER 2 — Claude Advisory, Not Yet Coordinator Approved
 
-### Advisory: Package 2.5A vs 2.5B scope split
-
-**Package 2.5A (current — in progress):** The 16 source-of-truth docs (`docs/strategy/`, `docs/architecture/`, `docs/ops/`). These are the durable project foundation. Commit this first.
-
-**Package 2.5B (proposed — DO NOT EXECUTE until Coordinator authorizes):** The extended scope the AI Mastery Build Pack intended. Missing files include:
-- `docs/command-center/` (4 files: README, master-project-truth, current-status, next-actions)
-- `docs/strategy/positioning-bank.md`
-- `docs/architecture/source-platform-architecture.md`
-- `docs/architecture/product-system-architecture.md`
-- `docs/ops/sprint-package-plan.md`
-- `docs/ops/coordinator-sync-log.md`
-- `docs/automation/` directory (12 schemas, 10 templates, 5 operator-mode protocols)
-
-Whether to create Package 2.5B files is a Coordinator decision. The 16 docs in 2.5A are already a meaningful and complete foundation on their own.
-
-### Advisory: Recommended AI Mastery implementation sequence
+### Advisory: AI Mastery implementation sequence status
 
 1. Capture Package 2 final closeout from Claude ✓ (done)
 2. Send Development the Package 2 closeout review request ✓ (done)
-3. Run Package 2.5A in Claude Code — source-of-truth docs only ✓ (in progress)
-4. Coordinator reviews Package 2.5A and authorizes commit
-5. Commit and merge Package 2.5A
-6. Coordinator decides: authorize Package 2.5B (automation scaffold) or proceed to Package 3
-7. Coordinator reviews new operating artifacts; only then approve Package 3 or Package 2.5B
+3. Run Package 2.5A in Claude Code — source-of-truth docs only ✓ (complete — `d1c5a44` / `d69dc2c`)
+4. Coordinator reviews Package 2.5A and authorizes commit ✓ (done)
+5. Commit and merge Package 2.5A ✓ (done)
+6. Coordinator authorizes Package 2.5B ✓ (done)
+7. Run Package 2.5B in Claude Code — automation artifacts ✓ (complete — `bb23e8b` / `aa6402c`)
+8. **Next: Coordinator evaluates and authorizes next development package** ← current position
+
+### Advisory: What Package 2.5B does and does not deliver
+
+**Delivered:** Schemas, templates, and Operator Mode protocols. These are static artifacts — the grammar and structure for how automation will work.
+
+**Not delivered (later phase):** Actual running automations. n8n / Make / Zapier workflows, GitHub Projects board configuration, and NotebookLM setup remain outside the repo and are pending Coordinator decisions.
+
+**GitHub Projects and NotebookLM remain pending Coordinator decisions** — whether to adopt them, and if so when. Do not treat them as active stack components until explicitly confirmed.
