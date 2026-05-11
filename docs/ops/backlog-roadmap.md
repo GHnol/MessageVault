@@ -44,7 +44,7 @@ Delivered:
 ### Package 2.5A — Project truth and operating system foundation
 
 **Branch:** `docs/project-truth-operating-system-foundation`
-**Status:** In progress (correction pass underway — not yet committed)
+**Status:** COMPLETE — merged to main (feature: `d1c5a44`, merge: `d69dc2c`)
 
 Delivered:
 - `docs/strategy/master-project-truth.md`
@@ -68,23 +68,23 @@ No app behavior changes. Docs only.
 
 ---
 
-### Package 2.5B — Automation scaffold (PROPOSED — not yet approved)
+### Package 2.5B — AI Mastery automation artifacts
 
-**Branch:** TBD
-**Status:** PROPOSED — requires explicit Coordinator authorization before execution
+**Branch:** `docs/ai-mastery-automation-artifacts`
+**Status:** COMPLETE — merged to main (feature: `bb23e8b`, merge: `aa6402c`)
 
-Proposed scope:
-- `docs/command-center/` (README, master-project-truth JSON, current-status, next-actions)
-- `docs/strategy/positioning-bank.md`
-- `docs/architecture/source-platform-architecture.md`
-- `docs/architecture/product-system-architecture.md`
-- `docs/ops/sprint-package-plan.md`
-- `docs/ops/coordinator-sync-log.md`
-- `docs/automation/schemas/` (12 schema files)
-- `docs/automation/templates/` (10 template files)
-- `docs/automation/operator-mode/` (5 protocol files)
+Delivered:
+- `docs/command-center/README.md`
+- `docs/command-center/current-status.md`
+- `docs/command-center/next-actions.md`
+- `docs/command-center/coordinator-dashboard.md`
+- `docs/automation/schemas/` — 12 JSON schemas (Draft-07, all validated)
+- `docs/automation/templates/` — 10 copy-paste-ready Markdown templates
+- `docs/automation/operator-mode/` — 5 Operator Mode protocols
 
-**Do not execute until Coordinator explicitly authorizes Package 2.5B.**
+No app code changed. Docs only.
+
+**Note:** Package 2.5B delivers the automation artifact layer (schemas, templates, protocols). Actual external automation via n8n / Make / Zapier remains a later phase and is explicitly not part of this package.
 
 ---
 
