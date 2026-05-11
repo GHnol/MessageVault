@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Feature",
+  "description": "A single entry in the KeepMees feature bank (docs/strategy/feature-bank.md)",
+  "type": "object",
+  "required": ["id", "name", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Short kebab-case feature identifier (e.g. normalized-memory, product-catalog)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable feature name"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "delivered",
+        "in-progress",
+        "planned",
+        "deferred",
+        "gated",
+        "rejected",
+        "proposed",
+        "needs-coordinator-decision"
+      ],
+      "description": "Current status of this feature"
+    },
+    "package": {
+      "type": "string",
+      "description": "Package that delivered or will deliver this feature (e.g. Package 1, Package 3)"
+    },
+    "commit": {
+      "type": "string",
+      "description": "Commit hash where this feature was delivered"
+    },
+    "module": {
+      "type": "string",
+      "description": "src/ module path that implements this feature"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["ingestion", "grouping", "composition", "product-system", "persistence", "design", "commerce", "ai-product"],
+      "description": "Feature area"
+    },
+    "deferralReason": {
+      "type": "string",
+      "description": "Why this feature is deferred (if status is deferred)"
+    },
+    "gate": {
+      "type": "string",
+      "description": "What must happen before this feature can be activated (if status is gated)"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

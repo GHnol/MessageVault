@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Decision",
+  "description": "A single entry in the KeepMees decision register (docs/ops/decision-register.md)",
+  "type": "object",
+  "required": ["id", "title", "decision", "rationale", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^DEC-[A-Z]+-\\d+[A-Z]?$",
+      "description": "Unique decision ID matching the register format (e.g. DEC-P-01, DEC-V-08)"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "Short title for the decision"
+    },
+    "decision": {
+      "type": "string",
+      "description": "The actual decision made"
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why this decision was made"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "locked",
+        "current",
+        "owner-approved-target",
+        "proposed",
+        "gated",
+        "deferred",
+        "rejected",
+        "needs-coordinator-decision",
+        "needs-product-decision",
+        "needs-vendor-input",
+        "needs-design-input"
+      ],
+      "description": "Current authority status of this decision"
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Downstream constraints created by this decision"
+    },
+    "supersededBy": {
+      "type": "string",
+      "pattern": "^DEC-[A-Z]+-\\d+[A-Z]?$",
+      "description": "If superseded, the ID of the superseding decision"
+    },
+    "stream": {
+      "type": "string",
+      "description": "Source stream that produced or approved this decision"
+    },
+    "lockedSince": {
+      "type": "string",
+      "description": "Phase or package when this decision was locked"
+    },
+    "requiresVersionBump": {
+      "type": "boolean",
+      "description": "True if changing this decision requires bumping BOOK_PAGINATION_VERSION"
+    }
+  }
+}

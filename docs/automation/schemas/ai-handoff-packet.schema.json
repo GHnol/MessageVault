@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AIHandoffPacket",
+  "description": "Transfer packet used when a Claude Code or Codex session approaches context limits and must hand off to the next agent",
+  "type": "object",
+  "required": ["date", "currentTask", "percentComplete", "branch", "lastCommit", "whatWasDone", "whatRemains", "testResults", "contextNeeded"],
+  "additionalProperties": false,
+  "properties": {
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "currentTask": {
+      "type": "string",
+      "description": "Name or short description of the package/task in progress"
+    },
+    "percentComplete": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Estimated percent complete"
+    },
+    "branch": {
+      "type": "string",
+      "description": "Current git branch"
+    },
+    "lastCommit": {
+      "type": "string",
+      "description": "Hash and message of last commit"
+    },
+    "filesModified": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of files modified or created since last commit"
+    },
+    "whatWasDone": {
+      "type": "string",
+      "description": "Summary of what has been completed in this session"
+    },
+    "whatRemains": {
+      "type": "string",
+      "description": "Summary of what still needs to be done"
+    },
+    "knownIssues": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Any issues, blockers, or uncertainties the next agent should know about"
+    },
+    "testResults": {
+      "type": "string",
+      "enum": ["all-passing", "some-failing", "not-run", "not-applicable"],
+      "description": "State of automated test suite"
+    },
+    "testDetails": {
+      "type": "string",
+      "description": "Details of test run if tests were run"
+    },
+    "nextWork": {
+      "type": "string",
+      "description": "Exactly what the next agent should do first"
+    },
+    "contextNeeded": {
+      "type": "string",
+      "description": "Critical context the next agent needs that isn't in the code or docs"
+    },
+    "scopeGuardReminder": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific scope-guarded areas the next agent must not touch"
+    },
+    "doNotCommit": {
+      "type": "boolean",
+      "default": true,
+      "description": "Reminder: do not commit without explicit user instruction"
+    }
+  }
+}
