@@ -2325,7 +2325,7 @@
             letter-spacing: -0.2px;
         }
 
-        .ks-header-end { width: 72px; display: flex; justify-content: flex-end; }
+        .ks-header-end { width: auto; display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
         .ks-header-book-btn {
             background: none; border: none; cursor: pointer;
             color: #007aff; font-size: 13px; font-weight: 400;
@@ -3050,7 +3050,18 @@
                     </div>
                     <div class="ingest-card-arrow">›</div>
                 </div>
+
+                <div class="ingest-card" id="loadProjectCard">
+                    <div class="ingest-card-icon">📂</div>
+                    <div class="ingest-card-body">
+                        <div class="ingest-card-title">Continue a saved project</div>
+                        <div class="ingest-card-desc">Load a <code>.keepmees.json</code> file to restore your messages, selections, and keepsake groups.</div>
+                    </div>
+                    <div class="ingest-card-arrow">›</div>
+                </div>
             </div>
+            <input type="file" id="projectFileInput" accept=".keepmees.json,.json" style="display:none;" />
+            <div class="status" id="projectLoadStatus" style="margin-top:12px;display:none;"></div>
 
             <div class="trust-bar">
                 <div class="trust-item">
@@ -3243,6 +3254,7 @@
                 </button>
                 <button type="button" class="header-btn secondary" id="selectAllBtn" style="display:none;">Select all</button>
                 <button type="button" class="header-btn secondary" id="backToPickerBtn" style="display:none;">&#8592; Conversations</button>
+                <button type="button" class="header-btn secondary" id="saveProjectBtn">Save project</button>
                 <button type="button" class="header-btn" id="downloadBtn">Save conversation</button>
             </div>
         </div>
@@ -3273,7 +3285,9 @@
             <div class="book-header-inner">
                 <button type="button" class="book-back-btn" id="bookBackBtn">&#8592; Keepsakes</button>
                 <div class="book-header-title">Message Book</div>
-                <div class="book-header-end"></div>
+                <div class="book-header-end">
+                    <button type="button" class="book-back-btn" id="bookSaveProjectBtn">Save project</button>
+                </div>
             </div>
         </div>
         <div class="book-shell">
@@ -3296,6 +3310,7 @@
         <div class="review-footer">
             <button type="button" class="review-footer-btn back" id="reviewBackBtn">&#8592; Back</button>
             <button type="button" class="review-footer-btn book" id="reviewBookBtn" style="display:none">Message Book</button>
+            <button type="button" class="review-footer-btn book" id="reviewSaveProjectBtn">Save project</button>
             <button type="button" class="review-footer-btn continue" id="reviewContinueBtn">Make keepsake &#8594;</button>
         </div>
     </div>
@@ -3329,6 +3344,7 @@
                 <button type="button" class="ks-back-btn" id="ksBackBtn">&#8592; Review</button>
                 <div class="ks-header-title">Your Keepsakes</div>
                 <div class="ks-header-end">
+                    <button type="button" class="ks-header-book-btn" id="ksSaveProjectBtn">Save project</button>
                     <button type="button" class="ks-header-book-btn" id="ksBookBtn">Message Book</button>
                 </div>
             </div>
@@ -3349,6 +3365,14 @@
     <script src="src/adapters/future-adapter-stubs.js"></script>
     <script src="src/core/project-session.js"></script>
     <script src="src/state/session-serialization.js"></script>
+    <!-- ════════════════════════════════════════════
+         KEEPMEES ENGINE — PACKAGE 3A
+         Local project session persistence.
+         Load order: persistence → restore → file-io (browser-only)
+    ════════════════════════════════════════════ -->
+    <script src="src/state/project-persistence.js"></script>
+    <script src="src/state/project-session-restore.js"></script>
+    <script src="src/state/project-file-io.js"></script>
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 2
          Product catalog + eligibility foundation.
@@ -3376,10 +3400,17 @@
         const chatHeaderName = document.getElementById('chatHeaderName');
         const chatHeaderMeta = document.getElementById('chatHeaderMeta');
         const downloadBtn = document.getElementById('downloadBtn');
+        const saveProjectBtn       = document.getElementById('saveProjectBtn');
+        const reviewSaveProjectBtn = document.getElementById('reviewSaveProjectBtn');
+        const ksSaveProjectBtn     = document.getElementById('ksSaveProjectBtn');
+        const bookSaveProjectBtn   = document.getElementById('bookSaveProjectBtn');
 
         // Landing
         const macGuideCard = document.getElementById('macGuideCard');
         const txtUploadCard = document.getElementById('txtUploadCard');
+        const loadProjectCard = document.getElementById('loadProjectCard');
+        const projectFileInput = document.getElementById('projectFileInput');
+        const projectLoadStatus = document.getElementById('projectLoadStatus');
         const howItWorksToggle = document.getElementById('howItWorksToggle');
         const howItWorksPanel = document.getElementById('howItWorksPanel');
 
@@ -8073,6 +8104,111 @@ ${keepsakeFooter}
         // Entry from keepsakes summary header
         ksBookBtn.addEventListener('click', () => showBookView(keepsakesView));
 
+        /* ── Package 3A: Local project save / load ───────────────────────────────
+           Save Project: snapshot current app state → download .keepmees.json
+           Load Project: read .keepmees.json → validate → restore into app state
+        ─────────────────────────────────────────────────────────────────────────── */
+
+        function showProjectStatus(msg, isError) {
+            projectLoadStatus.textContent = msg;
+            projectLoadStatus.style.display = 'block';
+            projectLoadStatus.className = 'status' + (isError ? ' error' : '');
+        }
+
+        function hideProjectStatus() {
+            projectLoadStatus.style.display = 'none';
+        }
+
+        function saveProject() {
+            const PP = window.KMEngine && window.KMEngine.ProjectPersistence;
+            const IO = window.KMEngine && window.KMEngine.ProjectFileIO;
+            if (!PP || !IO) return;
+
+            const snapshot = PP.createSnapshot({
+                memories:        window.chatMessagesData || [],
+                keepsakeGroups:  keepsakeGroups,
+                selectedIndices: selectedIndices,
+                contactName:     chatHeaderName.innerText.trim(),
+                messageBookState: messageBookState
+            });
+            IO.save(snapshot, chatHeaderName.innerText.trim());
+        }
+
+        async function handleProjectFileLoad(file) {
+            const IO  = window.KMEngine && window.KMEngine.ProjectFileIO;
+            const PSR = window.KMEngine && window.KMEngine.ProjectSessionRestore;
+            if (!IO || !PSR) {
+                showProjectStatus('Project load not available — engine not loaded.', true);
+                return;
+            }
+
+            const ioResult = await IO.load(file);
+            if (!ioResult.success) {
+                showProjectStatus('Could not read project file: ' + ioResult.error, true);
+                return;
+            }
+
+            const restoreResult = PSR.restore(ioResult.data);
+            if (!restoreResult.success) {
+                showProjectStatus('Project file is invalid: ' + restoreResult.errors.join('; '), true);
+                return;
+            }
+
+            if (restoreResult.warnings.length > 0) {
+                console.warn('[KeepMees] Project restore warnings:', restoreResult.warnings);
+            }
+
+            const appState = restoreResult.appState;
+
+            // Apply restored state
+            window.chatMessagesData = appState.memories;
+            keepsakeGroups          = appState.groups;
+
+            selectedIndices.clear();
+            for (const idx of appState.selectedIndices) {
+                selectedIndices.add(idx);
+            }
+
+            if (appState.messageBookState) {
+                messageBookState = appState.messageBookState;
+            }
+
+            // Render conversation (also shows chatView)
+            renderConversation(appState.memories);
+
+            // Re-apply selection marks that renderConversation cleared
+            chatMessages.querySelectorAll('.message-row.selectable').forEach(row => {
+                const idx = parseInt(row.getAttribute('data-index'));
+                if (!isNaN(idx) && selectedIndices.has(idx)) {
+                    row.classList.add('selected');
+                }
+            });
+            updateSelectionBar();
+
+            // If auto-derived contact name is generic and we stored a better one, use it
+            if (appState.contactName && chatHeaderName.innerText === 'Conversation') {
+                chatHeaderName.innerText = appState.contactName;
+            }
+
+            hideProjectStatus();
+        }
+
+        saveProjectBtn.addEventListener('click', saveProject);
+        reviewSaveProjectBtn.addEventListener('click', saveProject);
+        ksSaveProjectBtn.addEventListener('click', saveProject);
+        bookSaveProjectBtn.addEventListener('click', saveProject);
+
+        loadProjectCard.addEventListener('click', () => {
+            hideProjectStatus();
+            projectFileInput.value = '';
+            projectFileInput.click();
+        });
+
+        projectFileInput.addEventListener('change', () => {
+            const file = projectFileInput.files[0];
+            if (file) handleProjectFileLoad(file);
+        });
+
         /* ── Capture harness support ─────────────────────────────────────────────
            Exposes internal state and functions for scripts/capture-message-book-packet.mjs.
            keepsakeGroups is a let that normalizeGroups() can reassign, so it must be
@@ -8109,6 +8245,9 @@ ${keepsakeFooter}
             BOOK_PRODUCTION_DEPS,
             // KeepMees engine foundation (Package 1)
             KMEngine: window.KMEngine || null,
+            // Package 3A: project persistence helpers
+            saveProject,
+            handleProjectFileLoad,
         };
 
     </script>
