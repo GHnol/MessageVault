@@ -1,6 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-05-11
+**Updated by:** Claude Code (Package 3B status sync)
 **Status:** Active
 
 ---
@@ -104,18 +105,23 @@ Delivered:
 
 ---
 
-## Upcoming packages
-
 ### Package 3B — Automated E2E Regression Harness Foundation
 
-**Status:** Authorized — awaiting implementation
-**Scope (per Coordinator authorization):**
-- Automated end-to-end regression harness foundation
+**Branch:** `feature/e2e-regression-harness-foundation`
+**Status:** COMPLETE — merged to main (feature: `0ce973a`, merge: `40b4bba`)
 
-**Blocked by:** None.
-**Does not include:** checkout, PDF generation, cover design, visual redesign, cloud account persistence.
+Delivered:
+- `scripts/e2e-regression-harness.mjs` — Playwright headless Chromium harness; 10 phases, 29 tests; port 7332; proper static file server with correct MIME types; failure screenshots to `artifacts/e2e-failures/`
+- `scripts/e2e-test-data.mjs` — deterministic NormalizedMemory-compatible seed data (8 messages, fixed IDs and timestamps)
+- `index.html` — `window.__km` test harness bridge entries: `seedChatMessages`, `showKeepsakesView`, `showReviewView`, `getSelectedCount`, `captureProjectSnapshot`
+- `scripts/package.json` — `e2e` and `e2e:headed` npm scripts
+- `docs/qa/e2e-regression-harness.md` — harness documentation
+- `.gitignore` — `artifacts/e2e-failures/` excluded
+- **E2E tests: 29 passed, 0 failed** | **Node unit tests: 453 passing (all suites green)**
 
 ---
+
+## Upcoming packages
 
 ### Package 3 remaining scope (not yet scheduled)
 

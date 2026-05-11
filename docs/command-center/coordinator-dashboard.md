@@ -1,6 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-05-11
+**Updated by:** Claude Code (Package 3B status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -47,8 +48,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.5A — 16 source-of-truth docs | COMPLETE | `d1c5a44` / `d69dc2c` |
 | Package 2.5B — Automation artifacts | COMPLETE | `bb23e8b` / `aa6402c` |
 | Package 3A — Local project session save and resume foundation | COMPLETE | `8dcc959` / `b40fa2b` |
+| Package 3B — Automated E2E regression harness foundation | COMPLETE | `0ce973a` / `40b4bba` |
 
-Tests: **453 passing, 0 failures**. App code last changed: Package 3A (`8dcc959`).
+Tests: **453 Node tests passing, 0 failures + 29 E2E browser tests passing**. App code last changed: Package 3B (`0ce973a`).
 
 ---
 
@@ -74,8 +76,11 @@ Vendor confirmed
             → Checkout / order flow
                 → Proof approval UX
 
-Package 3B (authorized)
-    → Automated E2E Regression Harness Foundation
+Package 3B (COMPLETE — `40b4bba`)
+    → Automated E2E Regression Harness Foundation — DELIVERED
+
+Next package (authorization needed)
+    → Awaiting Coordinator scope decision
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -89,7 +94,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Confirm Package 3B scope details | Roadmap decision | High — authorization given; scope confirmation outstanding |
+| Authorize next development package | Roadmap decision | High — Package 3B complete; development paused pending authorization |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |

@@ -1,6 +1,7 @@
 # Risk Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-11
+**Updated by:** Claude Code (Package 3B status sync)
 **Status:** Active
 
 ---
@@ -29,7 +30,7 @@ Each risk has: **ID**, **Description**, **Likelihood** (L/M/H), **Impact** (L/M/
 
 **Description:** As `index.html` grows, it becomes harder to navigate, edit, and review. A single large file increases the risk of accidental changes to unrelated sections. The larger KeepMees gets, the more expensive a late architecture correction becomes.
 
-**Mitigation:** KMEngine modular extraction is the approved near-term path — progressively moving testable logic into `src/` modules. Package 3A added 3 new modules to `src/state/` without growing `index.html` unmaintainably. Framework / build-system migration is a tracked future decision (deferred, not rejected) — see `docs/architecture/adr-001-app-architecture-path.md`. Re-evaluate when render/proof architecture stabilizes or when UI state, persistence, proofing, and render specs become too complex for the current shell.
+**Mitigation:** KMEngine modular extraction is the approved near-term path — progressively moving testable logic into `src/` modules. Package 3A added 3 new modules to `src/state/` without growing `index.html` unmaintainably. Package 3B added a Playwright-based E2E harness that catches behavioral regressions automatically, reducing the cost of future changes. Framework / build-system migration is a tracked future decision (deferred, not rejected) — see `docs/architecture/adr-001-app-architecture-path.md`. Re-evaluate when render/proof architecture stabilizes or when UI state, persistence, proofing, and render specs become too complex for the current shell.
 
 ---
 
