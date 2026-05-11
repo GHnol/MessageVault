@@ -8209,11 +8209,13 @@ ${keepsakeFooter}
             if (file) handleProjectFileLoad(file);
         });
 
-        /* ── Capture harness support ─────────────────────────────────────────────
-           Exposes internal state and functions for scripts/capture-message-book-packet.mjs.
+        /* ── Test harness support ────────────────────────────────────────────────
+           Exposes internal state and functions for:
+             scripts/capture-message-book-packet.mjs  (Package 2.5B capture harness)
+             scripts/e2e-regression-harness.mjs       (Package 3B E2E regression harness)
            keepsakeGroups is a let that normalizeGroups() can reassign, so it must be
            accessed through getter/setter — a bare reference would stale after reassignment.
-           Remove this block when the harness is no longer needed.
+           Remove this block when both harnesses are no longer needed.
         ─────────────────────────────────────────────────────────────────────────── */
         window.__km = {
             getKeepsakeGroups()      { return keepsakeGroups; },
@@ -8248,6 +8250,22 @@ ${keepsakeFooter}
             // Package 3A: project persistence helpers
             saveProject,
             handleProjectFileLoad,
+            // Package 3B: E2E regression harness support (see scripts/e2e-regression-harness.mjs)
+            seedChatMessages(messages)  { window.chatMessagesData = messages; renderConversation(messages); },
+            showKeepsakesView,
+            showReviewView,
+            getSelectedCount()          { return selectedIndices.size; },
+            captureProjectSnapshot() {
+                var PP = window.KMEngine && window.KMEngine.ProjectPersistence;
+                if (!PP) return null;
+                return JSON.stringify(PP.createSnapshot({
+                    memories:         window.chatMessagesData || [],
+                    keepsakeGroups:   keepsakeGroups,
+                    selectedIndices:  selectedIndices,
+                    contactName:      chatHeaderName.innerText.trim(),
+                    messageBookState: messageBookState
+                }));
+            },
         };
 
     </script>

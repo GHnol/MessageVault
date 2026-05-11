@@ -5,6 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "e2e":           "node e2e-regression-harness.mjs",
+    "e2e:headed":    "node e2e-regression-harness.mjs --headed",
     "capture":       "node capture-message-book-packet.mjs",
     "capture:clean": "node capture-message-book-packet.mjs --clean",
     "capture:a":     "node capture-message-book-packet.mjs --scenarios a",
