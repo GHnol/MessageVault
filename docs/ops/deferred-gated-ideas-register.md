@@ -1,0 +1,278 @@
+# Deferred and Gated Ideas Register — KeepMees / MessageVault
+
+**Last updated:** 2026-05-10
+**Status:** Active
+
+---
+
+## How to read this document
+
+**Deferred:** good idea, not in scope for current packages. Can be activated by a Coordinator package instruction.
+**Gated:** blocked by a named external condition. Cannot activate until the gate clears.
+**Rejected:** considered and ruled out. Do not revisit without new information.
+
+---
+
+## Gated ideas
+
+### GATE-01 — PDF generation pipeline
+
+**Gate:** Vendor confirmed AND `BOOK_PRODUCTION_DEPS.isCoverUnblocked()` returns true
+**Description:** Server-side PDF/X-4 generation from a captured `BookRenderSpec`. Includes font embedding, bleed/trim marks, and color space management.
+**Pre-work in place:** `captureBookRenderSpec` exists. Preflight check registry exists. Render spec input contract is partially defined.
+**What remains when gate clears:** server architecture decision, render spec format finalization, PDF library evaluation, deployment.
+
+---
+
+### GATE-02 — Checkout and order flow
+
+**Gate:** PDF pipeline complete AND commerce readiness status updated to `ready`
+**Description:** End-to-end order flow: configure → proof → approve → checkout → submit order to vendor.
+**Notes:** ProductCatalog `message-book` currently has `commerceReadinessStatus: 'blocked'`. This status must be explicitly updated by product authority when ready.
+
+---
+
+### GATE-03 — Cover design tooling
+
+**Gate:** `BOOK_PRODUCTION_DEPS.isCoverUnblocked()` returns true
+**Description:** Customer-facing tool for configuring back cover content (customer editorial area). Front cover is KeepMees-controlled.
+**Notes:** KeepMees controls the cover. Some customer editorial area is TBD. No work until gate clears.
+
+---
+
+### GATE-04 — Proof approval UX
+
+**Gate:** PDF pipeline AND checkout complete
+**Description:** In-app proof review where the customer can see a digital facsimile of the final book before it goes to manufacturing.
+**Notes:** Current stance is in-app approval as the primary flow. Scope TBD.
+
+---
+
+## Deferred ideas
+
+### DEF-01 — WhatsApp adapter
+
+**Status:** Deferred (stub exists at `src/adapters/future-adapter-stubs.js`)
+**Description:** Parse WhatsApp `.txt` chat export. Pipe-delimited or WhatsApp-formatted text file.
+**Effort:** Medium. Format is known; adapter framework is in place.
+**Activate when:** prioritized by Coordinator. No external gate.
+
+---
+
+### DEF-02 — Android SMS adapter
+
+**Status:** Deferred (stub exists)
+**Description:** Parse SMS Backup & Restore XML backup format.
+**Effort:** Medium.
+**Activate when:** prioritized by Coordinator.
+
+---
+
+### DEF-03 — Instagram DM adapter
+
+**Status:** Deferred (stub exists)
+**Description:** Parse Instagram data export JSON.
+**Effort:** Medium. Requires investigation of Instagram export format.
+**Activate when:** prioritized by Coordinator.
+
+---
+
+### DEF-04 — Facebook Messenger adapter
+
+**Status:** Deferred (stub exists)
+**Description:** Parse Facebook data export JSON.
+**Effort:** Medium.
+**Activate when:** prioritized by Coordinator.
+
+---
+
+### DEF-05 — Telegram adapter
+
+**Status:** Deferred (stub exists)
+**Description:** Parse Telegram desktop JSON export.
+**Effort:** Medium.
+**Activate when:** prioritized by Coordinator.
+
+---
+
+### DEF-06 — OCR image import
+
+**Status:** Deferred
+**Description:** Extract text from screenshots of conversations via OCR.
+**Effort:** High. Requires server-side pipeline (no acceptable in-browser OCR at production quality).
+**Activate when:** server infrastructure is established.
+
+---
+
+### DEF-07 — Audio / video transcript import
+
+**Status:** Deferred
+**Description:** Transcribe audio or video messages into text for inclusion.
+**Effort:** High. Requires server-side transcription pipeline.
+**Activate when:** server infrastructure is established.
+
+---
+
+### DEF-08a — Local / session persistence (save and resume)
+
+**Status:** Near-term — NOT deferred
+**Description:** Allow users to save a Message Book project and resume it later, potentially across multiple sessions. Users may take days to construct a keepsake set and must not lose progress. `SessionSerialization` (Package 1) provides the serialization schema. This is the foundation-critical path — IndexedDB, export/import session files, or equivalent privacy-preserving local storage.
+**Effort:** Medium. Schema groundwork exists in `ProjectSession` and `SessionSerialization`. Package 3 includes session save/restore UI.
+**Activate when:** Package 3 (already planned).
+
+---
+
+### DEF-08b — Cloud account and cross-device persistence
+
+**Status:** Deferred
+**Description:** Allow users to save sessions to the cloud and access them across devices. Distinct from local/session persistence — this requires auth, backend infrastructure, and account model.
+**Effort:** High. Requires backend infrastructure, auth, and storage.
+**Activate when:** post-launch, when persistence demand justifies the infrastructure investment. Local/session persistence (DEF-08a) must exist first.
+
+---
+
+### DEF-09 — Journal product renderer
+
+**Status:** Deferred
+**Description:** Full renderer for the Journal product (cataloged, not yet implemented).
+**Effort:** High. Requires its own composition pipeline.
+**Activate when:** Message Book reaches manufacturing readiness and Journal is next priority.
+
+---
+
+### DEF-10 — Build system introduction
+
+**Status:** Deferred
+**Description:** Introduce a bundler (Vite or similar) to split index.html into components and enable tree-shaking, TypeScript, etc.
+**Effort:** High. Requires migration of existing index.html logic.
+**Activate when:** `index.html` maintenance burden exceeds threshold OR team grows.
+
+---
+
+### DEF-11 — Reactions / tapbacks rendering
+
+**Status:** Deferred (data is already parsed from iMessage chat.db export)
+**Description:** Render iMessage reactions/tapbacks (heart, thumbs-up, haha, etc.) in the book as corner-anchored badges attached to bubbles.
+**Effort:** Medium. The raw tapback data is available in the export; it's a parser + renderer gap.
+**Priority:** HIGH — this is a competitive differentiator vs MyForeverBooks (which parses but doesn't render them).
+**Locked visual decision:** Reactions are corner-anchored, attached to bubble (DEC-V-02 in decision-register).
+**Activate when:** visual design system is implemented in Figma + reaction badge component is designed.
+
+---
+
+### DEF-12 — Import Quality Report
+
+**Status:** Deferred
+**Description:** After import, show a quality report: messages found, date range, sender count, media found (photos/video/audio), missing media, unsupported items, replies detected, reactions detected, estimated pages, estimated volumes.
+**Effort:** Medium. Most data is already available after parsing.
+**Priority:** HIGH — reduces user anxiety and establishes trust before book creation begins.
+**Competitive context:** MyForeverBooks does not have this as a product feature. KeepMees should build it into the core import flow.
+**Activate when:** import flow is being refined; this is a near-term priority.
+
+---
+
+### DEF-13 — Project library as keepsake shelf
+
+**Status:** Deferred
+**Description:** Replace the utilitarian project list with a visual "shelf" of book projects showing cover thumbnail, project title, source conversation label, stage/status, date range, page/volume estimate, and last edited date.
+**Effort:** Medium.
+**Priority:** Medium — important for emotional brand experience but not blocking.
+**Competitive context:** MyForeverBooks' project library shows raw phone numbers and functions like an admin dashboard. KeepMees should make it feel like a personal keepsake archive.
+**Activate when:** UI redesign phase begins.
+
+---
+
+### DEF-14 — Stats page
+
+**Status:** Deferred
+**Description:** A modular stats page within the book showing: total messages, story span, messages by each person, top emojis, words shared, most active day, longest streak.
+**Effort:** Medium.
+**Priority:** Medium — strong engagement feature; emotionally resonant.
+**Note:** Tone should be adjustable — playful stats work for couples/friends; memorial books need a gentler treatment.
+**Activate when:** book editor is consumer-ready.
+
+---
+
+### DEF-15 — Pre-print Review Assistant (cleanup checks)
+
+**Status:** Deferred
+**Description:** A polished cleanup check system before proof generation. Checks for: raw long links, duplicate messages, duplicate images, broken attachments, missing media, phone numbers as names, system messages, reaction fallback text, empty messages, very low-resolution images, unchanged placeholder cover text, blank cover slots, unsafe page count, unreviewed proof.
+**Effort:** Medium. The preflight check registry schema exists (`BOOK_PREFLIGHT_CHECK_REGISTRY`); runners need to be implemented.
+**Activate when:** preflight runner is authorized as a package.
+
+---
+
+### DEF-16 — Gift cards
+
+**Status:** Deferred
+**Description:** Purchasable gift cards/credits allowing someone to gift a KeepMees product without touching the recipient's private messages. Should feel beautiful — designed e-gift card visuals, occasion themes, scheduled delivery, printable PDF certificate, recipient landing page.
+**Effort:** Medium-High. Requires commerce infrastructure.
+**Competitive context:** MyForeverBooks offers $25-$150 gift cards; theirs look generic. KeepMees gift card should feel like the start of the keepsake experience.
+**Activate when:** commerce/checkout flow is complete.
+
+---
+
+### DEF-17 — NotebookLM integration as research layer
+
+**Status:** Deferred (NEEDS COORDINATOR DECISION)
+**Description:** Upload project materials (competitor teardowns, vendor docs, strategy docs, product philosophy) to NotebookLM notebooks for source-grounded strategic synthesis and audio overview generation.
+**Effort:** Low operational effort; one-time setup per notebook.
+**Activate when:** Coordinator approves NotebookLM as an official project tool.
+
+---
+
+### DEF-18 — AI-assisted message curation
+
+**Status:** Deferred
+**Description:** Use an AI model to suggest which messages from a conversation are most keepsake-worthy. Helps users find emotionally meaningful moments faster.
+**Effort:** Medium. Client-side model preferred; server-side requires explicit opt-in by user.
+**Privacy:** Message content is private by default. Server-side inference requires explicit opt-in.
+**Activate when:** curation UX is identified as a top user friction point via usage data.
+
+---
+
+### DEF-19 — AI section title generation
+
+**Status:** Deferred
+**Description:** AI-suggested section titles based on the messages within a section. Max 45 characters — well within model capacity. Could run client-side.
+**Effort:** Low-medium. Section title character limit is already enforced by `bookEditorial`.
+**Privacy:** Same rule as DEF-18 — client-side preferred.
+**Activate when:** editorial friction data justifies it.
+
+---
+
+### DEF-20 — AI dedication / inscription assistance
+
+**Status:** Deferred
+**Description:** AI-assisted writing for the dedication page — suggestions only, not auto-populated. User retains full control and authorship.
+**Effort:** Low. Max dedication length is 500 characters.
+**Privacy:** Dedication content does not include message data; lower sensitivity than DEF-18/19.
+**Activate when:** editorial friction data justifies it.
+
+---
+
+### DEF-21 — Photo and media rendering in book interior
+
+**Status:** Deferred
+**Description:** Render actual photos and media attachments from iMessage conversations in the book. Currently, attachment-only messages are warned (not blocked) and appear as placeholders. True media rendering requires server-side processing, image scaling, and print-quality output.
+**Effort:** High. Requires server-side image pipeline; print-quality resolution constraints apply.
+**Competitive context:** MyForeverBooks renders photos. This is a gap that matters for conversations with significant photo history.
+**Activate when:** server infrastructure is established and Message Book reaches manufacturing readiness.
+
+---
+
+## Rejected ideas
+
+### REJ-01 — In-browser PDF generation
+
+**Status:** Rejected
+**Reason:** In-browser PDF libraries (jsPDF, PDFKit-browser, etc.) cannot produce print-quality PDF/X-4 output with proper font embedding and color management. This is a hard requirement for a physical keepsake product.
+**Do not revisit** unless a browser-native PDF specification meeting print-quality requirements emerges.
+
+---
+
+### REJ-02 — Softcover option at launch
+
+**Status:** Rejected for launch
+**Reason:** Casebound hardcover is a positioning decision. Softcover dilutes the premium keepsake value proposition.
+**Future consideration:** Softcover is not permanently ruled out — it could be a future lower-cost option. Not in scope for launch.
