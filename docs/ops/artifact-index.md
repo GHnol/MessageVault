@@ -1,6 +1,6 @@
 # Artifact Index — KeepMees / MessageVault
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-05-11
 **Status:** Active
 
 ---
@@ -49,6 +49,9 @@ Authoritative index of every significant file in the repository — what it is, 
 | File | Exports | Purpose |
 |---|---|---|
 | `src/state/session-serialization.js` | `KMEngine.SessionSerialization` | Serialize/restore `ProjectSession`; `captureFromApp` |
+| `src/state/project-persistence.js` | `KMEngine.ProjectPersistence` | Snapshot creation, schema validation, deserialization — Package 3A |
+| `src/state/project-session-restore.js` | `KMEngine.ProjectSessionRestore` | Restore thick app state from file; ID→index map; controlled warnings — Package 3A |
+| `src/state/project-file-io.js` | `KMEngine.ProjectFileIO` | Browser save (Blob/URL) and load (FileReader); browser-only — Package 3A |
 
 ---
 
@@ -67,10 +70,11 @@ Authoritative index of every significant file in the repository — what it is, 
 
 | File | Test count | Covers |
 |---|---|---|
-| `src/tests/km-engine-tests.mjs` | See Package 1 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms |
+| `src/tests/km-engine-tests.mjs` | ~96 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms |
 | `src/tests/keepsake-group-tests.mjs` | 43 | KeepsakeGroup create/touch/displayName/deriveMemoryIds/deriveSourcePlatformIds |
 | `src/tests/product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog all/get/flagship/byCategory, required fields |
 | `src/tests/product-eligibility-tests.mjs` | 76 | ProductEligibility per-product evaluators, LegacyKeepsakeTypesBridge |
+| `src/tests/project-persistence-tests.mjs` | 111 | ProjectPersistence validate/deserialize/createSnapshot, ProjectSessionRestore restore — Package 3A |
 
 ---
 

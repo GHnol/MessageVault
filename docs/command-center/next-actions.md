@@ -1,6 +1,6 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-05-11
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -10,25 +10,22 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Coordinator to evaluate and authorize next development package | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Coordinator authorized Package 3B planning/execution: Automated E2E Regression Harness Foundation | Coordinator | — |
 | 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
 
 ---
 
-## Next development package (Package 3 — awaiting Coordinator authorization)
+## Next development package (Package 3B — Coordinator authorized)
 
-**Do not start without explicit authorization.**
+**Status: Authorized — Automated E2E Regression Harness Foundation**
 
-Proposed scope:
-- `src/products/product-draft.js` — `ProductDraft` model (per-group, per-product draft container)
-- `src/core/preflight-runner.js` — executes the 10 checks in `BOOK_PREFLIGHT_CHECK_REGISTRY`
-- Session save/restore UI flow wired to `SessionSerialization` (local/session persistence — DEF-08a)
-- `KeepsakeGroup` + product draft lifecycle hooks
-- Test coverage for all new modules
+Scope (per Coordinator authorization):
+- Automated end-to-end regression harness foundation
 
 Does NOT include: checkout, PDF generation, cover design, visual redesign, cloud account persistence.
-No technical gate blocking Package 3 — authorization gate only.
+
+Package 3A (local project session save and resume foundation) is COMPLETE — merged to main (`b40fa2b`).
 
 ---
 
@@ -59,7 +56,7 @@ No technical gate blocking Package 3 — authorization gate only.
 
 | Decision | What needs deciding | Downstream impact |
 |---|---|---|
-| Package 3 authorization | Approve, defer, or redirect scope | Development package timing |
+| Package 3B scope confirmation | Confirm or adjust Automated E2E Regression Harness scope | Development package timing |
 | GitHub Projects setup | Whether to create the KeepMees Command Center board | Tracking infrastructure |
 | NotebookLM adoption | Formally adopt or defer | Research/synthesis tooling |
 | Designer budget | Re-authorize or continue passive search | Figma execution gate |
@@ -71,7 +68,7 @@ No technical gate blocking Package 3 — authorization gate only.
 
 | Item | Reason | Gate |
 |---|---|---|
-| Package 3 | Awaiting Coordinator authorization | Coordinator decision |
+| Package 3B implementation | Authorized — awaiting session start | Coordinator instruction to begin |
 | Checkout / order flow | Vendor not confirmed; commerce blocked | Vendor confirmed + PDF pipeline |
 | PDF generation pipeline | Server infra not established; vendor not confirmed | Vendor confirmed |
 | Cover design work | `isCoverUnblocked()` = false | Vendor confirmed |

@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-05-10
-**Updated by:** Claude Code (Package 2.5B status sync)
+**Last updated:** 2026-05-11
+**Updated by:** Claude Code (Package 3A status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -15,31 +15,33 @@
 | Package 2 | ProductCatalog and eligibility foundation | COMPLETE — merged to main | `87972c9` | `541a1b8` |
 | Package 2.5A | Project truth and operating system foundation | COMPLETE — merged to main | `d1c5a44` | `d69dc2c` |
 | Package 2.5B | AI Mastery automation artifacts | COMPLETE — merged to main | `bb23e8b` | `aa6402c` |
-| Package 3 | ProductDraft, preflight runner, session lifecycle | NOT STARTED — awaiting Coordinator authorization | — | — |
+| Package 3A | Local project session save and resume foundation | COMPLETE — merged to main | `8dcc959` | `b40fa2b` |
 
 ---
 
 ## App code state
 
-- No app code changes since Package 2 (`87972c9`)
-- `index.html`: unchanged
-- `src/`: unchanged
-- Tests: **342 passing, 0 failures** (last verified: Package 2 closeout)
+- App code last changed: Package 3A (`8dcc959`)
+- `index.html`: modified (save/load UI, event listeners, new script tags)
+- `src/state/`: 3 new modules (`project-persistence.js`, `project-session-restore.js`, `project-file-io.js`)
+- `src/tests/`: 1 new suite (`project-persistence-tests.mjs`)
+- Tests: **453 passing, 0 failures** (last verified: Package 3A closeout)
   - `km-engine-tests.mjs`: ~96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
+  - `project-persistence-tests.mjs`: 111
 
 ---
 
-## Git state (as of Package 2.5B closeout)
+## Git state (as of Package 3A closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `aa6402c` — merge: add Package 2.5B AI Mastery automation artifacts |
+| main HEAD | `b40fa2b` — merge: add local project session save and resume foundation |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | Yes — Package 2.5B pushed, merged to main, main pushed |
+| Pushed to remote | Yes — Package 3A pushed, merged to main, main pushed |
 
 ---
 
@@ -60,7 +62,6 @@
 
 | Item | Status |
 |---|---|
-| Package 3 authorization | NOT APPROVED — awaiting Coordinator |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION |
@@ -71,9 +72,9 @@
 
 | Stream (Chat #) | Last meaningful sync | Status |
 |---|---|---|
-| 01 Coordinator | Package 2.5B approved and merged | Needs sync: evaluate and authorize next package |
+| 01 Coordinator | Package 3A approved and merged | Needs sync: confirm Package 3B scope and authorize implementation |
 | 02 Product — Core Strategy | Source intake 2026-05-09 | No immediate action required |
-| 03 Development — Core Build | Package 2.5B closeout | Needs sync after Package 2.5B merge |
+| 03 Development — Core Build | Package 3A closeout | Needs sync after Package 3A merge |
 | 04 Production — Vendor Feasibility | Wave 1 research complete | IngramSpark + Lulu follow-ups pending |
 | 05 Production — Mockups and Vendor Strategy | Source intake 2026-05-09 | 6-product physical target locked |
 | 06 Production — Packaging, Bundling, Gifting | Source intake 2026-05-09 | 4-component system captured |

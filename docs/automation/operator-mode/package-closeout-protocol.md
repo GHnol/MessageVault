@@ -1,6 +1,6 @@
 # Package Closeout Protocol
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-05-11
 **Applies to:** Claude Code (Operator) after each package is authorized for commit
 
 ---
@@ -135,9 +135,26 @@ Required fields:
 
 ---
 
-## Step 10 — Update command center (if applicable)
+## Step 10 — Post-merge Command Center / ops status sync (MANDATORY)
 
-If the project has command center docs (`docs/command-center/`), update `current-status.md` to reflect the newly completed package.
+**Standing rule (added 2026-05-11):** Every package closeout requires a Command Center / ops status sync after the implementation is merged to main. This step is mandatory. The Coordinator may explicitly authorize skipping it, but without that authorization the package is not considered fully closed.
+
+Minimum files to update:
+- `docs/command-center/current-status.md`
+- `docs/command-center/next-actions.md`
+- `docs/command-center/coordinator-dashboard.md`
+- `docs/ops/artifact-index.md`, `docs/ops/backlog-roadmap.md`, `docs/ops/ai-automation-register.md`, `docs/ops/risk-register.md` as applicable
+
+Status sync commit flow:
+1. Edit docs to reflect the closed package (test counts, git state, next actions, COMPLETE rows)
+2. Create a dedicated branch, e.g. `docs/sync-command-center-after-package-[X]`
+3. Commit with `docs:` prefix identifying which package the sync covers
+4. Push the branch
+5. Merge into main (`--no-ff`)
+6. Push main
+7. Report sync commit hash and merge commit hash to Coordinator
+
+The next package implementation must not begin until Coordinator authorizes it — after the sync is complete and main is pushed.
 
 ---
 

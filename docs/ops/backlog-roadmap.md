@@ -1,6 +1,6 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-05-11
 **Status:** Active
 
 ---
@@ -88,20 +88,42 @@ No app code changed. Docs only.
 
 ---
 
+### Package 3A — Local project session save and resume foundation
+
+**Branch:** `feature/local-project-session-persistence`
+**Status:** COMPLETE — merged to main (feature: `8dcc959`, merge: `b40fa2b`)
+
+Delivered:
+- `src/state/project-persistence.js` — `KMEngine.ProjectPersistence`: snapshot creation, schema validation, deserialization
+- `src/state/project-session-restore.js` — `KMEngine.ProjectSessionRestore`: restores thick app state from file; ID→index map; controlled warnings without crashing
+- `src/state/project-file-io.js` — `KMEngine.ProjectFileIO`: browser save (Blob/URL) and load (FileReader) — browser-only, not tested in Node
+- `index.html` — Save Project buttons in chat header, Review Your Moments, Your Keepsakes, and Message Book; Load Project card on landing page; full event wiring
+- `src/tests/project-persistence-tests.mjs` (111 tests) — validate, deserialize, createSnapshot, restore suites — vm module pattern, no DOM required
+- **Package 3A tests: 111 passed, 0 failed** | **Cumulative total: 453 tests passing**
+- Browser QA: passed (save/load round-trip verified across all 4 entry points)
+
+---
+
 ## Upcoming packages
 
-### Package 3 — ProductDraft, session lifecycle, and local persistence
+### Package 3B — Automated E2E Regression Harness Foundation
 
-**Status:** Not started
-**Scope (planned, subject to Coordinator authorization):**
+**Status:** Authorized — awaiting implementation
+**Scope (per Coordinator authorization):**
+- Automated end-to-end regression harness foundation
+
+**Blocked by:** None.
+**Does not include:** checkout, PDF generation, cover design, visual redesign, cloud account persistence.
+
+---
+
+### Package 3 remaining scope (not yet scheduled)
+
+The following items from original Package 3 scope are not yet started and not yet authorized as a named package:
 - `ProductDraft` model — per-group, per-product draft container
 - Preflight runner — executes the 10 checks in `BOOK_PREFLIGHT_CHECK_REGISTRY`
-- Session save/restore UI flow wired to `SessionSerialization` (local/session persistence — DEF-08a)
 - KeepsakeGroup + product draft lifecycle hooks
 - Test coverage for all new modules
-
-**Blocked by:** None. Architecture and eligibility foundation are in place.
-**Does not include:** checkout, PDF generation, cover design, visual redesign, cloud account persistence.
 
 ---
 

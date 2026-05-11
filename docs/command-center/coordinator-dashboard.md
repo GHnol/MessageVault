@@ -1,6 +1,6 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-05-11
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -46,9 +46,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2 — ProductCatalog, Eligibility, KeepsakeGroup | COMPLETE | `87972c9` / `541a1b8` |
 | Package 2.5A — 16 source-of-truth docs | COMPLETE | `d1c5a44` / `d69dc2c` |
 | Package 2.5B — Automation artifacts | COMPLETE | `bb23e8b` / `aa6402c` |
-| Package 3 — ProductDraft, preflight, session lifecycle | NOT APPROVED | — |
+| Package 3A — Local project session save and resume foundation | COMPLETE | `8dcc959` / `b40fa2b` |
 
-Tests: **342 passing, 0 failures**. No app code changed since Package 2.
+Tests: **453 passing, 0 failures**. App code last changed: Package 3A (`8dcc959`).
 
 ---
 
@@ -57,7 +57,7 @@ Tests: **342 passing, 0 failures**. No app code changed since Package 2.
 - `index.html` is the current runtime shell — **interim only**, not permanent architecture
 - Approved near-term path: modular KMEngine extraction into `src/`
 - Framework/build-system migration: deferred (tracked future decision), NOT rejected
-- Local/session persistence: near-term (Package 3 scope)
+- Local/session persistence: DELIVERED — Package 3A (`8dcc959`)
 - Cloud account persistence: deferred post-launch
 
 ADR: `docs/architecture/adr-001-app-architecture-path.md` | Roadmap: `docs/architecture/architecture-roadmap.md`
@@ -74,8 +74,8 @@ Vendor confirmed
             → Checkout / order flow
                 → Proof approval UX
 
-Package 3 authorization
-    → ProductDraft, preflight runner, session save/restore
+Package 3B (authorized)
+    → Automated E2E Regression Harness Foundation
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -89,7 +89,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Authorize Package 3 | Roadmap decision | High — dev is ready |
+| Confirm Package 3B scope details | Roadmap decision | High — authorization given; scope confirmation outstanding |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |
