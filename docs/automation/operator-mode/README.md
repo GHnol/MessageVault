@@ -23,10 +23,11 @@ These protocols do not replace `CLAUDE.md` or `AGENTS.md`. They extend them with
 | File | Purpose |
 |---|---|
 | `README.md` | This file — overview of operator mode |
+| `context-continuity-protocol.md` | **Required** — when to checkpoint, before-compact and after-compact behavior, Claude/Codex switching rules, forbidden behaviors |
 | `update-project-records-protocol.md` | How to update docs from stream responses without creating false authority |
 | `package-closeout-protocol.md` | How to create and deliver a package closeout packet |
 | `stream-routing-protocol.md` | How to route stream updates to the right docs and recipients |
-| `claude-codex-relay-protocol.md` | How to hand off between Claude/Codex agents at context limits |
+| `claude-codex-relay-protocol.md` | Transfer packet format and relay protocol for Claude/Codex session handoffs |
 
 ---
 
@@ -45,7 +46,7 @@ These protocols do not replace `CLAUDE.md` or `AGENTS.md`. They extend them with
 - Suppress test failures — report before any other action
 
 **Do:**
-- Read `CLAUDE.md`, `AGENTS.md`, and relevant docs before executing
+- Read `CLAUDE.md`, `AGENTS.md`, `AI_HANDOFF.md`, and relevant docs before executing
 - Read the actual file before editing (never trust context summaries for file state)
 - Report blockers immediately rather than guessing
 - Execute only within the authorized package scope

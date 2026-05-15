@@ -158,6 +158,20 @@ The next package implementation must not begin until Coordinator authorizes it â
 
 ---
 
+## Mid-package continuity checkpoints
+
+Package closeout is the end-of-package continuity mechanism. It is not the only one.
+
+**Long packages (expected to span multiple sessions) require mid-task continuity checkpoints:**
+- Write a full `AI_HANDOFF.md` checkpoint before the first edit in each new session
+- Update `AI_HANDOFF.md` after each meaningful phase (not only at the end)
+- Before any context pressure, agent switch, or stopping mid-task: checkpoint first
+- See `docs/automation/operator-mode/context-continuity-protocol.md` for checkpoint triggers
+
+**Post-merge status sync remains mandatory.** Every package closeout requires a Command Center / ops status sync after the implementation is merged to main (Step 10 above). The Coordinator may explicitly authorize skipping it, but without that authorization the package is not considered fully closed.
+
+---
+
 ## Things that are NEVER part of package closeout
 
 - Do not commit `_source-intake/`

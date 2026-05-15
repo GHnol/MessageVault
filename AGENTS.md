@@ -59,6 +59,23 @@ When stopping mid-task or handing off to another agent:
 
 ---
 
+## Context Continuity Guard
+
+Context limits, auto-compact events, and agent switches are known risks in long sessions. These rules prevent context loss from corrupting in-progress work.
+
+1. **Do not rely on auto-compact as project memory.** Auto-compact may silently drop decisions made earlier in the session. The repo docs are the durable source of truth — not the session summary.
+2. **Before any long task, confirm:** current package, branch, objective, and approved scope. Read `AI_HANDOFF.md`, `CLAUDE.md`, `AGENTS.md`, and the relevant package docs before touching code.
+3. **During long tasks, maintain a rolling handoff summary.** At all times, know what you have done, what remains, and what is blocked. Do not let this state exist only in active context.
+4. **Before stopping, compacting, switching agents, hitting context pressure, or asking the user to continue later:** update `AI_HANDOFF.md` or produce a full transfer packet. Never abandon a task mid-stream without a written handoff.
+5. **After any context summary or compact event:** resume only from repo truth — `AI_HANDOFF.md`, git status, recent commits, and approved package docs. Do not resume from vague compressed memory of what was discussed.
+6. **If uncertain about scope, current state, or prior decisions:** stop and ask rather than guessing. A clarifying question is cheaper than an unwanted change.
+
+**User trigger phrases:** If the user says "checkpoint", "handoff", "before compact", "resume packet", or "context guard" — update `AI_HANDOFF.md` immediately.
+
+Full protocol: `docs/automation/operator-mode/context-continuity-protocol.md`
+
+---
+
 ## When in doubt
 
 Ask. Do not guess at scope. A clarifying question is cheaper than an unwanted change.
