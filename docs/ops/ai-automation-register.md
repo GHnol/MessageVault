@@ -390,3 +390,20 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 **Not delivered (later phase):** Actual running automations. n8n / Make / Zapier workflows, GitHub Projects board configuration, and NotebookLM setup remain outside the repo and are pending Coordinator decisions.
 
 **GitHub Projects and NotebookLM remain pending Coordinator decisions** — whether to adopt them, and if so when. Do not treat them as active stack components until explicitly confirmed.
+
+---
+
+### Advisory: Context Continuity Guard Patch (2026-05-15)
+
+**Status:** Implemented — docs only, no app code changes
+
+**What was added:**
+- `docs/automation/operator-mode/context-continuity-protocol.md` — new required Operator Mode protocol defining checkpoint triggers, before/after-compact behavior, Claude/Codex switching rules, and forbidden behaviors
+- `AI_HANDOFF.md` — strengthened as the compact-safe resume file; all required fields documented
+- `AGENTS.md` — Context Continuity Guard rule added (rule set #6)
+- `CLAUDE.md` — Context Continuity Guard section added
+- `docs/dev/ai-development-relay.md` — before-limit, resume-from-handoff, and auto-compact prohibition rules added
+- `docs/automation/operator-mode/claude-codex-relay-protocol.md` — handoff-based continuation requirement added; Claude/Codex interchange rules strengthened
+- `docs/automation/operator-mode/package-closeout-protocol.md` — mid-package continuity checkpoint requirement added
+
+**Core principle:** Auto-compact is not accepted as a durable handoff. The only safe resume path is `AI_HANDOFF.md` + `git status` + recent commits + approved package docs.

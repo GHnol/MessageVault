@@ -18,7 +18,9 @@ Authoritative index of every significant file in the repository — what it is, 
 |---|---|---|
 | `index.html` | Application | Entire app: UI, CSS, composition logic, pagination, rendering. Do not edit without reading. |
 | `README.md` | Documentation | Repository README (minimal) |
-| `CLAUDE.md` | AI instructions | Claude Code behavior rules, scope guard, git rules |
+| `CLAUDE.md` | AI instructions | Claude Code behavior rules, scope guard, git rules; Context Continuity Guard added |
+| `AGENTS.md` | AI instructions | Agent rules for all AI coding agents; Context Continuity Guard added |
+| `AI_HANDOFF.md` | Handoff / resume file | Compact-safe work transfer record; updated before any context event, agent switch, or mid-task stop |
 
 ---
 
@@ -164,15 +166,16 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 |---|---|
 | `docs/qa/e2e-regression-harness.md` | How to run the E2E regression harness (seeded + real-files modes), what all 51 tests cover, privacy rules, fixture policy, how to interpret failures, how to add tests — updated Package 3C |
 
-### Automation — Operator Mode Protocols (Package 2.5B — `bb23e8b`)
+### Automation — Operator Mode Protocols (Package 2.5B — `bb23e8b` / Context Guard Patch — see below)
 
 | File | Purpose |
 |---|---|
 | `docs/automation/operator-mode/README.md` | Entry point: core rules, status vocabulary, source-of-truth priority, authorization table |
+| `docs/automation/operator-mode/context-continuity-protocol.md` | **Context Continuity Guard Patch** — checkpoint triggers, before/after-compact behavior, Claude/Codex switching rules, forbidden behaviors |
 | `docs/automation/operator-mode/update-project-records-protocol.md` | 8-step protocol for updating docs from stream responses without false authority |
-| `docs/automation/operator-mode/package-closeout-protocol.md` | 10-step commit/merge/closeout process with exact git commands |
+| `docs/automation/operator-mode/package-closeout-protocol.md` | 10-step commit/merge/closeout process with exact git commands; updated with mid-package continuity rules |
 | `docs/automation/operator-mode/stream-routing-protocol.md` | Stream authority map, routing table, and routing decision tree for the 15-chat model |
-| `docs/automation/operator-mode/claude-codex-relay-protocol.md` | Transfer packet format and relay protocol for Claude/Codex session handoffs |
+| `docs/automation/operator-mode/claude-codex-relay-protocol.md` | Transfer packet format and Claude/Codex relay protocol; updated with handoff-based continuation requirement |
 
 ---
 

@@ -55,3 +55,30 @@ The following are off-limits without explicit instruction:
 - `BOOK_PRODUCTION_DEPS` and `BOOK_PARITY`
 - Standalone keepsake flows
 - Review view
+
+## Context Continuity Guard
+
+- Do not rely on auto-compact as project memory. The repo is the durable source of truth — not the session summary.
+- Before any long task: confirm the current package, branch, objective, and approved scope by reading `AI_HANDOFF.md`, `AGENTS.md`, and the relevant package docs.
+- During long tasks: maintain a rolling handoff state. Know what is done, what remains, and what is blocked.
+- Before stopping, compacting, switching agents, or approaching context pressure: update `AI_HANDOFF.md` or produce a full transfer packet. Do not stop mid-task without a written handoff.
+- After any context summary or compact: resume from `AI_HANDOFF.md`, git status, recent commits, and approved package docs — not from vague session memory.
+- If uncertain about scope, current state, or prior decisions: stop and ask. Do not guess.
+
+**User trigger phrases:** If the user says "checkpoint", "handoff", "before compact", "resume packet", or "context guard" — update `AI_HANDOFF.md` immediately and report what was done, what remains, and what comes next.
+
+Full protocol: `docs/automation/operator-mode/context-continuity-protocol.md`
+
+## Git identity (KeepMees repo)
+
+This repo belongs to: KeepMees  
+GitHub account: ghnol  
+Git user.name: ghnol  
+Git user.email: nlamptey@outlook.com
+
+Before running any git push, commit, or gh command:
+1. Run `git remote -v` — must show the KeepMees MessageVault remote
+2. Run `git config user.name` and `git config user.email` — must show ghnol / nlamptey@outlook.com
+3. Do NOT run `gh auth switch` under any circumstances
+4. Do NOT change any remote URL without confirming first
+5. If anything looks wrong, stop and tell the user before proceeding

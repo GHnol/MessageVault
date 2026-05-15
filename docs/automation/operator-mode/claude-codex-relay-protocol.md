@@ -84,23 +84,30 @@ When starting from a transfer packet:
 
 ## What the incoming agent must do before touching anything
 
-1. Read `AI_HANDOFF.md` first (if it exists — update it during the transfer)
-2. Read `CLAUDE.md` and `AGENTS.md`
-3. Read the transfer packet carefully
-4. Read the current state of relevant source files (do not trust in-context summaries)
-5. Confirm understanding of what was done and what remains
-6. State explicitly what it will do next BEFORE starting
+1. Read `AGENTS.md`
+2. Read `CLAUDE.md` (if the incoming agent is Claude Code)
+3. Read `AI_HANDOFF.md` — required even if a transfer packet is present; `AI_HANDOFF.md` is the compact-safe source of truth
+4. Run `git status` — verify actual working tree state against what the handoff claims
+5. Run `git log --oneline -10` — verify recent commits
+6. Read the transfer packet carefully
+7. Read the current state of relevant source files (do not trust in-context summaries)
+8. Confirm the current package, branch, objective, approved scope, hard exclusions, files changed, tests run, and next exact action
+9. State explicitly what it will do next BEFORE starting
+
+**If `AI_HANDOFF.md` is missing, stale, or conflicts with git status:** stop and ask the Coordinator for direction. Do not proceed from the transfer packet alone.
 
 ---
 
 ## Rules the incoming agent must follow
 
 - Do NOT assume the previous agent's in-context state is correct — verify against current files
+- Do NOT continue from vague compressed memory of what was discussed — use `AI_HANDOFF.md` + git state
 - Do NOT commit or push without explicit user instruction
 - Do NOT start a new package without explicit authorization
 - Do NOT touch scope-guarded areas (BOOK_PAGE_LINES, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS, BOOK_PARITY, standalone keepsake flows, Review view)
 - Do NOT stage `_source-intake/` or `.claude/settings.local.json`
 - Do NOT make locked decisions — the next agent inherits the package scope, not product authority
+- Do NOT treat auto-compact as a sufficient handoff — `AI_HANDOFF.md` must be current for the handoff to be valid
 
 ---
 
@@ -133,3 +140,28 @@ When these appear: generate the transfer packet immediately.
 Anthropic prompt cache TTL is approximately 5 minutes. If the next session begins more than 5 minutes after the transfer packet is generated, the new session starts uncached. The Transfer Packet must be self-contained enough that the new session can operate correctly without cached context.
 
 A Transfer Packet that references "what we discussed earlier" is not a Transfer Packet — it is an incomplete handoff.
+
+---
+
+## Claude Code ↔ Codex interchange requirement
+
+Claude Code may not hand off to Codex through chat memory alone. Codex may not hand off to Claude Code through chat memory alone.
+
+**Before switching tools, the active agent must:**
+1. Complete the current logical unit (one function, one file). Do not stop mid-implementation.
+2. Update `AI_HANDOFF.md` with all required fields.
+3. Produce a transfer packet in the chat.
+4. Confirm the next agent knows the current package, branch, objective, approved scope, hard exclusions, files changed, tests run, and next exact action.
+
+**The incoming agent must read (in order):**
+1. `AGENTS.md`
+2. `CLAUDE.md` (if the incoming agent is Claude Code)
+3. `AI_HANDOFF.md`
+4. `git status` — verify working tree state
+5. `git log --oneline -10` — verify recent commits
+6. The relevant package docs listed in `AI_HANDOFF.md`
+
+**If `AI_HANDOFF.md` is missing, stale, or conflicts with git status:**
+Stop. Ask the Coordinator for direction. Do not begin work.
+
+See `docs/automation/operator-mode/context-continuity-protocol.md` for full checkpoint triggers and forbidden behaviors.

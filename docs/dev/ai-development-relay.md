@@ -32,10 +32,39 @@ Development (ChatGPT) → Implementation (Claude Code) → QA → Development (C
 ## Relay rules
 
 - One active editing agent per branch at a time.
-- Read `AI_HANDOFF.md` before any edit session. Do not skip this step.
+- Read `AGENTS.md`, `CLAUDE.md` (if applicable), and `AI_HANDOFF.md` before any edit session. Do not skip these steps.
 - Do not commit or push without explicit user instruction.
 - Scope creep is a relay failure. If you notice a related problem, note it in `AI_HANDOFF.md` and do not fix it unless instructed.
 - If work is interrupted mid-task, the agent stopping must update `AI_HANDOFF.md` before exiting. Incomplete handoffs block the next agent.
+
+### Context continuity rule
+
+**Auto-compact is not a durable handoff.** A context summary or compact event may silently lose decisions, scope, and state agreed earlier in the session. An agent that resumes from auto-compact alone and continues implementing is operating on an unreliable foundation.
+
+The only safe resume path is: `AI_HANDOFF.md` + `git status` + recent commits + approved package docs.
+
+### Before-limit / before-compact handoff rule
+
+Before reaching context pressure (approximately 70% of context window), before any auto-compact event, or before any agent switch:
+
+1. Complete the current logical unit. Do not stop mid-function or mid-file.
+2. Update `AI_HANDOFF.md` with full current state — all required fields.
+3. Produce a transfer packet in the chat.
+4. State what was done, what remains, and what the next agent should do first.
+
+Do not wait until the context limit hits. Generate the handoff while there is still room to be thorough.
+
+### Resume-from-handoff rule
+
+When resuming after any context event, compact, or agent switch:
+
+1. Read `AGENTS.md`, then `CLAUDE.md` (if applicable), then `AI_HANDOFF.md`.
+2. Run `git status` and `git log --oneline -10`.
+3. Read the relevant package docs listed in `AI_HANDOFF.md`.
+4. Confirm the current package, branch, objective, approved scope, hard exclusions, files changed, tests run, and next exact action.
+5. State out loud what you will do first — before touching any file.
+
+**If `AI_HANDOFF.md` is missing, stale, or conflicts with git status:** stop and ask the Coordinator. Do not proceed from memory.
 
 ---
 
