@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-11
-**Updated by:** Claude Code (Package 3B status sync)
+**Last updated:** 2026-05-15
+**Updated by:** Claude Code (Package 3C status sync)
 **Status:** Active
 
 ---
@@ -118,6 +118,22 @@ Delivered:
 - `docs/qa/e2e-regression-harness.md` — harness documentation
 - `.gitignore` — `artifacts/e2e-failures/` excluded
 - **E2E tests: 29 passed, 0 failed** | **Node unit tests: 453 passing (all suites green)**
+
+---
+
+### Package 3C — Real File Import, Download, and Full-Path E2E Coverage
+
+**Branch:** `feature/e2e-real-file-import-download-coverage`
+**Status:** COMPLETE — merged to main (feature: `f8379d0`, merge: `904cf51`)
+
+Delivered:
+- `scripts/e2e-regression-harness.mjs` — extended with phases 11–19 (`--real-files` flag); 22 new tests + 1 optional; total 51 tests (52 with chat.db)
+- `scripts/fixtures/fake-conversation.txt` — safe fake pipe-delimited fixture (5 messages, deterministic, no real user data)
+- `scripts/package.json` — `e2e:real` and `e2e:real:headed` npm scripts added
+- `docs/qa/e2e-regression-harness.md` — full rewrite documenting both modes, all phases, privacy rules, fixture policy, visual regression deferred to Package 3D
+- **Seeded baseline unchanged:** phases 1–10 (29 tests) remain the default, suitable for CI after every package
+- **Real-file coverage:** phases 11–19 cover real .txt import, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text assertions, optional private chat.db smoke, capture harness subprocess
+- **Node unit tests: 453 passing (unchanged)** | **E2E seeded: 29 passing** | **E2E real-files: 52 passing (51 always + 1 conditional)**
 
 ---
 

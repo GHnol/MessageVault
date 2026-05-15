@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
-**Last updated:** 2026-05-11
-**Updated by:** Claude Code (Package 3B status sync)
+**Last updated:** 2026-05-15
+**Updated by:** Claude Code (Package 3C status sync)
 **Status:** Active
 
 ---
@@ -76,8 +76,9 @@ Authoritative index of every significant file in the repository — what it is, 
 | `src/tests/product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog all/get/flagship/byCategory, required fields |
 | `src/tests/product-eligibility-tests.mjs` | 76 | ProductEligibility per-product evaluators, LegacyKeepsakeTypesBridge |
 | `src/tests/project-persistence-tests.mjs` | 111 | ProjectPersistence validate/deserialize/createSnapshot, ProjectSessionRestore restore — Package 3A |
-| `scripts/e2e-regression-harness.mjs` | 29 | Browser E2E: app load, seed, selection, review, keepsakes, book, save/load, invalid file, harness smoke — Package 3B |
+| `scripts/e2e-regression-harness.mjs` | 29 seeded + 22 real-files (51 total; 52 with chat.db) | Browser E2E: seeded baseline phases 1–10 (Package 3B) + real-file phases 11–19 (Package 3C, `--real-files` flag) |
 | `scripts/e2e-test-data.mjs` | — | Deterministic NormalizedMemory seed data for E2E harness — Package 3B |
+| `scripts/fixtures/fake-conversation.txt` | — | Safe fake pipe-delimited .txt fixture (5 messages) for real import testing — Package 3C |
 
 ---
 
@@ -157,11 +158,11 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/automation/templates/roadmap-item.md` | Template for roadmap milestones |
 | `docs/automation/templates/ai-automation-item.md` | Template for AI automation register items |
 
-### QA (Package 3B — `0ce973a`)
+### QA (Package 3B — `0ce973a` / Package 3C — `f8379d0`)
 
 | File | Purpose |
 |---|---|
-| `docs/qa/e2e-regression-harness.md` | How to run the E2E regression harness, what it covers, how to interpret failures, how to add tests |
+| `docs/qa/e2e-regression-harness.md` | How to run the E2E regression harness (seeded + real-files modes), what all 51 tests cover, privacy rules, fixture policy, how to interpret failures, how to add tests — updated Package 3C |
 
 ### Automation — Operator Mode Protocols (Package 2.5B — `bb23e8b`)
 

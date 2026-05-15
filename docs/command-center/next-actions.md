@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-05-11
-**Updated by:** Claude Code (Package 3B status sync)
+**Last updated:** 2026-05-15
+**Updated by:** Claude Code (Package 3C status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package (Package 3C or equivalent) | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Evaluate and authorize Package 2.6 (Operator Inbox + Stream Update Processor) | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
 
@@ -19,12 +19,13 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3B COMPLETE — next package not yet authorized**
+**Status: Package 3C COMPLETE — Package 2.6 not yet authorized**
 
+Package 3C (Real File Import, Download, and Full-Path E2E Coverage) is COMPLETE — merged to main (`904cf51`).
 Package 3B (Automated E2E Regression Harness Foundation) is COMPLETE — merged to main (`40b4bba`).
 Package 3A (local project session save and resume foundation) is COMPLETE — merged to main (`b40fa2b`).
 
-No next package scope has been authorized. Development is paused until Coordinator authorizes the next package.
+Proposed next: **Package 2.6 — Operator Inbox + Stream Update Processor**. No scope has been authorized. Development is paused until Coordinator evaluates and authorizes Package 2.6 or an equivalent package.
 
 ---
 
@@ -55,7 +56,7 @@ No next package scope has been authorized. Development is paused until Coordinat
 
 | Decision | What needs deciding | Downstream impact |
 |---|---|---|
-| Next package scope | Authorize next development package after Package 3B | Development resumption |
+| Next package scope | Evaluate and authorize Package 2.6 after Package 3C | Development resumption |
 | GitHub Projects setup | Whether to create the KeepMees Command Center board | Tracking infrastructure |
 | NotebookLM adoption | Formally adopt or defer | Research/synthesis tooling |
 | Designer budget | Re-authorize or continue passive search | Figma execution gate |
