@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-05-11
-**Updated by:** Claude Code (Package 3B status sync)
+**Last updated:** 2026-05-15
+**Updated by:** Claude Code (Package 3C status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -17,12 +17,13 @@
 | Package 2.5B | AI Mastery automation artifacts | COMPLETE — merged to main | `bb23e8b` | `aa6402c` |
 | Package 3A | Local project session save and resume foundation | COMPLETE — merged to main | `8dcc959` | `b40fa2b` |
 | Package 3B | Automated E2E regression harness foundation | COMPLETE — merged to main | `0ce973a` | `40b4bba` |
+| Package 3C | Real file import, download, and full-path E2E coverage | COMPLETE — merged to main | `f8379d0` | `904cf51` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 3B (`0ce973a`)
+- App code last changed: Package 3B (`0ce973a`) — no app code changes in Package 3C
 - `index.html`: modified (Package 3B: `window.__km` test harness bridge entries added)
 - `src/state/`: 3 modules added in Package 3A (`project-persistence.js`, `project-session-restore.js`, `project-file-io.js`)
 - `src/tests/`: 5 suites, 453 Node tests — all green
@@ -31,20 +32,21 @@
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
   - `project-persistence-tests.mjs`: 111
-- `scripts/e2e-regression-harness.mjs`: 29-test Playwright browser harness (Package 3B)
+- `scripts/e2e-regression-harness.mjs`: 29-test seeded Playwright harness (phases 1–10, Package 3B) + 22-test real-file coverage (phases 11–19, Package 3C) — 51 tests total; 52 with optional chat.db
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
-- `docs/qa/e2e-regression-harness.md`: harness documentation (Package 3B)
+- `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
+- `docs/qa/e2e-regression-harness.md`: harness documentation (Package 3C — full rewrite)
 
 ---
 
-## Git state (as of Package 3B closeout)
+## Git state (as of Package 3C closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `40b4bba` — merge: add automated E2E regression harness foundation |
+| main HEAD | `904cf51` — merge: add real file and download E2E coverage |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | Yes — Package 3B pushed, merged to main, main pushed |
+| Pushed to remote | Yes — Package 3C pushed, merged to main, main pushed |
 
 ---
 
@@ -75,9 +77,9 @@
 
 | Stream (Chat #) | Last meaningful sync | Status |
 |---|---|---|
-| 01 Coordinator | Package 3B approved and merged | Needs sync: authorize next package scope |
+| 01 Coordinator | Package 3C approved and merged | Needs sync: evaluate and authorize Package 2.6 |
 | 02 Product — Core Strategy | Source intake 2026-05-09 | No immediate action required |
-| 03 Development — Core Build | Package 3B closeout | Needs sync after Package 3B merge |
+| 03 Development — Core Build | Package 3C closeout | Needs sync after Package 3C merge |
 | 04 Production — Vendor Feasibility | Wave 1 research complete | IngramSpark + Lulu follow-ups pending |
 | 05 Production — Mockups and Vendor Strategy | Source intake 2026-05-09 | 6-product physical target locked |
 | 06 Production — Packaging, Bundling, Gifting | Source intake 2026-05-09 | 4-component system captured |
