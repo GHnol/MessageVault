@@ -7,6 +7,8 @@
   "scripts": {
     "e2e":           "node e2e-regression-harness.mjs",
     "e2e:headed":    "node e2e-regression-harness.mjs --headed",
+    "e2e:real":      "node e2e-regression-harness.mjs --real-files",
+    "e2e:real:headed":"node e2e-regression-harness.mjs --real-files --headed",
     "capture":       "node capture-message-book-packet.mjs",
     "capture:clean": "node capture-message-book-packet.mjs --clean",
     "capture:a":     "node capture-message-book-packet.mjs --scenarios a",

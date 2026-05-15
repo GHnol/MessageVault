@@ -1,0 +1,5 @@
+2024-06-01 09:00:00|Alex|Good morning! Hope you have a wonderful day.
+2024-06-01 09:02:00|Me|Morning! Thanks, you too. Big day today.
+2024-06-01 09:04:00|Alex|I know right. You ready for the presentation?
+2024-06-01 09:06:00|Me|As ready as I can be. Fingers crossed!
+2024-06-01 09:08:00|Alex|You will do great. I believe in you.

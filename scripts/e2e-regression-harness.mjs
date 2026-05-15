@@ -8,10 +8,16 @@
  *   node scripts/e2e-regression-harness.mjs
  *   node scripts/e2e-regression-harness.mjs --headed
  *   node scripts/e2e-regression-harness.mjs --headed --slow
+ *   node scripts/e2e-regression-harness.mjs --real-files
+ *   node scripts/e2e-regression-harness.mjs --real-files --headed
  *
  * Or via npm (from scripts/):
  *   npm run e2e
  *   npm run e2e:headed
+ *   npm run e2e:real
+ *
+ * Optional environment variable for private chat.db smoke testing:
+ *   KEEP_MEES_E2E_CHATDB_PATH=/path/to/your/chat.db node scripts/e2e-regression-harness.mjs --real-files
  *
  * Exit code: 0 = all tests passed, 1 = one or more tests failed.
  * Failure screenshots: artifacts/e2e-failures/
@@ -21,9 +27,14 @@ import http        from 'node:http';
 import fs          from 'node:fs';
 import fsp         from 'node:fs/promises';
 import path        from 'node:path';
+import os          from 'node:os';
+import { exec }    from 'node:child_process';
+import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { TEST_MESSAGES, TEST_MESSAGE_COUNT } from './e2e-test-data.mjs';
+
+const execAsync = promisify(exec);
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -33,10 +44,19 @@ const FAILURES   = path.join(REPO_ROOT, 'artifacts', 'e2e-failures');
 
 // ── CLI ───────────────────────────────────────────────────────────────────────
 
-const args   = process.argv.slice(2);
-const HEADED = args.includes('--headed') || args.includes('--debug');
-const SLOW   = args.includes('--slow') ? 600 : 0;
-const PORT   = 7332; // distinct from capture harness port 7331
+const args       = process.argv.slice(2);
+const HEADED     = args.includes('--headed') || args.includes('--debug');
+const SLOW       = args.includes('--slow') ? 600 : 0;
+const REAL_FILES = args.includes('--real-files');
+const PORT       = 7332; // distinct from capture harness port 7331
+
+// ── Real-file fixtures ────────────────────────────────────────────────────────
+
+const TXT_FIXTURE       = path.join(__dir, 'fixtures', 'fake-conversation.txt');
+const TXT_FIXTURE_COUNT = 5; // matches fake-conversation.txt
+
+// Optional private chat.db — must never be committed; local use only.
+const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
 // ── MIME types ────────────────────────────────────────────────────────────────
 
@@ -97,6 +117,14 @@ async function assertVisible(page, selector, label) {
     assert(visible, `${label || selector} should be visible`);
 }
 
+// Wait for chatView to be showing (set by renderConversation directly on style)
+async function waitForChatView(page, timeout = 5_000) {
+    await page.waitForFunction(
+        () => document.getElementById('chatView').style.display === 'block',
+        { timeout }
+    );
+}
+
 // ── Test runner ───────────────────────────────────────────────────────────────
 
 class Harness {
@@ -117,6 +145,20 @@ class Harness {
             console.error(`  ✗  ${name}`);
             console.error(`     ${err.message}`);
             await this._screenshot(name);
+        }
+    }
+
+    // For Node-side tests (subprocess, file I/O) that do not use the browser page.
+    async runNode(name, fn) {
+        const start = Date.now();
+        try {
+            await fn();
+            this.results.push({ name, passed: true, ms: Date.now() - start });
+            console.log(`  ✓  ${name}`);
+        } catch (err) {
+            this.results.push({ name, passed: false, ms: Date.now() - start, error: err.message });
+            console.error(`  ✗  ${name}`);
+            console.error(`     ${err.message}`);
         }
     }
 
@@ -160,7 +202,7 @@ async function main() {
     // ── Server ────────────────────────────────────────────────────────────────
     const { server, url } = await startServer(PORT);
     console.log(`  Server : ${url}`);
-    console.log(`  Mode   : ${HEADED ? 'headed (debug)' : 'headless'}\n`);
+    console.log(`  Mode   : ${HEADED ? 'headed (debug)' : 'headless'}${REAL_FILES ? ' + real-files' : ''}\n`);
 
     // ── Browser ───────────────────────────────────────────────────────────────
     const browser = await chromium.launch({ headless: !HEADED, slowMo: SLOW });
@@ -176,6 +218,8 @@ async function main() {
 
     // savedSnapshot holds the JSON string produced in Phase 7; used in Phase 8.
     let savedSnapshot = null;
+    // downloadedFilePath holds the path of the actual browser-downloaded file; used in Phase 14.
+    let downloadedFilePath = null;
 
     // ─────────────────────────────────────────────────────────────────────────
     // PHASE 1 — App load
@@ -450,10 +494,317 @@ async function main() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
+    // REAL-FILES PHASES (only when --real-files is passed)
+    // ─────────────────────────────────────────────────────────────────────────
+
+    if (REAL_FILES) {
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 11 — Real .txt file import
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 11 — Real .txt file import ──\n');
+
+        await harness.run('txt fixture imports via file input', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            // Navigate to txt upload view (as a user would)
+            await page.click('#txtUploadCard');
+            // Set the fixture file on the hidden file input — triggers the change event
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            // FileReader is async; wait for renderConversation to set chatView visible
+            await waitForChatView(page);
+        });
+
+        await harness.run('chat view visible after txt import', async page => {
+            await assertVisible(page, '#chatView', 'Chat view after txt import');
+        });
+
+        await harness.run('message rows match txt fixture count', async page => {
+            const rows = await page.locator('.message-row.selectable').count();
+            assert(rows === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} DOM rows after txt import, got ${rows}`);
+            const dataCount = await page.evaluate(() => (window.chatMessagesData || []).length);
+            assert(dataCount === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} in chatMessagesData after txt import, got ${dataCount}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 12 — Selection, review, and keepsake groups from .txt import
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 12 — Selection and review from txt ──\n');
+
+        await harness.run('select all messages from txt import', async page => {
+            await page.click('#selectAllBtn');
+            const count = await page.evaluate(() => window.__km.getSelectedCount());
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} selected after txt import, got ${count}`);
+        });
+
+        await harness.run('Continue navigates to review view from txt state', async page => {
+            await page.click('#selectionContinue');
+            await assertVisible(page, '#reviewView', 'Review view after txt import selection');
+        });
+
+        await harness.run('keepsake groups built from txt messages', async page => {
+            const groups = await page.evaluate(() => window.__km.getKeepsakeGroups());
+            assert(groups.length > 0, 'No keepsake groups after txt import + Continue');
+            const realGroups = groups.filter(g => g.id !== 'group-staging');
+            assert(realGroups.length > 0, 'No real keepsake groups (only staging)');
+            assert(realGroups[0].messages.length > 0, 'First real group has no messages');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 13 — Actual project file download
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 13 — Actual project file download ──\n');
+
+        await harness.run('save project button triggers browser download', async page => {
+            // Intercept the Blob download before clicking
+            const [download] = await Promise.all([
+                page.waitForEvent('download'),
+                page.click('#reviewSaveProjectBtn'),
+            ]);
+            downloadedFilePath = path.join(os.tmpdir(), `keepmees-e2e-${Date.now()}.json`);
+            await download.saveAs(downloadedFilePath);
+            assert(fs.existsSync(downloadedFilePath), 'Download file was not saved to temp path');
+        });
+
+        await harness.run('downloaded file is valid keepmees JSON with correct message count', async page => {
+            assert(downloadedFilePath !== null, 'No downloaded file from previous test');
+            const raw = fs.readFileSync(downloadedFilePath, 'utf8');
+            const obj = JSON.parse(raw);
+            assert(obj.keepmeesVersion === '1',
+                `keepmeesVersion should be "1", got "${obj.keepmeesVersion}"`);
+            assert(Array.isArray(obj.projectSession?.memories),
+                'projectSession.memories missing from downloaded file');
+            assert(obj.projectSession.memories.length === TXT_FIXTURE_COUNT,
+                `Downloaded file has ${obj.projectSession.memories.length} memories, expected ${TXT_FIXTURE_COUNT}`);
+            assert(typeof obj.projectSession.id === 'string' && obj.projectSession.id.length > 0,
+                'projectSession.id missing or empty');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 14 — Actual file upload and restore
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 14 — Actual file upload and restore ──\n');
+
+        await harness.run('reload to clean state before upload test', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await assertVisible(page, '#landing', 'Landing before upload test');
+        });
+
+        await harness.run('project file input loads downloaded file', async page => {
+            assert(downloadedFilePath !== null, 'No downloaded file — Phase 13 save test may have failed');
+            // setInputFiles triggers the change event → handleProjectFileLoad (async FileReader)
+            await page.locator('#projectFileInput').setInputFiles(downloadedFilePath);
+            await waitForChatView(page);
+        });
+
+        await harness.run('chat view restored after actual file upload', async page => {
+            await assertVisible(page, '#chatView', 'Chat view after actual file upload restore');
+        });
+
+        await harness.run('restored message count matches downloaded file', async page => {
+            const dataCount = await page.evaluate(() => (window.chatMessagesData || []).length);
+            assert(dataCount === TXT_FIXTURE_COUNT,
+                `chatMessagesData has ${dataCount} messages after upload restore, expected ${TXT_FIXTURE_COUNT}`);
+            const domCount = await page.locator('.message-row.selectable').count();
+            assert(domCount === TXT_FIXTURE_COUNT,
+                `DOM has ${domCount} rows after upload restore, expected ${TXT_FIXTURE_COUNT}`);
+        });
+
+        await harness.run('keepsake groups survive actual file restore', async page => {
+            const groups = await page.evaluate(() => window.__km.getKeepsakeGroups());
+            assert(groups.length > 0, 'No keepsake groups after actual file restore');
+            const realGroups = groups.filter(g => g.id !== 'group-staging');
+            assert(realGroups.length > 0, 'No real keepsake groups after actual file restore');
+            assert(realGroups[0].messages.length > 0, 'Restored group has no messages');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 15 — Views after actual file restore
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 15 — Views after actual restore ──\n');
+
+        await harness.run('Review view renders after actual file restore', async page => {
+            await page.evaluate(() => window.__km.showReviewView());
+            await assertVisible(page, '#reviewView', 'Review view after actual file restore');
+            const html = await page.locator('#reviewBody').innerHTML();
+            assert(html.trim().length > 0, 'Review body empty after actual file restore');
+        });
+
+        await harness.run('Your Keepsakes renders after actual file restore', async page => {
+            await page.evaluate(() => window.__km.showKeepsakesView());
+            await assertVisible(page, '#keepsakesView', 'Keepsakes view after actual file restore');
+            const html = await page.locator('#ksBody').innerHTML();
+            assert(html.trim().length > 0, 'Keepsakes body empty after actual file restore');
+        });
+
+        await harness.run('Message Book renders after actual file restore', async page => {
+            await page.evaluate(() => window.__km.showBookView());
+            await assertVisible(page, '#bookView', 'Book view after actual file restore');
+            await page.waitForSelector('#bookCanvas .book-page', { timeout: 5_000 });
+            const pageCount = await page.locator('#bookCanvas .book-page').count();
+            assert(pageCount > 0, 'Book has no pages after actual file restore');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 16 — Standalone keepsake type chooser
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 16 — Standalone keepsake type chooser ──\n');
+
+        await harness.run('type chooser action button opens composition view', async page => {
+            // Navigate to keepsakes (state with groups is current from Phase 15)
+            await page.evaluate(() => window.__km.showKeepsakesView());
+            await assertVisible(page, '#keepsakesView', 'Keepsakes view for chooser test');
+            // Click the first action button on a keepsake card ("Choose type →" or "Resume →")
+            await page.locator('.ks-card-action-btn').first().click();
+            // enterComposition() is called → shows compositionView
+            await assertVisible(page, '#compositionView', 'Composition view after action button click');
+        });
+
+        await harness.run('chosenTypeId set on group after type selection', async page => {
+            const chosenTypeId = await page.evaluate(() => {
+                const groups = window.__km.getKeepsakeGroups();
+                const realGroups = groups.filter(g => g.id !== 'group-staging');
+                return realGroups.length > 0 ? realGroups[0].chosenTypeId : null;
+            });
+            assert(chosenTypeId !== null && chosenTypeId !== undefined,
+                `chosenTypeId should be set after clicking type chooser, got ${chosenTypeId}`);
+        });
+
+        await harness.run('composition back button returns to Keepsakes view', async page => {
+            await page.click('#compBackBtn');
+            await assertVisible(page, '#keepsakesView', 'Keepsakes view after composition back');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 17 — Stable error text assertions
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 17 — Stable error text ──\n');
+
+        await harness.run('reload to clean state for error text tests', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+        });
+
+        await harness.run('invalid JSON shows error status with expected text', async page => {
+            await page.locator('#projectFileInput').setInputFiles({
+                name:     'bad.keepmees.json',
+                mimeType: 'application/json',
+                buffer:   Buffer.from('{not valid json {{'),
+            });
+            // handleProjectFileLoad is async; wait for status to appear
+            await page.waitForFunction(
+                () => {
+                    const el = document.getElementById('projectLoadStatus');
+                    return el && el.style.display !== 'none' && el.textContent.length > 0;
+                },
+                { timeout: 3_000 }
+            );
+            const status = await page.evaluate(() => ({
+                text:  document.getElementById('projectLoadStatus').textContent,
+                error: document.getElementById('projectLoadStatus').classList.contains('error'),
+            }));
+            assert(status.error, 'projectLoadStatus should have class "error" for invalid JSON');
+            assert(
+                status.text.toLowerCase().includes('could not read') ||
+                status.text.toLowerCase().includes('parse') ||
+                status.text.toLowerCase().includes('invalid'),
+                `Expected error text about invalid JSON, got: "${status.text}"`
+            );
+        });
+
+        await harness.run('wrong schema version shows error status', async page => {
+            const badVer = JSON.stringify({
+                keepmeesVersion: '999',
+                projectSession: { id: 'x', memories: [], selectedMemoryIds: [], keepsakeGroups: [] }
+            });
+            await page.locator('#projectFileInput').setInputFiles({
+                name:     'wrong-ver.keepmees.json',
+                mimeType: 'application/json',
+                buffer:   Buffer.from(badVer),
+            });
+            await page.waitForFunction(
+                () => {
+                    const el = document.getElementById('projectLoadStatus');
+                    return el && el.style.display !== 'none' && el.textContent.length > 0;
+                },
+                { timeout: 3_000 }
+            );
+            const status = await page.evaluate(() => ({
+                text:  document.getElementById('projectLoadStatus').textContent,
+                error: document.getElementById('projectLoadStatus').classList.contains('error'),
+            }));
+            assert(status.error, 'projectLoadStatus should have class "error" for wrong version');
+            assert(
+                status.text.toLowerCase().includes('invalid') ||
+                status.text.toLowerCase().includes('version') ||
+                status.text.toLowerCase().includes('unsupported'),
+                `Expected error text about invalid/unsupported version, got: "${status.text}"`
+            );
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 18 — Optional private chat.db smoke (env-var gated)
+        // ─────────────────────────────────────────────────────────────────────
+        if (CHATDB_PATH) {
+            console.log('\n── PHASE 18 — Optional chat.db smoke ──\n');
+            console.log(`  Using: ${CHATDB_PATH}\n`);
+
+            await harness.run('private chat.db loads without crash', async page => {
+                await page.reload({ waitUntil: 'domcontentloaded' });
+                await waitForKm(page);
+                // Navigate to guide view (chat.db upload flow)
+                await page.click('#macGuideCard');
+                // SQL.js loads from CDN; allow generous timeout for network + WASM init
+                await page.locator('#dbFileInput').setInputFiles(CHATDB_PATH);
+                // Wait for either contact picker, loading overlay success, or an error status
+                // Any of these means the app did not crash
+                await page.waitForFunction(
+                    () => {
+                        const picker  = document.getElementById('contactPicker');
+                        const overlay = document.querySelector('.loading-overlay.active');
+                        const guideStatus = document.getElementById('guideStatus');
+                        return (
+                            (picker && picker.style.display !== 'none') ||
+                            (overlay !== null) ||
+                            (guideStatus && guideStatus.textContent.length > 0)
+                        );
+                    },
+                    { timeout: 30_000 }
+                );
+                const alive = await page.evaluate(() => typeof window.__km === 'object');
+                assert(alive, 'window.__km inaccessible after chat.db load — app may have crashed');
+            });
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 19 — Capture harness integration (subprocess)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 19 — Capture harness integration ──\n');
+
+        await harness.runNode('capture harness scenario A exits cleanly', async () => {
+            const captureScript = path.join(__dir, 'capture-message-book-packet.mjs');
+            await execAsync(`node "${captureScript}" --scenarios a`, {
+                cwd:     REPO_ROOT,
+                timeout: 90_000,
+            });
+        });
+
+    } // end REAL_FILES
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Teardown
     // ─────────────────────────────────────────────────────────────────────────
     await browser.close();
     server.close();
+
+    // Clean up temp download file if it exists
+    if (downloadedFilePath && fs.existsSync(downloadedFilePath)) {
+        try { fs.unlinkSync(downloadedFilePath); } catch (_) {}
+    }
 
     harness.printSummary();
 
