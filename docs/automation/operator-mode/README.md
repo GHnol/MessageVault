@@ -24,6 +24,7 @@ These protocols do not replace `CLAUDE.md` or `AGENTS.md`. They extend them with
 |---|---|
 | `README.md` | This file — overview of operator mode |
 | `context-continuity-protocol.md` | **Required** — when to checkpoint, before-compact and after-compact behavior, Claude/Codex switching rules, forbidden behaviors |
+| `operator-inbox-protocol.md` | How to create inbox files, run the processor, interpret outputs, privacy rules, and future n8n integration path |
 | `update-project-records-protocol.md` | How to update docs from stream responses without creating false authority |
 | `package-closeout-protocol.md` | How to create and deliver a package closeout packet |
 | `stream-routing-protocol.md` | How to route stream updates to the right docs and recipients |
