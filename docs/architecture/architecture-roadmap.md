@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 2)
+## Current architecture (post-Package 4A)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -30,15 +30,18 @@ src/
   state/
     session-serialization.js  — serialize/restore ProjectSession
   products/
-    product-statuses.js       — status enums
-    product-catalog.js        — product definitions
-    product-eligibility.js    — per-product eligibility evaluators
+    product-statuses.js                — status enums
+    product-catalog.js                 — product definitions
+    product-eligibility.js             — per-product eligibility evaluators
     legacy-keepsake-types-bridge.js
+    product-render-spec.js             — render spec registry (constants + 10 specs)
+    product-render-spec-resolver.js    — resolve spec against a KeepsakeGroup
   tests/
     km-engine-tests.mjs
     keepsake-group-tests.mjs
     product-catalog-tests.mjs
     product-eligibility-tests.mjs
+    product-render-spec-tests.mjs
 ```
 
 All modules expose into `window.KMEngine`. No build step.
