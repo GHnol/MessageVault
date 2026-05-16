@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 3C status sync)
+**Updated by:** Claude Code (Package 2.6 status sync)
 **Status:** Active
 
 ---
@@ -36,7 +36,7 @@ Authoritative index of every significant file in the repository — what it is, 
 | `scripts/process-operator-inbox.mjs` | Script | Stream update processor — reads inbox .md file, generates 4 output files in operator-outbox/ |
 | `scripts/fixtures/operator-inbox/development-closeout-sample.md` | Test fixture | Safe fake Development stream closeout for processor testing |
 | `scripts/fixtures/operator-inbox/product-response-sample.md` | Test fixture | Safe fake Product stream response for processor testing |
-| `src/tests/operator-inbox-processor-tests.mjs` | Tests | 40+ tests: detectStream, extract*, classifyRoutingTargets, generateRouting*, processFile, unknown stream, empty content |
+| `src/tests/operator-inbox-processor-tests.mjs` | Tests | 67 tests: detectStream, extract*, classifyRoutingTargets, generateRouting*, processFile, unknown stream, empty content |
 | `docs/automation/operator-mode/operator-inbox-protocol.md` | Protocol | Full operator inbox protocol: purpose, naming, running, outputs, privacy rules, n8n path |
 
 ---
@@ -96,6 +96,7 @@ Authoritative index of every significant file in the repository — what it is, 
 | `src/tests/product-eligibility-tests.mjs` | 76 | ProductEligibility per-product evaluators, LegacyKeepsakeTypesBridge |
 | `src/tests/project-persistence-tests.mjs` | 111 | ProjectPersistence validate/deserialize/createSnapshot, ProjectSessionRestore restore — Package 3A |
 | `scripts/e2e-regression-harness.mjs` | 29 seeded + 22 real-files (51 total; 52 with chat.db) | Browser E2E: seeded baseline phases 1–10 (Package 3B) + real-file phases 11–19 (Package 3C, `--real-files` flag) |
+| `src/tests/operator-inbox-processor-tests.mjs` | 67 | Processor: detectStream, extractAll, generateRouting*, processFile — Package 2.6 |
 | `scripts/e2e-test-data.mjs` | — | Deterministic NormalizedMemory seed data for E2E harness — Package 3B |
 | `scripts/fixtures/fake-conversation.txt` | — | Safe fake pipe-delimited .txt fixture (5 messages) for real import testing — Package 3C |
 
@@ -177,7 +178,7 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/automation/templates/roadmap-item.md` | Template for roadmap milestones |
 | `docs/automation/templates/ai-automation-item.md` | Template for AI automation register items |
 
-### QA (Package 3B — `0ce973a` / Package 3C — `f8379d0`)
+### QA (Package 3B — `0ce973a` / Package 3C — `f8379d0` / Package 2.6 — `23b46b7`)
 
 | File | Purpose |
 |---|---|
