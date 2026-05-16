@@ -8,11 +8,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `[idle | in-progress | blocked | ready-for-review]`
+**Status:** `ready-for-commit` — implementation complete, all tests pass, awaiting Coordinator commit authorization
 
-**Last updated by:** `[Claude Code | Codex | human]`
+**Last updated by:** `Claude Code`
 
-**Date:** `[YYYY-MM-DD]`
+**Date:** `2026-05-15`
 
 ---
 
@@ -20,48 +20,59 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active package** | `[e.g. Package 3C — Real File Import Coverage]` |
-| **Branch** | `[e.g. feature/e2e-real-file-import-download-coverage]` |
-| **Branch base** | `[e.g. main at 904cf51]` |
-| **Last commit on branch** | `[hash — message]` |
+| **Active package** | `Package 2.6 — Operator Inbox + Stream Update Processor` |
+| **Branch** | `feature/operator-inbox-stream-processor` |
+| **Branch base** | `main at ede1a86` |
+| **Last commit on branch** | `none yet — awaiting commit authorization` |
 
 ---
 
 ## Objective
 
-> What is this work trying to accomplish? One or two sentences. Be specific.
+Build the local Operator Inbox and Stream Update Processor: a file-based routing automation layer where the user pastes a stream response into an inbox Markdown file and runs one command to produce structured routing packets, Coordinator summaries, and suggested prompts.
 
 ---
 
 ## Approved scope
 
-> What was explicitly authorized? List the authorized deliverables from the Coordinator's instruction.
-
-- [ ] Deliverable 1
-- [ ] Deliverable 2
+- [x] `operator-inbox/` folder with README and .gitkeep
+- [x] `operator-inbox/processed/.gitkeep`
+- [x] `operator-outbox/` folder with README and .gitkeep
+- [x] `.gitignore` updates to ignore raw inbox/outbox files
+- [x] `scripts/process-operator-inbox.mjs` processor script
+- [x] `scripts/fixtures/operator-inbox/development-closeout-sample.md`
+- [x] `scripts/fixtures/operator-inbox/product-response-sample.md`
+- [x] `src/tests/operator-inbox-processor-tests.mjs`
+- [x] `docs/automation/operator-mode/operator-inbox-protocol.md`
+- [x] Update `docs/automation/operator-mode/README.md`
+- [x] Update `docs/ops/ai-automation-register.md`
+- [x] Update `docs/ops/artifact-index.md`
+- [x] `scripts/package.json` — add inbox script
 
 ---
 
 ## Hard exclusions
 
-> What was explicitly out of scope or forbidden? Copy from the Coordinator's instruction.
-
 - Do not modify `index.html`
-- Do not modify `src/**`
+- Do not modify `src/**` app modules (only `src/tests/` is allowed)
 - Do not commit `_source-intake/`
 - Do not commit `.claude/settings.local.json`
-- Do not start the next package
+- Do not implement n8n / Make / Zapier
+- Do not connect to ChatGPT directly
+- Do not add external API calls or API keys
+- Do not implement `--apply` mode (dry-run output only)
+- Do not start Package 2.7 or any other package
 
 ---
 
 ## Git state at handoff
 
 ```
-Branch:      [branch name]
-main HEAD:   [hash — message]
-Working tree: [clean | modified files list]
-Staged:      [staged files list or "nothing staged"]
-Last push:   [Yes / No — last pushed commit hash]
+Branch:      feature/operator-inbox-stream-processor
+main HEAD:   ede1a86 — merge: add context continuity guard for Operator Mode
+Working tree: 6 modified files, 6 untracked new files/folders
+Staged:      nothing staged
+Last push:   No — branch not pushed yet
 ```
 
 ---
@@ -69,32 +80,55 @@ Last push:   [Yes / No — last pushed commit hash]
 ## Recent commits (relevant to this work)
 
 ```
-[hash] [message]
-[hash] [message]
-[hash] [message]
+ede1a86 merge: add context continuity guard for Operator Mode
+8f766af docs: add context continuity guard for Operator Mode
+424d9fa merge: sync operating docs to reflect Package 3C completion
+904cf51 merge: add real file and download E2E coverage
+f8379d0 test: add real file and download E2E coverage
 ```
 
 ---
 
-## Files changed (since last commit or since task start)
+## Files changed (since task start)
 
 | File | What changed | Status |
 |---|---|---|
-| `path/to/file.js` | [description] | [done / in-progress / untested] |
+| `scripts/process-operator-inbox.mjs` | NEW — main processor with exported extraction functions + CLI | complete |
+| `src/tests/operator-inbox-processor-tests.mjs` | NEW — 13 suites, 67 assertions | complete |
+| `operator-inbox/README.md` | NEW | complete |
+| `operator-inbox/.gitkeep` | NEW | complete |
+| `operator-inbox/processed/.gitkeep` | NEW | complete |
+| `operator-outbox/README.md` | NEW | complete |
+| `operator-outbox/.gitkeep` | NEW | complete |
+| `scripts/fixtures/operator-inbox/development-closeout-sample.md` | NEW — fake Development closeout fixture | complete |
+| `scripts/fixtures/operator-inbox/product-response-sample.md` | NEW — fake Product response fixture | complete |
+| `docs/automation/operator-mode/operator-inbox-protocol.md` | NEW — ~200 line protocol doc | complete |
+| `.gitignore` | Updated — inbox/outbox ignore rules | complete |
+| `scripts/package.json` | Updated — inbox:latest, inbox scripts | complete |
+| `docs/automation/operator-mode/README.md` | Updated — added operator-inbox-protocol.md entry | complete |
+| `docs/ops/ai-automation-register.md` | Updated — Package 2.6 advisory block | complete |
+| `docs/ops/artifact-index.md` | Updated — Operator Inbox system table (10 entries) | complete |
 
 ---
 
 ## Work completed
 
-- [x] Item 1 — what was done and verified
-- [x] Item 2
-
----
+- [x] Branch created from main (ede1a86)
+- [x] Routing packet schema and stream-update schema read
+- [x] Existing scripts/package.json and .gitignore read
+- [x] Test pattern understood from project-persistence-tests.mjs
+- [x] All 15 Package 2.6 files written
+- [x] All 5 existing Node test suites pass (453 total)
+- [x] New processor tests pass (67/67)
+- [x] Sample command run against development fixture — 4 output files generated
+- [x] Outbox outputs confirmed gitignored
 
 ## Work remaining
 
-- [ ] Item 1 — what still needs to happen
-- [ ] Item 2
+- [ ] Coordinator commit authorization
+- [ ] Stage and commit all Package 2.6 files
+- [ ] Push branch, merge to main, push main
+- [ ] Post-merge status sync (update command-center, backlog-roadmap, etc.)
 
 ---
 
@@ -102,56 +136,70 @@ Last push:   [Yes / No — last pushed commit hash]
 
 | Suite / command | Result | Notes |
 |---|---|---|
-| `node src/tests/km-engine-tests.mjs` | pass / fail | [count or failure detail] |
-| `node scripts/e2e-regression-harness.mjs` | pass / fail | |
-| `node scripts/e2e-regression-harness.mjs --real-files` | pass / fail | |
-
----
-
-## Manual QA
-
-| Scenario | Result | Notes |
-|---|---|---|
-| — | — | — |
+| `node src/tests/km-engine-tests.mjs` | 96 passed, 0 failed | no regression |
+| `node src/tests/keepsake-group-tests.mjs` | 43 passed, 0 failed | no regression |
+| `node src/tests/product-catalog-tests.mjs` | 127 passed, 0 failed | no regression |
+| `node src/tests/product-eligibility-tests.mjs` | 76 passed, 0 failed | no regression |
+| `node src/tests/project-persistence-tests.mjs` | 111 passed, 0 failed | no regression |
+| `node src/tests/operator-inbox-processor-tests.mjs` | 67 passed, 0 failed | new suite |
+| Sample: `node scripts/process-operator-inbox.mjs --file scripts/fixtures/operator-inbox/development-closeout-sample.md` | 4 outputs generated | outbox files gitignored |
 
 ---
 
 ## Known risks and blockers
 
-> Open questions, decisions needed, or things that could go wrong on resume.
-
-| Risk / Blocker | Severity | Notes |
-|---|---|---|
-| — | — | — |
+None — all implementation risks were resolved during build.
 
 ---
 
 ## Next exact action
 
-> One or two sentences: exactly what the next agent or human should do FIRST. Be precise about the file, function, or command.
+Await Coordinator commit authorization. When authorized, stage these files and commit on `feature/operator-inbox-stream-processor`:
+
+```
+.gitignore
+scripts/package.json
+scripts/process-operator-inbox.mjs
+scripts/fixtures/operator-inbox/development-closeout-sample.md
+scripts/fixtures/operator-inbox/product-response-sample.md
+src/tests/operator-inbox-processor-tests.mjs
+operator-inbox/README.md
+operator-inbox/.gitkeep
+operator-inbox/processed/.gitkeep
+operator-outbox/README.md
+operator-outbox/.gitkeep
+docs/automation/operator-mode/operator-inbox-protocol.md
+docs/automation/operator-mode/README.md
+docs/ops/ai-automation-register.md
+docs/ops/artifact-index.md
+AI_HANDOFF.md
+```
+
+Suggested commit message:
+```
+feat: add Operator Inbox and stream update processor (Package 2.6)
+```
 
 ---
 
 ## Source-of-truth files to read first on resume
 
-Before touching anything after a handoff or context event, read these in order:
-
-1. `AGENTS.md` — agent rules and Context Continuity Guard
-2. `CLAUDE.md` — Claude Code-specific rules (if incoming agent is Claude Code)
-3. This file (`AI_HANDOFF.md`) — current state
-4. `git status` — actual working tree state
-5. `git log --oneline -10` — recent commit history
-6. The relevant package docs (listed in Approved scope above)
-7. Any files listed in "Files changed" that will be touched next
+1. `AGENTS.md`
+2. `CLAUDE.md`
+3. This file (`AI_HANDOFF.md`)
+4. `git status`
+5. `git log --oneline -10`
+6. `docs/automation/schemas/routing-packet.schema.json`
 
 ---
 
 ## Resume prompt for next Claude/Codex session
 
-Copy and paste this prompt to onboard the next agent:
-
 ```
-You are resuming work on the KeepMees / MessageVault repo.
+You are resuming Package 2.6 — Operator Inbox + Stream Update Processor on branch
+feature/operator-inbox-stream-processor (base: main at ede1a86).
+
+Status: implementation complete, all tests pass, awaiting commit authorization.
 
 Before touching anything:
 1. Read AGENTS.md
@@ -159,24 +207,23 @@ Before touching anything:
 3. Read AI_HANDOFF.md (this file)
 4. Run: git status
 5. Run: git log --oneline -10
-6. Read the package docs listed in AI_HANDOFF.md under "Source-of-truth files"
 
-Do not assume the previous session's in-context state is correct — verify against current files.
-Do not commit or push without explicit user instruction.
-Do not start a new package without explicit Coordinator authorization.
+All 15 files are written. Tests: 453 existing + 67 new = 520 total, all pass.
+Sample command confirmed working. Outbox files confirmed gitignored.
 
-Confirm the current package, branch, objective, approved scope, hard exclusions,
-files changed, tests run, and next exact action — then state what you will do first
-before doing anything.
+Do NOT commit or push without explicit Coordinator authorization.
+Do NOT implement n8n, --apply mode, or direct ChatGPT integration.
+Do NOT start Package 2.7.
 ```
 
 ---
 
 ## File-level warnings
 
-> Anything the next agent must know before editing specific files.
-
 | File | Warning |
 |---|---|
-| `index.html` | Single-file app — all logic is here. Read before editing. Do not touch standalone keepsake flows or Review view. |
-| `BOOK_PAGE_LINES` / `BOOK_PAGINATION_VERSION` | Locked constants — never change without explicit Coordinator instruction and version bump. |
+| `index.html` | Single-file app — do not touch. |
+| `src/**` (except `src/tests/`) | Do not modify app modules. |
+| `docs/automation/schemas/routing-packet.schema.json` | additionalProperties: false — routing JSON must only use defined fields |
+| `operator-outbox/*.md`, `operator-outbox/*.json` | Gitignored — never commit generated outbox files |
+| `operator-inbox/*.md` (except README, .gitkeep) | Gitignored — never commit real inbox files |

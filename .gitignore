@@ -3,3 +3,16 @@ artifacts/preview-handoff-v1/
 artifacts/preview-handoff-v1.zip
 artifacts/e2e-failures/
 _source-intake/
+
+# Operator Inbox — raw pasted stream responses (never commit real content)
+operator-inbox/*.md
+!operator-inbox/README.md
+!operator-inbox/.gitkeep
+operator-inbox/processed/*.md
+!operator-inbox/processed/.gitkeep
+
+# Operator Outbox — generated routing packets (never commit)
+operator-outbox/*.md
+operator-outbox/*.json
+!operator-outbox/README.md
+!operator-outbox/.gitkeep

@@ -393,6 +393,31 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 
 ---
 
+### Advisory: Package 2.6 — Operator Inbox + Stream Update Processor (2026-05-15)
+
+**Status:** Implemented — local file-based only; no external API calls
+
+**What was added:**
+- `operator-inbox/` — folder for pasting stream responses (raw files gitignored)
+- `operator-outbox/` — folder for generated routing packets (all outputs gitignored)
+- `scripts/process-operator-inbox.mjs` — processor script: reads one inbox .md file and generates 4 output files
+- `src/tests/operator-inbox-processor-tests.mjs` — 40+ tests covering all extraction functions and processFile
+- `scripts/fixtures/operator-inbox/development-closeout-sample.md` — safe fake Development fixture
+- `scripts/fixtures/operator-inbox/product-response-sample.md` — safe fake Product fixture
+- `docs/automation/operator-mode/operator-inbox-protocol.md` — full protocol documentation
+
+**Processor outputs** (per input file):
+- `*.routing.md` — human-readable routing packet
+- `*.routing.json` — machine-readable (conforms to `docs/automation/schemas/routing-packet.schema.json`)
+- `*.coordinator-summary.md` — one-page Coordinator review summary
+- `*.suggested-prompts.md` — copy-paste prompts for routing
+
+**What this does NOT do:** auto-post to ChatGPT, modify repo docs, commit anything, connect to external services. All output is for human review only.
+
+**Future n8n path:** The processor is subprocess-friendly. A future n8n Execute Command node can wrap it and route the `.routing.json` output automatically.
+
+---
+
 ### Advisory: Context Continuity Guard Patch (2026-05-15)
 
 **Status:** Implemented — docs only, no app code changes

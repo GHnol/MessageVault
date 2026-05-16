@@ -14,7 +14,9 @@
     "capture:a":     "node capture-message-book-packet.mjs --scenarios a",
     "capture:b":     "node capture-message-book-packet.mjs --scenarios b",
     "capture:c":     "node capture-message-book-packet.mjs --scenarios c",
-    "capture:d":     "node capture-message-book-packet.mjs --scenarios d"
+    "capture:d":     "node capture-message-book-packet.mjs --scenarios d",
+    "inbox:latest":  "node process-operator-inbox.mjs --latest",
+    "inbox":         "node process-operator-inbox.mjs"
   },
   "dependencies": {
     "playwright": "^1.44.0"

@@ -24,6 +24,23 @@ Authoritative index of every significant file in the repository — what it is, 
 
 ---
 
+## Operator Inbox system (Package 2.6)
+
+| File | Type | Purpose |
+|---|---|---|
+| `operator-inbox/README.md` | Documentation | How to create inbox files, run the processor, and file naming convention |
+| `operator-inbox/.gitkeep` | Tracker | Keeps inbox folder tracked; raw .md files are gitignored |
+| `operator-inbox/processed/.gitkeep` | Tracker | Keeps processed subfolder tracked |
+| `operator-outbox/README.md` | Documentation | How to interpret outbox outputs and use them for routing |
+| `operator-outbox/.gitkeep` | Tracker | Keeps outbox folder tracked; generated .md/.json files are gitignored |
+| `scripts/process-operator-inbox.mjs` | Script | Stream update processor — reads inbox .md file, generates 4 output files in operator-outbox/ |
+| `scripts/fixtures/operator-inbox/development-closeout-sample.md` | Test fixture | Safe fake Development stream closeout for processor testing |
+| `scripts/fixtures/operator-inbox/product-response-sample.md` | Test fixture | Safe fake Product stream response for processor testing |
+| `src/tests/operator-inbox-processor-tests.mjs` | Tests | 40+ tests: detectStream, extract*, classifyRoutingTargets, generateRouting*, processFile, unknown stream, empty content |
+| `docs/automation/operator-mode/operator-inbox-protocol.md` | Protocol | Full operator inbox protocol: purpose, naming, running, outputs, privacy rules, n8n path |
+
+---
+
 ## KMEngine core modules
 
 | File | Exports | Purpose |
