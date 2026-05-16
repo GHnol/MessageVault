@@ -205,6 +205,77 @@ if (result) {
 }
 try { rmSync(tmpDir, { recursive: true, force: true }); } catch {}
 
+// ── Suite 14: real closeout wording — Package 2.6.1 regression tests ─────────
+suite('real closeout wording — next action and test summary');
+
+const CLOSEOUT_CONTENT = [
+    '# Package 2.6 Final Closeout Report',
+    '',
+    'Source: Claude Code',
+    '',
+    'Package 2.6 feature commit: 23b46b7',
+    'Package 2.6 merge commit: e7d635d',
+    '',
+    'Tests run and final results',
+    '',
+    'km-engine-tests.mjs: 96/96',
+    'operator-inbox-processor-tests.mjs: 67/67',
+    'Total: 520 passed, 0 failed',
+    '',
+    'Next package: Not started. Awaiting Coordinator authorization.',
+].join('\n');
+
+// Next action extraction — "Next package:" line
+const closeoutActions = extractNextActions(CLOSEOUT_CONTENT);
+assert(closeoutActions.length > 0,                                  '"Next package:" line produces at least one next action');
+assert(closeoutActions.some(a => /Coordinator/.test(a)),            'extracted next action mentions Coordinator');
+assert(closeoutActions.some(a => /Not started|Awaiting/.test(a)),   'extracted next action preserves source wording');
+
+// Next action — "Awaiting Coordinator authorization." standalone
+const awaitingActions = extractNextActions('Awaiting Coordinator authorization.');
+assert(awaitingActions.length > 0,                                  '"Awaiting Coordinator authorization." extracted as next action');
+
+// Next action — "Coordinator to evaluate and authorize next package." standalone
+const evalActions = extractNextActions('Coordinator to evaluate and authorize next package.');
+assert(evalActions.length > 0,                                      '"Coordinator to evaluate..." extracted as next action');
+
+// Next action — "Next package requires Coordinator authorization." (no colon)
+const requiresActions = extractNextActions('Next package requires Coordinator authorization.');
+assert(requiresActions.length > 0,                                  '"Next package requires..." extracted as next action');
+
+// Test summary extraction — aggregate "N passed, M failed"
+const closeoutTR = extractTestResults(CLOSEOUT_CONTENT);
+assert(closeoutTR.passing === 520,                                   '"520 passed" extracted as passing count');
+assert(closeoutTR.failing === 0,                                     '"0 failed" extracted as failing count');
+assert(closeoutTR.summary !== null,                                  'aggregate test summary is not null');
+assert(/520/.test(closeoutTR.summary),                              'aggregate summary contains 520');
+
+// Test summary extraction — "Total: N/N" fraction format
+const fractionTR = extractTestResults('Total: 67/67 tests done.');
+assert(fractionTR.summary !== null,                                  '"Total: N/N" produces a summary');
+assert(/67/.test(fractionTR.summary),                               'fraction summary contains 67');
+
+// Regression: existing passing/failing count extraction still works
+assert(extractTestResults(DEV_CONTENT).passing === 29,              'regression: 29 passing still detected');
+assert(extractTestResults(DEV_CONTENT).failing === 0,               'regression: 0 failures still detected');
+
+// Regression: unknown/missing next action does not crash
+const emptyNA = extractNextActions('');
+assert(Array.isArray(emptyNA),                                      'empty content: extractNextActions returns array');
+assert(emptyNA.length === 0,                                        'empty content: no actions extracted');
+
+// Regression: JSON output remains valid with new patterns
+const closeoutExtracted = extractAll('2026-05-15_claude-code_closeout.md', CLOSEOUT_CONTENT);
+let closeoutParsed;
+try {
+    closeoutParsed = JSON.parse(generateRoutingJson(closeoutExtracted));
+    assert(true, 'closeout content: routing JSON is still valid');
+} catch {
+    assert(false, 'closeout content: routing JSON is still valid');
+}
+assert(Array.isArray(closeoutParsed.destination) && closeoutParsed.destination.length > 0,
+    'closeout content: destination array is valid in JSON');
+
 // ── Summary ──────────────────────────────────────────────────────────────────
 console.log('\n─────────────────────────────────────────────');
 console.log(`  ${passed} passed, ${failed} failed`);

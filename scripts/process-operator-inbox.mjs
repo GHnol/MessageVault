@@ -126,6 +126,19 @@ export function extractTestResults(content) {
         results.summary = 'all passing';
         if (results.failing === null) results.failing = 0;
     }
+    // Aggregate "N passed, M failed" pattern — e.g. "520 passed, 0 failed"
+    const aggMatch = content.match(/(\d+)\s+passed[^,\n]*,\s*(\d+)\s+fail/i);
+    if (aggMatch) {
+        if (!results.summary) results.summary = `${aggMatch[1]} passed, ${aggMatch[2]} failed`;
+        if (results.passing === null) results.passing = parseInt(aggMatch[1], 10);
+        if (results.failing === null) results.failing = parseInt(aggMatch[2], 10);
+    }
+    // "Total: N/N" fraction pattern — e.g. "Total: 520/520"
+    const totalMatch = content.match(/\bTotal:\s+(\d+)\/(\d+)/i);
+    if (totalMatch && !results.summary) {
+        results.summary = `${totalMatch[1]}/${totalMatch[2]}`;
+        if (results.passing === null) results.passing = parseInt(totalMatch[1], 10);
+    }
     return results;
 }
 
@@ -168,6 +181,14 @@ export function extractNextActions(content) {
         /^[*\-]?\s*Next\s+(?:action|step)?:\s*(.+)$/gim,
         /^[*\-]?\s*Action\s+required:\s*(.+)$/gim,
         /^[*\-]?\s*TODO:\s*(.+)$/gim,
+        // "Next package: ..." lines — e.g. "Next package: Not started. Awaiting Coordinator authorization."
+        /^[*\-]?\s*Next\s+package:\s*(.+)$/gim,
+        // "Next package requires ..." — no colon variant
+        /^[*\-]?\s*(Next\s+package\s+requires?\s+[^\n]+)$/gim,
+        // "Awaiting Coordinator authorization..." standalone
+        /^[*\-]?\s*(Awaiting\s+Coordinator\s+authorization[^\n]*)$/gim,
+        // "Coordinator to evaluate/authorize/review ..." standalone
+        /^[*\-]?\s*(Coordinator\s+to\s+(?:evaluate|authorize|review)\s+[^\n]*)$/gim,
     ];
     for (const re of patterns) {
         let m;
