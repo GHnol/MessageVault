@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 2.6 status sync)
+**Updated by:** Claude Code (Package 4A status sync)
 **Status:** Active
 
 ---
@@ -158,6 +158,38 @@ Delivered:
 
 ---
 
+### Package 2.6.1 — Operator Inbox Extraction Polish
+
+**Branch:** `fix/operator-inbox-closeout-extraction`
+**Status:** COMPLETE — merged to main (feature: `841d28a`, merge: `75a2378`)
+
+Delivered:
+- `scripts/process-operator-inbox.mjs` — patched `extractNextActions` (4 new patterns for closeout wording including "Next package:" lines and "Awaiting Coordinator authorization"); patched `extractTestResults` (aggregate "N passed, M failed" and "Total: N/N" fraction patterns)
+- `src/tests/operator-inbox-processor-tests.mjs` — Suite 14 added: 18 new assertions covering real closeout wording and regressions
+- **Tests: 85 passed, 0 failed** (67 existing + 18 new) | **Cumulative total: 538 tests**
+
+No app behavior changes. Processor and tests only.
+
+---
+
+### Package 4A — ProductRenderSpec Foundation
+
+**Branch:** `feature/product-render-spec-foundation`
+**Status:** COMPLETE — merged to main (feature: `f08a7dd`, merge: `1058dc1`)
+
+Delivered:
+- `src/products/product-render-spec.js` — 5 render constants (RENDER_STATUS, TEXT_DENSITY, BUBBLE_TREATMENT, REACTION_POLICY, ATTACHMENT_POLICY); `makeRenderSpec` factory; 10 specs covering 6 catalog products + 4 physical-only render planning targets; `KMEngine.ProductRenderSpecs` with `all()`, `get()`, `renderPlanningTargets()`, `catalogAligned()`
+- `src/products/product-render-spec-resolver.js` — `KMEngine.ProductRenderSpecResolver` with `resolve(productTypeId, group)` returning blockers/warnings/eligible/memoryCount; passthrough helpers `getSpec()`, `allSpecs()`, `renderPlanningTargetSpecs()`
+- `src/tests/product-render-spec-tests.mjs` — 341 assertions across 11 suites; Suite 11 explicitly verifies render planning targets do not imply commerce/manufacturing/public-claim readiness
+- `docs/architecture/architecture-roadmap.md` — section heading updated to post-Package 4A; ProductRenderSpec layer added to module tree
+- **Tests: 341 passed, 0 failed** (new) | **Cumulative total: 879 tests**
+
+What this does NOT deliver: product preview UI, mug/sticker/framed-print/fridge-magnet renderers, checkout/payment, PDF generation, vendor exports, visual regression work. No app behavior changed.
+
+**Key design decision:** `isRenderPlanningTarget` (not `isLaunchTarget`) is the field name, making explicit that render planning scope does not imply commerce, manufacturing, fulfillment, or public claim readiness.
+
+---
+
 ## Upcoming packages
 
 ### Package 3 remaining scope (not yet scheduled)
@@ -170,14 +202,21 @@ The following items from original Package 3 scope are not yet started and not ye
 
 ---
 
-### Package 4 — (To be defined)
+### Package 4A — ProductRenderSpec Foundation
 
-**Status:** Not started. Awaiting Package 3 completion and Coordinator direction.
+**Status:** COMPLETE — see Delivered packages above.
 
-Possible scope areas:
+---
+
+### Package 4B and beyond — (To be defined)
+
+**Status:** Not started. Awaiting Coordinator direction after Package 4A closeout.
+
+Possible scope areas for future packages:
+- ProductDraft model — per-group, per-product draft container
+- Preflight runner — executes the 10 checks in BOOK_PREFLIGHT_CHECK_REGISTRY
 - Source adapter completions (WhatsApp, Android SMS) — if prioritized
-- Additional preflight checks with runners
-- Render spec finalization (not ProductRenderSpec code — spec document only)
+- Additional render spec consumers (preview stubs, resolver integration into eligibility)
 
 ---
 

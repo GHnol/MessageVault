@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 2.6 status sync)
+**Updated by:** Claude Code (Package 4A status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -19,21 +19,24 @@
 | Package 3B | Automated E2E regression harness foundation | COMPLETE — merged to main | `0ce973a` | `40b4bba` |
 | Package 3C | Real file import, download, and full-path E2E coverage | COMPLETE — merged to main | `f8379d0` | `904cf51` |
 | Package 2.6 | Operator Inbox + Stream Update Processor | COMPLETE — merged to main | `23b46b7` | `e7d635d` |
+| Package 2.6.1 | Operator Inbox Extraction Polish | COMPLETE — merged to main | `841d28a` | `75a2378` |
+| Package 4A | ProductRenderSpec Foundation | COMPLETE — merged to main | `f08a7dd` | `1058dc1` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 3B (`0ce973a`) — no app code changes in Packages 3C or 2.6
+- App code last changed: Package 3B (`0ce973a`) — no app code changes in Packages 3C, 2.6, 2.6.1, or 4A
 - `index.html`: modified (Package 3B: `window.__km` test harness bridge entries added)
 - `src/state/`: 3 modules added in Package 3A (`project-persistence.js`, `project-session-restore.js`, `project-file-io.js`)
-- `src/tests/`: 6 suites, 520 Node tests — all green
+- `src/tests/`: 7 suites, 879 Node tests — all green
   - `km-engine-tests.mjs`: ~96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
   - `project-persistence-tests.mjs`: 111
-  - `operator-inbox-processor-tests.mjs`: 67 (Package 2.6)
+  - `operator-inbox-processor-tests.mjs`: 85 (Package 2.6 + 2.6.1)
+  - `product-render-spec-tests.mjs`: 341 (Package 4A)
 - `scripts/e2e-regression-harness.mjs`: 29-test seeded Playwright harness (phases 1–10, Package 3B) + 22-test real-file coverage (phases 11–19, Package 3C) — 51 tests total; 52 with optional chat.db
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
@@ -43,14 +46,14 @@
 
 ---
 
-## Git state (as of Package 2.6 closeout)
+## Git state (as of Package 4A closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `e7d635d` — merge: add Operator Inbox and stream update processor |
+| main HEAD | `1058dc1` — merge: add ProductRenderSpec foundation |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | Yes — Package 2.6 pushed, merged to main, main pushed |
+| Pushed to remote | Yes — Package 4A pushed, merged to main, main pushed |
 
 ---
 
@@ -81,9 +84,9 @@
 
 | Stream (Chat #) | Last meaningful sync | Status |
 |---|---|---|
-| 01 Coordinator | Package 2.6 approved and merged | Needs sync: evaluate and authorize next package after Package 2.6 |
+| 01 Coordinator | Package 4A approved and merged | Needs sync: evaluate and authorize next package after Package 4A |
 | 02 Product — Core Strategy | Source intake 2026-05-09 | No immediate action required |
-| 03 Development — Core Build | Package 2.6 closeout | Needs sync after Package 2.6 merge |
+| 03 Development — Core Build | Package 4A closeout | Needs sync after Package 4A merge |
 | 04 Production — Vendor Feasibility | Wave 1 research complete | IngramSpark + Lulu follow-ups pending |
 | 05 Production — Mockups and Vendor Strategy | Source intake 2026-05-09 | 6-product physical target locked |
 | 06 Production — Packaging, Bundling, Gifting | Source intake 2026-05-09 | 4-component system captured |

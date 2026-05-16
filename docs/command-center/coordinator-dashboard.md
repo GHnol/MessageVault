@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 2.6 status sync)
+**Updated by:** Claude Code (Package 4A status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -51,8 +51,10 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 3B — Automated E2E regression harness foundation | COMPLETE | `0ce973a` / `40b4bba` |
 | Package 3C — Real file import, download, and full-path E2E coverage | COMPLETE | `f8379d0` / `904cf51` |
 | Package 2.6 — Operator Inbox + Stream Update Processor | COMPLETE | `23b46b7` / `e7d635d` |
+| Package 2.6.1 — Operator Inbox Extraction Polish | COMPLETE | `841d28a` / `75a2378` |
+| Package 4A — ProductRenderSpec Foundation | COMPLETE | `f08a7dd` / `1058dc1` |
 
-Tests: **520 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C and 2.6 added scripts/harness/processor coverage only, no app code changes.
+Tests: **879 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C, 2.6, 2.6.1, and 4A added module/test/docs coverage only, no app code changes.
 
 ---
 
@@ -87,6 +89,15 @@ Package 3C (COMPLETE — `904cf51`)
 Package 2.6 (COMPLETE — `e7d635d`)
     → Operator Inbox + Stream Update Processor — DELIVERED
 
+Package 2.6.1 (COMPLETE — `75a2378`)
+    → Operator Inbox Extraction Polish — DELIVERED
+
+Package 4A (COMPLETE — `1058dc1`)
+    → ProductRenderSpec Foundation — DELIVERED
+    → Render planning target terminology (isRenderPlanningTarget) established
+    → Commerce/manufacturing/public-claim readiness explicitly gated for all non-Message Book formats
+    → 341 new tests; no app behavior changed
+
 Next package (not yet authorized)
     → Awaiting Coordinator evaluation and authorization
 
@@ -102,7 +113,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Evaluate and authorize next package after Package 2.6 closeout | Roadmap decision | High — Package 2.6 complete; development paused pending authorization |
+| Evaluate and authorize next package after Package 4A closeout | Roadmap decision | High — Package 4A complete; development paused pending authorization |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |
