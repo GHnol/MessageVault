@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 3C status sync)
+**Updated by:** Claude Code (Package 2.6 status sync)
 **Status:** Active
 
 ---
@@ -134,6 +134,27 @@ Delivered:
 - **Seeded baseline unchanged:** phases 1–10 (29 tests) remain the default, suitable for CI after every package
 - **Real-file coverage:** phases 11–19 cover real .txt import, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text assertions, optional private chat.db smoke, capture harness subprocess
 - **Node unit tests: 453 passing (unchanged)** | **E2E seeded: 29 passing** | **E2E real-files: 52 passing (51 always + 1 conditional)**
+
+---
+
+### Package 2.6 — Operator Inbox + Stream Update Processor
+
+**Branch:** `feature/operator-inbox-stream-processor`
+**Status:** COMPLETE — merged to main (feature: `23b46b7`, merge: `e7d635d`)
+
+Delivered:
+- `operator-inbox/` — folder for pasting stream responses; raw .md files gitignored; `processed/` subfolder tracked
+- `operator-outbox/` — folder for generated routing packets; all outputs gitignored; README and .gitkeep tracked
+- `scripts/process-operator-inbox.mjs` — stream update processor: reads one inbox .md file and generates 4 output files (routing.md, routing.json, coordinator-summary.md, suggested-prompts.md); CLI supports `--latest` and `--file <path>`
+- `scripts/fixtures/operator-inbox/development-closeout-sample.md` — safe fake Development stream closeout fixture
+- `scripts/fixtures/operator-inbox/product-response-sample.md` — safe fake Product stream response fixture
+- `src/tests/operator-inbox-processor-tests.mjs` — 13 suites, 67 assertions; covers all extraction functions and processFile
+- `docs/automation/operator-mode/operator-inbox-protocol.md` — full protocol documentation
+- Updated: `.gitignore`, `scripts/package.json` (inbox:latest, inbox scripts), operator-mode README, ai-automation-register, artifact-index
+
+**What this does NOT do:** auto-post to ChatGPT, modify repo docs automatically, commit anything, connect to external services. All output is for human review only. Direct ChatGPT chat-to-chat automation remains not implemented. n8n / Make / Zapier remain not started.
+
+**Tests: 520 Node tests passing, 0 failures** (453 existing + 67 new)
 
 ---
 

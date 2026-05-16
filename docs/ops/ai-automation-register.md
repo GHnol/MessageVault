@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 3C status sync)
+**Updated by:** Claude Code (Package 2.6 status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -257,10 +257,11 @@ All `src/tests/*.mjs` files are runnable via `node`. No build step.
 | `product-catalog-tests.mjs` | 127 | Must remain green |
 | `product-eligibility-tests.mjs` | 76 | Must remain green |
 | `project-persistence-tests.mjs` | 111 | Must remain green — Package 3A |
+| `operator-inbox-processor-tests.mjs` | 67 | Must remain green — Package 2.6 |
 | `scripts/e2e-regression-harness.mjs` | 29 seeded (phases 1–10) | Must remain green — Package 3B (Playwright, requires `scripts/node_modules`) |
 | `scripts/e2e-regression-harness.mjs --real-files` | 52 total (51 always + 1 conditional chat.db) | Must remain green before real-file path changes — Package 3C |
 
-Required before any future package commit: all 5 Node suites + E2E seeded harness pass. Node total: **453 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
+Required before any future package commit: all 6 Node suites + E2E seeded harness pass. Node total: **520 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
 
 ---
 
@@ -381,7 +382,8 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 9. Run Package 3A in Claude Code — local project session save/load ✓ (complete — `8dcc959` / `b40fa2b`)
 10. Execute Package 3B — Automated E2E Regression Harness Foundation ✓ (complete — `0ce973a` / `40b4bba`)
 11. Execute Package 3C — Real File Import, Download, and Full-Path E2E Coverage ✓ (complete — `f8379d0` / `904cf51`)
-12. **Next: Coordinator evaluates and authorizes Package 2.6** ← current position
+12. Execute Package 2.6 — Operator Inbox + Stream Update Processor ✓ (complete — `23b46b7` / `e7d635d`)
+13. **Next: Coordinator evaluates and authorizes next package** ← current position
 
 ### Advisory: What Package 2.5B does and does not deliver
 
@@ -395,7 +397,7 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 
 ### Advisory: Package 2.6 — Operator Inbox + Stream Update Processor (2026-05-15)
 
-**Status:** Implemented — local file-based only; no external API calls
+**Status:** COMPLETE — merged to main (`23b46b7` / `e7d635d`); local file-based only; no external API calls
 
 **What was added:**
 - `operator-inbox/` — folder for pasting stream responses (raw files gitignored)
