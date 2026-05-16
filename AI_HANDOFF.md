@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `ready-for-commit` — implementation complete, all tests pass, awaiting Coordinator commit authorization
+**Status:** `closed` — Package 2.6 committed, merged to main, status sync committed and merged to main. No active package. Awaiting Coordinator authorization for next package.
 
 **Last updated by:** `Claude Code`
 
@@ -23,7 +23,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Active package** | `Package 2.6 — Operator Inbox + Stream Update Processor` |
 | **Branch** | `feature/operator-inbox-stream-processor` |
 | **Branch base** | `main at ede1a86` |
-| **Last commit on branch** | `none yet — awaiting commit authorization` |
+| **Last commit on branch** | `main HEAD: b55adf8 — merge: sync operating docs to reflect Package 2.6 completion` |
 
 ---
 
