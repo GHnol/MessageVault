@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 2.6 status sync)
+**Updated by:** Claude Code (Package 4A status sync)
 **Status:** Active
 
 ---
@@ -83,6 +83,8 @@ Authoritative index of every significant file in the repository — what it is, 
 | `src/products/product-catalog.js` | `KMEngine.ProductCatalog` | 6 product definitions; `all()`, `get()`, `flagship()`, `byCategory()` |
 | `src/products/product-eligibility.js` | `KMEngine.ProductEligibility` | Per-product eligibility evaluators; `evaluate()`, `evaluateAll()` |
 | `src/products/legacy-keepsake-types-bridge.js` | `KMEngine.LegacyKeepsakeTypesBridge` | 4 legacy standalone types (quote-card, framed-print, mini-story, conversation-page) |
+| `src/products/product-render-spec.js` | `KMEngine.ProductRenderSpecs`, 5 render constants | Render spec registry: 10 specs (6 catalog + 4 physical-only render planning targets); `all()`, `get()`, `renderPlanningTargets()`, `catalogAligned()` — Package 4A |
+| `src/products/product-render-spec-resolver.js` | `KMEngine.ProductRenderSpecResolver` | Resolve render spec against KeepsakeGroup; returns blockers, warnings, eligible, memoryCount — Package 4A |
 
 ---
 
@@ -96,7 +98,8 @@ Authoritative index of every significant file in the repository — what it is, 
 | `src/tests/product-eligibility-tests.mjs` | 76 | ProductEligibility per-product evaluators, LegacyKeepsakeTypesBridge |
 | `src/tests/project-persistence-tests.mjs` | 111 | ProjectPersistence validate/deserialize/createSnapshot, ProjectSessionRestore restore — Package 3A |
 | `scripts/e2e-regression-harness.mjs` | 29 seeded + 22 real-files (51 total; 52 with chat.db) | Browser E2E: seeded baseline phases 1–10 (Package 3B) + real-file phases 11–19 (Package 3C, `--real-files` flag) |
-| `src/tests/operator-inbox-processor-tests.mjs` | 67 | Processor: detectStream, extractAll, generateRouting*, processFile — Package 2.6 |
+| `src/tests/operator-inbox-processor-tests.mjs` | 85 | Processor: detectStream, extractAll, generateRouting*, processFile — Package 2.6; Suite 14 added Package 2.6.1 |
+| `src/tests/product-render-spec-tests.mjs` | 341 | ProductRenderSpecs, ProductRenderSpecResolver, gate values, render planning targets, no commerce/manufacturing/publicClaim readiness implied — Package 4A |
 | `scripts/e2e-test-data.mjs` | — | Deterministic NormalizedMemory seed data for E2E harness — Package 3B |
 | `scripts/fixtures/fake-conversation.txt` | — | Safe fake pipe-delimited .txt fixture (5 messages) for real import testing — Package 3C |
 

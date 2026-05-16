@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 2.6 status sync)
+**Updated by:** Claude Code (Package 4A status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -257,11 +257,12 @@ All `src/tests/*.mjs` files are runnable via `node`. No build step.
 | `product-catalog-tests.mjs` | 127 | Must remain green |
 | `product-eligibility-tests.mjs` | 76 | Must remain green |
 | `project-persistence-tests.mjs` | 111 | Must remain green — Package 3A |
-| `operator-inbox-processor-tests.mjs` | 67 | Must remain green — Package 2.6 |
+| `operator-inbox-processor-tests.mjs` | 85 | Must remain green — Package 2.6 / 2.6.1 |
+| `product-render-spec-tests.mjs` | 341 | Must remain green — Package 4A |
 | `scripts/e2e-regression-harness.mjs` | 29 seeded (phases 1–10) | Must remain green — Package 3B (Playwright, requires `scripts/node_modules`) |
 | `scripts/e2e-regression-harness.mjs --real-files` | 52 total (51 always + 1 conditional chat.db) | Must remain green before real-file path changes — Package 3C |
 
-Required before any future package commit: all 6 Node suites + E2E seeded harness pass. Node total: **520 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
+Required before any future package commit: all 7 Node suites + E2E seeded harness pass. Node total: **879 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
 
 ---
 
@@ -383,7 +384,9 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 10. Execute Package 3B — Automated E2E Regression Harness Foundation ✓ (complete — `0ce973a` / `40b4bba`)
 11. Execute Package 3C — Real File Import, Download, and Full-Path E2E Coverage ✓ (complete — `f8379d0` / `904cf51`)
 12. Execute Package 2.6 — Operator Inbox + Stream Update Processor ✓ (complete — `23b46b7` / `e7d635d`)
-13. **Next: Coordinator evaluates and authorizes next package** ← current position
+13. Execute Package 2.6.1 — Operator Inbox Extraction Polish ✓ (complete — `841d28a` / `75a2378`)
+14. Execute Package 4A — ProductRenderSpec Foundation ✓ (complete — `f08a7dd` / `1058dc1`)
+15. **Next: Coordinator evaluates and authorizes next package** ← current position
 
 ### Advisory: What Package 2.5B does and does not deliver
 
@@ -392,6 +395,24 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 **Not delivered (later phase):** Actual running automations. n8n / Make / Zapier workflows, GitHub Projects board configuration, and NotebookLM setup remain outside the repo and are pending Coordinator decisions.
 
 **GitHub Projects and NotebookLM remain pending Coordinator decisions** — whether to adopt them, and if so when. Do not treat them as active stack components until explicitly confirmed.
+
+---
+
+### Advisory: Package 4A — ProductRenderSpec Foundation (2026-05-15)
+
+**Status:** COMPLETE — merged to main (`f08a7dd` / `1058dc1`); no app behavior changed; index.html not touched
+
+**What was added:**
+- `src/products/product-render-spec.js` — 5 render constants; `makeRenderSpec` factory; 10 specs; `KMEngine.ProductRenderSpecs` with `all()`, `get()`, `renderPlanningTargets()`, `catalogAligned()`
+- `src/products/product-render-spec-resolver.js` — `KMEngine.ProductRenderSpecResolver` with `resolve(productTypeId, group)` returning blockers/warnings/eligible
+- `src/tests/product-render-spec-tests.mjs` — 341 assertions; Suite 11 verifies render planning targets do not imply commerce/manufacturing/public-claim readiness
+- `docs/architecture/architecture-roadmap.md` — ProductRenderSpec layer added to module tree
+
+**Key design decision:** `isRenderPlanningTarget` field name makes explicit that render architecture scope does not imply commerce, manufacturing, fulfillment, or public claim readiness.
+
+**What this does NOT deliver:** product preview UI, physical product renderers, checkout/payment, PDF generation, vendor exports, visual regression work.
+
+**879 Node tests passing, 0 failures.**
 
 ---
 

@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 2.6 status sync)
+**Updated by:** Claude Code (Package 4A status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Evaluate and authorize next package after Package 2.6 closeout | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Evaluate and authorize next package after Package 4A closeout | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
 
@@ -19,8 +19,10 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 2.6 COMPLETE — next package not yet authorized**
+**Status: Package 4A COMPLETE — next package not yet authorized**
 
+Package 4A (ProductRenderSpec Foundation) is COMPLETE — merged to main (`1058dc1`).
+Package 2.6.1 (Operator Inbox Extraction Polish) is COMPLETE — merged to main (`75a2378`).
 Package 2.6 (Operator Inbox + Stream Update Processor) is COMPLETE — merged to main (`e7d635d`).
 Package 3C (Real File Import, Download, and Full-Path E2E Coverage) is COMPLETE — merged to main (`904cf51`).
 Package 3B (Automated E2E Regression Harness Foundation) is COMPLETE — merged to main (`40b4bba`).
