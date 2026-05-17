@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4B status sync)
+**Updated by:** Claude Code (Package 4C status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -260,10 +260,11 @@ All `src/tests/*.mjs` files are runnable via `node`. No build step.
 | `operator-inbox-processor-tests.mjs` | 85 | Must remain green — Package 2.6 / 2.6.1 |
 | `product-render-spec-tests.mjs` | 341 | Must remain green — Package 4A |
 | `prototype-preview-registry-tests.mjs` | 215 | Must remain green — Package 4B |
+| `product-experience-readiness-tests.mjs` | 337 | Must remain green — Package 4C |
 | `scripts/e2e-regression-harness.mjs` | 29 seeded (phases 1–10) | Must remain green — Package 3B (Playwright, requires `scripts/node_modules`) |
 | `scripts/e2e-regression-harness.mjs --real-files` | 52 total (51 always + 1 conditional chat.db) | Must remain green before real-file path changes — Package 3C |
 
-Required before any future package commit: all 8 Node suites + E2E seeded harness pass. Node total: **1094 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
+Required before any future package commit: all 9 Node suites + E2E seeded harness pass. Node total: **1431 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
 
 ---
 
@@ -388,7 +389,8 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 13. Execute Package 2.6.1 — Operator Inbox Extraction Polish ✓ (complete — `841d28a` / `75a2378`)
 14. Execute Package 4A — ProductRenderSpec Foundation ✓ (complete — `f08a7dd` / `1058dc1`)
 15. Execute Package 4B — Prototype Preview Registry Foundation ✓ (complete — `eca2329` / `3f939d0`)
-16. **Next: Coordinator evaluates and authorizes next package** ← current position
+16. Execute Package 4C — Product Experience Readiness Resolver Foundation ✓ (complete — `367dfc7` / `879c244`)
+17. **Next: Coordinator evaluates and authorizes next package** ← current position
 
 ### Advisory: What Package 2.5B does and does not deliver
 
@@ -397,6 +399,24 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 **Not delivered (later phase):** Actual running automations. n8n / Make / Zapier workflows, GitHub Projects board configuration, and NotebookLM setup remain outside the repo and are pending Coordinator decisions.
 
 **GitHub Projects and NotebookLM remain pending Coordinator decisions** — whether to adopt them, and if so when. Do not treat them as active stack components until explicitly confirmed.
+
+---
+
+### Advisory: Package 4C — Product Experience Readiness Resolver Foundation (2026-05-16)
+
+**Status:** COMPLETE — merged to main (`367dfc7` / `879c244`); no app behavior changed; index.html not touched
+
+**What was added:**
+- `src/products/product-experience-readiness.js` — `EXPERIENCE_STATUS` frozen constant (11 values: unknown, unsupported, catalog-known, eligibility-known, render-planning-known, prototype-preview-supported, proof-ready, commerce-ready, manufacturing-ready, public-claim-ready, blocked); combined readiness resolver combining catalog, eligibility, render spec, and preview registry layers; `resolveForProduct`, `resolveAllForGroup`, `resolvePreviewableForGroup`, `resolveBlockedForGroup`, `resolveByStatus`; `KMEngine.ProductExperienceReadiness`, `KMEngine.EXPERIENCE_STATUS`
+- `src/tests/product-experience-readiness-tests.mjs` — 337 assertions across 15 suites; Suite 15 proves system dependency blockers (renderer-not-implemented) and content eligibility blockers coexist in same readiness output
+
+**Key semantic guard:** For a non-previewable product where the group also fails catalog eligibility (e.g., mug with too many messages), the readiness output preserves BOTH the system dependency issue (`preview-not-supported`, `renderer-not-implemented`) in top-level `blockers` AND the content-specific eligibility issue in `eligibilityResult.blockers`. Neither category is hidden.
+
+**What this does NOT deliver:** actual preview UI, product cards, preview renderers, proof approval UI, checkout/payment, PDF generation, vendor exports, visual regression work.
+
+**Commerce, manufacturing, proof, and public-claim readiness remain gated for all products — all false currently.**
+
+**1431 Node tests passing, 0 failures.**
 
 ---
 
