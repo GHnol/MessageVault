@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
-**Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 4A status sync)
+**Last updated:** 2026-05-16
+**Updated by:** Claude Code (Package 4B status sync)
 **Status:** Active
 
 ---
@@ -85,6 +85,8 @@ Authoritative index of every significant file in the repository — what it is, 
 | `src/products/legacy-keepsake-types-bridge.js` | `KMEngine.LegacyKeepsakeTypesBridge` | 4 legacy standalone types (quote-card, framed-print, mini-story, conversation-page) |
 | `src/products/product-render-spec.js` | `KMEngine.ProductRenderSpecs`, 5 render constants | Render spec registry: 10 specs (6 catalog + 4 physical-only render planning targets); `all()`, `get()`, `renderPlanningTargets()`, `catalogAligned()` — Package 4A |
 | `src/products/product-render-spec-resolver.js` | `KMEngine.ProductRenderSpecResolver` | Resolve render spec against KeepsakeGroup; returns blockers, warnings, eligible, memoryCount — Package 4A |
+| `src/products/prototype-preview-registry.js` | `KMEngine.PrototypePreviewRegistry`, `PREVIEW_STATUS`, `makePreviewEntry` | Preview entry registry: 6 entries for render planning targets; `all()`, `get()`, `getByPreviewTypeId()`, `architectureKnown()`, `prototypePreviewSupported()`; prototypePreviewEnabled: true for Message Book only — Package 4B |
+| `src/products/prototype-preview-resolver.js` | `KMEngine.PrototypePreviewResolver` | Resolve preview readiness against KeepsakeGroup; combines registry entry + ProductRenderSpec; returns previewSupported, blockers, warnings — Package 4B |
 
 ---
 
@@ -100,6 +102,7 @@ Authoritative index of every significant file in the repository — what it is, 
 | `scripts/e2e-regression-harness.mjs` | 29 seeded + 22 real-files (51 total; 52 with chat.db) | Browser E2E: seeded baseline phases 1–10 (Package 3B) + real-file phases 11–19 (Package 3C, `--real-files` flag) |
 | `src/tests/operator-inbox-processor-tests.mjs` | 85 | Processor: detectStream, extractAll, generateRouting*, processFile — Package 2.6; Suite 14 added Package 2.6.1 |
 | `src/tests/product-render-spec-tests.mjs` | 341 | ProductRenderSpecs, ProductRenderSpecResolver, gate values, render planning targets, no commerce/manufacturing/publicClaim readiness implied — Package 4A |
+| `src/tests/prototype-preview-registry-tests.mjs` | 215 | PrototypePreviewRegistry all/get/getByPreviewTypeId/architectureKnown/prototypePreviewSupported, PrototypePreviewResolver resolve, unknown-type safe results, non-book stubs, no mutation — Package 4B |
 | `scripts/e2e-test-data.mjs` | — | Deterministic NormalizedMemory seed data for E2E harness — Package 3B |
 | `scripts/fixtures/fake-conversation.txt` | — | Safe fake pipe-delimited .txt fixture (5 messages) for real import testing — Package 3C |
 

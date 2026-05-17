@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 4A status sync)
+**Last updated:** 2026-05-16
+**Updated by:** Claude Code (Package 4B status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -53,8 +53,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.6 — Operator Inbox + Stream Update Processor | COMPLETE | `23b46b7` / `e7d635d` |
 | Package 2.6.1 — Operator Inbox Extraction Polish | COMPLETE | `841d28a` / `75a2378` |
 | Package 4A — ProductRenderSpec Foundation | COMPLETE | `f08a7dd` / `1058dc1` |
+| Package 4B — Prototype Preview Registry Foundation | COMPLETE | `eca2329` / `3f939d0` |
 
-Tests: **879 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C, 2.6, 2.6.1, and 4A added module/test/docs coverage only, no app code changes.
+Tests: **1094 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C, 2.6, 2.6.1, 4A, and 4B added module/test/docs coverage only, no app code changes.
 
 ---
 
@@ -98,8 +99,16 @@ Package 4A (COMPLETE — `1058dc1`)
     → Commerce/manufacturing/public-claim readiness explicitly gated for all non-Message Book formats
     → 341 new tests; no app behavior changed
 
+Package 4B (COMPLETE — `3f939d0`)
+    → Prototype Preview Registry Foundation — DELIVERED
+    → PREVIEW_STATUS constants, makePreviewEntry factory, 6 preview registry entries
+    → prototypePreviewEnabled: true for Message Book only; 5 non-book formats remain renderer-not-implemented stubs
+    → PrototypePreviewResolver: resolve(), blockers (preview-not-supported, engine-not-supported, etc.)
+    → 215 new tests; no app behavior changed; index.html not touched
+    → Commerce/manufacturing/public-claim readiness remains gated for all non-Message Book formats
+
 Next package (not yet authorized)
-    → Awaiting Coordinator evaluation and authorization
+    → Awaiting Coordinator evaluation and authorization after Package 4B closeout
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -113,7 +122,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Evaluate and authorize next package after Package 4A closeout | Roadmap decision | High — Package 4A complete; development paused pending authorization |
+| Evaluate and authorize next package after Package 4B closeout | Roadmap decision | High — Package 4B complete; development paused pending authorization |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |

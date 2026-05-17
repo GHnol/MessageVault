@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-15
-**Updated by:** Claude Code (Package 4A status sync)
+**Last updated:** 2026-05-16
+**Updated by:** Claude Code (Package 4B status sync)
 **Status:** Active
 
 ---
@@ -190,6 +190,24 @@ What this does NOT deliver: product preview UI, mug/sticker/framed-print/fridge-
 
 ---
 
+### Package 4B — Prototype Preview Registry Foundation
+
+**Branch:** `feature/prototype-preview-registry-foundation`
+**Status:** COMPLETE — merged to main (feature: `eca2329`, merge: `3f939d0`)
+
+Delivered:
+- `src/products/prototype-preview-registry.js` — `PREVIEW_STATUS` frozen constant (READY, STUB, NOT_APPLICABLE); `makePreviewEntry` factory; 6 preview entries covering all render planning targets; `KMEngine.PrototypePreviewRegistry` with `all()`, `get(productTypeId)`, `getByPreviewTypeId()`, `architectureKnown()`, `prototypePreviewSupported()`
+- `src/products/prototype-preview-resolver.js` — `KMEngine.PrototypePreviewResolver` with `resolve(productTypeId, group?)` returning resolved/previewSupported/blockers/warnings/memoryCount; passthrough helpers; combines registry entry + ProductRenderSpec data
+- `src/tests/prototype-preview-registry-tests.mjs` — 215 assertions across 13 suites
+- `docs/architecture/architecture-roadmap.md` — section heading updated to post-Package 4B; PrototypePreviewRegistry layer added to module tree
+- **Tests: 215 passed, 0 failed** (new) | **Cumulative total: 1094 tests**
+
+What this does NOT deliver: actual preview UI, mug/sticker/framed-print/fridge-magnet/mini-notebook renderers, checkout/payment, PDF generation, vendor exports, visual regression work. No app behavior changed. index.html not touched.
+
+**Key gate:** `prototypePreviewEnabled: true` for Message Book only. All 5 non-book render planning targets have `unsupportedReason: 'renderer-not-implemented'`. Commerce, manufacturing, and public-claim readiness remain gated.
+
+---
+
 ## Upcoming packages
 
 ### Package 3 remaining scope (not yet scheduled)
@@ -208,15 +226,21 @@ The following items from original Package 3 scope are not yet started and not ye
 
 ---
 
-### Package 4B and beyond — (To be defined)
+### Package 4B — Prototype Preview Registry Foundation
 
-**Status:** Not started. Awaiting Coordinator direction after Package 4A closeout.
+**Status:** COMPLETE — see Delivered packages above.
+
+---
+
+### Package 4C and beyond — (To be defined)
+
+**Status:** Not started. Awaiting Coordinator direction after Package 4B closeout.
 
 Possible scope areas for future packages:
 - ProductDraft model — per-group, per-product draft container
 - Preflight runner — executes the 10 checks in BOOK_PREFLIGHT_CHECK_REGISTRY
 - Source adapter completions (WhatsApp, Android SMS) — if prioritized
-- Additional render spec consumers (preview stubs, resolver integration into eligibility)
+- Preview resolver integration into eligibility flow
 
 ---
 
