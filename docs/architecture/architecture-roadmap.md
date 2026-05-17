@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-09
+**Last updated:** 2026-05-16
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 4B)
+## Current architecture (post-Package 4C)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -38,6 +38,7 @@ src/
     product-render-spec-resolver.js    — resolve spec against a KeepsakeGroup
     prototype-preview-registry.js      — preview entry registry (constants + 6 entries for render planning targets)
     prototype-preview-resolver.js      — resolve preview readiness against a KeepsakeGroup
+    product-experience-readiness.js    — combined readiness resolver (all 4 layers); EXPERIENCE_STATUS; resolveForProduct/resolveAllForGroup
   tests/
     km-engine-tests.mjs
     keepsake-group-tests.mjs
@@ -45,6 +46,7 @@ src/
     product-eligibility-tests.mjs
     product-render-spec-tests.mjs
     prototype-preview-registry-tests.mjs
+    product-experience-readiness-tests.mjs
 ```
 
 All modules expose into `window.KMEngine`. No build step.
