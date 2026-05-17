@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 4A)
+## Current architecture (post-Package 4B)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -36,12 +36,15 @@ src/
     legacy-keepsake-types-bridge.js
     product-render-spec.js             — render spec registry (constants + 10 specs)
     product-render-spec-resolver.js    — resolve spec against a KeepsakeGroup
+    prototype-preview-registry.js      — preview entry registry (constants + 6 entries for render planning targets)
+    prototype-preview-resolver.js      — resolve preview readiness against a KeepsakeGroup
   tests/
     km-engine-tests.mjs
     keepsake-group-tests.mjs
     product-catalog-tests.mjs
     product-eligibility-tests.mjs
     product-render-spec-tests.mjs
+    prototype-preview-registry-tests.mjs
 ```
 
 All modules expose into `window.KMEngine`. No build step.
