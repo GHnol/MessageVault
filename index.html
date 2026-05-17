@@ -3385,6 +3385,18 @@
     <script src="src/products/legacy-keepsake-types-bridge.js"></script>
 
     <!-- ════════════════════════════════════════════
+         Product experience readiness foundation (Packages 4A–4D).
+         Load order: render-spec → render-spec-resolver → preview-registry
+                     → preview-resolver → experience-readiness → experience-consumer
+    ════════════════════════════════════════════ -->
+    <script src="src/products/product-render-spec.js"></script>
+    <script src="src/products/product-render-spec-resolver.js"></script>
+    <script src="src/products/prototype-preview-registry.js"></script>
+    <script src="src/products/prototype-preview-resolver.js"></script>
+    <script src="src/products/product-experience-readiness.js"></script>
+    <script src="src/products/product-experience-consumer.js"></script>
+
+    <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>
@@ -8265,6 +8277,16 @@ ${keepsakeFooter}
                     contactName:      chatHeaderName.innerText.trim(),
                     messageBookState: messageBookState
                 }));
+            },
+            // Package 4D: Product experience readiness consumer bridge
+            isReadinessAvailable() {
+                var KM = window.KMEngine;
+                return !!(KM && KM.ProductExperienceConsumer && KM.ProductExperienceConsumer.isAvailable());
+            },
+            resolveGroupReadiness(group) {
+                var KM = window.KMEngine;
+                if (!KM || !KM.ProductExperienceConsumer) return null;
+                return KM.ProductExperienceConsumer.resolveForGroup(group);
             },
         };
 
