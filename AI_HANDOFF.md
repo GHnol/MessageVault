@@ -8,11 +8,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 4C COMPLETE, merged to main, status sync complete
+**Status:** `awaiting authorization` — Package 4D IMPLEMENTATION COMPLETE, all tests passing, NOT YET committed
 
 **Last updated by:** `Claude Code`
 
-**Date:** `2026-05-16`
+**Date:** `2026-05-17`
 
 ---
 
@@ -20,31 +20,35 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active package** | `Package 4C — Product Experience Readiness Resolver Foundation` |
-| **Branch** | `feature/product-experience-readiness-foundation` |
-| **Branch base** | `main at 05a3b7b` |
+| **Active package** | `Package 4D — Product Experience Readiness Consumer Foundation` |
+| **Branch** | `feature/product-experience-readiness-consumer` |
+| **Branch base** | `main at 09f5453` |
 | **Last commit on branch** | `none yet — awaiting commit authorization` |
 
 ---
 
 ## Objective
 
-Create the Product Experience Readiness Resolver foundation: a view-model layer that combines all four product-system layers (catalog, eligibility, render spec, preview registry) into one structured readiness output per product/group. Answers: "What can this group become, and why?"
+Wire the product-system modules (Packages 4A–4C) into `index.html` for live browser availability. Create a consumer module (`src/products/product-experience-consumer.js`) as an app-side bridge to `ProductExperienceReadiness`. Add `isReadinessAvailable()` and `resolveGroupReadiness(group)` to `window.__km`. Add E2E Phase 20 (6 tests). Do NOT change any rendering or UI behavior.
 
 New files:
-- `src/products/product-experience-readiness.js` — `EXPERIENCE_STATUS` constant (11 values), `_deriveExperienceStatus`, `resolveForProduct`, `resolveAllForGroup`, `resolvePreviewableForGroup`, `resolveBlockedForGroup`, `resolveByStatus`; `KMEngine.ProductExperienceReadiness`, `KMEngine.EXPERIENCE_STATUS`
-- `src/tests/product-experience-readiness-tests.mjs` — 325 assertions across 14 suites
+- `src/products/product-experience-consumer.js` — null-safe bridge; `isAvailable()`, `resolveForGroup()`, `resolveProductForGroup()`, `resolvePreviewableForGroup()`; `KMEngine.ProductExperienceConsumer`
+- `src/tests/product-experience-consumer-tests.mjs` — 35 assertions across 13 suites
 
 Updated files:
-- `docs/architecture/architecture-roadmap.md` — heading updated to post-Package 4C; product-experience-readiness.js + test file added to module tree
+- `index.html` — 6 new script tags (product-render-spec.js, product-render-spec-resolver.js, prototype-preview-registry.js, prototype-preview-resolver.js, product-experience-readiness.js, product-experience-consumer.js); 2 new methods on `window.__km` (`isReadinessAvailable`, `resolveGroupReadiness`)
+- `scripts/e2e-regression-harness.mjs` — Phase 20 added (6 tests: availability, EXPERIENCE_STATUS, group resolve, message-book status, non-book status, null safety)
+- `docs/architecture/architecture-roadmap.md` — heading updated to post-Package 4D; product-experience-consumer.js + test file added to module tree
 - `AI_HANDOFF.md` — this file
 
 ---
 
 ## Approved scope
 
-- [x] `src/products/product-experience-readiness.js` — new file
-- [x] `src/tests/product-experience-readiness-tests.mjs` — new file
+- [x] `src/products/product-experience-consumer.js` — new file
+- [x] `src/tests/product-experience-consumer-tests.mjs` — new file
+- [x] `index.html` — 6 script tags + 2 window.__km methods
+- [x] `scripts/e2e-regression-harness.mjs` — Phase 20 (6 tests)
 - [x] `docs/architecture/architecture-roadmap.md` — heading + module tree update
 
 No other files changed.
@@ -53,8 +57,7 @@ No other files changed.
 
 ## Hard exclusions
 
-- Do not modify `index.html`
-- Do not implement actual preview UI, physical product renderers, PDF, checkout, or cover design
+- Do not modify preview UI, product renderers, PDF, checkout, or cover design
 - Do not start any new package
 - Do not commit or push without explicit Coordinator authorization
 
@@ -63,11 +66,12 @@ No other files changed.
 ## Git state at handoff
 
 ```
-Branch:       feature/product-experience-readiness-foundation
-main HEAD:    05a3b7b — merge: sync operating docs to reflect Package 4B completion
-Working tree: 2 new untracked files (src/products/product-experience-readiness.js,
-              src/tests/product-experience-readiness-tests.mjs),
-              2 modified files (docs/architecture/architecture-roadmap.md, AI_HANDOFF.md)
+Branch:       feature/product-experience-readiness-consumer
+main HEAD:    09f5453 — docs: close Package 4C handoff
+Working tree: 2 new untracked files (src/products/product-experience-consumer.js,
+              src/tests/product-experience-consumer-tests.mjs),
+              3 modified files (index.html, scripts/e2e-regression-harness.mjs,
+              docs/architecture/architecture-roadmap.md)
 Staged:       nothing staged
 Last push:    No — branch not pushed yet
 ```
@@ -78,31 +82,35 @@ Last push:    No — branch not pushed yet
 
 | File | What changed | Status |
 |---|---|---|
-| `src/products/product-experience-readiness.js` | New — EXPERIENCE_STATUS (11 values), _userLabels, _mergeUnique, _deriveExperienceStatus (with systemPreviewReady distinction for BLOCKED vs RENDER_PLANNING_KNOWN), _deriveNextDependency, _deriveInternalNotes, _safeUnknown, resolveForProduct, resolveAllForGroup, resolvePreviewableForGroup, resolveBlockedForGroup, resolveByStatus | complete |
-| `src/tests/product-experience-readiness-tests.mjs` | New — 325 assertions across 14 suites covering all 14 Coordinator test requirements | complete |
-| `docs/architecture/architecture-roadmap.md` | Updated heading to post-Package 4C; added product-experience-readiness.js + product-experience-readiness-tests.mjs to module tree | complete |
+| `src/products/product-experience-consumer.js` | New — `_safeGroup`, `isAvailable`, `resolveForGroup`, `resolveProductForGroup`, `resolvePreviewableForGroup`; `KMEngine.ProductExperienceConsumer` | complete |
+| `src/tests/product-experience-consumer-tests.mjs` | New — 35 assertions across 13 suites; null-safety, readiness-absent, mutation guard, message-book highest status | complete |
+| `index.html` | 6 script tags after `legacy-keepsake-types-bridge.js`; `isReadinessAvailable()` and `resolveGroupReadiness(group)` on `window.__km` | complete |
+| `scripts/e2e-regression-harness.mjs` | Phase 20 added (6 tests between Phase 10 and REAL_FILES block) | complete |
+| `docs/architecture/architecture-roadmap.md` | Heading to post-Package 4D; product-experience-consumer.js + consumer test file added to module tree | complete |
 
 ---
 
 ## Work completed
 
 - [x] Read AGENTS.md, CLAUDE.md, AI_HANDOFF.md (before-editing reads)
-- [x] Read all prerequisite source files (product-catalog, product-eligibility, product-render-spec, product-render-spec-resolver, prototype-preview-registry, prototype-preview-resolver)
-- [x] Read docs/strategy/master-project-truth.md, product-format-bank.md, backlog-roadmap.md, architecture-roadmap.md
-- [x] Created branch feature/product-experience-readiness-foundation from main at 05a3b7b
-- [x] Wrote src/products/product-experience-readiness.js
-- [x] Wrote src/tests/product-experience-readiness-tests.mjs
-- [x] Ran new tests: 325/325 passed (1 failure fixed — BLOCKED vs RENDER_PLANNING_KNOWN logic)
-- [x] Ran all 8 existing test suites: 1094/1094 passed (no regressions)
+- [x] Created branch feature/product-experience-readiness-consumer from main at 09f5453
+- [x] Wrote src/products/product-experience-consumer.js
+- [x] Edited index.html — 6 script tags for Packages 4A–4D modules
+- [x] Edited index.html — isReadinessAvailable() and resolveGroupReadiness(group) on window.__km
+- [x] Wrote src/tests/product-experience-consumer-tests.mjs
+- [x] Edited scripts/e2e-regression-harness.mjs — Phase 20 (6 tests)
 - [x] Edited docs/architecture/architecture-roadmap.md
 - [x] Updated AI_HANDOFF.md
+- [x] Ran new consumer tests: 35/35 passed
+- [x] Ran all 9 existing test suites: 1431/1431 passed (no regressions)
+- [x] Ran E2E seeded: 35/35 passed (29 existing + 6 new Phase 20)
 
 ## Work remaining
 
 - [ ] Coordinator commit authorization
-- [ ] Stage and commit 4 files + AI_HANDOFF.md on `feature/product-experience-readiness-foundation`
+- [ ] Stage and commit 5 files + AI_HANDOFF.md on `feature/product-experience-readiness-consumer`
 - [ ] Push branch, merge to main, push main
-- [ ] Post-merge status sync (7 ops/command-center docs) if required by Coordinator
+- [ ] Post-merge status sync if required by Coordinator
 
 ---
 
@@ -110,7 +118,8 @@ Last push:    No — branch not pushed yet
 
 | Suite / command | Result | Notes |
 |---|---|---|
-| `node src/tests/product-experience-readiness-tests.mjs` | 325 passed, 0 failed | new — 14 suites; 1 failure fixed (BLOCKED vs RENDER_PLANNING_KNOWN distinction) |
+| `node src/tests/product-experience-consumer-tests.mjs` | 35 passed, 0 failed | new — 13 suites |
+| `node src/tests/product-experience-readiness-tests.mjs` | 337 passed, 0 failed | no regression |
 | `node src/tests/prototype-preview-registry-tests.mjs` | 215 passed, 0 failed | no regression |
 | `node src/tests/product-render-spec-tests.mjs` | 341 passed, 0 failed | no regression |
 | `node src/tests/operator-inbox-processor-tests.mjs` | 85 passed, 0 failed | no regression |
@@ -119,13 +128,14 @@ Last push:    No — branch not pushed yet
 | `node src/tests/product-catalog-tests.mjs` | 127 passed, 0 failed | no regression |
 | `node src/tests/keepsake-group-tests.mjs` | 43 passed, 0 failed | no regression |
 | `node src/tests/km-engine-tests.mjs` | 96 passed, 0 failed | no regression |
-| **Total** | **1419 passed, 0 failed** | 1094 existing + 325 new |
+| `node scripts/e2e-regression-harness.mjs` | 35 passed, 0 failed | 29 existing + 6 new Phase 20 |
+| **Total Node unit tests** | **1466 passed, 0 failed** | 1431 existing + 35 new |
 
 ---
 
 ## Known issues / remaining minor gaps
 
-**Fix applied during implementation:** The initial `_deriveExperienceStatus` returned BLOCKED for mug with 5 messages (because mug's catalog eligibility evaluator blocks >3 messages), but the correct status is RENDER_PLANNING_KNOWN. Fixed by adding a `systemPreviewReady` flag: BLOCKED only fires when the preview system is ready (`prototypePreviewEnabled: true`) but the group fails eligibility. Catalog-only BLOCKED is preserved for products without any render planning layer (e.g., journal with 0 messages). All 14 test requirements confirmed passing.
+None. All tests pass. The consumer module is a pure null-safe delegation layer — no rendering logic, no new user-facing behavior.
 
 ---
 
@@ -133,15 +143,17 @@ Last push:    No — branch not pushed yet
 
 Await Coordinator commit authorization. When authorized, stage and commit:
 ```
-src/products/product-experience-readiness.js
-src/tests/product-experience-readiness-tests.mjs
+src/products/product-experience-consumer.js
+src/tests/product-experience-consumer-tests.mjs
+index.html
+scripts/e2e-regression-harness.mjs
 docs/architecture/architecture-roadmap.md
 AI_HANDOFF.md
 ```
 
 Suggested commit message:
 ```
-feat: add ProductExperienceReadiness foundation (combined readiness resolver for all 4 product layers)
+feat: add ProductExperienceConsumer bridge and wire Package 4 modules into index.html
 ```
 
 ---
@@ -159,24 +171,25 @@ feat: add ProductExperienceReadiness foundation (combined readiness resolver for
 ## Resume prompt for next Claude/Codex session
 
 ```
-You are resuming Package 4C — Product Experience Readiness Resolver Foundation on branch
-feature/product-experience-readiness-foundation (base: main at 05a3b7b).
+You are resuming Package 4D — Product Experience Readiness Consumer Foundation on branch
+feature/product-experience-readiness-consumer (base: main at 09f5453).
 
-Status: 4 files created/modified, all 1419 tests pass (325 new + 1094 existing),
-awaiting commit authorization.
+Status: 5 files created/modified, all tests pass (35 new consumer tests + 1431 existing
+Node unit tests + 35 E2E seeded), awaiting commit authorization.
 
-Files modified (only these four):
-- src/products/product-experience-readiness.js — NEW: EXPERIENCE_STATUS (11 values),
-  resolveForProduct combines catalog + eligibility + render spec + preview registry;
-  systemPreviewReady flag controls BLOCKED vs RENDER_PLANNING_KNOWN distinction;
-  KMEngine.ProductExperienceReadiness, KMEngine.EXPERIENCE_STATUS
-- src/tests/product-experience-readiness-tests.mjs — NEW: 325 assertions across 14 suites
-- docs/architecture/architecture-roadmap.md — MODIFIED: heading to post-Package 4C;
-  product-experience-readiness.js and product-experience-readiness-tests.mjs added to module tree
-- AI_HANDOFF.md — MODIFIED: this file (Package 4C in-progress state)
+Files modified (only these five + AI_HANDOFF.md):
+- src/products/product-experience-consumer.js — NEW: null-safe bridge to
+  ProductExperienceReadiness; isAvailable(), resolveForGroup(), resolveProductForGroup(),
+  resolvePreviewableForGroup(); KMEngine.ProductExperienceConsumer
+- src/tests/product-experience-consumer-tests.mjs — NEW: 35 assertions across 13 suites
+- index.html — 6 script tags for Packages 4A–4D modules after legacy-keepsake-types-bridge.js;
+  isReadinessAvailable() and resolveGroupReadiness(group) added to window.__km
+- scripts/e2e-regression-harness.mjs — Phase 20 added (6 tests between Phase 10 and REAL_FILES)
+- docs/architecture/architecture-roadmap.md — MODIFIED: heading to post-Package 4D;
+  product-experience-consumer.js and product-experience-consumer-tests.mjs added to module tree
 
 Do NOT commit or push without explicit Coordinator authorization.
-Do NOT modify index.html or any src app modules beyond the approved scope.
+Do NOT modify preview UI, product renderers, PDF, checkout, or cover design.
 Do NOT start any new package.
 ```
 
@@ -186,7 +199,7 @@ Do NOT start any new package.
 
 | File | Warning |
 |---|---|
-| `index.html` | Single-file app — do not touch. |
-| `src/**` (except `src/tests/` and the 2 new products/ files) | Do not modify app modules. |
+| `index.html` | Single-file app — edit only the script-loading block and window.__km block. |
+| `src/**` (except `src/tests/` and approved products/ files) | Do not modify app modules beyond approved scope. |
 | `operator-outbox/*.md`, `operator-outbox/*.json` | Gitignored — never commit generated outbox files |
 | `operator-inbox/*.md` (except README, .gitkeep) | Gitignored — never commit real inbox files |

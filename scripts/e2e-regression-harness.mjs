@@ -494,6 +494,87 @@ async function main() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
+    // PHASE 20 — Product experience readiness consumer bridge
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n── PHASE 20 — Product experience readiness consumer bridge ──\n');
+
+    await harness.run('window.__km.isReadinessAvailable() returns true', async page => {
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        const available = await page.evaluate(() => window.__km.isReadinessAvailable());
+        assert(available === true, 'isReadinessAvailable() did not return true — consumer or readiness module may be missing');
+    });
+
+    await harness.run('KMEngine.EXPERIENCE_STATUS is accessible on window', async page => {
+        const hasStatus = await page.evaluate(() => {
+            const KM = window.KMEngine;
+            return !!(KM && KM.EXPERIENCE_STATUS && typeof KM.EXPERIENCE_STATUS.PROTOTYPE_PREVIEW_SUPPORTED === 'string');
+        });
+        assert(hasStatus, 'KMEngine.EXPERIENCE_STATUS.PROTOTYPE_PREVIEW_SUPPORTED is not a string — module may not be loaded');
+    });
+
+    await harness.run('resolveGroupReadiness with seeded group returns array of entries', async page => {
+        await page.evaluate(msgs => window.__km.seedChatMessages(msgs), TEST_MESSAGES);
+        await page.evaluate(() => window.__km.showKeepsakesView());
+        const count = await page.evaluate(() => {
+            const KM = window.KMEngine;
+            if (!KM || !KM.keepsakeGroups) return -1;
+            return KM.keepsakeGroups.length;
+        });
+        // Only assert structure if groups exist; seeded flow may not create groups automatically
+        const result = await page.evaluate(() => {
+            const KM = window.KMEngine;
+            if (!KM || !KM.ProductExperienceConsumer) return null;
+            const group = { messages: [{ id: 'x1', text: 'hi', sender: 'me' }, { id: 'x2', text: 'hello', sender: 'them' }] };
+            return window.__km.resolveGroupReadiness(group);
+        });
+        assert(Array.isArray(result), 'resolveGroupReadiness returned non-array — consumer bridge may be broken');
+        assert(result !== null && result.length > 0, 'resolveGroupReadiness returned empty array — no products resolved');
+    });
+
+    await harness.run('resolveGroupReadiness: message-book reaches prototype-preview-supported', async page => {
+        const status = await page.evaluate(() => {
+            const KM = window.KMEngine;
+            if (!KM || !KM.ProductExperienceConsumer || !KM.EXPERIENCE_STATUS) return null;
+            const group = { messages: [{ id: 'a', text: 'hi', sender: 'me' }, { id: 'b', text: 'hey', sender: 'them' }] };
+            const results = window.__km.resolveGroupReadiness(group);
+            const book = results.find(r => r.productTypeId === 'message-book');
+            return book ? book.experienceStatus : null;
+        });
+        assert(status === 'prototype-preview-supported',
+            'message-book with 2 messages did not reach prototype-preview-supported (got: ' + status + ')');
+    });
+
+    await harness.run('resolveGroupReadiness: non-book render-planning products are render-planning-known', async page => {
+        const results = await page.evaluate(() => {
+            const KM = window.KMEngine;
+            if (!KM || !KM.ProductExperienceConsumer) return null;
+            const group = { messages: [{ id: 'a', text: 'hi', sender: 'me' }] };
+            return window.__km.resolveGroupReadiness(group);
+        });
+        assert(Array.isArray(results), 'resolveGroupReadiness returned non-array');
+        const nonBook = results.filter(r => r.productTypeId !== 'message-book' && r.renderPlanningKnown);
+        const allRenderPlanningKnown = nonBook.every(r =>
+            r.experienceStatus === 'render-planning-known' ||
+            r.experienceStatus === 'blocked'
+        );
+        assert(allRenderPlanningKnown,
+            'One or more non-book render-planning products reached higher than render-planning-known');
+    });
+
+    await harness.run('resolveGroupReadiness with null group does not crash', async page => {
+        const result = await page.evaluate(() => {
+            try {
+                return window.__km.resolveGroupReadiness(null);
+            } catch (e) {
+                return 'threw: ' + e.message;
+            }
+        });
+        assert(result !== null && typeof result !== 'string',
+            'resolveGroupReadiness(null) threw or returned null — expected an array');
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
     // REAL-FILES PHASES (only when --real-files is passed)
     // ─────────────────────────────────────────────────────────────────────────
 
