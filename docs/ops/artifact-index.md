@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4D status sync)
+**Updated by:** Claude Code (Package 4E status sync)
 **Status:** Active
 
 ---
@@ -101,7 +101,7 @@ Authoritative index of every significant file in the repository — what it is, 
 | `src/tests/product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog all/get/flagship/byCategory, required fields |
 | `src/tests/product-eligibility-tests.mjs` | 76 | ProductEligibility per-product evaluators, LegacyKeepsakeTypesBridge |
 | `src/tests/project-persistence-tests.mjs` | 111 | ProjectPersistence validate/deserialize/createSnapshot, ProjectSessionRestore restore — Package 3A |
-| `scripts/e2e-regression-harness.mjs` | 29 seeded + 22 real-files (51 total; 52 with chat.db) | Browser E2E: seeded baseline phases 1–10 (Package 3B) + real-file phases 11–19 (Package 3C, `--real-files` flag) |
+| `scripts/e2e-regression-harness.mjs` | 41 seeded + 23 real-files (64 total) | Browser E2E: seeded baseline phases 1–10 + 20 + 21 (Packages 3B + 4D + 4E) + real-file phases 11–19 (Package 3C, `--real-files` flag) |
 | `src/tests/operator-inbox-processor-tests.mjs` | 85 | Processor: detectStream, extractAll, generateRouting*, processFile — Package 2.6; Suite 14 added Package 2.6.1 |
 | `src/tests/product-render-spec-tests.mjs` | 341 | ProductRenderSpecs, ProductRenderSpecResolver, gate values, render planning targets, no commerce/manufacturing/publicClaim readiness implied — Package 4A |
 | `src/tests/prototype-preview-registry-tests.mjs` | 215 | PrototypePreviewRegistry all/get/getByPreviewTypeId/architectureKnown/prototypePreviewSupported, PrototypePreviewResolver resolve, unknown-type safe results, non-book stubs, no mutation — Package 4B |

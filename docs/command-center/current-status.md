@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4D status sync)
+**Updated by:** Claude Code (Package 4E status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -24,15 +24,16 @@
 | Package 4B | Prototype Preview Registry Foundation | COMPLETE — merged to main | `eca2329` | `3f939d0` |
 | Package 4C | Product Experience Readiness Resolver Foundation | COMPLETE — merged to main | `367dfc7` | `879c244` |
 | Package 4D | Product Experience Readiness Consumer Foundation | COMPLETE — merged to main | `47c402a` | `4747dff` |
+| Package 4E | Product Format Availability Surface Foundation | COMPLETE — merged to main | `99bdf8f` | `7c87f20` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 4D (`47c402a`) — 6 Package 4 modules wired into index.html; `isReadinessAvailable()` and `resolveGroupReadiness()` added to `window.__km`
-- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods)
+- App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; `buildFormatAvailability()` injects safe `.ks-format-availability` section per card via ProductExperienceConsumer
+- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`)
 - `src/state/`: 3 modules added in Package 3A (`project-persistence.js`, `project-session-restore.js`, `project-file-io.js`)
-- `src/products/`: 7 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer — 10 total including Package 4 consumer)
+- `src/products/`: 10 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer)
 - `src/tests/`: 10 suites, 1466 Node tests — all green
   - `km-engine-tests.mjs`: ~96
   - `keepsake-group-tests.mjs`: 43
@@ -44,7 +45,7 @@
   - `prototype-preview-registry-tests.mjs`: 215 (Package 4B)
   - `product-experience-readiness-tests.mjs`: 337 (Package 4C)
   - `product-experience-consumer-tests.mjs`: 35 (Package 4D)
-- `scripts/e2e-regression-harness.mjs`: 35-test seeded Playwright harness (phases 1–10 + phase 20, Package 3B + 4D) + 22-test real-file coverage (phases 11–19, Package 3C) — 57 tests total; 58 with optional chat.db
+- `scripts/e2e-regression-harness.mjs`: 41-test seeded Playwright harness (phases 1–10 + 20 + 21, Packages 3B + 4D + 4E) + 23-test real-file coverage (phases 11–19, Package 3C) — 64 tests total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -53,14 +54,14 @@
 
 ---
 
-## Git state (as of Package 4D closeout)
+## Git state (as of Package 4E closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `4747dff` — merge: add ProductExperienceConsumer bridge |
+| main HEAD | `7c87f20` — merge: add product format availability surface |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | Yes — Package 4D pushed, merged to main, main pushed |
+| Pushed to remote | Yes — Package 4E pushed, merged to main, main pushed |
 
 ---
 
@@ -91,9 +92,9 @@
 
 | Stream (Chat #) | Last meaningful sync | Status |
 |---|---|---|
-| 01 Coordinator | Package 4D approved and merged | Needs sync: evaluate and authorize next package after Package 4D |
+| 01 Coordinator | Package 4E approved and merged | Needs sync: evaluate and authorize next package after Package 4E |
 | 02 Product — Core Strategy | Source intake 2026-05-09 | No immediate action required |
-| 03 Development — Core Build | Package 4D closeout | Needs sync after Package 4D merge |
+| 03 Development — Core Build | Package 4E closeout | Needs sync after Package 4E merge |
 | 04 Production — Vendor Feasibility | Wave 1 research complete | IngramSpark + Lulu follow-ups pending |
 | 05 Production — Mockups and Vendor Strategy | Source intake 2026-05-09 | 6-product physical target locked |
 | 06 Production — Packaging, Bundling, Gifting | Source intake 2026-05-09 | 4-component system captured |

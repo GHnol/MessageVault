@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4D status sync)
+**Updated by:** Claude Code (Package 4E status sync)
 **Status:** Active
 
 ---
@@ -267,15 +267,42 @@ What this does NOT deliver: actual preview UI, product cards, preview renderers,
 
 ---
 
-### Package 4E and beyond — (To be defined)
+### Package 4E — Product Format Availability Surface Foundation
 
-**Status:** Not started. Awaiting Coordinator direction after Package 4D closeout.
+**Branch:** `feature/product-format-availability-surface`
+**Status:** COMPLETE — merged to main (feature: `99bdf8f`, merge: `7c87f20`)
+
+Delivered:
+- `index.html` — CSS for `.ks-format-availability` section (light + dark mode); `buildFormatAvailability(group)` function; wiring inside `buildKeepsakeCard` after meta row
+- `scripts/e2e-regression-harness.mjs` — Phase 21 added (6 tests: section renders, message-book tag text, fmt-available class, non-book planned labels, no commerce language, no crash)
+- `docs/architecture/architecture-roadmap.md` — section heading updated to post-Package 4E; `buildFormatAvailability()` noted in module tree
+- **Tests: 1466 Node unit tests, 0 failed (unchanged)** | **Seeded E2E: 41/41** | **Real-files E2E: 64/64** | **Capture harness scenario A: passed**
+
+Visible copy delivered:
+- Section header: "Product formats"
+- Message Book (canPreview true): "Available for Message Book preview" — fmt-available (green)
+- Non-book render-planning formats: "{displayName}: Planned format" — fmt-planned (grey)
+- Message Book blocked case: "Message Book: {eligibility blocker}" — fmt-blocked (orange)
+- Journal, Sticker Pack, Wall Art, Gift Wrap: NOT shown (isRenderPlanningTarget: false)
+
+What this does NOT deliver: physical product previews, product mockups, preview renderers for any non-book format, proof approval UI, checkout/payment, PDF generation, vendor exports, visual regression work. No changes to existing keepsake flows, save/load, imports, or Message Book rendering.
+
+**Known non-blocking note:** seeded E2E startup timing flap occurred once (navigate-to-app test); repeated runs passed cleanly. Logged as future harness reliability improvement, not a content regression.
+
+**Key gate:** Non-Message Book product formats remain planned and gated. No non-book format has a preview button, order button, or commerce path. Message Book remains the only active/current preview path.
+
+---
+
+### Package 4F and beyond — (To be defined)
+
+**Status:** Not started. Awaiting Coordinator direction after Package 4E closeout.
 
 Possible scope areas for future packages:
 - ProductDraft model — per-group, per-product draft container
 - Preflight runner — executes the 10 checks in BOOK_PREFLIGHT_CHECK_REGISTRY
 - Source adapter completions (WhatsApp, Android SMS) — if prioritized
-- Actual preview UI surface — requires Coordinator authorization
+- Preview renderer implementation for non-book formats — requires Coordinator authorization
+- Visual regression harness — requires Coordinator authorization (Package 3D scope)
 
 ---
 

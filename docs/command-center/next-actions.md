@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4D status sync)
+**Updated by:** Claude Code (Package 4E status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Evaluate and authorize next package after Package 4D closeout | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Evaluate and authorize next package after Package 4E closeout | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
 
@@ -19,8 +19,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 4D COMPLETE — next package not yet authorized**
+**Status: Package 4E COMPLETE — next package not yet authorized**
 
+Package 4E (Product Format Availability Surface Foundation) is COMPLETE — merged to main (`7c87f20`).
 Package 4D (Product Experience Readiness Consumer Foundation) is COMPLETE — merged to main (`4747dff`).
 Package 4C (Product Experience Readiness Resolver Foundation) is COMPLETE — merged to main (`879c244`).
 Package 4B (Prototype Preview Registry Foundation) is COMPLETE — merged to main (`3f939d0`).
@@ -62,7 +63,7 @@ No next package has been authorized. Development is paused until Coordinator eva
 
 | Decision | What needs deciding | Downstream impact |
 |---|---|---|
-| Next package scope | Evaluate and authorize Package 2.6 after Package 3C | Development resumption |
+| Next package scope | Evaluate and authorize next package after Package 4E | Development resumption |
 | GitHub Projects setup | Whether to create the KeepMees Command Center board | Tracking infrastructure |
 | NotebookLM adoption | Formally adopt or defer | Research/synthesis tooling |
 | Designer budget | Re-authorize or continue passive search | Figma execution gate |
@@ -75,6 +76,10 @@ No next package has been authorized. Development is paused until Coordinator eva
 | Item | Reason | Gate |
 |---|---|---|
 | Next development package | No scope authorized yet | Coordinator authorization |
+| Physical product previews | Not yet — no renderers implemented for mug, sticker, framed print, notebook, magnet | Coordinator authorization + renderer implementation |
+| Product mockups | Not yet — no mockup work authorized | Coordinator authorization |
+| Preview renderers | Not yet — renderer-not-implemented for all non-Message Book formats | Coordinator authorization |
+| Proof approval UX | Not yet — no proof rendering pipeline | PDF pipeline + checkout |
 | Checkout / order flow | Vendor not confirmed; commerce blocked | Vendor confirmed + PDF pipeline |
 | PDF generation pipeline | Server infra not established; vendor not confirmed | Vendor confirmed |
 | Cover design work | `isCoverUnblocked()` = false | Vendor confirmed |
