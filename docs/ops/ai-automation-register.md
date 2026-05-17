@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
-**Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4C status sync)
+**Last updated:** 2026-05-17
+**Updated by:** Claude Code (Package 4D status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -261,10 +261,11 @@ All `src/tests/*.mjs` files are runnable via `node`. No build step.
 | `product-render-spec-tests.mjs` | 341 | Must remain green — Package 4A |
 | `prototype-preview-registry-tests.mjs` | 215 | Must remain green — Package 4B |
 | `product-experience-readiness-tests.mjs` | 337 | Must remain green — Package 4C |
-| `scripts/e2e-regression-harness.mjs` | 29 seeded (phases 1–10) | Must remain green — Package 3B (Playwright, requires `scripts/node_modules`) |
-| `scripts/e2e-regression-harness.mjs --real-files` | 52 total (51 always + 1 conditional chat.db) | Must remain green before real-file path changes — Package 3C |
+| `product-experience-consumer-tests.mjs` | 35 | Must remain green — Package 4D |
+| `scripts/e2e-regression-harness.mjs` | 35 seeded (phases 1–10 + phase 20) | Must remain green — Package 3B + 4D (Playwright, requires `scripts/node_modules`) |
+| `scripts/e2e-regression-harness.mjs --real-files` | 58 total (57 always + 1 conditional chat.db) | Must remain green before real-file path changes — Package 3C + 4D |
 
-Required before any future package commit: all 9 Node suites + E2E seeded harness pass. Node total: **1431 tests**. E2E seeded: **29 tests**. E2E real-files: **52 tests** (run with `--real-files` when real-file paths change).
+Required before any future package commit: all 10 Node suites + E2E seeded harness pass. Node total: **1466 tests**. E2E seeded: **35 tests**. E2E real-files: **58 tests** (run with `--real-files` when real-file paths change).
 
 ---
 
@@ -390,7 +391,8 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 14. Execute Package 4A — ProductRenderSpec Foundation ✓ (complete — `f08a7dd` / `1058dc1`)
 15. Execute Package 4B — Prototype Preview Registry Foundation ✓ (complete — `eca2329` / `3f939d0`)
 16. Execute Package 4C — Product Experience Readiness Resolver Foundation ✓ (complete — `367dfc7` / `879c244`)
-17. **Next: Coordinator evaluates and authorizes next package** ← current position
+17. Execute Package 4D — Product Experience Readiness Consumer Foundation ✓ (complete — `47c402a` / `4747dff`)
+18. **Next: Coordinator evaluates and authorizes next package** ← current position
 
 ### Advisory: What Package 2.5B does and does not deliver
 
@@ -399,6 +401,24 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 **Not delivered (later phase):** Actual running automations. n8n / Make / Zapier workflows, GitHub Projects board configuration, and NotebookLM setup remain outside the repo and are pending Coordinator decisions.
 
 **GitHub Projects and NotebookLM remain pending Coordinator decisions** — whether to adopt them, and if so when. Do not treat them as active stack components until explicitly confirmed.
+
+---
+
+### Advisory: Package 4D — Product Experience Readiness Consumer Foundation (2026-05-17)
+
+**Status:** COMPLETE — merged to main (`47c402a` / `4747dff`); index.html updated (script wiring + window.__km bridge)
+
+**What was added:**
+- `src/products/product-experience-consumer.js` — null-safe bridge; `isAvailable()`, `resolveForGroup()`, `resolveProductForGroup()`, `resolvePreviewableForGroup()`; `KMEngine.ProductExperienceConsumer`
+- `src/tests/product-experience-consumer-tests.mjs` — 35 assertions across 13 suites; null-safety, readiness-absent, mutation guard, message-book highest status
+- `index.html` — 6 script tags wiring all Package 4 modules into the app runtime in dependency order; `isReadinessAvailable()` and `resolveGroupReadiness(group)` added to `window.__km`
+- `scripts/e2e-regression-harness.mjs` — Phase 20 (6 tests): availability, EXPERIENCE_STATUS on window, group resolve, message-book reaches prototype-preview-supported, non-book formats gated, null safety
+
+**Validation:** real-files E2E 58/58 passed; capture harness scenario A passed; all 1466 Node unit tests green.
+
+**What this does NOT deliver:** actual preview UI, product cards, preview renderers, proof approval UI, checkout/payment, PDF generation, vendor exports, visual regression work. Existing app behavior, imports, save/load, and Message Book flows preserved.
+
+**Non-Message Book product formats remain renderer-not-implemented where applicable. Commerce, manufacturing, proof, and public-claim readiness remain gated for all products.**
 
 ---
 

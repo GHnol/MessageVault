@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4C status sync)
+**Last updated:** 2026-05-17
+**Updated by:** Claude Code (Package 4D status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -55,8 +55,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 4A — ProductRenderSpec Foundation | COMPLETE | `f08a7dd` / `1058dc1` |
 | Package 4B — Prototype Preview Registry Foundation | COMPLETE | `eca2329` / `3f939d0` |
 | Package 4C — Product Experience Readiness Resolver Foundation | COMPLETE | `367dfc7` / `879c244` |
+| Package 4D — Product Experience Readiness Consumer Foundation | COMPLETE | `47c402a` / `4747dff` |
 
-Tests: **1431 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C, 2.6, 2.6.1, 4A, 4B, and 4C added module/test/docs coverage only, no app code changes.
+Tests: **1466 Node tests passing, 0 failures + 35 seeded E2E + 58 real-files E2E browser tests**. App code last changed: Package 4D (`47c402a`) — 6 Package 4 modules wired into index.html; `isReadinessAvailable()` and `resolveGroupReadiness()` added to `window.__km`.
 
 ---
 
@@ -120,8 +121,22 @@ Package 4C (COMPLETE — `879c244`)
     → 337 new tests; no app behavior changed; index.html not touched
     → Commerce, manufacturing, proof, and public-claim gates remain separate readiness concepts — all false currently
 
+Package 4D (COMPLETE — `4747dff`)
+    → Product Experience Readiness Consumer Foundation — DELIVERED
+    → All 6 Package 4 modules (render-spec, render-spec-resolver, preview-registry, preview-resolver,
+      experience-readiness, experience-consumer) wired into index.html via script tags
+    → ProductExperienceConsumer bridge: null-safe isAvailable(), resolveForGroup(), resolveProductForGroup(),
+      resolvePreviewableForGroup(); KMEngine.ProductExperienceConsumer
+    → isReadinessAvailable() and resolveGroupReadiness(group) added to window.__km
+    → E2E Phase 20 (6 tests): availability, EXPERIENCE_STATUS on window, group resolve, message-book status,
+      non-book gated status, null safety
+    → Real-files E2E: 58/58 passed; capture harness scenario A: passed, 4 pages
+    → 35 new unit tests; existing app behavior, imports, save/load, and Message Book flows preserved
+    → No preview UI, no product renderers, no proof approval, no checkout/payment added
+    → Non-Message Book product formats remain renderer-not-implemented where applicable
+
 Next package (not yet authorized)
-    → Awaiting Coordinator evaluation and authorization after Package 4C closeout
+    → Awaiting Coordinator evaluation and authorization after Package 4D closeout
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -135,7 +150,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Evaluate and authorize next package after Package 4C closeout | Roadmap decision | High — Package 4C complete; development paused pending authorization |
+| Evaluate and authorize next package after Package 4D closeout | Roadmap decision | High — Package 4D complete; development paused pending authorization |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |

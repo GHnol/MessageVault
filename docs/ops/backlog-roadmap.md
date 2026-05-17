@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4C status sync)
+**Last updated:** 2026-05-17
+**Updated by:** Claude Code (Package 4D status sync)
 **Status:** Active
 
 ---
@@ -232,6 +232,24 @@ The following items from original Package 3 scope are not yet started and not ye
 
 ---
 
+### Package 4D — Product Experience Readiness Consumer Foundation
+
+**Branch:** `feature/product-experience-readiness-consumer`
+**Status:** COMPLETE — merged to main (feature: `47c402a`, merge: `4747dff`)
+
+Delivered:
+- `src/products/product-experience-consumer.js` — null-safe app-side bridge to `ProductExperienceReadiness`; `isAvailable()`, `resolveForGroup()`, `resolveProductForGroup()`, `resolvePreviewableForGroup()`; `KMEngine.ProductExperienceConsumer`
+- `src/tests/product-experience-consumer-tests.mjs` — 35 assertions across 13 suites; null-safety, readiness-absent, mutation guard, message-book highest status
+- `index.html` — 6 script tags wiring Packages 4A–4D modules into app runtime; `isReadinessAvailable()` and `resolveGroupReadiness(group)` added to `window.__km`
+- `scripts/e2e-regression-harness.mjs` — Phase 20 added (6 tests: availability, EXPERIENCE_STATUS, group resolve, message-book status, non-book gated status, null safety)
+- **Tests: 35 passed, 0 failed** (new) | **Cumulative total: 1466 Node unit tests** | **Seeded E2E: 35** | **Real-files E2E: 58/58** | **Capture harness scenario A: passed**
+
+What this does NOT deliver: actual preview UI, product cards, preview renderers, proof approval UI, checkout/payment, PDF generation, vendor exports, visual regression work. Existing app behavior, imports, save/load, and Message Book flows preserved.
+
+**Key gate:** Non-Message Book product formats remain `renderer-not-implemented` where applicable. Commerce, manufacturing, proof, and public-claim readiness remain gated.
+
+---
+
 ### Package 4C — Product Experience Readiness Resolver Foundation
 
 **Branch:** `feature/product-experience-readiness-foundation`
@@ -249,9 +267,9 @@ What this does NOT deliver: actual preview UI, product cards, preview renderers,
 
 ---
 
-### Package 4D and beyond — (To be defined)
+### Package 4E and beyond — (To be defined)
 
-**Status:** Not started. Awaiting Coordinator direction after Package 4C closeout.
+**Status:** Not started. Awaiting Coordinator direction after Package 4D closeout.
 
 Possible scope areas for future packages:
 - ProductDraft model — per-group, per-product draft container
