@@ -2468,6 +2468,43 @@
         }
         .ks-card-action-btn:hover { opacity: 0.72; }
 
+        /* ── Product format availability (Package 4E) ───────────────────────── */
+        .ks-format-availability {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0 0;
+        }
+        .ks-format-availability-label {
+            width: 100%;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            color: #aeaeb2;
+            margin-bottom: 2px;
+        }
+        .ks-format-tag {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 9px;
+            border-radius: 20px;
+            letter-spacing: -0.1px;
+            line-height: 1.4;
+        }
+        .ks-format-tag.fmt-available {
+            background: rgba(52,199,89,0.12);
+            color: #248a3d;
+        }
+        .ks-format-tag.fmt-planned {
+            background: rgba(0,0,0,0.05);
+            color: #8e8e93;
+        }
+        .ks-format-tag.fmt-blocked {
+            background: rgba(255,149,0,0.10);
+            color: #c93400;
+        }
+
         @media (prefers-color-scheme: dark) {
             .keepsakes-view { background: #1c1c1e; }
 
@@ -2511,6 +2548,10 @@
             .ks-card-clear-btn { color: #48484a; }
             .ks-card-clear-btn:hover { color: #636366; }
             .ks-card-action-btn { color: #0a84ff; }
+            .ks-format-availability-label { color: #48484a; }
+            .ks-format-tag.fmt-available { background: rgba(48,209,88,0.12); color: #30d158; }
+            .ks-format-tag.fmt-planned   { background: rgba(255,255,255,0.06); color: #636366; }
+            .ks-format-tag.fmt-blocked   { background: rgba(255,159,10,0.10); color: #ff9f0a; }
         }
 
         /* ════════════════════════════════════════════
@@ -6282,6 +6323,50 @@ ${keepsakeFooter}
             return `${mos} month${mos !== 1 ? 's' : ''} ago`;
         }
 
+        function buildFormatAvailability(group) {
+            var KM = window.KMEngine;
+            if (!KM || !KM.ProductExperienceConsumer || !KM.ProductExperienceConsumer.isAvailable()) return null;
+
+            var results = KM.ProductExperienceConsumer.resolveForGroup(group);
+            var visible  = results.filter(function (r) { return r.renderPlanningKnown; });
+            if (visible.length === 0) return null;
+
+            var STATUS   = KM.EXPERIENCE_STATUS;
+            var section  = document.createElement('div');
+            section.className = 'ks-format-availability';
+            section.setAttribute('data-testid', 'format-availability');
+
+            var sectionLabel = document.createElement('div');
+            sectionLabel.className = 'ks-format-availability-label';
+            sectionLabel.textContent = 'Product formats';
+            section.appendChild(sectionLabel);
+
+            for (var i = 0; i < visible.length; i++) {
+                var r   = visible[i];
+                var tag = document.createElement('span');
+                tag.setAttribute('data-format-id',     r.productTypeId);
+                tag.setAttribute('data-format-status', r.experienceStatus);
+
+                if (r.canPreview) {
+                    tag.className   = 'ks-format-tag fmt-available';
+                    tag.textContent = 'Available for Message Book preview';
+                } else if (r.experienceStatus === STATUS.BLOCKED) {
+                    tag.className = 'ks-format-tag fmt-blocked';
+                    var bl = r.eligibilityResult && r.eligibilityResult.blockers && r.eligibilityResult.blockers.length
+                        ? r.eligibilityResult.blockers[0]
+                        : 'Content not eligible for this format yet';
+                    tag.textContent = r.productName + ': ' + bl;
+                } else {
+                    tag.className   = 'ks-format-tag fmt-planned';
+                    tag.textContent = r.productName + ': Planned format';
+                }
+
+                section.appendChild(tag);
+            }
+
+            return section;
+        }
+
         function buildKeepsakeCard(group, contactName) {
             const results = getGroupEligibility(group);
             const isChosen = group.chosenTypeId &&
@@ -6342,6 +6427,10 @@ ${keepsakeFooter}
             }
             meta.textContent = metaText;
             card.appendChild(meta);
+
+            // Product format availability (Package 4E)
+            var formatSection = buildFormatAvailability(group);
+            if (formatSection) card.appendChild(formatSection);
 
             // Action row: clear (left, chosen cards only) + primary action (right)
             const actionRow = document.createElement('div');

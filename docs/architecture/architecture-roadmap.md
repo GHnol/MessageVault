@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
+**Last updated:** 2026-05-17 (Package 4E in progress)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 4D)
+## Current architecture (post-Package 4E)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -40,6 +40,7 @@ src/
     prototype-preview-resolver.js      — resolve preview readiness against a KeepsakeGroup
     product-experience-readiness.js    — combined readiness resolver (all 4 layers); EXPERIENCE_STATUS; resolveForProduct/resolveAllForGroup
     product-experience-consumer.js     — app-side bridge to ProductExperienceReadiness; null-safe; view-model layer only
+index.html (keepsakes view)          — buildFormatAvailability() injects .ks-format-availability section per card via ProductExperienceConsumer — Package 4E
   tests/
     km-engine-tests.mjs
     keepsake-group-tests.mjs

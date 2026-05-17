@@ -575,6 +575,78 @@ async function main() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
+    // PHASE 21 — Product format availability surface
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n── PHASE 21 — Product format availability surface ──\n');
+
+    await harness.run('format availability section renders in keepsakes card', async page => {
+        // Real groups required — run the full seed → select → review flow
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        await page.evaluate(msgs => window.__km.seedChatMessages(msgs), TEST_MESSAGES);
+        await page.click('#selectAllBtn');
+        await page.click('#selectionContinue');
+        await page.waitForFunction(() => {
+            const el = document.getElementById('reviewView');
+            return el && el.style.display !== 'none';
+        });
+        await page.evaluate(() => window.__km.showKeepsakesView());
+        const sectionExists = await page.evaluate(() =>
+            document.querySelector('[data-testid="format-availability"]') !== null
+        );
+        assert(sectionExists, 'No [data-testid="format-availability"] found in keepsakes view — section not rendered');
+    });
+
+    await harness.run('Message Book tag shows "Available for Message Book preview"', async page => {
+        const bookTagText = await page.evaluate(() => {
+            const tag = document.querySelector('[data-format-id="message-book"]');
+            return tag ? tag.textContent : null;
+        });
+        assert(bookTagText === 'Available for Message Book preview',
+            'message-book tag text was: ' + bookTagText);
+    });
+
+    await harness.run('Message Book tag has fmt-available class', async page => {
+        const hasClass = await page.evaluate(() => {
+            const tag = document.querySelector('[data-format-id="message-book"]');
+            return tag ? tag.classList.contains('fmt-available') : false;
+        });
+        assert(hasClass, 'message-book tag does not have fmt-available class');
+    });
+
+    await harness.run('non-book format tags show "Planned format" label', async page => {
+        const plannedTags = await page.evaluate(() => {
+            const tags = Array.from(document.querySelectorAll('[data-format-status="render-planning-known"]'));
+            return tags.map(t => ({ id: t.dataset.formatId, text: t.textContent, cls: t.className }));
+        });
+        assert(plannedTags.length > 0, 'No render-planning-known format tags found — non-book products not shown');
+        const allPlanned = plannedTags.every(t => t.text.indexOf('Planned format') !== -1);
+        assert(allPlanned, 'Some render-planning-known tags do not say "Planned format": ' + JSON.stringify(plannedTags));
+    });
+
+    await harness.run('format section contains no order/buy/checkout language', async page => {
+        const sectionText = await page.evaluate(() => {
+            const section = document.querySelector('[data-testid="format-availability"]');
+            return section ? section.textContent : '';
+        });
+        const forbidden = ['Buy now', 'Order now', 'Checkout', 'Add to cart', 'Ships', 'Manufacturing ready'];
+        const found = forbidden.filter(f => sectionText.indexOf(f) !== -1);
+        assert(found.length === 0, 'Format section contains forbidden commerce language: ' + found.join(', '));
+    });
+
+    await harness.run('format availability section does not crash when rendered from the bridge', async page => {
+        const result = await page.evaluate(() => {
+            try {
+                const r = window.__km.resolveGroupReadiness({ messages: [] });
+                return Array.isArray(r) ? 'ok' : 'non-array';
+            } catch (e) {
+                return 'threw: ' + e.message;
+            }
+        });
+        assert(result === 'ok', 'resolveGroupReadiness with empty messages threw or returned non-array: ' + result);
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
     // REAL-FILES PHASES (only when --real-files is passed)
     // ─────────────────────────────────────────────────────────────────────────
 
