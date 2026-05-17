@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4B status sync)
+**Updated by:** Claude Code (Package 4C status sync)
 **Status:** Active
 
 ---
@@ -232,15 +232,32 @@ The following items from original Package 3 scope are not yet started and not ye
 
 ---
 
-### Package 4C and beyond — (To be defined)
+### Package 4C — Product Experience Readiness Resolver Foundation
 
-**Status:** Not started. Awaiting Coordinator direction after Package 4B closeout.
+**Branch:** `feature/product-experience-readiness-foundation`
+**Status:** COMPLETE — merged to main (feature: `367dfc7`, merge: `879c244`)
+
+Delivered:
+- `src/products/product-experience-readiness.js` — `EXPERIENCE_STATUS` frozen constant (11 values); `_userLabels` map; `_mergeUnique` deduplication helper; `_deriveExperienceStatus` (with `systemPreviewReady` flag for BLOCKED vs RENDER_PLANNING_KNOWN distinction); `_deriveNextDependency`; `_deriveInternalNotes`; `_safeUnknown`; `resolveForProduct`; `resolveAllForGroup`; `resolvePreviewableForGroup`; `resolveBlockedForGroup`; `resolveByStatus`; `KMEngine.ProductExperienceReadiness`; `KMEngine.EXPERIENCE_STATUS`
+- `src/tests/product-experience-readiness-tests.mjs` — 337 assertions across 15 suites; Suite 15 explicitly proves system dependency blockers and content eligibility blockers are both preserved in the same readiness output
+- `docs/architecture/architecture-roadmap.md` — section heading updated to post-Package 4C; ProductExperienceReadiness layer added to module tree
+- **Tests: 337 passed, 0 failed** (new) | **Cumulative total: 1431 tests**
+
+Key semantic guard: For a non-previewable product where the group also fails eligibility (e.g., mug with too many messages), the readiness output preserves BOTH the system dependency issue (`preview-not-supported`, `renderer-not-implemented`) in top-level `blockers` AND the content-specific eligibility issue in `eligibilityResult.blockers`. Neither is hidden.
+
+What this does NOT deliver: actual preview UI, product cards, preview renderers, proof approval UI, checkout/payment, PDF generation, vendor exports, visual regression work. No app behavior changed. index.html not touched.
+
+---
+
+### Package 4D and beyond — (To be defined)
+
+**Status:** Not started. Awaiting Coordinator direction after Package 4C closeout.
 
 Possible scope areas for future packages:
 - ProductDraft model — per-group, per-product draft container
 - Preflight runner — executes the 10 checks in BOOK_PREFLIGHT_CHECK_REGISTRY
 - Source adapter completions (WhatsApp, Android SMS) — if prioritized
-- Preview resolver integration into eligibility flow
+- Actual preview UI surface — requires Coordinator authorization
 
 ---
 

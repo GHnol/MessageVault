@@ -1,7 +1,7 @@
 # Risk Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4B status sync)
+**Updated by:** Claude Code (Package 4C status sync)
 **Status:** Active
 
 ---
@@ -30,7 +30,7 @@ Each risk has: **ID**, **Description**, **Likelihood** (L/M/H), **Impact** (L/M/
 
 **Description:** As `index.html` grows, it becomes harder to navigate, edit, and review. A single large file increases the risk of accidental changes to unrelated sections. The larger KeepMees gets, the more expensive a late architecture correction becomes.
 
-**Mitigation:** KMEngine modular extraction is the approved near-term path — progressively moving testable logic into `src/` modules. Package 3A added 3 new modules to `src/state/` without growing `index.html` unmaintainably. Package 3B added a Playwright-based E2E harness that catches behavioral regressions automatically, reducing the cost of future changes. Package 3C extended the harness to cover real file import, actual browser downloads, actual upload/restore, and capture harness integration — 51 tests total. Package 2.6 added the Operator Inbox automation layer (processor + tests) with no app code changes. Package 2.6.1 patched Operator Inbox extraction patterns. Package 4A added the ProductRenderSpec foundation (render spec registry, resolver, 341 tests) with no app code changes. Package 4B added the PrototypePreviewRegistry foundation (preview entry registry, resolver, 215 tests) with no app code changes — 1094 Node tests total. Framework / build-system migration is a tracked future decision (deferred, not rejected) — see `docs/architecture/adr-001-app-architecture-path.md`. Re-evaluate when render/proof architecture stabilizes or when UI state, persistence, proofing, and render specs become too complex for the current shell.
+**Mitigation:** KMEngine modular extraction is the approved near-term path — progressively moving testable logic into `src/` modules. Package 3A added 3 new modules to `src/state/` without growing `index.html` unmaintainably. Package 3B added a Playwright-based E2E harness that catches behavioral regressions automatically, reducing the cost of future changes. Package 3C extended the harness to cover real file import, actual browser downloads, actual upload/restore, and capture harness integration — 51 tests total. Package 2.6 added the Operator Inbox automation layer (processor + tests) with no app code changes. Package 2.6.1 patched Operator Inbox extraction patterns. Package 4A added the ProductRenderSpec foundation (render spec registry, resolver, 341 tests) with no app code changes. Package 4B added the PrototypePreviewRegistry foundation (preview entry registry, resolver, 215 tests) with no app code changes. Package 4C added the ProductExperienceReadiness foundation (combined readiness resolver across all 4 product layers, 337 tests) with no app code changes — 1431 Node tests total. Framework / build-system migration is a tracked future decision (deferred, not rejected) — see `docs/architecture/adr-001-app-architecture-path.md`. Re-evaluate when render/proof architecture stabilizes or when UI state, persistence, proofing, and render specs become too complex for the current shell.
 
 ---
 

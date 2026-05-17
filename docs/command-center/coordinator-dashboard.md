@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4B status sync)
+**Updated by:** Claude Code (Package 4C status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -54,8 +54,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.6.1 — Operator Inbox Extraction Polish | COMPLETE | `841d28a` / `75a2378` |
 | Package 4A — ProductRenderSpec Foundation | COMPLETE | `f08a7dd` / `1058dc1` |
 | Package 4B — Prototype Preview Registry Foundation | COMPLETE | `eca2329` / `3f939d0` |
+| Package 4C — Product Experience Readiness Resolver Foundation | COMPLETE | `367dfc7` / `879c244` |
 
-Tests: **1094 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C, 2.6, 2.6.1, 4A, and 4B added module/test/docs coverage only, no app code changes.
+Tests: **1431 Node tests passing, 0 failures + 29 seeded E2E + 52 real-files E2E browser tests**. App code last changed: Package 3B (`0ce973a`) — Packages 3C, 2.6, 2.6.1, 4A, 4B, and 4C added module/test/docs coverage only, no app code changes.
 
 ---
 
@@ -107,8 +108,20 @@ Package 4B (COMPLETE — `3f939d0`)
     → 215 new tests; no app behavior changed; index.html not touched
     → Commerce/manufacturing/public-claim readiness remains gated for all non-Message Book formats
 
+Package 4C (COMPLETE — `879c244`)
+    → Product Experience Readiness Resolver Foundation — DELIVERED
+    → EXPERIENCE_STATUS constants (11 values: unknown → unsupported → catalog-known → eligibility-known →
+      render-planning-known → prototype-preview-supported → proof-ready → commerce-ready →
+      manufacturing-ready → public-claim-ready; BLOCKED as special state)
+    → Combined readiness resolver: catalog + eligibility + render spec + preview registry → one output per product/group
+    → resolveForProduct, resolveAllForGroup, resolvePreviewableForGroup, resolveBlockedForGroup, resolveByStatus
+    → Semantic guard: system dependency blockers (renderer-not-implemented) and content eligibility blockers
+      are BOTH preserved in readiness output — Suite 15 regression test proves this
+    → 337 new tests; no app behavior changed; index.html not touched
+    → Commerce, manufacturing, proof, and public-claim gates remain separate readiness concepts — all false currently
+
 Next package (not yet authorized)
-    → Awaiting Coordinator evaluation and authorization after Package 4B closeout
+    → Awaiting Coordinator evaluation and authorization after Package 4C closeout
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -122,7 +135,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Evaluate and authorize next package after Package 4B closeout | Roadmap decision | High — Package 4B complete; development paused pending authorization |
+| Evaluate and authorize next package after Package 4C closeout | Roadmap decision | High — Package 4C complete; development paused pending authorization |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |
