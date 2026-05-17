@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-05-16
-**Updated by:** Claude Code (Package 4C status sync)
+**Last updated:** 2026-05-17
+**Updated by:** Claude Code (Package 4D status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Evaluate and authorize next package after Package 4C closeout | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Evaluate and authorize next package after Package 4D closeout | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
 
@@ -19,8 +19,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 4C COMPLETE — next package not yet authorized**
+**Status: Package 4D COMPLETE — next package not yet authorized**
 
+Package 4D (Product Experience Readiness Consumer Foundation) is COMPLETE — merged to main (`4747dff`).
 Package 4C (Product Experience Readiness Resolver Foundation) is COMPLETE — merged to main (`879c244`).
 Package 4B (Prototype Preview Registry Foundation) is COMPLETE — merged to main (`3f939d0`).
 Package 4A (ProductRenderSpec Foundation) is COMPLETE — merged to main (`1058dc1`).
