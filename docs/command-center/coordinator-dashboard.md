@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4D status sync)
+**Updated by:** Claude Code (Package 4E status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -56,8 +56,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 4B — Prototype Preview Registry Foundation | COMPLETE | `eca2329` / `3f939d0` |
 | Package 4C — Product Experience Readiness Resolver Foundation | COMPLETE | `367dfc7` / `879c244` |
 | Package 4D — Product Experience Readiness Consumer Foundation | COMPLETE | `47c402a` / `4747dff` |
+| Package 4E — Product Format Availability Surface Foundation | COMPLETE | `99bdf8f` / `7c87f20` |
 
-Tests: **1466 Node tests passing, 0 failures + 35 seeded E2E + 58 real-files E2E browser tests**. App code last changed: Package 4D (`47c402a`) — 6 Package 4 modules wired into index.html; `isReadinessAvailable()` and `resolveGroupReadiness()` added to `window.__km`.
+Tests: **1466 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; safe "Product formats" section with Message Book as "Available for Message Book preview" and non-book formats as "Planned format"; no renderers, no commerce, no mockups added.
 
 ---
 
@@ -130,13 +131,28 @@ Package 4D (COMPLETE — `4747dff`)
     → isReadinessAvailable() and resolveGroupReadiness(group) added to window.__km
     → E2E Phase 20 (6 tests): availability, EXPERIENCE_STATUS on window, group resolve, message-book status,
       non-book gated status, null safety
-    → Real-files E2E: 58/58 passed; capture harness scenario A: passed, 4 pages
+    → Real-files E2E: 58/58 passed; capture harness scenario A: passed
     → 35 new unit tests; existing app behavior, imports, save/load, and Message Book flows preserved
     → No preview UI, no product renderers, no proof approval, no checkout/payment added
     → Non-Message Book product formats remain renderer-not-implemented where applicable
 
+Package 4E (COMPLETE — `7c87f20`)
+    → Product Format Availability Surface Foundation — DELIVERED
+    → Safe "Product formats" section injected per card in Your Keepsakes view via buildFormatAvailability()
+    → Message Book label: "Available for Message Book preview" (fmt-available, green) — only when canPreview true
+    → Non-book render-planning format labels: "{name}: Planned format" (fmt-planned, grey)
+    → Blocked case label: "{name}: {eligibility blocker text}" (fmt-blocked, orange)
+    → No non-book preview buttons; no non-book order buttons; no product mockups; no product preview images
+    → No commerce, manufacturing-ready, public-claim, or order language
+    → E2E Phase 21 (6 tests): section renders, message-book tag text, fmt-available class, non-book planned
+      labels, no commerce language, no crash
+    → 41 seeded E2E / 64 real-files E2E; capture harness scenario A: passed
+    → Existing imports, save/load, standalone keepsakes, and Message Book flows preserved
+    → Physical product previews, preview renderers, proof approval, visual regression, commerce, and
+      manufacturing work remain not started
+
 Next package (not yet authorized)
-    → Awaiting Coordinator evaluation and authorization after Package 4D closeout
+    → Awaiting Coordinator evaluation and authorization after Package 4E closeout
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -150,7 +166,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Evaluate and authorize next package after Package 4D closeout | Roadmap decision | High — Package 4D complete; development paused pending authorization |
+| Evaluate and authorize next package after Package 4E closeout | Roadmap decision | High — Package 4E complete; development paused pending authorization |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |
