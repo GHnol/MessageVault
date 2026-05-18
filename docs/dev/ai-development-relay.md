@@ -10,8 +10,10 @@ This document describes how AI coding agents and human reviewers hand off work i
 |------|------|-----------------|
 | **Development** | ChatGPT Development | Architecture, review, release decisions |
 | **Implementation** | Claude Code | Code edits, file operations, test runs |
-| **Code generation** | Codex (optional) | Targeted code completion |
+| **Interchangeable agent** | Codex | Backup implementer, reviewer, debugging specialist, usage-limit fallback, alternative technical reasoning — see `docs/dev/claude-codex-interchangeability.md` |
 | **QA** | Human / Claude Code | Manual QA, browser testing |
+
+Claude Code and Codex are interchangeable over the durable substrate (git + repo docs). Either can own the active branch; exactly one does at a time. The project continues even if one tool hits a usage limit. Tool switches follow `docs/dev/tool-switching-protocol.md`.
 
 ---
 

@@ -44,6 +44,8 @@
 - [ ] Work performed by AI agent (Claude Code / Codex / ChatGPT Dev)
 - **Agent(s) involved:**
 - **`AI_HANDOFF.md` status:** cleared / updated / N/A
+- **`CURRENT_STATE.md` / `NEXT_SESSION_PROMPT.md` updated if state changed:** yes / no / N/A
+- **Model or tool switched during this work:** no / yes — handoff updated before switch: yes / no
 - **Scope confirmed narrow:** yes / no — notes:
 
 ---

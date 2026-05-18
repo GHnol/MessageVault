@@ -69,6 +69,20 @@ The following are off-limits without explicit instruction:
 
 Full protocol: `docs/automation/operator-mode/context-continuity-protocol.md`
 
+## Session, context, model, and tool protocols
+
+`AGENTS.md` is the universal contract; this file extends it. For continuity decisions, follow:
+
+- Restarting / after `/clear` / `/compact` / new session → `docs/dev/session-restart-protocol.md`
+- `/clear` vs `/compact` vs `/context`, high context/usage, auto-compact warnings → `docs/dev/context-hygiene-protocol.md`
+- Switching Claude model (e.g. to Opus) → `docs/dev/model-switching-protocol.md`
+- Switching tool (Claude ↔ Codex) → `docs/dev/tool-switching-protocol.md`
+- Codex roles / interchangeability → `docs/dev/claude-codex-interchangeability.md`
+- Worktrees / parallel sessions → `docs/dev/worktree-and-parallel-session-policy.md`
+- Full scope boundary list → `docs/dev/agent-scope-boundaries.md`
+
+Durable continuity files to keep current: `CURRENT_STATE.md` (project snapshot), `AI_HANDOFF.md` (work transfer), `NEXT_SESSION_PROMPT.md` (restart entry point). A model-switch or context warning is a cost/continuity warning, not an error — checkpoint these files, then proceed.
+
 ## Git identity (KeepMees repo)
 
 This repo belongs to: KeepMees  
