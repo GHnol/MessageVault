@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 4E COMPLETE, merged to main, status sync complete
+**Status:** `open` — Package 4E.1 implementation complete, testing complete, NOT YET COMMITTED
 
 **Last updated by:** `Claude Code`
 
@@ -20,53 +20,99 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active package** | `Package 4E — Product Format Availability Surface Foundation` |
-| **Branch** | `feature/product-format-availability-surface` (merged to main) |
-| **Branch base** | `main at a2f500e` |
-| **Feature commit** | `99bdf8f` — feat: add product format availability surface |
-| **Merge commit** | `7c87f20` — merge: add product format availability surface |
-| **Sync commit** | see status-sync merge commit below |
+| **Active package** | `Package 4E.1 — E2E Startup Timing Reliability Patch` |
+| **Branch** | `fix/e2e-startup-readiness-reliability` |
+| **Branch base** | `main at 496bdb9` |
+| **Feature commit** | NOT YET CREATED |
+| **Merge commit** | NOT YET CREATED |
 
 ---
 
 ## Objective
 
-Create the first safe product-format availability surface in the app. Expose ProductExperienceReadiness through a conservative UI section inside the "Your Keepsakes" view, showing which formats are known/available/planned/gated per keepsake group.
+Harden E2E startup readiness in `scripts/e2e-regression-harness.mjs` only. Add a server readiness probe, improve `waitForKm` error message, add one bounded retry on initial navigation. Test-harness reliability patch only — no product behavior changes, no UI changes, no product readiness logic changes.
 
 ---
 
 ## Work completed
 
-- [x] Full Package 4E implementation (CSS + buildFormatAvailability + wiring + Phase 21 E2E)
-- [x] Pre-commit review — copy safety verified, no forbidden wording
-- [x] All tests passed: 1466 Node unit / 41 seeded E2E / 64 real-files E2E / capture harness A
-- [x] Implementation commit: `99bdf8f`
-- [x] Branch pushed and merged to main — merge commit: `7c87f20`
-- [x] Main pushed
-- [x] Status sync branch created and all ops docs updated
-- [x] Status sync commit and merge to main complete
-- [x] AI_HANDOFF.md updated to closed state
+- [x] Branch `fix/e2e-startup-readiness-reliability` created from main at `496bdb9`
+- [x] Three reliability changes applied to `scripts/e2e-regression-harness.mjs`:
+  1. `waitForServer` function — Node-side HTTP probe, 10×100ms bounded, fails with diagnostic
+  2. `waitForKm` improved with diagnostic error message (names `window.__km` block and module serving as likely causes)
+  3. `await waitForServer(url)` call added in `main()` after `startServer`
+  4. Phase 1 test 1 wrapped in bounded retry loop (max 2 attempts, logged)
+- [x] `docs/qa/e2e-regression-harness.md` updated:
+  - Package line updated to include 4D, 4E, 4E.1
+  - Seeded baseline section updated to include phases 20 and 21 in coverage table
+  - Test counts updated: 41 seeded / 23 real-file / 64 combined
+  - "How to interpret failures" updated with improved diagnostic error text
+  - New "Startup reliability (Package 4E.1)" section added
+- [x] Seeded E2E: 3 consecutive runs — 41/41 each (runs 1, 2, 3)
+- [x] Real-files E2E: 64/64 passed
+- [x] Unit baselines:
+  - product-experience-consumer-tests: 35/35
+  - product-experience-readiness-tests: 337/337
+  - operator-inbox-processor-tests: 85/85
+  - project-persistence-tests: 111/111
+  - km-engine-tests: 96/96
 
 ## Work remaining
 
-None. Package 4E is fully closed.
+- [ ] **Coordinator authorization to commit and push** — do NOT commit without explicit instruction
+- [ ] Commit: `test: harden E2E startup readiness` (suggested message per original spec)
+- [ ] Push branch and merge to main (after commit authorized)
+- [ ] Post-merge ops doc status sync (backlog-roadmap, artifact-index, current-status, next-actions, coordinator-dashboard, risk-register)
 
 ---
 
-## Git state at closeout
+## Files changed (not yet committed)
+
+| File | Change |
+|---|---|
+| `scripts/e2e-regression-harness.mjs` | Startup reliability patch: `waitForServer`, improved `waitForKm` error, `waitForServer` call in `main()`, Phase 1 test 1 bounded retry |
+| `docs/qa/e2e-regression-harness.md` | Updated Package line, phases 20+21 in coverage table, test counts (41/23/64), improved failure diagnostics, new startup reliability section |
+
+**Files NOT changed (must stay unchanged):**
+- `index.html` — no product/UI behavior changes
+- `src/**` — no product logic changes
+- Any ops docs other than `docs/qa/e2e-regression-harness.md`
+
+---
+
+## Git state
 
 ```
-Branch:       main
-main HEAD:    (see git log — status-sync merge commit after 7c87f20)
-Working tree: Clean
-Pushed:       Yes
+Branch:       fix/e2e-startup-readiness-reliability
+Branch base:  main at 496bdb9
+Working tree: 2 files modified, not staged
+Pushed:       No
 ```
 
 ---
 
-## Next exact action
+## Next exact action for incoming session
 
-Coordinator to evaluate and authorize the next package. No development work starts until authorization is received.
+1. Read `AGENTS.md`, `CLAUDE.md`, this file
+2. Run `git status` and `git log --oneline -5` to confirm branch and state
+3. **Wait for Coordinator authorization before committing**
+4. When authorized: commit with suggested message `test: harden E2E startup readiness`
+5. Push branch, merge to main, sync ops docs
+
+---
+
+## Commit message (when authorized)
+
+```
+test: harden E2E startup readiness
+
+- Add waitForServer probe (10x100ms) before Chromium launch
+- Improve waitForKm error message with module-serving diagnostic
+- Add one bounded logged retry on Phase 1 initial navigation
+- Update docs/qa/e2e-regression-harness.md: phases 20+21, test counts, startup reliability section
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+```
 
 ---
 
