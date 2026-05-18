@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 2.7 (AI Development Operating System Upgrade Pass), docs/infrastructure only, NOT committed, NOT pushed
+**Status:** `closed` — Package 2.7 COMPLETE, merged to main (`cebdc72`), status sync complete
 
 **Last updated by:** `Claude Code (Opus 4.7)`
 
@@ -21,10 +21,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | Field | Value |
 |---|---|
 | **Active package** | `Package 2.7 — AI Development Operating System Upgrade Pass` |
-| **Branch** | `docs/ai-development-operating-system-upgrade` |
+| **Branch** | `docs/ai-development-operating-system-upgrade` (merged to main) |
 | **Branch base** | `main at 89a17d0` |
-| **Feature commit** | NOT YET CREATED — do not commit without explicit instruction |
-| **Merge commit** | NOT YET CREATED |
+| **Feature commit** | `6dde21b` — docs: upgrade AI development operating system |
+| **Merge commit** | `cebdc72` — merge: upgrade AI development operating system |
+| **Status-sync commit** | `docs: sync operating docs to reflect Package 2.7 completion` (see git log) |
 
 ---
 
@@ -62,30 +63,30 @@ Upgrade repo-level AI development operating infrastructure only: universal agent
 - [x] Verification run: `git status --short`, `git diff --stat`, ignore probes — clean and in scope
 - [x] Final report delivered
 
+- [x] Coordinator reviewed and approved Package 2.7
+- [x] Committed (`6dde21b`), pushed, merged to main (`cebdc72`), main pushed
+- [x] Post-merge status sync (command-center + ops + continuity files)
+
 ## Work remaining
 
-- [ ] Coordinator review of this docs/infra pass
-- [ ] Commit + push only when explicitly authorized (NOT done in this pass)
+None. Package 2.7 is fully closed. Next authorized target: Project Control Tower pass (not yet authorized). Package 5A remains paused.
 
 ---
 
-## Git state
+## Git state at closeout
 
 ```
-Branch:       docs/ai-development-operating-system-upgrade
-Branch base:  main at 89a17d0
-Working tree: in progress (docs/infra files being created)
-Pushed:       No
+Branch:       main
+main HEAD:    cebdc72 (+ status-sync merge — see git log)
+Working tree: Clean
+Pushed:       Yes
 ```
 
 ---
 
-## Next exact action for incoming session
+## Next exact action
 
-1. Read `AGENTS.md`, `CLAUDE.md`, this file
-2. Run `git status --short` and `git diff --stat`
-3. If Phase B incomplete: continue creating Phase B files per the Package 2.7 instruction
-4. **Do not commit or push** without explicit Coordinator instruction
+Coordinator to authorize the Project Control Tower pass. No development or Tower work begins until authorized. Package 5A stays paused until the Tower is complete and approved. `scripts/node_modules` history cleanup is a separate Coordinator decision.
 
 ---
 
@@ -93,9 +94,9 @@ Pushed:       No
 
 1. `AGENTS.md`
 2. `CLAUDE.md`
-3. This file (`AI_HANDOFF.md`)
-4. `git status` / `git log --oneline -10`
-5. The Package 2.7 instruction (from Coordinator)
+3. `CURRENT_STATE.md`
+4. This file (`AI_HANDOFF.md`)
+5. `git status` / `git log --oneline -10`
 
 ---
 

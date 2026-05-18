@@ -43,7 +43,9 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | `Package 2.7 — AI Development Operating System Upgrade Pass` (docs/infra only) |
-| Branch | `docs/ai-development-operating-system-upgrade` |
-| First action | Read `AI_HANDOFF.md`, run `git status --short`, continue/verify Phase B docs; do NOT commit |
-| If 2.7 already closed | No package authorized — await Coordinator; do not start new code work |
+| Resume into | No package in progress. Package 2.7 COMPLETE and merged (`cebdc72`). |
+| Branch | `main` |
+| Next authorized target | Project Control Tower pass — NOT yet authorized (Coordinator decision pending) |
+| First action | Read `AGENTS.md`/`CLAUDE.md`/`AI_HANDOFF.md`/`CURRENT_STATE.md`, run `git status` + `git log --oneline -10`; do not start code/Tower work without explicit authorization |
+| Package 5A | Paused until the Project Control Tower is complete and approved |
+| Do not | Build the full Project Control Tower or any Tower artifact until that pass is explicitly authorized |

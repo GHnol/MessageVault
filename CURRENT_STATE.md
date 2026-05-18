@@ -21,17 +21,18 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `89a17d0` — docs: mark Package 4E.1 closed in handoff file |
-| Last closed package | `Package 4E.1 — E2E Startup Timing Reliability Patch` (merge `73dae00`) |
-| Active package | `Package 2.7 — AI Development Operating System Upgrade Pass` (docs/infra only, in progress, uncommitted) |
-| Active branch | `docs/ai-development-operating-system-upgrade` |
-| Next package | Not authorized — Coordinator decision pending |
+| main HEAD | `cebdc72` — merge: upgrade AI development operating system |
+| Last closed package | `Package 2.7 — AI Development Operating System Upgrade Pass` (feature `6dde21b`, merge `cebdc72`) |
+| Active package | None — no package in progress |
+| Active branch | `main` (status-sync `docs/sync-command-center-after-package-2-7` pending merge) |
+| Next authorized target | Project Control Tower pass — NOT yet authorized (Coordinator decision pending) |
+| Package 5A | Paused until the Project Control Tower is complete and approved |
 
 ---
 
 ## Delivered packages (summary)
 
-Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 64 real-files E2E, all green.
+Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Package 2.7 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 64 real-files E2E, all green. Package 2.7 added operating infrastructure only (no app code).
 
 ---
 

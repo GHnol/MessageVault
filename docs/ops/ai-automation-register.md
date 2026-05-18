@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4D status sync)
+**Updated by:** Claude Code (Package 2.7 status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -372,6 +372,28 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 ---
 
 ## LAYER 2 — Claude Advisory, Not Yet Coordinator Approved
+
+### Advisory: Package 2.7 — AI Development Operating System Upgrade Pass (2026-05-17)
+
+**Status:** COMPLETE — merged to main (`6dde21b` / `cebdc72`); docs/operating-infrastructure only, no app code
+
+**What was added:**
+- `AGENTS.md` upgraded as the universal agent contract (tool-layering: AGENTS → CLAUDE/.codex → operator-mode → package); rules 11–15; durable continuity files; switching protocol table
+- `CLAUDE.md` refreshed as Claude-specific layer with protocol pointers
+- `CURRENT_STATE.md` (durable project snapshot) and `NEXT_SESSION_PROMPT.md` (restart entry point) added
+- `docs/dev/` protocols: context hygiene (/clear vs /compact vs /context), model switching, tool switching, session restart, agent scope boundaries, worktree/parallel-session policy, Claude/Codex interchangeability; `ai-development-relay.md` Codex 5-role model
+- `docs/qa/` pre-commit verification and release readiness templates
+- `docs/project-control/` readiness (plan, calendar spec, weekly-sync placeholder) — Tower NOT built
+- `.codex/README.md`, `.claude/agents/README.md`, `.claude/skills/README.md` placeholders (no live hooks/subagents/skills)
+- `.gitignore` hardened: Claude/Codex local, secrets/`.env*`, `.claude/worktrees/`, broad `artifacts/`, PDFs, `.ics`, `node_modules/`, local reports
+
+**Codex interchangeability formalized:** Codex supported as backup implementer, reviewer, debugging specialist, usage-limit fallback, alternative technical reasoning agent. Either tool can own the active branch; exactly one does at a time; handoff only via repo (`AI_HANDOFF.md` + `CURRENT_STATE.md`).
+
+**What this does NOT deliver:** full Project Control Tower, master roadmap, master schedule, Kanban board, Google Calendar `.ics`, ClickUp import, TickTick import, n8n/Make/Zapier automation, live Claude hooks/subagents/skills, `.codex/config.toml`, Product Package 5A. No app, product, vendor, design, or manufacturing decisions reopened.
+
+**Backlog:** `scripts/node_modules` tracked-history cleanup is a separate Coordinator decision (not Package 2.7). Live tool-specific automation (hooks/subagents/skills/Codex config) deferred to a separately authorized pass. Next authorized target: the Project Control Tower pass. Package 5A remains paused until the Tower is complete and approved.
+
+---
 
 ### Advisory: AI Mastery implementation sequence status
 
