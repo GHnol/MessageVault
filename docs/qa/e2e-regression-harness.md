@@ -1,6 +1,6 @@
 # E2E Regression Harness — KeepMees / MessageVault
 
-**Package:** 3B (seeded baseline) + 3C (real-file coverage)
+**Package:** 3B (seeded baseline) + 3C (real-file coverage) + 4D (Phase 20) + 4E (Phase 21) + 4E.1 (startup reliability)
 **Status:** Active
 
 ---
@@ -66,7 +66,7 @@ npx playwright install chromium
 
 ## Test coverage
 
-### Seeded baseline (phases 1–10, 29 tests — always runs)
+### Seeded baseline (phases 1–10, 20–21, 41 tests — always runs)
 
 | Phase | Area | Key assertions |
 |---|---|---|
@@ -80,8 +80,10 @@ npx playwright install chromium
 | 8 | Reload + restore | Clean reload; project load restores messages, groups, and all three views |
 | 9 | Invalid file handling | Invalid JSON and wrong schema version produce no crash; app stays functional |
 | 10 | Capture harness smoke | Capture bridge functions (showBookView, renderBookView, etc.) present after load |
+| 20 | Product experience readiness consumer bridge | `window.__km.isReadinessAvailable()` true; `EXPERIENCE_STATUS` accessible; `resolveGroupReadiness` returns array; message-book reaches `prototype-preview-supported`; non-book render-planning products are `render-planning-known`; null group safe — Package 4D |
+| 21 | Product format availability surface | `[data-testid="format-availability"]` renders in keepsakes card; message-book tag text is "Available for Message Book preview" with `fmt-available` class; non-book tags show "Planned format"; no order/buy/checkout language; bridge call does not crash — Package 4E |
 
-### Real-file coverage (phases 11–19, 22 tests — only with `--real-files`)
+### Real-file coverage (phases 11–19, 23 tests — only with `--real-files`)
 
 | Phase | Area | Key assertions |
 |---|---|---|
@@ -95,9 +97,9 @@ npx playwright install chromium
 | 18 | Optional chat.db smoke | If `KEEP_MEES_E2E_CHATDB_PATH` is set: file loads without crash; contact picker or status appears (1 test) |
 | 19 | Capture harness integration | `capture-message-book-packet.mjs --scenarios a` runs as subprocess and exits 0 |
 
-**Seeded baseline total: 29 tests**
-**Real-file total: 22 tests always + 1 conditional (chat.db)**
-**Combined total: 51 tests (52 with chat.db)**
+**Seeded baseline total: 41 tests**
+**Real-file total: 23 tests always + 1 conditional (chat.db)**
+**Combined total: 64 tests (65 with chat.db)**
 
 ---
 
@@ -206,7 +208,9 @@ This is deferred to a future **Package 3D: Visual Regression Baseline Harness**.
 
 **"KMEngine modules not loaded"** — most likely the static server is not serving `src/` files with a `text/javascript` MIME type. The harness server handles this; the capture harness server does not. If you switch servers, verify MIME types.
 
-**"window.__km not defined"** — the inline harness bridge in `index.html` failed to execute. Check for JavaScript syntax errors in the `window.__km` block.
+**"window.__km was not defined within 10s"** — the inline harness bridge in `index.html` failed to execute within the timeout. Check for JavaScript syntax errors in the `window.__km` block, and confirm all `src/` modules were served correctly.
+
+**"Static server at … did not become ready"** — the Node HTTP server did not respond on port 7332 within 1 second (10 × 100 ms probes). Check that no other process is holding port 7332.
 
 **Phase 8 failures (restore)** — if Phase 7 (save) also failed, Phase 8 failures are downstream and not independent. Fix the save phase first.
 
@@ -251,6 +255,20 @@ For tests that do not require a browser page (subprocess, file I/O), use `harnes
 Seeded test data lives in `scripts/e2e-test-data.mjs`. If a new seeded test needs different data, add it there with a fixed timestamp base (deterministic).
 
 Real-file fixture data lives in `scripts/fixtures/`. Add new fixture files there. Never add real user data or real chat exports to this directory.
+
+---
+
+## Startup reliability (Package 4E.1)
+
+Three measures guard against intermittent startup timing failures on Windows:
+
+1. **Server readiness probe** — after `startServer()`, the harness sends a bounded HTTP GET to `http://127.0.0.1:7332/index.html` (10 × 100 ms). If the server is not responding after all probes, the harness exits with a diagnostic rather than launching Chromium into a race.
+
+2. **Improved `waitForKm` error** — if `window.__km` is not defined within 10 s, the thrown error names both the `window.__km` block and module serving as likely causes, making the failure easier to diagnose.
+
+3. **One bounded startup retry** — the initial `page.goto` + `waitForKm` sequence in Phase 1, test 1 retries once if it fails. The retry is logged (`[startup retry]`). Only applies to the very first navigation; all other tests do not retry.
+
+These changes affect only `scripts/e2e-regression-harness.mjs` — no product behavior is changed.
 
 ---
 

@@ -102,10 +102,37 @@ function startServer(port) {
     });
 }
 
+// ── Server readiness probe ────────────────────────────────────────────────────
+// Confirms the static server is accepting connections before Chromium navigates.
+// Bounded to maxAttempts × intervalMs; fails with a diagnostic if never ready.
+async function waitForServer(url, maxAttempts = 10, intervalMs = 100) {
+    for (let i = 0; i < maxAttempts; i++) {
+        const ready = await new Promise(resolve => {
+            const req = http.get(url + '/index.html', res => { res.resume(); resolve(res.statusCode === 200); });
+            req.on('error', () => resolve(false));
+            req.setTimeout(1_000, () => { req.destroy(); resolve(false); });
+        });
+        if (ready) return;
+        if (i < maxAttempts - 1) await new Promise(r => setTimeout(r, intervalMs));
+    }
+    throw new Error(
+        `Static server at ${url} did not become ready after ${maxAttempts} probes — ` +
+        'check that port 7332 is not in use by another process'
+    );
+}
+
 // ── Harness helpers ───────────────────────────────────────────────────────────
 
 async function waitForKm(page) {
-    await page.waitForFunction(() => typeof window.__km !== 'undefined', { timeout: 10_000 });
+    await page.waitForFunction(
+        () => typeof window.__km !== 'undefined',
+        { timeout: 10_000 }
+    ).catch(() => {
+        throw new Error(
+            'window.__km was not defined within 10s — ' +
+            'check that index.html loaded and all src/ modules were served correctly'
+        );
+    });
 }
 
 function assert(cond, msg) {
@@ -201,6 +228,7 @@ async function main() {
 
     // ── Server ────────────────────────────────────────────────────────────────
     const { server, url } = await startServer(PORT);
+    await waitForServer(url); // probe before launching Chromium
     console.log(`  Server : ${url}`);
     console.log(`  Mode   : ${HEADED ? 'headed (debug)' : 'headless'}${REAL_FILES ? ' + real-files' : ''}\n`);
 
@@ -227,8 +255,21 @@ async function main() {
     console.log('── PHASE 1 — App load ──\n');
 
     await harness.run('navigate to app and wait for window.__km', async page => {
-        await page.goto(url, { waitUntil: 'domcontentloaded' });
-        await waitForKm(page);
+        // One bounded retry for the initial navigation — first Chromium connection can
+        // occasionally be slower than the server probe, especially on Windows.
+        for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+                await page.goto(url, { waitUntil: 'domcontentloaded' });
+                await waitForKm(page);
+                return;
+            } catch (e) {
+                if (attempt < 2) {
+                    console.log(`     [startup retry] initial load did not complete — retrying once`);
+                } else {
+                    throw e;
+                }
+            }
+        }
     });
 
     await harness.run('landing page visible', async page => {
