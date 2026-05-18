@@ -1,6 +1,15 @@
 # AGENTS.md — AI Coding Agent Instructions
 
-This file applies to all AI coding agents working in this repository (Claude Code, Codex, ChatGPT Development, etc.).
+This file is the **universal agent contract**. It applies to every AI coding agent working in this repository (Claude Code, Codex, ChatGPT Development, and any other).
+
+**Tool layering:**
+- `AGENTS.md` — universal contract (this file). Never overridden.
+- `CLAUDE.md` — Claude Code-specific behavior. Extends this file.
+- `.codex/README.md` — Codex-specific behavior. Extends this file.
+- `docs/automation/operator-mode/*` — KeepMees operating procedures.
+- Active package instruction — what the current session is authorized to do.
+
+An agent reads the universal contract first, then its own tool layer, then operating procedures, then the package instruction.
 
 ---
 
@@ -27,6 +36,42 @@ This file applies to all AI coding agents working in this repository (Claude Cod
 8. **Manual QA is required before commit for any UI or behavior change.** Document results in `docs/qa/manual-qa-template.md`.
 9. **Update `AI_HANDOFF.md` before stopping** if your work is incomplete or being transferred.
 10. **Do not claim work is complete** unless you have verified tests pass and manual QA requirements are met or explicitly waived.
+11. **Do not deploy, change production config, or edit secrets** without explicit approval.
+12. **Do not add dependencies** without explaining why.
+13. **Do not make product claims** the current system does not support.
+14. **Preserve locked truth:** Message Book is the flagship, not the project boundary; KeepMees is a broad keepsake system; preview truth is distinct from design truth; external designer contracting is paused; vendor/manufacturing and packaging/gifting are gated.
+15. **Provide exact commands, exact results, and an exact changed-file list.** Provide a recommended commit message whenever work reaches a good commit point.
+
+---
+
+## Durable continuity files
+
+The session is disposable. The repo is permanent. These files are the durable memory — keep them current:
+
+| File | Role |
+|---|---|
+| `AGENTS.md` / `CLAUDE.md` / `.codex/README.md` | Persistent rules |
+| `CURRENT_STATE.md` | Durable project snapshot — where the project is now |
+| `AI_HANDOFF.md` | In-flight work transfer |
+| `NEXT_SESSION_PROMPT.md` | How the next session restarts |
+
+Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` before any major stop, context compaction, `/clear`, `/compact`, model switch, tool switch, account switch, or branch handoff.
+
+---
+
+## Context, model, and tool switching
+
+| Situation | Protocol |
+|---|---|
+| Restarting any session / after `/clear` / `/compact` / new day | `docs/dev/session-restart-protocol.md` |
+| `/clear` vs `/compact` vs `/context` decision, high context/usage | `docs/dev/context-hygiene-protocol.md` |
+| Switching Claude model (e.g. to Opus) | `docs/dev/model-switching-protocol.md` |
+| Switching tool (Claude ↔ Codex) | `docs/dev/tool-switching-protocol.md` |
+| Codex roles and interchangeability | `docs/dev/claude-codex-interchangeability.md` |
+| Parallel work / worktrees | `docs/dev/worktree-and-parallel-session-policy.md` |
+| Full scope boundary list | `docs/dev/agent-scope-boundaries.md` |
+
+A model-switch or context warning is a **cost/continuity warning, not an error**. Checkpoint, then proceed.
 
 ---
 

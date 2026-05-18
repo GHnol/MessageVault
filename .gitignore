@@ -1,8 +1,34 @@
+# Claude Code — local / private (never commit)
 .claude/settings.local.json
-artifacts/preview-handoff-v1/
-artifacts/preview-handoff-v1.zip
-artifacts/e2e-failures/
+.claude/worktrees/
+CLAUDE.local.md
+
+# Codex — local / private config (never commit)
+.codex/config.local.toml
+.codex/*.local.*
+.codex/secrets*
+
+# Secrets / credentials (never commit)
+.env
+.env.*
+*.local.env
+**/secrets.json
+**/credentials.json
+aws-credentials*
+*.pem
+
+# Generated artifacts / exports / local reports (never commit)
+artifacts/
+!artifacts/.gitkeep
+*.pdf
+*.ics
+local-reports/
+screenshots/
+.tmp-ai/
 _source-intake/
+
+# Dependencies (never commit; scripts/node_modules is historically tracked — see backlog)
+node_modules/
 
 # Operator Inbox — raw pasted stream responses (never commit real content)
 operator-inbox/*.md

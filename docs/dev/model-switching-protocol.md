@@ -1,0 +1,69 @@
+# Model Switching Protocol
+
+**Applies to:** Claude Code in this repository (and any agent that can change underlying model)
+**Status:** Active — required operating protocol
+
+---
+
+## The warning is not an error
+
+Claude Code may warn that switching models will be slower and use more tokens because the current conversation is cached for the current model, and the next response on the new model re-reads the full history uncached.
+
+This is a **context-cost and continuity warning**, not a failure. Do not treat it as an error. Treat it as a prompt to checkpoint before switching.
+
+---
+
+## Before switching models in a long or important session
+
+Update all three durable files:
+
+- `AI_HANDOFF.md`
+- `CURRENT_STATE.md`
+- `NEXT_SESSION_PROMPT.md`
+
+The update must include:
+
+1. Current branch
+2. `git status`
+3. Recent commits
+4. Changed files
+5. Completed work
+6. Remaining work
+7. Current objective
+8. Blockers
+9. Risks
+10. Tests/checks run
+11. Tests/checks not run
+12. Exact next command sequence
+13. Exact restart prompt
+14. Recommended commit message if at a good commit point
+
+---
+
+## Which model for which work
+
+| Work type | Model |
+|---|---|
+| Routine mechanical edits, small doc changes, status syncs | Current / default model |
+| Architecture, deep review, complex debugging | Strongest available model (e.g. Opus) |
+| High-risk changes (scope-guarded areas, persistence, pagination-adjacent) | Strongest available model |
+| Repeated failed attempts on the same problem | Switch up a model tier, after a handoff checkpoint |
+| Major planning, Project Control Tower passes | Strongest available model |
+
+---
+
+## Decision flow
+
+1. If the session is large but the **same task is still active**: `/compact` before switching (preserve useful context cheaply).
+2. If the task is at a boundary, the session is messy, or context is bloated: update handoff files, `/clear`, switch model, then restart from `NEXT_SESSION_PROMPT.md`.
+3. Never rely on chat history alone across a model switch.
+4. Git remains the source of truth. Repo docs remain durable memory.
+5. Do not commit or push as a side effect of a model switch unless explicitly instructed.
+
+---
+
+## Relationship to other protocols
+
+- Timing of when to checkpoint: `context-hygiene-protocol.md`
+- Handoff artifact format: `AI_HANDOFF.md` + `docs/automation/operator-mode/claude-codex-relay-protocol.md`
+- Tool (Claude↔Codex) switching: `tool-switching-protocol.md`
