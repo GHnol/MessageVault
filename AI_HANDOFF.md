@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `open` — Package 4E.1 implementation complete, testing complete, NOT YET COMMITTED
+**Status:** `closed` — Package 4E.1 COMPLETE, merged to main (`73dae00`)
 
 **Last updated by:** `Claude Code`
 
@@ -23,8 +23,8 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Active package** | `Package 4E.1 — E2E Startup Timing Reliability Patch` |
 | **Branch** | `fix/e2e-startup-readiness-reliability` |
 | **Branch base** | `main at 496bdb9` |
-| **Feature commit** | NOT YET CREATED |
-| **Merge commit** | NOT YET CREATED |
+| **Feature commit** | `3c4ce70` — test: harden E2E startup readiness |
+| **Merge commit** | `73dae00` — merge: harden E2E startup readiness |
 
 ---
 
@@ -59,60 +59,38 @@ Harden E2E startup readiness in `scripts/e2e-regression-harness.mjs` only. Add a
 
 ## Work remaining
 
-- [ ] **Coordinator authorization to commit and push** — do NOT commit without explicit instruction
-- [ ] Commit: `test: harden E2E startup readiness` (suggested message per original spec)
-- [ ] Push branch and merge to main (after commit authorized)
-- [ ] Post-merge ops doc status sync (backlog-roadmap, artifact-index, current-status, next-actions, coordinator-dashboard, risk-register)
+None. Package 4E.1 is fully closed.
 
 ---
 
-## Files changed (not yet committed)
+## Files committed
 
 | File | Change |
 |---|---|
-| `scripts/e2e-regression-harness.mjs` | Startup reliability patch: `waitForServer`, improved `waitForKm` error, `waitForServer` call in `main()`, Phase 1 test 1 bounded retry |
-| `docs/qa/e2e-regression-harness.md` | Updated Package line, phases 20+21 in coverage table, test counts (41/23/64), improved failure diagnostics, new startup reliability section |
+| `scripts/e2e-regression-harness.mjs` | Startup reliability patch: `waitForServer`, improved `waitForKm` error, probe call in `main()`, Phase 1 test 1 bounded retry |
+| `docs/qa/e2e-regression-harness.md` | Package line, phases 20+21 coverage rows, test counts (41/23/64), improved failure diagnostics, new startup reliability section |
+| `AI_HANDOFF.md` | Package 4E.1 status record |
 
-**Files NOT changed (must stay unchanged):**
+**Files NOT touched:**
 - `index.html` — no product/UI behavior changes
 - `src/**` — no product logic changes
-- Any ops docs other than `docs/qa/e2e-regression-harness.md`
 
 ---
 
-## Git state
+## Git state at closeout
 
 ```
-Branch:       fix/e2e-startup-readiness-reliability
-Branch base:  main at 496bdb9
-Working tree: 2 files modified, not staged
-Pushed:       No
+Branch:       main
+main HEAD:    73dae00
+Working tree: clean (AI_HANDOFF.md in-memory edit pending commit below)
+Pushed:       Yes
 ```
 
 ---
 
-## Next exact action for incoming session
+## Next exact action
 
-1. Read `AGENTS.md`, `CLAUDE.md`, this file
-2. Run `git status` and `git log --oneline -5` to confirm branch and state
-3. **Wait for Coordinator authorization before committing**
-4. When authorized: commit with suggested message `test: harden E2E startup readiness`
-5. Push branch, merge to main, sync ops docs
-
----
-
-## Commit message (when authorized)
-
-```
-test: harden E2E startup readiness
-
-- Add waitForServer probe (10x100ms) before Chromium launch
-- Improve waitForKm error message with module-serving diagnostic
-- Add one bounded logged retry on Phase 1 initial navigation
-- Update docs/qa/e2e-regression-harness.md: phases 20+21, test counts, startup reliability section
-
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
-```
+Coordinator to evaluate and authorize the next package. No development work starts until authorization is received.
 
 ---
 
