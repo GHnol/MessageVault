@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4E status sync)
+**Updated by:** Claude Code (Package 2.7 status sync)
 **Status:** Active
 
 ---
@@ -293,9 +293,51 @@ What this does NOT deliver: physical product previews, product mockups, preview 
 
 ---
 
+### Package 4E.1 — E2E Startup Timing Reliability Patch
+
+**Branch:** `fix/e2e-startup-readiness-reliability`
+**Status:** COMPLETE — merged to main (feature: `3c4ce70`, merge: `73dae00`)
+
+Delivered:
+- `scripts/e2e-regression-harness.mjs` — `waitForServer` readiness probe before Chromium launch; improved `waitForKm` diagnostic error; one bounded logged retry on Phase 1 initial navigation
+- `docs/qa/e2e-regression-harness.md` — phases 20+21 coverage rows, test counts (41 seeded / 23 real-file / 64 combined), startup reliability section
+- **Seeded E2E: 3 consecutive 41/41 runs | Real-files E2E: 64/64 | Capture harness scenario A: passed | unit baselines green**
+
+Test-harness reliability only. No product, UI, or readiness logic change.
+
+---
+
+### Package 2.7 — AI Development Operating System Upgrade Pass
+
+**Branch:** `docs/ai-development-operating-system-upgrade`
+**Status:** COMPLETE — merged to main (feature: `6dde21b`, merge: `cebdc72`)
+
+Delivered (docs / operating infrastructure only — no app code):
+- `AGENTS.md` upgraded as the universal agent contract; tool-layering model; rules 11–15; durable continuity files; switching protocol table
+- `CLAUDE.md` refreshed as the Claude-specific layer (protocol pointers)
+- `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` added (durable snapshot + restart entry point)
+- `docs/dev/`: `context-hygiene-protocol.md`, `model-switching-protocol.md`, `tool-switching-protocol.md`, `session-restart-protocol.md`, `agent-scope-boundaries.md`, `worktree-and-parallel-session-policy.md`, `claude-codex-interchangeability.md`; `ai-development-relay.md` Codex 5-role model
+- `docs/qa/`: `pre-commit-verification-template.md`, `release-readiness-template.md`
+- `docs/project-control/`: `README.md`, `project-control-tower-plan.md`, `project-calendar-spec.md`, `coordinator-weekly-sync.md` (readiness only)
+- `.codex/README.md`; `.claude/agents/README.md`, `.claude/skills/README.md` (placeholders)
+- `.github/PULL_REQUEST_TEMPLATE.md` continuity checkboxes
+- `.gitignore` hardened (Claude/Codex local, secrets/`.env*`, worktrees, broad artifacts, PDFs, `.ics`, `node_modules/`, local reports)
+
+What this did NOT build: full Project Control Tower, master roadmap, master schedule, Kanban board, Google Calendar `.ics`, ClickUp import, TickTick import, n8n/Make/Zapier automation, Product Package 5A. No app behavior, product, vendor, design, or manufacturing decisions reopened.
+
+**Backlog note:** `scripts/node_modules` tracked-history cleanup remains a separate Coordinator decision, not part of Package 2.7. Live Claude hooks/subagents/skills and `.codex/config.toml` deferred to a separately authorized pass.
+
+---
+
+### Project Control Tower pass — (next authorized target, NOT yet authorized)
+
+**Status:** Not started. Package 2.7 prepared readiness only. The dedicated Tower build pass (master roadmap, schedule, phase gates, backlog, Kanban, Google Calendar/ClickUp/TickTick exports, Coordinator weekly sync) requires explicit Coordinator authorization. See `docs/project-control/project-control-tower-plan.md`. **Package 5A remains paused until the Project Control Tower is complete and approved.**
+
+---
+
 ### Package 4F and beyond — (To be defined)
 
-**Status:** Not started. Awaiting Coordinator direction after Package 4E closeout.
+**Status:** Not started. Awaiting Coordinator direction.
 
 Possible scope areas for future packages:
 - ProductDraft model — per-group, per-product draft container

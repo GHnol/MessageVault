@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4E status sync)
+**Updated by:** Claude Code (Package 2.7 status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,16 +11,19 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Evaluate and authorize next package after Package 4E closeout | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize the Project Control Tower pass | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
+| 4 | Decide `scripts/node_modules` tracked-history cleanup (separate from Package 2.7) | Coordinator | **[NEEDS APPROVAL]** |
 
 ---
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 4E COMPLETE — next package not yet authorized**
+**Status: Package 2.7 COMPLETE — next authorized target is the Project Control Tower pass (not yet authorized). Package 5A remains paused until the Project Control Tower is complete and approved.**
 
+Package 2.7 (AI Development Operating System Upgrade Pass) is COMPLETE — merged to main (`cebdc72`). Operating infrastructure only; no app code; full Project Control Tower NOT built (prepared only).
+Package 4E.1 (E2E Startup Timing Reliability Patch) is COMPLETE — merged to main (`73dae00`).
 Package 4E (Product Format Availability Surface Foundation) is COMPLETE — merged to main (`7c87f20`).
 Package 4D (Product Experience Readiness Consumer Foundation) is COMPLETE — merged to main (`4747dff`).
 Package 4C (Product Experience Readiness Resolver Foundation) is COMPLETE — merged to main (`879c244`).
@@ -32,7 +35,7 @@ Package 3C (Real File Import, Download, and Full-Path E2E Coverage) is COMPLETE 
 Package 3B (Automated E2E Regression Harness Foundation) is COMPLETE — merged to main (`40b4bba`).
 Package 3A (local project session save and resume foundation) is COMPLETE — merged to main (`b40fa2b`).
 
-No next package has been authorized. Development is paused until Coordinator evaluates and authorizes the next package.
+No development package has been authorized. The next authorized target for Coordinator evaluation is the **Project Control Tower pass** (build the master roadmap, schedule, gates, backlog, Kanban, calendar/ClickUp/TickTick exports per `docs/project-control/project-control-tower-plan.md`). Product Package 5A remains paused until the Project Control Tower is complete and approved.
 
 ---
 
@@ -63,7 +66,8 @@ No next package has been authorized. Development is paused until Coordinator eva
 
 | Decision | What needs deciding | Downstream impact |
 |---|---|---|
-| Next package scope | Evaluate and authorize next package after Package 4E | Development resumption |
+| Project Control Tower pass | Authorize the dedicated Tower build pass (roadmap, schedule, gates, backlog, Kanban, calendar/ClickUp/TickTick exports) | Project execution visibility; unblocks Package 5A evaluation |
+| Package 5A | Remains paused until Project Control Tower is complete and approved | Product roadmap resumption |
 | GitHub Projects setup | Whether to create the KeepMees Command Center board | Tracking infrastructure |
 | NotebookLM adoption | Formally adopt or defer | Research/synthesis tooling |
 | Designer budget | Re-authorize or continue passive search | Figma execution gate |
@@ -76,6 +80,9 @@ No next package has been authorized. Development is paused until Coordinator eva
 | Item | Reason | Gate |
 |---|---|---|
 | Next development package | No scope authorized yet | Coordinator authorization |
+| Full Project Control Tower build (master roadmap, schedule, Kanban, Google Calendar .ics, ClickUp import, TickTick import) | Package 2.7 prepared readiness only — Tower not built | Coordinator authorization of the Tower pass |
+| Product Package 5A | Paused | Project Control Tower complete and approved |
+| `scripts/node_modules` history cleanup | Tracked in git history; not part of Package 2.7 | Separate Coordinator decision |
 | Physical product previews | Not yet — no renderers implemented for mug, sticker, framed print, notebook, magnet | Coordinator authorization + renderer implementation |
 | Product mockups | Not yet — no mockup work authorized | Coordinator authorization |
 | Preview renderers | Not yet — renderer-not-implemented for all non-Message Book formats | Coordinator authorization |

@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4E status sync)
+**Updated by:** Claude Code (Package 2.7 status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -57,8 +57,10 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 4C — Product Experience Readiness Resolver Foundation | COMPLETE | `367dfc7` / `879c244` |
 | Package 4D — Product Experience Readiness Consumer Foundation | COMPLETE | `47c402a` / `4747dff` |
 | Package 4E — Product Format Availability Surface Foundation | COMPLETE | `99bdf8f` / `7c87f20` |
+| Package 4E.1 — E2E Startup Timing Reliability Patch | COMPLETE | `3c4ce70` / `73dae00` |
+| Package 2.7 — AI Development Operating System Upgrade Pass | COMPLETE | `6dde21b` / `cebdc72` |
 
-Tests: **1466 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; safe "Product formats" section with Message Book as "Available for Message Book preview" and non-book formats as "Planned format"; no renderers, no commerce, no mockups added.
+Tests: **1466 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; safe "Product formats" section with Message Book as "Available for Message Book preview" and non-book formats as "Planned format"; no renderers, no commerce, no mockups added. Package 4E.1 (`3c4ce70`) was test-harness reliability only (no app change). Package 2.7 (`6dde21b`) was AI development operating infrastructure only — no app, product, vendor, design, or manufacturing change; full Project Control Tower NOT built (prepared only).
 
 ---
 
@@ -151,8 +153,23 @@ Package 4E (COMPLETE — `7c87f20`)
     → Physical product previews, preview renderers, proof approval, visual regression, commerce, and
       manufacturing work remain not started
 
-Next package (not yet authorized)
-    → Awaiting Coordinator evaluation and authorization after Package 4E closeout
+Package 4E.1 (COMPLETE — `73dae00`)
+    → E2E Startup Timing Reliability Patch — DELIVERED (test-harness only, no app change)
+
+Package 2.7 (COMPLETE — `cebdc72`)
+    → AI Development Operating System Upgrade Pass — DELIVERED
+    → Universal agent contract refresh; Claude/Codex interchangeability
+    → context hygiene / model switching / tool switching / session restart / scope boundaries / worktree protocols
+    → CURRENT_STATE.md + NEXT_SESSION_PROMPT.md; QA pre-commit + release-readiness templates
+    → docs/project-control readiness (plan, calendar spec, weekly-sync placeholder)
+    → hardened .gitignore; Claude agents/skills + Codex README placeholders
+    → NOT built: full Project Control Tower, master roadmap, master schedule, Kanban,
+      Google Calendar .ics, ClickUp import, TickTick import, n8n/Make/Zapier, Product Package 5A
+    → no app code; no product/vendor/design/manufacturing decisions reopened
+
+Project Control Tower pass (NOT yet authorized) ← current position
+    → Coordinator to authorize the dedicated Tower build pass
+    → Package 5A remains paused until the Tower is complete and approved
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -166,7 +183,8 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Evaluate and authorize next package after Package 4E closeout | Roadmap decision | High — Package 4E complete; development paused pending authorization |
+| Authorize the Project Control Tower pass | Roadmap decision | High — next authorized target; unblocks Package 5A evaluation |
+| `scripts/node_modules` tracked-history cleanup (separate from Package 2.7) | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |

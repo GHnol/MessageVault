@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4E status sync)
+**Updated by:** Claude Code (Package 2.7 status sync)
 **Status:** Active
 
 ---
@@ -18,9 +18,14 @@ Authoritative index of every significant file in the repository — what it is, 
 |---|---|---|
 | `index.html` | Application | Entire app: UI, CSS, composition logic, pagination, rendering. Do not edit without reading. |
 | `README.md` | Documentation | Repository README (minimal) |
-| `CLAUDE.md` | AI instructions | Claude Code behavior rules, scope guard, git rules; Context Continuity Guard added |
-| `AGENTS.md` | AI instructions | Agent rules for all AI coding agents; Context Continuity Guard added |
+| `CLAUDE.md` | AI instructions | Claude-specific layer; extends `AGENTS.md`; scope guard, git rules, continuity + session/model/tool protocol pointers (Package 2.7) |
+| `AGENTS.md` | AI instructions | Universal agent contract for all AI coding agents; tool-layering model, continuity rules, switching protocol table (Package 2.7) |
 | `AI_HANDOFF.md` | Handoff / resume file | Compact-safe work transfer record; updated before any context event, agent switch, or mid-task stop |
+| `CURRENT_STATE.md` | Continuity file | Durable project-state snapshot — survives /clear, /compact, model/tool switch (Package 2.7) |
+| `NEXT_SESSION_PROMPT.md` | Continuity file | Paste-ready session restart prompt + mandatory startup checklist (Package 2.7) |
+| `.codex/README.md` | AI instructions | Codex-specific layer; roles, interchangeability, config policy (Package 2.7, placeholder) |
+| `.claude/agents/README.md` | AI instructions | Planned subagent roster (Package 2.7, readiness placeholder — no live agents) |
+| `.claude/skills/README.md` | AI instructions | Planned skill roster (Package 2.7, readiness placeholder — no live skills) |
 
 ---
 
@@ -188,11 +193,37 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/automation/templates/roadmap-item.md` | Template for roadmap milestones |
 | `docs/automation/templates/ai-automation-item.md` | Template for AI automation register items |
 
-### QA (Package 3B — `0ce973a` / Package 3C — `f8379d0` / Package 2.6 — `23b46b7`)
+### QA (Package 3B — `0ce973a` / 3C — `f8379d0` / 2.6 — `23b46b7` / 4E.1 — `3c4ce70` / 2.7 — `6dde21b`)
 
 | File | Purpose |
 |---|---|
-| `docs/qa/e2e-regression-harness.md` | How to run the E2E regression harness (seeded + real-files modes), what all 51 tests cover, privacy rules, fixture policy, how to interpret failures, how to add tests — updated Package 3C |
+| `docs/qa/e2e-regression-harness.md` | How to run the E2E harness (seeded + real-files), phase coverage incl. 20+21, test counts (41/23/64), startup reliability section, privacy/fixture policy — updated Package 4E.1 |
+| `docs/qa/manual-qa-template.md` | Manual QA result template (golden path, edge cases, regression) |
+| `docs/qa/pre-commit-verification-template.md` | Pre-commit hygiene gate: working tree, diff sanity, tests, continuity, identity (Package 2.7) |
+| `docs/qa/release-readiness-template.md` | Release/milestone readiness gate checklist (Package 2.7) |
+
+### Dev workflow protocols (Package 2.7 — `6dde21b`)
+
+| File | Purpose |
+|---|---|
+| `docs/dev/ai-development-relay.md` | Relay flow; Codex 5-role interchangeable model (updated Package 2.7) |
+| `docs/dev/development-review-packet-template.md` | Template for sending completed work to Development review |
+| `docs/dev/claude-codex-interchangeability.md` | Codex roles, shared contract, handoff rules |
+| `docs/dev/session-restart-protocol.md` | Mandatory restart sequence after any session/context/model/tool event |
+| `docs/dev/context-hygiene-protocol.md` | /clear vs /compact vs /context decision table; pre-event update content |
+| `docs/dev/model-switching-protocol.md` | Model-switch checkpoint rules; which model for which work |
+| `docs/dev/tool-switching-protocol.md` | Claude↔Codex handoff rules; branch ownership |
+| `docs/dev/agent-scope-boundaries.md` | Consolidated allowed/off-limits/authorization-required list |
+| `docs/dev/worktree-and-parallel-session-policy.md` | Worktree + parallel session governance |
+
+### Project Control readiness (Package 2.7 — `6dde21b`, readiness only — Tower NOT built)
+
+| File | Purpose |
+|---|---|
+| `docs/project-control/README.md` | Entry point; what is and is not built |
+| `docs/project-control/project-control-tower-plan.md` | Scope/structure of the future Tower pass |
+| `docs/project-control/project-calendar-spec.md` | How calendar/schedule export will work when built |
+| `docs/project-control/coordinator-weekly-sync.md` | Recurring Coordinator sync placeholder (not active yet) |
 
 ### Automation — Operator Mode Protocols (Package 2.5B — `bb23e8b` / Context Guard Patch — see below)
 

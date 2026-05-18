@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 4E status sync)
+**Updated by:** Claude Code (Package 2.7 status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -25,6 +25,8 @@
 | Package 4C | Product Experience Readiness Resolver Foundation | COMPLETE — merged to main | `367dfc7` | `879c244` |
 | Package 4D | Product Experience Readiness Consumer Foundation | COMPLETE — merged to main | `47c402a` | `4747dff` |
 | Package 4E | Product Format Availability Surface Foundation | COMPLETE — merged to main | `99bdf8f` | `7c87f20` |
+| Package 4E.1 | E2E Startup Timing Reliability Patch | COMPLETE — merged to main | `3c4ce70` | `73dae00` |
+| Package 2.7 | AI Development Operating System Upgrade Pass | COMPLETE — merged to main | `6dde21b` | `cebdc72` |
 
 ---
 
@@ -54,14 +56,18 @@
 
 ---
 
-## Git state (as of Package 4E closeout)
+## Git state (as of Package 2.7 closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `7c87f20` — merge: add product format availability surface |
+| main HEAD | `cebdc72` — merge: upgrade AI development operating system |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | Yes — Package 4E pushed, merged to main, main pushed |
+| Pushed to remote | Yes — Package 2.7 pushed, merged to main, main pushed |
+
+**Package 4E.1 (`3c4ce70` / `73dae00`):** test-harness reliability only — `waitForServer` probe, improved `waitForKm` diagnostic, bounded Phase 1 retry; no app behavior change.
+
+**Package 2.7 (`6dde21b` / `cebdc72`):** AI development operating infrastructure only — universal agent contract refresh, Claude/Codex interchangeability, context hygiene / model switching / tool switching / session restart / scope boundaries / worktree protocols, `CURRENT_STATE.md` + `NEXT_SESSION_PROMPT.md`, QA pre-commit + release-readiness templates, project-control readiness docs, hardened `.gitignore`, Claude agents/skills + Codex README placeholders. No app code, product, vendor, design, or manufacturing decisions touched. Full Project Control Tower NOT built (correctly prepared only).
 
 ---
 
@@ -82,9 +88,12 @@
 
 | Item | Status |
 |---|---|
+| Authorize Project Control Tower pass | NEEDS COORDINATOR DECISION — next action after Package 2.7 |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION |
+
+> Package 5A remains paused until the Project Control Tower is complete and approved. `scripts/node_modules` tracked-history cleanup remains a separate Coordinator decision, not part of Package 2.7.
 
 ---
 
