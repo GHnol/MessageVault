@@ -31,5 +31,9 @@ Skill packaging (folder structure, manifest fields, invocation) is tool-version-
 - Skills automate existing protocols; they never invent new authority.
 - Skills obey all scope guards and locked-truth rules.
 - A skill's output is verified against actual git/file state, never trusted blindly.
+- Skills obey the universal AI Project OS layer (`docs/ai-system/universal-standards.md`) and the auto-management umbrella (`docs/dev/auto-management-protocol.md`).
+- A skill that drives package verification, package boundary closeout, or pre-commit hygiene must back to the corresponding template / protocol — `docs/qa/package-verification-template.md`, `docs/dev/package-boundary-closeout-protocol.md`, `docs/qa/pre-commit-verification-template.md`.
 
 (Backlog item: implement verified live skills in a dedicated authorized pass.)
+
+See also: `.claude/agents/README.md` (planned subagents), `.claude/commands/README.md` (planned custom slash commands, added Package 2.9).

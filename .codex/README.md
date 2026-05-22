@@ -37,6 +37,24 @@ See `docs/dev/claude-codex-interchangeability.md`. Codex is supported as:
 - Never stage `.claude/settings.local.json`, `_source-intake/`, generated outbox/inbox files, secrets, or `node_modules/`.
 - Before any context/tool/model switch: update `AI_HANDOFF.md` + `CURRENT_STATE.md` + `NEXT_SESSION_PROMPT.md` and produce a transfer packet.
 - Resume only via `docs/dev/session-restart-protocol.md`.
+- Maintain repo-native memory continuously (Package 2.9 auto-management rule). Do not wait for usage-limit or context warnings to write state.
+
+---
+
+## Codex Package 2.9 protocols
+
+Codex obeys the universal AI Project OS layer as well as the Codex-specific layer:
+
+- Auto-management umbrella → `docs/dev/auto-management-protocol.md`
+- Which model for which task → `docs/dev/model-routing-protocol.md` (apply the tier intent to whichever Codex tier is closest)
+- Token efficiency → `docs/dev/token-efficiency-protocol.md`
+- Context budget checklist → `docs/dev/context-budget-checklist.md`
+- Tool batching → `docs/dev/tool-batching-protocol.md`
+- Package boundary closeout → `docs/dev/package-boundary-closeout-protocol.md`
+- Notification setup (user-level) → `docs/dev/notification-setup.md`
+- AI Project OS standards → `docs/ai-system/universal-standards.md`
+- Test strategy → `docs/qa/test-strategy.md`
+- Package verification template → `docs/qa/package-verification-template.md`
 
 ---
 

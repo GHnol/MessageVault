@@ -64,6 +64,8 @@ The update must include:
 
 ## Relationship to other protocols
 
+- **Which model for which task** (routing decisions, distinct from switching mechanics): `model-routing-protocol.md`
 - Timing of when to checkpoint: `context-hygiene-protocol.md`
 - Handoff artifact format: `AI_HANDOFF.md` + `docs/automation/operator-mode/claude-codex-relay-protocol.md`
 - Tool (Claude↔Codex) switching: `tool-switching-protocol.md`
+- Umbrella auto-management duties: `auto-management-protocol.md`

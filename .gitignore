@@ -44,3 +44,18 @@ operator-outbox/*.md
 operator-outbox/*.json
 !operator-outbox/README.md
 !operator-outbox/.gitkeep
+
+# IDE / OS / log noise (never commit)
+*.log
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+claude-logs/
+codex-logs/
+.tmp-ai-*/
+
+# Defensive Codex patterns (never commit)
+.codex/skills/local/
+.codex/sessions/

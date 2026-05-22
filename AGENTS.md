@@ -54,8 +54,9 @@ The session is disposable. The repo is permanent. These files are the durable me
 | `CURRENT_STATE.md` | Durable project snapshot — where the project is now |
 | `AI_HANDOFF.md` | In-flight work transfer |
 | `NEXT_SESSION_PROMPT.md` | How the next session restarts |
+| `docs/ai-system/` | Universal AI Project OS layer (standards, bootstrap, changelog, version history) |
 
-Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` before any major stop, context compaction, `/clear`, `/compact`, model switch, tool switch, account switch, or branch handoff.
+Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` at every meaningful work unit — not only before a major stop. Do not wait for the usage-limit or auto-compact warning to write state. By that point it may be too late.
 
 ---
 
@@ -63,15 +64,26 @@ Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` before 
 
 | Situation | Protocol |
 |---|---|
+| Umbrella auto-management duties | `docs/dev/auto-management-protocol.md` |
 | Restarting any session / after `/clear` / `/compact` / new day | `docs/dev/session-restart-protocol.md` |
-| `/clear` vs `/compact` vs `/context` decision, high context/usage | `docs/dev/context-hygiene-protocol.md` |
-| Switching Claude model (e.g. to Opus) | `docs/dev/model-switching-protocol.md` |
+| `/clear` vs `/compact` vs `/context` decision, high context/usage, high uncached context | `docs/dev/context-hygiene-protocol.md` |
+| **Which model for which task** (routing decisions) | `docs/dev/model-routing-protocol.md` |
+| Switching Claude model in-session | `docs/dev/model-switching-protocol.md` |
 | Switching tool (Claude ↔ Codex) | `docs/dev/tool-switching-protocol.md` |
 | Codex roles and interchangeability | `docs/dev/claude-codex-interchangeability.md` |
 | Parallel work / worktrees | `docs/dev/worktree-and-parallel-session-policy.md` |
 | Full scope boundary list | `docs/dev/agent-scope-boundaries.md` |
+| Token efficiency (context-cost discipline) | `docs/dev/token-efficiency-protocol.md` |
+| Pre-flight context budget at session start | `docs/dev/context-budget-checklist.md` |
+| Tool batching (parallel calls, scripts, plan format) | `docs/dev/tool-batching-protocol.md` |
+| Package boundary closeout behavior | `docs/dev/package-boundary-closeout-protocol.md` |
+| Permission/wait notification setup (user-level) | `docs/dev/notification-setup.md` |
+| Universal AI Project OS standards | `docs/ai-system/universal-standards.md` |
+| AI Project OS layer index, bootstrap, changelog, version history | `docs/ai-system/README.md` |
 
 A model-switch or context warning is a **cost/continuity warning, not an error**. Checkpoint, then proceed.
+
+**Auto-management rule (added Package 2.9):** maintain repo-native memory continuously; do not wait for the usage-limit or auto-compact warning to write state. Update `AI_HANDOFF.md` / `CURRENT_STATE.md` / `NEXT_SESSION_PROMPT.md` at meaningful work units. At package boundaries, run package verification (`docs/qa/package-verification-template.md`) before proposing commit. Recommend a fresh session for the next package when context is heavy. See `docs/dev/auto-management-protocol.md`.
 
 ---
 

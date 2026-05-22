@@ -16,23 +16,23 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-17`
+**Last updated:** `2026-05-22`
 **Updated by:** `Claude Code (Opus 4.7)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `bdb73db` — merge: add KeepMees project control tower |
-| Last closed package | `Package 2.8 — KeepMees Project Control Tower` (feature `2a5fb54`, merge `bdb73db`) |
-| Active package | None — no package in progress |
-| Active branch | `main` (status-sync `docs/sync-command-center-after-package-2-8` pending merge) |
-| Next authorized target | None — Coordinator reviews the committed Tower and decides whether to authorize Package 5A |
-| Package 5A | Still paused — Foundation Operating System Gate now passable; awaits explicit Coordinator authorization |
+| main HEAD | `9191532` — merge: sync operating docs to reflect Package 2.8 completion |
+| Last closed package | `Package 2.8 — KeepMees Project Control Tower` (feature `2a5fb54`, merge `bdb73db`); status sync `9191532` |
+| Active package | `Package 2.9 — AI Project OS Auto-Management Upgrade Pass` (in progress on `docs/ai-project-os-auto-management-upgrade`; not yet committed) |
+| Active branch | `docs/ai-project-os-auto-management-upgrade` |
+| Next authorized target | Coordinator reviews Package 2.9 diff and decides commit + merge; Package 5A remains paused awaiting separate explicit Coordinator authorization |
+| Package 5A | Still paused — Foundation Operating System Gate passed by Package 2.8; awaits explicit Coordinator authorization (independent of Package 2.9) |
 
 ---
 
 ## Delivered packages (summary)
 
-Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Packages 2.7, 2.8 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 64 real-files E2E, all green. Packages 2.7 and 2.8 added operating infrastructure only (no app code).
+Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Packages 2.7, 2.8 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 23 real-files E2E (64 combined), all green. Packages 2.7 and 2.8 added operating infrastructure only (no app code). Package 2.9 (in progress) is the same shape — universal AI Project OS layer plus dev/QA protocol additions; no app code.
 
 ---
 
@@ -40,6 +40,7 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 | Gate | Status |
 |---|---|
+| Foundation Operating System (Gate 1) | Passed by Package 2.8 |
 | Vendor confirmed | NO — evaluation in progress |
 | `isCoverUnblocked()` | false |
 | Commerce readiness (message-book) | blocked |
@@ -62,7 +63,29 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 ## What is NOT started
 
-Package 5A, checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. Project Control Tower is now BUILT and MERGED — Coordinator review of the committed Tower is the next coordination step. See `docs/command-center/next-actions.md` "Do NOT start yet".
+Package 5A, checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. The Project Control Tower (Package 2.8) is BUILT and MERGED. Package 2.9 is the in-progress OS upgrade pass; it is docs/config/infrastructure-only and does not touch app code.
+
+---
+
+## Where to look — AI Project OS layer (Package 2.9)
+
+| Question | File |
+|---|---|
+| What is the AI Project OS layer? | `docs/ai-system/README.md` |
+| Universal standards across repos | `docs/ai-system/universal-standards.md` |
+| How to bootstrap a new repo with this OS | `docs/ai-system/bootstrap-template.md` |
+| OS-level changelog | `docs/ai-system/CHANGELOG.md` |
+| OS version history (Package 2.7 → 2.8 → 2.9 → ...) | `docs/ai-system/version-history.md` |
+| Umbrella auto-management duties | `docs/dev/auto-management-protocol.md` |
+| Which model for which task | `docs/dev/model-routing-protocol.md` |
+| Token-efficiency discipline | `docs/dev/token-efficiency-protocol.md` |
+| Pre-flight context budget | `docs/dev/context-budget-checklist.md` |
+| Tool batching | `docs/dev/tool-batching-protocol.md` |
+| Package boundary closeout | `docs/dev/package-boundary-closeout-protocol.md` |
+| Notification setup (user-level) | `docs/dev/notification-setup.md` |
+| Test strategy | `docs/qa/test-strategy.md` |
+| Per-package verification | `docs/qa/package-verification-template.md` |
+| Planned custom slash commands (placeholder) | `.claude/commands/README.md` |
 
 ---
 
@@ -93,9 +116,12 @@ Package 5A, checkout/PDF/cover work, framework migration, visual redesign, previ
 |---|---|
 | Universal agent rules | `AGENTS.md` |
 | Claude-specific rules | `CLAUDE.md` |
+| Codex-specific rules | `.codex/README.md` |
 | In-flight work transfer | `AI_HANDOFF.md` |
 | How to restart a session | `NEXT_SESSION_PROMPT.md` |
 | Delivered package state | `docs/command-center/current-status.md` |
 | What to do / not start | `docs/command-center/next-actions.md` |
 | Risks | `docs/ops/risk-register.md` |
 | Decisions | `docs/ops/decision-register.md` |
+| AI Project OS standards (universal) | `docs/ai-system/universal-standards.md` |
+| Auto-management umbrella | `docs/dev/auto-management-protocol.md` |
