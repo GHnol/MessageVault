@@ -80,5 +80,6 @@ The Coordinator owns keeping all six layers synchronized. Repo docs are source o
 | Week (ISO) | main HEAD | Last closed package | Next authorized | Changed | Not changed |
 |---|---|---|---|---|---|
 | 2026-05-17 | d07804b | Package 2.7 | Package 2.8 (Tower) in review | Project Control Tower built (Package 2.8) | App code; locked decisions; gated phases |
+| 2026-05-22 | 9191532 | Package 2.8 | Package 2.9 (AI Project OS auto-management upgrade pass) in progress on `docs/ai-project-os-auto-management-upgrade` | AI Project OS layer added at `docs/ai-system/`; new dev protocols (auto-management, model-routing, token-efficiency, context-budget-checklist, tool-batching, package-boundary-closeout, notification-setup); QA test-strategy + package-verification-template; `.claude/commands/` readiness placeholder; `.gitignore` IDE/log additions; PR template extended; cross-links added to AGENTS/CLAUDE/.codex/.claude readiness READMEs and context-hygiene/model-switching protocols | App code; locked decisions; gated phases; Project Control Tower content (only README + this log touched) |
 
 (Add one row per weekly sync. Keep the latest ~12 weeks; archive older rows in a note if it grows.)

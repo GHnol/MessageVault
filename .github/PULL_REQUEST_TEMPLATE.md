@@ -47,6 +47,9 @@
 - **`CURRENT_STATE.md` / `NEXT_SESSION_PROMPT.md` updated if state changed:** yes / no / N/A
 - **Model or tool switched during this work:** no / yes — handoff updated before switch: yes / no
 - **Scope confirmed narrow:** yes / no — notes:
+- **Model tier used** (see `docs/dev/model-routing-protocol.md`): light / default / strongest
+- **Package verification run** (see `docs/qa/package-verification-template.md`): yes / no / N/A
+- **Boundary closeout followed** (see `docs/dev/package-boundary-closeout-protocol.md`): yes / no / N/A
 
 ---
 

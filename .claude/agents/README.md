@@ -31,5 +31,9 @@ Live subagents are added only in a separately authorized pass, after the frontma
 - Subagents advise; they do not commit on a branch they do not own.
 - Subagents inherit all scope guards and locked-truth rules.
 - A subagent's summary is intent, not proof — its output must be verified against the actual diff.
+- Subagents obey the universal AI Project OS layer (`docs/ai-system/universal-standards.md`) and the auto-management umbrella (`docs/dev/auto-management-protocol.md`).
+- Subagents that perform package-boundary or verification work back to `docs/dev/package-boundary-closeout-protocol.md` and `docs/qa/package-verification-template.md` — they do not invent new closeout rules.
 
 (Backlog item: implement verified live subagent files in a dedicated authorized pass.)
+
+See also: `.claude/skills/README.md` (planned skills), `.claude/commands/README.md` (planned custom slash commands, added Package 2.9).

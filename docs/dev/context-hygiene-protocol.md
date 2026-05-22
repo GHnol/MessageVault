@@ -83,3 +83,27 @@ A handoff that says "we discussed this earlier" is not a valid handoff.
 - Work transfer lives in `AI_HANDOFF.md`.
 - Git remains the source of truth.
 - Do not commit or push as a side effect of context hygiene unless explicitly instructed.
+
+---
+
+## High uncached context protocol (added in Package 2.9)
+
+When Claude Code reports unusually high uncached token/context cost (e.g. 300k+, 500k+):
+
+1. **Do not continue blindly.** A long uncached transcript is a continuity warning, not normal operation.
+2. **Do not default to `claude --continue`.** Long stale sessions drag the full transcript into every turn, are slow, and increase the risk of dropped decisions.
+3. **Require that `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` are current.** Update first if not.
+4. **Recommend a fresh session from repo truth.** A fresh Claude session in this repo should be able to resume from `AGENTS.md` + `CLAUDE.md` + `AI_HANDOFF.md` + `CURRENT_STATE.md` + git state, without dragging the prior transcript.
+5. **Continue the existing session only if the active uncached context is genuinely needed** and the user accepts the cost. State that judgment out loud before continuing.
+
+The goal: project truth lives in repo files, not in an endless chat transcript. The session is disposable; the repo is permanent.
+
+See `docs/dev/auto-management-protocol.md` § "High uncached context protocol" for the broader auto-management context.
+
+---
+
+## Fresh-session preference
+
+Default to a fresh repo-truth session at every package boundary, after any merge to main, after a long debugging chain, after any explicit checkpoint/handoff trigger phrase, and any time uncached context exceeds the user's tolerance.
+
+Continue an existing session only when: same logical task is mid-flight, active context is genuinely useful and small, no package boundary has been reached.

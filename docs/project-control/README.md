@@ -30,6 +30,15 @@ Priority order when sources conflict:
 6. `docs/command-center/*` (delivered status)
 7. External tools (ClickUp / TickTick / Calendar) — lowest; never authoritative
 
+### Relationship to the AI Project OS layer (added Package 2.9)
+
+The **AI Project OS** layer lives at `docs/ai-system/` and is project-agnostic (portable to future repos like Puzzle). The **Project Control Tower** lives here and is KeepMees-specific. They are siblings:
+
+- AI Project OS → universal standards, dev/QA protocols, bootstrap template, version history
+- Project Control Tower → live KeepMees roadmap, schedule, sprint, gates, decisions, risks
+
+Both stay in sync. When a Project Control update touches OS standards, mirror the change in `docs/ai-system/CHANGELOG.md`; when an OS upgrade pass changes how the Tower is maintained, note it in `coordinator-weekly-sync.md`.
+
 ---
 
 ## The six layers

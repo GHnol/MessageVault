@@ -73,15 +73,39 @@ Full protocol: `docs/automation/operator-mode/context-continuity-protocol.md`
 
 `AGENTS.md` is the universal contract; this file extends it. For continuity decisions, follow:
 
+- **Umbrella auto-management duties → `docs/dev/auto-management-protocol.md`**
 - Restarting / after `/clear` / `/compact` / new session → `docs/dev/session-restart-protocol.md`
-- `/clear` vs `/compact` vs `/context`, high context/usage, auto-compact warnings → `docs/dev/context-hygiene-protocol.md`
-- Switching Claude model (e.g. to Opus) → `docs/dev/model-switching-protocol.md`
+- `/clear` vs `/compact` vs `/context`, high context/usage, auto-compact warnings, high uncached context → `docs/dev/context-hygiene-protocol.md`
+- **Which model for which task** (routing decisions) → `docs/dev/model-routing-protocol.md`
+- Switching Claude model in-session (mechanics) → `docs/dev/model-switching-protocol.md`
 - Switching tool (Claude ↔ Codex) → `docs/dev/tool-switching-protocol.md`
 - Codex roles / interchangeability → `docs/dev/claude-codex-interchangeability.md`
 - Worktrees / parallel sessions → `docs/dev/worktree-and-parallel-session-policy.md`
 - Full scope boundary list → `docs/dev/agent-scope-boundaries.md`
+- Token-efficiency discipline → `docs/dev/token-efficiency-protocol.md`
+- Pre-flight context budget at session start → `docs/dev/context-budget-checklist.md`
+- Tool batching (parallel calls, scripts, plan format) → `docs/dev/tool-batching-protocol.md`
+- Package boundary closeout behavior → `docs/dev/package-boundary-closeout-protocol.md`
+- Permission/wait notification setup (user-level) → `docs/dev/notification-setup.md`
+- Universal AI Project OS standards → `docs/ai-system/universal-standards.md`
+- AI Project OS layer index → `docs/ai-system/README.md`
 
 Durable continuity files to keep current: `CURRENT_STATE.md` (project snapshot), `AI_HANDOFF.md` (work transfer), `NEXT_SESSION_PROMPT.md` (restart entry point). A model-switch or context warning is a cost/continuity warning, not an error — checkpoint these files, then proceed.
+
+## Session model — fresh vs continuation (added Package 2.9)
+
+- `claude --continue` of long stale sessions is **not** the default. Prefer a fresh session that resumes from repo truth.
+- At every package boundary, after any merge to main, after a long debugging chain, or when the harness reports high uncached context (e.g. 300k+ / 500k+): recommend a fresh session.
+- Continue an existing session only when: same logical task is mid-flight, active context is genuinely useful and small, no package boundary has been reached.
+
+## Testing protocols (added Package 2.9)
+
+- Overall test strategy → `docs/qa/test-strategy.md`
+- Per-package verification (run at every package boundary) → `docs/qa/package-verification-template.md`
+- Pre-commit hygiene gate → `docs/qa/pre-commit-verification-template.md`
+- Release readiness → `docs/qa/release-readiness-template.md`
+- Manual QA result format → `docs/qa/manual-qa-template.md`
+- E2E harness operating manual → `docs/qa/e2e-regression-harness.md`
 
 ## Git identity (KeepMees repo)
 
