@@ -1,0 +1,263 @@
+# KeepMees Master Roadmap
+
+**Last updated:** 2026-05-17 (America/New_York)
+**Owner:** Coordinator / Project Control
+**Source of truth:** this file summarizes `docs/strategy/`, `docs/ops/decision-register.md`, `docs/ops/backlog-roadmap.md`, `docs/command-center/current-status.md`. If they conflict, those win and this is corrected.
+
+> Confidence: **High** = near-term, controllable, low external dependency. **Medium** = depends on internal sequencing. **Low** = gated by external (vendor/designer/PDF infra) or far enough out that dates are directional only.
+
+---
+
+## Package history mapped into phases
+
+Significant foundation work is already done. Completed packages map to phases as follows:
+
+| Package | Maps to phase(s) | Status |
+|---|---|---|
+| Package 1 — Source + Adapter + NormalizedMemory foundation | Phase 3 | DONE |
+| Package 2 — Product Catalog + Eligibility + KeepsakeGroup | Phase 4 | DONE |
+| Package 2.5A — Project Truth + Operating System foundation | Phase 0, Phase 1 | DONE |
+| Package 2.5B — AI Mastery automation artifacts | Phase 0 | DONE |
+| Package 2.6 / 2.6.1 — Operator Inbox + processor (+fix) | Phase 0 | DONE |
+| Package 2.7 — AI Development Operating System Upgrade | Phase 0 | DONE |
+| Package 2.8 — Project Control Tower (this) | Phase 0 | IN PROGRESS |
+| Package 3A — Local project session save/resume | Phase 3, Phase 5 | DONE |
+| Package 3B — Automated E2E regression harness | Phase 0 (QA infra) | DONE |
+| Package 3C — Real file import/download/full-path E2E | Phase 0 (QA infra), Phase 3 | DONE |
+| Package 4A — ProductRenderSpec foundation | Phase 4, Phase 6 | DONE |
+| Package 4B — PrototypePreviewRegistry foundation | Phase 6 | DONE |
+| Package 4C — ProductExperienceReadiness foundation | Phase 4, Phase 6 | DONE |
+| Package 4D — ProductExperienceConsumer bridge | Phase 4, Phase 6 | DONE |
+| Package 4E — Product format availability surface | Phase 1, Phase 4 | DONE |
+| Package 4E.1 — E2E startup timing reliability patch | Phase 0 (QA infra) | DONE |
+
+Phase names below do **not** imply zero progress — read the "completed work" line in each phase.
+
+---
+
+## Phase 0 — Project Control Tower and AI Operating System
+
+- **Purpose:** Repo-native operating system: project truth, automation artifacts, continuity protocols, and this Tower.
+- **Start / End:** 2026-04 (Package 2.5A) → target close 2026-05-23 (Tower review/merge). **Confidence: High**
+- **Entry criteria:** Project exists; AI relay model defined.
+- **Exit criteria:** Tower built, reviewed, merged; `coordinator-weekly-sync.md` active; continuity protocols in force.
+- **Deliverables:** 2.5A/2.5B/2.6/2.7 (DONE); Package 2.8 Tower (IN PROGRESS).
+- **Completed work:** all operating docs, schemas, templates, operator-mode protocols, continuity/model/tool/session protocols, QA templates.
+- **Dependencies:** none external.
+- **Risks:** Tower drift vs. repo (mitigated by weekly sync); over-process.
+- **Owner lane:** Coordinator / Project Control.
+- **Success criteria:** A new session can resume correctly from repo docs alone; Package 5A unpauses only via the Foundation Operating System Gate.
+- **Next review:** Weekly Project Control Sync (Fridays).
+
+## Phase 1 — Product Truth Stabilization
+
+- **Purpose:** Lock and keep current what KeepMees is, what is decided, and what is gated.
+- **Start / End:** 2026-04 → ongoing (maintenance). **Confidence: High**
+- **Entry:** Strategy docs exist.
+- **Exit:** `master-project-truth.md` + `decision-register.md` reflect reality; product-format availability surface ships without implying commerce/manufacturing readiness (DONE, Package 4E).
+- **Deliverables:** strategy bank, decision register, format availability surface.
+- **Completed work:** Packages 2.5A, 4E. Locked decisions DEC-P/V/ID recorded.
+- **Dependencies:** none external.
+- **Risks:** KeepMees reduced to Message Book; fake product claims.
+- **Owner lane:** Product Strategy.
+- **Success criteria:** No doc or surface implies readiness a SKU does not have.
+- **Next review:** Monthly Roadmap Reset.
+
+## Phase 2 — Message Book MVP Preview Foundation
+
+- **Purpose:** A working in-browser Message Book preview from selected messages.
+- **Start / End:** 2026-03 (MB foundation commits) → substantially DONE; refinements ongoing. **Confidence: High (built), Medium (1:1 fidelity)**
+- **Entry:** Source intake + normalized memory.
+- **Exit:** Book view renders paginated, sectioned, multi-volume-capable output.
+- **Deliverables:** pagination engine, section/volume scaffolding, editorial constraints.
+- **Completed work:** historical MB phase (e6cbc26 → 7a03b85), Package 3A persistence.
+- **Dependencies:** Phase 3, Phase 4.
+- **Risks:** preview ≠ final print.
+- **Owner lane:** Message Book.
+- **Success criteria:** Deterministic pagination; saved books restore identically.
+- **Next review:** Weekly Development Review.
+
+## Phase 3 — Source Intake and Message Selection Flow
+
+- **Purpose:** Import real conversations and select meaningful messages.
+- **Start / End:** Package 1 → DONE (E2E covered). **Confidence: High**
+- **Entry:** Adapter registry.
+- **Exit:** iMessage chat.db / .txt / manual entry import; selection → review flow; real-file E2E green.
+- **Deliverables:** adapters, NormalizedMemory, selection UI, E2E phases 11–19.
+- **Completed work:** Packages 1, 3A, 3C.
+- **Dependencies:** none external.
+- **Risks:** future macOS/iOS chat.db schema change (RISK in `docs/ops/risk-register.md`).
+- **Owner lane:** Development.
+- **Success criteria:** Real .txt and chat.db import without crash; selection persists.
+- **Next review:** Weekly Development Review.
+
+## Phase 4 — Keepsake Grouping and Product Eligibility
+
+- **Purpose:** Bridge selected source material to eligible product formats.
+- **Start / End:** Package 2 → DONE. **Confidence: High**
+- **Entry:** NormalizedMemory + selection.
+- **Exit:** KeepsakeGroup model; per-product eligibility; readiness resolver + consumer bridge.
+- **Deliverables:** Packages 2, 4A–4E.
+- **Completed work:** ProductCatalog, ProductEligibility, KeepsakeGroup, render spec, preview registry, experience readiness/consumer, availability surface.
+- **Dependencies:** Phase 3.
+- **Risks:** eligibility drift vs. real product constraints.
+- **Owner lane:** Development / Product Strategy.
+- **Success criteria:** Non-book formats remain architecture-known without implying purchasability.
+- **Next review:** Monthly Roadmap Reset.
+
+## Phase 5 — Message Book Composition Engine
+
+- **Purpose:** Soft composition: grouping, emotional pairing, section flow, featured moments, parity padding.
+- **Start / End:** 2026-03 historical → substantially DONE; continuation backlog open. **Confidence: High (core), Medium (refinements)**
+- **Entry:** Phase 2.
+- **Exit:** Composition rules locked (DEC-P-04/07, DEC-V-03/05); paginator deterministic + version-gated.
+- **Deliverables:** generateCompositionUnits → paginateUnits → enrichPageMetadata → buildPageDOMElement.
+- **Completed work:** composition pipeline, parity, editorial validation.
+- **Dependencies:** Phase 4.
+- **Risks:** pagination regression (scope-guarded constants).
+- **Owner lane:** Message Book.
+- **Success criteria:** Same input → same pages; `BOOK_PAGINATION_VERSION` honored.
+- **Next review:** Weekly Development Review.
+
+## Phase 6 — Print-Faithful Preview
+
+- **Purpose:** Move from composition-faithful to 1:1 print fidelity (north star).
+- **Start / End:** partial now → target window 2026-07+ (gated by design alignment). **Confidence: Medium → Low**
+- **Entry:** Phase 5 + product readiness layers (4A–4E DONE).
+- **Exit:** Preview matches Figma master structure; line-break/pagination edge differences understood and bounded (DEC-V-07).
+- **Deliverables:** render spec consumption in preview; fidelity verification harness (future).
+- **Completed work:** ProductRenderSpec/PreviewRegistry/ExperienceReadiness foundations.
+- **Dependencies:** Phase 7 (design system).
+- **Risks:** preview drifting from print reality; design not available.
+- **Owner lane:** Preview and Print Fidelity.
+- **Success criteria:** Documented, bounded delta between preview and Figma master.
+- **Next review:** Phase Gate — Preview Fidelity Gate.
+
+## Phase 7 — Design System Alignment
+
+- **Purpose:** Figma master (`KeepMees Message Book, Figma Build Package v1.1`) built and accepted (Design Viability Checkpoint A).
+- **Start / End:** BLOCKED → low-confidence window 2026-Q3. **Confidence: Low (gated)**
+- **Entry:** Confirmed Figma executor (designer budget resolved).
+- **Exit:** Figma master passes acceptance rubric.
+- **Deliverables:** page masters, components, tokens.
+- **Completed work:** Figma Build Package v1.1 brief written.
+- **Dependencies:** designer budget decision (Alexander Weaver commercial hold).
+- **Risks:** designer budget gap (H/H — `docs/ops/risk-register.md`).
+- **Owner lane:** Design System.
+- **Success criteria:** Accepted Figma master; preview/design truth distinction preserved (DEC-V-06).
+- **Next review:** Monthly Roadmap Reset / Budget Review.
+
+## Phase 8 — Manufacturing Readiness Planning
+
+- **Purpose:** Confirm trim/bleed/margins/stock against a real vendor (replace provisional DEC-P-10).
+- **Start / End:** gated → low-confidence 2026-Q3/Q4. **Confidence: Low (gated)**
+- **Entry:** Phase 7 + vendor candidate.
+- **Exit:** Confirmed manufacturing dimensions; preflight registry runnable.
+- **Deliverables:** confirmed DEC-P-10 values; preflight runners (future package).
+- **Completed work:** preflight schema registry, provisional dimensions.
+- **Dependencies:** vendor.
+- **Risks:** estimates wrong at real vendor limits.
+- **Owner lane:** Production / Manufacturing.
+- **Success criteria:** No fake manufacturing readiness; values vendor-confirmed.
+- **Next review:** Manufacturing Readiness Gate.
+
+## Phase 9 — Vendor Readiness and Proofing
+
+- **Purpose:** Confirm a vendor for 7×10" casebound hardcover; clear `isCoverUnblocked()`.
+- **Start / End:** gated → low-confidence 2026-Q3/Q4. **Confidence: Low (gated)**
+- **Entry:** Phase 8 progress.
+- **Exit:** Vendor confirmed; cover work unblocked; proof spec validated.
+- **Deliverables:** vendor confirmation, proof spec.
+- **Completed work:** vendor research (PrintNinja viable; BookBaby conditional; IngramSpark pending; Blurb rejected; Lulu optional).
+- **Dependencies:** vendor responses (Chat 04/05 — outside repo).
+- **Risks:** vendor not confirmed indefinitely; IngramSpark 7×10" jacketed unavailable.
+- **Owner lane:** Vendor Feasibility.
+- **Success criteria:** One confirmed vendor meeting locked specs.
+- **Next review:** Vendor Readiness Gate.
+
+## Phase 10 — Packaging and Gifting Readiness
+
+- **Purpose:** Define packaging + gift-note system at launch quality.
+- **Start / End:** gated → low-confidence 2026-Q4. **Confidence: Low (gated)**
+- **Entry:** Phase 9.
+- **Exit:** Packaging SOP + gifting decision (gift notes v1 vs v1.1).
+- **Deliverables:** packaging spec, gifting flow.
+- **Completed work:** 4-component packaging system captured (source intake).
+- **Dependencies:** vendor, fulfillment.
+- **Risks:** packaging complexity; gifting scope creep.
+- **Owner lane:** Packaging / Gifting.
+- **Success criteria:** Packaging gated until vendor + fulfillment real.
+- **Next review:** Packaging Readiness Gate.
+
+## Phase 11 — Checkout / Sale Readiness
+
+- **Purpose:** Commerce path: checkout after proof approval, server PDF pipeline.
+- **Start / End:** gated → low-confidence 2026-Q4+. **Confidence: Low (gated)**
+- **Entry:** Phase 9 + server PDF pipeline (DEC-P-06).
+- **Exit:** Checkout that cannot bypass proof approval (DEC-P-09).
+- **Deliverables:** PDF pipeline, checkout, order flow.
+- **Completed work:** none (correctly not started).
+- **Dependencies:** vendor confirmed; PDF infra.
+- **Risks:** PDF pipeline more complex than anticipated.
+- **Owner lane:** Development / Legal-Business Ops.
+- **Success criteria:** No checkout without proof approval; no in-browser PDF.
+- **Next review:** Checkout / Sale Readiness Gate.
+
+## Phase 12 — Beta Proof Review
+
+- **Purpose:** In-app proof approval state + explicit customer accept (DEC-P-09). **Package 5A is the foundation here.**
+- **Start / End:** Package 5A starts only after Tower approved → near-term-after-Tower, **Confidence: Medium** for the 5A foundation; full beta **Low**.
+- **Entry:** Foundation Operating System Gate passed (Tower approved); Phase 5/6 sufficient.
+- **Exit:** Proof approval state model + recorded explicit approval.
+- **Deliverables:** Package 5A (Message Book Proof Approval State Foundation), then proof approval UX.
+- **Completed work:** none (paused).
+- **Dependencies:** Tower approval; composition engine.
+- **Risks:** scope creep into checkout/PDF.
+- **Owner lane:** Message Book / Development.
+- **Success criteria:** Proof state foundation only; no checkout/PDF/preview renderer scope.
+- **Next review:** Beta / Proof Review Gate.
+
+## Phase 13 — Launch Readiness
+
+- **Purpose:** All gates green; legal/privacy language final; pricing set.
+- **Start / End:** Low-confidence directional 2026-Q4 / 2027-Q1. **Confidence: Low**
+- **Entry:** Phases 6–12 sufficiently complete.
+- **Exit:** Launch readiness checklist (`docs/qa/release-readiness-template.md`) passes.
+- **Deliverables:** launch checklist sign-off.
+- **Dependencies:** vendor, design, PDF, packaging, checkout.
+- **Risks:** schedule uncertainty; privacy overclaims.
+- **Owner lane:** Launch Readiness.
+- **Success criteria:** No fake launch promises; every gate genuinely cleared.
+- **Next review:** Launch Readiness Review.
+
+## Phase 14 — Launch
+
+- **Purpose:** First real Message Book orders fulfilled.
+- **Start / End:** Low-confidence directional — date deliberately not promised. **Confidence: Low**
+- **Entry:** Phase 13 passed.
+- **Exit:** First orders shipped; support path live.
+- **Dependencies:** all prior phases.
+- **Risks:** fulfillment, demand, support load.
+- **Owner lane:** Launch Readiness / Legal-Business Ops.
+- **Success criteria:** Real fulfilled orders; promises match reality.
+- **Next review:** Launch Gate.
+
+## Phase 15 — Post-Launch Learning and Product Expansion
+
+- **Purpose:** Learn from launch; expand toward broader keepsake formats (journal, mug, sticker pack, wall art, gift wrap, etc.).
+- **Start / End:** post-launch, directional only. **Confidence: Low**
+- **Entry:** Phase 14.
+- **Exit:** Validated learnings; next-format decision.
+- **Dependencies:** launch data.
+- **Risks:** premature expansion; KeepMees reduced to one product.
+- **Owner lane:** Product Strategy / Product System Expansion.
+- **Success criteria:** Expansion driven by evidence, each format gated independently.
+- **Next review:** Post-Launch Learning Gate.
+
+---
+
+## Critical path (summary)
+
+Phase 0 (Tower) → Phase 12 foundation (Package 5A) → Phase 6 (print-faithful preview) ⟂ Phase 7 (design) → Phase 8/9 (manufacturing/vendor) → Phase 10 (packaging) → Phase 11 (checkout/PDF) → Phase 13 → Phase 14 → Phase 15.
+
+External gates (designer budget, vendor confirmation, server PDF infra) are the dominant schedule risk; everything from Phase 7 onward is **Low confidence** until those clear.

@@ -22,6 +22,8 @@ artifacts/
 !artifacts/.gitkeep
 *.pdf
 *.ics
+# Exception: the Project Control Tower calendar is repo-native source of truth (Package 2.8)
+!docs/project-control/keepmees-project-calendar.ics
 local-reports/
 screenshots/
 .tmp-ai/
