@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-05-21
-**Updated by:** Claude Code (Package 2.8 status sync)
+**Last updated:** 2026-05-22
+**Updated by:** Claude Code (Package 2.9 status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,19 +11,21 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Review the committed Project Control Tower under `docs/project-control/` | Coordinator | — |
-| 2 | Decide whether to authorize Package 5A (Foundation Operating System Gate now passable) | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Review the merged Package 2.9 (AI Project OS auto-management layer) under `docs/ai-system/`, `docs/dev/`, `docs/qa/` | Coordinator | — |
+| 2 | Decide whether to authorize Package 5A (Foundation Operating System Gate passed by Package 2.8; AI Project OS layer added by Package 2.9) | Coordinator | **[NEEDS APPROVAL]** |
 | 3 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 4 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 5 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
-| 6 | Decide `scripts/node_modules` tracked-history cleanup (separate from Package 2.8) | Coordinator | **[NEEDS APPROVAL]** |
+| 6 | Decide `scripts/node_modules` tracked-history cleanup (separate from Package 2.8/2.9) | Coordinator | **[NEEDS APPROVAL]** |
+| 7 | (Optional) Each contributor installs the user-level permission/wait notification hook per `docs/dev/notification-setup.md` | Founder / contributors | — |
 
 ---
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 2.8 COMPLETE — Project Control Tower built and merged. Coordinator now reviews the committed Tower and decides whether to authorize Package 5A. Package 5A remains paused.**
+**Status: Package 2.9 COMPLETE — AI Project OS auto-management layer built and merged. Coordinator now decides whether to authorize Package 5A. Package 5A remains paused.**
 
+Package 2.9 (AI Project OS Auto-Management Upgrade Pass) is COMPLETE — merged to main (`a20af30`). Universal `docs/ai-system/` layer + 7 new dev protocols + 2 new QA docs + `.claude/commands` placeholder; honest enforcement labels throughout; no app code.
 Package 2.8 (KeepMees Project Control Tower) is COMPLETE — merged to main (`bdb73db`). Full repo-native Tower built under `docs/project-control/`; no app code; locked decisions intact.
 Package 2.7 (AI Development Operating System Upgrade Pass) is COMPLETE — merged to main (`cebdc72`). Operating infrastructure only; no app code.
 Package 4E.1 (E2E Startup Timing Reliability Patch) is COMPLETE — merged to main (`73dae00`).
@@ -38,7 +40,7 @@ Package 3C (Real File Import, Download, and Full-Path E2E Coverage) is COMPLETE 
 Package 3B (Automated E2E Regression Harness Foundation) is COMPLETE — merged to main (`40b4bba`).
 Package 3A (local project session save and resume foundation) is COMPLETE — merged to main (`b40fa2b`).
 
-No development package has been authorized. The Project Control Tower is now BUILT and MERGED — the next Coordinator step is to review the committed Tower (see `docs/project-control/README.md`) and decide whether to authorize **Package 5A (Message Book Proof Approval State Foundation)**. The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable; Package 5A still requires explicit Coordinator authorization before any code begins.
+No development package has been authorized. The Project Control Tower (Package 2.8) and the universal AI Project OS auto-management layer (Package 2.9) are both BUILT and MERGED. The next Coordinator step is to decide whether to authorize **Package 5A (Message Book Proof Approval State Foundation)**. The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) was passed by Package 2.8; Package 5A still requires explicit Coordinator authorization before any code begins.
 
 ---
 

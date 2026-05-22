@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
-**Last updated:** 2026-05-21
-**Updated by:** Claude Code (Package 2.8 status sync)
+**Last updated:** 2026-05-22
+**Updated by:** Claude Code (Package 2.9 status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -372,6 +372,39 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 ---
 
 ## LAYER 2 — Claude Advisory, Not Yet Coordinator Approved
+
+### Advisory: Package 2.9 — AI Project OS Auto-Management Upgrade Pass (2026-05-22)
+
+**Status:** COMPLETE — merged to main (`81c5069` / `a20af30`); docs/operating-infrastructure only, no app code
+
+**What was added:**
+
+- Universal AI Project OS layer at `docs/ai-system/` (5 files): README, universal-standards, bootstrap-template, CHANGELOG, version-history. This is the portable layer — the part that travels via the bootstrap to Puzzle and any future repo. The KeepMees-specific Project Control Tower remains its sibling, project-specific.
+- 7 new dev protocols under `docs/dev/`:
+  - `auto-management-protocol.md` — umbrella protocol tying the OS together
+  - `model-routing-protocol.md` — which model for which task (tier intent, not model IDs)
+  - `token-efficiency-protocol.md` — context-cost discipline
+  - `context-budget-checklist.md` — 10-step pre-flight before any non-trivial pass
+  - `tool-batching-protocol.md` — batching plan format; parallel-call rules; script-vs-many-edits
+  - `package-boundary-closeout-protocol.md` — boundary behavior + fresh-session preference + next-package gating
+  - `notification-setup.md` — user-level permission/wait notification setup (Windows/macOS/Linux); not committed as private setting
+- Extensions to existing dev protocols: `context-hygiene-protocol.md` gains a high-uncached-context (300k+/500k+) section + fresh-session preference; `model-switching-protocol.md` cross-links to the new routing protocol.
+- 2 new QA docs: `test-strategy.md` (5-layer strategy + per-package-type matrix); `package-verification-template.md` (12-section verification gate).
+- `.claude/commands/README.md` — readiness placeholder for custom slash commands (no live commands).
+- Cross-links added across `AGENTS.md`, `CLAUDE.md`, `.codex/README.md`, `.claude/agents/README.md`, `.claude/skills/README.md`.
+- `.github/PULL_REQUEST_TEMPLATE.md` extended with model-tier / package-verification / boundary-closeout rows.
+- `.gitignore` extended with IDE/OS/log noise patterns + defensive Codex patterns.
+- Light touches to `docs/project-control/README.md` and `coordinator-weekly-sync.md` (weekly-log row).
+
+**Honest enforcement labels:** Every capability the OS adds is classified as one of five statuses — automatic / semi-automatic / policy-driven / user-level / backlog — both in `universal-standards.md` and `version-history.md`. No fake-automation claims. Git identity verification, commit/push gating, `/clear`/`/compact` invocation, model-switching mechanics, and Claude/Codex handoff packet generation are all explicitly labelled as policy-driven or manual.
+
+**Standing rule:** `docs/ai-system/*` is the universal portable AI Project OS layer. Edit only in dedicated OS upgrade passes; log every change in `docs/ai-system/CHANGELOG.md` and `version-history.md`. KeepMees-specific operations stay in `AGENTS.md`, `CLAUDE.md`, `.codex/README.md`, `docs/automation/operator-mode/`, and `docs/project-control/`.
+
+**What this does NOT deliver:** Product Package 5A; checkout / server PDF / cover design / preview renderers; vendor outreach; design hiring restart; n8n/Make/Zapier workflows; live Claude hooks/subagents/skills/custom slash commands (only readiness placeholders); `.codex/config.toml`; CI workflows; pre-commit hooks. No app, product, vendor, design, or manufacturing decisions reopened.
+
+**Foundation Operating System Gate (Gate 1)** stays passed (from Package 2.8). Package 2.9 strengthens it. Package 5A still requires explicit Coordinator authorization.
+
+---
 
 ### Advisory: Package 2.8 — KeepMees Project Control Tower (2026-05-21)
 

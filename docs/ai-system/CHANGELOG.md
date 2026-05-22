@@ -11,7 +11,11 @@ Newest entries first.
 
 ## 2026-05-22 — Package 2.9: AI Project OS Auto-Management Upgrade Pass
 
-**Status:** in progress on branch `docs/ai-project-os-auto-management-upgrade`. Not committed at the time of this entry — final commit hashes will be filled in at closeout.
+**Status:** COMPLETE — merged to main.
+**Branch:** `docs/ai-project-os-auto-management-upgrade`
+**Implementation commit:** `81c5069` — docs: upgrade AI Project OS auto-management
+**Merge commit:** `a20af30` — merge: upgrade AI Project OS auto-management
+**main HEAD after merge:** `a20af30` (post-merge status sync follows on a separate branch)
 
 **Scope (docs / config / infrastructure only — no app code):**
 

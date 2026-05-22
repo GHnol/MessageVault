@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
-**Last updated:** 2026-05-21
-**Updated by:** Claude Code (Package 2.8 status sync)
+**Last updated:** 2026-05-22
+**Updated by:** Claude Code (Package 2.9 status sync)
 **Status:** Active
 
 ---
@@ -23,9 +23,10 @@ Authoritative index of every significant file in the repository — what it is, 
 | `AI_HANDOFF.md` | Handoff / resume file | Compact-safe work transfer record; updated before any context event, agent switch, or mid-task stop |
 | `CURRENT_STATE.md` | Continuity file | Durable project-state snapshot — survives /clear, /compact, model/tool switch (Package 2.7) |
 | `NEXT_SESSION_PROMPT.md` | Continuity file | Paste-ready session restart prompt + mandatory startup checklist (Package 2.7) |
-| `.codex/README.md` | AI instructions | Codex-specific layer; roles, interchangeability, config policy (Package 2.7, placeholder) |
-| `.claude/agents/README.md` | AI instructions | Planned subagent roster (Package 2.7, readiness placeholder — no live agents) |
-| `.claude/skills/README.md` | AI instructions | Planned skill roster (Package 2.7, readiness placeholder — no live skills) |
+| `.codex/README.md` | AI instructions | Codex-specific layer; roles, interchangeability, config policy (Package 2.7, placeholder; Package 2.9 cross-links added) |
+| `.claude/agents/README.md` | AI instructions | Planned subagent roster (Package 2.7, readiness placeholder — no live agents; Package 2.9 cross-links added) |
+| `.claude/skills/README.md` | AI instructions | Planned skill roster (Package 2.7, readiness placeholder — no live skills; Package 2.9 cross-links added) |
+| `.claude/commands/README.md` | AI instructions | Planned custom slash command roster (Package 2.9, readiness placeholder — no live commands) |
 
 ---
 
@@ -193,7 +194,7 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/automation/templates/roadmap-item.md` | Template for roadmap milestones |
 | `docs/automation/templates/ai-automation-item.md` | Template for AI automation register items |
 
-### QA (Package 3B — `0ce973a` / 3C — `f8379d0` / 2.6 — `23b46b7` / 4E.1 — `3c4ce70` / 2.7 — `6dde21b`)
+### QA (Package 3B — `0ce973a` / 3C — `f8379d0` / 2.6 — `23b46b7` / 4E.1 — `3c4ce70` / 2.7 — `6dde21b` / 2.9 — `81c5069`)
 
 | File | Purpose |
 |---|---|
@@ -201,8 +202,10 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/qa/manual-qa-template.md` | Manual QA result template (golden path, edge cases, regression) |
 | `docs/qa/pre-commit-verification-template.md` | Pre-commit hygiene gate: working tree, diff sanity, tests, continuity, identity (Package 2.7) |
 | `docs/qa/release-readiness-template.md` | Release/milestone readiness gate checklist (Package 2.7) |
+| `docs/qa/test-strategy.md` | Package 2.9 — first-class test strategy across 5 layers (Node unit / E2E seeded / E2E real / capture harness / docs verification); per-package-type matrix |
+| `docs/qa/package-verification-template.md` | Package 2.9 — per-package verification gate (12 sections: scope, all 5 test layers, manual QA, docs, continuity, git identity, commit/merge plan, next-session prompt) |
 
-### Dev workflow protocols (Package 2.7 — `6dde21b`)
+### Dev workflow protocols (Package 2.7 — `6dde21b`; Package 2.9 — `81c5069` added 7 new + cross-links)
 
 | File | Purpose |
 |---|---|
@@ -210,11 +213,28 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/dev/development-review-packet-template.md` | Template for sending completed work to Development review |
 | `docs/dev/claude-codex-interchangeability.md` | Codex roles, shared contract, handoff rules |
 | `docs/dev/session-restart-protocol.md` | Mandatory restart sequence after any session/context/model/tool event |
-| `docs/dev/context-hygiene-protocol.md` | /clear vs /compact vs /context decision table; pre-event update content |
-| `docs/dev/model-switching-protocol.md` | Model-switch checkpoint rules; which model for which work |
+| `docs/dev/context-hygiene-protocol.md` | /clear vs /compact vs /context decision table; pre-event update content; high-uncached-context section (Package 2.9) |
+| `docs/dev/model-switching-protocol.md` | Model-switch checkpoint rules; mechanics (Package 2.9 cross-link to model-routing) |
 | `docs/dev/tool-switching-protocol.md` | Claude↔Codex handoff rules; branch ownership |
 | `docs/dev/agent-scope-boundaries.md` | Consolidated allowed/off-limits/authorization-required list |
 | `docs/dev/worktree-and-parallel-session-policy.md` | Worktree + parallel session governance |
+| `docs/dev/auto-management-protocol.md` | Package 2.9 — umbrella auto-management protocol; ties the OS together |
+| `docs/dev/model-routing-protocol.md` | Package 2.9 — which model for which task; tier-by-task matrix |
+| `docs/dev/token-efficiency-protocol.md` | Package 2.9 — context-cost discipline |
+| `docs/dev/context-budget-checklist.md` | Package 2.9 — 10-step pre-flight checklist |
+| `docs/dev/tool-batching-protocol.md` | Package 2.9 — batching plan format; parallel-call and script-vs-edit rules |
+| `docs/dev/package-boundary-closeout-protocol.md` | Package 2.9 — boundary behavior; fresh-session preference; next-package gating |
+| `docs/dev/notification-setup.md` | Package 2.9 — user-level permission/wait notification setup (Windows/macOS/Linux) |
+
+### AI Project OS layer (Package 2.9 — `81c5069`)
+
+| File | Purpose |
+|---|---|
+| `docs/ai-system/README.md` | Entry point to the AI Project OS layer |
+| `docs/ai-system/universal-standards.md` | Repo-agnostic standards; 5-status (automatic/semi-auto/policy/user-level/backlog) capability table |
+| `docs/ai-system/bootstrap-template.md` | Provisioning pattern for spinning up the OS in a new repo (Puzzle and beyond) |
+| `docs/ai-system/CHANGELOG.md` | OS-level changelog (separate from product changelog) |
+| `docs/ai-system/version-history.md` | OS version history (0.1.0 → Package 2.7, 0.2.0 → Package 2.8, 0.3.0 → Package 2.9) |
 
 ### Project Control Tower (Package 2.8 — `2a5fb54`, ACTIVE)
 
