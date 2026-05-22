@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-21
-**Updated by:** Claude Code (Package 2.8 status sync)
+**Last updated:** 2026-05-22
+**Updated by:** Claude Code (Package 2.9 status sync)
 **Status:** Active
 
 ---
@@ -357,9 +357,34 @@ What this did NOT build/change: no app code; no checkout/PDF/preview-renderers; 
 
 ---
 
+### Package 2.9 — AI Project OS Auto-Management Upgrade Pass
+
+**Branch:** `docs/ai-project-os-auto-management-upgrade`
+**Status:** COMPLETE — merged to main (feature: `81c5069`, merge: `a20af30`)
+
+Delivered (docs / operating infrastructure only — no app code):
+- `docs/ai-system/` — universal AI Project OS layer (5 files: README, universal-standards, bootstrap-template, CHANGELOG, version-history)
+- `docs/dev/` — 7 new protocols: auto-management (umbrella), model-routing, token-efficiency, context-budget-checklist, tool-batching, package-boundary-closeout, notification-setup; plus extensions to context-hygiene (high-uncached-context section, fresh-session preference) and model-switching (cross-link to routing)
+- `docs/qa/` — test-strategy.md (first-class testing strategy across 5 layers); package-verification-template.md (per-package verification gate)
+- `.claude/commands/README.md` — readiness placeholder (no live custom slash commands)
+- Cross-links added across `AGENTS.md`, `CLAUDE.md`, `.codex/README.md`, `.claude/agents/README.md`, `.claude/skills/README.md`
+- `.github/PULL_REQUEST_TEMPLATE.md` — model-tier / package-verification / boundary-closeout rows
+- `.gitignore` — IDE/OS/log noise patterns + defensive Codex patterns
+- Light touches to `docs/project-control/README.md` (note about `docs/ai-system/`) and `coordinator-weekly-sync.md` (2026-05-22 weekly-log row)
+- Continuity files updated (`AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`)
+- Honest enforcement labels applied throughout: every capability classified as automatic / semi-automatic / policy-driven / user-level / backlog
+
+What this did NOT build/change: no app code; no `index.html` / `src/**` / `scripts/**` changes (verified by `git diff` returning 0 lines); no checkout/PDF/preview-renderers; no vendor outreach; no design hiring restart; no n8n/Make/Zapier; no Product Package 5A; no live Claude hooks / subagents / skills / custom slash commands (only readiness placeholders); no `.codex/config.toml`; no Project Control Tower content rewritten. No locked product/vendor/design/manufacturing decisions reopened.
+
+**Standing rule established:** `docs/ai-system/` is the universal portable AI Project OS layer that travels to future repos via `bootstrap-template.md`. Project Control Tower remains KeepMees-specific. The two layers are siblings.
+
+**Foundation Operating System Gate (Gate 1)** remains passed (from Package 2.8). Package 2.9 strengthens the same gate by adding the universal OS layer on top. Package 5A still requires explicit Coordinator authorization.
+
+---
+
 ### Coordinator review + Package 5A decision — (next coordination step)
 
-**Status:** Not started. Coordinator reviews the committed Tower and decides whether to authorize **Package 5A — Message Book Proof Approval State Foundation** (Phase 12 foundation, Gate 9 target). The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable; Package 5A still requires explicit Coordinator authorization before any code begins. Scope-limited (proof approval STATE model + tests only; no checkout, no PDF, no preview renderers).
+**Status:** Not started. Coordinator reviews the merged Project Control Tower (Package 2.8) and AI Project OS layer (Package 2.9) and decides whether to authorize **Package 5A — Message Book Proof Approval State Foundation** (Phase 12 foundation, Gate 9 target). The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is passed; Package 5A still requires explicit Coordinator authorization before any code begins. Scope-limited (proof approval STATE model + tests only; no checkout, no PDF, no preview renderers).
 
 ---
 

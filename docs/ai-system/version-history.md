@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | in progress on `docs/ai-project-os-auto-management-upgrade` |
+| 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | merged (`a20af30`) |
 | 0.2.0 | Package 2.8 — KeepMees Project Control Tower | 2026-05-17 | merged (`bdb73db`) |
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
 
@@ -22,7 +22,9 @@ Version numbers are internal to this layer (not semver of any product code). The
 ## 0.3.0 — Package 2.9 — AI Project OS Auto-Management Upgrade Pass (2026-05-22)
 
 **Branch:** `docs/ai-project-os-auto-management-upgrade`
-**Status:** in progress; not yet committed at time of this row.
+**Implementation commit:** `81c5069`
+**Merge commit:** `a20af30`
+**main HEAD after merge:** `a20af30` (post-merge status sync follows on a separate `docs/sync-command-center-after-package-2-9` branch)
 
 ### Capability deltas (vs. 0.2.0)
 

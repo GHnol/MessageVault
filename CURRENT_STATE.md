@@ -21,18 +21,18 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `9191532` — merge: sync operating docs to reflect Package 2.8 completion |
-| Last closed package | `Package 2.8 — KeepMees Project Control Tower` (feature `2a5fb54`, merge `bdb73db`); status sync `9191532` |
-| Active package | `Package 2.9 — AI Project OS Auto-Management Upgrade Pass` (in progress on `docs/ai-project-os-auto-management-upgrade`; not yet committed) |
-| Active branch | `docs/ai-project-os-auto-management-upgrade` |
-| Next authorized target | Coordinator reviews Package 2.9 diff and decides commit + merge; Package 5A remains paused awaiting separate explicit Coordinator authorization |
-| Package 5A | Still paused — Foundation Operating System Gate passed by Package 2.8; awaits explicit Coordinator authorization (independent of Package 2.9) |
+| main HEAD | `a20af30` — merge: upgrade AI Project OS auto-management |
+| Last closed package | `Package 2.9 — AI Project OS Auto-Management Upgrade Pass` (implementation `81c5069`, merge `a20af30`); status sync in progress on `docs/sync-command-center-after-package-2-9` |
+| Active package | None — Coordinator decides next |
+| Active branch | `docs/sync-command-center-after-package-2-9` (status-sync pending merge to main) |
+| Next authorized target | Coordinator decides whether to authorize Package 5A — Foundation Operating System Gate was passed by Package 2.8 and the AI Project OS auto-management layer is now in place |
+| Package 5A | Still paused — awaits explicit Coordinator authorization (independent of Package 2.9 closure) |
 
 ---
 
 ## Delivered packages (summary)
 
-Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Packages 2.7, 2.8 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 23 real-files E2E (64 combined), all green. Packages 2.7 and 2.8 added operating infrastructure only (no app code). Package 2.9 (in progress) is the same shape — universal AI Project OS layer plus dev/QA protocol additions; no app code.
+Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Packages 2.7, 2.8, 2.9 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 23 real-files E2E (64 combined), all green. Packages 2.7, 2.8, 2.9 added operating infrastructure only (no app code).
 
 ---
 
@@ -40,7 +40,7 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 | Gate | Status |
 |---|---|
-| Foundation Operating System (Gate 1) | Passed by Package 2.8 |
+| Foundation Operating System (Gate 1) | Passed by Package 2.8; further strengthened by Package 2.9 (universal AI Project OS layer + auto-management protocols) |
 | Vendor confirmed | NO — evaluation in progress |
 | `isCoverUnblocked()` | false |
 | Commerce readiness (message-book) | blocked |
@@ -63,7 +63,7 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 ## What is NOT started
 
-Package 5A, checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. The Project Control Tower (Package 2.8) is BUILT and MERGED. Package 2.9 is the in-progress OS upgrade pass; it is docs/config/infrastructure-only and does not touch app code.
+Package 5A, checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. The Project Control Tower (Package 2.8) and the AI Project OS auto-management layer (Package 2.9) are both BUILT and MERGED. App code is unchanged.
 
 ---
 
@@ -106,7 +106,7 @@ Package 5A, checkout/PDF/cover work, framework migration, visual redesign, previ
 | ClickUp / TickTick imports | `clickup-import.csv`, `ticktick-import.csv`, `ticktick-weekly-checklist.md`, `ticktick-recurring-routines.md` |
 | 7 / 30 / 90 day plans | `next-7-days.md`, `next-30-days.md`, `next-90-days.md` |
 | Weekly sync process | `coordinator-weekly-sync.md` |
-| Next session prompt | `next-session-prompt.md` |
+| Next session prompt (Tower) | `next-session-prompt.md` |
 
 ---
 

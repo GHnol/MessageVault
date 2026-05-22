@@ -1,7 +1,7 @@
 # Risk Register — KeepMees / MessageVault
 
-**Last updated:** 2026-05-21
-**Updated by:** Claude Code (Package 2.8 status sync)
+**Last updated:** 2026-05-22
+**Updated by:** Claude Code (Package 2.9 status sync)
 **Status:** Active
 
 ---
@@ -104,7 +104,7 @@ Each risk has: **ID**, **Description**, **Likelihood** (L/M/H), **Impact** (L/M/
 
 **Description:** AI development sessions have context limits. A session that loses important context mid-implementation may produce work that contradicts locked decisions.
 
-**Mitigation:** The Package 2.5A/B documentation system is the primary mitigation. Durable repo-based source-of-truth replaces chat scrolling. See also `docs/ops/stream-sync-protocol.md`. **Package 2.7 (`cebdc72`) materially strengthened this:** `CURRENT_STATE.md` (durable snapshot) + `NEXT_SESSION_PROMPT.md` (restart entry point), plus `docs/dev/` session-restart, context-hygiene (/clear vs /compact vs /context), model-switching, and tool-switching protocols — so context-loss, model switches, and Claude↔Codex switches cannot silently corrupt in-progress work. **Package 2.8 (`bdb73db`) further strengthened it** with the Project Control Tower (`docs/project-control/`): durable current sprint, backlog, 7/30/90-day plans, phase gates, and a Coordinator weekly sync process — every package closeout now re-syncs the Tower, so AI sessions never become the only place project state exists.
+**Mitigation:** The Package 2.5A/B documentation system is the primary mitigation. Durable repo-based source-of-truth replaces chat scrolling. See also `docs/ops/stream-sync-protocol.md`. **Package 2.7 (`cebdc72`) materially strengthened this:** `CURRENT_STATE.md` (durable snapshot) + `NEXT_SESSION_PROMPT.md` (restart entry point), plus `docs/dev/` session-restart, context-hygiene (/clear vs /compact vs /context), model-switching, and tool-switching protocols — so context-loss, model switches, and Claude↔Codex switches cannot silently corrupt in-progress work. **Package 2.8 (`bdb73db`) further strengthened it** with the Project Control Tower (`docs/project-control/`): durable current sprint, backlog, 7/30/90-day plans, phase gates, and a Coordinator weekly sync process — every package closeout now re-syncs the Tower, so AI sessions never become the only place project state exists. **Package 2.9 (`a20af30`) further strengthened it** with the universal AI Project OS layer (`docs/ai-system/`) and 7 new dev protocols (auto-management, model-routing, token-efficiency, context-budget-checklist, tool-batching, package-boundary-closeout, notification-setup) — so token-cost discipline, model-tier routing, high-uncached-context protection, fresh-session preference at boundaries, and continuous repo-native state updates are now explicit policy. Honest enforcement labels (automatic / semi-automatic / policy-driven / user-level / backlog) prevent fake-automation claims; nothing technically enforces these rules — they remain policy-driven and depend on agent discipline.
 
 ---
 
