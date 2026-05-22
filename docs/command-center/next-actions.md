@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 2.7 status sync)
+**Last updated:** 2026-05-21
+**Updated by:** Claude Code (Package 2.8 status sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,18 +11,21 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize the Project Control Tower pass | Coordinator | **[NEEDS APPROVAL]** |
-| 2 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
-| 3 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
-| 4 | Decide `scripts/node_modules` tracked-history cleanup (separate from Package 2.7) | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Review the committed Project Control Tower under `docs/project-control/` | Coordinator | — |
+| 2 | Decide whether to authorize Package 5A (Foundation Operating System Gate now passable) | Coordinator | **[NEEDS APPROVAL]** |
+| 3 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
+| 4 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
+| 5 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
+| 6 | Decide `scripts/node_modules` tracked-history cleanup (separate from Package 2.8) | Coordinator | **[NEEDS APPROVAL]** |
 
 ---
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 2.7 COMPLETE — next authorized target is the Project Control Tower pass (not yet authorized). Package 5A remains paused until the Project Control Tower is complete and approved.**
+**Status: Package 2.8 COMPLETE — Project Control Tower built and merged. Coordinator now reviews the committed Tower and decides whether to authorize Package 5A. Package 5A remains paused.**
 
-Package 2.7 (AI Development Operating System Upgrade Pass) is COMPLETE — merged to main (`cebdc72`). Operating infrastructure only; no app code; full Project Control Tower NOT built (prepared only).
+Package 2.8 (KeepMees Project Control Tower) is COMPLETE — merged to main (`bdb73db`). Full repo-native Tower built under `docs/project-control/`; no app code; locked decisions intact.
+Package 2.7 (AI Development Operating System Upgrade Pass) is COMPLETE — merged to main (`cebdc72`). Operating infrastructure only; no app code.
 Package 4E.1 (E2E Startup Timing Reliability Patch) is COMPLETE — merged to main (`73dae00`).
 Package 4E (Product Format Availability Surface Foundation) is COMPLETE — merged to main (`7c87f20`).
 Package 4D (Product Experience Readiness Consumer Foundation) is COMPLETE — merged to main (`4747dff`).
@@ -35,7 +38,7 @@ Package 3C (Real File Import, Download, and Full-Path E2E Coverage) is COMPLETE 
 Package 3B (Automated E2E Regression Harness Foundation) is COMPLETE — merged to main (`40b4bba`).
 Package 3A (local project session save and resume foundation) is COMPLETE — merged to main (`b40fa2b`).
 
-No development package has been authorized. The next authorized target for Coordinator evaluation is the **Project Control Tower pass** (build the master roadmap, schedule, gates, backlog, Kanban, calendar/ClickUp/TickTick exports per `docs/project-control/project-control-tower-plan.md`). Product Package 5A remains paused until the Project Control Tower is complete and approved.
+No development package has been authorized. The Project Control Tower is now BUILT and MERGED — the next Coordinator step is to review the committed Tower (see `docs/project-control/README.md`) and decide whether to authorize **Package 5A (Message Book Proof Approval State Foundation)**. The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable; Package 5A still requires explicit Coordinator authorization before any code begins.
 
 ---
 
@@ -66,8 +69,8 @@ No development package has been authorized. The next authorized target for Coord
 
 | Decision | What needs deciding | Downstream impact |
 |---|---|---|
-| Project Control Tower pass | Authorize the dedicated Tower build pass (roadmap, schedule, gates, backlog, Kanban, calendar/ClickUp/TickTick exports) | Project execution visibility; unblocks Package 5A evaluation |
-| Package 5A | Remains paused until Project Control Tower is complete and approved | Product roadmap resumption |
+| Package 5A authorization | Whether to authorize Message Book Proof Approval State Foundation now that the Tower is merged (Foundation OS Gate passable) | Product development resumption |
+| Tower adoption (founder) | Whether to import `.ics`, ClickUp CSV, TickTick CSV | Personal execution layer; not required for repo to work |
 | GitHub Projects setup | Whether to create the KeepMees Command Center board | Tracking infrastructure |
 | NotebookLM adoption | Formally adopt or defer | Research/synthesis tooling |
 | Designer budget | Re-authorize or continue passive search | Figma execution gate |
@@ -80,9 +83,8 @@ No development package has been authorized. The next authorized target for Coord
 | Item | Reason | Gate |
 |---|---|---|
 | Next development package | No scope authorized yet | Coordinator authorization |
-| Full Project Control Tower build (master roadmap, schedule, Kanban, Google Calendar .ics, ClickUp import, TickTick import) | Package 2.7 prepared readiness only — Tower not built | Coordinator authorization of the Tower pass |
-| Product Package 5A | Paused | Project Control Tower complete and approved |
-| `scripts/node_modules` history cleanup | Tracked in git history; not part of Package 2.7 | Separate Coordinator decision |
+| Product Package 5A | Paused | Explicit Coordinator authorization (Foundation Operating System Gate now passable but not auto-passed) |
+| `scripts/node_modules` history cleanup | Tracked in git history; not part of Package 2.8 | Separate Coordinator decision |
 | Physical product previews | Not yet — no renderers implemented for mug, sticker, framed print, notebook, magnet | Coordinator authorization + renderer implementation |
 | Product mockups | Not yet — no mockup work authorized | Coordinator authorization |
 | Preview renderers | Not yet — renderer-not-implemented for all non-Message Book formats | Coordinator authorization |

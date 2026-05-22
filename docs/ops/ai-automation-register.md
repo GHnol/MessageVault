@@ -1,7 +1,7 @@
 # AI and Automation Register — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 2.7 status sync)
+**Last updated:** 2026-05-21
+**Updated by:** Claude Code (Package 2.8 status sync)
 **Status:** LAYER 1 (source-backed); LAYER 2 advisory appendix at bottom
 
 ---
@@ -372,6 +372,25 @@ Title, Stream, Phase, Sprint, Priority, Status, Start date, Target date, Estimat
 ---
 
 ## LAYER 2 — Claude Advisory, Not Yet Coordinator Approved
+
+### Advisory: Package 2.8 — KeepMees Project Control Tower (2026-05-21)
+
+**Status:** COMPLETE — merged to main (`2a5fb54` / `bdb73db`); docs/operating-infrastructure only, no app code
+
+**What was added:**
+- Full repo-native Project Control Tower under `docs/project-control/` (22 files): README, master-roadmap (Phases 0–15 with completed-package mapping), master-schedule (dated + confidence labels), current-sprint, backlog (16 lanes), kanban-board, phase-gates (11), decision-log, project risk-register, calendar-spec + committed `keepmees-project-calendar.ics` (12 events, VTIMEZONE America/New_York, unique UIDs), clickup-import.csv (17×30), ticktick-import.csv (10×18), ticktick-weekly-checklist, ticktick-recurring-routines, next-7/30/90-days, coordinator-weekly-sync (active), next-session-prompt
+- Surgical `.gitignore` exception (`!docs/project-control/keepmees-project-calendar.ics`) so the repo-native calendar is trackable while all other `.ics` files remain ignored
+- 2 Package 2.7 stubs superseded with history preserved (`project-control-tower-plan.md`, `project-calendar-spec.md`)
+
+**Standing rule established:** repo docs under `docs/project-control/` are the source of truth. External tools (ClickUp / TickTick / Google Calendar / Kanban) **never** override the repo — Coordinator syncs external changes back into the repo or discards them.
+
+**Six layers:** (1) repo docs (truth) → (2) ClickUp CSV (full execution board) → (3) Kanban file (status visibility) → (4) calendar `.ics` (rituals only) → (5) TickTick (personal check-off layer only) → (6) Coordinator weekly sync (the synchronization process).
+
+**What this does NOT deliver:** Product Package 5A; checkout / server PDF / cover design / preview renderers; vendor outreach; design hiring restart; n8n/Make/Zapier workflows; live Claude hooks/subagents/skills; `.codex/config.toml`. No app, product, vendor, design, or manufacturing decisions reopened.
+
+**Foundation Operating System Gate (Gate 1) is now passable** — Package 5A still requires explicit Coordinator authorization.
+
+---
 
 ### Advisory: Package 2.7 — AI Development Operating System Upgrade Pass (2026-05-17)
 

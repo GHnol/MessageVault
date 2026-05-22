@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 2.7 status sync)
+**Last updated:** 2026-05-21
+**Updated by:** Claude Code (Package 2.8 status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -59,8 +59,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 4E — Product Format Availability Surface Foundation | COMPLETE | `99bdf8f` / `7c87f20` |
 | Package 4E.1 — E2E Startup Timing Reliability Patch | COMPLETE | `3c4ce70` / `73dae00` |
 | Package 2.7 — AI Development Operating System Upgrade Pass | COMPLETE | `6dde21b` / `cebdc72` |
+| Package 2.8 — KeepMees Project Control Tower | COMPLETE | `2a5fb54` / `bdb73db` |
 
-Tests: **1466 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; safe "Product formats" section with Message Book as "Available for Message Book preview" and non-book formats as "Planned format"; no renderers, no commerce, no mockups added. Package 4E.1 (`3c4ce70`) was test-harness reliability only (no app change). Package 2.7 (`6dde21b`) was AI development operating infrastructure only — no app, product, vendor, design, or manufacturing change; full Project Control Tower NOT built (prepared only).
+Tests: **1466 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. App code last changed: Package 4E (`99bdf8f`). Packages 4E.1, 2.7, 2.8 made no app code changes. Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower (`docs/project-control/`: README, master-roadmap, master-schedule, current-sprint, backlog across 16 lanes, kanban-board, 11 phase-gates, decision-log, project risk-register, calendar-spec + importable `keepmees-project-calendar.ics`, clickup-import.csv, ticktick-import.csv + weekly checklist + recurring routines, next-7/30/90-days, coordinator-weekly-sync, next-session-prompt; 2 Package 2.7 stubs superseded). Surgical `.gitignore` exception so the repo-native `.ics` is trackable. No app/product/vendor/design/manufacturing decisions reopened. Package 5A remains paused.
 
 ---
 
@@ -167,9 +168,26 @@ Package 2.7 (COMPLETE — `cebdc72`)
       Google Calendar .ics, ClickUp import, TickTick import, n8n/Make/Zapier, Product Package 5A
     → no app code; no product/vendor/design/manufacturing decisions reopened
 
-Project Control Tower pass (NOT yet authorized) ← current position
-    → Coordinator to authorize the dedicated Tower build pass
-    → Package 5A remains paused until the Tower is complete and approved
+Package 2.8 (COMPLETE — `bdb73db`)
+    → KeepMees Project Control Tower — DELIVERED
+    → Full repo-native operating system under docs/project-control/ (22 files)
+    → Master roadmap (Phases 0–15), master schedule (dated + confidence labels), 
+      current sprint, backlog (16 lanes), Kanban board, 11 phase gates, 
+      decision log, project risk register
+    → Calendar layer: calendar-spec.md + committed keepmees-project-calendar.ics 
+      (surgical .gitignore exception); 12 events incl. weekly rituals + monthly 
+      reviews + gate-review placeholders
+    → External layers: clickup-import.csv (17×30), ticktick-import.csv (10×18), 
+      ticktick-weekly-checklist.md, ticktick-recurring-routines.md
+    → Horizon plans: next-7-days, next-30-days, next-90-days
+    → Process: coordinator-weekly-sync.md (active), next-session-prompt.md
+    → 2 Package 2.7 stubs superseded with history preserved
+    → no app code; no locked decisions reopened
+
+Coordinator review of committed Tower + Package 5A decision ← current position
+    → Coordinator reviews the merged Tower
+    → Decides whether to authorize Package 5A (Foundation OS Gate now passable)
+    → Package 5A remains paused until explicit authorization
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -183,8 +201,9 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Authorize the Project Control Tower pass | Roadmap decision | High — next authorized target; unblocks Package 5A evaluation |
-| `scripts/node_modules` tracked-history cleanup (separate from Package 2.7) | Repo hygiene decision | Low — backlog |
+| Review the committed Project Control Tower; authorize Package 5A | Roadmap decision | High — Foundation OS Gate now passable; product development resumption |
+| Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
+| `scripts/node_modules` tracked-history cleanup (separate from Package 2.8) | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
 | Designer budget re-authorization | Budget decision | High — blocks Figma |

@@ -43,9 +43,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No package in progress. Package 2.7 COMPLETE and merged (`cebdc72`). |
+| Resume into | No package in progress. Package 2.8 (KeepMees Project Control Tower) COMPLETE and merged (`bdb73db`). |
 | Branch | `main` |
-| Next authorized target | Project Control Tower pass — NOT yet authorized (Coordinator decision pending) |
-| First action | Read `AGENTS.md`/`CLAUDE.md`/`AI_HANDOFF.md`/`CURRENT_STATE.md`, run `git status` + `git log --oneline -10`; do not start code/Tower work without explicit authorization |
-| Package 5A | Paused until the Project Control Tower is complete and approved |
-| Do not | Build the full Project Control Tower or any Tower artifact until that pass is explicitly authorized |
+| Next coordination step | Coordinator reviews the committed Tower and decides whether to authorize Package 5A |
+| First action | Read `AGENTS.md`/`CLAUDE.md`/`AI_HANDOFF.md`/`CURRENT_STATE.md`, then `docs/project-control/README.md` + `current-sprint.md` + `next-7-days.md`; run `git status` + `git log --oneline -10` |
+| Package 5A | Still paused — Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable, but Package 5A requires explicit Coordinator authorization |
+| Do not | Start Package 5A or any product/app code without explicit authorization; do not modify `index.html` / `src/**` / `scripts/**`; do not commit/push without explicit instruction |
+| Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
