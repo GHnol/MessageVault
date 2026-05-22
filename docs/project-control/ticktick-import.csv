@@ -1,0 +1,19 @@
+Task Name,List Name,Due Date,Priority,Tags,Notes,Lane,Phase,Source Doc,Success Criteria
+Review the Project Control Tower,KeepMees - This Week,2026-05-19,High,"#keepmees #coordinator #review","Read README, roadmap, schedule, gates, backlog",Coordinator / Project Control,Phase 0,docs/project-control/README.md,Reviewed and decision recorded
+Approve or request Tower changes,KeepMees - This Week,2026-05-20,High,"#keepmees #decision-needed","Explicit approve or changes",Coordinator / Project Control,Phase 0,docs/project-control/current-sprint.md,Decision recorded
+Approve Tower commit and merge,KeepMees - This Week,2026-05-22,High,"#keepmees #coordinator","Operator Mode closeout once approved",Coordinator / Project Control,Phase 0,docs/project-control/README.md,Tower on main
+Import .ics into Google Calendar,KeepMees - This Week,2026-05-23,Medium,"#keepmees","Optional - calendar rituals",Coordinator / Project Control,Phase 0,docs/project-control/calendar-spec.md,Rituals on calendar
+Import ClickUp CSV,KeepMees - This Week,2026-05-23,Medium,"#keepmees","Optional - full board",Coordinator / Project Control,Phase 0,docs/project-control/clickup-import.csv,Board populated
+Load TickTick CSV and routines,KeepMees - This Week,2026-05-23,Medium,"#keepmees","Optional - personal layer",Coordinator / Project Control,Phase 0,docs/project-control/ticktick-recurring-routines.md,This-week tasks only
+Authorize Package 5A after Tower approved,KeepMees - This Week,2026-05-26,High,"#keepmees #decision-needed","Only after Tower merged",Coordinator / Project Control,Phase 12,docs/project-control/phase-gates.md,5A authorized
+Confirm vendor and design stay paused,KeepMees - This Week,2026-05-23,High,"#keepmees #blocked","No external outreach",Coordinator / Project Control,Phase 0,docs/project-control/current-sprint.md,No outreach started
+Weekly KeepMees CEO Review,KeepMees - Coordinator,2026-05-17,High,"#keepmees #review","Sun 7:00 PM - capacity check",Coordinator / Project Control,Phase 0,docs/project-control/calendar-spec.md,Sprint scope confirmed
+Weekly Coordinator Planning Review,KeepMees - Coordinator,2026-05-18,High,"#keepmees #review","Mon 7:30 PM - plan the week",Coordinator / Project Control,Phase 0,docs/project-control/next-7-days.md,Sprint updated
+Weekly Project Control Sync,KeepMees - Coordinator,2026-05-22,High,"#keepmees #review","Fri 7:30 PM - reconcile Tower",Coordinator / Project Control,Phase 0,docs/project-control/coordinator-weekly-sync.md,Tower synced
+Prepare scoped Package 5A prompt,KeepMees - Development,2026-05-28,High,"#keepmees #development","No checkout/PDF/renderer scope",Development,Phase 12,docs/project-control/current-sprint.md,Scoped prompt ready
+Run E2E and unit before any commit,KeepMees - Development,,High,"#keepmees #development","Green baseline required",QA / Testing,Phase 0,docs/qa/e2e-regression-harness.md,All suites green
+Designer budget decision input,KeepMees - Waiting / Blocked,,Medium,"#keepmees #blocked #decision-needed","Blocks Phase 7+",Finance / Budget,Phase 7,docs/project-control/risk-register.md,Decision enabled
+Vendor confirmation follow-up,KeepMees - Waiting / Blocked,,Medium,"#keepmees #vendor #blocked","No new outreach; track only",Vendor Feasibility,Phase 9,docs/ops/vendor-manufacturing-register.md,Status current
+Gift notes v1 vs v1.1 decision,KeepMees - Someday / Deferred,,Low,"#keepmees #decision-needed","Decide at packaging phase",Packaging / Gifting,Phase 10,docs/project-control/decision-log.md,Decision recorded
+Decide external tool adoption,KeepMees - Someday / Deferred,,Low,"#keepmees #decision-needed","ClickUp/TickTick/Calendar optional",Coordinator / Project Control,Phase 0,docs/project-control/decision-log.md,Choice recorded
+Monthly budget review,KeepMees - Coordinator,2026-06-07,Medium,"#keepmees #review","1st Sunday monthly",Finance / Budget,Phase 0,docs/project-control/calendar-spec.md,Reviewed and recorded
