@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 2.7 status sync)
+**Last updated:** 2026-05-21
+**Updated by:** Claude Code (Package 2.8 status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -27,6 +27,7 @@
 | Package 4E | Product Format Availability Surface Foundation | COMPLETE — merged to main | `99bdf8f` | `7c87f20` |
 | Package 4E.1 | E2E Startup Timing Reliability Patch | COMPLETE — merged to main | `3c4ce70` | `73dae00` |
 | Package 2.7 | AI Development Operating System Upgrade Pass | COMPLETE — merged to main | `6dde21b` | `cebdc72` |
+| Package 2.8 | KeepMees Project Control Tower | COMPLETE — merged to main | `2a5fb54` | `bdb73db` |
 
 ---
 
@@ -56,14 +57,16 @@
 
 ---
 
-## Git state (as of Package 2.7 closeout)
+## Git state (as of Package 2.8 closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `cebdc72` — merge: upgrade AI development operating system |
+| main HEAD | `bdb73db` — merge: add KeepMees project control tower |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | Yes — Package 2.7 pushed, merged to main, main pushed |
+| Pushed to remote | Yes — Package 2.8 pushed, merged to main, main pushed |
+
+**Package 2.8 (`2a5fb54` / `bdb73db`):** KeepMees Project Control Tower built — repo-native operating system under `docs/project-control/` (22 files: README, master-roadmap, master-schedule, current-sprint, backlog, kanban-board, phase-gates, decision-log, risk-register, calendar-spec + importable `keepmees-project-calendar.ics`, clickup-import.csv, ticktick-import.csv + weekly-checklist + recurring-routines, next-7/30/90-days, coordinator-weekly-sync, next-session-prompt; 2 Package 2.7 stubs superseded). Surgical `.gitignore` exception so the repo-native `.ics` is trackable. No app code, no product/vendor/design/manufacturing decisions reopened. Package 5A remains paused.
 
 **Package 4E.1 (`3c4ce70` / `73dae00`):** test-harness reliability only — `waitForServer` probe, improved `waitForKm` diagnostic, bounded Phase 1 retry; no app behavior change.
 
@@ -88,12 +91,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize Project Control Tower pass | NEEDS COORDINATOR DECISION — next action after Package 2.7 |
+| Review committed Project Control Tower; decide whether to authorize Package 5A | NEEDS COORDINATOR DECISION — next action after Package 2.8 |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION |
+| Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> Package 5A remains paused until the Project Control Tower is complete and approved. `scripts/node_modules` tracked-history cleanup remains a separate Coordinator decision, not part of Package 2.7.
+> Package 5A remains paused. The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable but requires explicit Coordinator authorization. `scripts/node_modules` tracked-history cleanup remains a separate Coordinator decision, not part of Package 2.8.
 
 ---
 

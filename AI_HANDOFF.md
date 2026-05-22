@@ -8,11 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 2.7 COMPLETE, merged to main (`cebdc72`), status sync complete
+**Status:** `closed` — Package 2.8 COMPLETE, merged to main (`bdb73db`); status sync in progress
 
 **Last updated by:** `Claude Code (Opus 4.7)`
-
-**Date:** `2026-05-17`
 
 ---
 
@@ -20,73 +18,68 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active package** | `Package 2.7 — AI Development Operating System Upgrade Pass` |
-| **Branch** | `docs/ai-development-operating-system-upgrade` (merged to main) |
-| **Branch base** | `main at 89a17d0` |
-| **Feature commit** | `6dde21b` — docs: upgrade AI development operating system |
-| **Merge commit** | `cebdc72` — merge: upgrade AI development operating system |
-| **Status-sync commit** | `docs: sync operating docs to reflect Package 2.7 completion` (see git log) |
+| **Active package** | `Package 2.8 — KeepMees Project Control Tower` |
+| **Branch** | `docs/project-control-tower` (merged to main) |
+| **Branch base** | `main at d07804b` |
+| **Feature commit** | `2a5fb54` — docs: add KeepMees project control tower |
+| **Merge commit** | `bdb73db` — merge: add KeepMees project control tower |
+| **Status-sync branch** | `docs/sync-command-center-after-package-2-8` (in progress) |
 
 ---
 
 ## Objective
 
-Upgrade repo-level AI development operating infrastructure only: universal agent contract, Claude/Codex interchangeability, session restart, model switching, context hygiene, worktree policy, QA templates, and Project Control Tower readiness. No product behavior, UI, `index.html`, or `src/**` changes. This is NOT Package 5A and NOT the full Project Control Tower build.
+Build the full KeepMees Project Control Tower under `docs/project-control/` as the repo-native operating system for the entire project — roadmap, schedule, sprint, backlog, Kanban, gates, decision log, risk register, calendar (`.ics`), ClickUp CSV, TickTick layer, 7/30/90-day plans, weekly Coordinator sync, next-session prompt. Docs only. No app/product/vendor/design code or decisions reopened. Not Package 5A; not the start of any product work.
 
 ---
 
 ## Approved scope
 
-- Create/update universal + Claude + Codex operating docs
-- Create `docs/dev/` workflow protocols, `docs/qa/` templates, `docs/project-control/` readiness docs
-- Harden `.gitignore`
-- README placeholders for hooks/subagents/skills (no live tool-specific configs)
+- Create/upgrade all 20 Tower components under `docs/project-control/`
+- Add a surgical `.gitignore` exception so the repo-native `.ics` is trackable
+- Preserve useful content from Package 2.7 placeholders (superseded stubs)
+- Status sync after merge (command-center + ops + continuity files)
 
-## Hard exclusions
+## Hard exclusions (held)
 
-- No `index.html` / `src/**` edits
-- No commit, no push, no deploy
-- No live hooks / live subagents / live skills / `.codex/config.toml` / shared `.claude/settings.json`
-- No untracking of already-tracked `scripts/node_modules/`
+- No `index.html` / `src/**` / `scripts/**` edits
+- No Package 5A; no product code; no checkout/PDF/preview-renderers
 - No reopening locked product/vendor/design decisions
-- No full Project Control Tower artifacts (roadmap/schedule/Kanban/ICS/ClickUp/TickTick)
+- No vendor outreach; no design hiring restart
+- No live hooks/subagents/skills; no `.codex/config.toml`
+- No `scripts/node_modules` history untracking (backlog only)
 
 ---
 
 ## Work completed
 
-- [x] Phase A inspection complete
-- [x] Gap report delivered
-- [x] AI_HANDOFF.md continuity checkpoint
-- [x] Phase B complete: 18 files created, 6 modified
-- [x] `.gitignore` hardened and verified (privacy ignores intact, new patterns confirmed via `git check-ignore`)
-- [x] Verification run: `git status --short`, `git diff --stat`, ignore probes — clean and in scope
-- [x] Final report delivered
-
-- [x] Coordinator reviewed and approved Package 2.7
-- [x] Committed (`6dde21b`), pushed, merged to main (`cebdc72`), main pushed
-- [x] Post-merge status sync (command-center + ops + continuity files)
+- [x] Phase A inspection + gap report
+- [x] Phase B: 20 Tower components created/upgraded; 2 Package 2.7 stubs superseded; surgical `.gitignore` exception
+- [x] Validations: `.ics` structurally valid (1 VCALENDAR, 1 VTIMEZONE America/New_York, 12 balanced VEVENTs, 12 unique UIDs); ClickUp CSV 17×30 clean; TickTick CSV 10×18 clean; `.ics` trackable; no app code touched; no secrets
+- [x] Coordinator approved Package 2.8
+- [x] Implementation commit `2a5fb54`; merge commit `bdb73db`; main pushed
+- [x] Status sync (this branch) — command-center + ops + continuity files updated
 
 ## Work remaining
 
-None. Package 2.7 is fully closed. Next authorized target: Project Control Tower pass (not yet authorized). Package 5A remains paused.
+- [ ] Commit status sync; push; merge to main; push main (Operator Mode in progress)
 
 ---
 
 ## Git state at closeout
 
 ```
-Branch:       main
-main HEAD:    cebdc72 (+ status-sync merge — see git log)
-Working tree: Clean
-Pushed:       Yes
+Branch (now):  docs/sync-command-center-after-package-2-8 (status sync in progress)
+main HEAD:     bdb73db — merge: add KeepMees project control tower
+Pushed:        Yes (Package 2.8 implementation + merge)
+Working tree:  status-sync edits staged below
 ```
 
 ---
 
 ## Next exact action
 
-Coordinator to authorize the Project Control Tower pass. No development or Tower work begins until authorized. Package 5A stays paused until the Tower is complete and approved. `scripts/node_modules` history cleanup is a separate Coordinator decision.
+Coordinator reviews the committed Project Control Tower (now on `main`) and decides whether to authorize Package 5A. **Package 5A remains paused** — the Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable but requires explicit Coordinator authorization. Until that authorization, no Package 5A code begins.
 
 ---
 
@@ -96,7 +89,8 @@ Coordinator to authorize the Project Control Tower pass. No development or Tower
 2. `CLAUDE.md`
 3. `CURRENT_STATE.md`
 4. This file (`AI_HANDOFF.md`)
-5. `git status` / `git log --oneline -10`
+5. `docs/project-control/README.md`, `current-sprint.md`, `next-7-days.md`
+6. `git status` / `git log --oneline -10`
 
 ---
 
@@ -104,9 +98,8 @@ Coordinator to authorize the Project Control Tower pass. No development or Tower
 
 | File | Warning |
 |---|---|
-| `index.html` | Off-limits this pass. Single-file app — scope-guarded constants, Review view, standalone keepsake flows. |
-| `src/**` | Off-limits this pass. |
-| `scripts/node_modules/` | Historically tracked (605 files). Do NOT untrack in this pass — backlog item only. |
-| `.claude/settings.local.json` | Gitignored — never commit. |
-| `operator-inbox/*.md`, `operator-outbox/*` | Gitignored — never commit generated/private files. |
-| `_source-intake/` | Gitignored — never commit. |
+| `index.html` | Scope-guarded constants, Review view, standalone keepsake flows — off-limits without explicit instruction. |
+| `src/**` | Off-limits without explicit package instruction. |
+| `scripts/node_modules/` | Historically tracked (605 files). Do NOT untrack without Coordinator decision. |
+| `.claude/settings.local.json`, `_source-intake/`, `operator-inbox/*.md`, `operator-outbox/*` | Gitignored — never commit. |
+| `docs/project-control/keepmees-project-calendar.ics` | Repo-native committed `.ics` — protected by a single `.gitignore` exception. |

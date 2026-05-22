@@ -21,18 +21,18 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `cebdc72` — merge: upgrade AI development operating system |
-| Last closed package | `Package 2.7 — AI Development Operating System Upgrade Pass` (feature `6dde21b`, merge `cebdc72`) |
+| main HEAD | `bdb73db` — merge: add KeepMees project control tower |
+| Last closed package | `Package 2.8 — KeepMees Project Control Tower` (feature `2a5fb54`, merge `bdb73db`) |
 | Active package | None — no package in progress |
-| Active branch | `main` (status-sync `docs/sync-command-center-after-package-2-7` pending merge) |
-| Next authorized target | Project Control Tower pass — NOT yet authorized (Coordinator decision pending) |
-| Package 5A | Paused until the Project Control Tower is complete and approved |
+| Active branch | `main` (status-sync `docs/sync-command-center-after-package-2-8` pending merge) |
+| Next authorized target | None — Coordinator reviews the committed Tower and decides whether to authorize Package 5A |
+| Package 5A | Still paused — Foundation Operating System Gate now passable; awaits explicit Coordinator authorization |
 
 ---
 
 ## Delivered packages (summary)
 
-Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Package 2.7 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 64 real-files E2E, all green. Package 2.7 added operating infrastructure only (no app code).
+Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Packages 2.7, 2.8 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 64 real-files E2E, all green. Packages 2.7 and 2.8 added operating infrastructure only (no app code).
 
 ---
 
@@ -62,7 +62,28 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 ## What is NOT started
 
-Next development package, Package 5A, full Project Control Tower build, checkout/PDF/cover work, framework migration, visual redesign. See `docs/command-center/next-actions.md` "Do NOT start yet".
+Package 5A, checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. Project Control Tower is now BUILT and MERGED — Coordinator review of the committed Tower is the next coordination step. See `docs/command-center/next-actions.md` "Do NOT start yet".
+
+---
+
+## Where to look — Project Control Tower (Package 2.8)
+
+| Question | File |
+|---|---|
+| Tower overview + how layers fit | `docs/project-control/README.md` |
+| Phases 0–15 with package history | `docs/project-control/master-roadmap.md` |
+| Dated, confidence-labelled schedule | `docs/project-control/master-schedule.md` |
+| Current sprint | `docs/project-control/current-sprint.md` |
+| Backlog (16 lanes) | `docs/project-control/backlog.md` |
+| Kanban board | `docs/project-control/kanban-board.md` |
+| Phase gates (11) | `docs/project-control/phase-gates.md` |
+| Decision log | `docs/project-control/decision-log.md` |
+| Project risk register | `docs/project-control/risk-register.md` |
+| Calendar + importable .ics | `docs/project-control/calendar-spec.md`, `keepmees-project-calendar.ics` |
+| ClickUp / TickTick imports | `clickup-import.csv`, `ticktick-import.csv`, `ticktick-weekly-checklist.md`, `ticktick-recurring-routines.md` |
+| 7 / 30 / 90 day plans | `next-7-days.md`, `next-30-days.md`, `next-90-days.md` |
+| Weekly sync process | `coordinator-weekly-sync.md` |
+| Next session prompt | `next-session-prompt.md` |
 
 ---
 

@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 2.7 status sync)
+**Last updated:** 2026-05-21
+**Updated by:** Claude Code (Package 2.8 status sync)
 **Status:** Active
 
 ---
@@ -329,9 +329,37 @@ What this did NOT build: full Project Control Tower, master roadmap, master sche
 
 ---
 
-### Project Control Tower pass — (next authorized target, NOT yet authorized)
+### Package 2.8 — KeepMees Project Control Tower
 
-**Status:** Not started. Package 2.7 prepared readiness only. The dedicated Tower build pass (master roadmap, schedule, phase gates, backlog, Kanban, Google Calendar/ClickUp/TickTick exports, Coordinator weekly sync) requires explicit Coordinator authorization. See `docs/project-control/project-control-tower-plan.md`. **Package 5A remains paused until the Project Control Tower is complete and approved.**
+**Branch:** `docs/project-control-tower`
+**Status:** COMPLETE — merged to main (feature: `2a5fb54`, merge: `bdb73db`)
+
+Delivered (docs / repo-native operating system only — no app code):
+- `docs/project-control/README.md` (full Tower index + 6-layer rules)
+- `master-roadmap.md` — Phases 0–15 with completed-package mapping
+- `master-schedule.md` — dated, confidence-labelled (High / Medium / Low)
+- `current-sprint.md` — Sprint 2026-05-A: Project Control Tower Landing
+- `backlog.md` — 16 lanes, status/priority/phase/dependency/success per item
+- `kanban-board.md` — full project + current-sprint views, 10 status columns
+- `phase-gates.md` — 11 gates with entry/exit/artifacts/verification
+- `decision-log.md` — locked / active / open / deferred / killed
+- `risk-register.md` — project view across 15 categories
+- `calendar-spec.md` + committed `keepmees-project-calendar.ics` (VTIMEZONE America/New_York, 12 events, unique UIDs)
+- `clickup-import.csv` (17 cols × 30 rows), `ticktick-import.csv` (10 cols × 18 rows), `ticktick-weekly-checklist.md`, `ticktick-recurring-routines.md`
+- `next-7-days.md`, `next-30-days.md`, `next-90-days.md`
+- `coordinator-weekly-sync.md` — active weekly process, `next-session-prompt.md`
+- Surgical `.gitignore` exception so the repo-native `.ics` is trackable
+- 2 Package 2.7 stubs superseded (`project-control-tower-plan.md`, `project-calendar-spec.md`) with history preserved
+
+What this did NOT build/change: no app code; no checkout/PDF/preview-renderers; no vendor outreach; no design hiring restart; no n8n/Make/Zapier; no Product Package 5A. No locked product/vendor/design/manufacturing decisions reopened.
+
+**Standing rule:** repo docs under `docs/project-control/` are the source of truth; ClickUp / TickTick / Google Calendar / Kanban tooling never override the repo. Tower maintenance is `coordinator-weekly-sync.md`.
+
+---
+
+### Coordinator review + Package 5A decision — (next coordination step)
+
+**Status:** Not started. Coordinator reviews the committed Tower and decides whether to authorize **Package 5A — Message Book Proof Approval State Foundation** (Phase 12 foundation, Gate 9 target). The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable; Package 5A still requires explicit Coordinator authorization before any code begins. Scope-limited (proof approval STATE model + tests only; no checkout, no PDF, no preview renderers).
 
 ---
 

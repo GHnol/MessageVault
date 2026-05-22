@@ -1,7 +1,7 @@
 # Artifact Index — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17
-**Updated by:** Claude Code (Package 2.7 status sync)
+**Last updated:** 2026-05-21
+**Updated by:** Claude Code (Package 2.8 status sync)
 **Status:** Active
 
 ---
@@ -216,14 +216,32 @@ All schemas use JSON Schema Draft-07. All 12 validated.
 | `docs/dev/agent-scope-boundaries.md` | Consolidated allowed/off-limits/authorization-required list |
 | `docs/dev/worktree-and-parallel-session-policy.md` | Worktree + parallel session governance |
 
-### Project Control readiness (Package 2.7 — `6dde21b`, readiness only — Tower NOT built)
+### Project Control Tower (Package 2.8 — `2a5fb54`, ACTIVE)
 
 | File | Purpose |
 |---|---|
-| `docs/project-control/README.md` | Entry point; what is and is not built |
-| `docs/project-control/project-control-tower-plan.md` | Scope/structure of the future Tower pass |
-| `docs/project-control/project-calendar-spec.md` | How calendar/schedule export will work when built |
-| `docs/project-control/coordinator-weekly-sync.md` | Recurring Coordinator sync placeholder (not active yet) |
+| `docs/project-control/README.md` | Tower entry point and six-layer rules |
+| `docs/project-control/master-roadmap.md` | Phases 0–15 with package history mapped in |
+| `docs/project-control/master-schedule.md` | Dated schedule with confidence labels |
+| `docs/project-control/current-sprint.md` | Current sprint goal, tasks, closeout template |
+| `docs/project-control/backlog.md` | Backlog across 16 lanes with status/priority/phase |
+| `docs/project-control/kanban-board.md` | 10-column board (full project + current sprint) |
+| `docs/project-control/phase-gates.md` | 11 go/no-go gates |
+| `docs/project-control/decision-log.md` | Locked / active / open / deferred / killed |
+| `docs/project-control/risk-register.md` | Project risk register across 15 categories |
+| `docs/project-control/calendar-spec.md` | Calendar rituals; what belongs and what does not |
+| `docs/project-control/keepmees-project-calendar.ics` | Importable Google Calendar file (repo-native; surgical `.gitignore` exception) |
+| `docs/project-control/clickup-import.csv` | ClickUp-ready task import (17 cols) |
+| `docs/project-control/ticktick-import.csv` | TickTick-ready personal task import (10 cols) |
+| `docs/project-control/ticktick-weekly-checklist.md` | Manual weekly checklist for TickTick |
+| `docs/project-control/ticktick-recurring-routines.md` | Recurring TickTick routine definitions |
+| `docs/project-control/next-7-days.md` | Day-by-day plan |
+| `docs/project-control/next-30-days.md` | Week-by-week plan |
+| `docs/project-control/next-90-days.md` | Month-by-month directional plan |
+| `docs/project-control/coordinator-weekly-sync.md` | Active weekly Coordinator sync process |
+| `docs/project-control/next-session-prompt.md` | Copy-paste prompt for the next session |
+| `docs/project-control/project-control-tower-plan.md` | SUPERSEDED (Package 2.7 stub, history preserved) |
+| `docs/project-control/project-calendar-spec.md` | SUPERSEDED by `calendar-spec.md` (history preserved) |
 
 ### Automation — Operator Mode Protocols (Package 2.5B — `bb23e8b` / Context Guard Patch — see below)
 
