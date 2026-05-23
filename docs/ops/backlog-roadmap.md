@@ -378,13 +378,29 @@ What this did NOT build/change: no app code; no `index.html` / `src/**` / `scrip
 
 **Standing rule established:** `docs/ai-system/` is the universal portable AI Project OS layer that travels to future repos via `bootstrap-template.md`. Project Control Tower remains KeepMees-specific. The two layers are siblings.
 
-**Foundation Operating System Gate (Gate 1)** remains passed (from Package 2.8). Package 2.9 strengthens the same gate by adding the universal OS layer on top. Package 5A still requires explicit Coordinator authorization.
+**Foundation Operating System Gate (Gate 1)** remains passed (from Package 2.8). Package 2.9 strengthened it with the universal OS layer.
 
 ---
 
-### Coordinator review + Package 5A decision — (next coordination step)
+### Package 5A — Message Book Proof Approval State Foundation
 
-**Status:** Not started. Coordinator reviews the merged Project Control Tower (Package 2.8) and AI Project OS layer (Package 2.9) and decides whether to authorize **Package 5A — Message Book Proof Approval State Foundation** (Phase 12 foundation, Gate 9 target). The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is passed; Package 5A still requires explicit Coordinator authorization before any code begins. Scope-limited (proof approval STATE model + tests only; no checkout, no PDF, no preview renderers).
+**Branch:** `feature/proof-approval-state-foundation`
+**Status:** COMPLETE — merged to main (feature: `e2df2a0`, merge: `297a221`)
+
+Delivered:
+- `src/products/proof-approval-state.js` — `KMEngine.ProofApprovalState` with `STATUS` (5 frozen constants: none, pending-review, approved, changes-requested, revoked); `canTransition(from, to)` (6 allowed / 12 blocked transitions); `create(opts)` (JSON-safe state record factory; validates productTypeId); `transition(stateRecord, toStatus, opts)` (immutable; sets timestamps and reason fields per transition; returns result envelope)
+- `src/tests/proof-approval-state-tests.mjs` — 14 suites, 137 assertions; covers constants, create() shape, create() validation, all 6 allowed transitions, all 12 blocked transitions, edge cases, invalid status, blocked error format, immutability, timestamps per transition, reason fields, serialization round-trip, extra unknown fields, semantic guards
+- **Tests: 137 passed, 0 failed** (new) | **Cumulative total: 1603 Node unit tests**
+
+What this does NOT deliver: proof approval UI, proof approval wired into `index.html`, checkout/payment, PDF generation, commerce or manufacturing readiness, preview renderer work. No `index.html` changes. `"proof-ready"` does not appear in the implementation file.
+
+**Key design:** `transition()` never mutates the input record; returns a result envelope `{ success, error, state }`. All state records are JSON-safe (no functions, no cycles).
+
+---
+
+### Coordinator decides next package — (current position)
+
+**Status:** No package authorized. Coordinator reviews Package 5A and decides the next step.
 
 ---
 

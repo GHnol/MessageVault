@@ -17,22 +17,22 @@
 ## State as of last update
 
 **Last updated:** `2026-05-22`
-**Updated by:** `Claude Code (Opus 4.7)`
+**Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `a20af30` — merge: upgrade AI Project OS auto-management |
-| Last closed package | `Package 2.9 — AI Project OS Auto-Management Upgrade Pass` (implementation `81c5069`, merge `a20af30`); status sync in progress on `docs/sync-command-center-after-package-2-9` |
+| main HEAD | `297a221` — merge: add proof approval state foundation |
+| Last closed package | `Package 5A — Message Book Proof Approval State Foundation` (implementation `e2df2a0`, merge `297a221`); status sync in progress on `docs/sync-command-center-after-package-5a` |
 | Active package | None — Coordinator decides next |
-| Active branch | `docs/sync-command-center-after-package-2-9` (status-sync pending merge to main) |
-| Next authorized target | Coordinator decides whether to authorize Package 5A — Foundation Operating System Gate was passed by Package 2.8 and the AI Project OS auto-management layer is now in place |
-| Package 5A | Still paused — awaits explicit Coordinator authorization (independent of Package 2.9 closure) |
+| Active branch | `docs/sync-command-center-after-package-5a` (status-sync pending merge to main) |
+| Next authorized target | Coordinator decides next package — no package authorized |
+| Package 5A | COMPLETE — merged to main (`297a221`) |
 
 ---
 
 ## Delivered packages (summary)
 
-Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1 and Packages 2.7, 2.8, 2.9 are COMPLETE and merged. Test baseline: 1466 Node unit tests + 41 seeded E2E + 23 real-files E2E (64 combined), all green. Packages 2.7, 2.8, 2.9 added operating infrastructure only (no app code).
+Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1, Packages 2.7, 2.8, 2.9, and Package 5A are COMPLETE and merged. Test baseline: **1603 Node unit tests** (1466 prior + 137 new from Package 5A) + 41 seeded E2E + 23 real-files E2E (64 combined), all green. Packages 2.7, 2.8, 2.9 added operating infrastructure only (no app code). Package 5A added `proof-approval-state.js` — state model only, no UI.
 
 ---
 
@@ -63,7 +63,7 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 ## What is NOT started
 
-Package 5A, checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. The Project Control Tower (Package 2.8) and the AI Project OS auto-management layer (Package 2.9) are both BUILT and MERGED. App code is unchanged.
+Checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. The Project Control Tower (Package 2.8), the AI Project OS auto-management layer (Package 2.9), and the Proof Approval State Foundation (Package 5A) are all BUILT and MERGED. `index.html` app behavior is unchanged. No UI wiring for proof approval has been added.
 
 ---
 

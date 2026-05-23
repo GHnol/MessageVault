@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-05-22
-**Updated by:** Claude Code (Package 2.9 status sync)
+**Updated by:** Claude Code (Package 5A status sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -29,6 +29,7 @@
 | Package 2.7 | AI Development Operating System Upgrade Pass | COMPLETE — merged to main | `6dde21b` | `cebdc72` |
 | Package 2.8 | KeepMees Project Control Tower | COMPLETE — merged to main | `2a5fb54` | `bdb73db` |
 | Package 2.9 | AI Project OS Auto-Management Upgrade Pass | COMPLETE — merged to main | `81c5069` | `a20af30` |
+| Package 5A | Message Book Proof Approval State Foundation | COMPLETE — merged to main | `e2df2a0` | `297a221` |
 
 ---
 
@@ -37,8 +38,8 @@
 - App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; `buildFormatAvailability()` injects safe `.ks-format-availability` section per card via ProductExperienceConsumer
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`)
 - `src/state/`: 3 modules added in Package 3A (`project-persistence.js`, `project-session-restore.js`, `project-file-io.js`)
-- `src/products/`: 10 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer)
-- `src/tests/`: 10 suites, 1466 Node tests — all green
+- `src/products/`: 11 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state)
+- `src/tests/`: 11 suites, 1603 Node tests — all green
   - `km-engine-tests.mjs`: ~96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
@@ -49,6 +50,7 @@
   - `prototype-preview-registry-tests.mjs`: 215 (Package 4B)
   - `product-experience-readiness-tests.mjs`: 337 (Package 4C)
   - `product-experience-consumer-tests.mjs`: 35 (Package 4D)
+  - `proof-approval-state-tests.mjs`: 137 (Package 5A)
 - `scripts/e2e-regression-harness.mjs`: 41-test seeded Playwright harness (phases 1–10 + 20 + 21, Packages 3B + 4D + 4E) + 23-test real-file coverage (phases 11–19, Package 3C) — 64 tests total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
@@ -62,10 +64,12 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `a20af30` — merge: upgrade AI Project OS auto-management (status sync will bump this further when merged) |
-| Active branch | `docs/sync-command-center-after-package-2-9` (status sync in progress) |
-| Working tree | Status-sync edits unstaged |
-| Pushed to remote | Yes — Package 2.9 implementation + merge pushed; status sync to be pushed after merge |
+| main HEAD | `297a221` — merge: add proof approval state foundation (status sync will bump this further when merged) |
+| Active branch | `docs/sync-command-center-after-package-5a` (status sync in progress) |
+| Working tree | Status-sync edits in progress |
+| Pushed to remote | Yes — Package 5A implementation + merge pushed; status sync to be pushed after merge |
+
+**Package 5A (`e2df2a0` / `297a221`):** Message Book Proof Approval State Foundation — `src/products/proof-approval-state.js` added: `KMEngine.ProofApprovalState` with STATUS (5 constants: none, pending-review, approved, changes-requested, revoked), `canTransition(from, to)`, `create(opts)`, `transition(stateRecord, toStatus, opts)`; immutable records; JSON-safe; 137 new tests (14 suites). No `index.html` changes; no UI wiring; no checkout/commerce/manufacturing/export logic; no PDF; no preview renderer. `"proof-ready"` does not appear in the implementation file.
 
 **Package 2.9 (`81c5069` / `a20af30`):** AI Project OS Auto-Management Upgrade Pass — universal `docs/ai-system/` layer added (5 files: README, universal-standards, bootstrap-template, CHANGELOG, version-history); 7 new dev protocols (auto-management, model-routing, token-efficiency, context-budget-checklist, tool-batching, package-boundary-closeout, notification-setup); 2 new QA docs (test-strategy, package-verification-template); `.claude/commands/README.md` readiness placeholder; cross-links added across AGENTS/CLAUDE/.codex/.claude readiness READMEs; `.gitignore` IDE/log additions; PR template extended; light touches to `docs/project-control/README.md` + `coordinator-weekly-sync.md`. Honest enforcement labels applied throughout (automatic / semi-automatic / policy-driven / user-level / backlog). No app code; no `index.html` / `src/**` / `scripts/**` changes; no product/vendor/design/manufacturing decisions reopened; no live hooks/subagents/skills/slash commands shipped. Package 5A remains paused.
 
