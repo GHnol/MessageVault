@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-05-22
-**Updated by:** Claude Code (Package 2.9 status sync)
+**Updated by:** Claude Code (Package 5A status sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -61,8 +61,9 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.7 — AI Development Operating System Upgrade Pass | COMPLETE | `6dde21b` / `cebdc72` |
 | Package 2.8 — KeepMees Project Control Tower | COMPLETE | `2a5fb54` / `bdb73db` |
 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | COMPLETE | `81c5069` / `a20af30` |
+| Package 5A — Message Book Proof Approval State Foundation | COMPLETE | `e2df2a0` / `297a221` |
 
-Tests: **1466 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. App code last changed: Package 4E (`99bdf8f`). Packages 4E.1, 2.7, 2.8, 2.9 made no app code changes. Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower (`docs/project-control/`: README, master-roadmap, master-schedule, current-sprint, backlog across 16 lanes, kanban-board, 11 phase-gates, decision-log, project risk-register, calendar-spec + importable `keepmees-project-calendar.ics`, clickup-import.csv, ticktick-import.csv + weekly checklist + recurring routines, next-7/30/90-days, coordinator-weekly-sync, next-session-prompt; 2 Package 2.7 stubs superseded). Surgical `.gitignore` exception so the repo-native `.ics` is trackable. No app/product/vendor/design/manufacturing decisions reopened. Package 5A remains paused.
+Tests: **1603 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. `index.html` app behavior last changed: Package 4E (`99bdf8f`). Packages 4E.1, 2.7, 2.8, 2.9, and 5A made no `index.html` changes. Package 5A (`e2df2a0`) added `src/products/proof-approval-state.js` (ProofApprovalState: STATUS constants, canTransition, create, transition; 137 new tests; no UI wiring; no checkout/commerce/manufacturing/export logic). Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
 
 ---
 
@@ -202,10 +203,12 @@ Package 2.9 (COMPLETE — `a20af30`)
     → No app code; no live hooks/subagents/skills/slash commands shipped; 
       no locked decisions reopened; Package 5A still paused
 
-Coordinator review of merged Package 2.9 + Package 5A decision ← current position
-    → Coordinator reviews the merged AI Project OS layer + Project Control Tower
-    → Decides whether to authorize Package 5A
-    → Package 5A remains paused until explicit authorization
+Package 5A (COMPLETE — `297a221`)
+    → ProofApprovalState: STATUS constants, canTransition, create, transition
+    → 137 new Node tests; no UI; no index.html changes
+
+Coordinator decides next package ← current position
+    → No package authorized; Coordinator reviews Package 5A and decides next step
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -219,7 +222,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Review the committed Project Control Tower; authorize Package 5A | Roadmap decision | High — Foundation OS Gate now passable; product development resumption |
+| Decide next package after Package 5A | Roadmap decision | High — proof approval state foundation now in place |
 | Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
 | `scripts/node_modules` tracked-history cleanup (separate from Package 2.8) | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |

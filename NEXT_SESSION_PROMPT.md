@@ -47,23 +47,23 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No package in progress. Package 2.9 (AI Project OS Auto-Management Upgrade Pass) COMPLETE and merged (`a20af30`). |
+| Resume into | No package in progress. Package 5A (Message Book Proof Approval State Foundation) COMPLETE and merged (`297a221`). |
 | Branch | `main` (after the status-sync branch is merged) |
-| main HEAD | `a20af30` (status sync will bump this further when merged) |
-| Next coordination step | Coordinator reviews the merged Package 2.9 + status sync. Decides whether to authorize Package 5A. |
-| Package 5A | Still paused — Foundation Operating System Gate was passed by Package 2.8 and Package 2.9 added the universal AI Project OS layer on top. Package 5A requires separate explicit Coordinator authorization. |
-| Do not | Start Package 5A or any product/app code without explicit authorization; do not modify `index.html` / `src/**` / `scripts/**`; do not commit/push without explicit instruction. |
+| main HEAD | `297a221` (status sync will bump this further when merged) |
+| Next coordination step | Coordinator decides the next package. No package is currently authorized. |
+| Package 5A | COMPLETE — `src/products/proof-approval-state.js` + `src/tests/proof-approval-state-tests.mjs` merged. 1603 Node tests passing. No UI wiring added. |
+| Do not | Start any new package without explicit Coordinator authorization; do not modify `index.html` / `src/**` / `scripts/**`; do not commit/push without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
 
 ## Decision points if Coordinator returns next session
 
-1. **"Authorize Package 5A."**
-   - Confirm `git log --oneline -5` shows Package 2.9 merged and status sync merged.
-   - Confirm Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) status is passed.
-   - Prepare a scoped Package 5A package prompt — proof approval STATE model + tests only; NO checkout, NO PDF, NO preview renderers; NO app-scope creep.
-   - Do not begin Package 5A implementation until the prompt is reviewed and explicitly approved.
+1. **"Authorize the next package."**
+   - Confirm `git log --oneline -5` shows Package 5A merged and status sync merged.
+   - Confirm no unauthorized package is in progress.
+   - Prepare a scoped package prompt for the next package based on Coordinator direction.
+   - Do not begin implementation until the prompt is reviewed and explicitly approved.
 
 2. **"Run weekly sync."**
    - Follow `docs/project-control/coordinator-weekly-sync.md` process.
