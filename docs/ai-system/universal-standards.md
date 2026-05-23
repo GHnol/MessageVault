@@ -114,6 +114,46 @@ See `docs/dev/package-boundary-closeout-protocol.md`.
 
 ---
 
+## Post-Commit State Rule
+
+**Status:** ACTIVE. Universal across KeepMees, Puzzle, and any future repo bootstrapped from this OS.
+**Purpose:** Prevent recursive state-sync loops where durable state files try to perfectly describe the commit that is currently being created.
+
+Do not force durable state files to name or perfectly describe the commit that is currently being created.
+
+For commits that update `CURRENT_STATE.md`, `AI_HANDOFF.md`, `NEXT_SESSION_PROMPT.md`, `docs/command-center/*`, `docs/project-control/*`, or any similar durable state files:
+
+1. The files **may** describe the pre-commit verified state.
+2. The files **may** describe the expected post-commit state.
+3. The files **may** say "after this commit lands, start X in a fresh session."
+4. The actual commit hash belongs in the **post-commit report** (chat message to the user, PR description, changelog entry), not inside the file being committed.
+5. The next session **must** verify current `HEAD` during preflight (`git log --oneline -10`, `git rev-parse HEAD`) — durable state hashes are point-in-time and may lag by one commit.
+6. A follow-up state-sync commit is required **only** if the docs would misdirect the next agent into the wrong branch, wrong package, wrong task, unsafe scope, or stale blocker.
+7. Do **not** create recursive state-sync commits solely because a file used pre-commit language during the commit approval step.
+
+### What counts as "would misdirect the next agent"
+
+Real operational danger — examples that **do** justify a follow-up sync commit:
+
+- Active branch named in `AI_HANDOFF.md` no longer exists or has been renamed.
+- Active package recorded as `in-progress` when it has actually been merged and closed.
+- Next-action pointer aims at a paused / cancelled / superseded task.
+- Hard exclusions are missing or have been weakened.
+- A locked blocker has been silently lifted (or a new blocker has been silently introduced).
+
+### What does NOT justify a follow-up sync commit
+
+- The `main HEAD` field lags the actual head by one commit (cosmetic mismatch only).
+- A doc uses phrasing like "after this commit lands" or "this commit will be" (pre-commit language — expected and fine).
+- The hash for the commit currently being created is not yet inside the file (it cannot be, without recursive amend).
+- A timestamp is a few hours stale but the named package, branch, scope, and next action are still accurate.
+
+Cosmetic mismatch, pre-commit language, and "after this lands" wording are **not** sufficient reason to spin a sync commit. The preflight verification step (read repo, run `git log`) is the corrective control — not another commit.
+
+Policy-driven. The agent must apply this rule when proposing or refusing follow-up state-sync commits.
+
+---
+
 ## Testing as a first-class concern
 
 Testing is not cleanup-later. Every package that touches behavior must declare:
