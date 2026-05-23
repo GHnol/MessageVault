@@ -9,6 +9,39 @@ Newest entries first.
 
 ---
 
+## 2026-05-22 — AI Project OS Patch: Post-Commit State Rule
+
+**Status:** PROPOSED — not yet committed; awaiting Coordinator approval.
+**Branch:** `docs/post-commit-state-rule`
+**Scope:** AI Project OS process correction only — no product/app changes; Package 5A remains paused.
+
+### Added (universal)
+- `docs/ai-system/universal-standards.md` — new top-level section "Post-Commit State Rule" with full wording (seven numbered clauses, "what counts as misdirection" examples, "what does NOT justify a follow-up sync" examples)
+
+### Updated (dev protocols — cross-links to the canonical rule)
+- `docs/dev/package-boundary-closeout-protocol.md` — new "Post-Commit State Rule (applies to status sync decisions)" section after the existing "Status sync as a separate commit" section
+- `docs/dev/session-restart-protocol.md` — new "HEAD verification at preflight (Post-Commit State Rule)" subsection under "Verification rules"
+- `docs/dev/auto-management-protocol.md` — Post-Commit State Rule bound on Duty 1 (Maintain repo-native memory continuously) + new quick-reference row
+
+### Updated (bootstrap)
+- `docs/ai-system/bootstrap-template.md` — new § 8a confirming the rule travels to every repo bootstrapped from this OS
+
+### Intentionally NOT changed (per scope limits)
+- `index.html`, `src/**`, `scripts/**`
+- `CURRENT_STATE.md`, `AI_HANDOFF.md`, `NEXT_SESSION_PROMPT.md` — the `main HEAD` value in these files lags by one commit (cosmetic only); under the new rule this is **not** a reason for a follow-up state-sync commit
+- `docs/command-center/*`, `docs/project-control/*` — no conflicting wording was found
+- Package 5A — remains paused
+
+### Rule purpose
+
+Prevent recursive state-sync loops where durable state files try to perfectly describe the commit that is currently being created. Commit hashes belong in post-commit reports and next-session preflight verification — not amended into the committed file itself.
+
+### Universality
+
+The rule applies to KeepMees, Puzzle, and every future repo bootstrapped from `docs/ai-system/bootstrap-template.md`.
+
+---
+
 ## 2026-05-22 — Package 2.9: AI Project OS Auto-Management Upgrade Pass
 
 **Status:** COMPLETE — merged to main.

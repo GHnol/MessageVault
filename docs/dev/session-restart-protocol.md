@@ -43,6 +43,18 @@ Only after step 10 may any file be edited.
 - Do not trust any in-context summary of file contents. Open the file.
 - Do not resume implementation from a compact summary alone.
 
+### HEAD verification at preflight (Post-Commit State Rule)
+
+Durable state files (`AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`) are point-in-time snapshots. The `main HEAD` or branch-HEAD value inside them may legitimately lag the actual repo head by one commit — that is expected behavior under the Post-Commit State Rule (`docs/ai-system/universal-standards.md` § "Post-Commit State Rule"), not a bug to fix.
+
+Always verify current `HEAD` during preflight:
+
+- `git rev-parse HEAD`
+- `git log --oneline -10`
+- `git branch --show-current`
+
+If the recorded HEAD differs from the actual HEAD by one commit and the named package / branch / scope / next action are still accurate, this is a cosmetic mismatch — proceed using the live `git` values. **Do not** propose a state-sync commit just to update the hash; do so only if the docs would misdirect the next agent (wrong branch, wrong package, wrong task, weakened scope, stale blocker).
+
 ---
 
 ## Stop conditions

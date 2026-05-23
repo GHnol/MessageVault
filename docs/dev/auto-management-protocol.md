@@ -31,6 +31,8 @@ Policy-driven.
 
 If the user invokes any trigger phrase — "checkpoint", "handoff", "before compact", "resume packet", "context guard", "save state", "pause here" — update `AI_HANDOFF.md` immediately and report.
 
+**Post-Commit State Rule bound on this duty.** Continuous updates do **not** mean every commit must amend or be followed by a state-sync commit. Durable state files may be a pre-commit or expected-post-commit snapshot; the actual commit hash for the commit being created belongs in the post-commit closeout report, not inside the file itself. Spin a follow-up state-sync commit only when the docs would misdirect the next agent (wrong branch, wrong package, wrong task, weakened scope, stale blocker). Cosmetic HEAD lag or "after this commit lands" wording is not sufficient reason. Canonical wording: `docs/ai-system/universal-standards.md` § "Post-Commit State Rule".
+
 ### 2. Detect and force package boundaries
 
 Policy-driven.
@@ -231,3 +233,4 @@ The OS is honest about which parts are policy and which parts are automatic. See
 | Auto-compact warning | Stop new work; checkpoint; produce transfer packet |
 | Package boundary | Full closeout per `package-boundary-closeout-protocol.md` |
 | User says "checkpoint" / "handoff" / etc. | Update `AI_HANDOFF.md` immediately and report |
+| Considering a follow-up state-sync commit | Apply Post-Commit State Rule (`docs/ai-system/universal-standards.md`); spin one only if docs would misdirect the next agent, not for cosmetic HEAD lag |

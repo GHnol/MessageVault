@@ -11,11 +11,62 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | proposed on `docs/post-commit-state-rule` (awaiting Coordinator approval) |
 | 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | merged (`a20af30`) |
 | 0.2.0 | Package 2.8 — KeepMees Project Control Tower | 2026-05-17 | merged (`bdb73db`) |
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
 
-Version numbers are internal to this layer (not semver of any product code). They increment one minor per OS upgrade pass.
+Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 0.3.1 — Patch — Post-Commit State Rule (2026-05-22)
+
+**Branch:** `docs/post-commit-state-rule`
+**Implementation commit:** *(to fill in at closeout — see Post-Commit State Rule § 4: hashes belong in the post-commit report, not pre-filled)*
+**main HEAD before patch:** `3ce8657` (Package 2.9 status-sync merge)
+
+### What this patch adds
+
+A universal Post-Commit State Rule that prevents recursive state-sync loops. Durable state files (`CURRENT_STATE.md`, `AI_HANDOFF.md`, `NEXT_SESSION_PROMPT.md`, `docs/command-center/*`, `docs/project-control/*`) may be a pre-commit or expected-post-commit snapshot. Commit hashes belong in the post-commit closeout report (chat, PR description, changelog), not amended into the file being committed. Future sessions verify HEAD during preflight; that verification is the corrective control for one-commit lag — not another sync commit.
+
+### Files changed
+
+| File | Change |
+|---|---|
+| `docs/ai-system/universal-standards.md` | Added top-level "Post-Commit State Rule" section (canonical wording, seven numbered clauses, misdirection examples) |
+| `docs/dev/package-boundary-closeout-protocol.md` | Added "Post-Commit State Rule (applies to status sync decisions)" after the status-sync-as-separate-commit section |
+| `docs/dev/session-restart-protocol.md` | Added "HEAD verification at preflight (Post-Commit State Rule)" subsection under Verification rules |
+| `docs/dev/auto-management-protocol.md` | Bound the rolling-update duty with the rule; added quick-reference row |
+| `docs/ai-system/bootstrap-template.md` | Added § 8a so the rule travels to every future repo bootstrapped from this OS |
+| `docs/ai-system/CHANGELOG.md` | Entry for this patch |
+| `docs/ai-system/version-history.md` | This row + section |
+
+### Capability deltas (vs. 0.3.0)
+
+| Capability | Before | After | Automatic / Semi-auto / Policy |
+|---|---|---|---|
+| Post-Commit State Rule | Implicit; agents sometimes spun follow-up state-sync commits purely to update HEAD hashes in committed docs | Explicit universal rule with canonical wording in `universal-standards.md` and aligned cross-references in three dev protocols and the bootstrap template | Policy-driven |
+
+### What is intentionally NOT changed
+
+- `index.html`, `src/**`, `scripts/**` (app/product code) — off limits
+- `CURRENT_STATE.md`, `AI_HANDOFF.md`, `NEXT_SESSION_PROMPT.md` — their recorded `main HEAD` (`a20af30`) lags the actual `main` HEAD (`3ce8657`) by one commit. Under the new rule this is **cosmetic** and is **not** sufficient reason for a follow-up state-sync commit; the next session will reconcile via preflight `git log` / `git rev-parse HEAD`
+- `docs/command-center/*`, `docs/project-control/*` — scanned; no conflicting wording was found
+- Package 5A — remains paused
+- Locked product/vendor/manufacturing decisions
+
+### Backlog created by this patch
+
+None.
+
+### What should be copied to Puzzle and future repos
+
+The Post-Commit State Rule is universal and copies through `docs/ai-system/universal-standards.md` plus the cross-referenced sections in `docs/dev/package-boundary-closeout-protocol.md`, `docs/dev/session-restart-protocol.md`, `docs/dev/auto-management-protocol.md`, and `docs/ai-system/bootstrap-template.md`. These files are already on the bootstrap copy list.
+
+### Blockers before returning to Package 5A
+
+None added by this patch. Package 5A remains paused pending explicit Coordinator authorization.
 
 ---
 

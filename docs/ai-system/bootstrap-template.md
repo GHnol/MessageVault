@@ -180,6 +180,18 @@ If the project commits a specific generated file (like KeepMees does with `keepm
 
 ---
 
+## 8a. Post-Commit State Rule (universal — travels with the OS)
+
+The Post-Commit State Rule lives in `docs/ai-system/universal-standards.md` and travels to every repo bootstrapped from this template. Confirm it is present in the copied `universal-standards.md` and that the matching cross-references exist in:
+
+- `docs/dev/package-boundary-closeout-protocol.md` (status sync decision section)
+- `docs/dev/session-restart-protocol.md` (HEAD verification at preflight)
+- `docs/dev/auto-management-protocol.md` (rolling-update bound + quick-reference row)
+
+The rule prevents recursive state-sync commits in any repo using this OS: durable state files may be pre-commit or expected-post-commit snapshots, commit hashes belong in post-commit reports, the next session verifies HEAD during preflight, and follow-up sync commits are spun only when stale wording would misdirect the next agent.
+
+---
+
 ## 9. First commit
 
 After all the files above exist:

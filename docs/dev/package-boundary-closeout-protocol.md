@@ -127,6 +127,20 @@ See `docs/automation/operator-mode/package-closeout-protocol.md` Step 10 for the
 
 ---
 
+## Post-Commit State Rule (applies to status sync decisions)
+
+Status sync is required when the durable state files would **misdirect the next agent** — not when they are merely cosmetically out of sync with the just-created commit.
+
+Durable state files (`CURRENT_STATE.md`, `AI_HANDOFF.md`, `NEXT_SESSION_PROMPT.md`, `docs/command-center/*`, `docs/project-control/*`) may be a pre-commit snapshot or an expected-post-commit snapshot. The actual commit hash belongs in the post-commit closeout report (chat, PR body, changelog), not inside the file being committed. Future sessions verify `HEAD` during preflight; that verification — not another commit — is the corrective control for stale hashes.
+
+**Spin a follow-up state-sync commit when:** branch name, active package, next-action pointer, hard exclusions, or blocker status would point the next agent at the wrong work.
+
+**Do NOT spin a follow-up state-sync commit when:** only the `main HEAD` field lags by one commit, a doc uses "after this commit lands" phrasing, or a timestamp is mildly stale but the named package / branch / scope / next action are still accurate.
+
+Canonical wording: `docs/ai-system/universal-standards.md` § "Post-Commit State Rule".
+
+---
+
 ## When the agent must stop and ask
 
 - Files outside the authorized scope appear in `git status` and weren't predicted by `AI_HANDOFF.md`.
