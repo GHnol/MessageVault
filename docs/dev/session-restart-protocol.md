@@ -5,6 +5,12 @@
 
 ---
 
+## Short command
+
+Type `/start` to run this protocol automatically. The `/start` command reads the required files, runs `git` state checks, and produces the state declaration — no pasting needed.
+
+---
+
 ## When this applies
 
 - A brand-new session

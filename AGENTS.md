@@ -64,6 +64,7 @@ Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` at ever
 
 | Situation | Protocol |
 |---|---|
+| **Short command interface (daily use)** | `.claude/commands/README.md` — `/start`, `/handoff`, `/precommit`, `/closeout`, `/weekly-sync`, `/status-summary`, etc. |
 | Umbrella auto-management duties | `docs/dev/auto-management-protocol.md` |
 | Restarting any session / after `/clear` / `/compact` / new day | `docs/dev/session-restart-protocol.md` |
 | `/clear` vs `/compact` vs `/context` decision, high context/usage, high uncached context | `docs/dev/context-hygiene-protocol.md` |

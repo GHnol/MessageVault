@@ -30,13 +30,41 @@ The settings file is `~/.claude/settings.json` (or equivalent in your config dir
 
 ## Configuration pattern
 
-Add a `hooks` block to your user-level `settings.json`. The exact hook names available depend on your Claude Code version — check `/help` or the Claude Code docs for the current event names. Common ones include:
+Add a `hooks` block to your user-level `settings.json`. The exact hook event names available depend on your Claude Code version — check `/help` or the Claude Code docs for the current event names. Common event names include:
 
-- `pre_tool_use` — fires before a tool runs (useful for "needs permission" beeps if the harness gates the tool).
-- `stop` — fires when Claude finishes a turn (useful for "done thinking" beep).
-- `notification` — fires when the harness wants to alert you (useful for permission prompts).
+- `Notification` (capital N) — fires when the harness wants to alert you, including permission prompts. This is the primary hook for "waiting for permission" beeps.
+- `Stop` — fires when Claude finishes a turn (useful for "done thinking" beep).
+- `PreToolUse` — fires before a tool runs (fires more frequently than `Notification`).
 
 The hook value is a shell command. Keep it fast (< 250 ms) — long-running hooks slow every turn.
+
+**Note on casing:** Claude Code may use `camelCase`, `PascalCase`, or `snake_case` depending on version. If `Notification` does not fire, try `notification`. Check the Claude Code release notes for your installed version.
+
+---
+
+## PermissionRequest hook (test fallback)
+
+If `Notification` is not firing for permission prompts, try `PermissionRequest` as an alternative:
+
+```json
+{
+  "hooks": {
+    "PermissionRequest": "powershell -NoProfile -Command \"[console]::beep(880,250)\""
+  }
+}
+```
+
+This is a fallback; confirm which event name your Claude Code version uses before relying on it.
+
+---
+
+## Double-beep behavior
+
+If you register both `Notification` and `PermissionRequest`, you may hear two beeps for the same permission prompt — once when the request is queued and once when the notification fires. This is expected if both events fire for the same action. Use a different pitch to distinguish them, or choose one hook type only.
+
+If you hear unexpected double-beeps, remove one of the hooks and observe whether the behavior changes.
+
+---
 
 ---
 
@@ -115,6 +143,24 @@ Test manually before adding to the hook.
 
 ---
 
+## Windows — popup / toast fallback (if terminal audio is silent)
+
+If `[console]::beep()` produces no sound (muted console beeper or Hyper-V console), use a Windows toast notification instead:
+
+```powershell
+powershell -NoProfile -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.MessageBox]::Show('Claude is waiting for permission.', 'KeepMees Claude Code', 0)"
+```
+
+Or a balloon tooltip (quicker, non-blocking):
+
+```powershell
+powershell -NoProfile -Command "Add-Type -AssemblyName System.Windows.Forms; $n = New-Object System.Windows.Forms.NotifyIcon; $n.Icon = [System.Drawing.SystemIcons]::Information; $n.Visible = $true; $n.ShowBalloonTip(3000, 'Claude Code', 'Waiting for permission.', [System.Windows.Forms.ToolTipIcon]::Info); Start-Sleep 4; $n.Dispose()"
+```
+
+Test it manually before adding it to the hook. Balloon tips may not appear on all Windows 11 configurations depending on Focus Assist settings.
+
+---
+
 ## Terminal bell fallback
 
 If you just want a quick `\a` bell and your terminal has bell sound enabled:
@@ -188,6 +234,48 @@ If you don't hear anything:
 2. Confirm the hook event name matches your Claude Code version.
 3. Check `CLAUDE_CONFIG_DIR` — make sure the hook landed in the active config dir.
 4. Try a simpler command (e.g. a single system sound) to rule out the hook command itself.
+
+---
+
+## CLAUDE_CONFIG_DIR troubleshooting
+
+Claude Code reads its config from `CLAUDE_CONFIG_DIR`. If that environment variable is not set, the default is `~/.claude/` on Unix and `%USERPROFILE%\.claude\` on Windows.
+
+To confirm your active config dir:
+
+```powershell
+# Windows
+$env:CLAUDE_CONFIG_DIR
+# If empty, the active dir is:
+"$env:USERPROFILE\.claude"
+```
+
+```bash
+# Unix / macOS
+echo $CLAUDE_CONFIG_DIR
+# If empty: ~/.claude/
+```
+
+**KeepMees-specific:** this project uses an iCloud-synced config directory at `~/.claude-account-icloud/`. The hooks must be installed in that directory's `settings.json`, not in `~/.claude/settings.json`, for them to fire during KeepMees work sessions.
+
+To verify you are editing the correct file, run:
+
+```powershell
+# Windows — show which settings.json exists in the iCloud dir
+Get-Item "$env:USERPROFILE\.claude-account-icloud\settings.json"
+```
+
+If the file does not exist, create it with a minimal JSON object before adding the hooks block:
+
+```json
+{
+  "hooks": {
+    "Notification": "powershell -NoProfile -Command \"[console]::beep(880,250)\""
+  }
+}
+```
+
+After saving, restart Claude Code and trigger a permission prompt to verify.
 
 ---
 

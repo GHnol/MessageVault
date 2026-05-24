@@ -11,7 +11,8 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | proposed on `docs/post-commit-state-rule` (awaiting Coordinator approval) |
+| 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | in progress |
+| 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | merged (`9be0f81`) |
 | 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | merged (`a20af30`) |
 | 0.2.0 | Package 2.8 — KeepMees Project Control Tower | 2026-05-17 | merged (`bdb73db`) |
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
@@ -20,10 +21,56 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ---
 
+## 0.4.0 — AI Project OS Usability Patch — Short Command Interface (2026-05-24)
+
+**Branch:** `docs/ai-project-os-usability-patch` (pending)
+**Status:** in progress
+
+### What this patch adds
+
+- **Short Command Interface:** 10 live command files in `.claude/commands/` replacing pasted protocols for daily startup, handoff, precommit, closeout, tool switching, weekly sync, calendar sync, and status summary.
+- **Calendar Sync Layer planning:** `calendar-sync-policy.md`, `calendar-source-template.md`, `calendar-sync-log.md` — planning docs for future automated calendar sync without Google Calendar API implementation yet.
+- **Shareable Status Summary:** `docs/project-control/shareable-status-summary.md` — internal and public-safe status in one file.
+- **Notification docs refresh:** PermissionRequest hook guidance, double-beep warning, Windows toast fallback, CLAUDE_CONFIG_DIR troubleshooting added to `notification-setup.md`.
+- **State correction:** stale status-sync branch language removed from `CURRENT_STATE.md`, `AI_HANDOFF.md`, `NEXT_SESSION_PROMPT.md`; version 0.3.1 status corrected in this file.
+
+### Capability deltas (vs. 0.3.1)
+
+| Capability | Before | After | Status |
+|---|---|---|---|
+| Daily startup | Paste long prompt or read session-restart-protocol.md manually | `/start` command file | User-invoked |
+| Checkpoint / handoff | Paste long handoff prompt | `/handoff` command file | User-invoked |
+| Pre-commit verification | Paste pre-commit checklist or read template manually | `/precommit` command file | User-invoked |
+| Package closeout | Paste closeout prompt | `/closeout` command file | User-invoked |
+| Tool switching | Paste tool-switching prompt | `/switch-to-codex`, `/switch-to-claude` command files | User-invoked |
+| Weekly sync | Paste weekly-sync prompt | `/weekly-sync` command file | User-invoked |
+| Calendar sync planning | No structured process | `/calendar-sync-plan` command file + planning docs | User-invoked; API automation Backlog |
+| Shareable status | No structured output | `/status-summary` command file + `shareable-status-summary.md` | User-invoked |
+| Status-sync stale language | Misleading in AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md | Corrected | Done |
+| v0.3.1 status | Incorrectly showed PROPOSED | Corrected to merged | Done |
+
+### What is intentionally NOT changed
+
+- `index.html`, `src/**`, `scripts/**`
+- Scope-guarded constants and product gates
+- Google Calendar API implementation (planning docs only)
+- Live hooks, subagents, skill packages (format not yet verified)
+
+### Backlog
+
+| Item | Reason deferred |
+|---|---|
+| `scripts/generate-project-calendar.mjs` | Needs explicit Coordinator authorization + stable UID design |
+| `scripts/sync-project-calendar.mjs` | Needs Google Calendar API credentials (never committed) + authorized package |
+| Additional commands (`/context-budget`, `/scope-check`, `/batch-plan`, `/qa-verify`) | Can be added in a future pass when needed |
+
+---
+
 ## 0.3.1 — Patch — Post-Commit State Rule (2026-05-22)
 
 **Branch:** `docs/post-commit-state-rule`
-**Implementation commit:** *(to fill in at closeout — see Post-Commit State Rule § 4: hashes belong in the post-commit report, not pre-filled)*
+**Merge commit:** `9be0f81` — merge: clarify post-commit state handling
+**Status:** merged to main
 **main HEAD before patch:** `3ce8657` (Package 2.9 status-sync merge)
 
 ### What this patch adds

@@ -44,12 +44,18 @@ Copy and adapt:
 |---|---|
 | `.claude/agents/README.md` | Readiness placeholder (planned subagent roster) — copy KeepMees pattern, edit roles to match new project |
 | `.claude/skills/README.md` | Readiness placeholder (planned skill roster) |
-| `.claude/commands/README.md` | Readiness placeholder (planned custom slash commands) |
+| `.claude/commands/README.md` | Short Command Interface — live commands for daily operation |
+| `.claude/commands/start.md` | Session startup command |
+| `.claude/commands/handoff.md` | Handoff / checkpoint command |
+| `.claude/commands/precommit.md` | Pre-commit verification command |
+| `.claude/commands/closeout.md` | Package closeout command |
 | `.claude/settings.local.json` | **Not committed.** Each contributor configures their own. |
 | `.codex/README.md` | Codex-specific layer — roles, interchangeability, config policy |
 | `.codex/config.toml` | **Skip** until the Codex schema is verified for the version in use. Document as backlog. |
 
-No live hooks, no live subagents, no live skills, no live custom slash commands — unless verified safe in a separately authorized pass.
+No live hooks, no live subagents, no live skills — unless verified safe in a separately authorized pass.
+
+User-invoked command files are recommended: plain markdown files in `.claude/commands/` are safe, format-verified, and the primary short entry point for daily operation. The user types `/command`; Claude Code routes to the prompt content; Claude follows the protocol. At minimum, add `/start`, `/handoff`, `/precommit`, `/closeout`. Copy from KeepMees and adapt.
 
 ---
 
@@ -249,10 +255,12 @@ Package 5A (KeepMees Message Book Proof Approval State Foundation) is the KeepMe
 
 ## What this template intentionally does NOT do
 
-- Does not commit live hooks, subagents, skills, or slash commands.
+- Does not commit live hooks, subagents, or skills (format not yet verified for all repo configurations).
 - Does not install n8n / Make / Zapier flows.
 - Does not auto-create a GitHub Project board.
-- Does not configure the permission-notification beep at user level (each contributor does that themselves — see `docs/dev/notification-setup.md`).
+- Does not configure the permission-notification beep at user level — each contributor installs that in their own `CLAUDE_CONFIG_DIR`; see `docs/dev/notification-setup.md`. Not committed; not shared; not enforced on other contributors.
 - Does not make any product decisions for the new project.
+
+**What the template does include (new as of OS v0.4.0):** user-invoked command files in `.claude/commands/` — plain markdown, format-verified, user types the command to invoke, no automatic execution. Hooks and skills remain on the backlog until their formats are verified.
 
 These are intentional gaps. They keep the bootstrap safe and copy-pasteable.

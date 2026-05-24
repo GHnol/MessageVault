@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-22`
+**Last updated:** `2026-05-24`
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `297a221` — merge: add proof approval state foundation |
-| Last closed package | `Package 5A — Message Book Proof Approval State Foundation` (implementation `e2df2a0`, merge `297a221`); status sync in progress on `docs/sync-command-center-after-package-5a` |
+| main HEAD | `926ec37` — merge: sync operating docs to reflect Package 5A completion |
+| Last closed package | `Package 5A — Message Book Proof Approval State Foundation` (implementation `e2df2a0`, merge `297a221`; status sync `663346c`, merge `926ec37`) — FULLY COMPLETE |
 | Active package | None — Coordinator decides next |
-| Active branch | `docs/sync-command-center-after-package-5a` (status-sync pending merge to main) |
+| Active branch | `main` (clean — no active work branch) |
 | Next authorized target | Coordinator decides next package — no package authorized |
-| Package 5A | COMPLETE — merged to main (`297a221`) |
+| Package 5A | COMPLETE — merged and status-synced. No active branch remains. |
 
 ---
 
@@ -85,7 +85,9 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | Notification setup (user-level) | `docs/dev/notification-setup.md` |
 | Test strategy | `docs/qa/test-strategy.md` |
 | Per-package verification | `docs/qa/package-verification-template.md` |
-| Planned custom slash commands (placeholder) | `.claude/commands/README.md` |
+| Short command interface (live) | `.claude/commands/README.md` — `/start`, `/handoff`, `/precommit`, `/closeout`, `/status-summary`, etc. |
+| Calendar sync layer planning | `docs/project-control/calendar-sync-policy.md`, `calendar-source-template.md`, `calendar-sync-log.md` |
+| Shareable project status | `docs/project-control/shareable-status-summary.md` |
 
 ---
 

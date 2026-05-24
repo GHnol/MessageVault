@@ -69,6 +69,25 @@ The following are off-limits without explicit instruction:
 
 Full protocol: `docs/automation/operator-mode/context-continuity-protocol.md`
 
+## Short Command Interface (added AI Project OS Usability Patch)
+
+The user should not need to paste long startup, handoff, closeout, precommit, status, or tool-switch prompts during daily work. Long protocols live in repo docs. Daily operation uses short slash commands.
+
+| Command | What it does | Backed by |
+|---|---|---|
+| `/start` | Session startup — read repo state, state package/branch/next action | `docs/dev/session-restart-protocol.md` |
+| `/handoff` | Update `AI_HANDOFF.md` and produce a transfer packet | `docs/automation/operator-mode/context-continuity-protocol.md` |
+| `/precommit` | Walk the pre-commit verification gate | `docs/qa/pre-commit-verification-template.md` |
+| `/closeout` | Package boundary closeout — verify, update state, propose commit | `docs/dev/package-boundary-closeout-protocol.md` |
+| `/package-start` | Pre-flight for a newly authorized package | `docs/dev/session-restart-protocol.md` |
+| `/switch-to-codex` | Prepare handoff for Codex | `docs/dev/tool-switching-protocol.md` |
+| `/switch-to-claude` | Resume from Codex | `docs/dev/session-restart-protocol.md` |
+| `/weekly-sync` | Coordinator weekly sync | `docs/project-control/coordinator-weekly-sync.md` |
+| `/calendar-sync-plan` | Calendar delta review (dry run) | `docs/project-control/calendar-sync-policy.md` |
+| `/status-summary` | Generate internal + shareable project status | `docs/project-control/shareable-status-summary.md` |
+
+Command files live in `.claude/commands/*.md`. Commands are user-invoked: the user types the command; Claude Code routes to the prompt content; Claude follows the protocol. Commands route Claude through existing protocols — they never invent new authority, never commit or push without approval, and never start a new package without Coordinator authorization. If Claude Code command support varies by version, the `.md` files serve as short paste-ready entry points.
+
 ## Session, context, model, and tool protocols
 
 `AGENTS.md` is the universal contract; this file extends it. For continuity decisions, follow:

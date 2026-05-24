@@ -47,11 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No package in progress. Package 5A (Message Book Proof Approval State Foundation) COMPLETE and merged (`297a221`). |
-| Branch | `main` (after the status-sync branch is merged) |
-| main HEAD | `297a221` (status sync will bump this further when merged) |
+| Resume into | No package in progress. Package 5A (Message Book Proof Approval State Foundation) COMPLETE — implementation and status-sync both merged. |
+| Branch | `main` (clean) |
+| main HEAD | `926ec37` — merge: sync operating docs to reflect Package 5A completion |
 | Next coordination step | Coordinator decides the next package. No package is currently authorized. |
-| Package 5A | COMPLETE — `src/products/proof-approval-state.js` + `src/tests/proof-approval-state-tests.mjs` merged. 1603 Node tests passing. No UI wiring added. |
+| Package 5A | COMPLETE — `src/products/proof-approval-state.js` + `src/tests/proof-approval-state-tests.mjs` merged. Status-sync merged. 1603 Node tests passing. No UI wiring added. |
 | Do not | Start any new package without explicit Coordinator authorization; do not modify `index.html` / `src/**` / `scripts/**`; do not commit/push without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 

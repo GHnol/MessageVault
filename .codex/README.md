@@ -15,6 +15,18 @@ Codex must read `AGENTS.md` first. This file only adds Codex-specific notes; it 
 
 ---
 
+## Short Command Interface (Claude Code — not Codex)
+
+Claude Code has live slash commands in `.claude/commands/` for daily operations (`/start`, `/handoff`, `/precommit`, `/closeout`, `/switch-to-codex`, etc.). Codex does not use this system — it has no slash command runner. However, Codex follows the same underlying protocols:
+
+- Session start → read `AGENTS.md` → `.codex/README.md` → `AI_HANDOFF.md` → `CURRENT_STATE.md` → `git status` + `git log --oneline -10`
+- Handoff → update `AI_HANDOFF.md`; produce transfer block in chat
+- Tool switch back to Claude → produce the packet that `/switch-to-claude` expects
+
+When handing off from Claude to Codex, Claude will run `/switch-to-codex` which produces the Codex startup block. Codex reads that block and follows it exactly.
+
+---
+
 ## Codex roles in this project
 
 See `docs/dev/claude-codex-interchangeability.md`. Codex is supported as:
