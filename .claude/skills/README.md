@@ -4,6 +4,18 @@
 
 ---
 
+## Commands vs Skills
+
+**Commands** (`.claude/commands/*.md`) are the daily short interface. Each command is a single-invocation workflow that drives a well-defined protocol from start to finish (startup, handoff, pre-commit, closeout, etc.). Use them for routine daily operations.
+
+**Skills** are deeper, reusable workflows that may be composed, parameterized, or invoked by other workflows. Skills are appropriate when a workflow is too complex for a single prompt, needs conditional branching, or should be reusable across different contexts.
+
+For daily KeepMees operation, use the commands. Skills are for future deeper automation.
+
+See also: `.claude/commands/README.md` for the live command roster.
+
+---
+
 ## Why placeholder, not live skills
 
 Skill packaging (folder structure, manifest fields, invocation) is tool-version-specific. Shipping live skills now risks fake certainty about the format. Per the upgrade instruction, prefer README + backlog over uncertain live implementation. Live skills are added only in a separately authorized pass after the format is verified against the Claude Code version in use.
@@ -28,7 +40,7 @@ Skill packaging (folder structure, manifest fields, invocation) is tool-version-
 
 ## Invariants for any future skill
 
-- Skills automate existing protocols; they never invent new authority.
+- Skills are user-invoked. They route Claude through existing protocols — they never invent new authority.
 - Skills obey all scope guards and locked-truth rules.
 - A skill's output is verified against actual git/file state, never trusted blindly.
 - Skills obey the universal AI Project OS layer (`docs/ai-system/universal-standards.md`) and the auto-management umbrella (`docs/dev/auto-management-protocol.md`).

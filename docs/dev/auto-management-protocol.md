@@ -219,6 +219,26 @@ The OS is honest about which parts are policy and which parts are automatic. See
 
 ---
 
+## Short Command Interface
+
+The commands in `.claude/commands/` are the daily short interface to this protocol. Use them instead of pasting prompts:
+
+| Command | What it automates |
+|---|---|
+| `/start` | Session startup (Duty 1: repo-native memory read + 12-step sequence) |
+| `/handoff` | Checkpoint / state update (Duty 1: trigger phrases) |
+| `/precommit` | Pre-commit gate |
+| `/closeout` | Package boundary closeout (Duty 2) |
+| `/package-start` | New package pre-flight |
+| `/switch-to-codex` | Codex relay (Codex relay readiness section) |
+| `/switch-to-claude` | Resume from Codex |
+| `/weekly-sync` | Weekly Tower sync |
+| `/status-summary` | Project state summary |
+
+See `.claude/commands/README.md` for the full roster.
+
+---
+
 ## Quick reference
 
 | Trigger | Action |

@@ -200,6 +200,39 @@ Policy-driven, with exceptions for genuinely independent edits.
 
 ---
 
+## Short Command Interface
+
+Long protocols live in repo docs. Daily operation uses short commands.
+
+The user should not need to paste long startup, handoff, closeout, precommit, status, or tool-switch prompts during daily work. The commands in `.claude/commands/*.md` are the short interface to those protocols.
+
+| Command | What it does |
+|---|---|
+| `/start` | Session startup from repo truth |
+| `/handoff` | Update `AI_HANDOFF.md` and produce transfer packet |
+| `/precommit` | Walk the pre-commit verification gate |
+| `/closeout` | Package boundary closeout |
+| `/package-start` | Pre-flight for newly authorized package |
+| `/switch-to-codex` | Prepare Codex handoff |
+| `/switch-to-claude` | Resume from Codex |
+| `/weekly-sync` | Coordinator weekly sync |
+| `/calendar-sync-plan` | Calendar delta review (dry run) |
+| `/status-summary` | Generate internal + shareable status |
+
+**Invariants for every command in every repo using this OS:**
+- Commands are user-invoked. The user types the command; Claude Code routes to the prompt content; Claude follows the protocol. No command runs autonomously.
+- Commands route Claude through existing protocols — they never invent new authority.
+- Commands never commit or push — those require explicit user instruction.
+- Commands never start a new package without explicit Coordinator authorization.
+- Scope guards remain in force regardless of which command is invoked.
+- If Claude Code command support varies by version, the `.md` files still serve as short paste-ready prompt entry points.
+
+When bootstrapping a new repo: add live command files in `.claude/commands/` using the same pattern (plain markdown, filename = command name, content = prompt). Start with `/start`, `/handoff`, `/precommit`, `/closeout`.
+
+See `docs/ai-system/bootstrap-template.md` § 2 for the bootstrap step.
+
+---
+
 ## Notification setup
 
 The harness can sound a permission/wait notification at user level. This is **user-level configuration**, not committed private settings. See `docs/dev/notification-setup.md`.
@@ -253,7 +286,7 @@ Every claim this OS makes is labelled. Status meanings:
 | Fresh-session restart preference at boundaries | Policy-driven — agent recommends; user decides |
 | Token efficiency rules (file reads vs paste, scoped vs whole-repo, etc.) | Policy-driven |
 | Tool batching plan format | Policy-driven |
-| Custom slash commands (`.claude/commands/*.md`) | Backlog — readiness placeholder only; no live commands committed |
+| Custom slash commands (`.claude/commands/*.md`) | User-invoked — command `.md` files committed to repo; user types `/command`; Claude Code routes to the prompt content; Claude follows the protocol. No automatic execution; approval boundaries unchanged. (10 files committed: `/start`, `/handoff`, `/precommit`, `/closeout`, `/package-start`, `/switch-to-codex`, `/switch-to-claude`, `/weekly-sync`, `/calendar-sync-plan`, `/status-summary`) |
 | Project subagents (`.claude/agents/*.md`) | Backlog — readiness placeholder only; no live subagents committed |
 | Project skills (`.claude/skills/`) | Backlog — readiness placeholder only; no live skills committed |
 | Claude hooks (`.claude/settings.json` hooks block) | Backlog — no hooks committed to the repo; user-level hooks are documented separately in `docs/dev/notification-setup.md` |

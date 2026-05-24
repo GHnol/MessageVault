@@ -9,9 +9,68 @@ Newest entries first.
 
 ---
 
+## 2026-05-24 — AI Project OS Usability Patch
+
+**Status:** IN PROGRESS — docs/config only; no product/app changes.
+**Branch:** `docs/ai-project-os-usability-patch` (pending)
+**Scope:** AI Project OS usability improvements only. No `index.html`, `src/**`, `scripts/**`, no product implementation, no vendor/design/checkout work.
+
+### Added (Short Command Interface — universal)
+- `.claude/commands/start.md` — session startup from repo truth
+- `.claude/commands/handoff.md` — AI_HANDOFF.md update + transfer packet
+- `.claude/commands/precommit.md` — pre-commit verification gate
+- `.claude/commands/closeout.md` — package boundary closeout
+- `.claude/commands/package-start.md` — new package pre-flight
+- `.claude/commands/switch-to-codex.md` — Codex handoff
+- `.claude/commands/switch-to-claude.md` — resume from Codex
+- `.claude/commands/weekly-sync.md` — Coordinator weekly sync
+- `.claude/commands/calendar-sync-plan.md` — calendar delta dry run
+- `.claude/commands/status-summary.md` — internal + shareable status
+
+### Added (Calendar Sync Layer planning)
+- `docs/project-control/calendar-sync-policy.md` — when/how to sync the calendar, dry-run/apply workflow, future script plan
+- `docs/project-control/calendar-source-template.md` — repo-native format for calendar events (stable UIDs, all current events catalogued)
+- `docs/project-control/calendar-sync-log.md` — record of every calendar change applied
+
+### Added (Shareable Status Summary)
+- `docs/project-control/shareable-status-summary.md` — internal + public-safe status in one file
+
+### Updated (universal standards)
+- `docs/ai-system/universal-standards.md` — new "Short Command Interface" section; automation table updated (custom slash commands: Backlog → User-invoked)
+- `docs/ai-system/bootstrap-template.md` — Step 2 updated to include live command files; bootstrap instructions clarified
+- `docs/ai-system/CHANGELOG.md` — Post-Commit State Rule entry corrected (PROPOSED → COMPLETE); this entry
+- `docs/ai-system/version-history.md` — version 0.3.1 corrected; version 0.4.0 row added
+
+### Updated (dev protocols)
+- `docs/dev/auto-management-protocol.md` — Short Command Interface reference added to quick reference
+- `docs/dev/session-restart-protocol.md` — `/start` command reference added
+- `docs/dev/notification-setup.md` — PermissionRequest hook guidance, double-beep warning, Windows toast fallback, CLAUDE_CONFIG_DIR troubleshooting
+
+### Updated (agent layers)
+- `AGENTS.md` — Short Command Interface row added to protocol table
+- `CLAUDE.md` — new "Short Command Interface" section with full command table
+- `.codex/README.md` — note about Claude Code commands vs Codex equivalents
+- `.claude/commands/README.md` — updated from placeholder to live; old planned roster replaced with live roster
+- `.claude/skills/README.md` — Commands vs Skills distinction added
+
+### Corrected (stale state)
+- `CURRENT_STATE.md` — HEAD updated to `926ec37`; stale status-sync branch removed
+- `AI_HANDOFF.md` — status-sync "in progress" language corrected; work-remaining cleared
+- `NEXT_SESSION_PROMPT.md` — HEAD updated; stale "status sync will bump this" language removed
+
+### Intentionally NOT changed
+- `index.html`, `src/**`, `scripts/**`
+- Pagination constants, `BOOK_PAGINATION_VERSION`, `BOOK_PRODUCTION_DEPS`, `BOOK_PARITY`
+- Standalone keepsake flows, Review view
+- Live Claude hooks, subagents, skill packages
+- No Google Calendar API implementation (planning docs only)
+- Product roadmap content in `docs/project-control/` (Tower content unchanged)
+
+---
+
 ## 2026-05-22 — AI Project OS Patch: Post-Commit State Rule
 
-**Status:** PROPOSED — not yet committed; awaiting Coordinator approval.
+**Status:** COMPLETE — merged to main (`9be0f81` merge).
 **Branch:** `docs/post-commit-state-rule`
 **Scope:** AI Project OS process correction only — no product/app changes; Package 5A remains paused.
 
