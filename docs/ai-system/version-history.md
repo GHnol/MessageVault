@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | in progress |
 | 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
 | 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
 | 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | merged (`9be0f81`) |
@@ -19,6 +20,52 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 1.2.0 — AI Project OS v1.2: External Setup Alignment Patch (2026-05-25)
+
+**Branch:** `docs/align-clickup-setup-ai-os-v1-2`
+**Status:** IN PROGRESS — docs/process only; no product implementation
+
+### What this patch adds
+
+- **ClickUp setup policy:** `docs/project-control/clickup-setup-policy.md` — one primary Project Control Board List; AI OS workflow lanes as saved views/filters, not default separate Lists; hybrid status set; 13 required custom fields; Owner Role as custom field (not ClickUp assignee); one list_id per sync map; per-task external_id.
+- **External platform mapping guide:** `docs/project-control/external-platform-mapping-guide.md` — repo doc → ClickUp field mapping; calendar item type guidance; TickTick scope boundaries; external sync safety summary.
+
+### Capability deltas (vs. 0.5.0)
+
+| Capability | Before | After | Status |
+|---|---|---|---|
+| ClickUp structure definition | Implied by CSV; no explicit policy | Explicit one-List policy with saved views/filters | Policy-driven |
+| AI OS lanes in ClickUp | No guidance | Saved views/filters, not separate Lists by default | Policy-driven |
+| Custom field definition | Partial (CSV columns only) | Full list of 13 required custom fields | Policy-driven |
+| Owner Role rule for AI agents | Not documented | Explicit: custom field only, not ClickUp assignee | Policy-driven |
+| External platform mapping | No guide | `external-platform-mapping-guide.md` | Policy-driven |
+| external-sync-map.local.json rule | Gitignored; brief mention | Explicitly: never committed; ClickUp list_id and task IDs live here only | Policy-driven |
+| example map safety | Noted as example | Explicitly: must contain only placeholder IDs, never real IDs | Policy-driven |
+
+### What is intentionally NOT changed
+
+- `index.html`, `src/**`, `scripts/**` — no product or app code
+- `docs/project-control/clickup-import.csv` — valid as-is for import into 01 Project Control Board; no structural change required
+- No live ClickUp API integration
+- No Google Calendar API implementation
+- No external writes
+- Package 5B — not started; no planning work for 5B
+
+### Backlog
+
+| Item | Reason deferred |
+|---|---|
+| Add OS ID, Package, Last Repo Sync, External Sync Status columns to clickup-import.csv | CSV structurally valid without them; fields populated manually after import; requires Coordinator decision on format |
+| Live ClickUp API sync | Needs API token (never committed) + Coordinator-authorized package |
+
+### What should be copied to Puzzle and future repos
+
+`clickup-setup-policy.md` and `external-platform-mapping-guide.md` are KeepMees-specific in their task content but the structural patterns (one primary List, saved views/filters, Owner Role custom field, local sync map) apply universally to any AI Project OS repo. Adapt and copy when bootstrapping Puzzle.
+
+The changes to `project-sync-policy.md` and `external-sync-safety.md` (explicit rules on committed vs non-committed files, AI agent assignee rule) are universal and should be part of the standard bootstrap template.
 
 ---
 

@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — AI Project OS Framework Groundwork Pass COMPLETE. Implementation committed (`219f0b3`), merged to main (`cc7139a`), pushed to origin. Status-sync in progress on `docs/sync-after-ai-project-os-framework-groundwork`.
+**Status:** `in progress` — AI Project OS v1.2 external setup alignment patch. Docs-only. No product/app code. Active branch: `docs/align-clickup-setup-ai-os-v1-2`. Awaiting Coordinator commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
 
@@ -18,71 +18,69 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
+| **Active patch** | `AI Project OS v1.2 — External Setup Alignment Patch` (docs-only) |
+| **Active branch** | `docs/align-clickup-setup-ai-os-v1-2` (in progress — awaiting commit approval) |
 | **Last completed pass** | `AI Project OS Framework Groundwork Pass` (Sprint 2026-05-B) |
-| **Implementation branch** | `docs/ai-project-os-framework-groundwork` (merged to main) |
-| **Implementation commit** | `219f0b3` — docs: complete AI Project OS framework groundwork |
-| **Merge commit** | `cc7139a` — merge: complete AI Project OS framework groundwork |
-| **Status-sync branch** | `docs/sync-after-ai-project-os-framework-groundwork` (in progress) |
-| **Active package** | None — Coordinator decides next |
+| **Last merged branch** | `docs/sync-after-ai-project-os-framework-groundwork` → main (`863461a`) |
+| **main HEAD** | `863461a` — merge: sync operating docs after AI Project OS framework groundwork |
+| **Active package** | None — Coordinator decides next product package |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
 
 ---
 
-## Objective (OS pass, retrospective)
+## Objective (current patch)
 
-Completed the AI Project OS framework: made 13 skills canonical (SKILL.md per skill in `.claude/skills/*/`), added 4 new command wrappers, rewrote command and skills READMEs, added closeout sync contract, project-control sync foundation (6 docs), OS self-audit checklist + script, notification setup wizard (PS1 + skill + command), updated all Bootstrap Core docs to v0.5.0, corrected stale project-control state, extended .gitignore. No app code touched; no product package started.
+Docs-only external setup alignment. Standardize the ClickUp structure (one primary Board, saved views/filters, not six default Lists), add external platform mapping guide, update sync policy and external-sync-safety docs, add AI Project OS v1.2 entries to CHANGELOG and version-history. No app code; no live API integration; no Package 5B work.
 
 ---
 
-## Delivered scope
+## Delivered scope (v1.2 patch, pending commit approval)
 
-- 13 skills created at `.claude/skills/*/SKILL.md` — each with YAML frontmatter + full protocol
-- 4 new command wrappers; 10 existing updated; READMEs rewritten
-- `docs/dev/closeout-sync-contract.md` — mandatory sync check after 12 trigger types
-- 6 project-control sync foundation docs
-- `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` (88 pass)
-- `scripts/setup-claude-notification.ps1` + skill + command (dry-run by default)
-- Bootstrap Core updated: universal-standards, bootstrap-template, CHANGELOG, version-history, README
-- `docs/project-control/current-sprint.md` + `kanban-board.md` corrected
-- `.gitignore` extended with 7 new patterns
-- All scripts: dependency-free, read-only or explicitly-apply-gated, no external writes
+- `docs/project-control/clickup-setup-policy.md` — CREATED: approved ClickUp structure, saved views/filters, hybrid statuses, 13 custom fields, Owner Role rule, sync map rule
+- `docs/project-control/external-platform-mapping-guide.md` — CREATED: repo doc → ClickUp/Calendar/TickTick mapping, platform scope boundaries, safety summary
+- `docs/project-control/project-sync-policy.md` — UPDATED: ClickUp structure section added; external tool routing updated; companion docs updated
+- `docs/project-control/external-sync-safety.md` — UPDATED: ClickUp structure note; local map never-commit rule; example map placeholder rule; AI agent assignee rule
+- `docs/ai-system/CHANGELOG.md` — UPDATED: v1.2 entry added at top
+- `docs/ai-system/version-history.md` — UPDATED: v1.2.0 row + section added at top
 
 ---
 
 ## Hard exclusions verified
 
-- `index.html` — zero diff confirmed
-- `src/**` — zero diff confirmed
-- No product package started; no API writes; no secrets committed
+- `index.html` — not touched
+- `src/**` — not touched
+- `scripts/**` — not touched
+- `docs/project-control/clickup-import.csv` — inspected only; not modified
+- No live API integration; no external writes; no secrets
 
 ---
 
 ## Work completed
 
-- [x] Implementation committed `219f0b3` on `docs/ai-project-os-framework-groundwork`
-- [x] Branch pushed to origin
-- [x] Merged to main (`cc7139a`) with `--no-ff`
-- [x] Main pushed to origin (now at `cc7139a`)
-- [x] Status-sync branch created: `docs/sync-after-ai-project-os-framework-groundwork`
-- [ ] Status-sync files updated (in progress on this branch)
-- [ ] Status-sync committed and merged to main
+- [x] Branch created: `docs/align-clickup-setup-ai-os-v1-2`
+- [x] 2 new docs created
+- [x] 4 existing docs updated
+- [x] AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md updated (branch correction)
+- [ ] Coordinator commit approval
+- [ ] Commit
+- [ ] Merge to main
+- [ ] Push main
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    docs/sync-after-ai-project-os-framework-groundwork
-main HEAD:       cc7139a — merge: complete AI Project OS framework groundwork
-Pushed:          Yes — implementation and merge both on main and on origin
-Status-sync:     In progress on docs/sync-after-ai-project-os-framework-groundwork
+Branch (now):    docs/align-clickup-setup-ai-os-v1-2
+main HEAD:       863461a — merge: sync operating docs after AI Project OS framework groundwork
+Pushed:          main is current on origin; patch branch not yet pushed
 ```
 
 ---
 
 ## Next exact action
 
-Complete status-sync edits → commit `docs: sync operating docs after AI Project OS framework groundwork` → merge to main → push main. Then Coordinator decides next product package.
+Coordinator reviews the final report and approves commit. Then: commit with approved message → merge to main → push main.
 
 ---
 

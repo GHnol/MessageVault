@@ -1,6 +1,6 @@
 # External Sync Safety Rules
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.2 external setup alignment, 2026-05-25)
 **Owner:** Coordinator / Project Control
 **Purpose:** Governs how and when external tools (Google Calendar, ClickUp, TickTick) may be updated from repo state.
 
@@ -61,9 +61,23 @@ External Google Calendar event IDs are stored in `external-sync-map.local.json` 
 
 ## ClickUp safety
 
+### Approved structure
+
+ClickUp uses one primary List (01 Project Control Board) inside the KeepMees Space / 00 Project Control Folder. Workflow slices (Current Sprint, Backlog, Review / QA, etc.) are saved views and filters — not separate Lists by default. See `clickup-setup-policy.md` for the full approved structure.
+
+### Committed and non-committed files
+
+- `docs/project-control/external-sync-map.local.json` — **never committed.** Contains real ClickUp task IDs (`external_id`) and the Board `list_id`. Gitignored.
+- `docs/project-control/external-sync-map.example.json` — **committed as example only.** Must contain only fake placeholder IDs, never real ClickUp IDs.
+- ClickUp API tokens, OAuth credentials, or any ClickUp authentication material — **never committed.**
+
+### AI agents as ClickUp assignees
+
+Do not use ClickUp task assignees for AI agents (Claude, Codex) unless they are real ClickUp workspace users. Assign AI agent ownership via the Owner Role custom field only.
+
 ### Sync method
 
-ClickUp is updated by re-importing `clickup-import.csv`. The import is additive by default (ClickUp does not auto-delete existing tasks on import). This is safe for adding new tasks and updating statuses.
+ClickUp is updated by re-importing `clickup-import.csv` into the 01 Project Control Board List. The import is additive by default (ClickUp does not auto-delete existing tasks on import). This is safe for adding new tasks and updating statuses.
 
 ### Risks to avoid
 
@@ -106,7 +120,7 @@ This file maps stable internal IDs to external tool IDs (Google Calendar event I
 
 `docs/project-control/external-sync-map.example.json`
 
-This shows the format of the map file. It contains no real external IDs.
+This shows the format of the map file. It must contain only fake placeholder IDs — never real Google Calendar event IDs, ClickUp task IDs, TickTick item IDs, or any other real external identifiers.
 
 ---
 
