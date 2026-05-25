@@ -9,6 +9,34 @@ Newest entries first.
 
 ---
 
+## 2026-05-25 — AI Project OS v1.2: External Setup Alignment Patch
+
+**Status:** IN PROGRESS — docs-only patch; no product/app code changed.
+**Branch:** `docs/align-clickup-setup-ai-os-v1-2`
+**Scope:** ClickUp setup standardization, external platform mapping guide, sync policy clarification. No `index.html`, `src/**`, `scripts/**`, no product implementation, no live API integration.
+
+### Added
+
+- `docs/project-control/clickup-setup-policy.md` — defines the approved ClickUp structure: one KeepMees Space, one 00 Project Control Folder, one 01 Project Control Board List; AI OS workflow lanes as saved views/filters (not default separate Lists); hybrid status set; 13 required custom fields; Owner Role rule (AI agents as custom field values, not ClickUp assignees); sync map rule (one list_id, per-task external_id, local map gitignored)
+- `docs/project-control/external-platform-mapping-guide.md` — explains the mapping between repo project-control docs and ClickUp, Google Calendar, and TickTick; repo doc to ClickUp field mapping table; calendar item type guidance; TickTick scope boundaries; external sync safety summary
+
+### Updated
+
+- `docs/project-control/project-sync-policy.md` — added "ClickUp structure (approved)" section explicitly defining one Space, one Folder, one primary List, saved views/filters, one list_id, per-task external_id; external tool routing table updated to name "01 Project Control Board"; companion docs updated to include new files; live API noted as future approval-gated
+- `docs/project-control/external-sync-safety.md` — added "Approved structure" note to ClickUp section; clarified that external-sync-map.local.json must never be committed; clarified that external-sync-map.example.json must contain only placeholder IDs; clarified that ClickUp tokens must never be committed; added rule that AI agents must not be ClickUp assignees unless real users
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**`, `scripts/**` — no product or app code
+- `docs/project-control/clickup-import.csv` — inspected; remains valid for import into 01 Project Control Board; columns map to approved custom fields; no "List" column present; no structural change required
+- No live ClickUp API integration added
+- No Google Calendar API implementation
+- No external writes of any kind
+- No Package 5B planning or implementation
+- No secrets or credentials
+
+---
+
 ## 2026-05-24 — AI Project OS Framework Groundwork Pass
 
 **Status:** COMPLETE — merged to main (`cc7139a`). Implementation commit: `219f0b3`.

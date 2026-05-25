@@ -1,8 +1,8 @@
 # Project Control Sync Policy
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.2 external setup alignment, 2026-05-25)
 **Owner:** Coordinator / Project Control
-**Companion docs:** `project-sync-dry-run-format.md`, `project-sync-source-schema.md`, `external-sync-safety.md`, `project-sync-log.md`
+**Companion docs:** `project-sync-dry-run-format.md`, `project-sync-source-schema.md`, `external-sync-safety.md`, `project-sync-log.md`, `clickup-setup-policy.md`, `external-platform-mapping-guide.md`
 **Companion commands:** `/project-sync-dry-run`, `/project-sync-apply`
 
 ---
@@ -98,6 +98,24 @@ Sprint tasks, backlog items, and daily to-dos belong in ClickUp and TickTick, no
 
 ---
 
+## ClickUp structure (approved)
+
+ClickUp is organized around one primary Project Control Board. Do not create separate Lists for workflow lanes by default. Workflow slices (Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, Risks / Decisions) are saved views and filters inside the primary List.
+
+| ClickUp layer | Value |
+|---|---|
+| Space | KeepMees |
+| Folder | 00 Project Control |
+| Primary List | 01 Project Control Board |
+| Sync map | One `list_id` for the Board; one `external_id` per task |
+| Saved views | Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, Risks / Decisions, and more |
+
+Separate Lists are a future scaling option only, not the default. See `clickup-setup-policy.md` for the full approved structure and custom field definitions.
+
+Live ClickUp API integration remains future and approval-gated. The current sync method is CSV import (`clickup-import.csv`) following the dry-run/apply workflow.
+
+---
+
 ## External tool routing
 
 | Content type | Primary tool | Secondary |
@@ -105,7 +123,7 @@ Sprint tasks, backlog items, and daily to-dos belong in ClickUp and TickTick, no
 | Recurring weekly/monthly reviews | Google Calendar | — |
 | Phase gate placeholders | Google Calendar | — |
 | Launch readiness review | Google Calendar (low-confidence placeholder) | — |
-| Full project execution board | ClickUp | — |
+| Full project execution board | ClickUp (01 Project Control Board) | — |
 | Personal daily check-off list | TickTick | — |
 | Project truth (decisions, roadmap, sprint) | Repo docs | — |
 | Individual backlog items | ClickUp | Repo `backlog.md` |
