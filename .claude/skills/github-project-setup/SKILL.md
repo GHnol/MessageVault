@@ -57,16 +57,27 @@ Do not run `gh auth login` automatically. Do not change `gh auth` state.
 Run the dry-run script first:
 
 ```bash
-node scripts/github-project-setup-dry-run.mjs
+node scripts/github-project-setup-dry-run.mjs --owner GHnol --repo MessageVault
 ```
 
-Dry-run output must include:
-- Planned GitHub Project name, owner, repo
-- Planned statuses (9)
-- Planned views (14)
-- Planned custom fields (13) with types
-- Field map example validation result
+Dry-run output includes:
+- Required docs check
+- gh CLI version check (warns if < v2.28.0, uses GraphQL fallback automatically)
+- GitHub auth probe (login verification — read-only)
+- GitHub Projects scope probe (read-only)
+- Sync map gitignore check
+- Existing project detection (read-only — prevents duplicate creation)
+- Numbered planned operations list
+- Planned custom fields (13) with types and option counts
+- Required Status options (9) — manual UI step note
+- Required views (14) — manual UI step note
 - Safety footer confirming no external writes were performed
+
+To check live project status after apply:
+
+```bash
+node scripts/github-project-sync-status.mjs --live --owner GHnol --project-number 1
+```
 
 ## Apply approval boundaries
 
@@ -109,7 +120,6 @@ No apply script may run without `--apply` flag. Without `--apply`, all apply scr
 - Never run `gh auth login` automatically.
 - Never delete or archive GitHub Issues or Project items without explicit approval.
 - Never touch `index.html`, `src/**`, or any product code.
-- Never execute apply scripts in this docs-only pass.
 - If `gh auth status` fails: stop and tell the user to authenticate manually.
 
 ## No secrets, no token logging

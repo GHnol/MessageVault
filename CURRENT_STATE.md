@@ -24,10 +24,10 @@
 | main HEAD | `3dcf917` — merge: make GitHub Projects the default external board |
 | Last completed pass | `AI Project OS v1.3 — External Board Provider Update` — merged `3dcf917` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | None — Coordinator decides next action |
-| Active branch | None |
-| Next authorized target | Coordinator decides next product package or OS action |
-| OS audit | BOOTSTRAP COMPLETE — 108 pass, 0 warn, 0 fail (post-v1.3) |
+| Active pass | `AI Project OS v1.4 — GitHub Projects Live Provisioning Integration` — IN PROGRESS |
+| Active branch | `docs/github-projects-live-provisioning` |
+| Next authorized target | Complete v1.4 OS audit → pre-commit gate → Coordinator approves commit |
+| OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail |
 | Package 5B | Not started |
 
 ---

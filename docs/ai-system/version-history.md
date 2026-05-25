@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | in-progress (branch: `docs/github-projects-live-provisioning`) |
 | 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
 | 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
 | 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
@@ -21,6 +22,30 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 1.4.0 — AI Project OS v1.4: GitHub Projects Live Provisioning Integration (2026-05-25)
+
+**Branch:** `docs/github-projects-live-provisioning` — IN PROGRESS
+**Status:** Implementation complete (scripts verified dry-run); awaiting OS audit and state sync
+
+### What this pass adds
+
+- **Client library:** `scripts/lib/github-projects-client.mjs` — all GitHub Projects GraphQL/REST operations; `requireApply()` mutation guard; no shell injection; no token exposure.
+- **Real apply scripts:** `github-project-setup-apply.mjs` and `github-project-import-issues.mjs` fully implemented — not skeletons. Can create real GitHub Projects and import real Issues when invoked with `--apply` and Coordinator approval.
+- **Three-layer duplicate detection:** local sync map → external OS ID marker search → new record.
+- **Incremental sync map writes:** after each issue on apply (safe to re-run on partial failure).
+- **Source records example:** `docs/project-control/github-projects-source-records.example.json` (3 records, all fields).
+- **Dry-run enhancements:** auth probe, project scope probe, existing project detection, version check, gitignore check, full planned operations list.
+- **`--live` flag** on sync-status for read-only API queries.
+- **`--local-map` flag** on field-map for local sync map validation.
+
+### Backlog / manual steps required
+
+- GitHub Projects UI: configure 9 Status options after project is created
+- GitHub Projects UI: create 14 views after project is created
+- OS audit run to verify all 108+ checks still pass
 
 ---
 
