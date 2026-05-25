@@ -33,9 +33,15 @@ If the user invokes any trigger phrase — "checkpoint", "handoff", "before comp
 
 **Post-Commit State Rule bound on this duty.** Continuous updates do **not** mean every commit must amend or be followed by a state-sync commit. Durable state files may be a pre-commit or expected-post-commit snapshot; the actual commit hash for the commit being created belongs in the post-commit closeout report, not inside the file itself. Spin a follow-up state-sync commit only when the docs would misdirect the next agent (wrong branch, wrong package, wrong task, weakened scope, stale blocker). Cosmetic HEAD lag or "after this commit lands" wording is not sufficient reason. Canonical wording: `docs/ai-system/universal-standards.md` § "Post-Commit State Rule".
 
-### 2. Detect and force package boundaries
+### 2. Detect and force package boundaries + run internal sync check
 
 Policy-driven.
+
+When work reaches a package boundary, run the full closeout sync contract (`docs/dev/closeout-sync-contract.md`). Every meaningful closeout — package complete, commit completed, merge completed, branch handoff, model switch, tool switch, project-control change, milestone/gate change, schedule/date change, significant task/backlog status change, major planning change — must trigger an internal sync check.
+
+The sync check verifies: `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`, `docs/project-control/current-sprint.md`, `docs/project-control/kanban-board.md`, and staleness of external tool exports.
+
+External systems (Google Calendar, ClickUp, TickTick) remain dry-run/apply with Coordinator approval. Use `/project-sync-dry-run` to produce the proposed delta; `/project-sync-apply` only after Coordinator approves.
 
 When work reaches a package boundary:
 
@@ -234,8 +240,12 @@ The commands in `.claude/commands/` are the daily short interface to this protoc
 | `/switch-to-claude` | Resume from Codex |
 | `/weekly-sync` | Weekly Tower sync |
 | `/status-summary` | Project state summary |
+| `/os-audit` | OS self-audit (verify bootstrap complete) |
+| `/project-sync-dry-run` | Project-control sync dry-run (no writes) |
+| `/project-sync-apply` | Apply approved sync delta |
+| `/notification-setup-wizard` | Walk notification hook setup (local-only) |
 
-See `.claude/commands/README.md` for the full roster.
+Commands delegate to `.claude/skills/*/SKILL.md` (canonical layer). See `.claude/commands/README.md` for the full roster.
 
 ---
 
@@ -251,6 +261,7 @@ See `.claude/commands/README.md` for the full roster.
 | Tool switch (Claude↔Codex) | Update all three; produce transfer packet |
 | Approaching context limit | Update handoff; recommend `/compact` or `/clear` per `context-hygiene-protocol.md` |
 | Auto-compact warning | Stop new work; checkpoint; produce transfer packet |
-| Package boundary | Full closeout per `package-boundary-closeout-protocol.md` |
+| Package boundary | Full closeout per `package-boundary-closeout-protocol.md`; run internal sync check per `closeout-sync-contract.md` |
+| Any meaningful closeout (see `closeout-sync-contract.md`) | Run internal sync check; external sync dry-run if calendar/task drift is suspected |
 | User says "checkpoint" / "handoff" / etc. | Update `AI_HANDOFF.md` immediately and report |
 | Considering a follow-up state-sync commit | Apply Post-Commit State Rule (`docs/ai-system/universal-standards.md`); spin one only if docs would misdirect the next agent, not for cosmetic HEAD lag |

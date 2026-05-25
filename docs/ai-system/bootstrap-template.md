@@ -43,19 +43,19 @@ Copy and adapt:
 | Directory | What to create |
 |---|---|
 | `.claude/agents/README.md` | Readiness placeholder (planned subagent roster) — copy KeepMees pattern, edit roles to match new project |
-| `.claude/skills/README.md` | Readiness placeholder (planned skill roster) |
-| `.claude/commands/README.md` | Short Command Interface — live commands for daily operation |
-| `.claude/commands/start.md` | Session startup command |
-| `.claude/commands/handoff.md` | Handoff / checkpoint command |
-| `.claude/commands/precommit.md` | Pre-commit verification command |
-| `.claude/commands/closeout.md` | Package closeout command |
+| `.claude/skills/<name>/SKILL.md` | **Skills are canonical** — create SKILL.md with YAML frontmatter (`name:`, `description:`) for each core workflow. Minimum: `start`, `handoff`, `precommit`, `closeout`. Skills are the authoritative protocol definitions. |
+| `.claude/commands/README.md` | Short Command Interface — live command wrappers for daily operation |
+| `.claude/commands/start.md` | Thin wrapper → delegates to `start` skill |
+| `.claude/commands/handoff.md` | Thin wrapper → delegates to `handoff` skill |
+| `.claude/commands/precommit.md` | Thin wrapper → delegates to `precommit` skill |
+| `.claude/commands/closeout.md` | Thin wrapper → delegates to `closeout` skill |
 | `.claude/settings.local.json` | **Not committed.** Each contributor configures their own. |
 | `.codex/README.md` | Codex-specific layer — roles, interchangeability, config policy |
 | `.codex/config.toml` | **Skip** until the Codex schema is verified for the version in use. Document as backlog. |
 
-No live hooks, no live subagents, no live skills — unless verified safe in a separately authorized pass.
+No live hooks, no live subagents — unless verified safe in a separately authorized pass. Skills are now the canonical layer and should be created with SKILL.md frontmatter format.
 
-User-invoked command files are recommended: plain markdown files in `.claude/commands/` are safe, format-verified, and the primary short entry point for daily operation. The user types `/command`; Claude Code routes to the prompt content; Claude follows the protocol. At minimum, add `/start`, `/handoff`, `/precommit`, `/closeout`. Copy from KeepMees and adapt.
+User-invoked command wrappers delegate to skills: plain markdown files in `.claude/commands/` are safe, format-verified, and the primary short entry point for daily operation. The user types `/command`; Claude Code routes to the command file prompt; Claude follows the skill protocol. At minimum, create skills for `start`, `handoff`, `precommit`, `closeout`, then thin command wrappers for each. Copy from KeepMees and adapt.
 
 ---
 
@@ -234,10 +234,13 @@ The new repo passes bootstrap when:
 - A fresh agent (Claude Code or Codex) can read `AGENTS.md` → tool layer → `AI_HANDOFF.md` → `CURRENT_STATE.md` and state out loud what to do next.
 - `docs/ai-system/CHANGELOG.md` has an entry for the bootstrap.
 - `version-history.md` has the bootstrap row.
-- `.gitignore` blocks Claude local settings, secrets, and artifacts.
+- `.gitignore` blocks Claude local settings, secrets, artifacts, and local external-sync maps.
 - The PR template has AI-agent + continuity sections.
+- **Skills exist** — at minimum `start`, `handoff`, `precommit`, `closeout` with SKILL.md frontmatter.
+- **OS self-audit passes** — run `/os-audit` (or `scripts/os-self-audit.mjs`) and receive `BOOTSTRAP COMPLETE`.
+- **Closeout sync contract exists** — `docs/dev/closeout-sync-contract.md` is present.
 
-If any of those is missing, the bootstrap is incomplete.
+If any of those is missing, the bootstrap is incomplete. The OS self-audit script (`scripts/os-self-audit.mjs`) is the definitive check.
 
 ---
 
@@ -255,12 +258,19 @@ Package 5A (KeepMees Message Book Proof Approval State Foundation) is the KeepMe
 
 ## What this template intentionally does NOT do
 
-- Does not commit live hooks, subagents, or skills (format not yet verified for all repo configurations).
+- Does not commit live hooks or subagents (format not yet verified for all repo configurations).
 - Does not install n8n / Make / Zapier flows.
 - Does not auto-create a GitHub Project board.
-- Does not configure the permission-notification beep at user level — each contributor installs that in their own `CLAUDE_CONFIG_DIR`; see `docs/dev/notification-setup.md`. Not committed; not shared; not enforced on other contributors.
+- Does not configure the permission-notification beep at user level — each contributor installs that via `/notification-setup-wizard`; see `docs/dev/notification-setup.md`. Not committed; not shared; not enforced on other contributors.
 - Does not make any product decisions for the new project.
+- Does not write to external tools (Google Calendar, ClickUp, TickTick) — all external sync is dry-run/apply with approval.
 
-**What the template does include (new as of OS v0.4.0):** user-invoked command files in `.claude/commands/` — plain markdown, format-verified, user types the command to invoke, no automatic execution. Hooks and skills remain on the backlog until their formats are verified.
+**What the template does include (new as of OS v0.5.0):**
+- Skill folders with SKILL.md frontmatter — the canonical protocol layer.
+- Thin command wrappers in `.claude/commands/` that delegate to skills.
+- Closeout sync contract (`docs/dev/closeout-sync-contract.md`) — mandatory internal sync after meaningful closeouts.
+- Project-control sync foundation — policy, dry-run format, external sync safety rules, example ID map.
+- OS self-audit (`/os-audit` + `scripts/os-self-audit.mjs`) — required before claiming bootstrap complete.
+- Notification setup wizard (`/notification-setup-wizard` + `scripts/setup-claude-notification.ps1`).
 
-These are intentional gaps. They keep the bootstrap safe and copy-pasteable.
+These are intentional gaps and additions. They keep the bootstrap safe and copy-pasteable.

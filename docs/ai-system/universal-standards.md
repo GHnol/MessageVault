@@ -200,36 +200,54 @@ Policy-driven, with exceptions for genuinely independent edits.
 
 ---
 
-## Short Command Interface
+## Short Command Interface and Skills
 
-Long protocols live in repo docs. Daily operation uses short commands.
+Long protocols live in repo docs. Daily operation uses short commands that delegate to canonical skills.
 
-The user should not need to paste long startup, handoff, closeout, precommit, status, or tool-switch prompts during daily work. The commands in `.claude/commands/*.md` are the short interface to those protocols.
+**Skills are canonical.** The SKILL.md files in `.claude/skills/*/` are the authoritative protocol definitions. Command files in `.claude/commands/*.md` are compatibility wrappers — thin delegates that invoke the matching skill. This separation allows the canonical protocol to evolve independently of the command invocation mechanism.
 
-| Command | What it does |
-|---|---|
-| `/start` | Session startup from repo truth |
-| `/handoff` | Update `AI_HANDOFF.md` and produce transfer packet |
-| `/precommit` | Walk the pre-commit verification gate |
-| `/closeout` | Package boundary closeout |
-| `/package-start` | Pre-flight for newly authorized package |
-| `/switch-to-codex` | Prepare Codex handoff |
-| `/switch-to-claude` | Resume from Codex |
-| `/weekly-sync` | Coordinator weekly sync |
-| `/calendar-sync-plan` | Calendar delta review (dry run) |
-| `/status-summary` | Generate internal + shareable status |
+**Command wrappers are the daily interface.** The user types `/command`; Claude Code routes to the command file content; Claude follows the protocol.
+
+| Command | Canonical skill | What it does |
+|---|---|---|
+| `/start` | `.claude/skills/start/SKILL.md` | Session startup from repo truth |
+| `/handoff` | `.claude/skills/handoff/SKILL.md` | Update `AI_HANDOFF.md` and produce transfer packet |
+| `/precommit` | `.claude/skills/precommit/SKILL.md` | Walk the pre-commit verification gate |
+| `/closeout` | `.claude/skills/closeout/SKILL.md` | Package boundary closeout + internal sync check |
+| `/package-start` | `.claude/skills/package-start/SKILL.md` | Pre-flight for newly authorized package |
+| `/switch-to-codex` | `.claude/skills/switch-to-codex/SKILL.md` | Prepare Codex handoff |
+| `/switch-to-claude` | `.claude/skills/switch-to-claude/SKILL.md` | Resume from Codex |
+| `/weekly-sync` | `.claude/skills/weekly-sync/SKILL.md` | Coordinator weekly sync |
+| `/calendar-sync-plan` | `.claude/skills/project-sync-dry-run/SKILL.md` | Calendar delta review (dry run) |
+| `/status-summary` | `.claude/skills/status-summary/SKILL.md` | Generate internal + shareable status |
+| `/os-audit` | `.claude/skills/os-audit/SKILL.md` | AI Project OS self-audit |
+| `/project-sync-dry-run` | `.claude/skills/project-sync-dry-run/SKILL.md` | Project-control sync dry-run (no writes) |
+| `/project-sync-apply` | `.claude/skills/project-sync-apply/SKILL.md` | Apply approved sync delta |
+| `/notification-setup-wizard` | `.claude/skills/notification-setup-wizard/SKILL.md` | Notification hook setup (local-only) |
 
 **Invariants for every command in every repo using this OS:**
-- Commands are user-invoked. The user types the command; Claude Code routes to the prompt content; Claude follows the protocol. No command runs autonomously.
+- Commands are user-invoked. No command runs autonomously.
 - Commands route Claude through existing protocols — they never invent new authority.
 - Commands never commit or push — those require explicit user instruction.
 - Commands never start a new package without explicit Coordinator authorization.
 - Scope guards remain in force regardless of which command is invoked.
 - If Claude Code command support varies by version, the `.md` files still serve as short paste-ready prompt entry points.
 
-When bootstrapping a new repo: add live command files in `.claude/commands/` using the same pattern (plain markdown, filename = command name, content = prompt). Start with `/start`, `/handoff`, `/precommit`, `/closeout`.
+When bootstrapping a new repo: create skill folders in `.claude/skills/` with SKILL.md frontmatter (name, description), then create thin command wrappers in `.claude/commands/`. Start with `start`, `handoff`, `precommit`, `closeout`.
 
 See `docs/ai-system/bootstrap-template.md` § 2 for the bootstrap step.
+
+## Closeout sync rule
+
+Every meaningful work-unit closeout must trigger an internal sync check. This rule is universal across every repo bootstrapped from this OS.
+
+Meaningful closeouts include: package complete/paused/blocked, commit completed, merge completed, branch handoff, model switch, tool switch, project-control change, milestone/gate change, schedule/date change, significant task/backlog status change, major planning change.
+
+The sync check verifies that durable state files (`AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`) and project-control docs (`current-sprint.md`, `kanban-board.md`) are not operationally misleading. Apply the Post-Commit State Rule: edit only if stale wording would misdirect the next agent.
+
+External systems (Google Calendar, ClickUp, TickTick) remain dry-run/apply with Coordinator approval. Never write to external systems without explicit approval.
+
+Full contract: `docs/dev/closeout-sync-contract.md`
 
 ---
 
@@ -286,9 +304,13 @@ Every claim this OS makes is labelled. Status meanings:
 | Fresh-session restart preference at boundaries | Policy-driven — agent recommends; user decides |
 | Token efficiency rules (file reads vs paste, scoped vs whole-repo, etc.) | Policy-driven |
 | Tool batching plan format | Policy-driven |
-| Custom slash commands (`.claude/commands/*.md`) | User-invoked — command `.md` files committed to repo; user types `/command`; Claude Code routes to the prompt content; Claude follows the protocol. No automatic execution; approval boundaries unchanged. (10 files committed: `/start`, `/handoff`, `/precommit`, `/closeout`, `/package-start`, `/switch-to-codex`, `/switch-to-claude`, `/weekly-sync`, `/calendar-sync-plan`, `/status-summary`) |
+| Custom slash commands (`.claude/commands/*.md`) | User-invoked — 14 command wrappers committed; each delegates to matching skill. Commands: `/start`, `/handoff`, `/precommit`, `/closeout`, `/package-start`, `/switch-to-codex`, `/switch-to-claude`, `/weekly-sync`, `/calendar-sync-plan`, `/status-summary`, `/os-audit`, `/project-sync-dry-run`, `/project-sync-apply`, `/notification-setup-wizard`. No automatic execution; approval boundaries unchanged. |
+| Project skills (`.claude/skills/*/SKILL.md`) | User-invoked — 13 skills with YAML frontmatter committed; skills are the canonical protocol layer; commands are compatibility wrappers. Skills: `start`, `handoff`, `precommit`, `closeout`, `package-start`, `switch-to-codex`, `switch-to-claude`, `weekly-sync`, `status-summary`, `os-audit`, `project-sync-dry-run`, `project-sync-apply`, `notification-setup-wizard`. |
 | Project subagents (`.claude/agents/*.md`) | Backlog — readiness placeholder only; no live subagents committed |
-| Project skills (`.claude/skills/`) | Backlog — readiness placeholder only; no live skills committed |
+| Closeout internal sync check | Policy-driven — mandatory after every meaningful closeout; the `closeout` skill runs it; no tool auto-enforces it |
+| Project-control sync (external tools) | Semi-automatic dry-run / approval-gated apply — `/project-sync-dry-run` produces the delta; Coordinator approves; `/project-sync-apply` applies |
+| OS self-audit (`/os-audit`) | User-invoked — run before claiming bootstrap complete; optional `scripts/os-self-audit.mjs` for scripted check |
+| Notification wizard (`/notification-setup-wizard`) | User-level setup — local only; not committed; once installed, harness fires for that contributor |
 | Claude hooks (`.claude/settings.json` hooks block) | Backlog — no hooks committed to the repo; user-level hooks are documented separately in `docs/dev/notification-setup.md` |
 | Codex config (`.codex/config.toml`) | Backlog — Codex config schema not verified to this runtime; `.codex/README.md` is the Codex contract |
 | Worktree automation | Backlog — `.claude/worktrees/` is gitignored; no automation scripts committed |

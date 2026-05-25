@@ -1,3 +1,5 @@
+This command delegates to the **status-summary** skill (`.claude/skills/status-summary/SKILL.md`). Approval boundaries unchanged: no file written without Coordinator confirmation; no external sharing without review.
+
 Generate the KeepMees project status summary in two versions: internal and shareable.
 
 Read:

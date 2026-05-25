@@ -1,3 +1,5 @@
+This command routes through the **project-sync-dry-run** skill (`.claude/skills/project-sync-dry-run/SKILL.md`) for calendar-specific sync checks, and the **calendar-sync-policy** (`docs/project-control/calendar-sync-policy.md`) for rules. No live API sync. Approval boundaries unchanged: no Google Calendar writes, no `.ics` delete/reimport without Coordinator approval.
+
 Review the KeepMees calendar sync state and propose a delta if needed.
 
 Read in order:

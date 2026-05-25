@@ -1,51 +1,52 @@
 # .claude/commands — Short Command Interface
 
-**Status:** ACTIVE (live commands shipped in AI Project OS Usability Patch, 2026-05-24). Format confirmed as plain markdown files in `.claude/commands/`. Each file appears as a slash command matching its filename.
+**Status:** ACTIVE. Commands are thin wrappers that delegate to canonical skills in `.claude/skills/*/SKILL.md`. Format confirmed: plain markdown files in `.claude/commands/` with the filename as the command name.
 
 ---
 
-## Why live now
+## Skills are canonical — commands are compatibility wrappers
 
-The placeholder policy from Package 2.9 ("prefer README + backlog over uncertain live implementation") was appropriate until the format was verified. The format is now confirmed: plain markdown files in `.claude/commands/` with the filename as the command name. No manifest, no frontmatter. The content is the prompt that runs when the command is invoked.
+**Skills** (`.claude/skills/*/SKILL.md`) contain the authoritative protocol. **Commands** (this directory) are the daily invocation interface — each one is a thin prompt that routes Claude to the matching skill.
+
+When a command is invoked, Claude follows the skill protocol. The command file itself only needs to identify the skill, state the approval boundaries, and provide enough context for Claude to start.
 
 ---
 
 ## Live command roster
 
-| Command | File | What it does | Backed by |
+| Command | Canonical skill | What it does | Backed by |
 |---|---|---|---|
-| `/start` | `start.md` | Session startup — read repo state, state package/branch/next action | `docs/dev/session-restart-protocol.md` |
-| `/handoff` | `handoff.md` | Update `AI_HANDOFF.md` and produce transfer packet | `docs/automation/operator-mode/context-continuity-protocol.md` |
-| `/precommit` | `precommit.md` | Walk the pre-commit verification gate | `docs/qa/pre-commit-verification-template.md` |
-| `/closeout` | `closeout.md` | Package boundary closeout — verify, update state, propose commit | `docs/dev/package-boundary-closeout-protocol.md` |
-| `/package-start` | `package-start.md` | Pre-flight for a newly authorized package | `docs/dev/session-restart-protocol.md` |
-| `/switch-to-codex` | `switch-to-codex.md` | Prepare handoff for Codex | `docs/dev/tool-switching-protocol.md` |
-| `/switch-to-claude` | `switch-to-claude.md` | Resume from Codex | `docs/dev/session-restart-protocol.md` |
-| `/weekly-sync` | `weekly-sync.md` | Coordinator weekly sync | `docs/project-control/coordinator-weekly-sync.md` |
-| `/calendar-sync-plan` | `calendar-sync-plan.md` | Calendar delta review (dry run only) | `docs/project-control/calendar-sync-policy.md` |
-| `/status-summary` | `status-summary.md` | Generate internal + shareable project status | `docs/project-control/shareable-status-summary.md` |
+| `/start` | `start` | Session startup — read repo state, state package/branch/next action | `docs/dev/session-restart-protocol.md` |
+| `/handoff` | `handoff` | Update `AI_HANDOFF.md` and produce transfer packet | `docs/automation/operator-mode/context-continuity-protocol.md` |
+| `/precommit` | `precommit` | Walk the pre-commit verification gate | `docs/qa/pre-commit-verification-template.md` |
+| `/closeout` | `closeout` | Package boundary closeout + internal sync check | `docs/dev/package-boundary-closeout-protocol.md` |
+| `/package-start` | `package-start` | Pre-flight for a newly authorized package | `docs/dev/session-restart-protocol.md` |
+| `/switch-to-codex` | `switch-to-codex` | Prepare handoff for Codex | `docs/dev/tool-switching-protocol.md` |
+| `/switch-to-claude` | `switch-to-claude` | Resume from Codex | `docs/dev/session-restart-protocol.md` |
+| `/weekly-sync` | `weekly-sync` | Coordinator weekly sync | `docs/project-control/coordinator-weekly-sync.md` |
+| `/calendar-sync-plan` | `project-sync-dry-run` | Calendar delta review (dry run only) | `docs/project-control/calendar-sync-policy.md` |
+| `/status-summary` | `status-summary` | Generate internal + shareable project status | `docs/project-control/shareable-status-summary.md` |
+| `/os-audit` | `os-audit` | AI Project OS self-audit | `docs/ai-system/os-self-audit-checklist.md` |
+| `/project-sync-dry-run` | `project-sync-dry-run` | Project-control sync dry-run (no writes) | `docs/project-control/project-sync-policy.md` |
+| `/project-sync-apply` | `project-sync-apply` | Apply approved sync delta (approval-gated) | `docs/project-control/external-sync-safety.md` |
+| `/notification-setup-wizard` | `notification-setup-wizard` | Walk notification hook setup (local-only) | `docs/dev/notification-setup.md` |
 
 ---
 
 ## Invariants for all commands
 
 - Commands are user-invoked. The user types the command; Claude Code routes to the prompt content; Claude follows the protocol. No command runs autonomously.
-- Commands route Claude through existing protocols; they never invent new authority.
+- Commands delegate to the matching skill — they never invent new authority.
 - A command's output is verified against actual git/file state, never trusted blindly.
 - Commands never commit or push — those remain manual, requiring explicit user instruction.
 - Commands never start a new package without explicit Coordinator authorization.
 - Scope guards (pagination constants, `BOOK_PAGINATION_VERSION`, `BOOK_PRODUCTION_DEPS`, `BOOK_PARITY`, standalone keepsake flows, Review view) remain off-limits regardless of which command is invoked.
-
----
-
-## Commands vs Skills
-
-Commands (`.claude/commands/*.md`) are the daily short interface — one invocation drives a full workflow. Skills (`.claude/skills/`) are deeper, reusable workflows that can be composed. See `.claude/skills/README.md` for the distinction.
+- External sync commands (`/project-sync-dry-run`, `/project-sync-apply`, `/calendar-sync-plan`) are dry-run/approval-gated. No external writes without Coordinator approval.
 
 ---
 
 ## See also
 
+- `.claude/skills/README.md` — canonical skill definitions (the protocol source of truth)
 - `.claude/agents/README.md` — planned subagent roster (placeholder)
-- `.claude/skills/README.md` — skill roster and commands-vs-skills distinction
 - `docs/dev/auto-management-protocol.md` — the umbrella protocol these commands route Claude through

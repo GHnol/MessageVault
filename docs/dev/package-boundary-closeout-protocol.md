@@ -55,9 +55,11 @@ When any one fires, the agent runs the boundary closeout sequence below.
 
 7. **Propose merge plan.** Branch name, base, merge flag, push order. Do not push without explicit instruction.
 
-8. **Status sync plan.** Identify the docs that need updating in the post-merge status-sync commit (typically `docs/command-center/*`, `docs/ops/artifact-index.md`, `docs/ops/backlog-roadmap.md`, `docs/ops/ai-automation-register.md`, `docs/project-control/coordinator-weekly-sync.md` weekly-log row). Do not perform the sync until the package is merged and the user authorizes it.
+8. **Internal sync check.** Run the closeout sync contract (`docs/dev/closeout-sync-contract.md`). Verify `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`, `docs/project-control/current-sprint.md`, and `docs/project-control/kanban-board.md`. Run `/project-sync-dry-run` if there is suspected drift in calendar or external tool exports. Apply the Post-Commit State Rule: edit only if docs would misdirect the next agent.
 
-9. **Recommend session shape for the next package.** See "Next-package gating" below.
+9. **Status sync plan.** Identify the docs that need updating in the post-merge status-sync commit (typically `docs/command-center/*`, `docs/ops/artifact-index.md`, `docs/ops/backlog-roadmap.md`, `docs/ops/ai-automation-register.md`, `docs/project-control/coordinator-weekly-sync.md` weekly-log row). Do not perform the sync until the package is merged and the user authorizes it.
+
+10. **Recommend session shape for the next package.** See "Next-package gating" below.
 
 ---
 

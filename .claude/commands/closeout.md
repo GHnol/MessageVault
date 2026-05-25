@@ -1,3 +1,5 @@
+This command delegates to the **closeout** skill (`.claude/skills/closeout/SKILL.md`). It invokes the full closeout workflow including the internal sync check. Approval boundaries unchanged: no autonomous commit, push, merge, deployment, or external sync.
+
 Run the KeepMees package boundary closeout sequence.
 
 Read in order:

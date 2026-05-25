@@ -47,29 +47,35 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No package in progress. Package 5A (Message Book Proof Approval State Foundation) COMPLETE — implementation and status-sync both merged. |
-| Branch | `main` (clean) |
-| main HEAD | `926ec37` — merge: sync operating docs to reflect Package 5A completion |
-| Next coordination step | Coordinator decides the next package. No package is currently authorized. |
-| Package 5A | COMPLETE — `src/products/proof-approval-state.js` + `src/tests/proof-approval-state-tests.mjs` merged. Status-sync merged. 1603 Node tests passing. No UI wiring added. |
-| Do not | Start any new package without explicit Coordinator authorization; do not modify `index.html` / `src/**` / `scripts/**`; do not commit/push without explicit instruction. |
+| Resume into | AI Project OS Framework Groundwork Pass — all work complete, awaiting Coordinator commit approval. |
+| Branch | `docs/ai-project-os-framework-groundwork` (off main at `cb920be`) |
+| main HEAD | `cb920be` — merge: add Short Command Interface to AI Project OS |
+| Next coordination step | Coordinator approves commit on `docs/ai-project-os-framework-groundwork`, then decides next product package. |
+| OS audit | BOOTSTRAP COMPLETE — `node scripts/os-self-audit.mjs` → 88 pass, 0 fail |
+| Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
+| Do not | Commit/push without explicit Coordinator approval; start any new product package without explicit authorization; modify `index.html` / `src/**`. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
 
 ## Decision points if Coordinator returns next session
 
-1. **"Authorize the next package."**
-   - Confirm `git log --oneline -5` shows Package 5A merged and status sync merged.
-   - Confirm no unauthorized package is in progress.
-   - Prepare a scoped package prompt for the next package based on Coordinator direction.
+1. **"Approve the OS pass commit."**
+   - Run `/precommit` to walk the verification gate.
+   - Confirm audit still passes: `node scripts/os-self-audit.mjs`
+   - Commit: `docs: complete AI Project OS framework groundwork`
+   - Merge branch to main; push; update CURRENT_STATE.md and AI_HANDOFF.md.
+
+2. **"Authorize the next product package."**
+   - First confirm the OS pass commit is merged and main is clean.
+   - Prepare a scoped package prompt per Coordinator direction.
    - Do not begin implementation until the prompt is reviewed and explicitly approved.
 
-2. **"Run weekly sync."**
+3. **"Run weekly sync."**
    - Follow `docs/project-control/coordinator-weekly-sync.md` process.
    - Add a new row to the weekly log.
 
-3. **"Update OS layer item X."**
+4. **"Update OS layer item X."**
    - Edit only `docs/ai-system/*` or `docs/dev/*` or `docs/qa/*` as appropriate.
    - Log every change in `docs/ai-system/CHANGELOG.md` and `version-history.md`.
    - Do not commit without explicit instruction.

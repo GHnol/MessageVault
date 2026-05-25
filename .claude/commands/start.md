@@ -1,3 +1,5 @@
+This command delegates to the **start** skill (`.claude/skills/start/SKILL.md`). It invokes the session startup workflow. Approval boundaries unchanged: no commit, push, merge, or external sync.
+
 Run the KeepMees session startup sequence.
 
 Read, in this order:

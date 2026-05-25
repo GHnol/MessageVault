@@ -1,3 +1,5 @@
+This command delegates to the **switch-to-codex** skill (`.claude/skills/switch-to-codex/SKILL.md`). Approval boundaries unchanged: no autonomous tool switch; user confirms the switch after the packet is produced.
+
 Prepare a Codex handoff and produce a transfer packet for tool switching.
 
 First: run the handoff sequence — update `AI_HANDOFF.md` with current state (same as `/handoff`).

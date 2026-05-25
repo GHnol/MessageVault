@@ -53,6 +53,14 @@ See `docs/dev/claude-codex-interchangeability.md`. Codex is supported as:
 
 ---
 
+## Event-triggered internal sync rule (added AI Project OS Framework Groundwork Pass)
+
+Every meaningful work-unit closeout must trigger an internal sync check. Codex follows the same rule as Claude Code. After any package complete, merge, branch handoff, model/tool switch, project-control change, milestone/gate change, schedule/date change, task/backlog status change, or major planning change — run an internal sync check against the files in `docs/dev/closeout-sync-contract.md`.
+
+External systems (Google Calendar, ClickUp, TickTick) remain dry-run/apply with Coordinator approval. Codex must never write to external systems.
+
+Full contract: `docs/dev/closeout-sync-contract.md`
+
 ## Codex Package 2.9 protocols
 
 Codex obeys the universal AI Project OS layer as well as the Codex-specific layer:

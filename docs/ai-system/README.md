@@ -48,6 +48,7 @@ The AI Project OS layer is the **portable** layer — the part you would copy in
 | `bootstrap-template.md` | Provisioning pattern for spinning up the AI Project OS in a new repo |
 | `CHANGELOG.md` | OS-level changelog — what changed in the AI Project OS itself, version by version |
 | `version-history.md` | Versioned record of OS upgrade passes (Package 2.7, 2.8, 2.9, ...) and what they delivered |
+| `os-self-audit-checklist.md` | Checklist for verifying AI Project OS bootstrap completeness; companion to `scripts/os-self-audit.mjs` |
 
 ---
 

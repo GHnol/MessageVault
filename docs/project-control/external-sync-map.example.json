@@ -1,0 +1,85 @@
+{
+  "_comment": "EXAMPLE ONLY. This file shows the format of external-sync-map.local.json. It contains no real external IDs. The real map is gitignored (external-sync-map.local.json) and lives only on each contributor's machine.",
+  "_format_version": "1",
+  "_last_updated": "YYYY-MM-DD",
+
+  "google_calendar": {
+    "keepmees-ritual-ceo-review-weekly": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-coordinator-planning-weekly": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-dev-review-weekly": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-product-design-review-weekly": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-project-control-sync-weekly": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-monthly-roadmap-reset": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-monthly-budget-review": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-ritual-monthly-risk-review": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-milestone-phase-gate-review": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    },
+    "keepmees-milestone-launch-readiness-review": {
+      "external_id": "gcal_event_id_here",
+      "calendar_id": "primary",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    }
+  },
+
+  "clickup": {
+    "keepmees-task-proof-approval-state": {
+      "external_id": "clickup_task_id_here",
+      "list_id": "clickup_list_id_here",
+      "last_synced": "YYYY-MM-DD",
+      "status": "done"
+    }
+  },
+
+  "ticktick": {
+    "keepmees-task-weekly-coordinator-review": {
+      "external_id": "ticktick_item_id_here",
+      "last_synced": "YYYY-MM-DD",
+      "status": "active"
+    }
+  }
+}
