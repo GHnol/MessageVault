@@ -1,6 +1,6 @@
 # GitHub Projects Import Runbook
 
-**Status:** ACTIVE (introduced in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
+**Status:** ACTIVE (introduced v1.3; apply scripts made real in v1.4 — AI Project OS v1.4 GitHub Projects Live Provisioning Integration, 2026-05-25)
 **Owner:** Coordinator / Project Control
 **Purpose:** Step-by-step process for setting up a GitHub Project, importing issues, and syncing project fields. All operations follow the dry-run → approval → apply → log workflow.
 **Companion docs:** `github-projects-setup-policy.md`, `github-projects-source-schema.md`, `github-projects-field-map.example.json`, `github-projects-sync-log.md`, `external-sync-safety.md`
@@ -96,22 +96,22 @@ node scripts/github-project-setup-apply.mjs --apply
 ```
 
 This script will:
-1. Check for existing project with the same name
-2. Create the project if not found
-3. Add custom fields via GitHub GraphQL API
-4. Configure statuses
-5. Create default views
-6. Print the project number and ID
-7. Update `external-sync-map.local.json` (never committed)
-
-**Do not run with `--apply` in this pass.** This pass documents the runbook only.
+1. Probe GitHub auth and project scope
+2. Check for existing project (dedup: no duplicate creation)
+3. Create the project if not found (or reuse existing)
+4. Link the project to `GHnol/MessageVault` repository
+5. Read existing project fields (idempotent: skip already-created fields)
+6. Add all 13 missing custom fields via GitHub GraphQL API
+7. Write `external-sync-map.local.json` with project ID and field IDs (never committed)
+8. Append an entry to `github-projects-sync-log.md`
+9. Print remaining manual steps: Status field options + 14 views
 
 ### Template project (optional)
 
-If a template GitHub Project is available in the organization, clone it:
+If a template GitHub Project is available in the organization, use:
 
 ```bash
-gh project copy <template-number> --owner GHnol --title "KeepMees Project Control"
+node scripts/github-project-setup-apply.mjs --apply --from-template --template-project-number <N>
 ```
 
 Review the template structure and adapt it to the approved field set in `github-projects-setup-policy.md`.
@@ -132,33 +132,44 @@ Do not create issues from ad-hoc prompts or unverified sources.
 ### Dry-run issue list
 
 ```bash
-node scripts/github-project-import-issues.mjs
+node scripts/github-project-import-issues.mjs \
+  --input docs/project-control/github-projects-source-records.example.json \
+  --owner GHnol --repo MessageVault --project-number 1
 ```
 
-Default mode prints the planned issues (title, body, labels, milestone, project fields). No issues are created.
+Dry-run output:
+- Parses and validates all source records (schema validation)
+- Checks local sync map for already-synced OS IDs (layer 1 dedup)
+- Searches GitHub for issues with matching OS ID markers (layer 2 dedup)
+- Prints create/skip plan — no external writes
 
 ### Create issues (with --apply and Coordinator approval only)
 
 ```bash
-node scripts/github-project-import-issues.mjs --apply --input <source-file>
+node scripts/github-project-import-issues.mjs --apply \
+  --input docs/project-control/github-projects-source-records.example.json \
+  --owner GHnol --repo MessageVault --project-number 1
 ```
 
 Requirements before running:
 - Coordinator has reviewed and approved the dry-run output
 - `--apply` flag is present
-- `--input <source-file>` points to a valid JSON or YAML source record file
-- `gh auth status` confirms active session
-- GitHub Project exists (Step 1 complete)
+- `--input <source-file>` points to a valid source records JSON file
+- `gh auth status` confirms active session for GHnol
+- `gh` token has `repo` and `read:project` / `write:project` scopes
+- GitHub Project exists and `external-sync-map.local.json` has project_id (Step 1 complete)
 
-This script will:
-1. Read source records from `--input` file
-2. Create one GitHub Issue per source record
-3. Add each issue to the GitHub Project
-4. Set project field values from source record
-5. Write issue number, issue URL, and project_item_id to `external-sync-map.local.json`
-6. Log the result in `github-projects-sync-log.md`
+This script will (per record, in order):
+1. Validate all source records and check for duplicates
+2. Create one GitHub Issue (`gh issue create`) per new source record
+3. Embed OS ID marker in issue body for future dedup
+4. Add the issue to the GitHub Project (GraphQL `addProjectV2ItemById`)
+5. Set all 13 custom field values via GraphQL mutations
+6. Set the built-in Status field if the option exists
+7. Write issue_number, issue_node_id, and project_item_id to `external-sync-map.local.json` after each issue (incremental — safe to re-run on partial failure)
+8. Append a summary entry to `github-projects-sync-log.md`
 
-**Do not run with `--apply` in this pass.** This pass documents the runbook only.
+Re-running with `--apply` is safe: the sync map and GitHub OS ID marker prevent duplicate issues.
 
 ### Add issues to project (if created separately)
 

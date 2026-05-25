@@ -47,14 +47,14 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Idle — AI Project OS v1.3 COMPLETE and merged. No active package. Coordinator decides next action. |
-| Branch | `main` |
+| Resume into | AI Project OS v1.4 IN PROGRESS — branch `docs/github-projects-live-provisioning`. Scripts implemented and verified. Run OS audit, then request Coordinator approval to commit. |
+| Branch | `docs/github-projects-live-provisioning` |
 | main HEAD | `3dcf917` — merge: make GitHub Projects the default external board |
-| Next coordination step | Coordinator authorizes next product package or OS action. |
-| OS audit | BOOTSTRAP COMPLETE — `node scripts/os-self-audit.mjs` → 108 pass, 0 warn, 0 fail (post-v1.3) |
+| Next action | Run `node scripts/os-self-audit.mjs` → verify 108+ pass, 0 fail → pre-commit gate → Coordinator approves commit. |
+| OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
 | Package 5B | Not started. |
-| Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction; run any --apply script without explicit Coordinator approval. |
+| Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction; run any --apply script without explicit Coordinator approval; create real GitHub Projects or Issues. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

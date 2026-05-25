@@ -1,45 +1,70 @@
 #!/usr/bin/env node
 /**
  * github-project-setup-dry-run.mjs
+ * AI Project OS v1.4 — Read-only pre-flight for GitHub Project setup.
  *
- * Reads repo docs and prints the planned GitHub Project structure, fields,
- * statuses, and views. Performs NO external writes of any kind.
+ * Reads repo docs, probes GitHub auth and project scope, checks for an existing
+ * project, and prints the full planned setup operation list.
  *
- * No npm dependencies. No API calls. No credentials. No external writes.
- * Exit 0 = dry-run complete. Exit 1 = required docs missing.
+ * No external writes. No mutations. No token exposure.
+ * Exit 0 = dry-run complete. Exit 1 = critical preflight failure.
+ *
+ * Usage:
+ *   node scripts/github-project-setup-dry-run.mjs [--owner GHnol] [--project-title "..."] [--project-number N]
  */
 
 import { existsSync, readFileSync } from 'fs';
 import { resolve, join } from 'path';
 import { fileURLToPath } from 'url';
+import { execFileSync } from 'child_process';
+import {
+  probeAuth,
+  probeProjectScope,
+  checkGitignored,
+  findProject,
+  REQUIRED_FIELDS,
+  REQUIRED_STATUSES,
+  REQUIRED_VIEWS,
+} from './lib/github-projects-client.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 
-function path(rel) {
-  return join(ROOT, rel);
-}
+const args = process.argv.slice(2);
+function flag(name) { return args.includes(name); }
+function opt(name) { const i = args.indexOf(name); return i !== -1 && i + 1 < args.length ? args[i + 1] : null; }
 
-function exists(rel) {
-  return existsSync(path(rel));
-}
+const OWNER = opt('--owner') || 'GHnol';
+const REPO  = opt('--repo') || 'MessageVault';
+const PROJECT_TITLE = opt('--project-title') || 'KeepMees Project Control';
+const PROJECT_NUMBER_RAW = opt('--project-number');
+const SYNC_MAP_PATH = opt('--sync-map') || 'docs/project-control/external-sync-map.local.json';
 
-function sep() {
-  console.log('─'.repeat(60));
-}
-
-// ── Header ───────────────────────────────────────────────────────────────────
+function path(rel) { return join(ROOT, rel); }
+function exists(rel) { return existsSync(path(rel)); }
+function sep() { console.log('─'.repeat(60)); }
+function ok(msg)   { console.log(`  [PASS] ${msg}`); }
+function fail(msg) { console.log(`  [FAIL] ${msg}`); }
+function warn(msg) { console.log(`  [WARN] ${msg}`); }
+function info(msg) { console.log(`  [INFO] ${msg}`); }
 
 const now = new Date().toISOString().slice(0, 10);
+let exitCode = 0;
+
 console.log('');
 sep();
 console.log('GITHUB PROJECT SETUP — DRY RUN');
 console.log(`Date:    ${now}`);
-console.log('Mode:    dry-run (no external writes)');
-console.log('Script:  scripts/github-project-setup-dry-run.mjs');
+console.log(`Owner:   ${OWNER}   Repo: ${REPO}`);
+console.log(`Project: "${PROJECT_TITLE}"`);
+console.log('Mode:    read-only (no external writes)');
 sep();
 console.log('');
 
-// ── Required docs check ───────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
+// 1. Required docs check
+// ---------------------------------------------------------------------------
+console.log('1. REQUIRED DOCS');
+console.log('');
 
 const requiredDocs = [
   'docs/project-control/github-projects-setup-policy.md',
@@ -47,145 +72,215 @@ const requiredDocs = [
   'docs/project-control/github-projects-import-runbook.md',
   'docs/project-control/github-projects-field-map.example.json',
   'docs/project-control/github-projects-sync-log.md',
+  'docs/project-control/external-sync-safety.md',
 ];
 
-console.log('REQUIRED DOCS CHECK');
-let missing = 0;
+let missingDocs = 0;
 for (const doc of requiredDocs) {
-  if (exists(doc)) {
-    console.log(`  [PASS] ${doc}`);
-  } else {
-    console.log(`  [FAIL] MISSING: ${doc}`);
-    missing++;
-  }
+  if (exists(doc)) { ok(doc); }
+  else { fail(`MISSING: ${doc}`); missingDocs++; }
 }
 
-if (missing > 0) {
+if (missingDocs > 0) {
   console.log('');
-  console.log(`ERROR: ${missing} required doc(s) missing. Run this script after the policy docs are in place.`);
-  process.exit(1);
+  console.log(`  ERROR: ${missingDocs} required doc(s) missing. Resolve before apply.`);
+  exitCode = 1;
+}
+console.log('');
+
+// ---------------------------------------------------------------------------
+// 2. gh CLI version check
+// ---------------------------------------------------------------------------
+console.log('2. GH CLI VERSION');
+console.log('');
+
+let ghVersion = null;
+try {
+  ghVersion = execFileSync('gh', ['--version'], { encoding: 'utf8', timeout: 10000 }).split('\n')[0].trim();
+  ok(`gh version: ${ghVersion}`);
+
+  // Parse semver to check for project subcommand support (added in v2.28.0)
+  const match = ghVersion.match(/(\d+)\.(\d+)\.(\d+)/);
+  if (match) {
+    const [, major, minor] = match.map(Number);
+    const hasProjectCmd = major > 2 || (major === 2 && minor >= 28);
+    if (hasProjectCmd) {
+      ok('gh project subcommand available (v2.28.0+)');
+    } else {
+      warn(`gh version ${major}.${minor}.x < 2.28.0 — "gh project" subcommand unavailable`);
+      info('  Apply script uses GraphQL fallback path automatically. No action needed.');
+    }
+  }
+} catch (e) {
+  fail(`gh not found or not executable: ${e.message}`);
+  info('  Install gh CLI: https://cli.github.com/');
+  exitCode = 1;
+}
+console.log('');
+
+// ---------------------------------------------------------------------------
+// 3. GitHub auth probe
+// ---------------------------------------------------------------------------
+console.log('3. GITHUB AUTH');
+console.log('');
+
+let authLogin = null;
+try {
+  const authResult = probeAuth();
+  authLogin = authResult.login;
+  ok(`Authenticated as: ${authLogin}`);
+} catch (e) {
+  fail(`Auth probe failed: ${e.message}`);
+  info('  Run: gh auth login');
+  exitCode = 1;
+}
+console.log('');
+
+// ---------------------------------------------------------------------------
+// 4. GitHub Projects scope probe
+// ---------------------------------------------------------------------------
+console.log('4. GITHUB PROJECTS SCOPE');
+console.log('');
+
+if (authLogin) {
+  try {
+    probeProjectScope();
+    ok('project:read scope available');
+  } catch (e) {
+    warn(`Project scope probe inconclusive: ${e.message}`);
+    info('  If project creation fails, run: gh auth refresh -s project');
+  }
+} else {
+  info('  Skipped (no auth)');
+}
+console.log('');
+
+// ---------------------------------------------------------------------------
+// 5. Sync map gitignore check
+// ---------------------------------------------------------------------------
+console.log('5. SYNC MAP GITIGNORE');
+console.log('');
+
+try {
+  const ignoreR = checkGitignored(SYNC_MAP_PATH, ROOT);
+  if (ignoreR.ignored) { ok(`${SYNC_MAP_PATH} is gitignored`); }
+  else { fail(`${SYNC_MAP_PATH} is NOT gitignored — add it to .gitignore before apply`); exitCode = 1; }
+} catch (e) {
+  warn(`Could not verify gitignore status: ${e.message}`);
+}
+console.log('');
+
+// ---------------------------------------------------------------------------
+// 6. Existing project detection (read-only)
+// ---------------------------------------------------------------------------
+console.log('6. EXISTING PROJECT DETECTION');
+console.log('');
+
+let existingProject = null;
+if (authLogin) {
+  try {
+    const projectNumber = PROJECT_NUMBER_RAW ? parseInt(PROJECT_NUMBER_RAW, 10) : null;
+    const findR = findProject(OWNER, PROJECT_TITLE, projectNumber);
+    if (findR.ok && findR.found) {
+      existingProject = findR.project;
+      ok(`Existing project found: "${existingProject.title}" #${existingProject.number} (id: ${existingProject.id})`);
+      info('  Apply will reuse this project (no duplicate created).');
+    } else if (!findR.ok) {
+      warn(`Project query failed: ${findR.error}`);
+      info('  Apply will attempt to create project. If it already exists, duplicate prevention will detect it.');
+    } else {
+      info(`No existing project found matching "${PROJECT_TITLE}" — apply will create it.`);
+    }
+  } catch (e) {
+    warn(`Project detection failed: ${e.message}`);
+    info('  Apply will attempt to create project. If it already exists, duplicate prevention will detect it.');
+  }
+} else {
+  info('  Skipped (no auth)');
+}
+console.log('');
+
+// ---------------------------------------------------------------------------
+// 7. Planned operations
+// ---------------------------------------------------------------------------
+console.log('7. PLANNED OPERATIONS');
+console.log('');
+
+let opNum = 1;
+const planOp = msg => console.log(`  ${opNum++}. ${msg}`);
+
+if (!existingProject) {
+  planOp(`Create GitHub Project: "${PROJECT_TITLE}" (owner: ${OWNER})`);
+  planOp(`Link project to repository: ${OWNER}/${REPO}`);
+} else {
+  planOp(`Reuse existing project: "${existingProject.title}" #${existingProject.number}`);
 }
 
+for (const field of REQUIRED_FIELDS) {
+  planOp(`Create field: "${field.name}" [${field.dataType}]`);
+}
+
+planOp('Write sync map with project ID and all field IDs');
+planOp('Append sync log entry');
 console.log('');
 
-// ── Planned project structure ─────────────────────────────────────────────────
-
-console.log('PLANNED GITHUB PROJECT STRUCTURE');
-sep();
+// ---------------------------------------------------------------------------
+// 8. Planned fields
+// ---------------------------------------------------------------------------
+console.log('8. PLANNED CUSTOM FIELDS (13)');
 console.log('');
-console.log('Project:');
-console.log('  Name:    KeepMees Project Control');
-console.log('  Owner:   GHnol');
-console.log('  Repo:    GHnol/MessageVault (repo-connected)');
+for (const f of REQUIRED_FIELDS) {
+  const optNote = f.options ? ` — options: ${f.options.slice(0, 3).join(', ')}${f.options.length > 3 ? '...' : ''}` : '';
+  console.log(`  • ${f.name.padEnd(28)} [${f.dataType}]${optNote}`);
+}
 console.log('');
 
-console.log('Statuses (9):');
-const statuses = [
-  'Not Started',
-  'In Progress',
-  'In Review',
-  'Blocked',
-  'Waiting',
-  'Approved',
-  'Done',
-  'Deferred',
-  'Cancelled',
-];
-for (const s of statuses) {
+// ---------------------------------------------------------------------------
+// 9. Required statuses
+// ---------------------------------------------------------------------------
+console.log('9. REQUIRED STATUS OPTIONS (9) — manual UI step');
+console.log('');
+console.log('  The built-in Status field is created automatically by GitHub Projects.');
+console.log('  Default options (Todo, In Progress, Done) must be replaced manually.');
+console.log('');
+for (const s of REQUIRED_STATUSES) {
   console.log(`  • ${s}`);
 }
 console.log('');
+console.log('  After apply: GitHub Projects UI → Project Settings → Fields → Status → Edit options');
+console.log('');
 
-console.log('Views (14):');
-const views = [
-  'Board',
-  'Table',
-  'Current Sprint',
-  'Backlog',
-  'Review / QA',
-  'Waiting / Blocked',
-  'Done',
-  'Risks / Decisions',
-  'Calendar Relevant',
-  'TickTick Relevant',
-  'By Package',
-  'By Phase',
-  'By Lane',
-  'Decision Needed',
-];
-for (const v of views) {
-  console.log(`  • ${v}`);
+// ---------------------------------------------------------------------------
+// 10. Required views
+// ---------------------------------------------------------------------------
+console.log('10. REQUIRED VIEWS (14) — manual UI step');
+console.log('');
+console.log('  GitHub GraphQL API does not support view creation. Create manually:');
+console.log('');
+let vNum = 1;
+for (const v of REQUIRED_VIEWS) {
+  console.log(`  ${vNum++}. ${v}`);
 }
 console.log('');
 
-console.log('Custom Fields (13):');
-const fields = [
-  { name: 'OS ID', type: 'text' },
-  { name: 'Package', type: 'text' },
-  { name: 'Phase', type: 'text' },
-  { name: 'Lane', type: 'single_select' },
-  { name: 'Source File', type: 'text' },
-  { name: 'Last Repo Sync', type: 'date' },
-  { name: 'External Sync Status', type: 'single_select' },
-  { name: 'Risk Level', type: 'single_select' },
-  { name: 'Decision Needed', type: 'checkbox' },
-  { name: 'Calendar Relevant', type: 'checkbox' },
-  { name: 'TickTick Relevant', type: 'checkbox' },
-  { name: 'Owner Role', type: 'single_select' },
-  { name: 'Success Criteria', type: 'text' },
-];
-for (const f of fields) {
-  console.log(`  • ${f.name.padEnd(25)} [${f.type}]`);
-}
-console.log('');
-
-// ── Field map example check ───────────────────────────────────────────────────
-
-console.log('FIELD MAP EXAMPLE');
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
 sep();
-const examplePath = 'docs/project-control/github-projects-field-map.example.json';
-if (exists(examplePath)) {
-  try {
-    const raw = readFileSync(path(examplePath), 'utf8');
-    const map = JSON.parse(raw);
-    console.log(`  owner:         ${map.owner || '(not set)'}`);
-    console.log(`  repo:          ${map.repo || '(not set)'}`);
-    console.log(`  project_title: ${map.project_title || '(not set)'}`);
-    console.log(`  project_number: ${map.project_number} (placeholder)`);
-    console.log(`  fields:        ${Object.keys(map.fields || {}).length} field(s) defined`);
-    console.log(`  views:         ${(map.views || []).length} view(s) defined`);
-    console.log(`  statuses:      ${(map.statuses || []).length} status(es) defined`);
-    console.log('  [PASS] Example field map is valid JSON');
-  } catch (e) {
-    console.log(`  [FAIL] Could not parse example field map: ${e.message}`);
-  }
+if (exitCode === 0) {
+  console.log('DRY-RUN COMPLETE — ready for apply');
 } else {
-  console.log(`  [FAIL] Example field map missing: ${examplePath}`);
+  console.log('DRY-RUN COMPLETE — issues found, see [FAIL] items above');
 }
-console.log('');
-
-// ── gh CLI check ──────────────────────────────────────────────────────────────
-
-console.log('GH CLI STATUS');
-sep();
-console.log('  This script does not check gh CLI availability.');
-console.log('  To verify before apply, run:');
-console.log('    gh --version');
-console.log('    gh auth status');
-console.log('  Apply scripts will check these automatically before proceeding.');
-console.log('');
-
-// ── Safety footer ─────────────────────────────────────────────────────────────
-
-sep();
-console.log('DRY-RUN COMPLETE');
 console.log('');
 console.log('  No external writes performed.');
-console.log('  No GitHub Project was created.');
-console.log('  No GitHub Issues were created.');
+console.log('  No GitHub Project was created or modified.');
 console.log('  No credentials were read or logged.');
 console.log('');
-console.log('  To apply: get Coordinator approval, then run:');
-console.log('    node scripts/github-project-setup-apply.mjs --apply');
-console.log('');
+if (exitCode === 0) {
+  console.log('  To apply (Coordinator approval required):');
+  console.log(`    node scripts/github-project-setup-apply.mjs --apply --owner ${OWNER} --repo ${REPO}`);
+}
 sep();
+
+process.exit(exitCode);

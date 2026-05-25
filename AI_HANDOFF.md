@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `idle` — AI Project OS v1.3 External Board Provider Update is COMPLETE and merged to main. No active branch. No active product package. Coordinator decides next action.
+**Status:** `active` — AI Project OS v1.4 GitHub Projects Live Provisioning Integration is IN PROGRESS on branch `docs/github-projects-live-provisioning`. Scripts implemented and verified. Doc/state sync in progress. No commit yet.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
 
@@ -18,8 +18,8 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — v1.3 is COMPLETE and merged |
-| **Active branch** | None — on `main` |
+| **Active pass** | `AI Project OS v1.4 — GitHub Projects Live Provisioning Integration` |
+| **Active branch** | `docs/github-projects-live-provisioning` |
 | **main HEAD** | `3dcf917` — merge: make GitHub Projects the default external board |
 | **Last completed pass** | `AI Project OS v1.3 — External Board Provider Update` (merged `3dcf917`) |
 | **Active package** | None — Coordinator decides next product package |
@@ -30,40 +30,31 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (active pass)
 
-AI Project OS v1.3 External Board Provider Update. Makes GitHub Projects the default external board provider for KeepMees and future AI Project OS repos. Demotes ClickUp to optional adapter. Adds setup policy, source schema, import runbook, example field map, sync log, 5 dry-run/apply scripts, and a new github-project-setup skill/command. Updates project-sync-policy, external-platform-mapping-guide, external-sync-safety, CHANGELOG, version-history, bootstrap-template. No app code; no live GitHub API writes; no Package 5B work.
+AI Project OS v1.4 — GitHub Projects Live Provisioning Integration. Make the GitHub Projects apply scripts (`github-project-setup-apply.mjs` and `github-project-import-issues.mjs`) real and apply-capable. Add client library (`scripts/lib/github-projects-client.mjs`). Implement three-layer duplicate detection. Dry-run-first/explicit-approval/no-live-apply-during-verification/no-token-exposure. No app code; no Package 5B work.
 
 ---
 
-## Delivered scope (v1.3 pass)
+## Delivered scope (v1.4 pass — in progress)
 
-### New files — docs
-- `docs/project-control/github-projects-setup-policy.md` — CREATED
-- `docs/project-control/github-projects-source-schema.md` — CREATED
-- `docs/project-control/github-projects-import-runbook.md` — CREATED
-- `docs/project-control/github-projects-field-map.example.json` — CREATED
-- `docs/project-control/github-projects-sync-log.md` — CREATED
+### New files
+- `scripts/lib/github-projects-client.mjs` — CREATED (full client library)
+- `docs/project-control/github-projects-source-records.example.json` — CREATED (3 example source records)
 
-### New files — scripts
-- `scripts/github-project-setup-dry-run.mjs` — CREATED (safe, read-only)
-- `scripts/github-project-setup-apply.mjs` — CREATED (skeleton, not yet live)
-- `scripts/github-project-import-issues.mjs` — CREATED (dry-run default)
-- `scripts/github-project-sync-status.mjs` — CREATED (local only)
-- `scripts/github-project-field-map.mjs` — CREATED (validator, no external calls)
+### Fully rewritten (skeleton → real apply-capable)
+- `scripts/github-project-setup-apply.mjs` — REWRITTEN (real apply; plan mode with probes)
+- `scripts/github-project-import-issues.mjs` — REWRITTEN (real apply; 3-layer dedup; incremental sync map)
 
-### New files — skill/command
-- `.claude/skills/github-project-setup/SKILL.md` — CREATED
-- `.claude/commands/github-project-setup.md` — CREATED
+### Enhanced
+- `scripts/github-project-setup-dry-run.mjs` — ENHANCED (gh version, auth probe, project discovery, planned ops list)
+- `scripts/github-project-sync-status.mjs` — ENHANCED (`--live` flag for read-only API queries)
+- `scripts/github-project-field-map.mjs` — ENHANCED (`--local-map` flag for local sync map validation)
 
-### Updated files
-- `docs/project-control/project-sync-policy.md` — GitHub Projects as default; ClickUp optional; sync map unified
-- `docs/project-control/external-platform-mapping-guide.md` — reframed around GitHub Projects first; ClickUp labeled optional adapter
-- `docs/project-control/external-sync-safety.md` — GitHub token/gh auth safety added
-- `.claude/skills/README.md` — new skill added to roster
-- `.claude/commands/README.md` — new command added to roster
-- `docs/ai-system/CHANGELOG.md` — v1.3 entry added
-- `docs/ai-system/version-history.md` — v1.3 entry added
-- `docs/ai-system/bootstrap-template.md` — Step 6 updated to prefer GitHub Projects
-- `AI_HANDOFF.md` — this file
+### Updated docs
+- `docs/ai-system/CHANGELOG.md` — v1.4 entry added
+- `docs/ai-system/version-history.md` — v1.4 row added
+- `docs/project-control/github-projects-import-runbook.md` — updated for real apply scripts
+- `.claude/skills/github-project-setup/SKILL.md` — removed skeleton hard stop; updated dry-run section
+- `AI_HANDOFF.md` — this file (updated to v1.4 active)
 - `CURRENT_STATE.md` — updated
 - `NEXT_SESSION_PROMPT.md` — updated
 
@@ -73,50 +64,58 @@ AI Project OS v1.3 External Board Provider Update. Makes GitHub Projects the def
 
 - `index.html` — not touched
 - `src/**` — not touched
-- `docs/project-control/clickup-import.csv` — not modified
-- `docs/project-control/clickup-setup-policy.md` — not modified; preserved as optional adapter
-- No live GitHub API integration; no GitHub Project created; no issues imported
-- No external writes of any kind; no secrets; no tokens committed
+- No live GitHub API apply during implementation verification
+- No real GitHub Project created; no real GitHub Issues imported
+- No `external-sync-map.local.json` written during verification
+- No secrets, tokens, or credentials committed
 - No Package 5B planning or implementation
 
 ---
 
-## Work completed (v1.3 pass)
+## Work completed (v1.4 pass)
 
-- [x] Branch created: `docs/github-projects-default-board-provider`
-- [x] 5 new docs created (`github-projects-*.md`)
-- [x] 1 new example JSON created (`github-projects-field-map.example.json`)
-- [x] 5 new scripts created (dry-run/apply scaffolding)
-- [x] 1 new skill created (`.claude/skills/github-project-setup/SKILL.md`)
-- [x] 1 new command created (`.claude/commands/github-project-setup.md`)
-- [x] 3 existing project-control docs updated (sync policy, mapping guide, sync safety)
-- [x] 2 existing skill/command READMEs updated (roster entries added)
-- [x] 3 AI-system docs updated (CHANGELOG, version-history, bootstrap-template)
+- [x] Branch created: `docs/github-projects-live-provisioning`
+- [x] `scripts/lib/github-projects-client.mjs` — written and verified (`node --check`)
+- [x] `scripts/github-project-setup-apply.mjs` — rewritten (real apply); verified (`node --check`)
+- [x] `scripts/github-project-import-issues.mjs` — rewritten (real apply); verified (`node --check`)
+- [x] `scripts/github-project-setup-dry-run.mjs` — enhanced; verified (`node --check`, dry-run executed)
+- [x] `scripts/github-project-sync-status.mjs` — enhanced; verified (`node --check`, dry-run executed)
+- [x] `scripts/github-project-field-map.mjs` — enhanced; verified (`node --check`, ran: 0 fail, 0 warn)
+- [x] `docs/project-control/github-projects-source-records.example.json` — created
+- [x] `docs/ai-system/CHANGELOG.md` — v1.4 entry added
+- [x] `docs/ai-system/version-history.md` — v1.4 row added
+- [x] `docs/project-control/github-projects-import-runbook.md` — updated
+- [x] `.claude/skills/github-project-setup/SKILL.md` — updated
 - [x] State files updated (AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md)
-- [x] Script syntax checked (node --check)
-- [x] Dry-run scripts executed and verified
-- [x] Coordinator commit approval — received
-- [x] Commit: `5707189` on branch `docs/github-projects-default-board-provider`
-- [x] Branch pushed to origin
-- [x] Merged to main: `3dcf917`
-- [x] State sync committed on `docs/sync-after-github-projects-default-board`
+
+- [x] OS self-audit: **118 pass, 0 warn, 0 fail** (post-v1.4)
+- [x] `docs/ai-system/os-self-audit-checklist.md` — Section 6c added (10 new v1.4 checks)
+- [x] `scripts/os-self-audit.mjs` — Section 6c checks added (118 total, up from 108)
+
+## Work remaining (v1.4 pass)
+
+- [ ] Pre-commit verification gate (Coordinator-driven)
+- [ ] Coordinator approves commit
+- [ ] Commit on branch
+- [ ] Push branch
+- [ ] Merge to main
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    docs/sync-after-github-projects-default-board (sync branch)
+Branch (now):    docs/github-projects-live-provisioning
 main HEAD:       3dcf917 — merge: make GitHub Projects the default external board
-Working tree:    clean (state files updated, sync commit pending)
-Pushed:          main not yet pushed (sync commit pending)
+Working tree:    modified (v1.4 implementation — not yet committed)
+Pushed:          branch not yet pushed
 ```
 
 ---
 
 ## Next exact action
 
-Coordinator decides next product package or OS action. No active work. main is clean and merged. OS audit: 108 pass, 0 fail.
+Pre-commit verification gate → request Coordinator commit approval. OS audit: 118 pass, 0 fail. All scripts verified. Implementation complete.
 
 ---
 

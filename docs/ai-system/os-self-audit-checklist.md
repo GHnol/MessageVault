@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -133,6 +133,25 @@ The audit does **not** require:
 
 ---
 
+## 6c. GitHub Projects live provisioning layer (AI Project OS v1.4)
+
+Required when the repo has been updated to AI Project OS v1.4 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `scripts/lib/github-projects-client.mjs` exists | Required | `Glob scripts/lib/github-projects-client.mjs` |
+| `docs/project-control/github-projects-source-records.example.json` exists | Required | `Glob docs/project-control/github-projects-source-records.example.json` |
+| `github-projects-client.mjs` exports `probeAuth` | Required | `Grep "export function probeAuth" scripts/lib/github-projects-client.mjs` |
+| `github-projects-client.mjs` exports `parseSourceRecords` | Required | `Grep "export function parseSourceRecords" scripts/lib/github-projects-client.mjs` |
+| `github-projects-client.mjs` uses `requireApply` guard | Required | `Grep "requireApply" scripts/lib/github-projects-client.mjs` |
+| `github-project-setup-apply.mjs` imports from client library | Required | `Grep "./lib/github-projects-client.mjs" scripts/github-project-setup-apply.mjs` |
+| `github-project-import-issues.mjs` imports from client library | Required | `Grep "./lib/github-projects-client.mjs" scripts/github-project-import-issues.mjs` |
+| `github-project-sync-status.mjs` supports `--live` flag | Required | `Grep "\-\-live" scripts/github-project-sync-status.mjs` |
+| `source-records.example.json` has `os_id` field | Required | `Grep "os_id" docs/project-control/github-projects-source-records.example.json` |
+| `source-records.example.json` has KMVT- IDs | Required | `Grep "KMVT-" docs/project-control/github-projects-source-records.example.json` |
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -181,7 +200,7 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 
 | Script | Classification | What it checks |
 |---|---|---|
-| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b above (file existence, gitignore, Grep-based checks, GitHub Projects layer) |
+| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c above (file existence, gitignore, Grep-based checks, GitHub Projects layer) |
 | `scripts/project-control-sync-validate.mjs` | Recommended | Section 6 — project-control doc consistency |
 | `scripts/github-project-setup-dry-run.mjs` | Recommended | GitHub Projects planned structure; validates example field map |
 | `scripts/github-project-field-map.mjs` | Recommended | GitHub Projects field map placeholder safety and field coverage |

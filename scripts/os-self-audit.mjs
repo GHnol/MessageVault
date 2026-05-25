@@ -176,6 +176,22 @@ checkGrep('external-sync-map.example.json has github_projects section', 'docs/pr
 // Verify project-sync-policy.md names GitHub Projects as default
 checkGrep('project-sync-policy.md names GitHub Projects as default', 'docs/project-control/project-sync-policy.md', 'GitHub Projects is the default');
 
+// --- Section 6c: GitHub Projects Live Provisioning layer (AI Project OS v1.4) ---
+checkFile('scripts/lib/github-projects-client.mjs (v1.4 client library)', 'scripts/lib/github-projects-client.mjs');
+checkFile('docs/project-control/github-projects-source-records.example.json (v1.4 source records example)', 'docs/project-control/github-projects-source-records.example.json');
+// Verify client library exports required symbols
+checkGrep('github-projects-client.mjs exports probeAuth', 'scripts/lib/github-projects-client.mjs', 'export function probeAuth');
+checkGrep('github-projects-client.mjs exports parseSourceRecords', 'scripts/lib/github-projects-client.mjs', 'export function parseSourceRecords');
+checkGrep('github-projects-client.mjs uses requireApply guard', 'scripts/lib/github-projects-client.mjs', 'requireApply');
+// Verify apply scripts import from client library
+checkGrep('github-project-setup-apply.mjs imports from client library', 'scripts/github-project-setup-apply.mjs', './lib/github-projects-client.mjs');
+checkGrep('github-project-import-issues.mjs imports from client library', 'scripts/github-project-import-issues.mjs', './lib/github-projects-client.mjs');
+// Verify sync-status has --live flag
+checkGrep('github-project-sync-status.mjs supports --live flag', 'scripts/github-project-sync-status.mjs', '--live');
+// Verify source records example has required fields
+checkGrep('source-records.example.json has os_id field', 'docs/project-control/github-projects-source-records.example.json', 'os_id');
+checkGrep('source-records.example.json has OS ID marker comment pattern', 'docs/project-control/github-projects-source-records.example.json', 'KMVT-');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

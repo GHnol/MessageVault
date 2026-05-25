@@ -9,6 +9,53 @@ Newest entries first.
 
 ---
 
+## 2026-05-25 — AI Project OS v1.4: GitHub Projects Live Provisioning Integration
+
+**Status:** IN PROGRESS — branch `docs/github-projects-live-provisioning`
+**Scope:** Make GitHub Projects apply scripts real and apply-capable. No app code; no live apply during implementation; no Package 5B work. Implements client library, three-layer duplicate detection, sync map writing, incremental apply, and all script dry-runs verified against live GitHub auth.
+
+### Added
+
+- `scripts/lib/github-projects-client.mjs` — core helper module for all GitHub ProjectV2 GraphQL and REST operations; uses `gh api graphql --input -` (stdin JSON); `execFileSync` with args array (no shell injection); all mutations require `{ apply: true }`; exports: `gql`, `getGhVersion`, `probeAuth`, `probeProjectScope`, `checkGitignored`, `readSyncMap`, `writeSyncMap`, `mergeSyncMap`, `appendSyncLog`, `resolveOwnerId`, `getRepositoryId`, `findProject`, `getProjectFields`, `getProjectItemIssueIds`, `searchIssueByOsId`, `getIssueNodeId`, `createProject`, `copyProject`, `linkProjectToRepo`, `createTextField`, `createDateField`, `createSingleSelectField`, `addProjectItem`, `setFieldText`, `setFieldSingleSelect`, `setFieldDate`, `createGhIssue`, `parseSourceRecords`, `REQUIRED_FIELDS`, `REQUIRED_STATUSES`, `REQUIRED_VIEWS`, `VALID_STATUSES`, `VALID_OWNER_ROLES`, `VALID_RISK_LEVELS`
+- `docs/project-control/github-projects-source-records.example.json` — 3 example source records (KMVT-OS-001, KMVT-PKG-5A, KMVT-PKG-5B) for dry-run testing; shows full schema with all fields
+
+### Rewritten (full implementation replacing skeleton)
+
+- `scripts/github-project-setup-apply.mjs` — fully apply-capable; plan mode probes auth/scope/existing-project, prints numbered operation list; apply mode: creates/reuses project, links repo, detects existing fields, creates 13 custom fields, writes sync map, appends sync log; all mutations guarded by `requireApply`
+- `scripts/github-project-import-issues.mjs` — fully apply-capable; dry-run: parses/validates source records, 3-layer dedup (local sync map → external OS ID search → title warning), prints create/skip plan; apply: `createGhIssue`, `addProjectItem`, `setField*` per record, incremental sync map write (safe on partial failure), sync log append
+
+### Enhanced
+
+- `scripts/github-project-setup-dry-run.mjs` — now probes gh CLI version, GitHub auth (GraphQL `viewer { login }`), project scope, gitignore, and existing project; prints full numbered operation list with field option counts; no external writes
+- `scripts/github-project-sync-status.mjs` — added `--live` flag for read-only GitHub API queries (finds project, reads fields, cross-references item count vs sync map); local mode unchanged
+- `scripts/github-project-field-map.mjs` — added `--local-map` flag to also validate a local sync map if present; validates structure, token safety, field/option counts
+
+### Updated
+
+- `.claude/skills/github-project-setup/SKILL.md` — removed skeleton-era "never execute apply scripts" hard stop; updated dry-run section to list all new probes; added `--live` and `--local-map` documentation
+- `docs/project-control/github-projects-import-runbook.md` — removed "do not apply in this pass" notices; updated Steps 1 and 2 with real apply-script behavior (dedup, incremental sync map, rollback safety)
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- No live GitHub API apply during implementation verification
+- No GitHub Project created during this pass
+- No GitHub Issues imported during this pass
+- No Package 5B planning or implementation
+- No secrets or credentials committed
+
+### Key design decisions
+
+- `probeAuth()` uses GraphQL `{ viewer { login } }` — REST `/user` endpoint returns 404 with this token
+- `gh api graphql --input -` (stdin JSON) for all ProjectV2 mutations — avoids shell injection and handles variable types correctly
+- `external-sync-map.local.json` written incrementally after each issue (safe re-run on partial failure)
+- OS ID body marker `<!-- ai-os-id: <os_id> -->` embedded in issue body for external dedup
+- Status field options cannot be created via GraphQL API — must be configured manually in GitHub Projects UI
+- View creation not available via GraphQL API — must be created manually in GitHub Projects UI
+- `probeProjectScope()` uses `viewer { projectsV2(first: 1) { totalCount } }` — if token lacks `read:project`, the probe fails with a warning (not abort) in dry-run mode
+
+---
+
 ## 2026-05-25 — AI Project OS v1.3: External Board Provider Update
 
 **Status:** COMPLETE — merged to `main` as `3dcf917` on 2026-05-25
