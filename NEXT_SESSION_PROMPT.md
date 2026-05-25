@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.2 external setup alignment patch — docs-only, awaiting commit approval. |
-| Branch | `docs/align-clickup-setup-ai-os-v1-2` |
-| main HEAD | `863461a` — merge: sync operating docs after AI Project OS framework groundwork |
-| Next coordination step | Coordinator approves commit → commit → merge → push. Then Coordinator decides next product package. |
+| Resume into | No pass or package in progress. AI Project OS v1.2 external setup alignment patch COMPLETE — merged `328d81e`. |
+| Branch | `main` (clean after status-sync merge) |
+| main HEAD | `328d81e` — merge: align ClickUp setup with AI Project OS v1.2 (will update after status-sync merge) |
+| Next coordination step | Coordinator decides the next product package. No package is currently authorized. |
 | OS audit | BOOTSTRAP COMPLETE — `node scripts/os-self-audit.mjs` → 88 pass, 0 fail |
 | Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
 | Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction. |

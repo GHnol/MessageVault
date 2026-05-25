@@ -11,8 +11,8 @@ Newest entries first.
 
 ## 2026-05-25 — AI Project OS v1.2: External Setup Alignment Patch
 
-**Status:** IN PROGRESS — docs-only patch; no product/app code changed.
-**Branch:** `docs/align-clickup-setup-ai-os-v1-2`
+**Status:** COMPLETE — merged to main (`328d81e`). Implementation commit: `1c76444`.
+**Branch:** `docs/align-clickup-setup-ai-os-v1-2` (merged)
 **Scope:** ClickUp setup standardization, external platform mapping guide, sync policy clarification. No `index.html`, `src/**`, `scripts/**`, no product implementation, no live API integration.
 
 ### Added
