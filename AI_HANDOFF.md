@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS v1.3 External Board Provider Update. Implementation files written on branch `docs/github-projects-default-board-provider`. Awaiting Coordinator commit approval.
+**Status:** `idle` — AI Project OS v1.3 External Board Provider Update is COMPLETE and merged to main. No active branch. No active product package. Coordinator decides next action.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.3 — External Board Provider Update` (docs/scripts/config only) |
-| **Active branch** | `docs/github-projects-default-board-provider` |
-| **main HEAD** | `a0e27aa` — merge: sync operating docs after ClickUp setup alignment |
-| **Last completed pass** | `AI Project OS v1.2 — External Setup Alignment Patch` (merged `328d81e`) |
+| **Active pass** | None — v1.3 is COMPLETE and merged |
+| **Active branch** | None — on `main` |
+| **main HEAD** | `3dcf917` — merge: make GitHub Projects the default external board |
+| **Last completed pass** | `AI Project OS v1.3 — External Board Provider Update` (merged `3dcf917`) |
 | **Active package** | None — Coordinator decides next product package |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
 | **Package 5B** | Not started |
@@ -95,25 +95,28 @@ AI Project OS v1.3 External Board Provider Update. Makes GitHub Projects the def
 - [x] State files updated (AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md)
 - [x] Script syntax checked (node --check)
 - [x] Dry-run scripts executed and verified
-- [ ] Coordinator commit approval (awaiting)
-- [ ] Commit and merge to main
+- [x] Coordinator commit approval — received
+- [x] Commit: `5707189` on branch `docs/github-projects-default-board-provider`
+- [x] Branch pushed to origin
+- [x] Merged to main: `3dcf917`
+- [x] State sync committed on `docs/sync-after-github-projects-default-board`
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    docs/github-projects-default-board-provider
-main HEAD:       a0e27aa — merge: sync operating docs after ClickUp setup alignment
-Working tree:    files written; not yet committed
-Pushed:          No — awaiting Coordinator commit approval
+Branch (now):    docs/sync-after-github-projects-default-board (sync branch)
+main HEAD:       3dcf917 — merge: make GitHub Projects the default external board
+Working tree:    clean (state files updated, sync commit pending)
+Pushed:          main not yet pushed (sync commit pending)
 ```
 
 ---
 
 ## Next exact action
 
-Coordinator reviews and approves → commit with message below → merge to main → push main. Then Coordinator decides next product package or OS action.
+Coordinator decides next product package or OS action. No active work. main is clean and merged. OS audit: 108 pass, 0 fail.
 
 ---
 

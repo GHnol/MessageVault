@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | in progress (branch: `docs/github-projects-default-board-provider`) |
+| 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
 | 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
 | 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
 | 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
@@ -26,8 +26,8 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ## 1.3.0 — AI Project OS v1.3: External Board Provider Update (2026-05-25)
 
-**Branch:** `docs/github-projects-default-board-provider` (pending commit approval)
-**Status:** IN PROGRESS — awaiting Coordinator commit approval
+**Branch:** `docs/github-projects-default-board-provider` → merged to `main` as `3dcf917`
+**Status:** COMPLETE — merged 2026-05-25
 
 ### What this pass adds
 
