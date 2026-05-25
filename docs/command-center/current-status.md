@@ -30,6 +30,8 @@
 | Package 2.8 | KeepMees Project Control Tower | COMPLETE — merged to main | `2a5fb54` | `bdb73db` |
 | Package 2.9 | AI Project OS Auto-Management Upgrade Pass | COMPLETE — merged to main | `81c5069` | `a20af30` |
 | Package 5A | Message Book Proof Approval State Foundation | COMPLETE — merged to main | `e2df2a0` | `297a221` |
+| AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
+| AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 
 ---
 
@@ -60,14 +62,14 @@
 
 ---
 
-## Git state (as of Package 2.9 closeout)
+## Git state (as of AI Project OS Framework Groundwork Pass closeout)
 
 | Item | Value |
 |---|---|
-| main HEAD | `297a221` — merge: add proof approval state foundation (status sync will bump this further when merged) |
-| Active branch | `docs/sync-command-center-after-package-5a` (status sync in progress) |
+| main HEAD | `cc7139a` — merge: complete AI Project OS framework groundwork |
+| Active branch | `docs/sync-after-ai-project-os-framework-groundwork` (status-sync in progress) |
 | Working tree | Status-sync edits in progress |
-| Pushed to remote | Yes — Package 5A implementation + merge pushed; status sync to be pushed after merge |
+| Pushed to remote | Yes — implementation `219f0b3` + merge `cc7139a` pushed to origin/main |
 
 **Package 5A (`e2df2a0` / `297a221`):** Message Book Proof Approval State Foundation — `src/products/proof-approval-state.js` added: `KMEngine.ProofApprovalState` with STATUS (5 constants: none, pending-review, approved, changes-requested, revoked), `canTransition(from, to)`, `create(opts)`, `transition(stateRecord, toStatus, opts)`; immutable records; JSON-safe; 137 new tests (14 suites). No `index.html` changes; no UI wiring; no checkout/commerce/manufacturing/export logic; no PDF; no preview renderer. `"proof-ready"` does not appear in the implementation file.
 

@@ -47,26 +47,20 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS Framework Groundwork Pass — all work complete, awaiting Coordinator commit approval. |
-| Branch | `docs/ai-project-os-framework-groundwork` (off main at `cb920be`) |
-| main HEAD | `cb920be` — merge: add Short Command Interface to AI Project OS |
-| Next coordination step | Coordinator approves commit on `docs/ai-project-os-framework-groundwork`, then decides next product package. |
+| Resume into | No pass or package in progress. AI Project OS Framework Groundwork Pass COMPLETE — merged `cc7139a`. |
+| Branch | `main` (clean after status-sync merge) |
+| main HEAD | `cc7139a` — merge: complete AI Project OS framework groundwork (will update after status-sync merge) |
+| Next coordination step | Coordinator decides the next product package. No package is currently authorized. |
 | OS audit | BOOTSTRAP COMPLETE — `node scripts/os-self-audit.mjs` → 88 pass, 0 fail |
 | Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
-| Do not | Commit/push without explicit Coordinator approval; start any new product package without explicit authorization; modify `index.html` / `src/**`. |
+| Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
 
 ## Decision points if Coordinator returns next session
 
-1. **"Approve the OS pass commit."**
-   - Run `/precommit` to walk the verification gate.
-   - Confirm audit still passes: `node scripts/os-self-audit.mjs`
-   - Commit: `docs: complete AI Project OS framework groundwork`
-   - Merge branch to main; push; update CURRENT_STATE.md and AI_HANDOFF.md.
-
-2. **"Authorize the next product package."**
+1. **"Authorize the next product package."**
    - First confirm the OS pass commit is merged and main is clean.
    - Prepare a scoped package prompt per Coordinator direction.
    - Do not begin implementation until the prompt is reviewed and explicitly approved.

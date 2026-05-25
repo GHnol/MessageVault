@@ -21,11 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `cb920be` — merge: add Short Command Interface to AI Project OS |
+| main HEAD | `cc7139a` — merge: complete AI Project OS framework groundwork |
+| Last completed pass | `AI Project OS Framework Groundwork Pass` — implementation `219f0b3`, merge `cc7139a` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | `AI Project OS Framework Groundwork Pass` (Sprint 2026-05-B) |
-| Active branch | `docs/ai-project-os-framework-groundwork` (all work complete, awaiting commit approval) |
-| Next authorized target | Coordinator approves commit on `docs/ai-project-os-framework-groundwork`, then decides next product package |
+| Active pass | None — Framework Groundwork Pass merged; status-sync in progress |
+| Active branch | `docs/sync-after-ai-project-os-framework-groundwork` (status-sync) |
+| Next authorized target | Coordinator decides next product package |
 | OS audit | BOOTSTRAP COMPLETE — 88 pass, 0 fail (`node scripts/os-self-audit.mjs`) |
 
 ---

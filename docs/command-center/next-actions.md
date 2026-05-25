@@ -11,20 +11,20 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Review the merged Package 5A (proof approval state foundation) — `src/products/proof-approval-state.js` + tests | Coordinator | — |
-| 2 | Decide the next development package | Coordinator | **[NEEDS APPROVAL]** |
-| 3 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
-| 4 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
-| 5 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
-| 6 | Decide `scripts/node_modules` tracked-history cleanup | Coordinator | **[NEEDS APPROVAL]** |
-| 7 | (Optional) Each contributor installs the user-level permission/wait notification hook per `docs/dev/notification-setup.md` | Founder / contributors | — |
+| 1 | Decide the next development package | Coordinator | **[NEEDS APPROVAL]** |
+| 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
+| 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
+| 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
+| 5 | Decide `scripts/node_modules` tracked-history cleanup | Coordinator | **[NEEDS APPROVAL]** |
+| 6 | (Optional) Install user-level notification hook: run `.\scripts\setup-claude-notification.ps1 -Apply` | Founder / contributors | — |
 
 ---
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 5A COMPLETE — Proof Approval State Foundation built and merged. Coordinator decides next package.**
+**Status: AI Project OS Framework Groundwork Pass COMPLETE — merged `cc7139a`. Coordinator decides next package.**
 
+AI Project OS Framework Groundwork Pass is COMPLETE — merged to main (`cc7139a`). 13 skills canonical, closeout sync contract, project-control sync foundation, OS self-audit (88 pass), notification wizard; no app code.
 Package 5A (Message Book Proof Approval State Foundation) is COMPLETE — merged to main (`297a221`). `KMEngine.ProofApprovalState` with STATUS constants, `canTransition`, `create`, `transition`; 137 new tests; no UI; no `index.html` changes.
 Package 2.9 (AI Project OS Auto-Management Upgrade Pass) is COMPLETE — merged to main (`a20af30`). Universal `docs/ai-system/` layer + 7 new dev protocols + 2 new QA docs; no app code.
 Package 2.8 (KeepMees Project Control Tower) is COMPLETE — merged to main (`bdb73db`). Full repo-native Tower built; no app code.

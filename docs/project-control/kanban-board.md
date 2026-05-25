@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-05-24 (America/New_York)
+**Last updated:** 2026-05-25 (America/New_York)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- **AI Project OS Framework Groundwork Pass** · AI Workflow · P0 · Ph0 · Claude Code · due 2026-05-24 · success: skills canonical, sync contract, self-audit pass · src `current-sprint.md`
+- _(empty — no active implementation pass)_
 
 ### Waiting / Blocked
 - **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · no package authorized as of 2026-05-24
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **AI Project OS Framework Groundwork Pass** · AI Workflow · Ph0 · merged `cc7139a` — COMPLETE
 - **Package 5A — Message Book Proof Approval State Foundation** · Development · Ph12 · merged `297a221`, status-sync `926ec37` — COMPLETE
 - **AI Project OS Usability Patch — Short Command Interface** · AI Workflow · Ph0 · merged `cb920be` — COMPLETE
 - **Package 2.9 — AI Project OS Auto-Management Upgrade** · AI Workflow · Ph0 · merged `a20af30` — COMPLETE
@@ -64,17 +65,10 @@
 
 ---
 
-## View 2 — Current sprint (Sprint 2026-05-B — OS Framework Groundwork)
+## View 2 — Sprint 2026-05-B (CLOSED)
 
 ### In Progress
-- AI Project OS Framework Groundwork Pass · AI Workflow · P0
-- Correct stale project-control state · Coordinator · P1
-
-### Waiting / Blocked
-- Coordinator approve commit · P0 (decision-needed)
-
-### Ready
-- Activate weekly Coordinator sync · Coordinator · P1 (sync contract now active)
+- Status-sync closeout · Coordinator · P0
 
 ### Done (this sprint)
 - Skills canonical (.claude/skills/*/SKILL.md × 13) ✓
@@ -86,6 +80,7 @@
 - Bootstrap Core updated to v0.5.0 ✓
 - Agent layer docs updated (AGENTS, CLAUDE, .codex) ✓
 - current-sprint.md and kanban-board.md corrected ✓
+- Implementation committed (219f0b3) and merged (cc7139a) ✓
 
 ---
 

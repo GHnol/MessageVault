@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS Framework Groundwork Pass. Branch `docs/ai-project-os-framework-groundwork` off main at `cb920be`. All 14 sections complete. Awaiting Coordinator commit approval. **Do not commit until the Coordinator explicitly approves.**
+**Status:** `closed` — AI Project OS Framework Groundwork Pass COMPLETE. Implementation committed (`219f0b3`), merged to main (`cc7139a`), pushed to origin. Status-sync in progress on `docs/sync-after-ai-project-os-framework-groundwork`.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
 
@@ -18,124 +18,71 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS Framework Groundwork Pass` (Sprint 2026-05-B) |
-| **Branch** | `docs/ai-project-os-framework-groundwork` |
-| **Branch base** | `main at cb920be` — merge: add Short Command Interface to AI Project OS |
-| **Status** | All work complete — awaiting Coordinator commit approval |
+| **Last completed pass** | `AI Project OS Framework Groundwork Pass` (Sprint 2026-05-B) |
+| **Implementation branch** | `docs/ai-project-os-framework-groundwork` (merged to main) |
+| **Implementation commit** | `219f0b3` — docs: complete AI Project OS framework groundwork |
+| **Merge commit** | `cc7139a` — merge: complete AI Project OS framework groundwork |
+| **Status-sync branch** | `docs/sync-after-ai-project-os-framework-groundwork` (in progress) |
+| **Active package** | None — Coordinator decides next |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
 
 ---
 
-## Objective
+## Objective (OS pass, retrospective)
 
-Complete the AI Project OS framework: make 13 skills canonical (SKILL.md per skill), add 4 new command wrappers, add closeout sync contract, project-control sync foundation, OS self-audit, notification setup wizard, update all Bootstrap Core docs, correct stale project-control state, and update gitignore. No app code touched; no product package started.
-
----
-
-## Approved scope (all delivered)
-
-**Section 1 — Skills canonical:** 13 skills created at `.claude/skills/*/SKILL.md` each with YAML frontmatter + full protocol
-
-**Section 2 — Command wrappers:** 4 new commands created (`os-audit`, `project-sync-dry-run`, `project-sync-apply`, `notification-setup-wizard`); 10 existing commands updated with skill-delegation header; README rewritten
-
-**Section 3 — Event-triggered sync rule:** Added to `AGENTS.md`, `CLAUDE.md`, `.codex/README.md`, `auto-management-protocol.md`, `package-boundary-closeout-protocol.md`
-
-**Section 4 — Closeout Sync Contract:** `docs/dev/closeout-sync-contract.md` created
-
-**Section 5 — Project Control Sync Automation foundation:** 6 new docs: `project-sync-policy.md`, `project-sync-source-schema.md`, `project-sync-dry-run-format.md`, `external-sync-safety.md`, `external-sync-map.example.json`, `project-sync-log.md`
-
-**Section 6 — Calendar source docs:** (policy-driven; existing calendar docs sufficient — no change needed; policy references closeout-sync-contract.md)
-
-**Section 7 — Notification Setup Wizard:** `scripts/setup-claude-notification.ps1` + `.claude/skills/notification-setup-wizard/SKILL.md` + `.claude/commands/notification-setup-wizard.md`
-
-**Section 8 — OS Self-Audit:** `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` + `.claude/skills/os-audit/SKILL.md` + `.claude/commands/os-audit.md`
-
-**Section 9 — Shareable status summary:** `.claude/skills/status-summary/SKILL.md` updated; command wrapper updated
-
-**Section 10 — Bootstrap Core updated:** `universal-standards.md`, `bootstrap-template.md`, `CHANGELOG.md`, `version-history.md`, `docs/ai-system/README.md` all updated to v0.5.0
-
-**Section 11 — Project-control cleanup:** `current-sprint.md` and `kanban-board.md` fully rewritten to reflect Package 5A done + Sprint 2026-05-B active
-
-**Section 12 — Gitignore safety:** New patterns: `docs/project-control/external-sync-map.local.json`, `*.sync-dryrun.{md,json}`, `local-sync-reports/`, `*.claude-settings-backup-*.json`, `*.oauth-token.json`, `**/oauth-credentials.json`, `google-calendar-credentials.json`
-
-**Section 13 — Checks:** All pass:
-- `node --check` on all 3 new .mjs scripts — PASS
-- `node scripts/os-self-audit.mjs` — 88 pass, 0 fail, BOOTSTRAP COMPLETE
-- `node scripts/project-control-sync-dry-run.mjs` — NO DRIFT
-- `node scripts/project-control-sync-validate.mjs` — 11 pass, VALID
-- `git diff -- index.html src/` — zero diff (no app code touched)
-- `git check-ignore` on all new gitignore patterns — all patterns confirmed active
-- `git diff --stat` — 24 files changed (all OS/docs layer only)
-
-**Section 14 — Continuity file updates:** AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md (this update)
+Completed the AI Project OS framework: made 13 skills canonical (SKILL.md per skill in `.claude/skills/*/`), added 4 new command wrappers, rewrote command and skills READMEs, added closeout sync contract, project-control sync foundation (6 docs), OS self-audit checklist + script, notification setup wizard (PS1 + skill + command), updated all Bootstrap Core docs to v0.5.0, corrected stale project-control state, extended .gitignore. No app code touched; no product package started.
 
 ---
 
-## Hard exclusions (verified clean)
+## Delivered scope
+
+- 13 skills created at `.claude/skills/*/SKILL.md` — each with YAML frontmatter + full protocol
+- 4 new command wrappers; 10 existing updated; READMEs rewritten
+- `docs/dev/closeout-sync-contract.md` — mandatory sync check after 12 trigger types
+- 6 project-control sync foundation docs
+- `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` (88 pass)
+- `scripts/setup-claude-notification.ps1` + skill + command (dry-run by default)
+- Bootstrap Core updated: universal-standards, bootstrap-template, CHANGELOG, version-history, README
+- `docs/project-control/current-sprint.md` + `kanban-board.md` corrected
+- `.gitignore` extended with 7 new patterns
+- All scripts: dependency-free, read-only or explicitly-apply-gated, no external writes
+
+---
+
+## Hard exclusions verified
 
 - `index.html` — zero diff confirmed
 - `src/**` — zero diff confirmed
-- No product package started; no product feature implemented
-- No live Google Calendar, ClickUp, or TickTick API writes
-- No `.claude/settings.local.json` edited; no secrets committed
-- No commit created (waiting for explicit Coordinator approval)
+- No product package started; no API writes; no secrets committed
 
 ---
 
 ## Work completed
 
-- [x] 13 skills created (`start`, `handoff`, `precommit`, `closeout`, `package-start`, `switch-to-codex`, `switch-to-claude`, `weekly-sync`, `status-summary`, `os-audit`, `project-sync-dry-run`, `project-sync-apply`, `notification-setup-wizard`)
-- [x] 4 new command wrappers; 10 existing updated; READMEs rewritten
-- [x] `docs/dev/closeout-sync-contract.md` created
-- [x] 6 new project-control sync foundation docs created
-- [x] `scripts/os-self-audit.mjs` + `scripts/project-control-sync-dry-run.mjs` + `scripts/project-control-sync-validate.mjs` created and passing
-- [x] `scripts/setup-claude-notification.ps1` created
-- [x] `docs/ai-system/os-self-audit-checklist.md` created
-- [x] All Bootstrap Core docs updated to v0.5.0
-- [x] `current-sprint.md` + `kanban-board.md` corrected
-- [x] `.gitignore` extended with 7 new patterns
-- [x] All 4 validation checks pass (audit 88/0, dry-run NO DRIFT, validate 11/0, app-diff zero)
-- [x] Windows ESM path fix applied to all 3 .mjs scripts (`fileURLToPath`)
-- [x] `docs/ai-system/README.md` file index updated to include `os-self-audit-checklist.md`
-- [x] AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md updated (this run)
-
-## Work remaining
-
-- [ ] **Coordinator explicitly approves the commit** — required before any commit
-- [ ] Once approved: commit with message `docs: complete AI Project OS framework groundwork`
-- [ ] Merge branch to main (Coordinator instruction required)
+- [x] Implementation committed `219f0b3` on `docs/ai-project-os-framework-groundwork`
+- [x] Branch pushed to origin
+- [x] Merged to main (`cc7139a`) with `--no-ff`
+- [x] Main pushed to origin (now at `cc7139a`)
+- [x] Status-sync branch created: `docs/sync-after-ai-project-os-framework-groundwork`
+- [ ] Status-sync files updated (in progress on this branch)
+- [ ] Status-sync committed and merged to main
 
 ---
 
 ## Git state
 
 ```
-Branch:       docs/ai-project-os-framework-groundwork
-Base:         cb920be (main) — merge: add Short Command Interface to AI Project OS
-Working tree: 51 files modified/new (all docs/OS layer; zero app code)
-Committed:    nothing yet on this branch — all changes are uncommitted
-Push:         not pushed — do not push without explicit instruction
+Branch (now):    docs/sync-after-ai-project-os-framework-groundwork
+main HEAD:       cc7139a — merge: complete AI Project OS framework groundwork
+Pushed:          Yes — implementation and merge both on main and on origin
+Status-sync:     In progress on docs/sync-after-ai-project-os-framework-groundwork
 ```
 
 ---
 
 ## Next exact action
 
-Wait for Coordinator commit approval. When approved, run `/precommit` to walk the verification gate, then commit:
-
-```
-docs: complete AI Project OS framework groundwork
-
-- Make 13 skills canonical (.claude/skills/*/SKILL.md) — authoritative protocol layer
-- Add 4 new command wrappers; update 10 existing to delegate to skills
-- Add closeout sync contract (docs/dev/closeout-sync-contract.md)
-- Add project-control sync foundation (policy, schema, dry-run format, safety, example map, log)
-- Add OS self-audit checklist + script (node scripts/os-self-audit.mjs → 88 pass)
-- Add notification setup wizard (PS1 script + skill + command)
-- Update Bootstrap Core to v0.5.0 (universal-standards, bootstrap-template, CHANGELOG, version-history, README)
-- Correct stale project-control state (current-sprint.md, kanban-board.md)
-- Extend .gitignore for local sync maps, dry-run outputs, notification backups, credentials
-```
+Complete status-sync edits → commit `docs: sync operating docs after AI Project OS framework groundwork` → merge to main → push main. Then Coordinator decides next product package.
 
 ---
 
@@ -159,7 +106,7 @@ docs: complete AI Project OS framework groundwork
 | `src/products/product-experience-readiness.js` | Off-limits — do not touch EXPERIENCE_STATUS.PROOF_READY. |
 | `src/state/project-persistence.js` | Off-limits without explicit package instruction. |
 | `src/state/session-serialization.js` | Off-limits without explicit package instruction. |
-| `scripts/**` | New OS scripts (`os-self-audit.mjs`, `project-control-sync-dry-run.mjs`, `project-control-sync-validate.mjs`, `setup-claude-notification.ps1`) are part of this OS pass and are fine. Do not modify `index.html`-adjacent scripts without package authorization. |
+| `scripts/os-self-audit.mjs`, `scripts/project-control-sync-dry-run.mjs`, etc. | New OS scripts from this pass — safe to run (read-only); do not modify without a new OS upgrade pass. |
 | `scripts/node_modules/` | Historically tracked. Do NOT untrack without Coordinator decision. |
 | `.claude/settings.local.json`, `_source-intake/`, `operator-inbox/*.md`, `operator-outbox/*` | Gitignored — never commit. |
 | `docs/project-control/external-sync-map.local.json` | Gitignored — never commit. |
