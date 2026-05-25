@@ -24,9 +24,9 @@
 | main HEAD | `cc7139a` — merge: complete AI Project OS framework groundwork |
 | Last completed pass | `AI Project OS Framework Groundwork Pass` — implementation `219f0b3`, merge `cc7139a` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | AI Project OS v1.2 — External Setup Alignment Patch (docs-only; awaiting commit approval) |
-| Active branch | `docs/align-clickup-setup-ai-os-v1-2` |
-| Next authorized target | Coordinator approves patch commit, then decides next product package |
+| Active pass | None — AI Project OS v1.2 external setup alignment patch COMPLETE; status-sync in progress |
+| Active branch | `docs/sync-after-clickup-setup-alignment` (status-sync) |
+| Next authorized target | Coordinator decides next product package |
 | OS audit | BOOTSTRAP COMPLETE — 88 pass, 0 fail (`node scripts/os-self-audit.mjs`) |
 
 ---

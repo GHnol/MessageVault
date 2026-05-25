@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | in progress |
+| 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
 | 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
 | 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
 | 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | merged (`9be0f81`) |
@@ -25,8 +25,9 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ## 1.2.0 — AI Project OS v1.2: External Setup Alignment Patch (2026-05-25)
 
-**Branch:** `docs/align-clickup-setup-ai-os-v1-2`
-**Status:** IN PROGRESS — docs/process only; no product implementation
+**Branch:** `docs/align-clickup-setup-ai-os-v1-2` (merged `328d81e`)
+**Implementation commit:** `1c76444`
+**Status:** COMPLETE — merged 2026-05-25
 
 ### What this patch adds
 

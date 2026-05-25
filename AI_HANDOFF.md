@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in progress` — AI Project OS v1.2 external setup alignment patch. Docs-only. No product/app code. Active branch: `docs/align-clickup-setup-ai-os-v1-2`. Awaiting Coordinator commit approval.
+**Status:** `closed` — AI Project OS v1.2 external setup alignment patch COMPLETE. Implementation committed (`1c76444`), merged to main (`328d81e`), pushed to origin. Status-sync in progress on `docs/sync-after-clickup-setup-alignment`.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
 
@@ -18,30 +18,31 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active patch** | `AI Project OS v1.2 — External Setup Alignment Patch` (docs-only) |
-| **Active branch** | `docs/align-clickup-setup-ai-os-v1-2` (in progress — awaiting commit approval) |
-| **Last completed pass** | `AI Project OS Framework Groundwork Pass` (Sprint 2026-05-B) |
-| **Last merged branch** | `docs/sync-after-ai-project-os-framework-groundwork` → main (`863461a`) |
-| **main HEAD** | `863461a` — merge: sync operating docs after AI Project OS framework groundwork |
+| **Last completed pass** | `AI Project OS v1.2 — External Setup Alignment Patch` (docs-only) |
+| **Implementation branch** | `docs/align-clickup-setup-ai-os-v1-2` (merged to main) |
+| **Implementation commit** | `1c76444` — docs: align ClickUp setup with AI Project OS v1.2 |
+| **Merge commit** | `328d81e` — merge: align ClickUp setup with AI Project OS v1.2 |
+| **Status-sync branch** | `docs/sync-after-clickup-setup-alignment` (in progress) |
+| **main HEAD** | `328d81e` — merge: align ClickUp setup with AI Project OS v1.2 |
 | **Active package** | None — Coordinator decides next product package |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
 
 ---
 
-## Objective (current patch)
+## Objective (OS pass, retrospective)
 
-Docs-only external setup alignment. Standardize the ClickUp structure (one primary Board, saved views/filters, not six default Lists), add external platform mapping guide, update sync policy and external-sync-safety docs, add AI Project OS v1.2 entries to CHANGELOG and version-history. No app code; no live API integration; no Package 5B work.
+Docs-only external setup alignment patch (v1.2). Standardized the ClickUp structure (one primary Board, saved views/filters, not six default Lists), added external platform mapping guide, updated sync policy and external-sync-safety docs, added AI Project OS v1.2 entries to CHANGELOG and version-history. No app code; no live API integration; no Package 5B work.
 
 ---
 
-## Delivered scope (v1.2 patch, pending commit approval)
+## Delivered scope
 
-- `docs/project-control/clickup-setup-policy.md` — CREATED: approved ClickUp structure, saved views/filters, hybrid statuses, 13 custom fields, Owner Role rule, sync map rule
-- `docs/project-control/external-platform-mapping-guide.md` — CREATED: repo doc → ClickUp/Calendar/TickTick mapping, platform scope boundaries, safety summary
-- `docs/project-control/project-sync-policy.md` — UPDATED: ClickUp structure section added; external tool routing updated; companion docs updated
-- `docs/project-control/external-sync-safety.md` — UPDATED: ClickUp structure note; local map never-commit rule; example map placeholder rule; AI agent assignee rule
-- `docs/ai-system/CHANGELOG.md` — UPDATED: v1.2 entry added at top
-- `docs/ai-system/version-history.md` — UPDATED: v1.2.0 row + section added at top
+- `docs/project-control/clickup-setup-policy.md` — CREATED
+- `docs/project-control/external-platform-mapping-guide.md` — CREATED
+- `docs/project-control/project-sync-policy.md` — UPDATED
+- `docs/project-control/external-sync-safety.md` — UPDATED
+- `docs/ai-system/CHANGELOG.md` — UPDATED
+- `docs/ai-system/version-history.md` — UPDATED
 
 ---
 
@@ -58,29 +59,31 @@ Docs-only external setup alignment. Standardize the ClickUp structure (one prima
 ## Work completed
 
 - [x] Branch created: `docs/align-clickup-setup-ai-os-v1-2`
-- [x] 2 new docs created
-- [x] 4 existing docs updated
-- [x] AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md updated (branch correction)
-- [ ] Coordinator commit approval
-- [ ] Commit
-- [ ] Merge to main
-- [ ] Push main
+- [x] 2 new docs created; 4 existing docs updated
+- [x] Implementation committed `1c76444`
+- [x] Branch pushed to origin
+- [x] Merged to main (`328d81e`) with `--no-ff`
+- [x] Main pushed to origin
+- [x] Status-sync branch created: `docs/sync-after-clickup-setup-alignment`
+- [ ] Status-sync files updated (in progress on this branch)
+- [ ] Status-sync committed and merged to main
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    docs/align-clickup-setup-ai-os-v1-2
-main HEAD:       863461a — merge: sync operating docs after AI Project OS framework groundwork
-Pushed:          main is current on origin; patch branch not yet pushed
+Branch (now):    docs/sync-after-clickup-setup-alignment
+main HEAD:       328d81e — merge: align ClickUp setup with AI Project OS v1.2
+Pushed:          Yes — implementation and merge both on main and on origin
+Status-sync:     In progress on docs/sync-after-clickup-setup-alignment
 ```
 
 ---
 
 ## Next exact action
 
-Coordinator reviews the final report and approves commit. Then: commit with approved message → merge to main → push main.
+Complete status-sync edits → commit `docs: sync operating docs after ClickUp setup alignment` → merge to main → push main. Then Coordinator decides next product package.
 
 ---
 
