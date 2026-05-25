@@ -11,7 +11,7 @@ Newest entries first.
 
 ## 2026-05-25 — AI Project OS v1.3: External Board Provider Update
 
-**Status:** IN PROGRESS — branch `docs/github-projects-default-board-provider` (pending Coordinator commit approval)
+**Status:** COMPLETE — merged to `main` as `3dcf917` on 2026-05-25
 **Scope:** GitHub Projects selected as default external board provider. ClickUp demoted to optional adapter. Dry-run/apply script scaffolding added. No app code; no live API integration; no Package 5B work.
 
 ### Added

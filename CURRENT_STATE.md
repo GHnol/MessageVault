@@ -21,13 +21,13 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `a0e27aa` — merge: sync operating docs after ClickUp setup alignment |
-| Last completed pass | `AI Project OS v1.2 — External Setup Alignment Patch` — merged `328d81e` — COMPLETE |
+| main HEAD | `3dcf917` — merge: make GitHub Projects the default external board |
+| Last completed pass | `AI Project OS v1.3 — External Board Provider Update` — merged `3dcf917` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | `AI Project OS v1.3 — External Board Provider Update` — in progress on `docs/github-projects-default-board-provider` |
-| Active branch | `docs/github-projects-default-board-provider` |
-| Next authorized target | Coordinator approves v1.3 commit → decides next product package |
-| OS audit | BOOTSTRAP COMPLETE — 88 pass, 0 fail (pre-v1.3; re-run after merge to verify new files) |
+| Active pass | None — Coordinator decides next action |
+| Active branch | None |
+| Next authorized target | Coordinator decides next product package or OS action |
+| OS audit | BOOTSTRAP COMPLETE — 108 pass, 0 warn, 0 fail (post-v1.3) |
 | Package 5B | Not started |
 
 ---
@@ -87,8 +87,8 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | Notification setup (user-level) | `docs/dev/notification-setup.md` |
 | Test strategy | `docs/qa/test-strategy.md` |
 | Per-package verification | `docs/qa/package-verification-template.md` |
-| Short command interface (live) | `.claude/commands/README.md` — 14 commands, all delegating to `.claude/skills/*/SKILL.md` |
-| Skills (canonical protocol layer) | `.claude/skills/README.md` — 13 skills with SKILL.md |
+| Short command interface (live) | `.claude/commands/README.md` — 15 commands, all delegating to `.claude/skills/*/SKILL.md` |
+| Skills (canonical protocol layer) | `.claude/skills/README.md` — 14 skills with SKILL.md |
 | Closeout sync contract | `docs/dev/closeout-sync-contract.md` |
 | Project-control sync foundation | `docs/project-control/project-sync-policy.md`, `project-sync-dry-run-format.md`, `external-sync-safety.md` |
 | OS self-audit | `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` |
