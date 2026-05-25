@@ -1,3 +1,5 @@
+This command delegates to the **precommit** skill (`.claude/skills/precommit/SKILL.md`). It invokes the pre-commit verification gate. Approval boundaries unchanged: no commit created.
+
 Run the KeepMees pre-commit verification gate.
 
 Read `docs/qa/pre-commit-verification-template.md` and walk through every check.

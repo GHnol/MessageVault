@@ -64,7 +64,8 @@ Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` at ever
 
 | Situation | Protocol |
 |---|---|
-| **Short command interface (daily use)** | `.claude/commands/README.md` — `/start`, `/handoff`, `/precommit`, `/closeout`, `/weekly-sync`, `/status-summary`, etc. |
+| **Short command interface (daily use)** | `.claude/commands/README.md` — `/start`, `/handoff`, `/precommit`, `/closeout`, `/weekly-sync`, `/status-summary`, `/os-audit`, `/project-sync-dry-run`, etc. Commands delegate to `.claude/skills/*/SKILL.md` (canonical). |
+| **Closeout sync contract** | `docs/dev/closeout-sync-contract.md` — what every closeout must verify |
 | Umbrella auto-management duties | `docs/dev/auto-management-protocol.md` |
 | Restarting any session / after `/clear` / `/compact` / new day | `docs/dev/session-restart-protocol.md` |
 | `/clear` vs `/compact` vs `/context` decision, high context/usage, high uncached context | `docs/dev/context-hygiene-protocol.md` |
@@ -85,6 +86,8 @@ Update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` at ever
 A model-switch or context warning is a **cost/continuity warning, not an error**. Checkpoint, then proceed.
 
 **Auto-management rule (added Package 2.9):** maintain repo-native memory continuously; do not wait for the usage-limit or auto-compact warning to write state. Update `AI_HANDOFF.md` / `CURRENT_STATE.md` / `NEXT_SESSION_PROMPT.md` at meaningful work units. At package boundaries, run package verification (`docs/qa/package-verification-template.md`) before proposing commit. Recommend a fresh session for the next package when context is heavy. See `docs/dev/auto-management-protocol.md`.
+
+**Event-triggered internal sync rule (added AI Project OS Framework Groundwork Pass):** every meaningful work-unit closeout must trigger an internal sync check (via the `closeout` skill or `/project-sync-dry-run`). Meaningful closeouts include: package complete/paused/blocked, commit completed, merge completed, branch handoff, model switch, tool switch, project-control change, milestone/gate change, schedule/date change, task/backlog status change, major planning change. External systems (Google Calendar, ClickUp, TickTick) remain dry-run/apply with Coordinator approval. Full contract: `docs/dev/closeout-sync-contract.md`.
 
 ---
 

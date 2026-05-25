@@ -1,3 +1,5 @@
+This command delegates to the **handoff** skill (`.claude/skills/handoff/SKILL.md`). It invokes the handoff and checkpoint workflow. Approval boundaries unchanged: no commit, push, or external sync.
+
 Update `AI_HANDOFF.md` with the current session state and produce a transfer packet.
 
 Run: `git branch --show-current`, `git status --short`, `git log --oneline -5`

@@ -1,3 +1,5 @@
+This command delegates to the **package-start** skill (`.claude/skills/package-start/SKILL.md`). Approval boundaries unchanged: requires explicit Coordinator authorization; no commit, push, or external sync.
+
 Run the pre-flight sequence for a newly authorized package.
 
 Read in order:

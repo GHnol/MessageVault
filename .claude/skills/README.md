@@ -1,51 +1,74 @@
-# .claude/skills — Project Skill Readiness
+# .claude/skills — Skills (Canonical Protocol Layer)
 
-**Status:** Readiness placeholder. No live skill definitions are shipped in this pass. This documents the planned skills so a future authorized pass can add them with verified structure.
-
----
-
-## Commands vs Skills
-
-**Commands** (`.claude/commands/*.md`) are the daily short interface. Each command is a single-invocation workflow that drives a well-defined protocol from start to finish (startup, handoff, pre-commit, closeout, etc.). Use them for routine daily operations.
-
-**Skills** are deeper, reusable workflows that may be composed, parameterized, or invoked by other workflows. Skills are appropriate when a workflow is too complex for a single prompt, needs conditional branching, or should be reusable across different contexts.
-
-For daily KeepMees operation, use the commands. Skills are for future deeper automation.
-
-See also: `.claude/commands/README.md` for the live command roster.
+**Status:** ACTIVE — 13 live skills shipped in AI Project OS Framework Groundwork Pass (2026-05-24).
 
 ---
 
-## Why placeholder, not live skills
+## Skills are canonical
 
-Skill packaging (folder structure, manifest fields, invocation) is tool-version-specific. Shipping live skills now risks fake certainty about the format. Per the upgrade instruction, prefer README + backlog over uncertain live implementation. Live skills are added only in a separately authorized pass after the format is verified against the Claude Code version in use.
+**Skills** (`.claude/skills/*/SKILL.md`) are the authoritative protocol definitions. Each SKILL.md contains YAML frontmatter (`name:`, `description:`) plus the full protocol: purpose, when to use, files to read, git preflight, sync obligations, output format, hard stop conditions, and approval boundaries.
 
----
+**Commands** (`.claude/commands/*.md`) are compatibility wrappers — thin delegates that invoke the matching skill workflow. Commands are the daily user interface; skills are the protocol source of truth.
 
-## Planned skill roster
-
-| Skill | What it would do | Backed by |
-|---|---|---|
-| `repo-startup-check` | Run the session-restart sequence and print the state summary | `docs/dev/session-restart-protocol.md` |
-| `summarize-changes` | Summarize `git diff` for review | — |
-| `pre-commit-review` | Walk the pre-commit verification checklist | `docs/qa/pre-commit-verification-template.md` |
-| `write-handoff` | Produce a complete `AI_HANDOFF.md` checkpoint | `docs/automation/operator-mode/context-continuity-protocol.md` |
-| `closeout-report` | Produce a package closeout report | `docs/automation/operator-mode/package-closeout-protocol.md` |
-| `qa-verification` | Drive the manual QA + release readiness templates | `docs/qa/*` |
-| `preview-fidelity-check` | Check preview-vs-design truth | `docs/dev/agent-scope-boundaries.md` |
-| `product-boundary-check` | Flag scope/locked-truth violations | `docs/dev/agent-scope-boundaries.md` |
-| `project-control-sync-check` | Confirm Project Control docs stay derived | `docs/project-control/*` |
+This separation allows the canonical protocol to evolve independently of the command invocation mechanism.
 
 ---
 
-## Invariants for any future skill
+## Live skill roster
+
+| Skill | What it does |
+|---|---|
+| `start` | Session startup — read repo state, declare package/branch/next action |
+| `handoff` | Update `AI_HANDOFF.md` and produce transfer packet |
+| `precommit` | Walk the pre-commit verification gate |
+| `closeout` | Package boundary closeout + internal sync check |
+| `package-start` | Pre-flight for newly authorized package |
+| `switch-to-codex` | Prepare Codex handoff and transfer packet |
+| `switch-to-claude` | Resume from Codex — read repo truth, declare state |
+| `weekly-sync` | Coordinator weekly sync; check Tower drift |
+| `status-summary` | Generate internal + shareable project status |
+| `os-audit` | AI Project OS self-audit; verify bootstrap complete |
+| `project-sync-dry-run` | Project-control sync dry-run (no writes, no external changes) |
+| `project-sync-apply` | Apply approved sync delta (internal docs + proposed external) |
+| `notification-setup-wizard` | Walk notification hook setup (local-only, never committed) |
+
+---
+
+## Invariants for every skill
 
 - Skills are user-invoked. They route Claude through existing protocols — they never invent new authority.
 - Skills obey all scope guards and locked-truth rules.
 - A skill's output is verified against actual git/file state, never trusted blindly.
 - Skills obey the universal AI Project OS layer (`docs/ai-system/universal-standards.md`) and the auto-management umbrella (`docs/dev/auto-management-protocol.md`).
-- A skill that drives package verification, package boundary closeout, or pre-commit hygiene must back to the corresponding template / protocol — `docs/qa/package-verification-template.md`, `docs/dev/package-boundary-closeout-protocol.md`, `docs/qa/pre-commit-verification-template.md`.
+- Skills never commit, push, merge, deploy, or write to external tools — those remain explicit user-instruction steps.
+- External sync skills (`project-sync-dry-run`, `project-sync-apply`) are dry-run/approval-gated.
+- Skills that write local files (handoff, project-sync-apply) do so only within the repo or user config — never to committed secrets or external APIs.
 
-(Backlog item: implement verified live skills in a dedicated authorized pass.)
+---
 
-See also: `.claude/agents/README.md` (planned subagents), `.claude/commands/README.md` (planned custom slash commands, added Package 2.9).
+## SKILL.md format
+
+Each SKILL.md uses this frontmatter at the top:
+
+```yaml
+---
+name: <skill-name>
+description: <clear one-sentence description>
+---
+```
+
+Followed by sections: Purpose, When to use, Files to read, Required git preflight, Sync obligations, Output format, Hard stop conditions, Approval boundaries, Backed by.
+
+---
+
+## How to add a new skill
+
+1. Create `.claude/skills/<name>/SKILL.md`
+2. Add YAML frontmatter with `name:` and `description:`
+3. Fill in the standard sections
+4. Create or update `.claude/commands/<name>.md` as a thin wrapper pointing to the skill
+5. Add the skill to the roster table above
+6. Add the command to `.claude/commands/README.md`
+7. Log in `docs/ai-system/CHANGELOG.md`
+
+See also: `.claude/agents/README.md` (planned subagents), `.claude/commands/README.md` (command roster).

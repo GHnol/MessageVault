@@ -1,3 +1,5 @@
+This command delegates to the **switch-to-claude** skill (`.claude/skills/switch-to-claude/SKILL.md`). Approval boundaries unchanged: no commit, push, or external sync.
+
 Resume KeepMees work after a Codex session — read from repo truth, not from session memory.
 
 Run: `git branch --show-current`, `git status --short`, `git log --oneline -10`

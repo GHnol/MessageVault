@@ -59,3 +59,19 @@ codex-logs/
 # Defensive Codex patterns (never commit)
 .codex/skills/local/
 .codex/sessions/
+
+# Project control sync — local external ID maps (never commit; contains external tool IDs)
+docs/project-control/external-sync-map.local.json
+
+# Generated dry-run outputs (never commit; these are chat-output artifacts)
+*.sync-dryrun.md
+*.sync-dryrun.json
+local-sync-reports/
+
+# Claude notification config backups (never commit; user-level only)
+*.claude-settings-backup-*.json
+
+# OAuth tokens and API credentials (never commit)
+*.oauth-token.json
+**/oauth-credentials.json
+google-calendar-credentials.json

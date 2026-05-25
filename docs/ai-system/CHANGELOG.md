@@ -9,6 +9,84 @@ Newest entries first.
 
 ---
 
+## 2026-05-24 — AI Project OS Framework Groundwork Pass
+
+**Status:** IN PROGRESS — docs/scripts/config only; no product/app changes.
+**Branch:** `docs/ai-project-os-framework-groundwork` (pending merge)
+**Scope:** AI Project OS framework completion. No `index.html`, `src/**`, no product implementation.
+
+### Added (Skills — canonical layer)
+- `.claude/skills/start/SKILL.md`
+- `.claude/skills/handoff/SKILL.md`
+- `.claude/skills/precommit/SKILL.md`
+- `.claude/skills/closeout/SKILL.md`
+- `.claude/skills/package-start/SKILL.md`
+- `.claude/skills/switch-to-codex/SKILL.md`
+- `.claude/skills/switch-to-claude/SKILL.md`
+- `.claude/skills/weekly-sync/SKILL.md`
+- `.claude/skills/status-summary/SKILL.md`
+- `.claude/skills/os-audit/SKILL.md`
+- `.claude/skills/project-sync-dry-run/SKILL.md`
+- `.claude/skills/project-sync-apply/SKILL.md`
+- `.claude/skills/notification-setup-wizard/SKILL.md`
+
+### Updated (Command wrappers — now thin delegates to skills)
+All existing `.claude/commands/*.md` updated to reference matching skill.
+New command wrappers added: `os-audit.md`, `project-sync-dry-run.md`, `project-sync-apply.md`, `notification-setup-wizard.md`.
+
+### Added (Closeout Sync Contract)
+- `docs/dev/closeout-sync-contract.md` — what every meaningful closeout must verify; internal vs external sync; classification guide; required closeout report format
+
+### Added (Project Control Sync Foundation)
+- `docs/project-control/project-sync-policy.md` — source of truth hierarchy, stable IDs, dry-run/apply workflow, scheduling model, external tool routing
+- `docs/project-control/project-sync-source-schema.md` — schema for ritual/milestone/package/task items and external ID map format
+- `docs/project-control/project-sync-dry-run-format.md` — exact format for dry-run delta output
+- `docs/project-control/external-sync-safety.md` — non-negotiable rules for Google Calendar, ClickUp, TickTick writes
+- `docs/project-control/external-sync-map.example.json` — committed example only; local map is gitignored
+- `docs/project-control/project-sync-log.md` — log of every project-control sync operation
+
+### Added (OS Self-Audit)
+- `docs/ai-system/os-self-audit-checklist.md` — required checklist before claiming bootstrap complete
+
+### Added (Scripts — safe, dependency-free, read-only)
+- `scripts/os-self-audit.mjs` — checks all required OS files, skills, commands, gitignore protections, Post-Commit State Rule cross-references
+- `scripts/project-control-sync-dry-run.mjs` — reads repo docs, reports drift vs expected state, outputs dry-run format
+- `scripts/project-control-sync-validate.mjs` — validates project-control docs are internally consistent
+- `scripts/setup-claude-notification.ps1` — walks notification hook setup; dry-run by default; -Apply to modify settings.json
+
+### Updated (Universal standards)
+- `docs/ai-system/universal-standards.md` — "Skills are canonical / commands are compatibility wrappers" section; "Closeout sync rule" section; automation table updated (skills: Backlog → User-invoked; commands: updated count and notes; new rows for closeout sync, OS self-audit, notification wizard)
+
+### Updated (Bootstrap template)
+- `docs/ai-system/bootstrap-template.md` — Step 2 updated (skill folders + thin command wrappers); Step 10 verification updated (OS self-audit required; closeout sync contract required); "What this template does" updated for v0.5.0
+
+### Updated (Dev protocols — event-triggered sync rule)
+- `docs/dev/auto-management-protocol.md` — Duty 2 expanded with internal sync check requirement; Quick reference rows added
+- `docs/dev/package-boundary-closeout-protocol.md` — Step 8 (internal sync check) added before Status sync plan
+- `docs/dev/closeout-sync-contract.md` — new file (listed above)
+
+### Updated (Agent layers — event-triggered sync rule)
+- `AGENTS.md` — event-triggered sync rule added; protocol table updated
+- `CLAUDE.md` — Short Command Interface table expanded with new commands and skill column; event-triggered sync rule section added
+- `.codex/README.md` — event-triggered sync rule section added
+
+### Updated (Project-control docs — stale state corrected)
+- `docs/project-control/current-sprint.md` — updated to reflect Package 5A complete, AI Project OS Framework Groundwork Pass active
+- `docs/project-control/kanban-board.md` — Package 5A moved to Done; cards updated post-Package 5A
+
+### Updated (Gitignore)
+- `.gitignore` — added `external-sync-map.local.json` and generated dry-run output patterns
+
+### Intentionally NOT changed
+- `index.html`, `src/**`, `scripts/**` (except new OS scripts above)
+- Pagination constants, `BOOK_PAGINATION_VERSION`, `BOOK_PRODUCTION_DEPS`
+- Standalone keepsake flows, Review view
+- No Google Calendar API implementation
+- Product roadmap content in Tower (unchanged except stale-state corrections)
+- No live Claude hooks committed
+
+---
+
 ## 2026-05-24 — AI Project OS Usability Patch
 
 **Status:** IN PROGRESS — docs/config only; no product/app changes.

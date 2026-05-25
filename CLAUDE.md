@@ -69,24 +69,52 @@ The following are off-limits without explicit instruction:
 
 Full protocol: `docs/automation/operator-mode/context-continuity-protocol.md`
 
-## Short Command Interface (added AI Project OS Usability Patch)
+## Short Command Interface (added AI Project OS Usability Patch; skills canonical from Framework Groundwork Pass)
 
 The user should not need to paste long startup, handoff, closeout, precommit, status, or tool-switch prompts during daily work. Long protocols live in repo docs. Daily operation uses short slash commands.
 
-| Command | What it does | Backed by |
-|---|---|---|
-| `/start` | Session startup — read repo state, state package/branch/next action | `docs/dev/session-restart-protocol.md` |
-| `/handoff` | Update `AI_HANDOFF.md` and produce a transfer packet | `docs/automation/operator-mode/context-continuity-protocol.md` |
-| `/precommit` | Walk the pre-commit verification gate | `docs/qa/pre-commit-verification-template.md` |
-| `/closeout` | Package boundary closeout — verify, update state, propose commit | `docs/dev/package-boundary-closeout-protocol.md` |
-| `/package-start` | Pre-flight for a newly authorized package | `docs/dev/session-restart-protocol.md` |
-| `/switch-to-codex` | Prepare handoff for Codex | `docs/dev/tool-switching-protocol.md` |
-| `/switch-to-claude` | Resume from Codex | `docs/dev/session-restart-protocol.md` |
-| `/weekly-sync` | Coordinator weekly sync | `docs/project-control/coordinator-weekly-sync.md` |
-| `/calendar-sync-plan` | Calendar delta review (dry run) | `docs/project-control/calendar-sync-policy.md` |
-| `/status-summary` | Generate internal + shareable project status | `docs/project-control/shareable-status-summary.md` |
+**Skills are canonical.** Command files (`.claude/commands/*.md`) are compatibility wrappers — thin delegates that invoke the matching skill workflow. The skill in `.claude/skills/<name>/SKILL.md` is the authoritative protocol definition.
+
+| Command | What it does | Canonical skill | Backed by |
+|---|---|---|---|
+| `/start` | Session startup — read repo state, state package/branch/next action | `.claude/skills/start/SKILL.md` | `docs/dev/session-restart-protocol.md` |
+| `/handoff` | Update `AI_HANDOFF.md` and produce a transfer packet | `.claude/skills/handoff/SKILL.md` | `docs/automation/operator-mode/context-continuity-protocol.md` |
+| `/precommit` | Walk the pre-commit verification gate | `.claude/skills/precommit/SKILL.md` | `docs/qa/pre-commit-verification-template.md` |
+| `/closeout` | Package boundary closeout — verify, update state, run sync check, propose commit | `.claude/skills/closeout/SKILL.md` | `docs/dev/package-boundary-closeout-protocol.md` |
+| `/package-start` | Pre-flight for a newly authorized package | `.claude/skills/package-start/SKILL.md` | `docs/dev/session-restart-protocol.md` |
+| `/switch-to-codex` | Prepare handoff for Codex | `.claude/skills/switch-to-codex/SKILL.md` | `docs/dev/tool-switching-protocol.md` |
+| `/switch-to-claude` | Resume from Codex | `.claude/skills/switch-to-claude/SKILL.md` | `docs/dev/session-restart-protocol.md` |
+| `/weekly-sync` | Coordinator weekly sync | `.claude/skills/weekly-sync/SKILL.md` | `docs/project-control/coordinator-weekly-sync.md` |
+| `/calendar-sync-plan` | Calendar delta review (dry run) | `.claude/skills/project-sync-dry-run/SKILL.md` | `docs/project-control/calendar-sync-policy.md` |
+| `/status-summary` | Generate internal + shareable project status | `.claude/skills/status-summary/SKILL.md` | `docs/project-control/shareable-status-summary.md` |
+| `/os-audit` | AI Project OS self-audit | `.claude/skills/os-audit/SKILL.md` | `docs/ai-system/os-self-audit-checklist.md` |
+| `/project-sync-dry-run` | Project-control sync dry-run (no writes) | `.claude/skills/project-sync-dry-run/SKILL.md` | `docs/project-control/project-sync-policy.md` |
+| `/project-sync-apply` | Apply approved sync delta | `.claude/skills/project-sync-apply/SKILL.md` | `docs/project-control/external-sync-safety.md` |
+| `/notification-setup-wizard` | Walk notification hook setup (local-only) | `.claude/skills/notification-setup-wizard/SKILL.md` | `docs/dev/notification-setup.md` |
 
 Command files live in `.claude/commands/*.md`. Commands are user-invoked: the user types the command; Claude Code routes to the prompt content; Claude follows the protocol. Commands route Claude through existing protocols — they never invent new authority, never commit or push without approval, and never start a new package without Coordinator authorization. If Claude Code command support varies by version, the `.md` files serve as short paste-ready entry points.
+
+## Event-triggered internal sync rule (added AI Project OS Framework Groundwork Pass)
+
+Every meaningful work-unit closeout must trigger an internal sync check via the `closeout` skill or the `project-sync-dry-run` skill. The sync check is mandatory (policy-driven) after:
+
+- Package complete, paused, or blocked
+- Commit completed
+- Merge completed
+- Branch handoff (Claude ↔ Codex)
+- Model switch
+- Tool switch
+- Project-control change (roadmap, sprint, backlog)
+- Milestone/gate change
+- Schedule/date change
+- Task/backlog status change (significant)
+- Major planning change
+
+The sync check verifies: `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`, `docs/project-control/current-sprint.md`, `docs/project-control/kanban-board.md`, and staleness of calendar/external tool exports.
+
+External systems (Google Calendar, ClickUp, TickTick) remain dry-run/apply and approval-gated. Never write to external systems without Coordinator approval.
+
+Full contract: `docs/dev/closeout-sync-contract.md`
 
 ## Session, context, model, and tool protocols
 

@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-24`
+**Last updated:** `2026-05-25`
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `926ec37` — merge: sync operating docs to reflect Package 5A completion |
-| Last closed package | `Package 5A — Message Book Proof Approval State Foundation` (implementation `e2df2a0`, merge `297a221`; status sync `663346c`, merge `926ec37`) — FULLY COMPLETE |
-| Active package | None — Coordinator decides next |
-| Active branch | `main` (clean — no active work branch) |
-| Next authorized target | Coordinator decides next package — no package authorized |
-| Package 5A | COMPLETE — merged and status-synced. No active branch remains. |
+| main HEAD | `cb920be` — merge: add Short Command Interface to AI Project OS |
+| Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
+| Active pass | `AI Project OS Framework Groundwork Pass` (Sprint 2026-05-B) |
+| Active branch | `docs/ai-project-os-framework-groundwork` (all work complete, awaiting commit approval) |
+| Next authorized target | Coordinator approves commit on `docs/ai-project-os-framework-groundwork`, then decides next product package |
+| OS audit | BOOTSTRAP COMPLETE — 88 pass, 0 fail (`node scripts/os-self-audit.mjs`) |
 
 ---
 
@@ -67,7 +67,7 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 
 ---
 
-## Where to look — AI Project OS layer (Package 2.9)
+## Where to look — AI Project OS layer (v0.5.0 — Framework Groundwork Pass)
 
 | Question | File |
 |---|---|
@@ -85,7 +85,11 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | Notification setup (user-level) | `docs/dev/notification-setup.md` |
 | Test strategy | `docs/qa/test-strategy.md` |
 | Per-package verification | `docs/qa/package-verification-template.md` |
-| Short command interface (live) | `.claude/commands/README.md` — `/start`, `/handoff`, `/precommit`, `/closeout`, `/status-summary`, etc. |
+| Short command interface (live) | `.claude/commands/README.md` — 14 commands, all delegating to `.claude/skills/*/SKILL.md` |
+| Skills (canonical protocol layer) | `.claude/skills/README.md` — 13 skills with SKILL.md |
+| Closeout sync contract | `docs/dev/closeout-sync-contract.md` |
+| Project-control sync foundation | `docs/project-control/project-sync-policy.md`, `project-sync-dry-run-format.md`, `external-sync-safety.md` |
+| OS self-audit | `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` |
 | Calendar sync layer planning | `docs/project-control/calendar-sync-policy.md`, `calendar-source-template.md`, `calendar-sync-log.md` |
 | Shareable project status | `docs/project-control/shareable-status-summary.md` |
 

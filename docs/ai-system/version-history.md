@@ -11,7 +11,8 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | in progress |
+| 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-24 | in progress |
+| 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
 | 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | merged (`9be0f81`) |
 | 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | merged (`a20af30`) |
 | 0.2.0 | Package 2.8 — KeepMees Project Control Tower | 2026-05-17 | merged (`bdb73db`) |
@@ -21,10 +22,61 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ---
 
+## 0.5.0 — AI Project OS Framework Groundwork Pass (2026-05-24)
+
+**Branch:** `docs/ai-project-os-framework-groundwork` (pending)
+**Status:** in progress
+
+### What this pass adds
+
+- **Skills as canonical layer:** 13 skill folders with SKILL.md frontmatter; commands become compatibility wrappers. Skills: `start`, `handoff`, `precommit`, `closeout`, `package-start`, `switch-to-codex`, `switch-to-claude`, `weekly-sync`, `status-summary`, `os-audit`, `project-sync-dry-run`, `project-sync-apply`, `notification-setup-wizard`.
+- **Closeout sync contract:** `docs/dev/closeout-sync-contract.md` — mandatory internal sync check after every meaningful work-unit closeout.
+- **Project-control sync foundation:** `project-sync-policy.md`, `project-sync-source-schema.md`, `project-sync-dry-run-format.md`, `external-sync-safety.md`, `external-sync-map.example.json`, `project-sync-log.md`.
+- **OS self-audit:** `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs`.
+- **Notification setup wizard:** `scripts/setup-claude-notification.ps1` + skill + command wrapper.
+- **Safe scripts (4):** `os-self-audit.mjs`, `project-control-sync-dry-run.mjs`, `project-control-sync-validate.mjs`, `setup-claude-notification.ps1`. All read-only, dependency-free, no external writes.
+
+### Capability deltas (vs. 0.4.0)
+
+| Capability | Before | After | Status |
+|---|---|---|---|
+| Skills | Placeholder README only | 13 live SKILL.md files with frontmatter | User-invoked |
+| Commands | Full protocol in command file | Thin wrapper → delegates to skill | User-invoked |
+| Post-package sync | Manual / ad hoc | Mandatory internal sync check via closeout-sync-contract | Policy-driven |
+| External sync | No policy | Dry-run/apply with approval; stable IDs; external safety rules | Semi-automatic |
+| OS self-audit | Not available | `/os-audit` + `scripts/os-self-audit.mjs` | User-invoked |
+| Notification setup | Manual instructions only | `/notification-setup-wizard` + PowerShell script (dry-run default) | User-level setup |
+| Project-control drift detection | Ad hoc | `/project-sync-dry-run` + script | User-invoked |
+| Bootstrap verification | Informal checklist | Formal `os-self-audit-checklist.md` + script | User-invoked |
+
+### What is intentionally NOT changed
+
+- `index.html`, `src/**` (app/product code)
+- Scope-guarded constants and product gates
+- No Google Calendar API implementation (dry-run/apply only)
+- No live Claude hooks committed
+- Package 5A — complete; no new product package authorized
+
+### Backlog
+
+| Item | Reason deferred |
+|---|---|
+| Live Google Calendar API sync | Needs OAuth credentials (never committed) + authorized package |
+| `scripts/generate-project-calendar.mjs` | Needs stable UID design + Coordinator authorization |
+| Additional commands (`/context-budget`, `/scope-check`) | Can be added in a future pass |
+| CI workflows | Not authorized; tests run locally |
+
+### What should be copied to Puzzle and future repos
+
+All of `docs/ai-system/`, all of `docs/dev/` (including `closeout-sync-contract.md`), all of `docs/qa/` templates, `.claude/skills/` pattern (adapt to new project), `.claude/commands/` wrappers, `scripts/os-self-audit.mjs`, `scripts/project-control-sync-dry-run.mjs`, `scripts/project-control-sync-validate.mjs`, `scripts/setup-claude-notification.ps1`. KeepMees-specific project-control content does not travel.
+
+---
+
 ## 0.4.0 — AI Project OS Usability Patch — Short Command Interface (2026-05-24)
 
-**Branch:** `docs/ai-project-os-usability-patch` (pending)
-**Status:** in progress
+**Branch:** `docs/ai-project-os-usability-patch`
+**Merge commit:** `cb920be`
+**Status:** merged to main
 
 ### What this patch adds
 

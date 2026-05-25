@@ -1,3 +1,5 @@
+This command delegates to the **weekly-sync** skill (`.claude/skills/weekly-sync/SKILL.md`). Approval boundaries unchanged: no commit, push, or external tool writes without Coordinator approval.
+
 Run the KeepMees Coordinator weekly sync.
 
 Read `docs/project-control/coordinator-weekly-sync.md` and follow the weekly process.
