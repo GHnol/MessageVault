@@ -121,7 +121,26 @@ If the new project will benefit from the Tower pattern, copy the structure of `d
 - `coordinator-weekly-sync.md` — adapt to the new project's cadence
 - `next-session-prompt.md` — adapt the resume prompt
 
-External-tool layers (ClickUp/TickTick/Calendar `.ics`) are optional per project.
+### External board (default: GitHub Projects)
+
+**GitHub Projects is the default external board provider** for any AI Project OS repo (as of v1.3). Set up GitHub Projects before ClickUp. Copy and adapt:
+
+- `docs/project-control/github-projects-setup-policy.md` — approved structure
+- `docs/project-control/github-projects-source-schema.md` — source schema
+- `docs/project-control/github-projects-import-runbook.md` — import process
+- `docs/project-control/github-projects-field-map.example.json` — example field map (safe to commit; placeholder IDs only)
+- `docs/project-control/github-projects-sync-log.md` — start fresh
+- `scripts/github-project-setup-dry-run.mjs` — copy as-is
+- `scripts/github-project-setup-apply.mjs` — copy as-is (apply skeleton)
+- `scripts/github-project-import-issues.mjs` — copy as-is
+- `scripts/github-project-sync-status.mjs` — copy as-is
+- `scripts/github-project-field-map.mjs` — copy as-is
+- `.claude/skills/github-project-setup/SKILL.md` — copy and adapt project name
+- `.claude/commands/github-project-setup.md` — copy as-is
+
+**ClickUp is an optional adapter.** Copy `clickup-setup-policy.md` only if the project will use ClickUp alongside GitHub Projects.
+
+Other external-tool layers (TickTick, Calendar `.ics`) are optional per project.
 
 If the new project is small, skip this whole layer and rely on `AI_HANDOFF.md` + a single `BACKLOG.md` instead.
 
@@ -260,10 +279,10 @@ Package 5A (KeepMees Message Book Proof Approval State Foundation) is the KeepMe
 
 - Does not commit live hooks or subagents (format not yet verified for all repo configurations).
 - Does not install n8n / Make / Zapier flows.
-- Does not auto-create a GitHub Project board.
+- Does not auto-create a GitHub Project or GitHub Issues — setup follows the dry-run/apply workflow in `github-projects-import-runbook.md` with explicit Coordinator approval.
 - Does not configure the permission-notification beep at user level — each contributor installs that via `/notification-setup-wizard`; see `docs/dev/notification-setup.md`. Not committed; not shared; not enforced on other contributors.
 - Does not make any product decisions for the new project.
-- Does not write to external tools (Google Calendar, ClickUp, TickTick) — all external sync is dry-run/apply with approval.
+- Does not write to external tools (GitHub Projects, Google Calendar, ClickUp, TickTick) — all external sync is dry-run/apply with approval.
 
 **What the template does include (new as of OS v0.5.0):**
 - Skill folders with SKILL.md frontmatter — the canonical protocol layer.

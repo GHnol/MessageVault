@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | in progress (branch: `docs/github-projects-default-board-provider`) |
 | 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
 | 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
 | 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
@@ -20,6 +21,67 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 1.3.0 — AI Project OS v1.3: External Board Provider Update (2026-05-25)
+
+**Branch:** `docs/github-projects-default-board-provider` (pending commit approval)
+**Status:** IN PROGRESS — awaiting Coordinator commit approval
+
+### What this pass adds
+
+- **GitHub Projects as default board:** `github-projects-setup-policy.md` — one repo-connected GitHub Project per project; GitHub Issues as external task records; 14 views, 9 statuses, 13 custom fields; Owner Role custom field (AI agents never as GitHub Assignees); approval-gated setup.
+- **GitHub Projects source schema:** `github-projects-source-schema.md` — full field list for source records; field routing table (Issue title/body, labels, milestone, Project custom fields, local sync map only).
+- **GitHub Projects import runbook:** `github-projects-import-runbook.md` — step-by-step dry-run/apply process; gh CLI preflight; rollback strategy.
+- **Example field map:** `github-projects-field-map.example.json` — committed example with placeholder IDs only; shows all 13 fields, 14 views, 9 statuses, example issue mappings.
+- **GitHub Projects sync log:** `github-projects-sync-log.md` — initial entry records policy change with no live writes.
+- **Script scaffolding (5 scripts):** `github-project-setup-dry-run.mjs` (reads docs, prints plan, no writes), `github-project-setup-apply.mjs` (apply skeleton, not yet live), `github-project-import-issues.mjs` (dry-run by default, --apply required), `github-project-sync-status.mjs` (local structural status only), `github-project-field-map.mjs` (validates example map, no external calls).
+- **New skill:** `.claude/skills/github-project-setup/SKILL.md` — YAML frontmatter, full protocol for GitHub Projects setup.
+- **New command:** `.claude/commands/github-project-setup.md` — thin wrapper → delegates to skill.
+
+### Capability deltas (vs. 1.2.0)
+
+| Capability | Before | After | Status |
+|---|---|---|---|
+| Default external board provider | ClickUp (implied by CSV) | GitHub Projects (explicit policy) | Policy-driven |
+| ClickUp status | Implied default | Explicit optional adapter | Policy-driven |
+| GitHub Projects setup policy | No policy | `github-projects-setup-policy.md` | Policy-driven |
+| GitHub Projects source schema | No schema | `github-projects-source-schema.md` | Policy-driven |
+| GitHub Projects import runbook | No runbook | `github-projects-import-runbook.md` | Policy-driven |
+| GitHub Projects dry-run script | Not available | `github-project-setup-dry-run.mjs` | User-invoked |
+| GitHub Projects apply skeleton | Not available | `github-project-setup-apply.mjs` (skeleton only) | Backlog (not yet live) |
+| GitHub Issue import script | Not available | `github-project-import-issues.mjs` (dry-run default) | User-invoked (apply: backlog) |
+| GitHub Projects sync status | Not available | `github-project-sync-status.mjs` (local only) | User-invoked |
+| Example field map | Not available | `github-projects-field-map.example.json` | Committed (placeholder IDs) |
+| github-project-setup skill | Not available | `.claude/skills/github-project-setup/SKILL.md` | User-invoked |
+| /github-project-setup command | Not available | `.claude/commands/github-project-setup.md` | User-invoked |
+| GitHub token safety rules | Not documented | Explicit in `external-sync-safety.md` | Policy-driven |
+| Sync map unified format | ClickUp + Calendar + TickTick | + GitHub Projects | Policy-driven |
+
+### What is intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- `docs/project-control/clickup-setup-policy.md` — preserved; ClickUp remains optional adapter
+- `docs/project-control/clickup-import.csv` — valid as-is; no structural change
+- No live GitHub Project created
+- No GitHub Issues imported
+- No live API integration of any kind
+- No Package 5B planning or implementation
+- No secrets or credentials
+
+### Backlog
+
+| Item | Reason deferred |
+|---|---|
+| Live `github-project-setup-apply.mjs` with GraphQL mutations | Needs explicit Coordinator approval + active session testing |
+| Live `github-project-import-issues.mjs` --apply execution | Needs approved source record file + Coordinator approval |
+| GitHub Project views configuration (some views need UI) | View creation via API may require GraphQL mutations not yet wired |
+| `external-sync-map.local.json` populated with real IDs | Requires live project creation first |
+
+### What should be copied to Puzzle and future repos
+
+`github-projects-setup-policy.md`, `github-projects-source-schema.md`, `github-projects-import-runbook.md`, and the 5 GitHub Projects scripts are universal patterns — adapt project name and owner when copying. The example field map and skill/command can be copied as-is and adapted. The safety additions to `external-sync-safety.md` are universal and should be part of the standard bootstrap template.
 
 ---
 

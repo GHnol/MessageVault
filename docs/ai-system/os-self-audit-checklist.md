@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -102,6 +102,37 @@ Each item is classified as **Required** (FAIL if missing) or **Recommended** (WA
 
 ---
 
+## 6b. GitHub Projects default board provider layer (AI Project OS v1.3)
+
+Required when the repo has been updated to AI Project OS v1.3 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `docs/project-control/github-projects-setup-policy.md` exists | Required | `Glob docs/project-control/github-projects-setup-policy.md` |
+| `docs/project-control/github-projects-source-schema.md` exists | Required | `Glob docs/project-control/github-projects-source-schema.md` |
+| `docs/project-control/github-projects-import-runbook.md` exists | Required | `Glob docs/project-control/github-projects-import-runbook.md` |
+| `docs/project-control/github-projects-field-map.example.json` exists | Required | `Glob docs/project-control/github-projects-field-map.example.json` |
+| `docs/project-control/github-projects-sync-log.md` exists | Required | `Glob docs/project-control/github-projects-sync-log.md` |
+| `.claude/skills/github-project-setup/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/github-project-setup/SKILL.md` |
+| `.claude/commands/github-project-setup.md` exists | Required | `Glob .claude/commands/github-project-setup.md` |
+| `scripts/github-project-setup-dry-run.mjs` exists | Required | `Glob scripts/github-project-setup-dry-run.mjs` |
+| `scripts/github-project-setup-apply.mjs` exists | Required | `Glob scripts/github-project-setup-apply.mjs` |
+| `scripts/github-project-import-issues.mjs` exists | Required | `Glob scripts/github-project-import-issues.mjs` |
+| `scripts/github-project-sync-status.mjs` exists | Required | `Glob scripts/github-project-sync-status.mjs` |
+| `scripts/github-project-field-map.mjs` exists | Required | `Glob scripts/github-project-field-map.mjs` |
+| `external-sync-map.example.json` has `github_projects` section | Required | `Grep "github_projects" docs/project-control/external-sync-map.example.json` |
+| `project-sync-policy.md` names GitHub Projects as default | Required | `Grep "GitHub Projects is the default" docs/project-control/project-sync-policy.md` |
+| `github-projects-field-map.example.json` uses placeholder IDs only | Required | `node scripts/github-project-field-map.mjs` (validation passes) |
+| No real GitHub tokens, project IDs, or issue numbers in committed files | Required | Visual scan of example JSONs |
+
+The audit does **not** require:
+- A real `external-sync-map.local.json` (gitignored; expected to be absent)
+- Real GitHub token or auth credentials
+- A live GitHub Project to exist
+- Real issue numbers or project item IDs
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -150,10 +181,13 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 
 | Script | Classification | What it checks |
 |---|---|---|
-| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 above (file existence, gitignore, Grep-based checks) |
+| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b above (file existence, gitignore, Grep-based checks, GitHub Projects layer) |
 | `scripts/project-control-sync-validate.mjs` | Recommended | Section 6 — project-control doc consistency |
+| `scripts/github-project-setup-dry-run.mjs` | Recommended | GitHub Projects planned structure; validates example field map |
+| `scripts/github-project-field-map.mjs` | Recommended | GitHub Projects field map placeholder safety and field coverage |
+| `scripts/github-project-sync-status.mjs` | Recommended | Local structural sync status (no API calls) |
 
-Both scripts are read-only, dependency-free, and local-file-only.
+All scripts are read-only, dependency-free, and local-file-only. No script makes API calls without `--apply` flag and Coordinator approval.
 
 ---
 

@@ -1,8 +1,8 @@
 # External Sync Safety Rules
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.2 external setup alignment, 2026-05-25)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.2 external setup alignment, 2026-05-25; updated in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
 **Owner:** Coordinator / Project Control
-**Purpose:** Governs how and when external tools (Google Calendar, ClickUp, TickTick) may be updated from repo state.
+**Purpose:** Governs how and when external tools (GitHub Projects, Google Calendar, ClickUp, TickTick) may be updated from repo state.
 
 These rules are non-negotiable. They apply to every agent, script, and manual process that touches external tool data on behalf of the KeepMees project.
 
@@ -12,11 +12,49 @@ These rules are non-negotiable. They apply to every agent, script, and manual pr
 
 1. **Dry-run before apply.** Always produce a delta proposal before applying any change to an external tool. No exceptions.
 2. **Approval before apply.** All external tool changes require explicit Coordinator approval before being applied.
-3. **No destructive deletes without approval.** Never delete a calendar event, ClickUp task, or TickTick item without explicit approval. Propose the delete; wait for confirmation.
+3. **No destructive deletes without approval.** Never delete a calendar event, GitHub Issue, GitHub Project item, ClickUp task, or TickTick item without explicit approval. Propose the delete; wait for confirmation.
 4. **No silent overwrites.** Never silently overwrite a user-edited external record. If the external record differs from the repo doc, surface the conflict and ask the Coordinator which version to keep.
-5. **Log every applied change.** Every change applied to an external tool must be recorded in `project-sync-log.md` with the date, method, and what changed.
-6. **No credentials in the repo.** Never commit API keys, OAuth tokens, client secrets, or any authentication credential. External sync always runs from user-level credentials (never committed).
-7. **No API calls from repo scripts.** Scripts in `scripts/` must not make API calls to external services. API scripts, if they ever exist, are gitignored local tools, never committed.
+5. **Log every applied change.** Every change applied to an external tool must be recorded in `project-sync-log.md` or `github-projects-sync-log.md` with the date, method, and what changed.
+6. **No credentials in the repo.** Never commit API keys, OAuth tokens, GitHub tokens, client secrets, or any authentication credential. External sync always runs from user-level credentials (never committed).
+7. **No API calls from repo scripts without --apply.** Scripts in `scripts/` must not make API calls to external services without an explicit `--apply` flag and Coordinator approval. Default mode for all scripts is dry-run or help output.
+
+---
+
+## GitHub Projects and gh CLI safety
+
+### GitHub token and gh auth safety
+
+- **Never commit GitHub tokens (PAT, fine-grained, or classic) of any kind.** This includes tokens starting with `ghp_`, `github_pat_`, or any variation.
+- **Never commit OAuth credentials** from `~/.config/gh/hosts.yml` or any gh CLI auth file.
+- **Never run `gh auth login` from a script automatically.** If `gh auth status` fails, print clear instructions and exit non-zero. The user must authenticate manually.
+- **Never change `gh auth` state from a script.** Do not run `gh auth switch`, `gh auth logout`, or `gh auth token` from a repo script.
+- **Never print the output of `gh auth token`** or any command that displays auth tokens.
+
+### Committed vs non-committed files (GitHub Projects)
+
+- `docs/project-control/external-sync-map.local.json` — **never committed.** Contains real GitHub project_id, project_item_id, issue numbers, and issue URLs. Gitignored.
+- `docs/project-control/github-projects-field-map.example.json` — **committed as example only.** Must contain only fake placeholder IDs. Never real project IDs, issue numbers, or item IDs.
+- GitHub tokens, OAuth credentials, or any GitHub authentication material — **never committed.**
+
+### No destructive project item or issue deletion
+
+Do not delete GitHub Issues or GitHub Project items without explicit Coordinator approval. Propose the delete; wait for confirmation. Closing an issue is preferable to deleting it — GitHub maintains an audit trail for closed issues.
+
+### No silent overwrite of GitHub Project fields
+
+Do not silently overwrite GitHub Project field values that a user has manually set. If the field value in the Project differs from the repo source record, surface the conflict.
+
+### Apply scripts must require explicit approval flags
+
+All apply scripts (`github-project-setup-apply.mjs`, `github-project-import-issues.mjs`) must:
+- Require `--apply` to perform any external write.
+- Print a warning and exit if `--apply` is absent.
+- Verify `gh auth status` before any apply operation.
+- Print the exact operations that will run before running them.
+
+### Dry-run scripts must perform no external mutation
+
+`github-project-setup-dry-run.mjs`, `github-project-sync-status.mjs`, and `github-project-field-map.mjs` must never call any external API. Dry-run output goes to stdout only.
 
 ---
 

@@ -1,0 +1,188 @@
+{
+  "_comment": "EXAMPLE ONLY. This file shows the format for GitHub Projects field mapping. It contains no real project IDs, issue numbers, or auth tokens. The real local map is gitignored (external-sync-map.local.json) and lives only on each contributor's machine.",
+  "_format_version": "1",
+  "_last_updated": "YYYY-MM-DD",
+
+  "owner": "GHnol",
+  "repo": "MessageVault",
+  "project_title": "KeepMees Project Control",
+  "project_number": 0,
+  "project_id": "PVT_placeholder_project_id_here",
+
+  "statuses": [
+    "Not Started",
+    "In Progress",
+    "In Review",
+    "Blocked",
+    "Waiting",
+    "Approved",
+    "Done",
+    "Deferred",
+    "Cancelled"
+  ],
+
+  "views": [
+    "Board",
+    "Table",
+    "Current Sprint",
+    "Backlog",
+    "Review / QA",
+    "Waiting / Blocked",
+    "Done",
+    "Risks / Decisions",
+    "Calendar Relevant",
+    "TickTick Relevant",
+    "By Package",
+    "By Phase",
+    "By Lane",
+    "Decision Needed"
+  ],
+
+  "labels": [
+    "task",
+    "package",
+    "gate",
+    "risk",
+    "decision",
+    "ritual",
+    "milestone",
+    "risk-high",
+    "decision-needed",
+    "calendar",
+    "sprint"
+  ],
+
+  "fields": {
+    "os_id": {
+      "type": "text",
+      "github_field_id": "PVTF_placeholder_os_id_field_id",
+      "github_field_name": "OS ID"
+    },
+    "package": {
+      "type": "text",
+      "github_field_id": "PVTF_placeholder_package_field_id",
+      "github_field_name": "Package"
+    },
+    "phase": {
+      "type": "text",
+      "github_field_id": "PVTF_placeholder_phase_field_id",
+      "github_field_name": "Phase"
+    },
+    "lane": {
+      "type": "single_select",
+      "github_field_id": "PVTF_placeholder_lane_field_id",
+      "github_field_name": "Lane",
+      "options": [
+        "Development",
+        "Product",
+        "Design",
+        "QA",
+        "Vendor",
+        "Operations",
+        "Growth",
+        "Legal",
+        "Finance",
+        "OS Infrastructure",
+        "AI Agent",
+        "Coordinator",
+        "Founder",
+        "Backlog"
+      ]
+    },
+    "source_file": {
+      "type": "text",
+      "github_field_id": "PVTF_placeholder_source_file_field_id",
+      "github_field_name": "Source File"
+    },
+    "last_repo_sync": {
+      "type": "date",
+      "github_field_id": "PVTF_placeholder_last_repo_sync_field_id",
+      "github_field_name": "Last Repo Sync"
+    },
+    "external_sync_status": {
+      "type": "single_select",
+      "github_field_id": "PVTF_placeholder_sync_status_field_id",
+      "github_field_name": "External Sync Status",
+      "options": ["in-sync", "drift", "unknown", "not-tracked"]
+    },
+    "risk_level": {
+      "type": "single_select",
+      "github_field_id": "PVTF_placeholder_risk_level_field_id",
+      "github_field_name": "Risk Level",
+      "options": ["Low", "Medium", "High"]
+    },
+    "decision_needed": {
+      "type": "checkbox",
+      "github_field_id": "PVTF_placeholder_decision_needed_field_id",
+      "github_field_name": "Decision Needed"
+    },
+    "calendar_relevant": {
+      "type": "checkbox",
+      "github_field_id": "PVTF_placeholder_calendar_relevant_field_id",
+      "github_field_name": "Calendar Relevant"
+    },
+    "ticktick_relevant": {
+      "type": "checkbox",
+      "github_field_id": "PVTF_placeholder_ticktick_relevant_field_id",
+      "github_field_name": "TickTick Relevant"
+    },
+    "owner_role": {
+      "type": "single_select",
+      "github_field_id": "PVTF_placeholder_owner_role_field_id",
+      "github_field_name": "Owner Role",
+      "options": [
+        "Founder",
+        "Coordinator",
+        "Claude",
+        "Codex",
+        "Development",
+        "Vendor",
+        "Design",
+        "Product",
+        "QA"
+      ]
+    },
+    "success_criteria": {
+      "type": "text",
+      "github_field_id": "PVTF_placeholder_success_criteria_field_id",
+      "github_field_name": "Success Criteria"
+    }
+  },
+
+  "local_sync_map_path": "docs/project-control/external-sync-map.local.json",
+
+  "example_issue_mappings": {
+    "keepmees-task-proof-approval-state": {
+      "os_id": "keepmees-task-proof-approval-state",
+      "issue_number": 0,
+      "issue_url": "https://github.com/GHnol/MessageVault/issues/0",
+      "project_item_id": "PVTI_placeholder_project_item_id_here",
+      "github_field_values": {
+        "Package": "Package 5A",
+        "Phase": "5",
+        "Lane": "Development",
+        "Owner Role": "Claude",
+        "External Sync Status": "in-sync",
+        "Source File": "docs/project-control/backlog.md"
+      },
+      "last_synced": "YYYY-MM-DD",
+      "status": "done"
+    },
+    "keepmees-gate-foundation-os": {
+      "os_id": "keepmees-gate-foundation-os",
+      "issue_number": 0,
+      "issue_url": "https://github.com/GHnol/MessageVault/issues/0",
+      "project_item_id": "PVTI_placeholder_project_item_id_here_2",
+      "github_field_values": {
+        "Package": "",
+        "Phase": "1",
+        "Lane": "OS Infrastructure",
+        "Owner Role": "Coordinator",
+        "External Sync Status": "in-sync",
+        "Source File": "docs/project-control/phase-gates.md"
+      },
+      "last_synced": "YYYY-MM-DD",
+      "status": "done"
+    }
+  }
+}
