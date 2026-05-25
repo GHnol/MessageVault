@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — AI Project OS v1.2 external setup alignment patch COMPLETE. Implementation committed (`1c76444`), merged to main (`328d81e`), pushed to origin. Status-sync in progress on `docs/sync-after-clickup-setup-alignment`.
+**Status:** `in-progress` — AI Project OS v1.3 External Board Provider Update. Implementation files written on branch `docs/github-projects-default-board-provider`. Awaiting Coordinator commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
 
@@ -18,31 +18,54 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Last completed pass** | `AI Project OS v1.2 — External Setup Alignment Patch` (docs-only) |
-| **Implementation branch** | `docs/align-clickup-setup-ai-os-v1-2` (merged to main) |
-| **Implementation commit** | `1c76444` — docs: align ClickUp setup with AI Project OS v1.2 |
-| **Merge commit** | `328d81e` — merge: align ClickUp setup with AI Project OS v1.2 |
-| **Status-sync branch** | `docs/sync-after-clickup-setup-alignment` (in progress) |
-| **main HEAD** | `328d81e` — merge: align ClickUp setup with AI Project OS v1.2 |
+| **Active pass** | `AI Project OS v1.3 — External Board Provider Update` (docs/scripts/config only) |
+| **Active branch** | `docs/github-projects-default-board-provider` |
+| **main HEAD** | `a0e27aa` — merge: sync operating docs after ClickUp setup alignment |
+| **Last completed pass** | `AI Project OS v1.2 — External Setup Alignment Patch` (merged `328d81e`) |
 | **Active package** | None — Coordinator decides next product package |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
+| **Package 5B** | Not started |
 
 ---
 
-## Objective (OS pass, retrospective)
+## Objective (active pass)
 
-Docs-only external setup alignment patch (v1.2). Standardized the ClickUp structure (one primary Board, saved views/filters, not six default Lists), added external platform mapping guide, updated sync policy and external-sync-safety docs, added AI Project OS v1.2 entries to CHANGELOG and version-history. No app code; no live API integration; no Package 5B work.
+AI Project OS v1.3 External Board Provider Update. Makes GitHub Projects the default external board provider for KeepMees and future AI Project OS repos. Demotes ClickUp to optional adapter. Adds setup policy, source schema, import runbook, example field map, sync log, 5 dry-run/apply scripts, and a new github-project-setup skill/command. Updates project-sync-policy, external-platform-mapping-guide, external-sync-safety, CHANGELOG, version-history, bootstrap-template. No app code; no live GitHub API writes; no Package 5B work.
 
 ---
 
-## Delivered scope
+## Delivered scope (v1.3 pass)
 
-- `docs/project-control/clickup-setup-policy.md` — CREATED
-- `docs/project-control/external-platform-mapping-guide.md` — CREATED
-- `docs/project-control/project-sync-policy.md` — UPDATED
-- `docs/project-control/external-sync-safety.md` — UPDATED
-- `docs/ai-system/CHANGELOG.md` — UPDATED
-- `docs/ai-system/version-history.md` — UPDATED
+### New files — docs
+- `docs/project-control/github-projects-setup-policy.md` — CREATED
+- `docs/project-control/github-projects-source-schema.md` — CREATED
+- `docs/project-control/github-projects-import-runbook.md` — CREATED
+- `docs/project-control/github-projects-field-map.example.json` — CREATED
+- `docs/project-control/github-projects-sync-log.md` — CREATED
+
+### New files — scripts
+- `scripts/github-project-setup-dry-run.mjs` — CREATED (safe, read-only)
+- `scripts/github-project-setup-apply.mjs` — CREATED (skeleton, not yet live)
+- `scripts/github-project-import-issues.mjs` — CREATED (dry-run default)
+- `scripts/github-project-sync-status.mjs` — CREATED (local only)
+- `scripts/github-project-field-map.mjs` — CREATED (validator, no external calls)
+
+### New files — skill/command
+- `.claude/skills/github-project-setup/SKILL.md` — CREATED
+- `.claude/commands/github-project-setup.md` — CREATED
+
+### Updated files
+- `docs/project-control/project-sync-policy.md` — GitHub Projects as default; ClickUp optional; sync map unified
+- `docs/project-control/external-platform-mapping-guide.md` — reframed around GitHub Projects first; ClickUp labeled optional adapter
+- `docs/project-control/external-sync-safety.md` — GitHub token/gh auth safety added
+- `.claude/skills/README.md` — new skill added to roster
+- `.claude/commands/README.md` — new command added to roster
+- `docs/ai-system/CHANGELOG.md` — v1.3 entry added
+- `docs/ai-system/version-history.md` — v1.3 entry added
+- `docs/ai-system/bootstrap-template.md` — Step 6 updated to prefer GitHub Projects
+- `AI_HANDOFF.md` — this file
+- `CURRENT_STATE.md` — updated
+- `NEXT_SESSION_PROMPT.md` — updated
 
 ---
 
@@ -50,40 +73,47 @@ Docs-only external setup alignment patch (v1.2). Standardized the ClickUp struct
 
 - `index.html` — not touched
 - `src/**` — not touched
-- `scripts/**` — not touched
-- `docs/project-control/clickup-import.csv` — inspected only; not modified
-- No live API integration; no external writes; no secrets
+- `docs/project-control/clickup-import.csv` — not modified
+- `docs/project-control/clickup-setup-policy.md` — not modified; preserved as optional adapter
+- No live GitHub API integration; no GitHub Project created; no issues imported
+- No external writes of any kind; no secrets; no tokens committed
+- No Package 5B planning or implementation
 
 ---
 
-## Work completed
+## Work completed (v1.3 pass)
 
-- [x] Branch created: `docs/align-clickup-setup-ai-os-v1-2`
-- [x] 2 new docs created; 4 existing docs updated
-- [x] Implementation committed `1c76444`
-- [x] Branch pushed to origin
-- [x] Merged to main (`328d81e`) with `--no-ff`
-- [x] Main pushed to origin
-- [x] Status-sync branch created: `docs/sync-after-clickup-setup-alignment`
-- [ ] Status-sync files updated (in progress on this branch)
-- [ ] Status-sync committed and merged to main
+- [x] Branch created: `docs/github-projects-default-board-provider`
+- [x] 5 new docs created (`github-projects-*.md`)
+- [x] 1 new example JSON created (`github-projects-field-map.example.json`)
+- [x] 5 new scripts created (dry-run/apply scaffolding)
+- [x] 1 new skill created (`.claude/skills/github-project-setup/SKILL.md`)
+- [x] 1 new command created (`.claude/commands/github-project-setup.md`)
+- [x] 3 existing project-control docs updated (sync policy, mapping guide, sync safety)
+- [x] 2 existing skill/command READMEs updated (roster entries added)
+- [x] 3 AI-system docs updated (CHANGELOG, version-history, bootstrap-template)
+- [x] State files updated (AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md)
+- [x] Script syntax checked (node --check)
+- [x] Dry-run scripts executed and verified
+- [ ] Coordinator commit approval (awaiting)
+- [ ] Commit and merge to main
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    docs/sync-after-clickup-setup-alignment
-main HEAD:       328d81e — merge: align ClickUp setup with AI Project OS v1.2
-Pushed:          Yes — implementation and merge both on main and on origin
-Status-sync:     In progress on docs/sync-after-clickup-setup-alignment
+Branch (now):    docs/github-projects-default-board-provider
+main HEAD:       a0e27aa — merge: sync operating docs after ClickUp setup alignment
+Working tree:    files written; not yet committed
+Pushed:          No — awaiting Coordinator commit approval
 ```
 
 ---
 
 ## Next exact action
 
-Complete status-sync edits → commit `docs: sync operating docs after ClickUp setup alignment` → merge to main → push main. Then Coordinator decides next product package.
+Coordinator reviews and approves → commit with message below → merge to main → push main. Then Coordinator decides next product package or OS action.
 
 ---
 

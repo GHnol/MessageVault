@@ -1,7 +1,121 @@
 {
-  "_comment": "EXAMPLE ONLY. This file shows the format of external-sync-map.local.json. It contains no real external IDs. The real map is gitignored (external-sync-map.local.json) and lives only on each contributor's machine.",
-  "_format_version": "1",
+  "_comment": "EXAMPLE ONLY. This file shows the format of external-sync-map.local.json. It contains no real external IDs, tokens, project IDs, issue numbers, or credentials. The real map is gitignored (external-sync-map.local.json) and lives only on each contributor's machine.",
+  "_format_version": "2",
   "_last_updated": "YYYY-MM-DD",
+  "_default_board_provider": "github_projects",
+  "_note": "github_projects is the default external board provider (AI Project OS v1.3). clickup is an optional adapter.",
+
+  "github_projects": {
+    "_project_meta": {
+      "owner": "GHnol",
+      "repo": "MessageVault",
+      "project_title": "KeepMees Project Control",
+      "project_number": 0,
+      "project_id": "PVT_placeholder_project_node_id_here",
+      "project_url": "https://github.com/orgs/GHnol/projects/0",
+      "last_synced": "YYYY-MM-DD",
+      "status": "not-yet-created"
+    },
+    "_field_ids": {
+      "_comment": "GitHub Project custom field node IDs — populated after project creation",
+      "status": "PVTSSF_placeholder_status_field_id",
+      "os_id": "PVTF_placeholder_os_id_field_id",
+      "package": "PVTF_placeholder_package_field_id",
+      "phase": "PVTF_placeholder_phase_field_id",
+      "lane": "PVTSSF_placeholder_lane_field_id",
+      "source_file": "PVTF_placeholder_source_file_field_id",
+      "last_repo_sync": "PVTF_placeholder_last_repo_sync_field_id",
+      "external_sync_status": "PVTSSF_placeholder_sync_status_field_id",
+      "risk_level": "PVTSSF_placeholder_risk_level_field_id",
+      "decision_needed": "PVTF_placeholder_decision_needed_field_id",
+      "calendar_relevant": "PVTF_placeholder_calendar_relevant_field_id",
+      "ticktick_relevant": "PVTF_placeholder_ticktick_relevant_field_id",
+      "owner_role": "PVTSSF_placeholder_owner_role_field_id",
+      "success_criteria": "PVTF_placeholder_success_criteria_field_id"
+    },
+    "_option_ids": {
+      "_comment": "GitHub Project single-select option IDs — populated after project field setup",
+      "status": {
+        "Not Started": "option_placeholder_not_started",
+        "In Progress": "option_placeholder_in_progress",
+        "In Review": "option_placeholder_in_review",
+        "Blocked": "option_placeholder_blocked",
+        "Waiting": "option_placeholder_waiting",
+        "Approved": "option_placeholder_approved",
+        "Done": "option_placeholder_done",
+        "Deferred": "option_placeholder_deferred",
+        "Cancelled": "option_placeholder_cancelled"
+      },
+      "external_sync_status": {
+        "in-sync": "option_placeholder_in_sync",
+        "drift": "option_placeholder_drift",
+        "unknown": "option_placeholder_unknown",
+        "not-tracked": "option_placeholder_not_tracked"
+      },
+      "owner_role": {
+        "Founder": "option_placeholder_founder",
+        "Coordinator": "option_placeholder_coordinator",
+        "Claude": "option_placeholder_claude",
+        "Codex": "option_placeholder_codex",
+        "Development": "option_placeholder_development",
+        "Vendor": "option_placeholder_vendor",
+        "Design": "option_placeholder_design",
+        "Product": "option_placeholder_product",
+        "QA": "option_placeholder_qa"
+      },
+      "risk_level": {
+        "Low": "option_placeholder_low",
+        "Medium": "option_placeholder_medium",
+        "High": "option_placeholder_high"
+      }
+    },
+    "keepmees-task-proof-approval-state": {
+      "os_id": "keepmees-task-proof-approval-state",
+      "issue_number": 0,
+      "issue_url": "https://github.com/GHnol/MessageVault/issues/0",
+      "project_item_id": "PVTI_placeholder_project_item_id_here",
+      "status": "done",
+      "last_repo_sync": "YYYY-MM-DD",
+      "external_sync_status": "in-sync",
+      "field_values": {
+        "Package": "Package 5A",
+        "Phase": "5",
+        "Lane": "Development",
+        "Owner Role": "Claude",
+        "Source File": "docs/project-control/backlog.md"
+      }
+    },
+    "keepmees-gate-foundation-os": {
+      "os_id": "keepmees-gate-foundation-os",
+      "issue_number": 0,
+      "issue_url": "https://github.com/GHnol/MessageVault/issues/0",
+      "project_item_id": "PVTI_placeholder_project_item_id_here_2",
+      "status": "done",
+      "last_repo_sync": "YYYY-MM-DD",
+      "external_sync_status": "in-sync",
+      "field_values": {
+        "Package": "",
+        "Phase": "1",
+        "Lane": "OS Infrastructure",
+        "Owner Role": "Coordinator",
+        "Source File": "docs/project-control/phase-gates.md"
+      }
+    },
+    "keepmees-ritual-ceo-review-weekly": {
+      "os_id": "keepmees-ritual-ceo-review-weekly",
+      "issue_number": 0,
+      "issue_url": "https://github.com/GHnol/MessageVault/issues/0",
+      "project_item_id": "PVTI_placeholder_project_item_id_here_3",
+      "status": "active",
+      "last_repo_sync": "YYYY-MM-DD",
+      "external_sync_status": "in-sync",
+      "field_values": {
+        "Lane": "Coordinator",
+        "Owner Role": "Coordinator",
+        "Source File": "docs/project-control/calendar-source-template.md"
+      }
+    }
+  },
 
   "google_calendar": {
     "keepmees-ritual-ceo-review-weekly": {
@@ -67,6 +181,7 @@
   },
 
   "clickup": {
+    "_note": "OPTIONAL ADAPTER — ClickUp is not the default board provider. Use when nontechnical collaborators need task visibility without GitHub access.",
     "keepmees-task-proof-approval-state": {
       "external_id": "clickup_task_id_here",
       "list_id": "clickup_list_id_here",

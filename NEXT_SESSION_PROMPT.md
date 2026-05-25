@@ -47,13 +47,14 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No pass or package in progress. AI Project OS v1.2 external setup alignment patch COMPLETE — merged `328d81e`. |
-| Branch | `main` (clean after status-sync merge) |
-| main HEAD | `328d81e` — merge: align ClickUp setup with AI Project OS v1.2 (will update after status-sync merge) |
-| Next coordination step | Coordinator decides the next product package. No package is currently authorized. |
-| OS audit | BOOTSTRAP COMPLETE — `node scripts/os-self-audit.mjs` → 88 pass, 0 fail |
+| Resume into | AI Project OS v1.3 External Board Provider Update — in progress on `docs/github-projects-default-board-provider`. Awaiting Coordinator commit approval. |
+| Branch | `docs/github-projects-default-board-provider` |
+| main HEAD | `a0e27aa` — merge: sync operating docs after ClickUp setup alignment |
+| Next coordination step | Coordinator approves commit → commit → merge to main → push. Then Coordinator decides next product package. |
+| OS audit | BOOTSTRAP COMPLETE — `node scripts/os-self-audit.mjs` → 88 pass, 0 fail (pre-v1.3; re-run after merge) |
 | Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
-| Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction. |
+| Package 5B | Not started. |
+| Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction; run any --apply script without explicit Coordinator approval. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

@@ -1,0 +1,71 @@
+# GitHub Projects Sync Log
+
+**Status:** ACTIVE (introduced in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
+**Owner:** Coordinator / Project Control
+**Purpose:** Record of every GitHub Projects setup, issue import, and field sync operation.
+
+Every apply operation must be logged here. Dry-run operations are optional to log but encouraged for traceability.
+
+---
+
+## Log entries (newest first)
+
+---
+
+### 2026-05-25 — AI Project OS v1.3: External Board Provider Update
+
+**Type:** Policy / docs only — no live GitHub API calls performed
+**Script:** None (docs-only patch)
+**Coordinator approval:** N/A (no external writes)
+**Branch:** `docs/github-projects-default-board-provider`
+
+**What this entry records:**
+
+- GitHub Projects selected as the default external board provider for KeepMees and future AI Project OS repos.
+- ClickUp demoted to optional adapter — supported but not default.
+- GitHub Projects setup policy documented in `github-projects-setup-policy.md`.
+- Source schema documented in `github-projects-source-schema.md`.
+- Import runbook documented in `github-projects-import-runbook.md`.
+- Example field map created in `github-projects-field-map.example.json`.
+- Script scaffolding created for future dry-run/apply automation.
+
+**What was NOT done in this patch:**
+
+- No GitHub Project was created.
+- No GitHub Issues were imported.
+- No GitHub Project fields were set.
+- No live GitHub API writes of any kind were performed.
+- No GitHub tokens or credentials were committed.
+- No `external-sync-map.local.json` was written.
+
+**Next steps (require Coordinator approval before proceeding):**
+
+- Coordinator approves GitHub Project creation → run `node scripts/github-project-setup-apply.mjs --apply`
+- Coordinator approves issue import → run `node scripts/github-project-import-issues.mjs --apply --input <source-file>`
+
+---
+
+## Log entry format
+
+For future entries:
+
+```
+### YYYY-MM-DD — <description>
+
+**Type:** project-setup | issue-import | field-sync | dry-run | policy
+**Script:** <script name and flags used, or "manual">
+**Coordinator approval:** <name or "N/A for dry-run">
+**Branch:** <branch name>
+
+**What changed:**
+- <bullet list of what was created, updated, or synced>
+
+**Issues created:** <count or "none">
+**Project items updated:** <count or "none">
+**Fields set:** <count or "none">
+
+**Warnings or issues:**
+- <any warnings encountered>
+
+**Local sync map updated:** yes | no | N/A
+```

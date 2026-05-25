@@ -9,6 +9,49 @@ Newest entries first.
 
 ---
 
+## 2026-05-25 — AI Project OS v1.3: External Board Provider Update
+
+**Status:** IN PROGRESS — branch `docs/github-projects-default-board-provider` (pending Coordinator commit approval)
+**Scope:** GitHub Projects selected as default external board provider. ClickUp demoted to optional adapter. Dry-run/apply script scaffolding added. No app code; no live API integration; no Package 5B work.
+
+### Added
+
+- `docs/project-control/github-projects-setup-policy.md` — defines GitHub Projects as the default external board; approved project structure, views (14), statuses (9), custom fields (13); Owner Role rule; approval gates; sync map rule
+- `docs/project-control/github-projects-source-schema.md` — repo-native source model for generating GitHub Issues and Project rows; field routing table (Issue title/body, labels, milestone, Project custom fields, local sync map only)
+- `docs/project-control/github-projects-import-runbook.md` — step-by-step import process: gh CLI preflight, project setup, issue import, field sync, sync map writing, rollback strategy; approval-gated throughout
+- `docs/project-control/github-projects-field-map.example.json` — committed example field map (placeholder IDs only); shows owner, repo, project_title, project_number, fields, views, labels, statuses, sync map path, example issue mappings
+- `docs/project-control/github-projects-sync-log.md` — log of GitHub Projects operations; initial v1.3 entry records policy change with no live API writes
+- `scripts/github-project-setup-dry-run.mjs` — reads policy docs; prints planned project structure, fields, statuses, views; validates example field map; no external writes
+- `scripts/github-project-setup-apply.mjs` — apply skeleton (not yet live); prints planned gh CLI / GraphQL steps; exits with error if --apply called; no external mutation in this version
+- `scripts/github-project-import-issues.mjs` — dry-run by default; prints planned issue import; --apply + --input required for actual creation; not executable in apply mode in this pass
+- `scripts/github-project-sync-status.mjs` — reports local structural sync status; compares local source records to local sync map if present; no API calls
+- `scripts/github-project-field-map.mjs` — validates example field map structure; checks placeholder safety; no external calls
+- `.claude/skills/github-project-setup/SKILL.md` — new skill: plan, dry-run, approval-gate GitHub Projects setup; YAML frontmatter; full protocol including preflight, dry-run, approval boundaries, hard stops
+- `.claude/commands/github-project-setup.md` — thin command wrapper → delegates to `github-project-setup` skill; `/github-project-setup`
+
+### Updated
+
+- `docs/project-control/project-sync-policy.md` — GitHub Projects is default board provider; ClickUp optional adapter; unified local sync map section; external tool routing table updated
+- `docs/project-control/external-platform-mapping-guide.md` — reframed around GitHub Projects first; ClickUp section relabeled "Optional Adapter"; GitHub Issues + GitHub Projects mapping explained; AI agent Owner Role rule clarified; sync map routing updated
+- `docs/project-control/external-sync-safety.md` — added GitHub Projects safety section: GitHub token and gh auth safety rules; committed vs non-committed files for GitHub Projects; no destructive project item deletion; no silent field overwrites; apply scripts must require --apply; dry-run scripts must perform no external mutation
+- `.claude/skills/README.md` — added `github-project-setup` skill to roster
+- `.claude/commands/README.md` — added `/github-project-setup` command to roster
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- `scripts/` (existing OS scripts) — not modified
+- `docs/project-control/clickup-import.csv` — remains valid for ClickUp import; structural change not warranted
+- `docs/project-control/clickup-setup-policy.md` — preserved as-is; ClickUp remains supported as optional adapter
+- No live GitHub API integration added
+- No GitHub Project created by this patch
+- No GitHub Issues imported by this patch
+- No external writes of any kind
+- No Package 5B planning or implementation
+- No secrets or credentials
+
+---
+
 ## 2026-05-25 — AI Project OS v1.2: External Setup Alignment Patch
 
 **Status:** COMPLETE — merged to main (`328d81e`). Implementation commit: `1c76444`.

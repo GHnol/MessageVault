@@ -1,9 +1,19 @@
 # Project Control Sync Policy
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.2 external setup alignment, 2026-05-25)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in AI Project OS v1.2 external setup alignment, 2026-05-25; updated in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
 **Owner:** Coordinator / Project Control
-**Companion docs:** `project-sync-dry-run-format.md`, `project-sync-source-schema.md`, `external-sync-safety.md`, `project-sync-log.md`, `clickup-setup-policy.md`, `external-platform-mapping-guide.md`
-**Companion commands:** `/project-sync-dry-run`, `/project-sync-apply`
+**Companion docs:** `project-sync-dry-run-format.md`, `project-sync-source-schema.md`, `external-sync-safety.md`, `project-sync-log.md`, `github-projects-setup-policy.md`, `github-projects-source-schema.md`, `github-projects-import-runbook.md`, `clickup-setup-policy.md`, `external-platform-mapping-guide.md`
+**Companion commands:** `/project-sync-dry-run`, `/project-sync-apply`, `/github-project-setup`
+
+---
+
+## Default external board provider
+
+**GitHub Projects is the default external board provider** for KeepMees and future AI Project OS repos (as of v1.3). GitHub Issues are the default external task records. GitHub Project fields are the default external board fields.
+
+**ClickUp is an optional adapter**, not the default board. Use ClickUp if the Coordinator or collaborators prefer it for nontechnical project management. See `clickup-setup-policy.md` for ClickUp structure when in use.
+
+GitHub Project setup and issue import are separate approval-gated operations. Both follow the dry-run/apply workflow defined in this document and in `github-projects-import-runbook.md`.
 
 ---
 
@@ -18,7 +28,7 @@ Repo docs under `docs/project-control/` are the authoritative source of truth. E
 | 3 | `AGENTS.md` / `CLAUDE.md` / `.codex/README.md` |
 | 4 | `CURRENT_STATE.md` |
 | 5 | `docs/project-control/` (Tower) |
-| 6 | External tools (ClickUp / TickTick / Calendar) — lowest; never authoritative |
+| 6 | External tools (GitHub Projects / ClickUp / TickTick / Calendar) — lowest; never authoritative |
 
 If an external tool and a repo doc conflict, the repo doc wins. The Coordinator syncs external changes back into the repo doc — not the reverse.
 
@@ -98,9 +108,31 @@ Sprint tasks, backlog items, and daily to-dos belong in ClickUp and TickTick, no
 
 ---
 
-## ClickUp structure (approved)
+## GitHub Projects structure (default)
 
-ClickUp is organized around one primary Project Control Board. Do not create separate Lists for workflow lanes by default. Workflow slices (Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, Risks / Decisions) are saved views and filters inside the primary List.
+GitHub Projects is organized around one repo-connected Project per project. GitHub Issues are the task records. GitHub Project views replace the saved-view model previously described for ClickUp.
+
+| GitHub Projects layer | Value |
+|---|---|
+| Project name | KeepMees Project Control |
+| Owner | GHnol |
+| Linked repo | GHnol/MessageVault |
+| Task records | GitHub Issues |
+| Board fields | GitHub Project custom fields (13 fields — see `github-projects-setup-policy.md`) |
+| Views | 14 default views (Board, Table, Current Sprint, Backlog, etc.) |
+| Sync map | One `project_id` + one `project_item_id` per issue; stored in local sync map |
+
+See `github-projects-setup-policy.md` for the full approved structure. See `github-projects-import-runbook.md` for the setup and import process.
+
+Live GitHub Project creation and issue import remain approval-gated. Scripts require `--apply` and Coordinator approval.
+
+---
+
+## ClickUp structure (optional adapter)
+
+ClickUp remains supported as an optional adapter for collaborators or projects that prefer it for nontechnical project management. ClickUp is not the default board provider.
+
+When ClickUp is in use, it is organized around one primary Project Control Board. Workflow slices are saved views and filters inside the primary List — not separate Lists by default.
 
 | ClickUp layer | Value |
 |---|---|
@@ -108,25 +140,30 @@ ClickUp is organized around one primary Project Control Board. Do not create sep
 | Folder | 00 Project Control |
 | Primary List | 01 Project Control Board |
 | Sync map | One `list_id` for the Board; one `external_id` per task |
-| Saved views | Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, Risks / Decisions, and more |
 
-Separate Lists are a future scaling option only, not the default. See `clickup-setup-policy.md` for the full approved structure and custom field definitions.
+See `clickup-setup-policy.md` for the full approved structure and custom field definitions.
 
-Live ClickUp API integration remains future and approval-gated. The current sync method is CSV import (`clickup-import.csv`) following the dry-run/apply workflow.
+---
+
+## Sync map (unified local map)
+
+One local sync map can track GitHub Project, GitHub Issue, GitHub Project item, Google Calendar, ClickUp, and TickTick IDs. The map lives at `docs/project-control/external-sync-map.local.json` (gitignored, never committed).
+
+The example map (`external-sync-map.example.json`) and the GitHub Projects example map (`github-projects-field-map.example.json`) are committed as documentation only. They must contain only placeholder IDs.
 
 ---
 
 ## External tool routing
 
-| Content type | Primary tool | Secondary |
+| Content type | Default tool | Optional |
 |---|---|---|
 | Recurring weekly/monthly reviews | Google Calendar | — |
 | Phase gate placeholders | Google Calendar | — |
 | Launch readiness review | Google Calendar (low-confidence placeholder) | — |
-| Full project execution board | ClickUp (01 Project Control Board) | — |
+| Full project execution board | GitHub Projects (KeepMees Project Control) | ClickUp (optional adapter) |
+| Individual backlog items / sprint tasks | GitHub Issues | ClickUp tasks |
 | Personal daily check-off list | TickTick | — |
 | Project truth (decisions, roadmap, sprint) | Repo docs | — |
-| Individual backlog items | ClickUp | Repo `backlog.md` |
 
 ---
 

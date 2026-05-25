@@ -88,6 +88,7 @@ const commands = [
   'start', 'handoff', 'precommit', 'closeout', 'package-start',
   'switch-to-codex', 'switch-to-claude', 'weekly-sync', 'status-summary',
   'os-audit', 'project-sync-dry-run', 'project-sync-apply', 'notification-setup-wizard',
+  'github-project-setup',
 ];
 checkFile('.claude/commands/README.md', '.claude/commands/README.md');
 for (const cmd of commands) {
@@ -100,6 +101,7 @@ const skills = [
   'start', 'handoff', 'precommit', 'closeout', 'package-start',
   'switch-to-codex', 'switch-to-claude', 'weekly-sync', 'status-summary',
   'os-audit', 'project-sync-dry-run', 'project-sync-apply', 'notification-setup-wizard',
+  'github-project-setup',
 ];
 for (const skill of skills) {
   const path = `.claude/skills/${skill}/SKILL.md`;
@@ -142,6 +144,37 @@ const syncDocs = [
 for (const doc of syncDocs) {
   checkFile(`docs/project-control/${doc}`, `docs/project-control/${doc}`);
 }
+
+// --- Section 6b: GitHub Projects default board provider layer (AI Project OS v1.3) ---
+const githubProjectsDocs = [
+  'github-projects-setup-policy.md',
+  'github-projects-source-schema.md',
+  'github-projects-import-runbook.md',
+  'github-projects-field-map.example.json',
+  'github-projects-sync-log.md',
+];
+for (const doc of githubProjectsDocs) {
+  checkFile(`docs/project-control/${doc} (GitHub Projects layer)`, `docs/project-control/${doc}`);
+}
+checkFile('.claude/skills/github-project-setup/SKILL.md', '.claude/skills/github-project-setup/SKILL.md');
+checkFile('.claude/commands/github-project-setup.md', '.claude/commands/github-project-setup.md');
+const githubProjectsScripts = [
+  'github-project-setup-dry-run.mjs',
+  'github-project-setup-apply.mjs',
+  'github-project-import-issues.mjs',
+  'github-project-sync-status.mjs',
+  'github-project-field-map.mjs',
+];
+for (const s of githubProjectsScripts) {
+  checkFile(`scripts/${s} (GitHub Projects layer)`, `scripts/${s}`);
+}
+// Verify the github-project-setup skill has valid frontmatter
+checkGrep('github-project-setup SKILL.md has name:', '.claude/skills/github-project-setup/SKILL.md', 'name:');
+checkGrep('github-project-setup SKILL.md has description:', '.claude/skills/github-project-setup/SKILL.md', 'description:');
+// Verify external-sync-map.example.json includes github_projects section
+checkGrep('external-sync-map.example.json has github_projects section', 'docs/project-control/external-sync-map.example.json', 'github_projects');
+// Verify project-sync-policy.md names GitHub Projects as default
+checkGrep('project-sync-policy.md names GitHub Projects as default', 'docs/project-control/project-sync-policy.md', 'GitHub Projects is the default');
 
 // --- Section 7: QA templates ---
 const qaDocs = [
