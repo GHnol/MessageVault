@@ -11,8 +11,8 @@ Newest entries first.
 
 ## 2026-05-24 — AI Project OS Framework Groundwork Pass
 
-**Status:** IN PROGRESS — docs/scripts/config only; no product/app changes.
-**Branch:** `docs/ai-project-os-framework-groundwork` (pending merge)
+**Status:** COMPLETE — merged to main (`cc7139a`). Implementation commit: `219f0b3`.
+**Branch:** `docs/ai-project-os-framework-groundwork` (merged)
 **Scope:** AI Project OS framework completion. No `index.html`, `src/**`, no product implementation.
 
 ### Added (Skills — canonical layer)

@@ -62,6 +62,8 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.8 — KeepMees Project Control Tower | COMPLETE | `2a5fb54` / `bdb73db` |
 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | COMPLETE | `81c5069` / `a20af30` |
 | Package 5A — Message Book Proof Approval State Foundation | COMPLETE | `e2df2a0` / `297a221` |
+| AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
+| AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
 
 Tests: **1603 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. `index.html` app behavior last changed: Package 4E (`99bdf8f`). Packages 4E.1, 2.7, 2.8, 2.9, and 5A made no `index.html` changes. Package 5A (`e2df2a0`) added `src/products/proof-approval-state.js` (ProofApprovalState: STATUS constants, canTransition, create, transition; 137 new tests; no UI wiring; no checkout/commerce/manufacturing/export logic). Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
 
@@ -207,8 +209,12 @@ Package 5A (COMPLETE — `297a221`)
     → ProofApprovalState: STATUS constants, canTransition, create, transition
     → 137 new Node tests; no UI; no index.html changes
 
+AI OS Framework Groundwork Pass (COMPLETE — `cc7139a`)
+    → 13 skills canonical, closeout sync contract, OS self-audit, notification wizard
+    → Bootstrap Core v0.5.0; project-control sync foundation; no app code
+
 Coordinator decides next package ← current position
-    → No package authorized; Coordinator reviews Package 5A and decides next step
+    → No package authorized; Coordinator decides next product package
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -222,7 +228,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Decide next package after Package 5A | Roadmap decision | High — proof approval state foundation now in place |
+| Decide next package after AI OS Framework Groundwork Pass | Roadmap decision | High — OS foundation now complete; ready for next product package |
 | Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
 | `scripts/node_modules` tracked-history cleanup (separate from Package 2.8) | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |

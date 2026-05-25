@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-24 | in progress |
+| 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
 | 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
 | 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | merged (`9be0f81`) |
 | 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | merged (`a20af30`) |
@@ -24,8 +24,8 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ## 0.5.0 — AI Project OS Framework Groundwork Pass (2026-05-24)
 
-**Branch:** `docs/ai-project-os-framework-groundwork` (pending)
-**Status:** in progress
+**Branch:** `docs/ai-project-os-framework-groundwork` (merged `cc7139a`)
+**Status:** COMPLETE — merged 2026-05-25
 
 ### What this pass adds
 
