@@ -11,6 +11,19 @@ Every apply operation must be logged here. Dry-run operations are optional to lo
 ## Log entries (newest first)
 ---
 
+### Field Repair — 2026-05-26
+- **Script:** github-project-field-repair.mjs
+- **Project:** #1 "KeepMees Project Control" (https://github.com/users/GHnol/projects/1)
+- **Mutations:** 13 succeeded, 0 failed
+- **External Sync Status:** set to `in-sync` on all 11 Project items
+- **Status corrections:** 2
+  - KM-PC-007 (#7): Backlog → Waiting / Blocked
+  - KM-PC-011 (#11): Backlog → Deferred
+- **Post-apply verification:** 0 remaining mutations (all 22 field checks correct)
+- **No Issues, labels, Project items, views, or product files changed**
+
+---
+
 ### Import — 2026-05-26
 - **Script:** github-project-import-issues.mjs
 - **Owner/Repo:** GHnol/MessageVault
