@@ -310,7 +310,7 @@ function applyOneRecord(record, project, fieldIndex, syncMapUpdates, owner, repo
 
     let value;
     if (key === '_today')            value = today;
-    else if (key === '_sync_status') value = 'Synced';
+    else if (key === '_sync_status') value = 'in-sync';
     else value = record[key];
 
     if (!value) continue;
