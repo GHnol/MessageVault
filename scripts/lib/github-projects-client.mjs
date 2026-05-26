@@ -267,7 +267,7 @@ export function getProjectItemIssueIds(projectId) {
     `query($pid: ID!) {
       node(id: $pid) {
         ... on ProjectV2 {
-          items(first: 200) {
+          items(first: 100) {
             nodes {
               id
               content { ... on Issue { id number } }
@@ -450,8 +450,20 @@ export function setFieldDate(projectId, itemId, fieldId, date, opts) {
   return { ok: true };
 }
 
+function ensureLabel(owner, repo, labelName) {
+  const check = runGh(['label', 'list', '--repo', `${owner}/${repo}`, '--search', labelName, '--json', 'name']);
+  if (check.ok) {
+    try {
+      const found = JSON.parse(check.stdout);
+      if (Array.isArray(found) && found.some(l => l.name === labelName)) return;
+    } catch (_) { /* fall through to create */ }
+  }
+  runGh(['label', 'create', '--repo', `${owner}/${repo}`, labelName, '--color', 'ededed']);
+}
+
 export function createGhIssue(owner, repo, title, body, labels, milestone, opts) {
   requireApply(opts);
+  for (const label of (labels ?? [])) ensureLabel(owner, repo, label);
   const args = ['issue', 'create',
     '--repo', `${owner}/${repo}`,
     '--title', title,

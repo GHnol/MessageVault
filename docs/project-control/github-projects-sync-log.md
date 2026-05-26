@@ -11,6 +11,31 @@ Every apply operation must be logged here. Dry-run operations are optional to lo
 ## Log entries (newest first)
 ---
 
+### Import — 2026-05-26
+- **Script:** github-project-import-issues.mjs
+- **Owner/Repo:** GHnol/MessageVault
+- **Project:** #1 "KeepMees Project Control"
+- **Input:** docs/project-control/github-projects-source-records.json
+- **Records processed:** 11
+- **Created:** 11
+- **Skipped:** 0
+- **Failed:** 0
+- **OS IDs created:** KM-PC-001, KM-PC-002, KM-PC-003, KM-PC-004, KM-PC-005, KM-PC-006, KM-PC-007, KM-PC-008, KM-PC-009, KM-PC-010, KM-PC-011
+
+---
+
+### Import — 2026-05-26
+- **Script:** github-project-import-issues.mjs
+- **Owner/Repo:** GHnol/MessageVault
+- **Project:** #1 "KeepMees Project Control"
+- **Input:** docs/project-control/github-projects-source-records.json
+- **Records processed:** 11
+- **Created:** 0
+- **Skipped:** 0
+- **Failed:** 11
+
+---
+
 ### 2026-05-26 — AI Project OS v1.4: GitHub Project Setup
 
 **Type:** project-setup
