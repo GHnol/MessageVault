@@ -24,7 +24,7 @@
 | main HEAD | `98f029d` — merge: implement GitHub Project targeted field-repair script |
 | Last completed pass | `GitHub Project board closeout` — board operational: 11 Issues, 13 fields, 14 views — `98f029d` |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | Board closeout branch `docs/github-project-board-closeout` — repo docs updated; pending dry-run and commit |
+| Active pass | Board closeout branch `docs/github-project-board-closeout` — field-repair apply complete (6 Status mutations, 0 remaining); docs committed `4ec843a`; pending push and merge → main |
 | Active branch | `docs/github-project-board-closeout` |
 | Next authorized target | Coordinator: authorize next product package. GitHub Project board now operational. |
 | OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail |

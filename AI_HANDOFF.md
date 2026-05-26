@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Board closeout pass on branch `docs/github-project-board-closeout` (from main at `98f029d`). Source records and repo docs updated; field-repair dry-run pending; no apply yet.
+**Status:** `ready-for-merge` — Board closeout pass on branch `docs/github-project-board-closeout` (from main at `98f029d`). Field-repair apply complete: 6 Status mutations succeeded (KM-PC-002, -003, -004, -005, -006, -009 → Done / Shipped), post-apply verification 0 remaining mutations. Repo docs committed `4ec843a`. Awaiting Coordinator approval to push and merge → main. Package 5B not started.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-26`
 
@@ -115,7 +115,7 @@ v1.4:            merged 1623e7e — COMPLETE
 
 ## Next exact action
 
-Run field-repair dry-run only (`node scripts/github-project-field-repair.mjs`). Review output with Coordinator. Await approval for field-repair apply, then commit all closeout files, push, and merge `docs/github-project-board-closeout` → main.
+Await Coordinator approval to push and merge `docs/github-project-board-closeout` → main. No further file edits or GitHub mutations pending.
 
 ---
 
