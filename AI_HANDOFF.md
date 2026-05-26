@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.4 GitHub Projects Live Provisioning Integration merged to `main` (`1623e7e`). Working tree clean. No active in-flight work. Coordinator decides next pass.
+**Status:** `ready-for-merge` — Board closeout pass on branch `docs/github-project-board-closeout` (from main at `98f029d`). Field-repair apply complete: 6 Status mutations succeeded (KM-PC-002, -003, -004, -005, -006, -009 → Done / Shipped), post-apply verification 0 remaining mutations. Repo docs committed `4ec843a`. Awaiting Coordinator approval to push and merge → main. Package 5B not started.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-25`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-26`
 
 ---
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — v1.4 complete; Coordinator decides next pass or product package |
-| **Active branch** | `main` (no active feature branch) |
-| **main HEAD** | `1623e7e` — merge: implement GitHub Projects live provisioning integration |
-| **Last completed pass** | `AI Project OS v1.4 — GitHub Projects Live Provisioning Integration` (merged `1623e7e`) |
+| **Active pass** | GitHub Project board closeout and repo sync |
+| **Active branch** | `docs/github-project-board-closeout` (from main at `98f029d`) |
+| **main HEAD** | `98f029d` — merge: implement GitHub Project targeted field-repair script |
+| **Last completed pass** | `GitHub Project field repair` (merged `98f029d`) |
 | **Active package** | None — Coordinator decides next product package |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
 | **Package 5B** | Not started |
@@ -115,7 +115,7 @@ v1.4:            merged 1623e7e — COMPLETE
 
 ## Next exact action
 
-No active in-flight work. Await Coordinator authorization for next product package or OS pass.
+Await Coordinator approval to push and merge `docs/github-project-board-closeout` → main. No further file edits or GitHub mutations pending.
 
 ---
 

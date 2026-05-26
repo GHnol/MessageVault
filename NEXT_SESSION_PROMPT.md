@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.4 COMPLETE — merged `1623e7e` to main. No active pass. Await Coordinator authorization. |
+| Resume into | GitHub Project board operational — 11 Issues, 13 fields, 14 views. main at `98f029d`. No active product pass. Await Coordinator authorization. |
 | Branch | `main` (no active feature branch) |
-| main HEAD | `1623e7e` — merge: implement GitHub Projects live provisioning integration |
-| Next action | Run `/start`. Read `AGENTS.md`, `CLAUDE.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`. Confirm no active package. Await Coordinator direction. |
+| main HEAD | `98f029d` — merge: implement GitHub Project targeted field-repair script |
+| Next action | Run `/start`. Read `AGENTS.md`, `CLAUDE.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`. Confirm board operational. Await Coordinator direction for Package 5B or next OS pass. |
 | OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
 | Package 5B | Not started. |

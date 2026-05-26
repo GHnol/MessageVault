@@ -18,7 +18,7 @@
     "success_criteria": "v1.4 and hotfix merged to main; 13/13 custom fields live on Project #1; sync map populated locally",
     "dependencies": [],
     "labels": ["os-pass", "infrastructure"],
-    "external_sync_status": "not-tracked",
+    "external_sync_status": "in-sync",
     "last_repo_sync": "2026-05-26"
   },
   {
@@ -29,7 +29,7 @@
     "package": "",
     "phase": "0",
     "lane": "OS Infrastructure",
-    "status": "In Progress",
+    "status": "Done",
     "priority": "P0",
     "risk_level": "Low",
     "decision_needed": false,
@@ -40,7 +40,7 @@
     "success_criteria": "Status options configured; all 14 views exist; Issues imported; field values set; board navigable",
     "dependencies": ["KM-PC-001"],
     "labels": ["infrastructure", "board-setup"],
-    "external_sync_status": "not-tracked",
+    "external_sync_status": "in-sync",
     "last_repo_sync": "2026-05-26"
   },
   {
@@ -51,7 +51,7 @@
     "package": "",
     "phase": "0",
     "lane": "OS Infrastructure",
-    "status": "In Progress",
+    "status": "Done",
     "priority": "P0",
     "risk_level": "Low",
     "decision_needed": false,
@@ -62,7 +62,7 @@
     "success_criteria": "github-projects-source-records.json written, JSON-valid, dry-run clean, Coordinator approves commit",
     "dependencies": ["KM-PC-001"],
     "labels": ["infrastructure", "source-records"],
-    "external_sync_status": "not-tracked",
+    "external_sync_status": "in-sync",
     "last_repo_sync": "2026-05-26"
   },
   {
@@ -73,7 +73,7 @@
     "package": "",
     "phase": "0",
     "lane": "OS Infrastructure",
-    "status": "Not Started",
+    "status": "Done",
     "priority": "P0",
     "risk_level": "Low",
     "decision_needed": false,
@@ -84,8 +84,8 @@
     "success_criteria": "Dry-run shows all records valid; no errors; no duplicates; no writes performed",
     "dependencies": ["KM-PC-003"],
     "labels": ["infrastructure", "dry-run"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   },
   {
     "os_id": "KM-PC-005",
@@ -95,7 +95,7 @@
     "package": "",
     "phase": "0",
     "lane": "OS Infrastructure",
-    "status": "Not Started",
+    "status": "Done",
     "priority": "P0",
     "risk_level": "Medium",
     "decision_needed": true,
@@ -106,8 +106,8 @@
     "success_criteria": "Issues created for all source records; items added to Project #1; all custom field values set; sync map updated locally",
     "dependencies": ["KM-PC-004"],
     "labels": ["infrastructure", "live-apply"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   },
   {
     "os_id": "KM-PC-006",
@@ -117,7 +117,7 @@
     "package": "",
     "phase": "0",
     "lane": "OS Infrastructure",
-    "status": "Not Started",
+    "status": "Done",
     "priority": "P1",
     "risk_level": "Low",
     "decision_needed": false,
@@ -128,8 +128,8 @@
     "success_criteria": "Status field has 9 custom options; all 14 views exist and are navigable in Project #1",
     "dependencies": ["KM-PC-001"],
     "labels": ["infrastructure", "manual-setup"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   },
   {
     "os_id": "KM-PC-007",
@@ -150,8 +150,8 @@
     "success_criteria": "Coordinator makes an explicit authorization decision and records it in decision-log.md",
     "dependencies": ["KM-PC-002"],
     "labels": ["decision", "gate"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   },
   {
     "os_id": "KM-PC-008",
@@ -172,8 +172,8 @@
     "success_criteria": "Coordinator authorizes scope; scoped package prompt written and reviewed; implementation begins only after explicit authorization",
     "dependencies": ["KM-PC-007"],
     "labels": ["package", "pending-auth"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   },
   {
     "os_id": "KM-PC-009",
@@ -183,7 +183,7 @@
     "package": "",
     "phase": "0",
     "lane": "OS Infrastructure",
-    "status": "Not Started",
+    "status": "Done",
     "priority": "P1",
     "risk_level": "Medium",
     "decision_needed": false,
@@ -194,8 +194,8 @@
     "success_criteria": "First import completes with 0 duplicate Issues; sync map updated and retained locally after apply",
     "dependencies": ["KM-PC-004"],
     "labels": ["risk"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   },
   {
     "os_id": "KM-PC-010",
@@ -216,7 +216,7 @@
     "success_criteria": "external-sync-map.local.json never appears in git status; gitignore check passes on every apply run",
     "dependencies": [],
     "labels": ["risk"],
-    "external_sync_status": "not-tracked",
+    "external_sync_status": "in-sync",
     "last_repo_sync": "2026-05-26"
   },
   {
@@ -238,7 +238,7 @@
     "success_criteria": "Decision recorded when a second repo requires GitHub Projects; template created or approach confirmed",
     "dependencies": ["KM-PC-002"],
     "labels": ["decision"],
-    "external_sync_status": "not-tracked",
-    "last_repo_sync": null
+    "external_sync_status": "in-sync",
+    "last_repo_sync": "2026-05-26"
   }
 ]
