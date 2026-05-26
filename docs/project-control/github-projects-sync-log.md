@@ -9,6 +9,63 @@ Every apply operation must be logged here. Dry-run operations are optional to lo
 ---
 
 ## Log entries (newest first)
+---
+
+### 2026-05-26 — AI Project OS v1.4: GitHub Project Setup
+
+**Type:** project-setup
+**Script:** scripts/github-project-setup-apply.mjs --apply
+**Coordinator approval:** required before running --apply
+**Owner/Repo:** GHnol/MessageVault
+
+**What changed:**
+- Project: "KeepMees Project Control" (#1)
+- Fields created/verified: 13/13
+
+**Local sync map updated:** yes
+
+**Manual steps still required:**
+- Create 14 views in GitHub Projects UI (see script output)
+- Configure Status field options in GitHub Projects UI
+
+---
+
+### 2026-05-26 — AI Project OS v1.4: GitHub Project Setup
+
+**Type:** project-setup
+**Script:** scripts/github-project-setup-apply.mjs --apply
+**Coordinator approval:** required before running --apply
+**Owner/Repo:** GHnol/MessageVault
+
+**What changed:**
+- Project: "KeepMees Project Control" (#1)
+- Fields created/verified: 0/13
+
+**Local sync map updated:** yes
+
+**Manual steps still required:**
+- Create 14 views in GitHub Projects UI (see script output)
+- Configure Status field options in GitHub Projects UI
+
+---
+
+### 2026-05-26 — AI Project OS v1.4: GitHub Project Setup
+
+**Type:** project-setup
+**Script:** scripts/github-project-setup-apply.mjs --apply
+**Coordinator approval:** required before running --apply
+**Owner/Repo:** GHnol/MessageVault
+
+**What changed:**
+- Project: "KeepMees Project Control" (#1)
+- Fields created/verified: 0/13
+
+**Local sync map updated:** yes
+
+**Manual steps still required:**
+- Create 14 views in GitHub Projects UI (see script output)
+- Configure Status field options in GitHub Projects UI
+
 
 ---
 
