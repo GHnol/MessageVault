@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-25`
+**Last updated:** `2026-05-26`
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `1623e7e` — merge: implement GitHub Projects live provisioning integration |
-| Last completed pass | `AI Project OS v1.4 — GitHub Projects Live Provisioning Integration` — merged `1623e7e` — COMPLETE |
+| main HEAD | `98f029d` — merge: implement GitHub Project targeted field-repair script |
+| Last completed pass | `GitHub Project board closeout` — board operational: 11 Issues, 13 fields, 14 views — `98f029d` |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | None — v1.4 complete and merged; Coordinator decides next pass or product package |
-| Active branch | `main` (no active feature branch) |
-| Next authorized target | Coordinator decides next product package or OS pass. No active in-flight work. |
+| Active pass | Board closeout branch `docs/github-project-board-closeout` — repo docs updated; pending dry-run and commit |
+| Active branch | `docs/github-project-board-closeout` |
+| Next authorized target | Coordinator: authorize next product package. GitHub Project board now operational. |
 | OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail |
 | Package 5B | Not started |
 
