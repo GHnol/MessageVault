@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.4 IN PROGRESS — branch `docs/github-projects-live-provisioning`. Scripts implemented and verified. Run OS audit, then request Coordinator approval to commit. |
-| Branch | `docs/github-projects-live-provisioning` |
-| main HEAD | `3dcf917` — merge: make GitHub Projects the default external board |
-| Next action | Run `node scripts/os-self-audit.mjs` → verify 108+ pass, 0 fail → pre-commit gate → Coordinator approves commit. |
+| Resume into | AI Project OS v1.4 COMPLETE — merged `1623e7e` to main. No active pass. Await Coordinator authorization. |
+| Branch | `main` (no active feature branch) |
+| main HEAD | `1623e7e` — merge: implement GitHub Projects live provisioning integration |
+| Next action | Run `/start`. Read `AGENTS.md`, `CLAUDE.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`. Confirm no active package. Await Coordinator direction. |
 | OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
 | Package 5B | Not started. |

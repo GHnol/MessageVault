@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **AI Project OS v1.4 — GitHub Projects Live Provisioning Integration** · AI Workflow · Ph0 · merged `1623e7e` — COMPLETE
 - **AI Project OS Framework Groundwork Pass** · AI Workflow · Ph0 · merged `cc7139a` — COMPLETE
 - **Package 5A — Message Book Proof Approval State Foundation** · Development · Ph12 · merged `297a221`, status-sync `926ec37` — COMPLETE
 - **AI Project OS Usability Patch — Short Command Interface** · AI Workflow · Ph0 · merged `cb920be` — COMPLETE

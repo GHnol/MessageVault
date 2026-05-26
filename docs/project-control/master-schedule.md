@@ -1,7 +1,7 @@
 # KeepMees Master Schedule
 
-**Last updated:** 2026-05-17 (America/New_York)
-**Assumed "today":** Sunday, 2026-05-17
+**Last updated:** 2026-05-25 (America/New_York)
+**Assumed "today":** Monday, 2026-05-25
 **Owner:** Coordinator / Project Control
 **Confidence labels:** High / Medium / Low. Low = gated by external dependency or far enough out that dates are directional only. Dates are planning targets, not promises.
 
@@ -96,8 +96,7 @@ Phase 9/10/11 ──> Phase 13 ──> Phase 14 ──> Phase 15
 
 - **Gated (external):** Phases 7, 8, 9, 10, 11 — designer budget, vendor confirmation, server PDF infra.
 - **Blocked:** Figma execution (no confirmed designer); cover work (`isCoverUnblocked()`=false).
-- **Paused:** Package 5A — until Tower approved.
-- **Active:** Package 2.8 Tower; ongoing Phase 1 maintenance.
+- **Active:** None — v1.4 OS pass complete; no active pass or product package as of 2026-05-25. Coordinator decides next authorized work.
 
 ---
 

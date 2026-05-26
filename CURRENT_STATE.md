@@ -21,12 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `3dcf917` — merge: make GitHub Projects the default external board |
-| Last completed pass | `AI Project OS v1.3 — External Board Provider Update` — merged `3dcf917` — COMPLETE |
+| main HEAD | `1623e7e` — merge: implement GitHub Projects live provisioning integration |
+| Last completed pass | `AI Project OS v1.4 — GitHub Projects Live Provisioning Integration` — merged `1623e7e` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | `AI Project OS v1.4 — GitHub Projects Live Provisioning Integration` — IN PROGRESS |
-| Active branch | `docs/github-projects-live-provisioning` |
-| Next authorized target | Complete v1.4 OS audit → pre-commit gate → Coordinator approves commit |
+| Active pass | None — v1.4 complete and merged; Coordinator decides next pass or product package |
+| Active branch | `main` (no active feature branch) |
+| Next authorized target | Coordinator decides next product package or OS pass. No active in-flight work. |
 | OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail |
 | Package 5B | Not started |
 

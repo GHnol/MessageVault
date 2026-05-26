@@ -39,7 +39,7 @@ Sprint 2026-05-B is CLOSED. AI Project OS Framework Groundwork Pass is COMPLETE 
 | 8 | Correct stale project-control state (current-sprint, kanban-board) | Coordinator | P1 | **Done** | Reflect Package 5A complete ✓ |
 | 9 | Update .gitignore for new artifact types | AI Workflow | P1 | **Done** | external-sync-map.local.json and dry-run outputs ignored ✓ |
 | 10 | Coordinator reviews and approves commit | Coordinator | P0 | **Done** | Commit approved, merged `cc7139a` ✓ |
-| 11 | Status-sync closeout | Coordinator | P0 | **In Progress** | State files reflect COMPLETE |
+| 11 | Status-sync closeout | Coordinator | P0 | **Done** | State files reflect COMPLETE ✓ |
 
 ---
 
