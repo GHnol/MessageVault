@@ -355,21 +355,21 @@ export function linkProjectToRepo(projectId, repositoryId, opts) {
 export function createTextField(projectId, name, opts) {
   requireApply(opts);
   const r = gql(
-    'mutation($pid: ID!, $n: String!) { addProjectV2Field(input: { projectId: $pid, name: $n, dataType: TEXT }) { projectV2Field { ... on ProjectV2Field { id name dataType } } } }',
+    'mutation($pid: ID!, $n: String!) { createProjectV2Field(input: { projectId: $pid, name: $n, dataType: TEXT }) { projectV2Field { ... on ProjectV2Field { id name dataType } } } }',
     { pid: projectId, n: name }
   );
   if (!r.ok) return r;
-  return { ok: true, field: r.data.addProjectV2Field.projectV2Field };
+  return { ok: true, field: r.data.createProjectV2Field.projectV2Field };
 }
 
 export function createDateField(projectId, name, opts) {
   requireApply(opts);
   const r = gql(
-    'mutation($pid: ID!, $n: String!) { addProjectV2Field(input: { projectId: $pid, name: $n, dataType: DATE }) { projectV2Field { ... on ProjectV2Field { id name dataType } } } }',
+    'mutation($pid: ID!, $n: String!) { createProjectV2Field(input: { projectId: $pid, name: $n, dataType: DATE }) { projectV2Field { ... on ProjectV2Field { id name dataType } } } }',
     { pid: projectId, n: name }
   );
   if (!r.ok) return r;
-  return { ok: true, field: r.data.addProjectV2Field.projectV2Field };
+  return { ok: true, field: r.data.createProjectV2Field.projectV2Field };
 }
 
 function safeStr(s) {
@@ -381,7 +381,7 @@ export function createSingleSelectField(projectId, name, options, opts) {
   const optStr = options.map(o => `{ name: "${safeStr(o)}", color: GRAY, description: "" }`).join(', ');
   const r = gql(
     `mutation($pid: ID!, $n: String!) {
-      addProjectV2Field(input: {
+      createProjectV2Field(input: {
         projectId: $pid
         name: $n
         dataType: SINGLE_SELECT
@@ -395,7 +395,7 @@ export function createSingleSelectField(projectId, name, options, opts) {
     { pid: projectId, n: name }
   );
   if (!r.ok) return r;
-  return { ok: true, field: r.data.addProjectV2Field.projectV2Field };
+  return { ok: true, field: r.data.createProjectV2Field.projectV2Field };
 }
 
 export function addProjectItem(projectId, contentId, opts) {
