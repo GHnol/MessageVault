@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -149,6 +149,34 @@ Required when the repo has been updated to AI Project OS v1.4 or later.
 | `github-project-sync-status.mjs` supports `--live` flag | Required | `Grep "\-\-live" scripts/github-project-sync-status.mjs` |
 | `source-records.example.json` has `os_id` field | Required | `Grep "os_id" docs/project-control/github-projects-source-records.example.json` |
 | `source-records.example.json` has KMVT- IDs | Required | `Grep "KMVT-" docs/project-control/github-projects-source-records.example.json` |
+
+---
+
+## 6d. GitHub Projects template standard layer (AI Project OS v1.5)
+
+Required when the repo has been updated to AI Project OS v1.5 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `docs/project-control/github-projects-template-standard.md` exists | Required | `Glob docs/project-control/github-projects-template-standard.md` |
+| `docs/project-control/github-projects-template-copy-runbook.md` exists | Required | `Glob docs/project-control/github-projects-template-copy-runbook.md` |
+| `docs/project-control/github-projects-template-config.example.json` exists | Required | `Glob docs/project-control/github-projects-template-config.example.json` |
+| `scripts/github-project-template-dry-run.mjs` exists | Required | `Glob scripts/github-project-template-dry-run.mjs` |
+| `scripts/github-project-template-validate.mjs` exists | Required | `Glob scripts/github-project-template-validate.mjs` |
+| `scripts/github-project-template-apply.mjs` exists | Required | `Glob scripts/github-project-template-apply.mjs` |
+| `.claude/skills/github-project-template/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/github-project-template/SKILL.md` |
+| `.claude/commands/github-project-template.md` exists | Required | `Glob .claude/commands/github-project-template.md` |
+| `github-projects-template-config.local.json` is gitignored | Required | `git check-ignore -v docs/project-control/github-projects-template-config.local.json` |
+| `template-config.example.json` uses placeholder IDs only | Required | `Grep "PVT_placeholder" docs/project-control/github-projects-template-config.example.json` |
+| `template-standard.md` names v1.5 canonical Status values | Required | `Grep "Done / Shipped" docs/project-control/github-projects-template-standard.md` |
+| `template-standard.md` does not use old vocabulary | Required | No "Not Started", "In Review", "Blocked", "Waiting", "Approved" in standard file |
+| `github-projects-client.mjs` REQUIRED_STATUSES uses v1.5 vocab | Required | `Grep "Done / Shipped" scripts/lib/github-projects-client.mjs` |
+| `github-projects-client.mjs` VALID_STATUSES uses v1.5 vocab | Required | `Grep "Done / Shipped" scripts/lib/github-projects-client.mjs` |
+| `github-projects-setup-policy.md` uses v1.5 Status vocabulary | Required | `Grep "Done / Shipped" docs/project-control/github-projects-setup-policy.md` |
+
+The audit does **not** require:
+- A real `github-projects-template-config.local.json` (gitignored; Gate 2 not yet authorized)
+- Gate 2 to be complete
 
 ---
 

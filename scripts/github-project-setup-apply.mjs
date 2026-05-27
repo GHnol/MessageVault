@@ -56,13 +56,34 @@ function getArg(name) {
 const OWNER = getArg('--owner') ?? 'GHnol';
 const REPO = getArg('--repo') ?? 'MessageVault';
 const PROJECT_TITLE = getArg('--project-title') ?? 'KeepMees Project Control';
-const FROM_TEMPLATE = argv.includes('--from-template');
-const TEMPLATE_ID = getArg('--template-project-id');
-const TEMPLATE_NUMBER = getArg('--template-project-number');
-const TEMPLATE_OWNER = getArg('--template-owner') ?? OWNER;
+let FROM_TEMPLATE = argv.includes('--from-template');
+let TEMPLATE_ID = getArg('--template-project-id');
+let TEMPLATE_NUMBER = getArg('--template-project-number');
+let TEMPLATE_OWNER = getArg('--template-owner') ?? OWNER;
 const SYNC_MAP_PATH = getArg('--sync-map') ?? 'docs/project-control/external-sync-map.local.json';
 const SYNC_MAP_FULL = join(ROOT, SYNC_MAP_PATH);
 const SYNC_LOG_PATH = join(ROOT, 'docs/project-control/github-projects-sync-log.md');
+
+// ─── v1.5: Config-driven template-copy detection ──────────────────────────────
+// Auto-detect local template config. If real IDs present, prefer template-copy.
+
+const TEMPLATE_CONFIG_PATH = join(ROOT, 'docs/project-control/github-projects-template-config.local.json');
+let _templateConfigSource = 'none';
+
+if (!FROM_TEMPLATE && existsSync(TEMPLATE_CONFIG_PATH)) {
+  try {
+    const _tc = JSON.parse(readFileSync(TEMPLATE_CONFIG_PATH, 'utf8'));
+    const _hasRealId = _tc.template_project_id && _tc.template_project_id !== 'PVT_placeholder';
+    const _hasRealNum = _tc.template_project_number && _tc.template_project_number !== 0;
+    if (_hasRealId && _hasRealNum) {
+      FROM_TEMPLATE = true;
+      TEMPLATE_ID = TEMPLATE_ID ?? _tc.template_project_id;
+      TEMPLATE_NUMBER = TEMPLATE_NUMBER ?? String(_tc.template_project_number);
+      TEMPLATE_OWNER = getArg('--template-owner') ?? _tc.template_owner ?? OWNER;
+      _templateConfigSource = 'auto-detected from github-projects-template-config.local.json';
+    }
+  } catch (_) { /* ignore parse errors; fall back to create-from-scratch */ }
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

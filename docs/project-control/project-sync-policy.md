@@ -124,6 +124,8 @@ GitHub Projects is organized around one repo-connected Project per project. GitH
 
 See `github-projects-setup-policy.md` for the full approved structure. See `github-projects-import-runbook.md` for the setup and import process.
 
+**Template-copy is the preferred setup path as of AI Project OS v1.5.** When a validated local template config exists, `github-project-setup-apply.mjs` auto-selects template-copy over create-from-scratch. See `github-projects-template-standard.md` for the two-gate model.
+
 Live GitHub Project creation and issue import remain approval-gated. Scripts require `--apply` and Coordinator approval.
 
 ---

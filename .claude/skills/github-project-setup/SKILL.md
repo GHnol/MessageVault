@@ -7,6 +7,8 @@ description: Plan, dry-run, and approval-gate GitHub Projects setup for AI Proje
 
 Automate and gate the setup of GitHub Projects as the default external board provider for KeepMees and future AI Project OS repos. This skill governs dry-run planning, approval workflow, issue import, and field mapping — without performing any live external writes unless explicitly approved.
 
+**As of AI Project OS v1.5, template-copy is the preferred setup path.** The `github-project-setup-apply.mjs` script auto-detects a local template config and uses `--from-template` if available. For template creation and Gate 2 operations, use the `/github-project-template` skill instead.
+
 ## When to use
 
 - Before creating a GitHub Project for any AI Project OS repo

@@ -88,7 +88,7 @@ const commands = [
   'start', 'handoff', 'precommit', 'closeout', 'package-start',
   'switch-to-codex', 'switch-to-claude', 'weekly-sync', 'status-summary',
   'os-audit', 'project-sync-dry-run', 'project-sync-apply', 'notification-setup-wizard',
-  'github-project-setup',
+  'github-project-setup', 'github-project-template',
 ];
 checkFile('.claude/commands/README.md', '.claude/commands/README.md');
 for (const cmd of commands) {
@@ -101,7 +101,7 @@ const skills = [
   'start', 'handoff', 'precommit', 'closeout', 'package-start',
   'switch-to-codex', 'switch-to-claude', 'weekly-sync', 'status-summary',
   'os-audit', 'project-sync-dry-run', 'project-sync-apply', 'notification-setup-wizard',
-  'github-project-setup',
+  'github-project-setup', 'github-project-template',
 ];
 for (const skill of skills) {
   const path = `.claude/skills/${skill}/SKILL.md`;
@@ -191,6 +191,24 @@ checkGrep('github-project-sync-status.mjs supports --live flag', 'scripts/github
 // Verify source records example has required fields
 checkGrep('source-records.example.json has os_id field', 'docs/project-control/github-projects-source-records.example.json', 'os_id');
 checkGrep('source-records.example.json has OS ID marker comment pattern', 'docs/project-control/github-projects-source-records.example.json', 'KMVT-');
+
+// --- Section 6d: GitHub Projects template standard layer (AI Project OS v1.5) ---
+checkFile('docs/project-control/github-projects-template-standard.md (v1.5 template standard)', 'docs/project-control/github-projects-template-standard.md');
+checkFile('docs/project-control/github-projects-template-copy-runbook.md (v1.5 template runbook)', 'docs/project-control/github-projects-template-copy-runbook.md');
+checkFile('docs/project-control/github-projects-template-config.example.json (v1.5 template config example)', 'docs/project-control/github-projects-template-config.example.json');
+checkFile('scripts/github-project-template-dry-run.mjs (v1.5 template dry-run)', 'scripts/github-project-template-dry-run.mjs');
+checkFile('scripts/github-project-template-validate.mjs (v1.5 template validate)', 'scripts/github-project-template-validate.mjs');
+checkFile('scripts/github-project-template-apply.mjs (v1.5 template apply)', 'scripts/github-project-template-apply.mjs');
+checkFile('.claude/skills/github-project-template/SKILL.md (v1.5 skill)', '.claude/skills/github-project-template/SKILL.md');
+checkFile('.claude/commands/github-project-template.md (v1.5 command)', '.claude/commands/github-project-template.md');
+checkGrep('github-project-template SKILL.md has name:', '.claude/skills/github-project-template/SKILL.md', 'name:');
+checkGrep('github-project-template SKILL.md has description:', '.claude/skills/github-project-template/SKILL.md', 'description:');
+checkGitignore('github-projects-template-config.local.json gitignored', 'docs/project-control/github-projects-template-config.local.json');
+checkGrep('template-config.example.json uses placeholder ID', 'docs/project-control/github-projects-template-config.example.json', 'PVT_placeholder');
+checkGrep('template-standard.md uses v1.5 status vocabulary', 'docs/project-control/github-projects-template-standard.md', 'Done / Shipped');
+checkGrep('github-projects-client.mjs REQUIRED_STATUSES uses v1.5 vocab', 'scripts/lib/github-projects-client.mjs', 'Done / Shipped');
+checkGrep('github-projects-client.mjs VALID_STATUSES uses v1.5 vocab', 'scripts/lib/github-projects-client.mjs', 'Waiting / Blocked');
+checkGrep('github-projects-setup-policy.md uses v1.5 Status vocabulary', 'docs/project-control/github-projects-setup-policy.md', 'Done / Shipped');
 
 // --- Section 7: QA templates ---
 const qaDocs = [

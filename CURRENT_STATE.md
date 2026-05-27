@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-26`
+**Last updated:** `2026-05-27`
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `83ad8e0` — merge: close GitHub Project board setup pass |
+| main HEAD | `11a218a` — docs: sync state after GitHub Project board closeout merge |
+| Active branch | `docs/ai-project-os-template-github-project-standard` (v1.5 Gate 1 — uncommitted) |
+| Active pass | AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (in-progress, awaiting commit) |
 | Last completed pass | `GitHub Project board closeout` — board operationally complete: 11 Issues, 13 fields, 14 views — merged `83ad8e0` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Active pass | None — board setup complete and merged; Coordinator decides next package |
-| Active branch | `main` (no active feature branch) |
-| Next authorized target | Coordinator: authorize next product package. GitHub Project board operationally complete. |
-| OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail |
-| Package 5B | Not started |
+| Next authorized target | Coordinator reviews v1.5 Gate 1 report → approves commit → Gate 2 separate authorization |
+| OS audit | Post-v1.5 Gate 1 (pre-commit): 138 pass, 0 warn, 0 fail |
+| Package 5B | Not started — blocked |
 
 ---
 
@@ -87,8 +87,8 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | Notification setup (user-level) | `docs/dev/notification-setup.md` |
 | Test strategy | `docs/qa/test-strategy.md` |
 | Per-package verification | `docs/qa/package-verification-template.md` |
-| Short command interface (live) | `.claude/commands/README.md` — 15 commands, all delegating to `.claude/skills/*/SKILL.md` |
-| Skills (canonical protocol layer) | `.claude/skills/README.md` — 14 skills with SKILL.md |
+| Short command interface (live) | `.claude/commands/README.md` — 16 commands, all delegating to `.claude/skills/*/SKILL.md` |
+| Skills (canonical protocol layer) | `.claude/skills/README.md` — 15 skills with SKILL.md |
 | Closeout sync contract | `docs/dev/closeout-sync-contract.md` |
 | Project-control sync foundation | `docs/project-control/project-sync-policy.md`, `project-sync-dry-run-format.md`, `external-sync-safety.md` |
 | OS self-audit | `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` |

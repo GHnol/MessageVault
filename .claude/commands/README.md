@@ -31,6 +31,7 @@ When a command is invoked, Claude follows the skill protocol. The command file i
 | `/project-sync-apply` | `project-sync-apply` | Apply approved sync delta (approval-gated) | `docs/project-control/external-sync-safety.md` |
 | `/notification-setup-wizard` | `notification-setup-wizard` | Walk notification hook setup (local-only) | `docs/dev/notification-setup.md` |
 | `/github-project-setup` | `github-project-setup` | Plan, dry-run, and approval-gate GitHub Projects setup | `docs/project-control/github-projects-setup-policy.md` |
+| `/github-project-template` | `github-project-template` | Manage AI Project OS GitHub Project template (dry-run, validate, Gate 2 apply) | `docs/project-control/github-projects-template-standard.md` |
 
 ---
 
