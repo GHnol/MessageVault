@@ -11,6 +11,29 @@ Every apply operation must be logged here. Dry-run operations are optional to lo
 ## Log entries (newest first)
 ---
 
+**Date:** 2026-05-27  
+**Type:** template-ui-setup (Founder manual)  
+**Action:** GitHub Projects UI — Status field options + 14 views configured on AI Project OS Template (Project #2)  
+**Coordinator approval:** Coordinator  
+**What was done:**
+- Status field options set to 8 v1.5 canonical values: Backlog, Ready, In Progress, Review / QA, Waiting / Blocked, Done / Shipped, Deferred, Cancelled
+- 14 views created: Board, Table, Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, High Risks, Calendar Relevant, TickTick Relevant, By Package, By Phase, By Lane, Decision Needed
+- Note: view name corrected to "High Risks" (was "Risks / Decisions") — GitHub Projects does not support OR across different fields
+- All 14 views confirmed via GraphQL read-only check
+- Gate 2 complete
+
+---
+
+**Date:** 2026-05-27  
+**Type:** template-create  
+**Script:** scripts/github-project-template-apply.mjs --apply --create-template  
+**Project Title:** AI Project OS Template  
+**Project ID:** PVT_kwHOBuFnQM4BY53W  
+**Project Number:** 2  
+**Fields Created:** 13/13
+
+---
+
 ### Board Closeout — 2026-05-26
 - **Pass:** Board closeout and repo sync (branch: `docs/github-project-board-closeout`)
 - **Project:** #1 "KeepMees Project Control" (https://github.com/users/GHnol/projects/1)

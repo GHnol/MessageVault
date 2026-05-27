@@ -50,7 +50,7 @@ Create these as saved views inside the GitHub Project:
 | Review / QA | Items with status Review / QA |
 | Waiting / Blocked | Items with status Waiting / Blocked |
 | Done | Items with status Done / Shipped or Cancelled |
-| Risks / Decisions | Items where Risk Level = High or Decision Needed = true |
+| High Risks | Items where Risk Level = High (GitHub Projects does not support OR across different fields; Decision Needed is a separate view) |
 | Calendar Relevant | Items where Calendar Relevant = true |
 | TickTick Relevant | Items where TickTick Relevant = true |
 | By Package | Grouped by Package field |

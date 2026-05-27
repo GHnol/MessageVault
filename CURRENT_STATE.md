@@ -21,15 +21,15 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `7c2c511` — merge: add AI Project OS v1.5 Gate 1 template standard |
+| main HEAD | `02bb97a` — docs: sync state after v1.5 Gate 1 merge (Gate 2 changes uncommitted) |
 | Active branch | `main` |
-| Active pass | None — v1.5 Gate 1 merged; Coordinator decides Gate 2 |
-| Last completed pass | `AI Project OS v1.5 Gate 1` — Template GitHub Project Standard — merged `7c2c511` — COMPLETE |
+| Active pass | None — v1.5 Gate 2 complete; Gate 2 closeout changes ready to commit |
+| Last completed pass | `AI Project OS v1.5 Gate 2` — Live Template Creation — complete 2026-05-27 — awaiting commit |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator: authorize v1.5 Gate 2 (live template creation or documented blocker) |
-| OS audit | Post-v1.5 Gate 1: 138 pass, 0 warn, 0 fail |
+| Next authorized target | Coordinator: authorize Gate 2 closeout commit |
+| OS audit | Post-Gate 2: 138 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
-| v1.5 Gate 2 | Not started — pending Coordinator decision |
+| v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views; local config written |
 
 ---
 

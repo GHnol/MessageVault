@@ -32,7 +32,7 @@ Create these as saved views or filter presets inside the primary List:
 | Review / QA | Status = In Review |
 | Waiting / Blocked | Status = Waiting or Blocked |
 | Done | Status = Done or Approved |
-| Risks / Decisions | Decision Needed = Yes, or Risk Level = High |
+| High Risks | Risk Level = High (Decision Needed is a separate view) |
 | Calendar Relevant | Calendar Relevant = Yes |
 | TickTick Relevant | TickTick Relevant = Yes |
 | By Package | Group by Package field |

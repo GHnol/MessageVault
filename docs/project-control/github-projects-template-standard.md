@@ -54,15 +54,24 @@ v1.5 is **not complete** until Gate 2 closes with one of these outcomes.
 
 ## Gate 2 Status
 
-**Status:** `pending` — awaiting Coordinator authorization.
+**Status:** `complete` — Gate 2 closed 2026-05-27.
 
-*Update this section when Gate 2 closes:*
 ```
-Gate 2 outcome: [Option A | Option B | Option C]
-Template project: <title> (owner: <owner>, number: <N>, id: <PVT_...>)
-Date closed: YYYY-MM-DD
-Coordinator approval: [name]
+Gate 2 outcome: Option B — dedicated template project created
+Template project: AI Project OS Template (owner: GHnol, number: 2, url: https://github.com/users/GHnol/projects/2)
+Template project ID: stored in github-projects-template-config.local.json (gitignored, never committed)
+Date closed: 2026-05-27
+Coordinator approval: Coordinator
 ```
+
+**Completed deliverables:**
+- Dedicated GitHub Project "AI Project OS Template" created under GHnol (number: 2)
+- 13 canonical custom fields provisioned and confirmed live
+- Status field configured to 8 v1.5 canonical options (Backlog, Ready, In Progress, Review / QA, Waiting / Blocked, Done / Shipped, Deferred, Cancelled)
+- 14 canonical views created by Founder in GitHub Projects UI
+- `High Risks` is the canonical risk view — GitHub Projects does not support OR across different fields, so the originally planned `Risks / Decisions` (Risk Level = High OR Decision Needed = true) is split: `High Risks` (Risk Level = High) and `Decision Needed` (Decision Needed = true) as separate views
+- Local template config written to `github-projects-template-config.local.json` (gitignored, not committed)
+- Future GitHub Project setup for any AI Project OS repo: prefer template-copy via `github-project-setup-apply.mjs`
 
 ---
 
@@ -167,7 +176,7 @@ Every AI Project OS GitHub Project must have these saved views:
 | Review / QA | Status = Review / QA |
 | Waiting / Blocked | Status = Waiting / Blocked |
 | Done | Status = Done / Shipped or Cancelled |
-| Risks / Decisions | Risk Level = High or Decision Needed = true |
+| High Risks | Risk Level = High (GitHub Projects does not support OR across different fields; Decision Needed is a separate view) |
 | Calendar Relevant | Calendar Relevant = true |
 | TickTick Relevant | TickTick Relevant = true |
 | By Package | Grouped by Package |

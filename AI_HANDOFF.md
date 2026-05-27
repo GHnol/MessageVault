@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.5 Gate 1 merged to `main` (`7c2c511`). Working tree clean. No active pass. Gate 2 pending Coordinator decision. Package 5B blocked.
+**Status:** `complete` — AI Project OS v1.5 Gate 2 complete 2026-05-27. Working tree has uncommitted changes (Gate 2 closeout docs — awaiting commit authorization). No active development pass. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-27`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — v1.5 Gate 1 merged; Coordinator decides Gate 2 |
+| **Active pass** | None — v1.5 Gate 2 complete; awaiting commit authorization for Gate 2 closeout docs |
 | **Active branch** | `main` |
-| **main HEAD** | `7c2c511` — merge: add AI Project OS v1.5 Gate 1 template standard |
-| **Last completed pass** | `AI Project OS v1.5 Gate 1` (merged `7c2c511`) |
+| **main HEAD** | `02bb97a` — docs: sync state after v1.5 Gate 1 merge (Gate 2 changes not yet committed) |
+| **Last completed pass** | `AI Project OS v1.5 Gate 2` (complete 2026-05-27; awaiting commit) |
 | **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked pending Coordinator authorization |
@@ -30,7 +30,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (last completed pass)
 
-AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastructure). Added canonical template standard docs, scripts, skill, and command. Updated client library to v1.5 canonical Status vocabulary (8 values). Added config-driven template-copy auto-detection to setup-apply. Added Section 6d to OS self-audit (16 new checks). Migrated all source records to v1.5 vocabulary. Gate 1 = repo docs/scripts only; no live GitHub mutations. COMPLETE and merged.
+AI Project OS v1.5 Gate 2 — Live Template Creation (complete 2026-05-27). Dedicated "AI Project OS Template" GitHub Project created under GHnol (Project #2, `PVT_kwHOBuFnQM4BY53W`, https://github.com/users/GHnol/projects/2). 13/13 canonical custom fields provisioned via script. Status field set to 8 v1.5 canonical options by Founder in GitHub UI. 14 canonical views created by Founder. "High Risks" replaces "Risks / Decisions" (GitHub Projects does not support OR across different fields). Local template config written (gitignored). Gate 2 complete — template-copy is now active preferred path. Closeout docs updated but not yet committed — awaiting Coordinator commit authorization.
 
 ---
 
@@ -82,34 +82,28 @@ AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastruct
 
 ---
 
-## Work completed (v1.5 Gate 1)
+## Work completed (v1.5 Gate 2)
 
-- [x] Branch created: `docs/ai-project-os-template-github-project-standard`
-- [x] All 8 new files created and verified (`node --check`)
-- [x] All 19 existing files updated
-- [x] Source records migrated to v1.5 vocabulary (Done→Done/Shipped, Not Started→Backlog, Waiting→Waiting/Blocked, Deferred→In Progress for KM-PC-011)
-- [x] Vocabulary check fix: old-vocab detection scoped to `status_options` only (not full config JSON), fixing false positive on "Done" view name
-- [x] `node scripts/github-project-template-dry-run.mjs` — PASS (all sections green)
-- [x] `node scripts/github-project-template-validate.mjs docs/project-control/github-projects-template-config.example.json` — 0 fail, 0 warn
-- [x] `node scripts/os-self-audit.mjs` — **138 pass, 0 warn, 0 fail**
-- [x] `git check-ignore -v docs/project-control/github-projects-template-config.local.json` — GITIGNORED at .gitignore:84
-- [x] `git diff -- index.html src public amplify package.json` — empty (no product code touched)
+- [x] Gate 2 authorized by Coordinator — Option B: dedicated template project
+- [x] Bug fixes applied to `scripts/github-project-template-apply.mjs` (3 bugs: projectId extraction, appendSyncLog format, --project-id flag added)
+- [x] "AI Project OS Template" GitHub Project created under GHnol (Project #2, `PVT_kwHOBuFnQM4BY53W`)
+- [x] 13/13 canonical custom fields provisioned and confirmed via live GraphQL query
+- [x] Status field: 8 v1.5 canonical options configured by Founder in GitHub UI
+- [x] 14 canonical views created by Founder in GitHub UI; "High Risks" replaces "Risks / Decisions" (GitHub OR-across-fields limitation)
+- [x] All 14 views confirmed via live GraphQL read-only query
+- [x] Local template config written: `docs/project-control/github-projects-template-config.local.json` (gitignored)
+- [x] Local config validation: 0 fail, 0 warn
+- [x] Dry-run post-apply: template-copy mode detected, all sections green
+- [x] OS self-audit: 138 pass, 0 warn, 0 fail
+- [x] Sync log updated (template-create entry + UI setup entry)
+- [x] "Risks / Decisions" → "High Risks" updated in: validate.mjs, client.mjs, example config, setup-policy.md, template-standard.md, external-platform-mapping-guide.md, clickup-setup-policy.md, local config
+- [x] CHANGELOG.md and version-history.md updated for v1.5 COMPLETE
+- [x] Template standard Gate 2 Status section updated
 - [x] State files updated (AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md)
-- [x] Gate 1 report produced
 
-## Work remaining (v1.5 Gate 1)
+## Work remaining (Gate 2 closeout)
 
-- [x] Coordinator reviewed Gate 1 report — approved
-- [x] Committed on branch (`4a995f8`, `c049699`)
-- [x] Branch pushed to origin
-- [x] Merged to main as `7c2c511`
-- [x] Live KeepMees board Status options confirmed v1.5 canonical (no field repair needed)
-
-## Gate 2 — separate Coordinator authorization required
-
-- [ ] Coordinator decides: create/designate canonical AI Project OS Template GitHub Project, or document blocker
-- [ ] If approved: run `github-project-template-apply.mjs --apply --create-template` or `--copy-from-template`
-- [ ] Populate `github-projects-template-config.local.json` with real template IDs (gitignored)
+- [ ] Coordinator authorizes commit of Gate 2 closeout changes
 
 ---
 
@@ -117,17 +111,17 @@ AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastruct
 
 ```
 Branch (now):    main
-main HEAD:       7c2c511 — merge: add AI Project OS v1.5 Gate 1 template standard
-Working tree:    clean
+main HEAD:       02bb97a — docs: sync state after v1.5 Gate 1 merge
+Working tree:    modified (Gate 2 closeout — awaiting commit authorization)
 v1.5 Gate 1:     COMPLETE — merged 7c2c511
-v1.5 Gate 2:     not started — pending Coordinator decision
+v1.5 Gate 2:     COMPLETE — live template project exists; closeout docs ready to commit
 ```
 
 ---
 
 ## Next exact action
 
-Coordinator decides whether to authorize v1.5 Gate 2 (live template creation or documented blocker). No active development pass.
+Coordinator authorizes commit of Gate 2 closeout changes with message: `docs: close AI Project OS v1.5 Gate 2 template standard`
 
 ---
 

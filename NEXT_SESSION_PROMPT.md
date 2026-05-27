@@ -47,14 +47,14 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.5 Gate 1 complete and merged to main (`7c2c511`). No active pass. Gate 2 pending Coordinator decision. Package 5B blocked. Working tree clean. |
+| Resume into | AI Project OS v1.5 Gate 2 complete 2026-05-27. "AI Project OS Template" (GHnol/projects/2) created; 13 fields; 14 views. Gate 2 closeout docs modified but not yet committed. Package 5B blocked. |
 | Branch | `main` |
-| main HEAD | `7c2c511` — merge: add AI Project OS v1.5 Gate 1 template standard |
-| Next action | Run `/start`. v1.5 Gate 1 is merged — no push or merge needed. Await Coordinator decision on v1.5 Gate 2 (live template creation or documented blocker). Do not start Gate 2 without explicit authorization. |
-| OS audit | Post-v1.5 Gate 1: 138 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| main HEAD | `02bb97a` — docs: sync state after v1.5 Gate 1 merge (Gate 2 changes uncommitted) |
+| Next action | Run `/start`. v1.5 Gate 2 complete — closeout changes ready to commit. Await Coordinator commit authorization for Gate 2 closeout. Do not start Package 5B without explicit authorization. |
+| OS audit | Post-Gate 2: 138 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked pending Coordinator authorization. |
-| Do not | Start Gate 2 without explicit Coordinator authorization; start Package 5B without explicit authorization; modify `index.html` / `src/**`; run any --apply script without Coordinator approval; create real GitHub Projects or Issues; push or merge without explicit instruction. |
+| Do not | Start Package 5B without explicit authorization; modify `index.html` / `src/**`; create additional GitHub Projects or Issues; run any --apply script without Coordinator approval; push or merge without explicit instruction; commit `github-projects-template-config.local.json`. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

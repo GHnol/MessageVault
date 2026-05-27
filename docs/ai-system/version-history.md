@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | in-progress (branch: `docs/ai-project-os-template-github-project-standard`) |
+| 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | complete — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27 |
 | 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | merged (`1623e7e`) |
 | 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
 | 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
@@ -28,8 +28,8 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ## 1.5.0 — AI Project OS v1.5: Template GitHub Project Standard (2026-05-26)
 
-**Branch:** `docs/ai-project-os-template-github-project-standard` — IN PROGRESS (Gate 1)
-**Status:** Gate 1 in progress — repo infrastructure; Gate 2 awaiting Coordinator authorization
+**Branch:** Gate 1 merged `7c2c511`; Gate 2 completed on `main` 2026-05-27
+**Status:** COMPLETE — Gate 1 merged; Gate 2 complete (dedicated template project created, 13 fields, 14 views)
 
 ### What this pass adds
 
@@ -44,16 +44,18 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ### Gate 2 status
 
-**Pending.** Gate 2 requires separate explicit Coordinator authorization. Options:
-- Designate KeepMees Project #1 as canonical template
-- Create a dedicated template project
-- Document a platform/permission blocker
+**COMPLETE** (2026-05-27) — Option B: dedicated "AI Project OS Template" project created under GHnol.
+- Project: "AI Project OS Template" — GHnol/projects/2 (`PVT_kwHOBuFnQM4BY53W`)
+- 13/13 canonical custom fields provisioned via script
+- Status field: 8 v1.5 canonical options configured by Founder in GitHub UI
+- 14 canonical views created by Founder in GitHub UI; "High Risks" replaces "Risks / Decisions" (GitHub Projects OR-across-fields limitation)
+- Local template config written to `github-projects-template-config.local.json` (gitignored)
+- Template-copy is now the preferred path for all future AI Project OS repo setups
 
 ### Backlog
 
 | Item | Reason deferred |
 |---|---|
-| Gate 2: live template creation or documented blocker | Requires separate Coordinator authorization |
 | Field repair for live KeepMees board (v1.4 → v1.5 Status vocab) | Not needed — live board confirmed at v1.5 canonical (verified 2026-05-27) |
 
 ### What should be copied to Puzzle and future repos

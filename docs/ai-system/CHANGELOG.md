@@ -11,8 +11,8 @@ Newest entries first.
 
 ## 2026-05-26 — AI Project OS v1.5: Template GitHub Project Standard
 
-**Status:** IN PROGRESS — branch `docs/ai-project-os-template-github-project-standard`
-**Scope:** Establish the canonical AI Project OS GitHub Project template standard. Template-copy becomes the preferred setup path; create-from-scratch is fallback only. Canonical Status vocabulary updated (v1.5). Two-gate closeout model. No live GitHub mutations in Gate 1. No app code; no Package 5B work.
+**Status:** COMPLETE — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27
+**Scope:** Establish the canonical AI Project OS GitHub Project template standard. Template-copy becomes the preferred setup path; create-from-scratch is fallback only. Canonical Status vocabulary updated (v1.5). Two-gate closeout model. Gate 2: dedicated "AI Project OS Template" project created under GHnol (Project #2); 13 canonical custom fields provisioned; 14 views created by Founder; Status field set to v1.5 canonical. No app code; no Package 5B work.
 
 ### Added
 
@@ -59,11 +59,13 @@ Newest entries first.
 
 ### Key design decisions
 
-- Two-gate model: Gate 1 is repo infrastructure (this pass); Gate 2 is live template creation (separate Coordinator authorization)
+- Two-gate model: Gate 1 is repo infrastructure; Gate 2 is live template creation (separate Coordinator authorization — completed 2026-05-27)
 - Template-copy preferred over create-from-scratch: auto-detected from local config; no user flag needed
 - REQUIRED_STATUSES updated from 9 (v1.4) to 8 (v1.5): removes Not Started, In Review, Blocked, Waiting, Approved, Done; adds Backlog, Ready, Review / QA, Waiting / Blocked, Done / Shipped
 - Vocabulary migration: source records in repo migrated to v1.5; live KeepMees board Status options confirmed as v1.5 canonical via read-only live check (2026-05-27 — no field repair needed)
 - `github-projects-template-config.local.json` gitignored (contains real template IDs); example file committed (placeholder IDs only)
+- Canonical risk view is "High Risks" (Risk Level = High only) — GitHub Projects does not support OR across different fields; original spec "Risks / Decisions" (Risk Level = High OR Decision Needed = true) is split into "High Risks" + "Decision Needed" as separate views
+- Gate 2 (2026-05-27): "AI Project OS Template" (Project #2) created under GHnol; 13/13 canonical custom fields provisioned via script; Status options configured to 8 v1.5 values; 14 views created by Founder in GitHub UI; local config written (gitignored)
 
 ---
 

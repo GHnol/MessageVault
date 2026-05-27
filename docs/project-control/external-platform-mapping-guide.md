@@ -31,7 +31,7 @@ GitHub Projects is the default external board because:
 | Project name | KeepMees Project Control |
 | Owner | GHnol |
 | Linked repo | GHnol/MessageVault |
-| Views | Board, Table, Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, Risks / Decisions, Calendar Relevant, TickTick Relevant, By Package, By Phase, By Lane, Decision Needed |
+| Views | Board, Table, Current Sprint, Backlog, Review / QA, Waiting / Blocked, Done, High Risks, Calendar Relevant, TickTick Relevant, By Package, By Phase, By Lane, Decision Needed |
 | Task records | GitHub Issues |
 | Board fields | GitHub Project custom fields (13 fields) |
 

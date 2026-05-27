@@ -53,7 +53,7 @@ const CANONICAL_FIELDS = [
 
 const CANONICAL_VIEWS = [
   'Board','Table','Current Sprint','Backlog','Review / QA',
-  'Waiting / Blocked','Done','Risks / Decisions','Calendar Relevant',
+  'Waiting / Blocked','Done','High Risks','Calendar Relevant',
   'TickTick Relevant','By Package','By Phase','By Lane','Decision Needed',
 ];
 

@@ -26,6 +26,7 @@
  *   --owner <owner>           GitHub owner (default: GHnol)
  *   --repo <repo>             GitHub repo name (default: MessageVault)
  *   --template-title <title>  Title for new template project (create-template only)
+ *   --project-id <id>         Skip project creation; provision fields into existing project ID
  *   --config <path>           Local template config path (default: local json path)
  *   --help                    Print this help
  */
@@ -48,10 +49,11 @@ function getArg(name) {
   return idx >= 0 && argv[idx + 1] ? argv[idx + 1] : null;
 }
 
-const OWNER         = getArg('--owner') ?? 'GHnol';
-const REPO          = getArg('--repo') ?? 'MessageVault';
-const TMPL_TITLE    = getArg('--template-title') ?? 'AI Project OS Template';
-const LOCAL_CONFIG  = getArg('--config') ??
+const OWNER           = getArg('--owner') ?? 'GHnol';
+const REPO            = getArg('--repo') ?? 'MessageVault';
+const TMPL_TITLE      = getArg('--template-title') ?? 'AI Project OS Template';
+const EXISTING_PID    = getArg('--project-id') ?? null;
+const LOCAL_CONFIG    = getArg('--config') ??
   'docs/project-control/github-projects-template-config.local.json';
 const LOCAL_CONFIG_FULL = join(ROOT, LOCAL_CONFIG);
 const EXAMPLE_CONFIG = join(ROOT,
@@ -243,26 +245,35 @@ if (CREATE_TEMPLATE) {
   info(`Creating template project: "${TMPL_TITLE}" (owner: ${OWNER})`);
   console.log('');
 
-  const scopeR = probeProjectScope();
-  if (!scopeR) {
-    warn('Project scope probe inconclusive — proceeding; if creation fails, run: gh auth refresh -s project');
-  }
+  let projectId, projectNumber;
 
-  const ownerR = (await import('./lib/github-projects-client.mjs')).resolveOwnerId(OWNER);
-  if (!ownerR.ok) {
-    console.error(`[FAIL] Cannot resolve owner ID: ${ownerR.error}`);
-    process.exit(1);
-  }
+  if (EXISTING_PID) {
+    info(`--project-id provided — skipping creation, provisioning fields into existing project`);
+    projectId = EXISTING_PID;
+    projectNumber = null;
+    ok(`Using existing project ID: ${projectId}`);
+  } else {
+    const scopeR = probeProjectScope();
+    if (!scopeR) {
+      warn('Project scope probe inconclusive — proceeding; if creation fails, run: gh auth refresh -s project');
+    }
 
-  const createR = createProject(ownerR.id, TMPL_TITLE, { apply: true });
-  if (!createR.ok) {
-    console.error(`[FAIL] Create project failed: ${createR.error}`);
-    process.exit(1);
-  }
+    const ownerR = (await import('./lib/github-projects-client.mjs')).resolveOwnerId(OWNER);
+    if (!ownerR.ok) {
+      console.error(`[FAIL] Cannot resolve owner ID: ${ownerR.error}`);
+      process.exit(1);
+    }
 
-  const projectId = createR.projectId;
-  const projectNumber = createR.projectNumber;
-  ok(`Template project created: ID=${projectId} Number=${projectNumber}`);
+    const createR = createProject(ownerR.id, TMPL_TITLE, { apply: true });
+    if (!createR.ok) {
+      console.error(`[FAIL] Create project failed: ${createR.error}`);
+      process.exit(1);
+    }
+
+    projectId = createR.project?.id;
+    projectNumber = createR.project?.number;
+    ok(`Template project created: ID=${projectId} Number=${projectNumber}`);
+  }
 
   let fieldsCreated = 0;
   for (const field of REQUIRED_FIELDS) {
@@ -299,15 +310,11 @@ if (CREATE_TEMPLATE) {
   info('  (never commit this file — it is gitignored)');
   console.log('');
 
-  appendSyncLog(join(ROOT, 'docs/project-control/github-projects-sync-log.md'), {
-    type: 'template-create',
-    script: 'scripts/github-project-template-apply.mjs --apply --create-template',
-    projectId,
-    projectNumber,
-    projectTitle: TMPL_TITLE,
-    fieldsCreated,
-    date: now,
-  });
+  appendSyncLog(
+    join(ROOT, 'docs/project-control/github-projects-sync-log.md'),
+    `**Date:** ${now}  \n**Type:** template-create  \n**Script:** scripts/github-project-template-apply.mjs --apply --create-template  \n**Project Title:** ${TMPL_TITLE}  \n**Project ID:** ${projectId}  \n**Project Number:** ${projectNumber}  \n**Fields Created:** ${fieldsCreated}/${REQUIRED_FIELDS.length}`,
+    { apply: true },
+  );
 
   sep();
   console.log('TEMPLATE CREATION COMPLETE');
@@ -357,19 +364,16 @@ if (COPY_FROM) {
     process.exit(1);
   }
 
-  ok(`Project copied: ID=${copyR.projectId} Number=${copyR.projectNumber}`);
+  ok(`Project copied: ID=${copyR.project?.id} Number=${copyR.project?.number}`);
   info(`Write the copied project ID to docs/project-control/external-sync-map.local.json`);
   info('Then run: node scripts/github-project-setup-apply.mjs to link to repo and verify fields');
   console.log('');
 
-  appendSyncLog(join(ROOT, 'docs/project-control/github-projects-sync-log.md'), {
-    type: 'template-copy',
-    script: 'scripts/github-project-template-apply.mjs --apply --copy-from-template',
-    templateId: cfg.template_project_id,
-    newProjectId: copyR.projectId,
-    newProjectNumber: copyR.projectNumber,
-    date: now,
-  });
+  appendSyncLog(
+    join(ROOT, 'docs/project-control/github-projects-sync-log.md'),
+    `**Date:** ${now}  \n**Type:** template-copy  \n**Script:** scripts/github-project-template-apply.mjs --apply --copy-from-template  \n**Template ID:** ${cfg.template_project_id}  \n**New Project ID:** ${copyR.project?.id}  \n**New Project Number:** ${copyR.project?.number}`,
+    { apply: true },
+  );
 
   sep();
   console.log('COPY COMPLETE');
