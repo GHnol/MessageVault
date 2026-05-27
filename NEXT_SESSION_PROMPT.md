@@ -47,15 +47,14 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.5 Gate 1 committed (`4a995f8`). Branch awaiting push/merge authorization. Gate 2 not started. Working tree: `NEXT_SESSION_PROMPT.md` only. |
-| Branch | `docs/ai-project-os-template-github-project-standard` |
-| Branch HEAD | `4a995f8` — docs: implement AI Project OS v1.5 Gate 1 template standard |
-| main HEAD | `11a218a` — docs: sync state after GitHub Project board closeout merge |
-| Next action | Run `/start`. Gate 1 committed. Await Coordinator push/merge authorization. Do not start Gate 2 without separate explicit authorization. |
+| Resume into | AI Project OS v1.5 Gate 1 complete and merged to main (`7c2c511`). No active pass. Gate 2 pending Coordinator decision. Package 5B blocked. Working tree clean. |
+| Branch | `main` |
+| main HEAD | `7c2c511` — merge: add AI Project OS v1.5 Gate 1 template standard |
+| Next action | Run `/start`. v1.5 Gate 1 is merged — no push or merge needed. Await Coordinator decision on v1.5 Gate 2 (live template creation or documented blocker). Do not start Gate 2 without explicit authorization. |
 | OS audit | Post-v1.5 Gate 1: 138 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked pending Coordinator authorization. |
-| Do not | Start Gate 2 (live template creation) without separate Coordinator authorization; push or merge without explicit instruction; modify `index.html` / `src/**`; run any --apply script without Coordinator approval; create real GitHub Projects or Issues. |
+| Do not | Start Gate 2 without explicit Coordinator authorization; start Package 5B without explicit authorization; modify `index.html` / `src/**`; run any --apply script without Coordinator approval; create real GitHub Projects or Issues; push or merge without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

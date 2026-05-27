@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS v1.5 Gate 1 (Template GitHub Project Standard — repo infrastructure) in progress on branch `docs/ai-project-os-template-github-project-standard`. All repo files created, edited, and verified. OS self-audit: **138 pass, 0 warn, 0 fail**. Awaiting Coordinator review of Gate 1 report and explicit commit approval.
+**Status:** `complete` — AI Project OS v1.5 Gate 1 merged to `main` (`7c2c511`). Working tree clean. No active pass. Gate 2 pending Coordinator decision. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-27`
 
@@ -18,24 +18,23 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | AI Project OS v1.5 — Template GitHub Project Standard (Gate 1 only) |
-| **Active branch** | `docs/ai-project-os-template-github-project-standard` |
-| **main HEAD** | `11a218a` — docs: sync state after GitHub Project board closeout merge |
-| **Branch HEAD** | `11a218a` (no commits yet on this branch — all changes are uncommitted) |
-| **Last completed pass** | `GitHub Project board closeout` (merged `83ad8e0`) |
-| **Active package** | OS v1.5 Gate 1 — repo infrastructure only; no live GitHub mutations |
+| **Active pass** | None — v1.5 Gate 1 merged; Coordinator decides Gate 2 |
+| **Active branch** | `main` |
+| **main HEAD** | `7c2c511` — merge: add AI Project OS v1.5 Gate 1 template standard |
+| **Last completed pass** | `AI Project OS v1.5 Gate 1` (merged `7c2c511`) |
+| **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked pending Coordinator authorization |
 
 ---
 
-## Objective (active pass)
+## Objective (last completed pass)
 
-AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastructure). Add canonical template standard docs, scripts, skill, and command. Update client library to v1.5 canonical Status vocabulary (8 values). Add config-driven template-copy auto-detection to setup-apply. Add Section 6d to OS self-audit (16 new checks). Migrate all source records to v1.5 vocabulary. Gate 1 = repo docs/scripts only; no live GitHub mutations. Gate 2 (live template creation) requires separate Coordinator authorization.
+AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastructure). Added canonical template standard docs, scripts, skill, and command. Updated client library to v1.5 canonical Status vocabulary (8 values). Added config-driven template-copy auto-detection to setup-apply. Added Section 6d to OS self-audit (16 new checks). Migrated all source records to v1.5 vocabulary. Gate 1 = repo docs/scripts only; no live GitHub mutations. COMPLETE and merged.
 
 ---
 
-## Delivered scope (v1.5 Gate 1 — COMPLETE, AWAITING COMMIT APPROVAL)
+## Delivered scope (v1.5 Gate 1 — COMPLETE, MERGED `7c2c511`)
 
 ### New files
 - `docs/project-control/github-projects-template-standard.md` — canonical template standard (v1.5 two-gate model, Status vocabulary, field/view/owner specs)
@@ -100,33 +99,35 @@ AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastruct
 
 ## Work remaining (v1.5 Gate 1)
 
-- [ ] Coordinator reviews Gate 1 report
-- [ ] Coordinator approves commit
-- [ ] Commit on branch and push
-- [ ] PR and merge to main (Coordinator approval)
+- [x] Coordinator reviewed Gate 1 report — approved
+- [x] Committed on branch (`4a995f8`, `c049699`)
+- [x] Branch pushed to origin
+- [x] Merged to main as `7c2c511`
+- [x] Live KeepMees board Status options confirmed v1.5 canonical (no field repair needed)
 
-## Work NOT started (Gate 2 — separate authorization required)
+## Gate 2 — separate Coordinator authorization required
 
-- [ ] Create/designate canonical AI Project OS Template GitHub Project (live mutation)
-- [ ] Populate `github-projects-template-config.local.json` with real IDs
-- [x] Live KeepMees board Status options already on v1.5 canonical vocabulary (confirmed 2026-05-27 via read-only live check — no field repair needed)
+- [ ] Coordinator decides: create/designate canonical AI Project OS Template GitHub Project, or document blocker
+- [ ] If approved: run `github-project-template-apply.mjs --apply --create-template` or `--copy-from-template`
+- [ ] Populate `github-projects-template-config.local.json` with real template IDs (gitignored)
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    docs/ai-project-os-template-github-project-standard
-main HEAD:       11a218a — docs: sync state after GitHub Project board closeout merge
-Working tree:    DIRTY (all v1.5 Gate 1 changes uncommitted — awaiting Coordinator approval)
-v1.5 Gate 1:     in-progress (not yet committed)
+Branch (now):    main
+main HEAD:       7c2c511 — merge: add AI Project OS v1.5 Gate 1 template standard
+Working tree:    clean
+v1.5 Gate 1:     COMPLETE — merged 7c2c511
+v1.5 Gate 2:     not started — pending Coordinator decision
 ```
 
 ---
 
 ## Next exact action
 
-Coordinator reviews Gate 1 report. On approval: commit all Gate 1 changes on branch.
+Coordinator decides whether to authorize v1.5 Gate 2 (live template creation or documented blocker). No active development pass.
 
 ---
 

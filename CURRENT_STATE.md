@@ -21,14 +21,15 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `11a218a` — docs: sync state after GitHub Project board closeout merge |
-| Active branch | `docs/ai-project-os-template-github-project-standard` (v1.5 Gate 1 — uncommitted) |
-| Active pass | AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (in-progress, awaiting commit) |
-| Last completed pass | `GitHub Project board closeout` — board operationally complete: 11 Issues, 13 fields, 14 views — merged `83ad8e0` — COMPLETE |
+| main HEAD | `7c2c511` — merge: add AI Project OS v1.5 Gate 1 template standard |
+| Active branch | `main` |
+| Active pass | None — v1.5 Gate 1 merged; Coordinator decides Gate 2 |
+| Last completed pass | `AI Project OS v1.5 Gate 1` — Template GitHub Project Standard — merged `7c2c511` — COMPLETE |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator reviews v1.5 Gate 1 report → approves commit → Gate 2 separate authorization |
-| OS audit | Post-v1.5 Gate 1 (pre-commit): 138 pass, 0 warn, 0 fail |
+| Next authorized target | Coordinator: authorize v1.5 Gate 2 (live template creation or documented blocker) |
+| OS audit | Post-v1.5 Gate 1: 138 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
+| v1.5 Gate 2 | Not started — pending Coordinator decision |
 
 ---
 
