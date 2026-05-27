@@ -123,20 +123,33 @@ If the new project will benefit from the Tower pattern, copy the structure of `d
 
 ### External board (default: GitHub Projects)
 
-**GitHub Projects is the default external board provider** for any AI Project OS repo (as of v1.3). Set up GitHub Projects before ClickUp. Copy and adapt:
+**GitHub Projects is the default external board provider** for any AI Project OS repo (as of v1.3). **Template-copy is the preferred setup path** (as of v1.5); create-from-scratch is the fallback. Set up GitHub Projects before ClickUp. Copy and adapt:
 
-- `docs/project-control/github-projects-setup-policy.md` — approved structure
+- `docs/project-control/github-projects-setup-policy.md` — approved structure (v1.5 Status vocabulary)
 - `docs/project-control/github-projects-source-schema.md` — source schema
-- `docs/project-control/github-projects-import-runbook.md` — import process
+- `docs/project-control/github-projects-import-runbook.md` — import process (template-copy section)
 - `docs/project-control/github-projects-field-map.example.json` — example field map (safe to commit; placeholder IDs only)
 - `docs/project-control/github-projects-sync-log.md` — start fresh
+- `docs/project-control/github-projects-template-standard.md` — canonical template standard (v1.5); two-gate model; vocabulary
+- `docs/project-control/github-projects-template-copy-runbook.md` — Gate 1/Gate 2 runbook
+- `docs/project-control/github-projects-template-config.example.json` — committed example (placeholder IDs only)
 - `scripts/github-project-setup-dry-run.mjs` — copy as-is
-- `scripts/github-project-setup-apply.mjs` — copy as-is (apply skeleton)
+- `scripts/github-project-setup-apply.mjs` — copy as-is (auto-detects template config; falls back to create-from-scratch)
 - `scripts/github-project-import-issues.mjs` — copy as-is
 - `scripts/github-project-sync-status.mjs` — copy as-is
 - `scripts/github-project-field-map.mjs` — copy as-is
+- `scripts/github-project-template-dry-run.mjs` — copy as-is
+- `scripts/github-project-template-validate.mjs` — copy as-is
+- `scripts/github-project-template-apply.mjs` — copy as-is
 - `.claude/skills/github-project-setup/SKILL.md` — copy and adapt project name
 - `.claude/commands/github-project-setup.md` — copy as-is
+- `.claude/skills/github-project-template/SKILL.md` — copy as-is
+- `.claude/commands/github-project-template.md` — copy as-is
+
+**Template-copy path for the new repo:**
+1. Complete Gate 2 for the source/template repo (see `github-projects-template-copy-runbook.md`)
+2. Write real template IDs to `github-projects-template-config.local.json` (gitignored, never committed)
+3. Run `github-project-setup-apply.mjs --apply` — template-copy auto-detected
 
 **ClickUp is an optional adapter.** Copy `clickup-setup-policy.md` only if the project will use ClickUp alongside GitHub Projects.
 

@@ -1,8 +1,8 @@
 # GitHub Projects Setup Policy
 
-**Status:** ACTIVE (introduced in AI Project OS v1.3 External Board Provider Update, 2026-05-25)
+**Status:** ACTIVE (introduced in AI Project OS v1.3 External Board Provider Update, 2026-05-25; Status vocabulary updated to v1.5 canonical in 2026-05-26)
 **Owner:** Coordinator / Project Control
-**Companion docs:** `github-projects-source-schema.md`, `github-projects-import-runbook.md`, `github-projects-field-map.example.json`, `github-projects-sync-log.md`, `external-platform-mapping-guide.md`, `external-sync-safety.md`, `clickup-setup-policy.md`
+**Companion docs:** `github-projects-source-schema.md`, `github-projects-import-runbook.md`, `github-projects-field-map.example.json`, `github-projects-sync-log.md`, `external-platform-mapping-guide.md`, `external-sync-safety.md`, `clickup-setup-policy.md`, `github-projects-template-standard.md`, `github-projects-template-copy-runbook.md`
 
 ---
 
@@ -46,10 +46,10 @@ Create these as saved views inside the GitHub Project:
 | Board | Default Kanban-style board — by status |
 | Table | Flat table of all items with all fields |
 | Current Sprint | Items in active sprint window |
-| Backlog | Items with status Not Started or Deferred |
-| Review / QA | Items with status In Review |
-| Waiting / Blocked | Items with status Blocked or Waiting |
-| Done | Items with status Done, Approved, or Cancelled |
+| Backlog | Items with status Backlog |
+| Review / QA | Items with status Review / QA |
+| Waiting / Blocked | Items with status Waiting / Blocked |
+| Done | Items with status Done / Shipped or Cancelled |
 | Risks / Decisions | Items where Risk Level = High or Decision Needed = true |
 | Calendar Relevant | Items where Calendar Relevant = true |
 | TickTick Relevant | Items where TickTick Relevant = true |
@@ -60,19 +60,24 @@ Create these as saved views inside the GitHub Project:
 
 ---
 
-## Recommended statuses
+## Canonical Status options (v1.5)
+
+**These are the only valid Status values as of AI Project OS v1.5.**
 
 | Status | Meaning |
 |---|---|
-| Not Started | Issue exists but no work has begun |
+| Backlog | Issue exists but no work has begun |
+| Ready | Scoped, unblocked, ready to start |
 | In Progress | Actively being worked |
-| In Review | Implementation done; awaiting review or approval |
-| Blocked | Cannot proceed due to an external dependency or decision |
-| Waiting | On hold pending action from another party |
-| Approved | Explicitly approved by Coordinator; may proceed or close |
-| Done | Completed and verified |
+| Review / QA | Implementation done; awaiting review, QA, or approval |
+| Waiting / Blocked | Cannot proceed — waiting on external dependency, decision, or third party |
+| Done / Shipped | Completed, verified, and merged/shipped |
 | Deferred | Explicitly pushed to a future phase |
 | Cancelled | Killed; will not be done |
+
+Old vocabulary (v1.3/v1.4 — must not appear in new or updated files): `Not Started`, `In Review`, `Blocked`, `Waiting`, `Approved`, `Done`
+
+See `github-projects-template-standard.md` for the full migration table.
 
 ---
 
@@ -158,6 +163,22 @@ One local sync map can track GitHub Project, GitHub Issue, GitHub Project item, 
 | Issue close or archive | Explicit Coordinator approval |
 
 No live GitHub Project creation or issue import happens without explicit approval. Scripts must require `--apply` and print a warning without it.
+
+---
+
+## Template-copy as preferred setup path (v1.5)
+
+**Template-copy is the preferred GitHub Project setup path as of AI Project OS v1.5.**
+
+When a validated template config (`github-projects-template-config.local.json`) is present:
+- `github-project-setup-apply.mjs` auto-detects it and uses `--from-template`
+- No manual `--from-template` flag needed
+
+When no template config is present (or it has placeholder IDs):
+- `github-project-setup-apply.mjs` falls back to create-from-scratch
+- Create-from-scratch creates 13 custom fields individually
+
+See `github-projects-template-standard.md` and `github-projects-template-copy-runbook.md` for the two-gate model and Gate 2 authorization requirements.
 
 ---
 

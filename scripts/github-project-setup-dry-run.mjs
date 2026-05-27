@@ -238,7 +238,7 @@ console.log('');
 // ---------------------------------------------------------------------------
 // 9. Required statuses
 // ---------------------------------------------------------------------------
-console.log('9. REQUIRED STATUS OPTIONS (9) — manual UI step');
+console.log(`9. REQUIRED STATUS OPTIONS (${REQUIRED_STATUSES.length}) — manual UI step`);
 console.log('');
 console.log('  The built-in Status field is created automatically by GitHub Projects.');
 console.log('  Default options (Todo, In Progress, Done) must be replaced manually.');

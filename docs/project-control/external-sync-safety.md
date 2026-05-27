@@ -33,7 +33,9 @@ These rules are non-negotiable. They apply to every agent, script, and manual pr
 ### Committed vs non-committed files (GitHub Projects)
 
 - `docs/project-control/external-sync-map.local.json` — **never committed.** Contains real GitHub project_id, project_item_id, issue numbers, and issue URLs. Gitignored.
+- `docs/project-control/github-projects-template-config.local.json` — **never committed.** Contains real template project ID and configuration. Gitignored. Populated only after Gate 2 is authorized.
 - `docs/project-control/github-projects-field-map.example.json` — **committed as example only.** Must contain only fake placeholder IDs. Never real project IDs, issue numbers, or item IDs.
+- `docs/project-control/github-projects-template-config.example.json` — **committed as example only.** Must contain only placeholder IDs (`PVT_placeholder`, `template_project_number: 0`). Never real template project IDs.
 - GitHub tokens, OAuth credentials, or any GitHub authentication material — **never committed.**
 
 ### No destructive project item or issue deletion

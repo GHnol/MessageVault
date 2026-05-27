@@ -9,9 +9,67 @@ Newest entries first.
 
 ---
 
+## 2026-05-26 — AI Project OS v1.5: Template GitHub Project Standard
+
+**Status:** IN PROGRESS — branch `docs/ai-project-os-template-github-project-standard`
+**Scope:** Establish the canonical AI Project OS GitHub Project template standard. Template-copy becomes the preferred setup path; create-from-scratch is fallback only. Canonical Status vocabulary updated (v1.5). Two-gate closeout model. No live GitHub mutations in Gate 1. No app code; no Package 5B work.
+
+### Added
+
+- `docs/project-control/github-projects-template-standard.md` — canonical template standard: two-gate closeout model; v1.5 Status vocabulary; canonical field set, view set, status/owner-role/external-sync options; migration table from v1.3/v1.4
+- `docs/project-control/github-projects-template-copy-runbook.md` — step-by-step Gate 1/Gate 2 runbook: pre-flight, template source options, validation, copy-from-template, Gate 2 closeout
+- `docs/project-control/github-projects-template-config.example.json` — committed example config (placeholder IDs only); shows full spec including v1.5 status options, all 13 fields, 14 views, 9 owner roles
+- `scripts/github-project-template-dry-run.mjs` — read-only dry-run: docs check, template config detection (Gate 2 status), example config validation, gitignore check, gh CLI check, planned apply behavior
+- `scripts/github-project-template-validate.mjs` — config validation: required keys, placeholder safety, old vocabulary check, status options, required fields, views, owner roles, external sync status, optional live GitHub probe (read-only)
+- `scripts/github-project-template-apply.mjs` — Gate 2 apply: `--create-template`, `--copy-from-template`, `--validate-template`; all Gate 2 mutations guarded by `--apply`; Gate 1 is plan mode only
+- `.claude/skills/github-project-template/SKILL.md` — new skill: template dry-run, validate, Gate 2 apply; two-gate model; approval boundaries; canonical vocabulary reference
+- `.claude/commands/github-project-template.md` — thin command wrapper → delegates to `github-project-template` skill; `/github-project-template`
+
+### Updated
+
+- `scripts/lib/github-projects-client.mjs` — REQUIRED_STATUSES and VALID_STATUSES updated to v1.5 canonical vocabulary (8 values: Backlog, Ready, In Progress, Review / QA, Waiting / Blocked, Done / Shipped, Deferred, Cancelled)
+- `scripts/github-project-setup-apply.mjs` — config-driven template-copy-first logic: auto-detects `github-projects-template-config.local.json`; selects `--from-template` path if real template IDs present; falls back to create-from-scratch if no config
+- `scripts/github-project-setup-dry-run.mjs` — adds template config detection section to dry-run output
+- `scripts/os-self-audit.mjs` — Section 6d checks added for v1.5 template standard layer
+- `docs/project-control/github-projects-setup-policy.md` — Status vocabulary updated to v1.5 canonical (8 options); view filters updated; template-copy preferred path section added
+- `docs/project-control/github-projects-import-runbook.md` — template copy section added (Step 1b)
+- `docs/project-control/external-sync-safety.md` — template config safety rules added
+- `docs/project-control/project-sync-policy.md` — template-copy as preferred setup path added
+- `docs/ai-system/universal-standards.md` — github-project-template skill added to automation table
+- `docs/ai-system/bootstrap-template.md` — § 6 updated: template-copy preferred, create-from-scratch fallback
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6d added (AI Project OS v1.5 template standard layer)
+- `.claude/skills/README.md` — `github-project-template` skill added to roster
+- `.claude/commands/README.md` — `/github-project-template` command added to roster
+- `.claude/skills/github-project-setup/SKILL.md` — references template-copy as preferred path
+- `.gitignore` — `docs/project-control/github-projects-template-config.local.json` added
+- `docs/project-control/github-projects-source-records.json` — status vocabulary migrated to v1.5; KM-PC-011 status updated to reflect v1.5 activation
+- `docs/ai-system/CHANGELOG.md` — v1.4 status corrected (IN PROGRESS → COMPLETE); this v1.5 entry added
+- `docs/ai-system/version-history.md` — v1.4 row corrected; v1.5 row added
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- No live GitHub API apply during Gate 1 implementation
+- No GitHub Project created during Gate 1
+- No GitHub Issues imported during Gate 1
+- No `github-projects-template-config.local.json` written during Gate 1
+- No `external-sync-map.local.json` written during Gate 1
+- No Package 5B planning or implementation
+- No secrets, tokens, or credentials committed
+
+### Key design decisions
+
+- Two-gate model: Gate 1 is repo infrastructure (this pass); Gate 2 is live template creation (separate Coordinator authorization)
+- Template-copy preferred over create-from-scratch: auto-detected from local config; no user flag needed
+- REQUIRED_STATUSES updated from 9 (v1.4) to 8 (v1.5): removes Not Started, In Review, Blocked, Waiting, Approved, Done; adds Backlog, Ready, Review / QA, Waiting / Blocked, Done / Shipped
+- Vocabulary migration: source records in repo migrated to v1.5; live KeepMees board Status options confirmed as v1.5 canonical via read-only live check (2026-05-27 — no field repair needed)
+- `github-projects-template-config.local.json` gitignored (contains real template IDs); example file committed (placeholder IDs only)
+
+---
+
 ## 2026-05-25 — AI Project OS v1.4: GitHub Projects Live Provisioning Integration
 
-**Status:** IN PROGRESS — branch `docs/github-projects-live-provisioning`
+**Status:** COMPLETE — merged to `main` as `1623e7e` on 2026-05-26
 **Scope:** Make GitHub Projects apply scripts real and apply-capable. No app code; no live apply during implementation; no Package 5B work. Implements client library, three-layer duplicate detection, sync map writing, incremental apply, and all script dry-runs verified against live GitHub auth.
 
 ### Added

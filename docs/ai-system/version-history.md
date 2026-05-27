@@ -11,7 +11,8 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | in-progress (branch: `docs/github-projects-live-provisioning`) |
+| 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | in-progress (branch: `docs/ai-project-os-template-github-project-standard`) |
+| 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | merged (`1623e7e`) |
 | 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
 | 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
 | 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
@@ -25,10 +26,46 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ---
 
+## 1.5.0 — AI Project OS v1.5: Template GitHub Project Standard (2026-05-26)
+
+**Branch:** `docs/ai-project-os-template-github-project-standard` — IN PROGRESS (Gate 1)
+**Status:** Gate 1 in progress — repo infrastructure; Gate 2 awaiting Coordinator authorization
+
+### What this pass adds
+
+- **Template standard:** `github-projects-template-standard.md` — canonical v1.5 Status vocabulary; two-gate closeout model; preferred template-copy path; canonical fields, views, statuses, owner roles.
+- **Template copy runbook:** `github-projects-template-copy-runbook.md` — Gate 1/Gate 2 process; three source options for template; validation steps.
+- **Template config example:** `github-projects-template-config.example.json` — committed placeholder example; local config gitignored.
+- **Three new scripts:** `github-project-template-dry-run.mjs`, `github-project-template-validate.mjs`, `github-project-template-apply.mjs` — all verified `node --check`; apply script gated by `--apply` and subcommand.
+- **New skill + command:** `github-project-template` — SKILL.md with frontmatter; thin command wrapper; two-gate boundary.
+- **Canonical Status vocabulary (v1.5):** Backlog, Ready, In Progress, Review / QA, Waiting / Blocked, Done / Shipped, Deferred, Cancelled (8 values; replaces 9-value v1.4 vocabulary).
+- **Config-driven template-copy:** `github-project-setup-apply.mjs` auto-detects local template config and selects template-copy over create-from-scratch.
+- **Gitignore:** `github-projects-template-config.local.json` protected.
+
+### Gate 2 status
+
+**Pending.** Gate 2 requires separate explicit Coordinator authorization. Options:
+- Designate KeepMees Project #1 as canonical template
+- Create a dedicated template project
+- Document a platform/permission blocker
+
+### Backlog
+
+| Item | Reason deferred |
+|---|---|
+| Gate 2: live template creation or documented blocker | Requires separate Coordinator authorization |
+| Field repair for live KeepMees board (v1.4 → v1.5 Status vocab) | Not needed — live board confirmed at v1.5 canonical (verified 2026-05-27) |
+
+### What should be copied to Puzzle and future repos
+
+`github-projects-template-standard.md`, `github-projects-template-copy-runbook.md`, `github-projects-template-config.example.json`, and the three template scripts. The gitignore addition for `github-projects-template-config.local.json` is universal.
+
+---
+
 ## 1.4.0 — AI Project OS v1.4: GitHub Projects Live Provisioning Integration (2026-05-25)
 
-**Branch:** `docs/github-projects-live-provisioning` — IN PROGRESS
-**Status:** Implementation complete (scripts verified dry-run); awaiting OS audit and state sync
+**Branch:** `docs/github-projects-live-provisioning` — merged `1623e7e`
+**Status:** COMPLETE — merged 2026-05-26
 
 ### What this pass adds
 

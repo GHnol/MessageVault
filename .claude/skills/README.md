@@ -1,6 +1,6 @@
 # .claude/skills — Skills (Canonical Protocol Layer)
 
-**Status:** ACTIVE — 14 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in AI Project OS v1.3 External Board Provider Update (2026-05-25).
+**Status:** ACTIVE — 15 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26).
 
 ---
 
@@ -32,6 +32,7 @@ This separation allows the canonical protocol to evolve independently of the com
 | `project-sync-apply` | Apply approved sync delta (internal docs + proposed external) |
 | `notification-setup-wizard` | Walk notification hook setup (local-only, never committed) |
 | `github-project-setup` | Plan, dry-run, and approval-gate GitHub Projects setup for AI Project OS external boards |
+| `github-project-template` | Manage the canonical AI Project OS GitHub Project template — dry-run, validate, and Gate 2 apply for template creation and copy |
 
 ---
 

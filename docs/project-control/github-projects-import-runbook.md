@@ -1,9 +1,9 @@
 # GitHub Projects Import Runbook
 
-**Status:** ACTIVE (introduced v1.3; apply scripts made real in v1.4 — AI Project OS v1.4 GitHub Projects Live Provisioning Integration, 2026-05-25)
+**Status:** ACTIVE (introduced v1.3; apply scripts made real in v1.4; template-copy path added in v1.5)
 **Owner:** Coordinator / Project Control
 **Purpose:** Step-by-step process for setting up a GitHub Project, importing issues, and syncing project fields. All operations follow the dry-run → approval → apply → log workflow.
-**Companion docs:** `github-projects-setup-policy.md`, `github-projects-source-schema.md`, `github-projects-field-map.example.json`, `github-projects-sync-log.md`, `external-sync-safety.md`
+**Companion docs:** `github-projects-setup-policy.md`, `github-projects-source-schema.md`, `github-projects-field-map.example.json`, `github-projects-sync-log.md`, `external-sync-safety.md`, `github-projects-template-standard.md`, `github-projects-template-copy-runbook.md`
 
 ---
 
@@ -106,15 +106,23 @@ This script will:
 8. Append an entry to `github-projects-sync-log.md`
 9. Print remaining manual steps: Status field options + 14 views
 
-### Template project (optional)
+### Step 1b: Template-copy path (preferred when Gate 2 is complete)
 
-If a template GitHub Project is available in the organization, use:
+**Template-copy is the preferred setup path as of AI Project OS v1.5.** If Gate 2 has been completed (real template IDs in `github-projects-template-config.local.json`), `github-project-setup-apply.mjs` automatically selects the template-copy path:
 
 ```bash
-node scripts/github-project-setup-apply.mjs --apply --from-template --template-project-number <N>
+# With local template config present, this auto-selects template-copy
+node scripts/github-project-setup-apply.mjs --apply --owner GHnol --repo MessageVault
 ```
 
-Review the template structure and adapt it to the approved field set in `github-projects-setup-policy.md`.
+To validate the template before applying:
+```bash
+node scripts/github-project-template-dry-run.mjs
+node scripts/github-project-template-validate.mjs \
+  --config docs/project-control/github-projects-template-config.local.json --live
+```
+
+If Gate 2 is not yet complete (no local template config or placeholder IDs), setup-apply falls back to create-from-scratch automatically. See `github-projects-template-standard.md` and `github-projects-template-copy-runbook.md`.
 
 ---
 

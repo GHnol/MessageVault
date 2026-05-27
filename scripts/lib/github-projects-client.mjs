@@ -505,8 +505,8 @@ export const REQUIRED_FIELDS = [
 ];
 
 export const REQUIRED_STATUSES = [
-  'Not Started', 'In Progress', 'In Review', 'Blocked',
-  'Waiting', 'Approved', 'Done', 'Deferred', 'Cancelled',
+  'Backlog', 'Ready', 'In Progress', 'Review / QA',
+  'Waiting / Blocked', 'Done / Shipped', 'Deferred', 'Cancelled',
 ];
 
 export const REQUIRED_VIEWS = [
@@ -516,8 +516,8 @@ export const REQUIRED_VIEWS = [
 ];
 
 export const VALID_STATUSES = new Set([
-  'Not Started', 'In Progress', 'In Review', 'Blocked',
-  'Waiting', 'Approved', 'Done', 'Deferred', 'Cancelled',
+  'Backlog', 'Ready', 'In Progress', 'Review / QA',
+  'Waiting / Blocked', 'Done / Shipped', 'Deferred', 'Cancelled',
 ]);
 
 export const VALID_OWNER_ROLES = new Set([

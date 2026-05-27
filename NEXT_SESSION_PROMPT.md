@@ -47,14 +47,15 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | GitHub Project board operational — 11 Issues, 13 fields, 14 views. main at `98f029d`. No active product pass. Await Coordinator authorization. |
-| Branch | `main` (no active feature branch) |
-| main HEAD | `98f029d` — merge: implement GitHub Project targeted field-repair script |
-| Next action | Run `/start`. Read `AGENTS.md`, `CLAUDE.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`. Confirm board operational. Await Coordinator direction for Package 5B or next OS pass. |
-| OS audit | Post-v1.4: 118 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
-| Package 5A | COMPLETE — merged `297a221`, status-sync merged `926ec37`. 1603 Node tests passing. |
-| Package 5B | Not started. |
-| Do not | Start any new product package without explicit Coordinator authorization; modify `index.html` / `src/**`; commit/push without explicit instruction; run any --apply script without explicit Coordinator approval; create real GitHub Projects or Issues. |
+| Resume into | AI Project OS v1.5 Gate 1 committed (`4a995f8`). Branch awaiting push/merge authorization. Gate 2 not started. Working tree: `NEXT_SESSION_PROMPT.md` only. |
+| Branch | `docs/ai-project-os-template-github-project-standard` |
+| Branch HEAD | `4a995f8` — docs: implement AI Project OS v1.5 Gate 1 template standard |
+| main HEAD | `11a218a` — docs: sync state after GitHub Project board closeout merge |
+| Next action | Run `/start`. Gate 1 committed. Await Coordinator push/merge authorization. Do not start Gate 2 without separate explicit authorization. |
+| OS audit | Post-v1.5 Gate 1: 138 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
+| Package 5B | Not started — blocked pending Coordinator authorization. |
+| Do not | Start Gate 2 (live template creation) without separate Coordinator authorization; push or merge without explicit instruction; modify `index.html` / `src/**`; run any --apply script without Coordinator approval; create real GitHub Projects or Issues. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

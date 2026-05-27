@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — GitHub Project board setup pass merged to main (`83ad8e0`). KeepMees GitHub Project board operationally complete: 11 Issues, 13 fields, 14 views, all items in-sync. Working tree clean. No active pass. Package 5B not started.
+**Status:** `in-progress` — AI Project OS v1.5 Gate 1 (Template GitHub Project Standard — repo infrastructure) in progress on branch `docs/ai-project-os-template-github-project-standard`. All repo files created, edited, and verified. OS self-audit: **138 pass, 0 warn, 0 fail**. Awaiting Coordinator review of Gate 1 report and explicit commit approval.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-26`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-27`
 
 ---
 
@@ -18,45 +18,54 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — board setup complete; Coordinator decides next package |
-| **Active branch** | `main` (no active feature branch) |
-| **main HEAD** | `83ad8e0` — merge: close GitHub Project board setup pass |
+| **Active pass** | AI Project OS v1.5 — Template GitHub Project Standard (Gate 1 only) |
+| **Active branch** | `docs/ai-project-os-template-github-project-standard` |
+| **main HEAD** | `11a218a` — docs: sync state after GitHub Project board closeout merge |
+| **Branch HEAD** | `11a218a` (no commits yet on this branch — all changes are uncommitted) |
 | **Last completed pass** | `GitHub Project board closeout` (merged `83ad8e0`) |
-| **Active package** | None — Coordinator decides next product package |
-| **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`, status-sync merged `926ec37`) |
-| **Package 5B** | Not started |
+| **Active package** | OS v1.5 Gate 1 — repo infrastructure only; no live GitHub mutations |
+| **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
+| **Package 5B** | Not started — blocked pending Coordinator authorization |
 
 ---
 
 ## Objective (active pass)
 
-AI Project OS v1.4 — GitHub Projects Live Provisioning Integration. Make the GitHub Projects apply scripts (`github-project-setup-apply.mjs` and `github-project-import-issues.mjs`) real and apply-capable. Add client library (`scripts/lib/github-projects-client.mjs`). Implement three-layer duplicate detection. Dry-run-first/explicit-approval/no-live-apply-during-verification/no-token-exposure. No app code; no Package 5B work.
+AI Project OS v1.5 Gate 1 — Template GitHub Project Standard (repo infrastructure). Add canonical template standard docs, scripts, skill, and command. Update client library to v1.5 canonical Status vocabulary (8 values). Add config-driven template-copy auto-detection to setup-apply. Add Section 6d to OS self-audit (16 new checks). Migrate all source records to v1.5 vocabulary. Gate 1 = repo docs/scripts only; no live GitHub mutations. Gate 2 (live template creation) requires separate Coordinator authorization.
 
 ---
 
-## Delivered scope (v1.4 pass — COMPLETE)
+## Delivered scope (v1.5 Gate 1 — COMPLETE, AWAITING COMMIT APPROVAL)
 
 ### New files
-- `scripts/lib/github-projects-client.mjs` — CREATED (full client library)
-- `docs/project-control/github-projects-source-records.example.json` — CREATED (3 example source records)
+- `docs/project-control/github-projects-template-standard.md` — canonical template standard (v1.5 two-gate model, Status vocabulary, field/view/owner specs)
+- `docs/project-control/github-projects-template-copy-runbook.md` — Gate 1/Gate 2 runbook
+- `docs/project-control/github-projects-template-config.example.json` — placeholder-only example config (committed)
+- `scripts/github-project-template-dry-run.mjs` — template dry-run (all sections pass)
+- `scripts/github-project-template-validate.mjs` — template config validator
+- `scripts/github-project-template-apply.mjs` — Gate 2 apply script (plan mode default; requires --apply)
+- `.claude/skills/github-project-template/SKILL.md` — canonical skill
+- `.claude/commands/github-project-template.md` — thin command wrapper
 
-### Fully rewritten (skeleton → real apply-capable)
-- `scripts/github-project-setup-apply.mjs` — REWRITTEN (real apply; plan mode with probes)
-- `scripts/github-project-import-issues.mjs` — REWRITTEN (real apply; 3-layer dedup; incremental sync map)
-
-### Enhanced
-- `scripts/github-project-setup-dry-run.mjs` — ENHANCED (gh version, auth probe, project discovery, planned ops list)
-- `scripts/github-project-sync-status.mjs` — ENHANCED (`--live` flag for read-only API queries)
-- `scripts/github-project-field-map.mjs` — ENHANCED (`--local-map` flag for local sync map validation)
-
-### Updated docs
-- `docs/ai-system/CHANGELOG.md` — v1.4 entry added
-- `docs/ai-system/version-history.md` — v1.4 row added
-- `docs/project-control/github-projects-import-runbook.md` — updated for real apply scripts
-- `.claude/skills/github-project-setup/SKILL.md` — removed skeleton hard stop; updated dry-run section
-- `AI_HANDOFF.md` — this file (updated to v1.4 active)
-- `CURRENT_STATE.md` — updated
-- `NEXT_SESSION_PROMPT.md` — updated
+### Modified files
+- `scripts/lib/github-projects-client.mjs` — REQUIRED_STATUSES and VALID_STATUSES updated to v1.5 canonical 8 values
+- `scripts/github-project-setup-apply.mjs` — config-driven template-copy auto-detection added
+- `scripts/github-project-setup-dry-run.mjs` — status count made dynamic (REQUIRED_STATUSES.length)
+- `scripts/os-self-audit.mjs` — Section 6d added (16 new v1.5 checks); commands/skills arrays updated to 15
+- `docs/project-control/github-projects-setup-policy.md` — v1.5 Status vocabulary, template-copy path
+- `docs/project-control/github-projects-source-records.json` — all statuses migrated to v1.5 vocabulary
+- `docs/project-control/github-projects-import-runbook.md` — Step 1b template-copy path added
+- `docs/project-control/external-sync-safety.md` — template config files added to committed vs non-committed table
+- `docs/project-control/project-sync-policy.md` — template-copy preferred path note added
+- `docs/ai-system/CHANGELOG.md` — v1.5 entry added; v1.4 status fixed to COMPLETE
+- `docs/ai-system/version-history.md` — v1.5 row added; v1.4 row fixed
+- `docs/ai-system/bootstrap-template.md` — §6 updated for template-copy path + new files
+- `docs/ai-system/universal-standards.md` — commands/skills counts updated (14 → 16 / 13 → 15)
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6d added (15 audit checks)
+- `.claude/skills/README.md` — count updated to 15; github-project-template row added
+- `.claude/commands/README.md` — github-project-template row added
+- `.claude/skills/github-project-setup/SKILL.md` — v1.5 template-copy paragraph added
+- `.gitignore` — github-projects-template-config.local.json gitignored
 
 ---
 
@@ -64,58 +73,60 @@ AI Project OS v1.4 — GitHub Projects Live Provisioning Integration. Make the G
 
 - `index.html` — not touched
 - `src/**` — not touched
-- No live GitHub API apply during implementation verification
-- No real GitHub Project created; no real GitHub Issues imported
-- No `external-sync-map.local.json` written during verification
+- No live GitHub mutations performed
+- No GitHub Project created, copied, or modified
+- No GitHub Issues created, modified, or deleted
+- No Project fields, views, or items touched
+- `external-sync-map.local.json` — not touched
 - No secrets, tokens, or credentials committed
 - No Package 5B planning or implementation
 
 ---
 
-## Work completed (v1.4 pass)
+## Work completed (v1.5 Gate 1)
 
-- [x] Branch created: `docs/github-projects-live-provisioning`
-- [x] `scripts/lib/github-projects-client.mjs` — written and verified (`node --check`)
-- [x] `scripts/github-project-setup-apply.mjs` — rewritten (real apply); verified (`node --check`)
-- [x] `scripts/github-project-import-issues.mjs` — rewritten (real apply); verified (`node --check`)
-- [x] `scripts/github-project-setup-dry-run.mjs` — enhanced; verified (`node --check`, dry-run executed)
-- [x] `scripts/github-project-sync-status.mjs` — enhanced; verified (`node --check`, dry-run executed)
-- [x] `scripts/github-project-field-map.mjs` — enhanced; verified (`node --check`, ran: 0 fail, 0 warn)
-- [x] `docs/project-control/github-projects-source-records.example.json` — created
-- [x] `docs/ai-system/CHANGELOG.md` — v1.4 entry added
-- [x] `docs/ai-system/version-history.md` — v1.4 row added
-- [x] `docs/project-control/github-projects-import-runbook.md` — updated
-- [x] `.claude/skills/github-project-setup/SKILL.md` — updated
+- [x] Branch created: `docs/ai-project-os-template-github-project-standard`
+- [x] All 8 new files created and verified (`node --check`)
+- [x] All 19 existing files updated
+- [x] Source records migrated to v1.5 vocabulary (Done→Done/Shipped, Not Started→Backlog, Waiting→Waiting/Blocked, Deferred→In Progress for KM-PC-011)
+- [x] Vocabulary check fix: old-vocab detection scoped to `status_options` only (not full config JSON), fixing false positive on "Done" view name
+- [x] `node scripts/github-project-template-dry-run.mjs` — PASS (all sections green)
+- [x] `node scripts/github-project-template-validate.mjs docs/project-control/github-projects-template-config.example.json` — 0 fail, 0 warn
+- [x] `node scripts/os-self-audit.mjs` — **138 pass, 0 warn, 0 fail**
+- [x] `git check-ignore -v docs/project-control/github-projects-template-config.local.json` — GITIGNORED at .gitignore:84
+- [x] `git diff -- index.html src public amplify package.json` — empty (no product code touched)
 - [x] State files updated (AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md)
+- [x] Gate 1 report produced
 
-- [x] OS self-audit: **118 pass, 0 warn, 0 fail** (post-v1.4)
-- [x] `docs/ai-system/os-self-audit-checklist.md` — Section 6c added (10 new v1.4 checks)
-- [x] `scripts/os-self-audit.mjs` — Section 6c checks added (118 total, up from 108)
+## Work remaining (v1.5 Gate 1)
 
-## Work remaining (v1.4 pass)
+- [ ] Coordinator reviews Gate 1 report
+- [ ] Coordinator approves commit
+- [ ] Commit on branch and push
+- [ ] PR and merge to main (Coordinator approval)
 
-- [x] Pre-commit verification gate (Coordinator-driven)
-- [x] Coordinator approves commit
-- [x] Commit on branch
-- [x] Push branch
-- [x] Merge to main — COMPLETE (merged `1623e7e`)
+## Work NOT started (Gate 2 — separate authorization required)
+
+- [ ] Create/designate canonical AI Project OS Template GitHub Project (live mutation)
+- [ ] Populate `github-projects-template-config.local.json` with real IDs
+- [x] Live KeepMees board Status options already on v1.5 canonical vocabulary (confirmed 2026-05-27 via read-only live check — no field repair needed)
 
 ---
 
 ## Git state
 
 ```
-Branch (now):    main
-main HEAD:       1623e7e — merge: implement GitHub Projects live provisioning integration
-Working tree:    clean
-v1.4:            merged 1623e7e — COMPLETE
+Branch (now):    docs/ai-project-os-template-github-project-standard
+main HEAD:       11a218a — docs: sync state after GitHub Project board closeout merge
+Working tree:    DIRTY (all v1.5 Gate 1 changes uncommitted — awaiting Coordinator approval)
+v1.5 Gate 1:     in-progress (not yet committed)
 ```
 
 ---
 
 ## Next exact action
 
-No active pass. Coordinator decides next package.
+Coordinator reviews Gate 1 report. On approval: commit all Gate 1 changes on branch.
 
 ---
 
