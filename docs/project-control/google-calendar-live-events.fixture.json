@@ -1,0 +1,249 @@
+{
+  "_comment": "FIXTURE — Fake mock Google Calendar events for Gate 2A comparison logic validation. Contains NO real Google Calendar event IDs, real calendar IDs, real account emails, real attendee emails, real OAuth tokens, credential paths, or any private external identifiers. All IDs and data are fake placeholders invented for testing only.",
+  "_fixture_version": "1",
+  "_purpose": "Exercises all 11 classification values in the dry-run comparison logic. Use with: node scripts/google-calendar-sync-dry-run.mjs --fixture docs/project-control/google-calendar-live-events.fixture.json",
+  "_classifications_covered": [
+    "NO_OP — event matches source exactly (keepmees-ritual-ceo-review-weekly)",
+    "UPDATE — AI_OS_ID confirmed, non-time field differs (keepmees-ritual-coordinator-planning-weekly)",
+    "ADOPTION_REQUIRED — exact title+date match, no AI_OS_ID marker (keepmees-ritual-dev-review-weekly)",
+    "DUPLICATE_DETECTED — two events carry same AI_OS_ID (keepmees-ritual-product-design-review-weekly)",
+    "CREATE — no live event found (keepmees-ritual-project-control-sync-weekly, keepmees-ritual-monthly-budget-review)",
+    "REMOTE_DRIFT — AI_OS_ID confirmed, start time externally changed (keepmees-ritual-monthly-roadmap-reset)",
+    "MAPPED_EVENT_MISSING_REMOTELY — fixtureLocalMap entry exists but event absent from live list (keepmees-ritual-monthly-risk-review)",
+    "POSSIBLE_DUPLICATE — fuzzy title match, no AI_OS_ID marker, blocks Gate 3 apply (keepmees-milestone-phase-gate-review)",
+    "NEEDS_MANUAL_REVIEW — multiple exact title+date matches, no AI_OS_ID markers (keepmees-milestone-launch-readiness-review)",
+    "DELETE_CANCEL_CANDIDATE — live managed event whose AI_OS_ID is not in any source record",
+    "MISSING_LOCAL_MAPPING — advisory flag on NO_OP/UPDATE where fixtureLocalMap has no entry"
+  ],
+
+  "calendarId": "fixture-calendar@group.calendar.google.com",
+
+  "fixtureLocalMap": {
+    "_comment": "Simulates external-sync-map.local.json entries for fixture testing only. Never use real event IDs here.",
+    "keepmees-ritual-monthly-risk-review": {
+      "external_id": "fixture_monthly_risk_ghost_id_not_in_events_list",
+      "calendar_id": "fixture-calendar@group.calendar.google.com",
+      "last_synced": "2026-01-01",
+      "status": "active"
+    }
+  },
+
+  "events": [
+
+    {
+      "_classification_target": "NO_OP",
+      "_note": "Exact match for keepmees-ritual-ceo-review-weekly. All payload fields identical to source record. Has AI_OS_ID in description and extendedProperties. Exercises NO_OP path + MISSING_LOCAL_MAPPING advisory (no fixtureLocalMap entry for this os_id).",
+      "id": "fixture_event_001_noop_ceo_review",
+      "summary": "KeepMees CEO Review",
+      "description": "Founder-level direction and capacity check.\nReview: CURRENT_STATE.md and docs/project-control/current-sprint.md.\nOutput: confirm or adjust sprint scope; note founder capacity (R-CAP-1).\n\nAI_OS_ID: keepmees-ritual-ceo-review-weekly",
+      "start": {
+        "dateTime": "2026-05-17T19:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-05-17T20:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=SU"],
+      "status": "confirmed",
+      "extendedProperties": {
+        "private": {
+          "ai_os_id": "keepmees-ritual-ceo-review-weekly"
+        }
+      }
+    },
+
+    {
+      "_classification_target": "UPDATE",
+      "_note": "Matches keepmees-ritual-coordinator-planning-weekly by AI_OS_ID. Title is missing 'Review' — non-time diff triggers UPDATE (not REMOTE_DRIFT). Has both marker types.",
+      "id": "fixture_event_002_update_coordinator_planning",
+      "summary": "KeepMees Coordinator Planning",
+      "description": "Plan the week and confirm priorities.\nReview: docs/project-control/next-7-days.md and backlog.md.\nOutput: update current-sprint.md.\n\nAI_OS_ID: keepmees-ritual-coordinator-planning-weekly",
+      "start": {
+        "dateTime": "2026-05-18T19:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-05-18T20:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=MO"],
+      "status": "confirmed",
+      "extendedProperties": {
+        "private": {
+          "ai_os_id": "keepmees-ritual-coordinator-planning-weekly"
+        }
+      }
+    },
+
+    {
+      "_classification_target": "ADOPTION_REQUIRED",
+      "_note": "Matches keepmees-ritual-dev-review-weekly by exact title and start date (2026-05-20). Has NO AI_OS_ID marker anywhere. Simulates 2026-05-17 ICS-imported event. Must be adopted before Gate 3.",
+      "id": "fixture_event_003_adoption_dev_review",
+      "summary": "KeepMees Development Review",
+      "description": "Development progress and test baseline.\nReview: docs/project-control/kanban-board.md and E2E status.\nOutput: update Kanban; note regressions.",
+      "start": {
+        "dateTime": "2026-05-20T19:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-05-20T20:15:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=WE"],
+      "status": "confirmed"
+    },
+
+    {
+      "_classification_target": "DUPLICATE_DETECTED (event A)",
+      "_note": "First copy matching keepmees-ritual-product-design-review-weekly. Both this and fixture_event_004b share the same AI_OS_ID in description.",
+      "id": "fixture_event_004a_dup_product_design",
+      "summary": "KeepMees Product / Design Review",
+      "description": "Product truth, fidelity, and design status.\nReview: decision-log.md and preview/print fidelity risks.\nOutput: record decisions and risk changes.\n\nAI_OS_ID: keepmees-ritual-product-design-review-weekly",
+      "start": {
+        "dateTime": "2026-05-21T19:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-05-21T20:15:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=TH"],
+      "status": "confirmed",
+      "extendedProperties": {
+        "private": {
+          "ai_os_id": "keepmees-ritual-product-design-review-weekly"
+        }
+      }
+    },
+
+    {
+      "_classification_target": "DUPLICATE_DETECTED (event B)",
+      "_note": "Second copy matching keepmees-ritual-product-design-review-weekly. Same AI_OS_ID as 004a — triggers DUPLICATE_DETECTED for that source record.",
+      "id": "fixture_event_004b_dup_product_design_copy",
+      "summary": "KeepMees Product / Design Review (Copy)",
+      "description": "Duplicate — accidentally created.\n\nAI_OS_ID: keepmees-ritual-product-design-review-weekly",
+      "start": {
+        "dateTime": "2026-05-21T19:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-05-21T20:15:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "recurrence": ["RRULE:FREQ=WEEKLY;BYDAY=TH"],
+      "status": "confirmed"
+    },
+
+    {
+      "_classification_target": "REMOTE_DRIFT",
+      "_note": "Matches keepmees-ritual-monthly-roadmap-reset by AI_OS_ID. Start time was changed externally from 17:00 to 18:00 — time diff triggers REMOTE_DRIFT instead of UPDATE.",
+      "id": "fixture_event_006_remote_drift_roadmap_reset",
+      "summary": "KeepMees Monthly Roadmap Reset",
+      "description": "Re-baseline roadmap and schedule.\nReview: master-roadmap.md and master-schedule.md.\nOutput: update phases, dates, and confidence labels.\n\nAI_OS_ID: keepmees-ritual-monthly-roadmap-reset",
+      "start": {
+        "dateTime": "2026-06-07T18:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-06-07T19:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "recurrence": ["RRULE:FREQ=MONTHLY;BYDAY=1SU"],
+      "status": "confirmed",
+      "extendedProperties": {
+        "private": {
+          "ai_os_id": "keepmees-ritual-monthly-roadmap-reset"
+        }
+      }
+    },
+
+    {
+      "_classification_target": "POSSIBLE_DUPLICATE",
+      "_note": "Fuzzy title match for keepmees-milestone-phase-gate-review. Title similarity ~60% ('KeepMees Phase Gate Check' vs 'KeepMees Phase Gate Review'). No AI_OS_ID. BLOCKS Gate 3 apply until Coordinator resolves (confirm unrelated, adopt, or explicitly approve despite duplicate risk).",
+      "id": "fixture_event_009_possible_dup_phase_gate",
+      "summary": "KeepMees Phase Gate Check",
+      "description": "Phase gate checkpoint — no AI_OS_ID marker.",
+      "start": {
+        "dateTime": "2026-11-30T10:00:00-05:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-11-30T11:00:00-05:00",
+        "timeZone": "America/New_York"
+      },
+      "status": "confirmed"
+    },
+
+    {
+      "_classification_target": "NEEDS_MANUAL_REVIEW (event A)",
+      "_note": "First event with exact title 'KeepMees Launch Readiness Review' and start date 2027-06-30. No AI_OS_ID. When two exact matches exist, triggers NEEDS_MANUAL_REVIEW.",
+      "id": "fixture_event_010a_needs_review_launch_a",
+      "summary": "KeepMees Launch Readiness Review",
+      "description": "Pre-launch go/no-go review — no AI_OS_ID marker — first copy.",
+      "start": {
+        "dateTime": "2027-06-30T10:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2027-06-30T11:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "status": "confirmed"
+    },
+
+    {
+      "_classification_target": "NEEDS_MANUAL_REVIEW (event B)",
+      "_note": "Second event with exact title 'KeepMees Launch Readiness Review' and start date 2027-06-30. Two exact matches → NEEDS_MANUAL_REVIEW for that source record.",
+      "id": "fixture_event_010b_needs_review_launch_b",
+      "summary": "KeepMees Launch Readiness Review",
+      "description": "Pre-launch go/no-go review — no AI_OS_ID marker — second copy.",
+      "start": {
+        "dateTime": "2027-06-30T10:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2027-06-30T11:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "status": "confirmed"
+    },
+
+    {
+      "_classification_target": "DELETE_CANCEL_CANDIDATE",
+      "_note": "Live managed event with AI_OS_ID 'keepmees-ritual-quarterly-review-deprecated' which is NOT in any source record. Triggers DELETE_CANCEL_CANDIDATE (report only — requires separate per-item Coordinator approval before deletion).",
+      "id": "fixture_event_011_delete_candidate_deprecated_quarterly",
+      "summary": "KeepMees Quarterly Review (Deprecated)",
+      "description": "Legacy quarterly review — replaced by monthly rituals.\n\nAI_OS_ID: keepmees-ritual-quarterly-review-deprecated",
+      "start": {
+        "dateTime": "2026-06-30T14:00:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": "2026-06-30T15:30:00-04:00",
+        "timeZone": "America/New_York"
+      },
+      "status": "confirmed",
+      "extendedProperties": {
+        "private": {
+          "ai_os_id": "keepmees-ritual-quarterly-review-deprecated"
+        }
+      }
+    }
+
+  ],
+
+  "_expected_results": {
+    "keepmees-ritual-ceo-review-weekly": "NO_OP",
+    "keepmees-ritual-coordinator-planning-weekly": "UPDATE",
+    "keepmees-ritual-dev-review-weekly": "ADOPTION_REQUIRED",
+    "keepmees-ritual-product-design-review-weekly": "DUPLICATE_DETECTED",
+    "keepmees-ritual-project-control-sync-weekly": "CREATE",
+    "keepmees-ritual-monthly-roadmap-reset": "REMOTE_DRIFT",
+    "keepmees-ritual-monthly-budget-review": "CREATE",
+    "keepmees-ritual-monthly-risk-review": "MAPPED_EVENT_MISSING_REMOTELY",
+    "keepmees-milestone-phase-gate-review": "POSSIBLE_DUPLICATE",
+    "keepmees-milestone-launch-readiness-review": "NEEDS_MANUAL_REVIEW",
+    "keepmees-ritual-quarterly-review-deprecated": "DELETE_CANCEL_CANDIDATE"
+  }
+}

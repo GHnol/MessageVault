@@ -27,6 +27,19 @@ Newest entries first.
 
 ---
 
+## 2026-05-31 — Gate 2A: live dry-run comparison logic implemented (fixture-only)
+
+- **Gate:** Gate 2A
+- **Method:** fixture-only (no API calls)
+- **Changed by:** Claude Code (Sonnet 4.6)
+- **Events created:** none
+- **Events updated:** none
+- **Events removed:** none
+- **Credential status:** LIVE_READINESS_BLOCKED_CREDENTIALS_MISSING (expected — Gate 2A does not use credentials)
+- **Notes:** Gate 2A delivers: comparison logic in `google-calendar-sync-dry-run.mjs` (fixture mode `--fixture`, live mode scaffold `--live-readonly`), fixture file `google-calendar-live-events.fixture.json` exercising all 11 classification values (NO_OP, UPDATE, ADOPTION_REQUIRED, DUPLICATE_DETECTED, CREATE, REMOTE_DRIFT, MAPPED_EVENT_MISSING_REMOTELY, POSSIBLE_DUPLICATE, NEEDS_MANUAL_REVIEW, DELETE_CANCEL_CANDIDATE, MISSING_LOCAL_MAPPING advisory), dry-run artifact schema with `gate3_apply_allowed` and `gate3_blockers`. No live Google Calendar API calls. `googleapis` not installed. credentials not configured. Gate 2B can run live `--live-readonly` when `googleapis` installed (Coordinator approval) and credentials configured.
+
+---
+
 ## 2026-05-30 — Gate 1 repo implementation complete
 
 - **Gate:** Gate 1

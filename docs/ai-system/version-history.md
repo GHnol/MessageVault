@@ -11,7 +11,8 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync | 2026-05-30 | Gate 1 in progress (branch `docs/google-calendar-live-sync-gate-1`); Gate 2/3 pending Coordinator authorization |
+| 1.6.1 | AI Project OS v1.6 — Gate 2A: Live Dry-Run Comparison Logic | 2026-05-31 | Gate 2A in progress (branch `docs/google-calendar-live-dry-run-logic`, uncommitted); Gate 2B pending googleapis + credentials |
+| 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync, Gate 1 | 2026-05-30 | Gate 1 COMPLETE — merged `5c4bd28`; Gate 2A in progress; Gate 2B/3 pending Coordinator authorization |
 | 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | complete — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27 |
 | 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | merged (`1623e7e`) |
 | 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
