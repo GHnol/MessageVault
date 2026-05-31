@@ -16,23 +16,24 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-30`
+**Last updated:** `2026-05-31`
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `e448053` — docs: close AI Project OS v1.5 Gate 2 template standard |
-| Active branch | `docs/google-calendar-live-sync-gate-1` |
-| Active pass | AI Project OS v1.6 Gate 1 — Google Calendar Live Sync Repo Foundation (implementation complete; commit pending Coordinator authorization) |
-| Last completed pass | `AI Project OS v1.5 Gate 2` — Live Template Creation — complete 2026-05-27 — merged e448053 |
+| main HEAD | `5c4bd28` — merge: add Google Calendar live sync foundation |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.6 Gate 1` — Google Calendar live sync repo foundation — merged `5c4bd28` 2026-05-31 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator: authorize Gate 1 commit, then Gate 2 (separate), then Gate 3 (separate) |
+| Next authorized target | Coordinator decides: authorize v1.6 Gate 2 (live Google Calendar dry-run) or other |
 | OS audit | Gate 1: 159 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
-| v1.6 Gate 1 | IN PROGRESS — implementation complete; commit pending |
-| v1.6 Gate 2 | NOT STARTED — requires separate Coordinator authorization + credentials |
-| v1.6 Gate 3 | NOT STARTED — requires separate Coordinator authorization + approved artifact |
+| v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
+| v1.6 Gate 2 | NOT STARTED — requires separate Coordinator authorization |
+| v1.6 Gate 3 | NOT STARTED — requires separate Coordinator authorization |
+| v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented |
 
 ---
 
@@ -46,7 +47,7 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 | Gate | Status |
 |---|---|
-| Foundation Operating System (Gate 1) | Passed by Package 2.8; further strengthened by Package 2.9 (universal AI Project OS layer + auto-management protocols) |
+| Foundation Operating System (Gate 1) | Passed by Package 2.8; strengthened by Packages 2.9, v1.3–v1.6 |
 | Vendor confirmed | NO — evaluation in progress |
 | `isCoverUnblocked()` | false |
 | Commerce readiness (message-book) | blocked |
@@ -69,23 +70,23 @@ Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.
 
 ## What is NOT started
 
-Checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. The Project Control Tower (Package 2.8), the AI Project OS auto-management layer (Package 2.9), and the Proof Approval State Foundation (Package 5A) are all BUILT and MERGED. `index.html` app behavior is unchanged. No UI wiring for proof approval has been added.
+Checkout/PDF/cover work, framework migration, visual redesign, preview renderers, vendor outreach, design hiring restart. v1.6 Gate 2 and Gate 3 (live Google Calendar sync) require separate Coordinator authorization. `index.html` app behavior is unchanged. No UI wiring for proof approval has been added.
 
 ---
 
-## Where to look — AI Project OS layer (v1.6 Gate 1 — Google Calendar Live Sync)
+## Where to look — AI Project OS layer (v1.6 — Google Calendar Live Sync)
 
 | Question | File |
 |---|---|
 | What is the AI Project OS layer? | `docs/ai-system/README.md` |
 | Universal standards across repos | `docs/ai-system/universal-standards.md` |
-| How to bootstrap a new repo with this OS | `docs/ai-system/bootstrap-template.md` |
+| How to bootstrap a new repo | `docs/ai-system/bootstrap-template.md` |
 | OS-level changelog | `docs/ai-system/CHANGELOG.md` |
 | OS version history | `docs/ai-system/version-history.md` |
 | Umbrella auto-management duties | `docs/dev/auto-management-protocol.md` |
 | v1.6 calendar source records | `docs/project-control/google-calendar-source-records.json` |
 | v1.6 calendar source schema | `docs/project-control/google-calendar-source-schema.md` |
-| v1.6 calendar sync policy | `docs/project-control/google-calendar-sync-policy.md` |
+| v1.6 calendar sync policy (authoritative) | `docs/project-control/google-calendar-sync-policy.md` |
 | v1.6 calendar sync runbook | `docs/project-control/google-calendar-sync-runbook.md` |
 | v1.6 credential safety guide | `docs/project-control/google-calendar-credentials.example.md` |
 | v1.6 canonical sync log | `docs/project-control/google-calendar-sync-log.md` |
@@ -96,20 +97,20 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 
 ---
 
-## Where to look — Project Control Tower (Package 2.8)
+## Where to look — Project Control Tower
 
 | Question | File |
 |---|---|
-| Tower overview + how layers fit | `docs/project-control/README.md` |
-| Phases 0–15 with package history | `docs/project-control/master-roadmap.md` |
-| Dated, confidence-labelled schedule | `docs/project-control/master-schedule.md` |
+| Tower overview | `docs/project-control/README.md` |
+| Phases 0–15 | `docs/project-control/master-roadmap.md` |
+| Schedule | `docs/project-control/master-schedule.md` |
 | Current sprint | `docs/project-control/current-sprint.md` |
-| Backlog (16 lanes) | `docs/project-control/backlog.md` |
+| Backlog | `docs/project-control/backlog.md` |
 | Kanban board | `docs/project-control/kanban-board.md` |
-| Phase gates (11) | `docs/project-control/phase-gates.md` |
+| Phase gates | `docs/project-control/phase-gates.md` |
 | Decision log | `docs/project-control/decision-log.md` |
-| Project risk register | `docs/project-control/risk-register.md` |
-| Calendar + importable .ics | `docs/project-control/calendar-spec.md`, `keepmees-project-calendar.ics` |
+| Risk register | `docs/project-control/risk-register.md` |
+| Calendar + .ics | `docs/project-control/calendar-spec.md`, `keepmees-project-calendar.ics` |
 
 ---
 
@@ -123,6 +124,5 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | In-flight work transfer | `AI_HANDOFF.md` |
 | How to restart a session | `NEXT_SESSION_PROMPT.md` |
 | Delivered package state | `docs/command-center/current-status.md` |
-| What to do / not start | `docs/command-center/next-actions.md` |
-| AI Project OS standards (universal) | `docs/ai-system/universal-standards.md` |
+| AI Project OS standards | `docs/ai-system/universal-standards.md` |
 | Auto-management umbrella | `docs/dev/auto-management-protocol.md` |

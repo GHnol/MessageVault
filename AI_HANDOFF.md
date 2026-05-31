@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS v1.6 Gate 1 implementation complete on branch `docs/google-calendar-live-sync-gate-1`. All Gate 1 files created, scripts verified, OS self-audit passes (159 pass, 0 warn, 0 fail). Awaiting Coordinator commit authorization for Gate 1.
+**Status:** `complete` — AI Project OS v1.6 Gate 1 merged `5c4bd28` on 2026-05-31. Working tree clean. No active pass. Gate 2 and Gate 3 require separate Coordinator authorization. Package 5B blocked.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-30`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-31`
 
 ---
 
@@ -18,98 +18,43 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | AI Project OS v1.6 — Google Calendar Live Sync, Gate 1 |
-| **Active branch** | `docs/google-calendar-live-sync-gate-1` |
-| **main HEAD** | `e448053` — docs: close AI Project OS v1.5 Gate 2 template standard |
-| **Last completed pass** | `AI Project OS v1.5 Gate 2` (complete 2026-05-27) |
-| **Active package** | None (OS pass only) |
+| **Active pass** | None — v1.6 Gate 1 complete |
+| **Active branch** | `main` |
+| **main HEAD** | `5c4bd28` — merge: add Google Calendar live sync foundation |
+| **Last completed pass** | `AI Project OS v1.6 Gate 1` — Google Calendar live sync repo foundation — merged `5c4bd28` 2026-05-31 |
+| **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked pending Coordinator authorization |
 
 ---
 
-## Objective (current pass)
+## Objective (last completed pass)
 
-AI Project OS v1.6 Gate 1 — Google Calendar Live Sync Repo Foundation. Gate 1 is repo implementation only. No live Google Calendar mutations. Gate 2 (live dry-run) and Gate 3 (live apply) require separate Coordinator authorization.
-
----
-
-## Work completed (Gate 1)
-
-- [x] `.gitignore` updated: added `token.json`, `**/token.json`, `google-calendar-token.json`, `docs/project-control/google-calendar-token.local.json`
-- [x] `docs/project-control/google-calendar-source-schema.md` created
-- [x] `docs/project-control/google-calendar-source-records.json` created (10 events)
-- [x] `docs/project-control/google-calendar-sync-policy.md` created
-- [x] `docs/project-control/google-calendar-sync-runbook.md` created
-- [x] `docs/project-control/google-calendar-credentials.example.md` created
-- [x] `docs/project-control/google-calendar-sync-log.md` created (Gate 1 entry recorded)
-- [x] `docs/project-control/calendar-sync-log.md` updated (marked LEGACY, pointer to new log)
-- [x] `docs/project-control/calendar-sync-policy.md` updated (marked LEGACY for static .ics model)
-- [x] `scripts/google-calendar-source-validate.mjs` created (151 pass, 0 warn, 0 fail)
-- [x] `scripts/google-calendar-sync-dry-run.mjs` created (10/10 READY_FOR_LIVE_COMPARE)
-- [x] `scripts/google-calendar-sync-apply.mjs` created and repaired: `GATE_3_AUTHORIZED = false` replaced with `--confirm-live-calendar-apply` runtime flag; `DUPLICATE_DETECTED` and `ADOPTION_REQUIRED` guards added; plan mode verified
-- [x] `scripts/generate-project-calendar.mjs` created (ICS regenerated successfully)
-- [x] `scripts/project-control-sync-validate.mjs` fixed (git ls-files check replaces existsSync)
-- [x] `.claude/skills/google-calendar-sync/SKILL.md` created
-- [x] `.claude/commands/google-calendar-sync.md` created
-- [x] `scripts/os-self-audit.mjs` updated: Section 6e added
-- [x] `scripts/project-control-sync-dry-run.mjs` updated: new required files added
-- [x] `docs/ai-system/CHANGELOG.md` updated: v1.6 entry added
-- [x] `docs/ai-system/version-history.md` updated: v1.6 row added
-- [x] `docs/ai-system/os-self-audit-checklist.md` updated: Section 6e added
-- [x] `docs/ai-system/universal-standards.md` updated: counts 17/16; calendar layer entry
-- [x] `docs/ai-system/bootstrap-template.md` updated: Google Calendar live sync layer added
-- [x] `.claude/skills/README.md` updated: count 16; google-calendar-sync row added
-- [x] `.claude/commands/README.md` updated: /google-calendar-sync row added
-- [x] OS self-audit: 159 pass, 0 warn, 0 fail
-- [x] Source validation: 151 pass, 0 warn, 0 fail
-- [x] Local dry-run: 10/10 READY_FOR_LIVE_COMPARE
-- [x] Apply plan mode: exits correctly with guard summary
-- [x] ICS regenerated with stable os_id UIDs and AI_OS_ID markers
-- [x] Gitignore protections verified: token.json, **/token.json, google-calendar-token.json, google-calendar-*.local.json, **/google-calendar-*.local.json, external-sync-map.local.json (gaps closed in repair pass)
-- [x] Product files confirmed untouched: index.html, src/**, public/**, amplify/**, package.json
-
-## Work remaining (Gate 1 closeout)
-
-- [ ] Coordinator authorizes Gate 1 commit
-
-## Work remaining (Gate 2 — separate authorization)
-
-- [ ] Coordinator authorizes Gate 2
-- [ ] Coordinator approves `googleapis` install in `scripts/` directory
-- [ ] Coordinator configures Google Calendar API credentials locally
-- [ ] Coordinator adds AI_OS_ID: markers to existing Google Calendar events (adoption guide in google-calendar-sync-policy.md)
-- [ ] Run `node scripts/google-calendar-sync-dry-run.mjs --live`
-- [ ] Review and approve dry-run delta
-
-## Work remaining (Gate 3 — separate authorization)
-
-- [ ] Coordinator authorizes Gate 3 with explicit "proceed with apply" instruction
-- [ ] Run apply with approved dry-run artifact
-- [ ] Update sync log; propose state-sync commit
-- [ ] v1.6 complete or document credential/platform blocker
+AI Project OS v1.6 Gate 1 — Google Calendar Live Sync Repo Foundation (merged 2026-05-31). Delivered: `google-calendar-source-records.json` (10 events), source schema, sync policy, sync runbook, credentials guide, validation script, local dry-run script, apply scaffold with runtime `--confirm-live-calendar-apply` gate, ICS generator, skill, command, OS audit updates, bootstrap updates, gitignore hardening. No live Google Calendar API calls. No credentials created. `external-sync-map.local.json` not read or written. Gate 2 and Gate 3 not run.
 
 ---
 
-## Git state
+## Gate status (v1.6)
 
-```
-Branch:         docs/google-calendar-live-sync-gate-1
-main HEAD:      e448053 — docs: close AI Project OS v1.5 Gate 2 template standard
-Working tree:   modified (Gate 1 implementation — awaiting commit authorization)
-v1.5 Gate 1:    COMPLETE — merged 7c2c511
-v1.5 Gate 2:    COMPLETE — merged e448053
-v1.6 Gate 1:    IN PROGRESS — implementation complete; commit pending
-v1.6 Gate 2:    NOT STARTED — requires separate Coordinator authorization
-v1.6 Gate 3:    NOT STARTED — requires separate Coordinator authorization
-```
+| Gate | Status |
+|---|---|
+| Gate 1 — Repo Implementation | COMPLETE — merged `5c4bd28` 2026-05-31 |
+| Gate 2 — Live Calendar Dry-Run | NOT STARTED — requires separate Coordinator authorization |
+| Gate 3 — Live Calendar Apply | NOT STARTED — requires separate Coordinator authorization |
 
 ---
 
-## Next exact action
+## What is required for Gate 2
 
-Coordinator reviews Gate 1 report and authorizes commit with message:
-`docs: add Google Calendar live sync foundation`
+1. Coordinator authorizes Gate 2.
+2. Coordinator approves `googleapis` npm package install in `scripts/` directory (separate approval).
+3. Coordinator configures Google Calendar API credentials locally (`google-calendar-credentials.json` + `token.json`).
+4. Coordinator adds `AI_OS_ID:` markers to existing Google Calendar events (adoption guide: `docs/project-control/google-calendar-sync-policy.md`).
+5. Run: `node scripts/google-calendar-sync-dry-run.mjs --live`
+6. Save dry-run artifact to `local-sync-reports/`.
+7. Coordinator reviews and approves classified delta.
+
+v1.6 is NOT complete until Gate 3 live apply succeeds for KeepMees, or a documented credential/platform blocker is recorded.
 
 ---
 
@@ -121,13 +66,20 @@ Coordinator reviews Gate 1 report and authorizes commit with message:
 - `amplify/**` — not touched
 - `package.json`, `package-lock.json` — not touched
 - No live Google Calendar mutations
-- No credential files created or used
-- `external-sync-map.local.json` — not read or written by Gate 1 scripts
+- No OAuth flow
+- No credential files created, read, or written
+- `external-sync-map.local.json` — not read or written
 - No GitHub Project mutations
 - No GitHub Issues created
 - No Package 5B work
 - No v1.7 automation implemented
 - No secrets, tokens, or credentials committed
+
+---
+
+## Next exact action
+
+Coordinator decides whether to authorize v1.6 Gate 2 (live Google Calendar dry-run). No action required from this session.
 
 ---
 
@@ -152,7 +104,7 @@ Coordinator reviews Gate 1 report and authorizes commit with message:
 | `src/state/project-persistence.js` | Off-limits without explicit package instruction. |
 | `src/state/session-serialization.js` | Off-limits without explicit package instruction. |
 | `docs/project-control/external-sync-map.local.json` | Gitignored, local-only — never commit; do not read or print contents. |
-| `docs/project-control/google-calendar-sync-apply.mjs` | GATE_3_AUTHORIZED = false in Gate 1. Set to true ONLY when Gate 3 is explicitly authorized. |
-| `scripts/google-calendar-sync-dry-run.mjs` | --live mode guards: credential check and googleapis check are functional; full live comparison runs in Gate 2 only after authorization. |
+| `scripts/google-calendar-sync-apply.mjs` | `--confirm-live-calendar-apply` flag required for Gate 3. Also requires `--apply`, `--approved-dry-run <path>`, and no unresolved DUPLICATE_DETECTED or ADOPTION_REQUIRED items. |
+| `scripts/google-calendar-sync-dry-run.mjs` | `--live` mode requires credentials + googleapis. Gate 2 not yet authorized. |
 | `scripts/node_modules/` | Historically tracked. Do NOT untrack without Coordinator decision. Do NOT install googleapis without Coordinator approval. |
 | `docs/ai-system/*` | Universal portable layer. Edit only in dedicated AI Project OS upgrade passes. |

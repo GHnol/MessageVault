@@ -47,30 +47,44 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.5 Gate 2 complete 2026-05-27. "AI Project OS Template" (GHnol/projects/2) created; 13 fields; 14 views. Gate 2 closeout docs modified but not yet committed. Package 5B blocked. |
+| Resume into | AI Project OS v1.6 Gate 1 complete. Gate 2 (live Google Calendar dry-run) and Gate 3 (live apply) not started. No active pass. Package 5B blocked. |
 | Branch | `main` |
-| main HEAD | `02bb97a` — docs: sync state after v1.5 Gate 1 merge (Gate 2 changes uncommitted) |
-| Next action | Run `/start`. v1.5 Gate 2 complete — closeout changes ready to commit. Await Coordinator commit authorization for Gate 2 closeout. Do not start Package 5B without explicit authorization. |
-| OS audit | Post-Gate 2: 138 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| main HEAD | `5c4bd28` — merge: add Google Calendar live sync foundation |
+| Next action | Run `/start`. v1.6 Gate 1 complete — no active pass. Await Coordinator decision on Gate 2 authorization. Do not start Package 5B without explicit authorization. Do not run Gate 2 or Gate 3 without explicit authorization. |
+| OS audit | Gate 1: 159 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked pending Coordinator authorization. |
-| Do not | Start Package 5B without explicit authorization; modify `index.html` / `src/**`; create additional GitHub Projects or Issues; run any --apply script without Coordinator approval; push or merge without explicit instruction; commit `github-projects-template-config.local.json`. |
+| v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31. |
+| v1.6 Gate 2 | NOT STARTED — requires Coordinator authorization + googleapis install approval + credentials. |
+| v1.6 Gate 3 | NOT STARTED — requires Coordinator authorization + Gate 2 approved artifact. |
+| v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented. |
+| Do not | Start Package 5B; modify `index.html` / `src/**`; run Gate 2 or Gate 3 without authorization; run any `--apply` script without Coordinator approval; install googleapis without Coordinator approval; push or merge without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
 
 ## Decision points if Coordinator returns next session
 
-1. **"Authorize the next product package."**
-   - First confirm the OS pass commit is merged and main is clean.
+1. **"Authorize v1.6 Gate 2."**
+   - Confirm credentials setup per `docs/project-control/google-calendar-credentials.example.md`.
+   - Confirm googleapis install approval.
+   - Run `node scripts/google-calendar-sync-dry-run.mjs --live`.
+   - Save artifact; Coordinator reviews delta; record in `google-calendar-sync-log.md`.
+
+2. **"Authorize v1.6 Gate 3."**
+   - Requires Gate 2 approved artifact with no unresolved DUPLICATE_DETECTED or ADOPTION_REQUIRED items.
+   - Run `node scripts/google-calendar-sync-apply.mjs --apply --confirm-live-calendar-apply --approved-dry-run <path>`.
+   - Update sync log; propose state-sync commit.
+
+3. **"Authorize the next product package."**
+   - First confirm main is clean and v1.6 state is accurate.
    - Prepare a scoped package prompt per Coordinator direction.
-   - Do not begin implementation until the prompt is reviewed and explicitly approved.
+   - Do not begin implementation until explicitly approved.
 
-3. **"Run weekly sync."**
+4. **"Run weekly sync."**
    - Follow `docs/project-control/coordinator-weekly-sync.md` process.
-   - Add a new row to the weekly log.
 
-4. **"Update OS layer item X."**
+5. **"Update OS layer item X."**
    - Edit only `docs/ai-system/*` or `docs/dev/*` or `docs/qa/*` as appropriate.
    - Log every change in `docs/ai-system/CHANGELOG.md` and `version-history.md`.
    - Do not commit without explicit instruction.
