@@ -21,17 +21,17 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `54867a8` — docs: sync state after v1.6 Gate 1 merge |
-| Active branch | `docs/google-calendar-live-dry-run-logic` (Gate 2A — uncommitted) |
-| Active pass | `AI Project OS v1.6 Gate 2A` — live dry-run comparison logic |
-| Last completed pass | `AI Project OS v1.6 Gate 1` — Google Calendar live sync repo foundation — merged `5c4bd28` 2026-05-31 |
+| main HEAD | `a530c56` — merge: complete Google Calendar live dry-run comparison logic |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.6 Gate 2A` — Live Read-Only Dry-Run Logic Completion — merged `a530c56` 2026-05-31 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator approves Gate 2A commit/merge, then decides Gate 2B (googleapis install + credentials) |
+| Next authorized target | Coordinator decides: authorize Gate 2B (googleapis install + credential setup + live dry-run) or other |
 | OS audit | Gate 2A: 159 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
-| v1.6 Gate 2A | IN PROGRESS — branch uncommitted — fixture validates all 11 classifications |
+| v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31 |
 | v1.6 Gate 2B | NOT STARTED — requires googleapis install approval + credentials |
 | v1.6 Gate 3 | NOT STARTED — requires Gate 2B approved artifact |
 | v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented |
