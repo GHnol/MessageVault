@@ -29,8 +29,9 @@ screenshots/
 .tmp-ai/
 _source-intake/
 
-# Dependencies (never commit; scripts/node_modules is historically tracked — see backlog)
+# Dependencies (never commit)
 node_modules/
+scripts/node_modules/
 
 # Operator Inbox — raw pasted stream responses (never commit real content)
 operator-inbox/*.md
