@@ -9,6 +9,39 @@ Newest entries first.
 
 ---
 
+## 2026-05-31 — AI Project OS v1.6: Google Calendar Live Sync, Gate 2D Repair — Canonical OAuth Bootstrap
+
+**Status:** IN PROGRESS — on branch `docs/google-calendar-oauth-path-alignment`, uncommitted. No OAuth run. No live API call. No product code. No Package 5B.
+**Scope:** Repair Gate 2D tooling blocker. Align credential/token paths to canonical `docs/project-control/` convention. Add `scripts/google-calendar-auth-bootstrap.mjs` with `--auth-status` and `--init-oauth`. Update dry-run script with `--auth-status`, `--help`, `resolveCredPaths()`, and explicit legacy root credential fallback. Update docs, skill, runbook, credential guide, OS audit checks.
+
+### Added
+
+- `scripts/google-calendar-auth-bootstrap.mjs` — canonical OAuth bootstrap script: `--auth-status` (existence + gitignore checks only), `--init-oauth` (full OAuth flow — NOT RUN in this repair), `--credential-path`, `--token-path`, `--allow-legacy-root-credentials`
+
+### Updated
+
+- `scripts/google-calendar-sync-dry-run.mjs` — canonical credential/token path defaults (`CANONICAL_CREDENTIALS_FILE`, `CANONICAL_TOKEN_FILE`); legacy root fallback only with `--allow-legacy-root-credentials` (warns `LEGACY_ROOT_CREDENTIAL_PATH_USED`); new modes: `--auth-status`, `--help`; `resolveCredPaths()` function; missing-token message changed from `CREDENTIAL_MISSING` to `OAUTH_BOOTSTRAP_REQUIRED` with bootstrap command
+- `docs/project-control/google-calendar-credentials.example.md` — canonical paths documented; one-time setup steps updated to `--init-oauth`; detecting-missing-credentials section updated
+- `docs/project-control/google-calendar-sync-runbook.md` — Gate 2B prerequisites updated to canonical paths and `--auth-status` / `--init-oauth` flow; pre-flight updated
+- `.claude/skills/google-calendar-sync/SKILL.md` — Gate 2B section updated with canonical paths, auth-status, and init-oauth; credential safety section updated; hard stops updated
+- `scripts/os-self-audit.mjs` — added canonical credential/token path gitignore checks; added `google-calendar-auth-bootstrap.mjs` file and content checks
+- `docs/project-control/google-calendar-sync-log.md` — Gate 2D Repair entry added
+- `docs/ai-system/CHANGELOG.md` — this entry
+- `docs/ai-system/version-history.md` — v1.6.2 row added
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- `scripts/package.json`, root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar API calls
+- No OAuth flow run
+- No credential files created, read, or written
+- `docs/project-control/external-sync-map.local.json` — not read or written
+- `scripts/google-calendar-sync-apply.mjs` — credential path alignment deferred to future pass (Gate 3 is not yet authorized)
+- No GitHub Project mutations
+
+---
+
 ## 2026-05-31 — AI Project OS v1.6: Google Calendar Live Sync, Gate 2A
 
 **Status:** IN PROGRESS — Gate 2A comparison logic on branch `docs/google-calendar-live-dry-run-logic`, uncommitted. Gate 2B (live dry-run) requires googleapis install approval + credentials.

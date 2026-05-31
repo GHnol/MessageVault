@@ -42,12 +42,16 @@ This skill governs all Google Calendar sync operations for the AI Project OS v1.
 - Verify audit passes: `node scripts/os-self-audit.mjs`
 - **No Google Calendar API calls. No credentials. No external mutations.**
 
-### Gate 2 — Live Dry-Run (read-only Google Calendar comparison)
+### Gate 2B — Live Dry-Run (read-only Google Calendar comparison)
 
 - Requires separate Coordinator authorization.
-- Requires Google Calendar API credentials locally (`google-calendar-credentials.json`, `token.json`).
+- Requires Google Calendar API credentials at canonical paths (gitignored):
+  - `docs/project-control/google-calendar-credentials.local.json`
+  - `docs/project-control/google-calendar-token.local.json`
 - Requires `googleapis` npm package in `scripts/node_modules/`.
-- Run: `node scripts/google-calendar-sync-dry-run.mjs --live`
+- Check auth readiness first (no contents read): `node scripts/google-calendar-auth-bootstrap.mjs --auth-status`
+- Generate token if needed (requires Coordinator authorization): `node scripts/google-calendar-auth-bootstrap.mjs --init-oauth`
+- Run live dry-run (requires Coordinator authorization): `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`
 - Save artifact to `local-sync-reports/google-calendar-dry-run-<timestamp>.json`.
 - **No calendar mutations.**
 
@@ -95,8 +99,15 @@ Never batch-delete. Each item is a separate command invocation with a separate C
 
 - Never commit credentials.
 - Never print tokens.
-- Verify gitignore before apply: `git check-ignore -v token.json`
-- If credentials are missing: record `LIVE_READINESS_BLOCKED_CREDENTIALS_MISSING` in sync log; do not fail Gate 1.
+- Canonical credential path: `docs/project-control/google-calendar-credentials.local.json`
+- Canonical token path: `docs/project-control/google-calendar-token.local.json`
+- Verify gitignore before any credential or token use:
+  ```
+  git check-ignore -v docs/project-control/google-calendar-credentials.local.json
+  git check-ignore -v docs/project-control/google-calendar-token.local.json
+  ```
+- If credentials missing: record `LIVE_READINESS_BLOCKED_CREDENTIALS_MISSING` in sync log; do not fail Gate 1.
+- If token missing but credentials present: report `OAUTH_BOOTSTRAP_REQUIRED`; run `--init-oauth` only with Coordinator authorization.
 
 ## Output format
 
@@ -117,10 +128,11 @@ No external sync was performed.
 Stop and ask the Coordinator before taking any action if:
 
 - `AI_HANDOFF.md` is missing or the handoff branch and current branch disagree
-- Gate 2 or Gate 3 authorization is not confirmed in the current session
+- Gate 2B or Gate 3 authorization is not confirmed in the current session
 - Dry-run artifact is missing but `--apply` was requested
 - `DUPLICATE_DETECTED` or `ADOPTION_REQUIRED` items exist in the artifact
-- `token.json` is not gitignored
+- `docs/project-control/google-calendar-token.local.json` is not gitignored
+- `docs/project-control/google-calendar-credentials.local.json` is not gitignored
 - `external-sync-map.local.json` is not gitignored
 - Any file that should not be touched (index.html, src/**, etc.) would be affected
 

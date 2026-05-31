@@ -1,6 +1,6 @@
 # Google Calendar Credentials — Setup Guide
 
-**Status:** ACTIVE (introduced in AI Project OS v1.6 Google Calendar Live Sync, Gate 1, 2026-05-30)
+**Status:** ACTIVE (introduced in AI Project OS v1.6 Google Calendar Live Sync, Gate 1, 2026-05-30; updated Gate 2D Repair, 2026-05-31 — canonical paths aligned)
 **Owner:** Coordinator / Project Control
 **Purpose:** Documents the credential setup process for Google Calendar API access. This file contains no secrets, tokens, or credentials. It is committed and safe to share.
 
@@ -17,21 +17,33 @@
 
 ---
 
+## Canonical credential paths (v1.6 Gate 2D Repair standard)
+
+| Role | Canonical path |
+|---|---|
+| **Credential file** | `docs/project-control/google-calendar-credentials.local.json` |
+| **Token file** | `docs/project-control/google-calendar-token.local.json` |
+
+These are the default paths used by all v1.6 scripts. Place credential files at these paths.
+
 ## Gitignored credential files
 
 The following files are gitignored and must NEVER be committed:
 
 | File | Purpose |
 |---|---|
-| `google-calendar-credentials.json` | OAuth2 client_id and client_secret (downloaded from Google Cloud Console) |
-| `token.json` | OAuth2 refresh token written by the googleapis Node SDK |
+| `docs/project-control/google-calendar-credentials.local.json` | **Canonical** OAuth2 credential file |
+| `docs/project-control/google-calendar-token.local.json` | **Canonical** OAuth2 token written by bootstrap script |
+| `google-calendar-credentials.json` | Legacy root credential (supported via `--allow-legacy-root-credentials` only) |
+| `token.json` | Legacy root token (supported via `--allow-legacy-root-credentials` only) |
 | `**/token.json` | token.json in any subdirectory |
 | `google-calendar-token.json` | Alternate token filename |
-| `docs/project-control/google-calendar-token.local.json` | Token if stored in project-control dir |
 | `*.oauth-token.json` | Any oauth-token.json file |
 
 These protections are in `.gitignore`. Verify with:
 ```
+git check-ignore -v docs/project-control/google-calendar-credentials.local.json
+git check-ignore -v docs/project-control/google-calendar-token.local.json
 git check-ignore -v token.json
 git check-ignore -v google-calendar-credentials.json
 ```
@@ -42,7 +54,7 @@ git check-ignore -v google-calendar-credentials.json
 
 **User OAuth 2.0** (recommended for solo founder):
 - Authorize once via browser.
-- Refresh token stored locally in `token.json` (gitignored).
+- Refresh token stored locally in `docs/project-control/google-calendar-token.local.json` (gitignored).
 - Simple setup; no service account provisioning needed.
 - Credentials expire only if the refresh token is revoked or the app's OAuth consent is withdrawn.
 
@@ -65,7 +77,7 @@ git check-ignore -v google-calendar-credentials.json
 
 ---
 
-## One-time setup steps (Gate 2 prerequisites)
+## One-time setup steps (Gate 2B prerequisites)
 
 1. **Create a Google Cloud Project**
    - Go to https://console.cloud.google.com/
@@ -80,20 +92,36 @@ git check-ignore -v google-calendar-credentials.json
    - Create credentials → OAuth client ID.
    - Application type: Desktop app.
    - Download the credentials JSON file.
-   - Save it as `google-calendar-credentials.json` in the repo root or `docs/project-control/`.
-   - Verify it is gitignored: `git check-ignore -v google-calendar-credentials.json`.
+   - Save it at the **canonical path**: `docs/project-control/google-calendar-credentials.local.json`
+   - Verify it is gitignored: `git check-ignore -v docs/project-control/google-calendar-credentials.local.json`
 
-4. **Run the one-time authorization flow**
-   - The script `scripts/google-calendar-sync-dry-run.mjs --live` will detect missing credentials and print instructions.
-   - Follow the printed URL to authorize in your browser.
-   - The script saves a refresh token to `token.json` (gitignored).
-   - Verify it is gitignored: `git check-ignore -v token.json`.
+4. **Check auth readiness**
+   ```
+   node scripts/google-calendar-auth-bootstrap.mjs --auth-status
+   ```
+   This reports whether the credential file is present and gitignored, and whether the token is present — without reading any contents.
 
-5. **Verify credentials work**
+5. **Run the one-time OAuth bootstrap (requires explicit Coordinator authorization)**
    ```
-   node scripts/google-calendar-sync-dry-run.mjs --live
+   node scripts/google-calendar-auth-bootstrap.mjs --init-oauth
    ```
-   If credentials are valid, the script will list your calendars and proceed to compare source records to live events.
+   - The script generates a Google authorization URL and opens it in your browser.
+   - Authorize in your browser and paste the code back in the terminal.
+   - The script saves the refresh token to `docs/project-control/google-calendar-token.local.json` (gitignored).
+   - Token contents are never printed.
+   - Verify the token path is gitignored: `git check-ignore -v docs/project-control/google-calendar-token.local.json`
+
+6. **Verify readiness**
+   ```
+   node scripts/google-calendar-sync-dry-run.mjs --auth-status
+   ```
+   Expected: `STATUS: READY`
+
+7. **Run live read-only dry-run (requires separate Coordinator authorization)**
+   ```
+   node scripts/google-calendar-sync-dry-run.mjs --live-readonly
+   ```
+   Reads calendar events only. No mutations.
 
 ---
 
@@ -120,24 +148,28 @@ The local dry-run scripts (Gate 1 only) are dependency-free. Only Gate 2+ live A
 
 ## Detecting missing credentials
 
-The sync scripts detect credential absence and print clear guidance:
-
+Use the auth status check (no file contents read):
 ```
-CREDENTIAL_MISSING — Google Calendar API credentials not found.
-
-Expected credential file: google-calendar-credentials.json
-Expected token file: token.json
-
-To set up credentials, follow:
-  docs/project-control/google-calendar-credentials.example.md
-
-Gate 1 (local-only) operations do not require credentials.
-Gate 2 (live dry-run) and Gate 3 (apply) require credentials.
-
-Current gate status: LIVE_READINESS_BLOCKED_CREDENTIALS_MISSING
+node scripts/google-calendar-auth-bootstrap.mjs --auth-status
+node scripts/google-calendar-sync-dry-run.mjs --auth-status
 ```
 
-Scripts exit non-zero with code `CREDENTIAL_MISSING` when credentials are absent in live mode.
+When the token is missing but credentials are present, the scripts report:
+```
+STATUS: OAUTH_BOOTSTRAP_REQUIRED
+  Credential file found. Token not yet generated.
+  Run OAuth bootstrap (requires explicit Coordinator authorization):
+    node scripts/google-calendar-auth-bootstrap.mjs --init-oauth
+```
+
+When the credential file is missing:
+```
+STATUS: CREDENTIAL_MISSING
+  Place credentials at: docs/project-control/google-calendar-credentials.local.json
+  See: docs/project-control/google-calendar-credentials.example.md
+```
+
+Scripts exit non-zero when credentials or token are absent in live mode.
 
 ---
 

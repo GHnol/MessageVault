@@ -6,9 +6,9 @@
  *   1. --apply flag must be present
  *   2. --confirm-live-calendar-apply flag must be present (Gate 3 explicit confirmation)
  *   3. --approved-dry-run <path> must point to a valid dry-run artifact
- *   4. token.json must be gitignored
+ *   4. Canonical token path must be gitignored
  *   5. external-sync-map.local.json must be gitignored
- *   6. Credentials must exist locally (google-calendar-credentials.json + token.json)
+ *   6. Credentials must exist at canonical paths locally
  *   7. Artifact must not contain unresolved DUPLICATE_DETECTED or ADOPTION_REQUIRED items
  *   8. Delete/cancel requires separate --delete --os-id <id> per item
  *
@@ -18,6 +18,14 @@
  *   - Writes event IDs only to external-sync-map.local.json (local-only, gitignored)
  *   - Never commits any file
  *   - Never exposes tokens
+ *
+ * Canonical credential paths (defaults):
+ *   Credential: docs/project-control/google-calendar-credentials.local.json
+ *   Token:      docs/project-control/google-calendar-token.local.json
+ *
+ * Legacy root paths (google-calendar-credentials.json / token.json at repo root) are supported
+ * only via explicit --allow-legacy-root-credentials flag. Never used silently.
+ * Warns LEGACY_ROOT_CREDENTIAL_PATH_USED when legacy fallback triggers.
  *
  * Gate 3 authorization model:
  *   Gate 3 is unlocked at runtime by providing all required flags — no source code editing needed.
@@ -55,18 +63,25 @@ import { fileURLToPath } from 'url';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const today = new Date().toISOString().slice(0, 10);
 
-const CREDENTIALS_FILE = 'google-calendar-credentials.json';
-const TOKEN_FILE = 'token.json';
+const CANONICAL_CREDENTIALS_FILE = 'docs/project-control/google-calendar-credentials.local.json';
+const CANONICAL_TOKEN_FILE = 'docs/project-control/google-calendar-token.local.json';
+const LEGACY_CREDENTIALS_FILE = 'google-calendar-credentials.json';
+const LEGACY_TOKEN_FILE = 'token.json';
 const LOCAL_MAP_FILE = 'docs/project-control/external-sync-map.local.json';
 
 const args = process.argv.slice(2);
 const hasApply = args.includes('--apply');
 const hasConfirmLive = args.includes('--confirm-live-calendar-apply');
 const hasDelete = args.includes('--delete');
+const allowLegacyRoot = args.includes('--allow-legacy-root-credentials');
 const dryRunArtifactIdx = args.indexOf('--approved-dry-run');
 const dryRunArtifactPath = dryRunArtifactIdx >= 0 ? args[dryRunArtifactIdx + 1] : null;
 const osIdIdx = args.indexOf('--os-id');
 const targetOsId = osIdIdx >= 0 ? args[osIdIdx + 1] : null;
+const credPathIdx = args.indexOf('--credential-path');
+const credPathArg = credPathIdx >= 0 ? args[credPathIdx + 1] : null;
+const tokenPathIdx = args.indexOf('--token-path');
+const tokenPathArg = tokenPathIdx >= 0 ? args[tokenPathIdx + 1] : null;
 
 function abort(reason) {
   console.error(`\nAPPLY BLOCKED — ${reason}`);
@@ -85,6 +100,35 @@ function isGitignored(path) {
   } catch {
     return false;
   }
+}
+
+function resolveCredPaths() {
+  if (credPathArg && !isGitignored(credPathArg)) {
+    abort(`--credential-path "${credPathArg}" is not gitignored. Refusing to use.`);
+  }
+  if (tokenPathArg && !isGitignored(tokenPathArg)) {
+    abort(`--token-path "${tokenPathArg}" is not gitignored. Refusing to use.`);
+  }
+
+  let credFile = credPathArg || CANONICAL_CREDENTIALS_FILE;
+  let tokenFile = tokenPathArg || CANONICAL_TOKEN_FILE;
+
+  if (!credPathArg && allowLegacyRoot && !existsSync(join(ROOT, credFile))) {
+    if (existsSync(join(ROOT, LEGACY_CREDENTIALS_FILE))) {
+      console.log('LEGACY_ROOT_CREDENTIAL_PATH_USED — falling back to google-calendar-credentials.json (root).');
+      console.log(`  Canonical preferred: ${CANONICAL_CREDENTIALS_FILE}`);
+      credFile = LEGACY_CREDENTIALS_FILE;
+    }
+  }
+  if (!tokenPathArg && allowLegacyRoot && !existsSync(join(ROOT, tokenFile))) {
+    if (existsSync(join(ROOT, LEGACY_TOKEN_FILE))) {
+      console.log('LEGACY_ROOT_CREDENTIAL_PATH_USED — falling back to token.json (root).');
+      console.log(`  Canonical preferred: ${CANONICAL_TOKEN_FILE}`);
+      tokenFile = LEGACY_TOKEN_FILE;
+    }
+  }
+
+  return { credFile, tokenFile };
 }
 
 // --- Plan mode (no --apply) ---
@@ -121,11 +165,16 @@ if (!hasApply) {
   console.log('  - Updates google-calendar-sync-log.md after successful operations');
   console.log('  - Never commits any file');
   console.log('');
+  console.log('Canonical credential paths (defaults):');
+  console.log(`  Credential: ${CANONICAL_CREDENTIALS_FILE}`);
+  console.log(`  Token:      ${CANONICAL_TOKEN_FILE}`);
+  console.log('  (Use --allow-legacy-root-credentials to fall back to root paths if canonical absent)');
+  console.log('');
   console.log('Hard stop conditions:');
   console.log('  - --confirm-live-calendar-apply must be present');
-  console.log('  - token.json must be gitignored');
+  console.log('  - Canonical token path must be gitignored');
   console.log('  - external-sync-map.local.json must be gitignored');
-  console.log('  - Credentials must exist locally');
+  console.log('  - Credentials must exist at canonical paths locally');
   console.log('  - googleapis must be installed in scripts/node_modules/');
   console.log('  - --approved-dry-run artifact must exist and be valid JSON');
   console.log('  - Artifact must have no unresolved DUPLICATE_DETECTED or ADOPTION_REQUIRED items');
@@ -137,6 +186,9 @@ if (!hasApply) {
 }
 
 // --- Apply mode: hard stop checks ---
+
+// Resolve canonical credential/token paths before any guard (legacy only with explicit flag)
+const { credFile, tokenFile } = resolveCredPaths();
 
 // Guard 1: --confirm-live-calendar-apply required (Gate 3 runtime confirmation — no source code edit needed)
 if (!hasConfirmLive) {
@@ -152,9 +204,9 @@ if (!hasConfirmLive) {
   );
 }
 
-// Guard 2: token.json must be gitignored
-if (!isGitignored(TOKEN_FILE)) {
-  abort(`token.json is NOT gitignored. Add "token.json" and "**/token.json" to .gitignore before running apply.`);
+// Guard 2: token path must be gitignored
+if (!isGitignored(tokenFile)) {
+  abort(`Token path "${tokenFile}" is NOT gitignored. Fix .gitignore before running apply.`);
 }
 
 // Guard 3: external-sync-map.local.json must be gitignored
@@ -213,17 +265,18 @@ if (adoptionItems.length > 0) {
   );
 }
 
-// Guard 9: credentials must exist
-if (!existsSync(join(ROOT, CREDENTIALS_FILE))) {
+// Guard 9: credentials must exist at resolved paths
+if (!existsSync(join(ROOT, credFile))) {
   abort(
-    `Credentials file not found: ${CREDENTIALS_FILE}\n` +
+    `Credentials file not found: ${credFile}\n` +
     `  See: docs/project-control/google-calendar-credentials.example.md`
   );
 }
-if (!existsSync(join(ROOT, TOKEN_FILE))) {
+if (!existsSync(join(ROOT, tokenFile))) {
   abort(
-    `Token file not found: ${TOKEN_FILE}\n` +
-    `  Run one-time OAuth flow first — see: docs/project-control/google-calendar-credentials.example.md`
+    `Token file not found: ${tokenFile}\n` +
+    `  Run OAuth bootstrap first: node scripts/google-calendar-auth-bootstrap.mjs --init-oauth\n` +
+    `  (Requires explicit Coordinator authorization before running.)`
   );
 }
 
@@ -262,9 +315,9 @@ console.log('All pre-flight guards passed:');
 console.log('  [PASS] --apply flag present');
 console.log('  [PASS] --confirm-live-calendar-apply present (Gate 3 confirmation)');
 console.log(`  [PASS] dry-run artifact found: ${dryRunArtifactPath}`);
-console.log('  [PASS] token.json is gitignored');
+console.log(`  [PASS] token path is gitignored: ${tokenFile}`);
 console.log('  [PASS] external-sync-map.local.json is gitignored');
-console.log('  [PASS] credentials found');
+console.log(`  [PASS] credentials found: ${credFile}`);
 console.log('  [PASS] no unresolved DUPLICATE_DETECTED items');
 console.log('  [PASS] no unresolved ADOPTION_REQUIRED items');
 if (hasDelete && targetOsId) {

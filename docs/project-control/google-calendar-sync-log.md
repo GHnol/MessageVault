@@ -27,6 +27,19 @@ Newest entries first.
 
 ---
 
+## 2026-05-31 — Gate 2D Repair: canonical OAuth bootstrap and credential path alignment
+
+- **Gate:** Gate 2D Repair (tooling pass — not a live calendar operation)
+- **Method:** local-only (no API calls)
+- **Changed by:** Claude Code (Sonnet 4.6)
+- **Events created:** none
+- **Events updated:** none
+- **Events removed:** none
+- **Credential status:** LIVE_READINESS_BLOCKED_TOKEN_BOOTSTRAP_NOT_IMPLEMENTED (resolved by this repair)
+- **Notes:** Gate 2D reached blocker `LIVE_READINESS_BLOCKED_TOKEN_BOOTSTRAP_NOT_IMPLEMENTED`. Script expected `token.json` to pre-exist; no OAuth flow was built in. Repair: (1) aligned default credential/token paths to canonical `docs/project-control/google-calendar-credentials.local.json` and `docs/project-control/google-calendar-token.local.json`; (2) created `scripts/google-calendar-auth-bootstrap.mjs` with `--auth-status` and `--init-oauth` modes; (3) updated `google-calendar-sync-dry-run.mjs` with `--auth-status`, `--help`, `resolveCredPaths()` with explicit legacy root fallback (`--allow-legacy-root-credentials`); (4) updated docs, skill, runbook, credential guide, OS audit. No OAuth flow run. No live API call. No Google Calendar events read or mutated.
+
+---
+
 ## 2026-05-31 — Gate 2A: live dry-run comparison logic implemented (fixture-only)
 
 - **Gate:** Gate 2A
