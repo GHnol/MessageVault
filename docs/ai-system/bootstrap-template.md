@@ -153,7 +153,27 @@ If the new project will benefit from the Tower pattern, copy the structure of `d
 
 **ClickUp is an optional adapter.** Copy `clickup-setup-policy.md` only if the project will use ClickUp alongside GitHub Projects.
 
-Other external-tool layers (TickTick, Calendar `.ics`) are optional per project.
+### Google Calendar live sync (v1.6 — optional but recommended)
+
+**v1.6 adds real live sync via Google Calendar API.** Copy and adapt:
+
+- `docs/project-control/google-calendar-source-schema.md` — copy as-is; defines the field schema
+- `docs/project-control/google-calendar-sync-policy.md` — adapt project name and adoption rule
+- `docs/project-control/google-calendar-sync-runbook.md` — adapt project name
+- `docs/project-control/google-calendar-credentials.example.md` — copy as-is
+- `docs/project-control/google-calendar-source-records.json` — populate with the new project's events (use `<project>-` os_id prefix)
+- `docs/project-control/google-calendar-sync-log.md` — start fresh
+- `scripts/google-calendar-source-validate.mjs` — copy as-is
+- `scripts/google-calendar-sync-dry-run.mjs` — copy as-is
+- `scripts/google-calendar-sync-apply.mjs` — copy as-is
+- `scripts/generate-project-calendar.mjs` — copy as-is; adapt CALENDAR_DOMAIN and CALENDAR_NAME
+- `.claude/skills/google-calendar-sync/SKILL.md` — copy and adapt project name
+- `.claude/commands/google-calendar-sync.md` — copy as-is
+- `.gitignore` additions: `token.json`, `**/token.json`, `google-calendar-token.json` (universal)
+
+Each new project uses its own `external-sync-map.local.json` (gitignored). Do not share event IDs or os_ids between projects.
+
+Other external-tool layers (TickTick, static Calendar `.ics`) are optional per project.
 
 If the new project is small, skip this whole layer and rely on `AI_HANDOFF.md` + a single `BACKLOG.md` instead.
 

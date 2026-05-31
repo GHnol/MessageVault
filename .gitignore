@@ -75,6 +75,12 @@ local-sync-reports/
 *.oauth-token.json
 **/oauth-credentials.json
 google-calendar-credentials.json
+token.json
+**/token.json
+google-calendar-token.json
+docs/project-control/google-calendar-token.local.json
+google-calendar-*.local.json
+**/google-calendar-*.local.json
 
 # GitHub Projects — local sync maps, auth exports, and template config (never commit)
 github-projects-sync-map.local.json

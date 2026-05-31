@@ -1,8 +1,10 @@
 # KeepMees Calendar Sync Log
 
-**Status:** ACTIVE (introduced in AI Project OS Usability Patch, 2026-05-24)
+**Status:** LEGACY (superseded by `google-calendar-sync-log.md` for AI Project OS v1.6+ operations)
 **Owner:** Coordinator / Project Control
-**Purpose:** Record every change applied to the KeepMees project calendar, whether via Google Calendar manual edit, `.ics` reimport, or future API sync.
+**Purpose:** Record of the 2026-05-17 initial `.ics` import. This file is preserved as a historical record. For all v1.6+ Google Calendar sync operations, see `docs/project-control/google-calendar-sync-log.md`.
+
+**v1.6 note:** This file contains only the 2026-05-17 initial import entry. The canonical sync log for all live sync operations (Gate 1, Gate 2, Gate 3) is `docs/project-control/google-calendar-sync-log.md`. Do not maintain this file as a second active log — it is a legacy pointer only.
 
 Newest entries first.
 

@@ -14,6 +14,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { resolve, join } from 'path';
+import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -67,11 +68,19 @@ for (const [label, rel] of required) {
 // --- External sync map example is valid JSON ---
 requireJSON('external-sync-map.example.json is valid JSON', 'docs/project-control/external-sync-map.example.json');
 
-// --- Local map must not exist in repo (gitignored) ---
-if (existsSync(join(ROOT, 'docs/project-control/external-sync-map.local.json'))) {
-  fail('external-sync-map.local.json must be gitignored (not committed)', 'file found in repo — check .gitignore');
+// --- Local map must not be committed to git (may exist on disk if gitignored) ---
+function isGitTracked(relPath) {
+  try {
+    execSync(`git ls-files --error-unmatch "${relPath}" 2>&1`, { cwd: ROOT, encoding: 'utf8' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+if (isGitTracked('docs/project-control/external-sync-map.local.json')) {
+  fail('external-sync-map.local.json must be gitignored (not committed)', 'file is tracked by git — remove from tracking and add to .gitignore');
 } else {
-  pass('external-sync-map.local.json not in repo (gitignored as expected)');
+  pass('external-sync-map.local.json not committed to git (gitignored or absent as expected)');
 }
 
 // --- Check for calendar-sync-log.md dates parseable ---
