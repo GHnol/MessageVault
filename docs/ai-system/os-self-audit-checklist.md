@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -180,6 +180,44 @@ The audit does **not** require:
 
 ---
 
+---
+
+## 6e. Google Calendar live sync layer (AI Project OS v1.6)
+
+Required when the repo has been updated to AI Project OS v1.6 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `docs/project-control/google-calendar-source-schema.md` exists | Required | `Glob docs/project-control/google-calendar-source-schema.md` |
+| `docs/project-control/google-calendar-source-records.json` exists | Required | `Glob docs/project-control/google-calendar-source-records.json` |
+| `docs/project-control/google-calendar-sync-policy.md` exists | Required | `Glob docs/project-control/google-calendar-sync-policy.md` |
+| `docs/project-control/google-calendar-sync-runbook.md` exists | Required | `Glob docs/project-control/google-calendar-sync-runbook.md` |
+| `docs/project-control/google-calendar-credentials.example.md` exists | Required | `Glob docs/project-control/google-calendar-credentials.example.md` |
+| `docs/project-control/google-calendar-sync-log.md` exists | Required | `Glob docs/project-control/google-calendar-sync-log.md` |
+| `scripts/google-calendar-source-validate.mjs` exists | Required | `Glob scripts/google-calendar-source-validate.mjs` |
+| `scripts/google-calendar-sync-dry-run.mjs` exists | Required | `Glob scripts/google-calendar-sync-dry-run.mjs` |
+| `scripts/google-calendar-sync-apply.mjs` exists | Required | `Glob scripts/google-calendar-sync-apply.mjs` |
+| `scripts/generate-project-calendar.mjs` exists | Required | `Glob scripts/generate-project-calendar.mjs` |
+| `.claude/skills/google-calendar-sync/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/google-calendar-sync/SKILL.md` |
+| `.claude/commands/google-calendar-sync.md` exists | Required | `Glob .claude/commands/google-calendar-sync.md` |
+| `token.json` is gitignored | Required | `git check-ignore -v token.json` |
+| `**/token.json` pattern is in `.gitignore` | Required | `Grep "token.json" .gitignore` |
+| `google-calendar-token.json` is gitignored | Required | `git check-ignore -v google-calendar-token.json` |
+| `external-sync-map.local.json` is gitignored | Required | `git check-ignore -v docs/project-control/external-sync-map.local.json` |
+| `google-calendar-source-records.json` is valid JSON | Required | `node scripts/google-calendar-source-validate.mjs` |
+| All source records pass schema validation | Required | `node scripts/google-calendar-source-validate.mjs` (0 fail) |
+| `google-calendar-sync-apply.mjs` has `--confirm-live-calendar-apply` guard | Required | `Grep "confirm-live-calendar-apply" scripts/google-calendar-sync-apply.mjs` |
+| `google-calendar-sync-apply.mjs` has --apply hard stop | Required | `Grep "hasApply" scripts/google-calendar-sync-apply.mjs` |
+
+The audit does **not** require:
+- A real `external-sync-map.local.json` (gitignored; populated only after Gate 3)
+- Google Calendar API credentials (not required for Gate 1)
+- `googleapis` npm package installed (required only for Gate 2/3)
+- Live Google Calendar events to exist
+- Gate 2 or Gate 3 to be complete
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -228,8 +266,10 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 
 | Script | Classification | What it checks |
 |---|---|---|
-| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c above (file existence, gitignore, Grep-based checks, GitHub Projects layer) |
+| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c + 6d + 6e (file existence, gitignore, Grep-based checks, GitHub Projects and Google Calendar layers) |
 | `scripts/project-control-sync-validate.mjs` | Recommended | Section 6 — project-control doc consistency |
+| `scripts/google-calendar-source-validate.mjs` | Recommended | Section 6e — Google Calendar source record schema validation |
+| `scripts/generate-project-calendar.mjs` | Recommended | Generates committed .ics from source records (no API calls) |
 | `scripts/github-project-setup-dry-run.mjs` | Recommended | GitHub Projects planned structure; validates example field map |
 | `scripts/github-project-field-map.mjs` | Recommended | GitHub Projects field map placeholder safety and field coverage |
 | `scripts/github-project-sync-status.mjs` | Recommended | Local structural sync status (no API calls) |

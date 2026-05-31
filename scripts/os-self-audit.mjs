@@ -210,6 +210,29 @@ checkGrep('github-projects-client.mjs REQUIRED_STATUSES uses v1.5 vocab', 'scrip
 checkGrep('github-projects-client.mjs VALID_STATUSES uses v1.5 vocab', 'scripts/lib/github-projects-client.mjs', 'Waiting / Blocked');
 checkGrep('github-projects-setup-policy.md uses v1.5 Status vocabulary', 'docs/project-control/github-projects-setup-policy.md', 'Done / Shipped');
 
+// --- Section 6e: Google Calendar live sync layer (AI Project OS v1.6) ---
+checkFile('docs/project-control/google-calendar-source-schema.md (v1.6 schema)', 'docs/project-control/google-calendar-source-schema.md');
+checkFile('docs/project-control/google-calendar-source-records.json (v1.6 source records)', 'docs/project-control/google-calendar-source-records.json');
+checkFile('docs/project-control/google-calendar-sync-policy.md (v1.6 sync policy)', 'docs/project-control/google-calendar-sync-policy.md');
+checkFile('docs/project-control/google-calendar-sync-runbook.md (v1.6 sync runbook)', 'docs/project-control/google-calendar-sync-runbook.md');
+checkFile('docs/project-control/google-calendar-credentials.example.md (v1.6 credentials guide)', 'docs/project-control/google-calendar-credentials.example.md');
+checkFile('docs/project-control/google-calendar-sync-log.md (v1.6 canonical sync log)', 'docs/project-control/google-calendar-sync-log.md');
+checkFile('scripts/google-calendar-source-validate.mjs (v1.6 validator)', 'scripts/google-calendar-source-validate.mjs');
+checkFile('scripts/google-calendar-sync-dry-run.mjs (v1.6 dry-run)', 'scripts/google-calendar-sync-dry-run.mjs');
+checkFile('scripts/google-calendar-sync-apply.mjs (v1.6 apply)', 'scripts/google-calendar-sync-apply.mjs');
+checkFile('scripts/generate-project-calendar.mjs (v1.6 ICS generator)', 'scripts/generate-project-calendar.mjs');
+checkFile('.claude/skills/google-calendar-sync/SKILL.md (v1.6 skill)', '.claude/skills/google-calendar-sync/SKILL.md');
+checkFile('.claude/commands/google-calendar-sync.md (v1.6 command)', '.claude/commands/google-calendar-sync.md');
+checkGrep('google-calendar-sync SKILL.md has name:', '.claude/skills/google-calendar-sync/SKILL.md', 'name:');
+checkGrep('google-calendar-sync SKILL.md has description:', '.claude/skills/google-calendar-sync/SKILL.md', 'description:');
+checkGitignore('token.json gitignored (v1.6)', 'token.json');
+checkGitignore('google-calendar-token.json gitignored (v1.6)', 'google-calendar-token.json');
+checkGitignore('external-sync-map.local.json gitignored (v1.6 verify)', 'docs/project-control/external-sync-map.local.json');
+checkGrep('google-calendar-sync-apply.mjs has --confirm-live-calendar-apply guard', 'scripts/google-calendar-sync-apply.mjs', 'confirm-live-calendar-apply');
+checkGrep('google-calendar-sync-apply.mjs has --apply hard stop', 'scripts/google-calendar-sync-apply.mjs', 'hasApply');
+checkGrep('google-calendar-source-records.json is valid JSON (grep check)', 'docs/project-control/google-calendar-source-records.json', 'os_id');
+checkGrep('google-calendar-source-records.json has AI_OS_ID markers', 'docs/project-control/google-calendar-source-records.json', 'AI_OS_ID:');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

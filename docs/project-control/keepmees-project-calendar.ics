@@ -24,107 +24,113 @@ RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-UID:keepmees-ceo-review@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-ceo-review-weekly@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260517T190000
 DTEND;TZID=America/New_York:20260517T200000
 RRULE:FREQ=WEEKLY;BYDAY=SU
 SUMMARY:KeepMees CEO Review
-DESCRIPTION:Founder-level direction and capacity check.\nReview: CURRENT_STATE.md and docs/project-control/current-sprint.md.\nOutput: confirm or adjust sprint scope; note founder capacity (R-CAP-1).
+DESCRIPTION:Founder-level direction and capacity check.\nReview: CURRENT_ST
+ ATE.md and docs/project-control/current-sprint.md.\nOutput: confirm or adj
+ ust sprint scope\; note founder capacity (R-CAP-1).\n\nAI_OS_ID: keepmees-
+ ritual-ceo-review-weekly
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-coordinator-planning@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-coordinator-planning-weekly@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260518T193000
 DTEND;TZID=America/New_York:20260518T203000
 RRULE:FREQ=WEEKLY;BYDAY=MO
 SUMMARY:KeepMees Coordinator Planning Review
-DESCRIPTION:Plan the week and confirm priorities.\nReview: docs/project-control/next-7-days.md and backlog.md.\nOutput: update current-sprint.md.
+DESCRIPTION:Plan the week and confirm priorities.\nReview: docs/project-con
+ trol/next-7-days.md and backlog.md.\nOutput: update current-sprint.md.\n\n
+ AI_OS_ID: keepmees-ritual-coordinator-planning-weekly
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-development-review@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-dev-review-weekly@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260520T193000
 DTEND;TZID=America/New_York:20260520T201500
 RRULE:FREQ=WEEKLY;BYDAY=WE
 SUMMARY:KeepMees Development Review
-DESCRIPTION:Development progress and test baseline.\nReview: docs/project-control/kanban-board.md and E2E status.\nOutput: update Kanban; note regressions.
+DESCRIPTION:Development progress and test baseline.\nReview: docs/project-c
+ ontrol/kanban-board.md and E2E status.\nOutput: update Kanban\; note regre
+ ssions.\n\nAI_OS_ID: keepmees-ritual-dev-review-weekly
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-product-design-review@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-product-design-review-weekly@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260521T193000
 DTEND;TZID=America/New_York:20260521T201500
 RRULE:FREQ=WEEKLY;BYDAY=TH
 SUMMARY:KeepMees Product / Design Review
-DESCRIPTION:Product truth, fidelity, and design status.\nReview: decision-log.md and preview/print fidelity risks.\nOutput: record decisions and risk changes.
+DESCRIPTION:Product truth\, fidelity\, and design status.\nReview: decision
+ -log.md and preview/print fidelity risks.\nOutput: record decisions and ri
+ sk changes.\n\nAI_OS_ID: keepmees-ritual-product-design-review-weekly
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-project-control-sync@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-project-control-sync-weekly@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260522T193000
 DTEND;TZID=America/New_York:20260522T201500
 RRULE:FREQ=WEEKLY;BYDAY=FR
 SUMMARY:KeepMees Project Control Sync
-DESCRIPTION:Reconcile all Tower layers.\nReview: full docs/project-control/.\nOutput: run coordinator-weekly-sync.md; update repo docs.
+DESCRIPTION:Reconcile all Tower layers.\nReview: full docs/project-control/
+ .\nOutput: run coordinator-weekly-sync.md\; update repo docs.\n\nAI_OS_ID:
+  keepmees-ritual-project-control-sync-weekly
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-monthly-roadmap-reset@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-monthly-roadmap-reset@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260607T170000
 DTEND;TZID=America/New_York:20260607T183000
 RRULE:FREQ=MONTHLY;BYDAY=1SU
 SUMMARY:KeepMees Monthly Roadmap Reset
-DESCRIPTION:Re-baseline roadmap and schedule.\nReview: master-roadmap.md and master-schedule.md.\nOutput: update phases, dates, and confidence labels.
+DESCRIPTION:Re-baseline roadmap and schedule.\nReview: master-roadmap.md an
+ d master-schedule.md.\nOutput: update phases\, dates\, and confidence labe
+ ls.\n\nAI_OS_ID: keepmees-ritual-monthly-roadmap-reset
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-monthly-budget-review@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-monthly-budget-review@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260607T184500
 DTEND;TZID=America/New_York:20260607T193000
 RRULE:FREQ=MONTHLY;BYDAY=1SU
 SUMMARY:KeepMees Monthly Budget / Viability Review
-DESCRIPTION:Budget, designer gap, and viability.\nReview: Finance lane and risk R-BUD-1.\nOutput: budget decision note.
+DESCRIPTION:Budget\, designer gap\, and project viability check.\nReview: f
+ inance lane\, risk-register.md (R-BUD-1).\nOutput: budget decision note\; 
+ designer decision update.\n\nAI_OS_ID: keepmees-ritual-monthly-budget-revi
+ ew
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-monthly-risk-review@keepmees.local
-DTSTAMP:20260517T120000Z
+UID:keepmees-ritual-monthly-risk-review@keepmees.local
+DTSTAMP:20260530T235756Z
 DTSTART;TZID=America/New_York:20260614T170000
 DTEND;TZID=America/New_York:20260614T180000
 RRULE:FREQ=MONTHLY;BYDAY=2SU
 SUMMARY:KeepMees Monthly Risk Review
-DESCRIPTION:Full risk register pass.\nReview: docs/project-control/risk-register.md.\nOutput: update risk statuses and contingencies.
+DESCRIPTION:Full risk register pass.\nReview: all 15 risk categories in ris
+ k-register.md.\nOutput: updated risk statuses.\n\nAI_OS_ID: keepmees-ritua
+ l-monthly-risk-review
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-gate-foundation-os@keepmees.local
-DTSTAMP:20260517T120000Z
-DTSTART;TZID=America/New_York:20260523T180000
-DTEND;TZID=America/New_York:20260523T190000
-SUMMARY:Phase Gate Review - Foundation Operating System Gate
-DESCRIPTION:Verify the Project Control Tower is approved and merged before unpausing Package 5A.\nReview: phase-gates.md Gate 1.\nOutput: gate pass/fail; authorize Package 5A if passed.
+UID:keepmees-milestone-phase-gate-review@keepmees.local
+DTSTAMP:20260530T235756Z
+DTSTART;TZID=America/New_York:20261231T100000
+DTEND;TZID=America/New_York:20261231T110000
+SUMMARY:KeepMees Phase Gate Review
+DESCRIPTION:Verify a phase gate before crossing it.\nReview: docs/project-c
+ ontrol/phase-gates.md for the gate in question.\nOutput: gate pass or fail
+  recorded.\n\nAI_OS_ID: keepmees-milestone-phase-gate-review
 END:VEVENT
 BEGIN:VEVENT
-UID:keepmees-gate-beta-proof@keepmees.local
-DTSTAMP:20260517T120000Z
-DTSTART;TZID=America/New_York:20260608T180000
-DTEND;TZID=America/New_York:20260608T190000
-SUMMARY:Phase Gate Review - Beta / Proof Review Gate (placeholder)
-DESCRIPTION:Low-confidence placeholder. Review Package 5A proof-approval-state foundation against Gate 9.\nReview: phase-gates.md Gate 9.\nOutput: gate status.
-END:VEVENT
-BEGIN:VEVENT
-UID:keepmees-gate-preview-fidelity@keepmees.local
-DTSTAMP:20260517T120000Z
-DTSTART;TZID=America/New_York:20260706T180000
-DTEND;TZID=America/New_York:20260706T190000
-SUMMARY:Phase Gate Review - Preview Fidelity Gate (placeholder)
-DESCRIPTION:Low-confidence placeholder. Review preview vs Figma master delta (DEC-V-07) against Gate 3.\nReview: phase-gates.md Gate 3.\nOutput: documented bounded delta.
-END:VEVENT
-BEGIN:VEVENT
-UID:keepmees-launch-readiness-review@keepmees.local
-DTSTAMP:20260517T120000Z
-DTSTART;TZID=America/New_York:20261206T170000
-DTEND;TZID=America/New_York:20261206T183000
-SUMMARY:KeepMees Launch Readiness Review (low-confidence placeholder)
-DESCRIPTION:Directional placeholder only - date not a commitment.\nReview: docs/qa/release-readiness-template.md and all phase gates.\nOutput: go/no-go assessment.
+UID:keepmees-milestone-launch-readiness-review@keepmees.local
+DTSTAMP:20260530T235756Z
+DTSTART;TZID=America/New_York:20270630T100000
+DTEND;TZID=America/New_York:20270630T113000
+SUMMARY:KeepMees Launch Readiness Review
+DESCRIPTION:Pre-launch go/no-go review.\nReview: docs/qa/release-readiness-
+ template.md.\nOutput: launch decision.\n\nAI_OS_ID: keepmees-milestone-lau
+ nch-readiness-review
 END:VEVENT
 END:VCALENDAR

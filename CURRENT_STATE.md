@@ -16,20 +16,23 @@
 
 ## State as of last update
 
-**Last updated:** `2026-05-27`
+**Last updated:** `2026-05-30`
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `02bb97a` — docs: sync state after v1.5 Gate 1 merge (Gate 2 changes uncommitted) |
-| Active branch | `main` |
-| Active pass | None — v1.5 Gate 2 complete; Gate 2 closeout changes ready to commit |
-| Last completed pass | `AI Project OS v1.5 Gate 2` — Live Template Creation — complete 2026-05-27 — awaiting commit |
+| main HEAD | `e448053` — docs: close AI Project OS v1.5 Gate 2 template standard |
+| Active branch | `docs/google-calendar-live-sync-gate-1` |
+| Active pass | AI Project OS v1.6 Gate 1 — Google Calendar Live Sync Repo Foundation (implementation complete; commit pending Coordinator authorization) |
+| Last completed pass | `AI Project OS v1.5 Gate 2` — Live Template Creation — complete 2026-05-27 — merged e448053 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator: authorize Gate 2 closeout commit |
-| OS audit | Post-Gate 2: 138 pass, 0 warn, 0 fail |
+| Next authorized target | Coordinator: authorize Gate 1 commit, then Gate 2 (separate), then Gate 3 (separate) |
+| OS audit | Gate 1: 159 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
-| v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views; local config written |
+| v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
+| v1.6 Gate 1 | IN PROGRESS — implementation complete; commit pending |
+| v1.6 Gate 2 | NOT STARTED — requires separate Coordinator authorization + credentials |
+| v1.6 Gate 3 | NOT STARTED — requires separate Coordinator authorization + approved artifact |
 
 ---
 
@@ -70,7 +73,7 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 
 ---
 
-## Where to look — AI Project OS layer (v0.5.0 — Framework Groundwork Pass)
+## Where to look — AI Project OS layer (v1.6 Gate 1 — Google Calendar Live Sync)
 
 | Question | File |
 |---|---|
@@ -78,23 +81,18 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | Universal standards across repos | `docs/ai-system/universal-standards.md` |
 | How to bootstrap a new repo with this OS | `docs/ai-system/bootstrap-template.md` |
 | OS-level changelog | `docs/ai-system/CHANGELOG.md` |
-| OS version history (Package 2.7 → 2.8 → 2.9 → ...) | `docs/ai-system/version-history.md` |
+| OS version history | `docs/ai-system/version-history.md` |
 | Umbrella auto-management duties | `docs/dev/auto-management-protocol.md` |
-| Which model for which task | `docs/dev/model-routing-protocol.md` |
-| Token-efficiency discipline | `docs/dev/token-efficiency-protocol.md` |
-| Pre-flight context budget | `docs/dev/context-budget-checklist.md` |
-| Tool batching | `docs/dev/tool-batching-protocol.md` |
-| Package boundary closeout | `docs/dev/package-boundary-closeout-protocol.md` |
-| Notification setup (user-level) | `docs/dev/notification-setup.md` |
-| Test strategy | `docs/qa/test-strategy.md` |
-| Per-package verification | `docs/qa/package-verification-template.md` |
-| Short command interface (live) | `.claude/commands/README.md` — 16 commands, all delegating to `.claude/skills/*/SKILL.md` |
-| Skills (canonical protocol layer) | `.claude/skills/README.md` — 15 skills with SKILL.md |
+| v1.6 calendar source records | `docs/project-control/google-calendar-source-records.json` |
+| v1.6 calendar source schema | `docs/project-control/google-calendar-source-schema.md` |
+| v1.6 calendar sync policy | `docs/project-control/google-calendar-sync-policy.md` |
+| v1.6 calendar sync runbook | `docs/project-control/google-calendar-sync-runbook.md` |
+| v1.6 credential safety guide | `docs/project-control/google-calendar-credentials.example.md` |
+| v1.6 canonical sync log | `docs/project-control/google-calendar-sync-log.md` |
+| Short command interface | `.claude/commands/README.md` — 17 commands |
+| Skills (canonical protocol layer) | `.claude/skills/README.md` — 16 skills |
 | Closeout sync contract | `docs/dev/closeout-sync-contract.md` |
-| Project-control sync foundation | `docs/project-control/project-sync-policy.md`, `project-sync-dry-run-format.md`, `external-sync-safety.md` |
 | OS self-audit | `docs/ai-system/os-self-audit-checklist.md` + `scripts/os-self-audit.mjs` |
-| Calendar sync layer planning | `docs/project-control/calendar-sync-policy.md`, `calendar-source-template.md`, `calendar-sync-log.md` |
-| Shareable project status | `docs/project-control/shareable-status-summary.md` |
 
 ---
 
@@ -112,10 +110,6 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | Decision log | `docs/project-control/decision-log.md` |
 | Project risk register | `docs/project-control/risk-register.md` |
 | Calendar + importable .ics | `docs/project-control/calendar-spec.md`, `keepmees-project-calendar.ics` |
-| ClickUp / TickTick imports | `clickup-import.csv`, `ticktick-import.csv`, `ticktick-weekly-checklist.md`, `ticktick-recurring-routines.md` |
-| 7 / 30 / 90 day plans | `next-7-days.md`, `next-30-days.md`, `next-90-days.md` |
-| Weekly sync process | `coordinator-weekly-sync.md` |
-| Next session prompt (Tower) | `next-session-prompt.md` |
 
 ---
 
@@ -130,7 +124,5 @@ Checkout/PDF/cover work, framework migration, visual redesign, preview renderers
 | How to restart a session | `NEXT_SESSION_PROMPT.md` |
 | Delivered package state | `docs/command-center/current-status.md` |
 | What to do / not start | `docs/command-center/next-actions.md` |
-| Risks | `docs/ops/risk-register.md` |
-| Decisions | `docs/ops/decision-register.md` |
 | AI Project OS standards (universal) | `docs/ai-system/universal-standards.md` |
 | Auto-management umbrella | `docs/dev/auto-management-protocol.md` |

@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync | 2026-05-30 | Gate 1 in progress (branch `docs/google-calendar-live-sync-gate-1`); Gate 2/3 pending Coordinator authorization |
 | 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | complete — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27 |
 | 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | merged (`1623e7e`) |
 | 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
@@ -23,6 +24,43 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 1.6.0 — AI Project OS v1.6: Google Calendar Live Sync (2026-05-30)
+
+**Branch:** `docs/google-calendar-live-sync-gate-1` (Gate 1 in progress)
+**Status:** Gate 1 in progress; Gate 2 (live dry-run) and Gate 3 (live apply) pending Coordinator authorization
+
+### What this pass adds
+
+- **Google Calendar source records:** `google-calendar-source-records.json` — 10 committed records; `AI_OS_ID:` markers; stable `duplicate_key`.
+- **Source schema:** `google-calendar-source-schema.md` — field definitions, routing, classification categories, duplicate prevention.
+- **Sync policy:** `google-calendar-sync-policy.md` — gate model, source-of-truth hierarchy, adoption rule, apply safety, .ics fallback role.
+- **Sync runbook:** `google-calendar-sync-runbook.md` — step-by-step gate procedures, credential blocker handling, Puzzle alignment.
+- **Credentials guide:** `google-calendar-credentials.example.md` — no secrets; preferred auth path; `googleapis` dependency documentation.
+- **Canonical sync log:** `google-calendar-sync-log.md` — Gate 1 entry; legacy `calendar-sync-log.md` preserved for 2026-05-17 import.
+- **Four scripts:** `google-calendar-source-validate.mjs` (schema validation), `google-calendar-sync-dry-run.mjs` (local + live modes), `google-calendar-sync-apply.mjs` (guarded apply scaffold with GATE_3_AUTHORIZED), `generate-project-calendar.mjs` (ICS from source records with stable UIDs).
+- **New skill + command:** `google-calendar-sync` — Gate 1/2/3 distinction, dry-run-first, create/update default, delete/cancel separate approval.
+
+### Gate status
+
+- **Gate 1:** Repo foundation — in progress (branch `docs/google-calendar-live-sync-gate-1`); commit pending Coordinator approval
+- **Gate 2:** Live dry-run — not started; requires separate Coordinator authorization + credentials + `googleapis` install approval
+- **Gate 3:** Live apply — not started; requires separate Coordinator authorization + Gate 2 approved artifact
+
+### Backlog
+
+| Item | Reason deferred |
+|---|---|
+| Gate 2 live dry-run | Separate Coordinator authorization + credential setup + `googleapis` install approval |
+| Gate 3 live apply | Separate Coordinator authorization + Gate 2 approved artifact |
+| `googleapis` install in `scripts/` | Requires Coordinator approval; not installed in Gate 1 |
+| Puzzle v1.6 calendar alignment | After KeepMees Gate 3 complete |
+
+### What should be copied to Puzzle and future repos
+
+`google-calendar-source-schema.md`, `google-calendar-sync-policy.md`, `google-calendar-sync-runbook.md`, `google-calendar-credentials.example.md`, and the four calendar scripts. The skill and command. The `.gitignore` additions for `token.json` and variants. Adapt project name, `os_id` prefix, source records, timezone, and rituals.
 
 ---
 

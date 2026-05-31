@@ -61,6 +61,9 @@ const pcDocs = [
   'docs/project-control/external-sync-safety.md',
   'docs/project-control/project-sync-log.md',
   'docs/project-control/calendar-sync-policy.md',
+  'docs/project-control/google-calendar-source-records.json',
+  'docs/project-control/google-calendar-sync-policy.md',
+  'docs/project-control/google-calendar-sync-log.md',
 ];
 for (const doc of pcDocs) {
   if (!existsSync(join(ROOT, doc))) {

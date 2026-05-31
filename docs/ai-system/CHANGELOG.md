@@ -9,6 +9,63 @@ Newest entries first.
 
 ---
 
+## 2026-05-30 — AI Project OS v1.6: Google Calendar Live Sync, Gate 1
+
+**Status:** IN PROGRESS — Gate 1 implementation on branch `docs/google-calendar-live-sync-gate-1`; Gate 2 (live dry-run) and Gate 3 (live apply) require separate Coordinator authorization.
+**Scope:** Establish the repo-native Google Calendar live sync foundation. Real live sync (not .ics-only). Three-gate model: Gate 1 = repo foundation (this pass), Gate 2 = read-only live dry-run, Gate 3 = approved live apply. No app code; no Package 5B work; no v1.7 automation.
+
+### Added
+
+- `docs/project-control/google-calendar-source-schema.md` — canonical field schema for Google Calendar source records; field definitions, routing table, dry-run classification categories, duplicate prevention markers
+- `docs/project-control/google-calendar-source-records.json` — 10 committed source records (8 recurring rituals + 2 milestone placeholders); `AI_OS_ID:` marker in every description; `os_id`-based `duplicate_key`
+- `docs/project-control/google-calendar-sync-policy.md` — authoritative v1.6 sync policy: gate model, source-of-truth hierarchy, what belongs in calendar, GitHub Project relationship, adoption rule for 2026-05-17 imported events, duplicate prevention, apply safety rules, .ics fallback role
+- `docs/project-control/google-calendar-sync-runbook.md` — step-by-step gate procedures: pre-flight, Gate 1 verification, Gate 2 live dry-run, Gate 3 live apply, delete/cancel procedure, credential blocker handling, sync log format, Puzzle alignment
+- `docs/project-control/google-calendar-credentials.example.md` — credential safety rules, gitignored file list, preferred auth path (User OAuth vs service account), required API scopes, one-time setup steps, `googleapis` dependency documentation, credential blocker handling
+- `docs/project-control/google-calendar-sync-log.md` — canonical v1.6+ sync log; Gate 1 entry recorded; legacy `calendar-sync-log.md` preserved as historical record for 2026-05-17 import
+- `scripts/google-calendar-source-validate.mjs` — validates source records: required fields, os_id uniqueness, ISO datetime format, timezone, RRULE if present, calendar_role, status, no event IDs, no credential strings, AI_OS_ID marker matches os_id; exit 0 = pass
+- `scripts/google-calendar-sync-dry-run.mjs` — local mode (Gate 1, no credentials): validates records, generates intended payloads with AI_OS_ID and extendedProperties markers, classifies READY_FOR_LIVE_COMPARE or INVALID_SOURCE; live mode (Gate 2, guarded): credential check, googleapis check, GATE_2 placeholder; structured output for v1.7 mirroring
+- `scripts/google-calendar-sync-apply.mjs` — hard-stop apply scaffold: requires --apply, --approved-dry-run artifact, gitignore guards (token.json, external-sync-map.local.json), credential presence, delete requires --delete --os-id per item, GATE_3_AUTHORIZED guard (false in Gate 1); plan mode prints full expected behavior
+- `scripts/generate-project-calendar.mjs` — generates `keepmees-project-calendar.ics` from source records; stable UIDs as `<os_id>@keepmees.local`; AI_OS_ID markers in descriptions; ICS line folding and escaping; --dry-run and --check modes; no API calls
+- `.claude/skills/google-calendar-sync/SKILL.md` — new skill: Gate 1/2/3 distinction, dry-run-first requirement, create/update default, delete/cancel separate approval, local sync-map rules, credential safety, structured output, hard stop conditions, approval boundaries
+- `.claude/commands/google-calendar-sync.md` — thin command wrapper → delegates to `google-calendar-sync` skill
+
+### Updated
+
+- `.gitignore` — added `token.json`, `**/token.json`, `google-calendar-token.json`, `docs/project-control/google-calendar-token.local.json`
+- `docs/project-control/calendar-sync-log.md` — marked LEGACY; pointer to `google-calendar-sync-log.md`
+- `docs/project-control/calendar-sync-policy.md` — marked LEGACY for static .ics model; pointer to `google-calendar-sync-policy.md`
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6e added (20 v1.6 checks); Scripts table updated
+- `scripts/os-self-audit.mjs` — Section 6e checks added (files, skill/command, gitignore, grep-based content checks)
+- `scripts/project-control-sync-dry-run.mjs` — `google-calendar-source-records.json`, `google-calendar-sync-policy.md`, `google-calendar-sync-log.md` added to required-files check
+- `.claude/skills/README.md` — count updated to 16; `google-calendar-sync` row added
+- `.claude/commands/README.md` — `/google-calendar-sync` row added
+- `docs/ai-system/CHANGELOG.md` — this entry
+- `docs/ai-system/version-history.md` — v1.6 row added
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- No live Google Calendar mutations
+- No credential files created or used
+- No `external-sync-map.local.json` read or written
+- No Package 5B planning or implementation
+- No v1.7 automation (hooks, mirroring, start router, model routing changes)
+- No secrets, tokens, or credentials committed
+
+### Key design decisions
+
+- Three-gate model: Gate 1 = repo foundation (no API), Gate 2 = read-only dry-run (separate auth), Gate 3 = apply (separate auth + artifact required)
+- `google-calendar-sync-log.md` is canonical for v1.6+ operations; `calendar-sync-log.md` preserved as legacy for 2026-05-17 import record
+- Duplicate prevention: `AI_OS_ID: <os_id>` in description (primary) + `extendedProperties.private.ai_os_id` in API payload (Gate 3)
+- Adoption rule: 2026-05-17 imported events need manual AI_OS_ID marker addition before Gate 2 can classify safely (adoption guide in sync policy)
+- GATE_3_AUTHORIZED constant in apply script: false in Gate 1; set to true only when Gate 3 is explicitly authorized
+- `googleapis` dependency: not installed in Gate 1; scripts-local only (do not modify root package.json); separate Coordinator approval required for Gate 2
+- `generate-project-calendar.mjs` uses `<os_id>@keepmees.local` UIDs for stable ICS regeneration
+- Dependency-free Node ESM for all Gate 1 scripts (no `googleapis` calls in Gate 1)
+- v1.6 complete only when Gate 3 succeeds for KeepMees (or documented credential/platform blocker)
+
+---
+
 ## 2026-05-26 — AI Project OS v1.5: Template GitHub Project Standard
 
 **Status:** COMPLETE — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27

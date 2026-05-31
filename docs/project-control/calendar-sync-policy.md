@@ -1,9 +1,11 @@
 # KeepMees Calendar Sync Policy
 
-**Status:** ACTIVE (introduced in AI Project OS Usability Patch, 2026-05-24)
+**Status:** LEGACY — superseded by `google-calendar-sync-policy.md` for AI Project OS v1.6+ live sync operations. This file is preserved as reference for the static `.ics` model (v0.4.0 – v1.5).
 **Owner:** Coordinator / Project Control
 **Companion docs:** `calendar-spec.md`, `calendar-source-template.md`, `calendar-sync-log.md`
 **Companion command:** `/calendar-sync-plan` (`.claude/commands/calendar-sync-plan.md`)
+
+**v1.6 note:** AI Project OS v1.6 introduced real live sync via Google Calendar API. The authoritative policy is now `docs/project-control/google-calendar-sync-policy.md`. The authoritative sync log is `docs/project-control/google-calendar-sync-log.md`. The `/google-calendar-sync` command and skill handle all live sync operations. This file describes the static `.ics` model for historical reference.
 
 ---
 
