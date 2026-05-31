@@ -21,19 +21,19 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `03169d7` — docs: sync state after v1.6 Gate 2A merge |
-| Active branch | `docs/google-calendar-dependency-hygiene` (Gate 2C, pending commit approval) |
-| Active pass | `AI Project OS v1.6 Gate 2C` — Scripts Dependency Hygiene + googleapis Setup |
-| Last completed pass | `AI Project OS v1.6 Gate 2A` — Live Read-Only Dry-Run Logic Completion — merged `a530c56` 2026-05-31 |
+| main HEAD | `041761a` — merge: move scripts dependencies out of git tracking |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.6 Gate 2C` — Scripts Dependency Hygiene and googleapis Setup — merged `041761a` 2026-05-31 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator approves Gate 2C commit + merge, then Gate 2B credential setup |
+| Next authorized target | Coordinator decides: proceed with Gate 2B credential setup and live read-only dry-run |
 | OS audit | Gate 2C: 159 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
 | v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31 |
-| v1.6 Gate 2C | COMPLETE (pending commit + merge) — branch `docs/google-calendar-dependency-hygiene` |
-| v1.6 Gate 2B | NOT STARTED — requires Gate 2C merge + credential setup |
+| v1.6 Gate 2C | COMPLETE — merged `041761a` 2026-05-31 |
+| v1.6 Gate 2B | NOT STARTED — requires credential setup (`google-calendar-credentials.json` + `token.json` locally) |
 | v1.6 Gate 3 | NOT STARTED — requires Gate 2B approved artifact |
 | v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented |
 

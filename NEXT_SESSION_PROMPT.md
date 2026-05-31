@@ -47,19 +47,20 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.6 Gate 2A complete. Gate 2B (live dry-run) and Gate 3 (live apply) not started. No active pass. Package 5B blocked. |
+| Resume into | AI Project OS v1.6 Gate 2C complete. Gate 2B (live dry-run) and Gate 3 (live apply) not started. No active pass. Package 5B blocked. |
 | Branch | `main` |
-| main HEAD | `a530c56` — merge: complete Google Calendar live dry-run comparison logic |
-| Next action | Run `/start`. v1.6 Gate 2A complete — no active pass. Await Coordinator decision on Gate 2B authorization (googleapis install approval + credential setup). Do not start Package 5B without explicit authorization. Do not run Gate 2B or Gate 3 without explicit authorization. |
-| OS audit | Gate 2A: 159 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| main HEAD | `041761a` — merge: move scripts dependencies out of git tracking |
+| Next action | Run `/start`. v1.6 Gate 2C complete — no active pass. Await Coordinator decision on Gate 2B authorization (credential setup + live read-only dry-run). Do not start Package 5B without explicit authorization. Do not run Gate 2B or Gate 3 without explicit authorization. |
+| OS audit | Gate 2C: 159 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked pending Coordinator authorization. |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31. |
 | v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31. All 11 classifications implemented and fixture-validated. POSSIBLE_DUPLICATE blocks Gate 3. |
-| v1.6 Gate 2B | NOT STARTED — requires Coordinator authorization + googleapis install (`cd scripts && npm install googleapis`) + credential setup. |
+| v1.6 Gate 2C | COMPLETE — merged `041761a` 2026-05-31. `scripts/node_modules/` untracked and gitignored. `googleapis@173.0.0` installed locally under `scripts/`. |
+| v1.6 Gate 2B | NOT STARTED — requires credential setup only (`google-calendar-credentials.json` + `token.json` locally, both gitignored). googleapis already installed. |
 | v1.6 Gate 3 | NOT STARTED — requires Gate 2B approved artifact. |
 | v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented. |
-| Do not | Start Package 5B; modify `index.html` / `src/**`; run Gate 2B or Gate 3 without authorization; run any `--apply` script without Coordinator approval; install googleapis without Coordinator approval; push or merge without explicit instruction. |
+| Do not | Start Package 5B; modify `index.html` / `src/**`; run Gate 2B or Gate 3 without authorization; run any `--apply` script without Coordinator approval; push or merge without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
@@ -67,8 +68,8 @@ Stop and ask the Coordinator if **any** of these are true:
 ## Decision points if Coordinator returns next session
 
 1. **"Authorize v1.6 Gate 2B."**
-   - Approve googleapis install: `cd scripts && npm install googleapis` (does not touch root `package.json`).
-   - Configure credentials per `docs/project-control/google-calendar-credentials.example.md`.
+   - googleapis is already installed (`googleapis@173.0.0` under `scripts/node_modules/` — gitignored).
+   - Configure credentials per `docs/project-control/google-calendar-credentials.example.md` (`google-calendar-credentials.json` + `token.json` locally, both gitignored).
    - Run `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`.
    - Save artifact to `local-sync-reports/`; Coordinator reviews delta; record in `google-calendar-sync-log.md`.
 
