@@ -9,6 +9,43 @@ Newest entries first.
 
 ---
 
+## 2026-05-31 — AI Project OS v1.6: Google Calendar Live Sync, Gate 2A
+
+**Status:** IN PROGRESS — Gate 2A comparison logic on branch `docs/google-calendar-live-dry-run-logic`, uncommitted. Gate 2B (live dry-run) requires googleapis install approval + credentials.
+**Scope:** Implement fixture-testable live comparison logic in `google-calendar-sync-dry-run.mjs`. All 11 classification values proved locally. No live API calls. No product code. No Package 5B.
+
+### Added
+
+- `docs/project-control/google-calendar-live-events.fixture.json` — committed fixture file with fake/mock Google Calendar event data exercising all 11 classification values: NO_OP, UPDATE, ADOPTION_REQUIRED, DUPLICATE_DETECTED, CREATE, REMOTE_DRIFT, MAPPED_EVENT_MISSING_REMOTELY, POSSIBLE_DUPLICATE, NEEDS_MANUAL_REVIEW, DELETE_CANCEL_CANDIDATE, MISSING_LOCAL_MAPPING (advisory)
+
+### Updated
+
+- `scripts/google-calendar-sync-dry-run.mjs` — full comparison logic implemented:
+  - `--fixture <path>` mode: fixture/mock comparison, no credentials, no googleapis; writes gitignored artifact
+  - `--live-readonly` mode: live Google Calendar API (dynamically imports googleapis to not block local/fixture modes); credential check; dependency check with `LIVE_READINESS_BLOCKED_DEPENDENCY_MISSING` message; not run in Gate 2A
+  - `--local-only` mode: unchanged from Gate 1
+  - Pure comparison functions: `extractDescMarker`, `comparePayload`, `classifySourceRecord`, `compareSourceToEvents`, `buildArtifact`
+  - All 11 classification values with `apply_blocker` flags, `confidence`, `reason`, `required_resolution`
+  - `POSSIBLE_DUPLICATE` is advisory (does not block Gate 3 apply)
+  - `MISSING_LOCAL_MAPPING` appears as advisory flag on NO_OP/UPDATE/REMOTE_DRIFT results
+  - Artifact schema: `schema_version`, `generated_at`, `mode`, `gate3_apply_allowed`, `gate3_blockers`, `delete_cancel_candidates`, `warnings`, `results`
+  - Output path guard: verifies `local-sync-reports/` is gitignored before writing
+- `docs/project-control/google-calendar-sync-runbook.md` — Gate 2 split into Gate 2A (fixture) and Gate 2B (live); all 11 classifications documented; live mode renamed `--live-readonly`
+- `docs/project-control/google-calendar-sync-log.md` — Gate 2A entry recorded
+- `AI_HANDOFF.md` — updated to Gate 2A in-progress state
+- `CURRENT_STATE.md` — updated: Gate 2A in progress, Gate 2B requires googleapis + credentials
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- `scripts/package.json`, root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read, or used
+- `googleapis` not installed (requires separate Coordinator approval)
+- `docs/project-control/external-sync-map.local.json` — not read or written
+
+---
+
 ## 2026-05-30 — AI Project OS v1.6: Google Calendar Live Sync, Gate 1
 
 **Status:** IN PROGRESS — Gate 1 implementation on branch `docs/google-calendar-live-sync-gate-1`; Gate 2 (live dry-run) and Gate 3 (live apply) require separate Coordinator authorization.

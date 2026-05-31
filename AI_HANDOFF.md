@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.6 Gate 1 merged `5c4bd28` on 2026-05-31. Working tree clean. No active pass. Gate 2 and Gate 3 require separate Coordinator authorization. Package 5B blocked.
+**Status:** `in-progress` — AI Project OS v1.6 Gate 2A complete (fixture validation). Branch: `docs/google-calendar-live-dry-run-logic`. Working tree: 2 modified files uncommitted. Gate 2B (live dry-run) requires googleapis install approval + credentials. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-31`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — v1.6 Gate 1 complete |
-| **Active branch** | `main` |
-| **main HEAD** | `5c4bd28` — merge: add Google Calendar live sync foundation |
+| **Active pass** | `AI Project OS v1.6 Gate 2A` — live dry-run logic implementation |
+| **Active branch** | `docs/google-calendar-live-dry-run-logic` |
+| **main HEAD** | `54867a8` — docs: sync state after v1.6 Gate 1 merge |
 | **Last completed pass** | `AI Project OS v1.6 Gate 1` — Google Calendar live sync repo foundation — merged `5c4bd28` 2026-05-31 |
 | **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
@@ -30,7 +30,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (last completed pass)
 
-AI Project OS v1.6 Gate 1 — Google Calendar Live Sync Repo Foundation (merged 2026-05-31). Delivered: `google-calendar-source-records.json` (10 events), source schema, sync policy, sync runbook, credentials guide, validation script, local dry-run script, apply scaffold with runtime `--confirm-live-calendar-apply` gate, ICS generator, skill, command, OS audit updates, bootstrap updates, gitignore hardening. No live Google Calendar API calls. No credentials created. `external-sync-map.local.json` not read or written. Gate 2 and Gate 3 not run.
+AI Project OS v1.6 Gate 2A — Live Dry-Run Comparison Logic Implementation (in-progress, uncommitted on branch `docs/google-calendar-live-dry-run-logic`). Delivered: full comparison logic in `scripts/google-calendar-sync-dry-run.mjs` (fixture mode `--fixture`, live mode scaffold `--live-readonly`), fixture file `docs/project-control/google-calendar-live-events.fixture.json` exercising all 11 classification values, dry-run artifact schema. No live API calls. googleapis not installed. credentials not configured. Gate 2B can run `--live-readonly` when googleapis installed + credentials ready.
 
 ---
 
@@ -39,18 +39,20 @@ AI Project OS v1.6 Gate 1 — Google Calendar Live Sync Repo Foundation (merged 
 | Gate | Status |
 |---|---|
 | Gate 1 — Repo Implementation | COMPLETE — merged `5c4bd28` 2026-05-31 |
-| Gate 2 — Live Calendar Dry-Run | NOT STARTED — requires separate Coordinator authorization |
-| Gate 3 — Live Calendar Apply | NOT STARTED — requires separate Coordinator authorization |
+| Gate 2A — Fixture Logic Implementation | IN PROGRESS — branch `docs/google-calendar-live-dry-run-logic`, uncommitted |
+| Gate 2B — Live Calendar Dry-Run | NOT STARTED — requires googleapis install approval + credentials |
+| Gate 3 — Live Calendar Apply | NOT STARTED — requires Gate 2B approved artifact |
 
 ---
 
-## What is required for Gate 2
+## What is required for Gate 2B (live dry-run)
 
-1. Coordinator authorizes Gate 2.
-2. Coordinator approves `googleapis` npm package install in `scripts/` directory (separate approval).
+1. Coordinator approves commit + merge of Gate 2A branch.
+2. Coordinator approves `googleapis` npm package install in `scripts/` directory:
+   `cd scripts && npm install googleapis`
 3. Coordinator configures Google Calendar API credentials locally (`google-calendar-credentials.json` + `token.json`).
-4. Coordinator adds `AI_OS_ID:` markers to existing Google Calendar events (adoption guide: `docs/project-control/google-calendar-sync-policy.md`).
-5. Run: `node scripts/google-calendar-sync-dry-run.mjs --live`
+4. Coordinator optionally adds `AI_OS_ID:` markers to existing Google Calendar events (adoption guide: `docs/project-control/google-calendar-sync-policy.md`).
+5. Run: `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`
 6. Save dry-run artifact to `local-sync-reports/`.
 7. Coordinator reviews and approves classified delta.
 
@@ -79,7 +81,12 @@ v1.6 is NOT complete until Gate 3 live apply succeeds for KeepMees, or a documen
 
 ## Next exact action
 
-Coordinator decides whether to authorize v1.6 Gate 2 (live Google Calendar dry-run). No action required from this session.
+1. Coordinator reviews Gate 2A work on branch `docs/google-calendar-live-dry-run-logic`.
+2. Coordinator approves commit message: `docs: complete Google Calendar live dry-run comparison logic`
+3. Coordinator approves merge to `main`.
+4. Then: Coordinator decides whether to authorize Gate 2B (live dry-run) — approve googleapis install + credential setup.
+
+Do not commit, push, or merge without Coordinator approval.
 
 ---
 
@@ -105,6 +112,6 @@ Coordinator decides whether to authorize v1.6 Gate 2 (live Google Calendar dry-r
 | `src/state/session-serialization.js` | Off-limits without explicit package instruction. |
 | `docs/project-control/external-sync-map.local.json` | Gitignored, local-only — never commit; do not read or print contents. |
 | `scripts/google-calendar-sync-apply.mjs` | `--confirm-live-calendar-apply` flag required for Gate 3. Also requires `--apply`, `--approved-dry-run <path>`, and no unresolved DUPLICATE_DETECTED or ADOPTION_REQUIRED items. |
-| `scripts/google-calendar-sync-dry-run.mjs` | `--live` mode requires credentials + googleapis. Gate 2 not yet authorized. |
+| `scripts/google-calendar-sync-dry-run.mjs` | `--live-readonly` mode requires credentials + googleapis. Gate 2B not yet authorized. `--fixture` mode requires no credentials. |
 | `scripts/node_modules/` | Historically tracked. Do NOT untrack without Coordinator decision. Do NOT install googleapis without Coordinator approval. |
 | `docs/ai-system/*` | Universal portable layer. Edit only in dedicated AI Project OS upgrade passes. |
