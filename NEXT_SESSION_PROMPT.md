@@ -47,30 +47,33 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.6 Gate 2C complete. Gate 2B (live dry-run) and Gate 3 (live apply) not started. No active pass. Package 5B blocked. |
+| Resume into | AI Project OS v1.6 Gate 2D Repair complete. Gate 2D live dry-run and Gate 3 not started. No active pass. Package 5B blocked. |
 | Branch | `main` |
-| main HEAD | `041761a` — merge: move scripts dependencies out of git tracking |
-| Next action | Run `/start`. v1.6 Gate 2C complete — no active pass. Await Coordinator decision on Gate 2B authorization (credential setup + live read-only dry-run). Do not start Package 5B without explicit authorization. Do not run Gate 2B or Gate 3 without explicit authorization. |
-| OS audit | Gate 2C: 159 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| main HEAD | `fe1315a` — merge: align Google Calendar OAuth paths |
+| Next action | Run `/start`. Gate 2D Repair merged. Await Coordinator authorization for OAuth bootstrap (`--init-oauth`) then Gate 2D live read-only dry-run. Do not start Package 5B without explicit authorization. Do not run `--init-oauth` or `--live-readonly` without explicit authorization. |
+| OS audit | Gate 2D Repair: 166 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked pending Coordinator authorization. |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31. |
-| v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31. All 11 classifications implemented and fixture-validated. POSSIBLE_DUPLICATE blocks Gate 3. |
-| v1.6 Gate 2C | COMPLETE — merged `041761a` 2026-05-31. `scripts/node_modules/` untracked and gitignored. `googleapis@173.0.0` installed locally under `scripts/`. |
-| v1.6 Gate 2B | NOT STARTED — requires credential setup only (`google-calendar-credentials.json` + `token.json` locally, both gitignored). googleapis already installed. |
-| v1.6 Gate 3 | NOT STARTED — requires Gate 2B approved artifact. |
+| v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31. All 11 classifications implemented and fixture-validated. |
+| v1.6 Gate 2C | COMPLETE — merged `041761a` 2026-05-31. `googleapis@173.0.0` installed locally under `scripts/`. |
+| v1.6 Gate 2D Repair | COMPLETE — merged `fe1315a` 2026-05-31. Canonical OAuth paths aligned. `scripts/google-calendar-auth-bootstrap.mjs` added. |
+| v1.6 Gate 2D live dry-run | NOT STARTED — canonical credential at `docs/project-control/google-calendar-credentials.local.json`. Token missing. Requires `--init-oauth` (Coordinator authorization) then `--live-readonly` (Coordinator authorization). |
+| v1.6 Gate 3 | NOT STARTED — requires Gate 2D live dry-run approved artifact. |
 | v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented. |
-| Do not | Start Package 5B; modify `index.html` / `src/**`; run Gate 2B or Gate 3 without authorization; run any `--apply` script without Coordinator approval; push or merge without explicit instruction. |
+| Do not | Start Package 5B; modify `index.html` / `src/**`; run `--init-oauth` or `--live-readonly` without authorization; run any `--apply` script without Coordinator approval; push or merge without explicit instruction. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
 
 ## Decision points if Coordinator returns next session
 
-1. **"Authorize v1.6 Gate 2B."**
-   - googleapis is already installed (`googleapis@173.0.0` under `scripts/node_modules/` — gitignored).
-   - Configure credentials per `docs/project-control/google-calendar-credentials.example.md` (`google-calendar-credentials.json` + `token.json` locally, both gitignored).
-   - Run `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`.
+1. **"Authorize v1.6 Gate 2D live dry-run."**
+   - googleapis already installed (`googleapis@173.0.0` under `scripts/node_modules/` — gitignored).
+   - Canonical credential already at `docs/project-control/google-calendar-credentials.local.json` (gitignored).
+   - Authorize OAuth bootstrap: `node scripts/google-calendar-auth-bootstrap.mjs --init-oauth` (opens browser OAuth, writes `docs/project-control/google-calendar-token.local.json`).
+   - Verify: `node scripts/google-calendar-auth-bootstrap.mjs --auth-status` — expect `STATUS: READY`.
+   - Authorize live dry-run: `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`.
    - Save artifact to `local-sync-reports/`; Coordinator reviews delta; record in `google-calendar-sync-log.md`.
 
 2. **"Authorize v1.6 Gate 3."**

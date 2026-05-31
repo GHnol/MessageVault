@@ -21,20 +21,21 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `041761a` — merge: move scripts dependencies out of git tracking |
+| main HEAD | `fe1315a` — merge: align Google Calendar OAuth paths |
 | Active branch | `main` |
 | Active pass | None |
-| Last completed pass | `AI Project OS v1.6 Gate 2C` — Scripts Dependency Hygiene and googleapis Setup — merged `041761a` 2026-05-31 |
+| Last completed pass | `AI Project OS v1.6 Gate 2D Repair` — Canonical OAuth Bootstrap and Credential Path Alignment — merged `fe1315a` 2026-05-31 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides: proceed with Gate 2B credential setup and live read-only dry-run |
-| OS audit | Gate 2C: 159 pass, 0 warn, 0 fail |
+| Next authorized target | Coordinator authorizes OAuth bootstrap (`--init-oauth`), then Gate 2D live read-only dry-run |
+| OS audit | Gate 2D Repair: 166 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
 | v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31 |
 | v1.6 Gate 2C | COMPLETE — merged `041761a` 2026-05-31 |
-| v1.6 Gate 2B | NOT STARTED — requires credential setup (`google-calendar-credentials.json` + `token.json` locally) |
-| v1.6 Gate 3 | NOT STARTED — requires Gate 2B approved artifact |
+| v1.6 Gate 2D Repair | COMPLETE — merged `fe1315a` 2026-05-31 |
+| v1.6 Gate 2D live dry-run | NOT STARTED — requires OAuth bootstrap (`--init-oauth`) + Coordinator authorization |
+| v1.6 Gate 3 | NOT STARTED — requires Gate 2D approved artifact |
 | v1.6 overall | NOT COMPLETE — complete only when Gate 3 live apply succeeds or credential/platform blocker documented |
 
 ---

@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS v1.6 Gate 2D Repair on branch `docs/google-calendar-oauth-path-alignment`. Uncommitted. Awaiting Coordinator review and commit authorization. Package 5B blocked.
+**Status:** `complete` — AI Project OS v1.6 Gate 2D Repair merged `fe1315a` on 2026-05-31. Working tree clean. No active pass. Gate 2D live dry-run pending OAuth bootstrap and Coordinator authorization. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-05-31`
 
@@ -18,31 +18,25 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.6 Gate 2D Repair` — Canonical OAuth Bootstrap and Credential Path Alignment |
-| **Active branch** | `docs/google-calendar-oauth-path-alignment` |
-| **main HEAD** | `a3e3cb8` — docs: sync state after v1.6 Gate 2C merge |
-| **Last completed pass** | `AI Project OS v1.6 Gate 2C` — merged `041761a` 2026-05-31 |
-| **Active package** | None (tooling repair pass) |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `fe1315a` — merge: align Google Calendar OAuth paths |
+| **Last completed pass** | `AI Project OS v1.6 Gate 2D Repair` — Canonical OAuth Bootstrap and Credential Path Alignment — merged `fe1315a` 2026-05-31 |
+| **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked pending Coordinator authorization |
 
 ---
 
-## Objective (Gate 2D Repair — in progress)
+## Objective (last completed pass)
 
-Repair tooling blocker `LIVE_READONLY_DRY_RUN_BLOCKED_TOKEN_BOOTSTRAP_NOT_IMPLEMENTED`. Align credential/token paths to canonical `docs/project-control/` convention. Add OAuth bootstrap support to committed tooling.
-
-Delivered (uncommitted, branch `docs/google-calendar-oauth-path-alignment`):
-1. `scripts/google-calendar-auth-bootstrap.mjs` — new canonical OAuth bootstrap script with `--auth-status` and `--init-oauth`.
-2. `scripts/google-calendar-sync-dry-run.mjs` — canonical credential/token paths as defaults; `--auth-status`; `--help`; `resolveCredPaths()` with explicit legacy root fallback; `OAUTH_BOOTSTRAP_REQUIRED` message when token missing.
-3. `docs/project-control/google-calendar-credentials.example.md` — canonical paths, updated setup steps.
-4. `docs/project-control/google-calendar-sync-runbook.md` — Gate 2B prerequisites updated.
+AI Project OS v1.6 Gate 2D Repair — merged `fe1315a` 2026-05-31. Delivered:
+1. `scripts/google-calendar-auth-bootstrap.mjs` — canonical OAuth bootstrap script with `--auth-status` and `--init-oauth`.
+2. `scripts/google-calendar-sync-dry-run.mjs` — canonical credential/token paths as defaults; `--auth-status`; `--help`; `resolveCredPaths()`; `OAUTH_BOOTSTRAP_REQUIRED` message when token missing.
+3. `scripts/google-calendar-sync-apply.mjs` — canonical credential/token path defaults; `resolveCredPaths()`; legacy paths require `--allow-legacy-root-credentials`.
+4. `docs/project-control/google-calendar-credentials.example.md`, `google-calendar-sync-runbook.md` — canonical paths and OAuth bootstrap flow documented.
 5. `.claude/skills/google-calendar-sync/SKILL.md` — canonical paths, new auth commands.
-6. `scripts/os-self-audit.mjs` — canonical path gitignore checks; auth-bootstrap file checks.
-7. `docs/project-control/google-calendar-sync-log.md` — repair entry.
-8. `docs/ai-system/CHANGELOG.md`, `version-history.md` — repair entry.
-
-All validations: OS audit (166 pass, 0 warn, 0 fail), source validate (151 pass), local-only dry-run (10 READY_FOR_LIVE_COMPARE), fixture dry-run (blocked by 7 items as expected), project-control sync validate (11 pass).
+6. `scripts/os-self-audit.mjs` — canonical path gitignore checks; auth-bootstrap file checks (166 pass).
 
 No OAuth run. No live API call. No credential contents read or printed.
 
@@ -55,22 +49,25 @@ No OAuth run. No live API call. No credential contents read or printed.
 | Gate 1 — Repo Implementation | COMPLETE — merged `5c4bd28` 2026-05-31 |
 | Gate 2A — Fixture Logic Implementation | COMPLETE — merged `a530c56` 2026-05-31 |
 | Gate 2C — Dependency Hygiene + googleapis Install | COMPLETE — merged `041761a` 2026-05-31 |
-| Gate 2D Repair — OAuth Bootstrap + Path Alignment | IN PROGRESS — branch `docs/google-calendar-oauth-path-alignment`, uncommitted |
-| Gate 2D — Live Calendar Read-Only Dry-Run | NOT STARTED — requires: Gate 2D Repair merged, OAuth bootstrap run, Coordinator authorization |
+| Gate 2D Repair — OAuth Bootstrap + Path Alignment | COMPLETE — merged `fe1315a` 2026-05-31 |
+| Gate 2D — Live Calendar Read-Only Dry-Run | NOT STARTED — requires OAuth bootstrap run + Coordinator authorization |
 | Gate 3 — Live Calendar Apply | NOT STARTED — requires Gate 2D approved artifact |
 
 ---
 
-## What is required after Gate 2D Repair merges
+## What is required for Gate 2D live dry-run
 
-1. Coordinator reviews and approves the repair commit.
-2. After merge, run: `node scripts/google-calendar-auth-bootstrap.mjs --auth-status` (confirms canonical credential present, token missing).
-3. Coordinator authorizes OAuth bootstrap: `node scripts/google-calendar-auth-bootstrap.mjs --init-oauth` (opens browser OAuth, writes `docs/project-control/google-calendar-token.local.json`).
-4. Run auth-status again to confirm `STATUS: READY`.
-5. Coordinator authorizes live dry-run: `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`.
-6. Save artifact to `local-sync-reports/`; Coordinator reviews delta.
+1. Coordinator authorizes OAuth bootstrap: `node scripts/google-calendar-auth-bootstrap.mjs --init-oauth`
+   - Opens browser OAuth, writes `docs/project-control/google-calendar-token.local.json` (gitignored).
+   - Canonical credential at `docs/project-control/google-calendar-credentials.local.json` is already in place.
+2. Verify readiness: `node scripts/google-calendar-auth-bootstrap.mjs --auth-status` — expect `STATUS: READY`.
+3. Coordinator authorizes live dry-run: `node scripts/google-calendar-sync-dry-run.mjs --live-readonly`.
+4. Save artifact to `local-sync-reports/`; Coordinator reviews classified delta.
+5. Record result in `docs/project-control/google-calendar-sync-log.md`.
 
 googleapis already installed at `scripts/node_modules/googleapis@173.0.0`. No further install required.
+
+v1.6 is NOT complete until Gate 3 live apply succeeds, or a documented credential/platform blocker is recorded.
 
 ---
 
@@ -96,7 +93,7 @@ googleapis already installed at `scripts/node_modules/googleapis@173.0.0`. No fu
 
 ## Next exact action
 
-Coordinator reviews the repair diff on branch `docs/google-calendar-oauth-path-alignment`. If approved, authorizes commit and merge to main.
+Coordinator authorizes OAuth bootstrap (`--init-oauth`), then authorizes Gate 2D live read-only dry-run (`--live-readonly`). No product package work authorized.
 
 ---
 
