@@ -5,20 +5,21 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "e2e":           "node e2e-regression-harness.mjs",
-    "e2e:headed":    "node e2e-regression-harness.mjs --headed",
-    "e2e:real":      "node e2e-regression-harness.mjs --real-files",
-    "e2e:real:headed":"node e2e-regression-harness.mjs --real-files --headed",
-    "capture":       "node capture-message-book-packet.mjs",
+    "e2e": "node e2e-regression-harness.mjs",
+    "e2e:headed": "node e2e-regression-harness.mjs --headed",
+    "e2e:real": "node e2e-regression-harness.mjs --real-files",
+    "e2e:real:headed": "node e2e-regression-harness.mjs --real-files --headed",
+    "capture": "node capture-message-book-packet.mjs",
     "capture:clean": "node capture-message-book-packet.mjs --clean",
-    "capture:a":     "node capture-message-book-packet.mjs --scenarios a",
-    "capture:b":     "node capture-message-book-packet.mjs --scenarios b",
-    "capture:c":     "node capture-message-book-packet.mjs --scenarios c",
-    "capture:d":     "node capture-message-book-packet.mjs --scenarios d",
-    "inbox:latest":  "node process-operator-inbox.mjs --latest",
-    "inbox":         "node process-operator-inbox.mjs"
+    "capture:a": "node capture-message-book-packet.mjs --scenarios a",
+    "capture:b": "node capture-message-book-packet.mjs --scenarios b",
+    "capture:c": "node capture-message-book-packet.mjs --scenarios c",
+    "capture:d": "node capture-message-book-packet.mjs --scenarios d",
+    "inbox:latest": "node process-operator-inbox.mjs --latest",
+    "inbox": "node process-operator-inbox.mjs"
   },
   "dependencies": {
+    "googleapis": "^173.0.0",
     "playwright": "^1.44.0"
   }
 }
