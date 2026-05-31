@@ -11,26 +11,55 @@
  *     No API calls. No credentials. Proves comparison logic before live access.
  *     Writes dry-run artifact to local-sync-reports/ (gitignored).
  *
+ *   --auth-status
+ *     Report credential/token readiness (existence + gitignore checks only).
+ *     No credential contents read. No API calls.
+ *
  *   --live-readonly  (alias: --live)
- *     Gate 2: compare against real Google Calendar (read-only).
- *     Requires: googleapis in scripts/node_modules/ and credentials locally.
+ *     Gate 2B: compare against real Google Calendar (read-only).
+ *     Requires: googleapis in scripts/node_modules/, credentials, and token locally.
+ *     Default credential: docs/project-control/google-calendar-credentials.local.json
+ *     Default token:      docs/project-control/google-calendar-token.local.json
  *     Writes dry-run artifact to local-sync-reports/ (gitignored).
- *     Gate 2 requires separate Coordinator authorization.
+ *     Gate 2B requires separate Coordinator authorization.
  *
  *   --output <path>
  *     Write artifact to this path (must be under local-sync-reports/).
  *     Default: local-sync-reports/google-calendar-dry-run-<timestamp>.json
  *
+ *   --help, -h
+ *     Show usage information.
+ *
+ *   --credential-path <path>
+ *     Override credential file path (must be gitignored).
+ *
+ *   --token-path <path>
+ *     Override token file path (must be gitignored).
+ *
+ *   --allow-legacy-root-credentials
+ *     Allow fallback to root google-calendar-credentials.json / token.json
+ *     when canonical paths are absent. Warns LEGACY_ROOT_CREDENTIAL_PATH_USED.
+ *
  * googleapis is NOT imported at the top level.
  * Dynamic import is used only inside live mode, so --local-only and --fixture
  * never fail due to missing googleapis.
+ *
+ * Canonical credential paths (defaults):
+ *   docs/project-control/google-calendar-credentials.local.json
+ *   docs/project-control/google-calendar-token.local.json
+ *
+ * OAuth bootstrap (separate script — requires explicit Coordinator authorization):
+ *   node scripts/google-calendar-auth-bootstrap.mjs --auth-status
+ *   node scripts/google-calendar-auth-bootstrap.mjs --init-oauth
  *
  * Usage:
  *   node scripts/google-calendar-sync-dry-run.mjs
  *   node scripts/google-calendar-sync-dry-run.mjs --local-only
  *   node scripts/google-calendar-sync-dry-run.mjs --fixture docs/project-control/google-calendar-live-events.fixture.json
  *   node scripts/google-calendar-sync-dry-run.mjs --fixture <path> --output local-sync-reports/result.json
+ *   node scripts/google-calendar-sync-dry-run.mjs --auth-status
  *   node scripts/google-calendar-sync-dry-run.mjs --live-readonly
+ *   node scripts/google-calendar-sync-dry-run.mjs --live-readonly --output local-sync-reports/gate-2d.json
  */
 
 import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'fs';
@@ -41,19 +70,28 @@ import { fileURLToPath } from 'url';
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const today = new Date().toISOString().slice(0, 10);
 const SOURCE_FILE = 'docs/project-control/google-calendar-source-records.json';
-const CREDENTIALS_FILE = 'google-calendar-credentials.json';
-const TOKEN_FILE = 'token.json';
+const CANONICAL_CREDENTIALS_FILE = 'docs/project-control/google-calendar-credentials.local.json';
+const CANONICAL_TOKEN_FILE = 'docs/project-control/google-calendar-token.local.json';
+const LEGACY_CREDENTIALS_FILE = 'google-calendar-credentials.json';
+const LEGACY_TOKEN_FILE = 'token.json';
 const REPORT_DIR = 'local-sync-reports';
 
 const args = process.argv.slice(2);
+const isHelp = args.includes('--help') || args.includes('-h');
+const isAuthStatus = args.includes('--auth-status');
 const isLive = args.includes('--live') || args.includes('--live-readonly');
 const isFixture = args.includes('--fixture');
-const isLocalOnly = !isLive && !isFixture;
+const isLocalOnly = !isHelp && !isAuthStatus && !isLive && !isFixture;
+const allowLegacyRoot = args.includes('--allow-legacy-root-credentials');
 
 const fixtureIdx = args.indexOf('--fixture');
 const fixtureArg = fixtureIdx >= 0 ? args[fixtureIdx + 1] : null;
 const outputIdx = args.indexOf('--output');
 const outputArg = outputIdx >= 0 ? args[outputIdx + 1] : null;
+const credPathIdx = args.indexOf('--credential-path');
+const credPathArg = credPathIdx >= 0 ? args[credPathIdx + 1] : null;
+const tokenPathIdx = args.indexOf('--token-path');
+const tokenPathArg = tokenPathIdx >= 0 ? args[tokenPathIdx + 1] : null;
 
 const VALID_ROLES = ['ritual', 'phase-gate', 'milestone', 'package-review', 'package-closeout', 'budget-review', 'roadmap-reset'];
 const VALID_STATUS = ['active', 'paused', 'archived'];
@@ -659,6 +697,137 @@ function writeArtifact(artifact, relPath) {
   return relPath;
 }
 
+// ─── Credential/token path resolution ─────────────────────────────────────
+
+function resolveCredPaths() {
+  if (credPathArg && !isPathGitignored(credPathArg)) {
+    console.error(`FATAL: --credential-path "${credPathArg}" is not gitignored. Refusing to use.`);
+    process.exit(1);
+  }
+  if (tokenPathArg && !isPathGitignored(tokenPathArg)) {
+    console.error(`FATAL: --token-path "${tokenPathArg}" is not gitignored. Refusing to use.`);
+    process.exit(1);
+  }
+
+  let credFile = credPathArg || CANONICAL_CREDENTIALS_FILE;
+  let tokenFile = tokenPathArg || CANONICAL_TOKEN_FILE;
+
+  if (!credPathArg && allowLegacyRoot && !existsSync(join(ROOT, credFile))) {
+    if (existsSync(join(ROOT, LEGACY_CREDENTIALS_FILE))) {
+      console.log('LEGACY_ROOT_CREDENTIAL_PATH_USED — falling back to google-calendar-credentials.json (root).');
+      console.log(`  Canonical preferred: ${CANONICAL_CREDENTIALS_FILE}`);
+      credFile = LEGACY_CREDENTIALS_FILE;
+    }
+  }
+  if (!tokenPathArg && allowLegacyRoot && !existsSync(join(ROOT, tokenFile))) {
+    if (existsSync(join(ROOT, LEGACY_TOKEN_FILE))) {
+      console.log('LEGACY_ROOT_CREDENTIAL_PATH_USED — falling back to token.json (root).');
+      console.log(`  Canonical preferred: ${CANONICAL_TOKEN_FILE}`);
+      tokenFile = LEGACY_TOKEN_FILE;
+    }
+  }
+
+  return { credFile, tokenFile };
+}
+
+// ─── Help mode ─────────────────────────────────────────────────────────────
+
+function runHelp() {
+  console.log(`
+Google Calendar Sync Dry-Run — AI Project OS v1.6
+Usage: node scripts/google-calendar-sync-dry-run.mjs [mode] [options]
+
+MODES (default: --local-only)
+  (no flag)         Local-only validation — no API calls, no credentials needed
+  --local-only      Same as default
+  --fixture <path>  Fixture/mock comparison — no API calls, no credentials needed
+  --auth-status     Credential/token readiness check (existence + gitignore only)
+  --live-readonly   Live Google Calendar comparison, read-only (Gate 2B)
+                    Requires: credentials + token + Coordinator authorization
+  --help, -h        Show this help
+
+CANONICAL CREDENTIAL PATHS (defaults)
+  Credential: ${CANONICAL_CREDENTIALS_FILE}
+  Token:      ${CANONICAL_TOKEN_FILE}
+
+CREDENTIAL/TOKEN OPTIONS
+  --credential-path <path>         Override credential file (must be gitignored)
+  --token-path <path>              Override token file (must be gitignored)
+  --allow-legacy-root-credentials  Fallback to root credential/token paths if canonical missing
+                                   (warns LEGACY_ROOT_CREDENTIAL_PATH_USED)
+
+OUTPUT OPTIONS
+  --output <path>   Artifact output path (must be under local-sync-reports/)
+                    Default: local-sync-reports/google-calendar-dry-run-<timestamp>.json
+
+OAUTH BOOTSTRAP (requires explicit Coordinator authorization)
+  Check readiness:  node scripts/google-calendar-auth-bootstrap.mjs --auth-status
+  Generate token:   node scripts/google-calendar-auth-bootstrap.mjs --init-oauth
+                    (writes ${CANONICAL_TOKEN_FILE})
+
+SAFETY
+  --live-readonly never creates, updates, deletes, or cancels calendar events.
+  --apply is not part of this script. Gate 3 uses google-calendar-sync-apply.mjs.
+  Artifacts are written only to local-sync-reports/ (gitignored).
+  Credentials and tokens are never printed.
+`);
+  process.exit(0);
+}
+
+// ─── Auth status mode ──────────────────────────────────────────────────────
+
+function runAuthStatus() {
+  console.log(`\nGOOGLE CALENDAR AUTH STATUS — ${today}`);
+  console.log('Source: scripts/google-calendar-sync-dry-run.mjs --auth-status');
+  console.log('Mode: AUTH STATUS — existence and gitignore checks only — no contents read');
+  console.log('');
+
+  const { credFile, tokenFile } = resolveCredPaths();
+
+  const credExists = existsSync(join(ROOT, credFile));
+  const tokenExists = existsSync(join(ROOT, tokenFile));
+  const credIgnored = isPathGitignored(credFile);
+  const tokenIgnored = isPathGitignored(tokenFile);
+
+  console.log(`Credential file:  ${credFile}`);
+  console.log(`  Present:        ${credExists ? 'YES' : 'NO — file missing'}`);
+  console.log(`  Gitignored:     ${credIgnored ? 'YES' : 'NO — SAFETY FAILURE'}`);
+  console.log('');
+  console.log(`Token file:       ${tokenFile}`);
+  console.log(`  Present:        ${tokenExists ? 'YES' : 'NO — OAuth bootstrap required'}`);
+  console.log(`  Gitignored:     ${tokenIgnored ? 'YES' : 'NO — SAFETY FAILURE'}`);
+  console.log('');
+
+  if (!credIgnored || !tokenIgnored) {
+    console.log('FATAL: A credential or token path is not gitignored. Fix before proceeding.');
+    process.exit(1);
+  }
+
+  if (!credExists) {
+    console.log('STATUS: CREDENTIAL_MISSING');
+    console.log(`  Place credentials at: ${credFile}`);
+    console.log('  See: docs/project-control/google-calendar-credentials.example.md');
+    process.exit(1);
+  }
+
+  if (!tokenExists) {
+    console.log('STATUS: OAUTH_BOOTSTRAP_REQUIRED');
+    console.log('  Credential file found. Token not yet generated.');
+    console.log('  Run OAuth bootstrap (requires explicit Coordinator authorization):');
+    console.log('    node scripts/google-calendar-auth-bootstrap.mjs --init-oauth');
+    process.exit(1);
+  }
+
+  console.log('STATUS: READY');
+  console.log('  Credential and token files are present and gitignored.');
+  console.log('  When authorized, run:');
+  console.log('    node scripts/google-calendar-sync-dry-run.mjs --live-readonly');
+  console.log('');
+  console.log('---');
+  console.log('No credentials or tokens were read. No API calls were made.');
+  process.exit(0);
+}
+
 // ─── Shared result printer ──────────────────────────────────────────────────
 
 function printComparisonResults(actions) {
@@ -866,20 +1035,30 @@ async function runLiveMode(records, outputArg) {
   console.log('Gate 2B — requires credentials + googleapis + separate Coordinator authorization');
   console.log('');
 
-  // Credential check
-  const credPath = join(ROOT, CREDENTIALS_FILE);
-  const tokenPath = join(ROOT, TOKEN_FILE);
+  // Credential/token path resolution (canonical first; legacy only with --allow-legacy-root-credentials)
+  const { credFile, tokenFile } = resolveCredPaths();
+  const credPath = join(ROOT, credFile);
+  const tokenPath = join(ROOT, tokenFile);
   const credMissing = !existsSync(credPath);
   const tokenMissing = !existsSync(tokenPath);
 
   if (credMissing || tokenMissing) {
-    console.log('CREDENTIAL_MISSING — Google Calendar API credentials not found.');
-    if (credMissing) console.log(`  Missing: ${CREDENTIALS_FILE}`);
-    if (tokenMissing) console.log(`  Missing: ${TOKEN_FILE}`);
+    if (credMissing) {
+      console.log('CREDENTIAL_MISSING — Google Calendar credential file not found.');
+      console.log(`  Expected: ${credFile}`);
+      console.log('  See: docs/project-control/google-calendar-credentials.example.md');
+    }
+    if (tokenMissing) {
+      console.log('OAUTH_BOOTSTRAP_REQUIRED — Google Calendar token not found.');
+      console.log(`  Expected: ${tokenFile}`);
+      if (!credMissing) {
+        console.log('  Credential file is present. Run OAuth bootstrap to generate the token:');
+        console.log('    node scripts/google-calendar-auth-bootstrap.mjs --init-oauth');
+        console.log('  (Requires explicit Coordinator authorization before running.)');
+      }
+    }
     console.log('');
-    console.log('To set up credentials: docs/project-control/google-calendar-credentials.example.md');
     console.log('Current gate status: LIVE_READINESS_BLOCKED_CREDENTIALS_MISSING');
-    console.log('');
     console.log('---');
     console.log('No external sync was performed. No files were modified by this script.');
     process.exit(1);
@@ -911,13 +1090,13 @@ async function runLiveMode(records, outputArg) {
   try {
     credentials = JSON.parse(readFileSync(credPath, 'utf8'));
   } catch (e) {
-    console.error(`FATAL: Could not parse ${CREDENTIALS_FILE}: ${e.message}`);
+    console.error(`FATAL: Could not parse ${credFile}: ${e.message}`);
     process.exit(1);
   }
   try {
     token = JSON.parse(readFileSync(tokenPath, 'utf8'));
   } catch (e) {
-    console.error(`FATAL: Could not parse ${TOKEN_FILE}: ${e.message}`);
+    console.error(`FATAL: Could not parse ${tokenFile}: ${e.message}`);
     process.exit(1);
   }
 
@@ -993,20 +1172,26 @@ async function runLiveMode(records, outputArg) {
 
 // ─── Main ──────────────────────────────────────────────────────────────────
 
-const records = loadSourceRecords();
+if (isHelp) {
+  runHelp();
+} else if (isAuthStatus) {
+  runAuthStatus();
+} else {
+  const records = loadSourceRecords();
 
-if (isLocalOnly) {
-  runLocalMode(records);
-} else if (isFixture) {
-  if (!fixtureArg) {
-    console.error('FATAL: --fixture requires a file path argument.');
-    console.error('  Example: --fixture docs/project-control/google-calendar-live-events.fixture.json');
-    process.exit(1);
+  if (isLocalOnly) {
+    runLocalMode(records);
+  } else if (isFixture) {
+    if (!fixtureArg) {
+      console.error('FATAL: --fixture requires a file path argument.');
+      console.error('  Example: --fixture docs/project-control/google-calendar-live-events.fixture.json');
+      process.exit(1);
+    }
+    runFixtureMode(records, fixtureArg, outputArg);
+  } else if (isLive) {
+    runLiveMode(records, outputArg).catch(e => {
+      console.error(`FATAL: ${e.message}`);
+      process.exit(1);
+    });
   }
-  runFixtureMode(records, fixtureArg, outputArg);
-} else if (isLive) {
-  runLiveMode(records, outputArg).catch(e => {
-    console.error(`FATAL: ${e.message}`);
-    process.exit(1);
-  });
 }

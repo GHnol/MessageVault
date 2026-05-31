@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.6.2 | AI Project OS v1.6 — Gate 2D Repair: Canonical OAuth Bootstrap | 2026-05-31 | In progress on branch `docs/google-calendar-oauth-path-alignment`; no OAuth run; no live API; Gate 2D re-run pending after merge |
 | 1.6.1 | AI Project OS v1.6 — Gate 2A: Live Dry-Run Comparison Logic | 2026-05-31 | Gate 2A in progress (branch `docs/google-calendar-live-dry-run-logic`, uncommitted); Gate 2B pending googleapis + credentials |
 | 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync, Gate 1 | 2026-05-30 | Gate 1 COMPLETE — merged `5c4bd28`; Gate 2A in progress; Gate 2B/3 pending Coordinator authorization |
 | 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | complete — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27 |

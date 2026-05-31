@@ -227,7 +227,14 @@ checkGrep('google-calendar-sync SKILL.md has name:', '.claude/skills/google-cale
 checkGrep('google-calendar-sync SKILL.md has description:', '.claude/skills/google-calendar-sync/SKILL.md', 'description:');
 checkGitignore('token.json gitignored (v1.6)', 'token.json');
 checkGitignore('google-calendar-token.json gitignored (v1.6)', 'google-calendar-token.json');
+checkGitignore('canonical credentials.local.json gitignored (v1.6 repair)', 'docs/project-control/google-calendar-credentials.local.json');
+checkGitignore('canonical token.local.json gitignored (v1.6 repair)', 'docs/project-control/google-calendar-token.local.json');
 checkGitignore('external-sync-map.local.json gitignored (v1.6 verify)', 'docs/project-control/external-sync-map.local.json');
+checkFile('scripts/google-calendar-auth-bootstrap.mjs (v1.6 repair OAuth bootstrap)', 'scripts/google-calendar-auth-bootstrap.mjs');
+checkGrep('google-calendar-auth-bootstrap.mjs has --auth-status mode', 'scripts/google-calendar-auth-bootstrap.mjs', '--auth-status');
+checkGrep('google-calendar-auth-bootstrap.mjs has --init-oauth mode', 'scripts/google-calendar-auth-bootstrap.mjs', '--init-oauth');
+checkGrep('google-calendar-sync-dry-run.mjs uses canonical credential path', 'scripts/google-calendar-sync-dry-run.mjs', 'CANONICAL_CREDENTIALS_FILE');
+checkGrep('google-calendar-sync-dry-run.mjs has --auth-status mode', 'scripts/google-calendar-sync-dry-run.mjs', '--auth-status');
 checkGrep('google-calendar-sync-apply.mjs has --confirm-live-calendar-apply guard', 'scripts/google-calendar-sync-apply.mjs', 'confirm-live-calendar-apply');
 checkGrep('google-calendar-sync-apply.mjs has --apply hard stop', 'scripts/google-calendar-sync-apply.mjs', 'hasApply');
 checkGrep('google-calendar-source-records.json is valid JSON (grep check)', 'docs/project-control/google-calendar-source-records.json', 'os_id');
