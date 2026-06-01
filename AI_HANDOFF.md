@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — AI Project OS v1.7 Gate 3 IN PROGRESS. Branch `docs/ai-project-os-v1-7-report-mirroring-intake`. Implementation complete, pending Coordinator review. No external mutations. Package 5B blocked.
+**Status:** `complete` — AI Project OS v1.7 Gate 3 COMPLETE. Implementation committed `4790c63`, merged to main `a86ae11` 2026-06-01. Working tree clean. 201 OS audit pass. Package 5B blocked. Gate 4 pending Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,21 +18,21 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake` |
-| **Active branch** | `docs/ai-project-os-v1-7-report-mirroring-intake` |
-| **main HEAD** | `d872f68` — docs: sync state after AI Project OS v1.7 Gate 2 merge |
-| **Last completed pass** | `AI Project OS v1.7 Gate 2` — state freshness validator + decision matrix — merged `3db3074` 2026-06-01 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `a86ae11` — Merge branch 'docs/ai-project-os-v1-7-report-mirroring-intake' |
+| **Last completed pass** | `AI Project OS v1.7 Gate 3` — report mirroring intake — merged `a86ae11` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
 
 ---
 
-## Objective (active pass — v1.7 Gate 3)
+## Objective (last completed pass — v1.7 Gate 3)
 
 AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake.
 
-**Gate 3 IN PROGRESS — branch `docs/ai-project-os-v1-7-report-mirroring-intake`.** Delivered:
+**Gate 3 COMPLETE — merged `a86ae11` 2026-06-01.** Delivered:
 1. `scripts/report-mirror-intake.mjs` — dependency-free Node ESM intake script. Default dry-run. `--input`/`--stdin`. `--type`, `--apply`, `--redact-only`, `--json`, `--redact-risk-accepted`. Redacts `ghp_*`, `github_pat_*`, `ghs_*`, PEM blocks, `GOCSPX-*`, `ya29.*`, `1//*`. Never prints secrets. Exit 0/1.
 2. `docs/project-control/report-mirror-policy.md` — mirroring policy, what is/isn't mirrored, mandatory vs skip rules, automation distinctions, redaction safeguards.
 3. `docs/project-control/report-mirror-schema.md` — schema: 10 report_type values, 4 source_type values, 4 mirror_status values, metadata fields, example (fake data).
@@ -112,16 +112,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 3 implementation complete on branch `docs/ai-project-os-v1-7-report-mirroring-intake`. Awaiting Coordinator review.
+Gate 3 is merged to main (`a86ae11`). State-sync commit in progress.
 
-If Coordinator approves:
-1. Commit Gate 3 implementation on this branch.
-2. Merge to main.
-3. State-sync commit if needed.
-4. Push to origin/main.
-5. Proceed to v1.7 Gate 4 (Start Router, Context Usage, and Model Routing Hardening) when authorized.
+Push to `origin/main` pending separate Coordinator authorization (covers implementation commit `4790c63`, merge commit `a86ae11`, and this state-sync commit).
 
-Do not commit, push, or merge without explicit Coordinator instruction. Do not start Package 5B.
+Coordinator then authorizes v1.7 Gate 4 (Start Router, Context Usage, and Model Routing Hardening) or any other next direction.
+
+Do not start Gate 4 or Package 5B. Do not push without explicit instruction.
 
 ---
 
