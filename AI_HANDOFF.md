@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — AI Project OS v1.7 Gate 5 IN PROGRESS on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`. Implementation in progress. Package 5B blocked. Gate 5 pending Coordinator review.
+**Status:** `complete` — AI Project OS v1.7 Gate 5 COMPLETE. Implementation committed `a9a94e5` 2026-06-01. Working tree clean. 253 OS audit pass. Package 5B blocked. Merge to main pending Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -46,7 +46,7 @@ AI Project OS v1.7 Gate 5 — External Sync Consistency Validators.
 11. `scripts/start-router.mjs` — Gate 5 awareness; external sync consistency signal.
 12. State files, CHANGELOG, version-history, current-sprint, kanban-board updated.
 
-**Pending:** Coordinator review, then commit.
+**COMPLETE — committed `a9a94e5` 2026-06-01.**
 
 **Repair applied (post-initial-implementation):** Fixed local sync-map shape parsing (apply-script shape `google_calendar.events[os_id]` and `github_projects.issues[os_id]`), added `--fixture-test` mode, scoped `FAIL_GCAL_POSSIBLE_DUPLICATE` to KeepMees-related events only, fixed googleapis Windows ESM import path, fixed GHP live query to use stdin JSON. Local-only now exits 0 (WARN only). Fixture-test exits 0. GCal live read-only: PASS (6 pass, 0 warn, 0 fail — all 10 source records confirmed). GHP live read-only: PASS (5 pass, 13 warn, 0 fail — all 11 KM-PC-* items found; 13 WARNs are expected due to absent GHP local map section). OS audit: 253 pass, 0 warn, 0 fail.
 
@@ -163,11 +163,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 5 implementation is in progress on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`.
+Gate 5 committed `a9a94e5` 2026-06-01. Merge to main pending separate Coordinator authorization.
 
-Coordinator reviews Gate 5 implementation report. If approved, commit and merge Gate 5.
+Push to `origin/main` pending separate Coordinator authorization.
 
-Do not start Package 5B. Do not push without explicit instruction. No external mutations authorized.
+Coordinator then authorizes v1.7 Gate 6 (Documentation-Watch and Bootstrap Copy-Forward Finalization) or any other next direction.
+
+Do not start Gate 6 or Package 5B. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

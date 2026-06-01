@@ -47,11 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 5 IN PROGRESS on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`. Implementation complete. Pending verification + Coordinator review. |
+| Resume into | AI Project OS v1.7 Gate 5 COMPLETE and committed `a9a94e5` 2026-06-01. Merge to main pending Coordinator authorization. |
 | Branch | `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
 | main HEAD | `617b494` — docs: sync state after AI Project OS v1.7 Gate 4 merge |
-| Next action | Run `/start`. Gate 5 implementation complete and verified. Await Coordinator approval for commit. Do not commit or push without explicit instruction. |
-| OS audit | Gate 4: 223 pass; Gate 5 adds ~30 checks (est. ~253 total) — run `node scripts/os-self-audit.mjs` to confirm |
+| Next action | Run `/start`. Gate 5 committed. Await Coordinator authorization to merge. Do not start Gate 6 or Package 5B without explicit Coordinator authorization. |
+| OS audit | Gate 5: 253 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (3 accepted cosmetic WARNs) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
