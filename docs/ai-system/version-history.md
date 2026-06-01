@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.7.5 | AI Project OS v1.7 Gate 5 — External Sync Consistency Validators | 2026-06-01 | IN PROGRESS — on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
+| 1.7.5 | AI Project OS v1.7 Gate 5 — External Sync Consistency Validators | 2026-06-01 | COMPLETE — merged `2b37e13` 2026-06-01 |
 | 1.7.4 | AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | 2026-06-01 | COMPLETE — merged `352356b` 2026-06-01 |
 | 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | COMPLETE — merged `a86ae11` 2026-06-01 |
 | 1.7.2 | AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators | 2026-06-01 | COMPLETE — merged `3db3074` 2026-06-01 |
@@ -37,8 +37,8 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ## 1.7.5 — AI Project OS v1.7 Gate 5: External Sync Consistency Validators (2026-06-01)
 
-**Branch:** `docs/ai-project-os-v1-7-external-sync-consistency-validators` (in progress)
-**Status:** IN PROGRESS
+**Branch:** `docs/ai-project-os-v1-7-external-sync-consistency-validators` (merged)
+**Status:** COMPLETE — merged `2b37e13` 2026-06-01
 
 ### What this pass adds
 

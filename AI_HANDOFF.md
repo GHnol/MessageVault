@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.7 Gate 5 COMPLETE. Implementation committed `a9a94e5` 2026-06-01. Working tree clean. 253 OS audit pass. Package 5B blocked. Merge to main pending Coordinator authorization.
+**Status:** `complete` — AI Project OS v1.7 Gate 5 COMPLETE. Implementation committed `a9a94e5`, merged to main `2b37e13` 2026-06-01. Working tree clean. 253 OS audit pass. Package 5B blocked. Gate 6 pending Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.7 Gate 5` — External Sync Consistency Validators |
-| **Active branch** | `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
-| **main HEAD** | `617b494` — docs: sync state after AI Project OS v1.7 Gate 4 merge |
-| **Last completed pass** | `AI Project OS v1.7 Gate 4` — start router + model routing hardening — merged `352356b` 2026-06-01 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `2b37e13` — Merge branch 'docs/ai-project-os-v1-7-external-sync-consistency-validators' |
+| **Last completed pass** | `AI Project OS v1.7 Gate 5` — external sync consistency validators — merged `2b37e13` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
@@ -163,7 +163,7 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 5 committed `a9a94e5` 2026-06-01. Merge to main pending separate Coordinator authorization.
+Gate 5 merged to main (`2b37e13`) 2026-06-01. State-sync commit in progress.
 
 Push to `origin/main` pending separate Coordinator authorization.
 

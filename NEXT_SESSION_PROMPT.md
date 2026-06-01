@@ -47,19 +47,20 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 5 COMPLETE and committed `a9a94e5` 2026-06-01. Merge to main pending Coordinator authorization. |
-| Branch | `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
-| main HEAD | `617b494` — docs: sync state after AI Project OS v1.7 Gate 4 merge |
-| Next action | Run `/start`. Gate 5 committed. Await Coordinator authorization to merge. Do not start Gate 6 or Package 5B without explicit Coordinator authorization. |
+| Resume into | AI Project OS v1.7 Gate 5 COMPLETE and merged to main `2b37e13` 2026-06-01. No active pass. Awaiting Coordinator authorization for v1.7 Gate 6 or push to origin. |
+| Branch | `main` |
+| main HEAD | `2b37e13` — Merge branch 'docs/ai-project-os-v1-7-external-sync-consistency-validators' |
+| Next action | Run `/start` then `node scripts/start-router.mjs`. Gate 5 merged. Await Coordinator authorization for v1.7 Gate 6 or push. Do not start Gate 6 or Package 5B without explicit Coordinator authorization. |
 | OS audit | Gate 5: 253 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (3 accepted cosmetic WARNs) |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic WARNs accepted) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
-| v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
-| v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. |
-| v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01. |
+| v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01. `scripts/external-sync-consistency-check.mjs` + 253 OS audit checks delivered. |
 | v1.7 Gate 4 | COMPLETE — merged `352356b` 2026-06-01. `scripts/start-router.mjs` + model routing hardening + 223 OS audit checks delivered. |
-| Do not | Start Gate 5 or Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token. |
+| v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01. |
+| v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. |
+| v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
+| Do not | Start Gate 6 or Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

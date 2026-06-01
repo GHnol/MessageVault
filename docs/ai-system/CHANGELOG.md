@@ -11,7 +11,7 @@ Newest entries first.
 
 ## 2026-06-01 — AI Project OS v1.7: Gate 5 — External Sync Consistency Validators
 
-**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Status:** COMPLETE — merged `2b37e13` 2026-06-01. No external mutations. No product code. No Package 5B.
 **Scope:** Add repo-native external sync consistency validator (`scripts/external-sync-consistency-check.mjs`); define consistency policy, schema, log, and fixture; add `external-sync-consistency` skill and command; integrate consistency checks into closeout, precommit, weekly-sync, and project-sync-dry-run workflows; update OS self-audit (Section 6i); update start-router with Gate 5 awareness and external sync consistency signal; update project-control state.
 
 ### Added
