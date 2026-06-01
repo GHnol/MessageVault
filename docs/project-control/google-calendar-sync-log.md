@@ -27,6 +27,19 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — Gate 2D: live read-only dry-run COMPLETE
+
+- **Gate:** Gate 2D
+- **Method:** api-dry-run (read-only — no calendar mutations)
+- **Changed by:** Claude Code (Sonnet 4.6) + Coordinator (OAuth bootstrap, dry-run authorization)
+- **Events created:** none
+- **Events updated:** none
+- **Events removed:** none
+- **Credential status:** present (gitignored)
+- **Notes:** Gate 2D live read-only dry-run complete. OAuth bootstrap (`--init-oauth`) run 2026-06-01 with explicit Coordinator authorization. Token written to `docs/project-control/google-calendar-token.local.json` (gitignored, not committed). Live dry-run (`--live-readonly`) run with explicit Coordinator authorization. Fetched 478 live events from primary calendar. Source records: 10. Classification: 10 CREATE, 0 UPDATE, 0 NO_OP, 0 ADOPTION_REQUIRED, 0 DUPLICATE_DETECTED, 0 Gate 3 blockers. `gate3_apply_allowed: true`. Artifact: `local-sync-reports/google-calendar-dry-run-live-2026-06-01T00-21-06-514Z.json` (gitignored, local-only). No calendar events created, updated, or deleted. Gate 3 NOT STARTED — requires separate explicit Coordinator authorization.
+
+---
+
 ## 2026-05-31 — Gate 2D Repair: canonical OAuth bootstrap and credential path alignment
 
 - **Gate:** Gate 2D Repair (tooling pass — not a live calendar operation)
