@@ -33,6 +33,14 @@ Run in parallel:
 
 Confirm: remote is correct, git identity matches KeepMees repo, working tree is clean.
 
+Then run the start router in package-start mode:
+
+```
+node scripts/start-router.mjs --mode package-start
+```
+
+BLOCKED verdicts are hard stops — do not create a branch or begin implementation until resolved.
+
 ## Sync obligations
 
 - Before creating the package branch, verify that `AI_HANDOFF.md` status is `closed` (no in-progress work).
@@ -56,6 +64,8 @@ Then create the branch and begin.
 - Do not proceed if the working tree has unexpected modified files.
 - Do not proceed if `AI_HANDOFF.md` says another agent is mid-task on this branch.
 - Do not proceed if being asked to write product/app code with no authorized package.
+- Do not proceed if the start router returns a BLOCKED verdict.
+- Do not start Package 5B without explicit Coordinator authorization and a clean READY verdict from the start router.
 - Do not start a new package inside a bloated session — recommend `/clear` and a fresh session first.
 
 ## Approval boundaries

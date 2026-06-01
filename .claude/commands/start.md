@@ -12,6 +12,14 @@ Read, in this order:
 
 Then run: `git branch --show-current`, `git status --short`, `git log --oneline -10`
 
+Then run the start router and state freshness validator:
+```
+node scripts/start-router.mjs
+node scripts/state-freshness-check.mjs
+```
+
+A BLOCKED verdict from the start router is a hard stop — do not edit any file until resolved.
+
 Then state out loud — before editing any file:
 
 > Package: … | Branch: … | Objective: … | Scope: … | Exclusions: … | Done: … | Remaining: … | Next action: …

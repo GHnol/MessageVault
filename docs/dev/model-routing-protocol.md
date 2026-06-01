@@ -24,11 +24,13 @@ The repo uses three tiers, named by capability rather than by specific model so 
 
 | Tier | Purpose | Examples (current as of 2026-06-01) |
 |---|---|---|
-| **Light** | Mechanical edits, summaries, classification, checklist generation, small cleanup | Claude Haiku 4.5 |
-| **Default** | Normal coding, debugging, tests, docs, implementation | Claude Sonnet 4.6 |
-| **Strongest** | Architecture, complex debugging, risky changes, deep review, product/system planning, OS validator design, failed/repeated attempts, final audits | Claude Opus 4.8 |
+| **Light** | Mechanical edits, summaries, classification, checklist generation, small doc cleanup, low-risk report formatting | Claude Haiku 4.5 |
+| **Default** | Normal implementation, test fixes, script changes, doc and OS workflow implementation, normal debugging, most package work | Claude Sonnet 4.6 |
+| **Strongest** | Architecture, complex debugging, high-risk validators, external sync logic, final audits, repeated failures, broad planning, irreversible or hard-to-rollback changes, product decisions with structural consequences | Claude Opus 4.8 |
 
 **Model ID rule:** the "Examples" column lists currently known IDs but will become stale as generations advance. Always verify the current model list against `CLAUDE.md` § Environment or the Anthropic model documentation before treating a specific ID as mandatory. The tier intent is the durable contract; the model ID is the current implementation of that tier.
+
+**Do not use Strongest tier for routine mechanical edits, doc syncs, or summary work** — it burns tokens without improving quality. Reserve it for the conditions in the Strongest row above.
 
 ---
 
@@ -104,13 +106,61 @@ The tier intent (in the routing matrix) is portable; the model IDs are not.
 
 ---
 
+## Plan Mode and opusplan
+
+**Plan Mode** (`EnterPlanMode` tool) is a Claude Code built-in, not a separate skill. It is useful when:
+- Planning architecture or complex multi-file work before editing
+- Working in unfamiliar code where consequences are hard to assess
+- Evaluating risky changes before committing to an approach
+- Broad refactors spanning many files
+
+It is **not** needed for:
+- Tiny mechanical edits with clear scope
+- Single-file fixes where the action is obvious
+- Routine doc updates that follow a known template
+
+**"opusplan"** is not a Claude Code concept or feature. Do not use this term. Do not invent routing logic around it.
+
+If switching into Plan Mode or Strongest tier in a long active session: update `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` first if meaningful work is in progress. If context is bloated, prefer compact or fresh restart before switching to a heavier model.
+
+Model switching is **semi-automatic**: the agent recommends the tier and the switch rationale; the user confirms when the switch is costly (long session, large uncached context, mid-flight implementation).
+
+Do not claim automatic model switching — the harness does not expose programmatic model control to the agent.
+
+---
+
 ## Custom model settings
 
-- Project-level `.claude/settings.json` with a model key is **not** committed in this repo — no proof it is safe or stable across Claude Code versions.
-- User-level model preference is set by the user, not the agent.
-- The agent recommends a tier; the user selects the model within that tier.
-- Plan Mode (`EnterPlanMode` tool) is a Claude Code built-in, not a separate skill. Use it for architecture and complex planning before editing files. It is not "opusplan" — that term has no technical meaning here.
-- Do not adopt new model features (batch, extended thinking, etc.) without verifying they are stable, documented, and worth the added complexity. Scrutinous adoption: default to the established approach unless there is a clear verified gain.
+- Project-level `.claude/settings.json` with a model key is **not** committed in this repo — no proof it is safe or stable across Claude Code versions and contributor setups.
+- User-level model preference is set by the user in their own config, not by the agent.
+- The agent recommends a tier; the user selects the specific model within that tier.
+- Custom model settings may vary by account, plan, and Claude Code version. Do not hard-code fragile model IDs as universal project law — use tiers for durable policy.
+- `.claude/settings.local.json` remains local and gitignored (never commit it).
+- Do not commit `.claude/settings.json` unless the setting is shared, safe, non-secret, and explicitly approved by the Coordinator.
+
+---
+
+## Scrutinous adoption rule
+
+Do not adopt Claude/Codex features, Plan Mode patterns, hooks, subagents, MCP servers, extended thinking, batch APIs, or automation patterns merely because they are new or sound advanced.
+
+Only adopt if they materially improve one or more of:
+- **Reliability** — fewer failures, better recovery
+- **Automation** — less manual toil for repeatable work
+- **Safety** — fewer ways to make irreversible mistakes
+- **Efficiency** — measurable token or time savings
+- **Product outcomes** — directly benefits KeepMees or future repos
+
+**Reject, defer, or monitor** if the feature is:
+- Semantic sugar with no reliability or automation gain
+- Redundant with an existing pattern that already works
+- Hype-driven or immature (beta, undocumented, unstable API)
+- Too complex for the gain (adds maintenance burden without proportional value)
+- Not compatible with the AI Project OS enforcement model
+- Not enforceable enough to justify the maintenance cost
+- Not materially helpful for KeepMees, Puzzle, or future repos
+
+When in doubt: document the feature in the backlog as MONITOR, and revisit when it has a stable track record.
 
 ## What this protocol does NOT do
 
@@ -118,5 +168,6 @@ The tier intent (in the routing matrix) is portable; the model IDs are not.
 - It does not override the user's explicit model preference for a session.
 - It does not promise a specific model is in use — model IDs may drift. The tier is the contract; the model is the current implementation of that tier.
 - It does not add "opusplan" routing — that term has no technical meaning in this repo.
+- It does not claim context usage can be automatically inspected. Token counts are user-observed or reported by Claude Code UI; the agent cannot programmatically query them.
 
-See `model-switching-protocol.md` for the mechanics of switching, `context-hygiene-protocol.md` for when to compact/clear before switching, and `auto-management-protocol.md` for how routing fits the broader auto-management duties.
+See `model-switching-protocol.md` for the mechanics of switching, `context-hygiene-protocol.md` for when to compact/clear before switching, `auto-management-protocol.md` for how routing fits the broader auto-management duties, and `scripts/start-router.mjs` for the session startup routing recommendation tool.

@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -278,6 +278,41 @@ The audit does **not** require:
 
 ---
 
+## 6h. Start router layer (AI Project OS v1.7 Gate 4)
+
+Required when the repo has been updated to AI Project OS v1.7 Gate 4 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `scripts/start-router.mjs` exists | Required | `Glob scripts/start-router.mjs` |
+| `start-router.mjs` supports `--json` flag | Required | `Grep "\-\-json" scripts/start-router.mjs` |
+| `start-router.mjs` supports `--explain` flag | Required | `Grep "\-\-explain" scripts/start-router.mjs` |
+| `start-router.mjs` supports `--mode` flag | Required | `Grep "\-\-mode" scripts/start-router.mjs` |
+| `start-router.mjs` has `READY_FRESH_START` verdict | Required | `Grep "READY_FRESH_START" scripts/start-router.mjs` |
+| `start-router.mjs` has `READY_CONTINUE` verdict | Required | `Grep "READY_CONTINUE" scripts/start-router.mjs` |
+| `start-router.mjs` has `NEEDS_HANDOFF_UPDATE` verdict | Required | `Grep "NEEDS_HANDOFF_UPDATE" scripts/start-router.mjs` |
+| `start-router.mjs` has `BLOCKED_DIRTY_TREE` verdict | Required | `Grep "BLOCKED_DIRTY_TREE" scripts/start-router.mjs` |
+| `start-router.mjs` has `BLOCKED_PACKAGE_UNAUTHORIZED` verdict | Required | `Grep "BLOCKED_PACKAGE_UNAUTHORIZED" scripts/start-router.mjs` |
+| `start-router.mjs` has `BLOCKED_EXTERNAL_SYNC_RISK` verdict | Required | `Grep "BLOCKED_EXTERNAL_SYNC_RISK" scripts/start-router.mjs` |
+| `start-router.mjs` has `NEEDS_COORDINATOR_DECISION` verdict | Required | `Grep "NEEDS_COORDINATOR_DECISION" scripts/start-router.mjs` |
+| `start-router.mjs` declares no external API calls | Required | `Grep "No external API calls" scripts/start-router.mjs` |
+| `.claude/skills/start-router/SKILL.md` exists | Required | `Glob .claude/skills/start-router/SKILL.md` |
+| `.claude/commands/start-router.md` exists | Required | `Glob .claude/commands/start-router.md` |
+| `start` SKILL.md references `start-router.mjs` | Required | `Grep "start-router.mjs" .claude/skills/start/SKILL.md` |
+| `session-restart-protocol.md` references `start-router.mjs` | Required | `Grep "start-router.mjs" docs/dev/session-restart-protocol.md` |
+| `auto-management-protocol.md` references `/start-router` command | Required | `Grep "/start-router" docs/dev/auto-management-protocol.md` |
+| `model-routing-protocol.md` has scrutinous adoption rule | Required | `Grep "Scrutinous adoption rule" docs/dev/model-routing-protocol.md` |
+| `model-routing-protocol.md` has Plan Mode section | Required | `Grep "Plan Mode and opusplan" docs/dev/model-routing-protocol.md` |
+| `model-routing-protocol.md` rejects opusplan | Required | `Grep "opusplan" docs/dev/model-routing-protocol.md` |
+| `model-routing-protocol.md` preserves tier-based routing (not brittle model IDs) | Required | `Grep "Model ID rule" docs/dev/model-routing-protocol.md` |
+| `raw-transcripts/` is gitignored | Required | `git check-ignore -v raw-transcripts/example.md` |
+
+The audit does **not** require:
+- The start router to produce a READY verdict in all repo states (it should produce NEEDS_HANDOFF_UPDATE on an in-progress branch with a stale handoff — that is correct behavior)
+- A specific mode to be in use at audit time
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -326,7 +361,7 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 
 | Script | Classification | What it checks |
 |---|---|---|
-| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c + 6d + 6e + 6f + 6g (file existence, gitignore, Grep-based checks, GitHub Projects, Google Calendar, state freshness, and report mirroring layers) |
+| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c + 6d + 6e + 6f + 6g + 6h (file existence, gitignore, Grep-based checks, GitHub Projects, Google Calendar, state freshness, report mirroring, and start router layers) |
 | `scripts/project-control-sync-validate.mjs` | Recommended | Section 6 — project-control doc consistency |
 | `scripts/google-calendar-source-validate.mjs` | Recommended | Section 6e — Google Calendar source record schema validation |
 | `scripts/generate-project-calendar.mjs` | Recommended | Generates committed .ics from source records (no API calls) |

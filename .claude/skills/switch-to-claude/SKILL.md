@@ -34,6 +34,14 @@ Verify that the branch in `AI_HANDOFF.md` matches `git branch --show-current`. V
 
 ## Sync obligations
 
+After the git preflight, run the start router to confirm the session is safe to resume:
+
+```
+node scripts/start-router.mjs
+```
+
+If the verdict is BLOCKED or NEEDS_HANDOFF_UPDATE, resolve before proceeding. Do not begin editing files until the verdict is READY_CONTINUE or READY_FRESH_START.
+
 - Do not update state docs during this skill unless the handoff reveals operational misdirection.
 - If `AI_HANDOFF.md` is stale or conflicts with git state, stop and ask the Coordinator.
 

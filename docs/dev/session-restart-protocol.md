@@ -35,11 +35,16 @@ In every one of these cases, assume you know nothing that is not in the repo.
 5. Run `git branch --show-current`
 6. Run `git status --short`
 7. Run `git log --oneline -10`
-8. Read the package docs referenced in `AI_HANDOFF.md`
-9. Read `NEXT_SESSION_PROMPT.md` for the current pointer
-10. **State out loud, before editing anything:** current package, branch, objective, approved scope, hard exclusions, what is done, what remains, next exact action
+8. Run the start router to get a recommended startup route:
+   ```
+   node scripts/start-router.mjs
+   ```
+   BLOCKED verdicts are hard stops. NEEDS_* verdicts require action before proceeding. Use the verdict to decide whether to start fresh, continue, or update handoff first.
+9. Read the package docs referenced in `AI_HANDOFF.md`
+10. Read `NEXT_SESSION_PROMPT.md` for the current pointer
+11. **State out loud, before editing anything:** current package, branch, objective, approved scope, hard exclusions, what is done, what remains, next exact action
 
-Only after step 10 may any file be edited.
+Only after step 11 may any file be edited.
 
 ---
 
@@ -88,6 +93,7 @@ Then proceed.
 ## Relationship to other protocols
 
 - When to checkpoint before stopping: `context-hygiene-protocol.md`
+- Automated startup routing: `scripts/start-router.mjs` (run at step 8 above)
 - Model switch specifics: `model-switching-protocol.md`
 - Tool switch specifics: `tool-switching-protocol.md`
 - Operator Mode continuity: `docs/automation/operator-mode/context-continuity-protocol.md`

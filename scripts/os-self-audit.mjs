@@ -279,6 +279,30 @@ checkGitignore('local-report-intake/ gitignored (v1.7 Gate 3)', 'local-report-in
 checkGrep('closeout SKILL.md references report-mirror-intake.mjs', '.claude/skills/closeout/SKILL.md', 'report-mirror-intake.mjs');
 checkGrep('handoff SKILL.md references report-mirror-intake.mjs', '.claude/skills/handoff/SKILL.md', 'report-mirror-intake.mjs');
 
+// --- Section 6h: Start router layer (AI Project OS v1.7 Gate 4) ---
+checkFile('scripts/start-router.mjs (v1.7 start router)', 'scripts/start-router.mjs');
+checkGrep('start-router.mjs supports --json flag', 'scripts/start-router.mjs', '--json');
+checkGrep('start-router.mjs supports --explain flag', 'scripts/start-router.mjs', '--explain');
+checkGrep('start-router.mjs supports --mode flag', 'scripts/start-router.mjs', '--mode');
+checkGrep('start-router.mjs has READY_FRESH_START verdict', 'scripts/start-router.mjs', 'READY_FRESH_START');
+checkGrep('start-router.mjs has READY_CONTINUE verdict', 'scripts/start-router.mjs', 'READY_CONTINUE');
+checkGrep('start-router.mjs has NEEDS_HANDOFF_UPDATE verdict', 'scripts/start-router.mjs', 'NEEDS_HANDOFF_UPDATE');
+checkGrep('start-router.mjs has BLOCKED_DIRTY_TREE verdict', 'scripts/start-router.mjs', 'BLOCKED_DIRTY_TREE');
+checkGrep('start-router.mjs has BLOCKED_PACKAGE_UNAUTHORIZED verdict', 'scripts/start-router.mjs', 'BLOCKED_PACKAGE_UNAUTHORIZED');
+checkGrep('start-router.mjs has BLOCKED_EXTERNAL_SYNC_RISK verdict', 'scripts/start-router.mjs', 'BLOCKED_EXTERNAL_SYNC_RISK');
+checkGrep('start-router.mjs has NEEDS_COORDINATOR_DECISION verdict', 'scripts/start-router.mjs', 'NEEDS_COORDINATOR_DECISION');
+checkGrep('start-router.mjs declares no external API calls', 'scripts/start-router.mjs', 'No external API calls. No file writes. No mutations');
+checkFile('.claude/skills/start-router/SKILL.md (v1.7 start-router skill)', '.claude/skills/start-router/SKILL.md');
+checkFile('.claude/commands/start-router.md (v1.7 start-router command)', '.claude/commands/start-router.md');
+checkGrep('start SKILL.md references start-router.mjs', '.claude/skills/start/SKILL.md', 'start-router.mjs');
+checkGrep('session-restart-protocol.md references start-router.mjs', 'docs/dev/session-restart-protocol.md', 'start-router.mjs');
+checkGrep('auto-management-protocol.md references /start-router command', 'docs/dev/auto-management-protocol.md', '/start-router');
+checkGrep('model-routing-protocol.md has scrutinous adoption rule', 'docs/dev/model-routing-protocol.md', 'Scrutinous adoption rule');
+checkGrep('model-routing-protocol.md has Plan Mode section', 'docs/dev/model-routing-protocol.md', 'Plan Mode and opusplan');
+checkGrep('model-routing-protocol.md rejects opusplan', 'docs/dev/model-routing-protocol.md', 'opusplan');
+checkGrep('model-routing-protocol.md has tier-based routing (not brittle model IDs)', 'docs/dev/model-routing-protocol.md', 'Model ID rule');
+checkGitignore('raw-transcripts/ gitignored (v1.7 Gate 4)', 'raw-transcripts/example.md');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

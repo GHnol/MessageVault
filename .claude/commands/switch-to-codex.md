@@ -2,7 +2,12 @@ This command delegates to the **switch-to-codex** skill (`.claude/skills/switch-
 
 Prepare a Codex handoff and produce a transfer packet for tool switching.
 
-First: run the handoff sequence — update `AI_HANDOFF.md` with current state (same as `/handoff`).
+First: run the start router in handoff mode to check context safety:
+```
+node scripts/start-router.mjs --mode handoff --context-risk
+```
+
+Then: run the handoff sequence — update `AI_HANDOFF.md` with current state (same as `/handoff`).
 
 Run: `git branch --show-current`, `git status --short`, `git log --oneline -5`
 

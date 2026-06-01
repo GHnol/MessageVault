@@ -11,6 +11,12 @@ Read in order:
 
 Run: `git branch --show-current`, `git status --short`, `git log --oneline -5`
 
+Then run the start router in package-start mode:
+```
+node scripts/start-router.mjs --mode package-start
+```
+A BLOCKED verdict is a hard stop — do not create a branch or begin implementation until resolved.
+
 Confirm and state out loud:
 - The package is explicitly authorized by the Coordinator
 - No unauthorized in-progress work exists on this branch

@@ -11,7 +11,8 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | IN PROGRESS — branch `docs/ai-project-os-v1-7-report-mirroring-intake`; commit pending Coordinator approval |
+| 1.7.4 | AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | 2026-06-01 | IN PROGRESS — branch `docs/ai-project-os-v1-7-start-router-context-model-routing`; commit pending Coordinator approval |
+| 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | COMPLETE — merged `a86ae11` 2026-06-01 |
 | 1.7.2 | AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators | 2026-06-01 | COMPLETE — merged `3db3074` 2026-06-01 |
 | 1.7.1 | AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan | 2026-06-01 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
 | 1.6.3 | AI Project OS v1.6 — Advisory Repair: Sync-Map Read Path | 2026-06-01 | COMPLETE — merged `db45e6a` 2026-06-01; post-repair dry-run: 10 NO_OP, 0 MISSING_LOCAL_MAPPING |
@@ -33,10 +34,46 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ---
 
+## 1.7.4 — AI Project OS v1.7 Gate 4: Start Router, Context Usage, and Model Routing Hardening (2026-06-01)
+
+**Branch:** `docs/ai-project-os-v1-7-start-router-context-model-routing` (in progress)
+**Status:** IN PROGRESS — commit pending Coordinator approval
+
+### What this pass adds
+
+- **`scripts/start-router.mjs`** — repo-native start router. Inspects git state + durable state files. Produces one of 9 verdicts: READY_FRESH_START, READY_CONTINUE, NEEDS_HANDOFF_UPDATE, NEEDS_STATE_SYNC, BLOCKED_DIRTY_TREE, BLOCKED_WRONG_BRANCH, BLOCKED_PACKAGE_UNAUTHORIZED, BLOCKED_EXTERNAL_SYNC_RISK, NEEDS_COORDINATOR_DECISION. CLI: `--json`, `--explain`, `--paths`, `--mode`, `--strict`, `--recommend-model`, `--context-risk`. Read-only, no API calls, dependency-free Node ESM.
+- **`.claude/skills/start-router/SKILL.md`** — new skill for `/start-router` command.
+- **`.claude/commands/start-router.md`** — thin command wrapper.
+
+### What this pass updates
+
+- `docs/dev/model-routing-protocol.md` — strengthened tier definitions; added Strongest-tier boundary rule; added Plan Mode and opusplan section (Plan Mode = built-in tool, not a skill; opusplan = rejected jargon); added Scrutinous adoption rule section; expanded custom model settings; updated "does NOT do" section.
+- `docs/dev/session-restart-protocol.md` — step 8 added (run start router).
+- `docs/dev/context-hygiene-protocol.md` — decision table updated with start-router row; high uncached context protocol updated; chat-history vs repo-native signals section added; `claude --continue` warning strengthened.
+- `docs/dev/context-budget-checklist.md` — step 1 (start router), step 2 (branch type) added; anti-patterns updated.
+- `docs/dev/model-switching-protocol.md` — start router step added; no-auto-switching and no-Strongest-for-routine-edits rules added.
+- `docs/dev/auto-management-protocol.md` — session-start protocol updated with start router step; short command interface updated; "does NOT do" updated.
+- `docs/ai-system/universal-standards.md` — Scrutinous adoption rule section added; Session startup routing section added; automation table updated.
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6h added (22 items).
+- `scripts/os-self-audit.mjs` — Section 6h checks added (22 new checks); audit count rises ~201 → ~223.
+- Skills updated: `start`, `package-start`, `handoff`, `switch-to-codex`, `switch-to-claude` — all reference start router.
+- `.gitignore` — `raw-transcripts/` added.
+- `docs/project-control/current-sprint.md`, `kanban-board.md` — Gate 4 in progress.
+
+### Backlog (deferred)
+
+| Item | Deferred to |
+|---|---|
+| External sync consistency validators (live read-only) | Gate 5 |
+| Docs-watch evaluation template | Gate 6 |
+| Bootstrap-template.md v1.7 update | Gate 6 |
+
+---
+
 ## 1.7.3 — AI Project OS v1.7 Gate 3: Report Mirroring and Project-Control Log Intake (2026-06-01)
 
-**Branch:** `docs/ai-project-os-v1-7-report-mirroring-intake` (in progress)
-**Status:** IN PROGRESS — commit pending Coordinator approval
+**Branch:** `docs/ai-project-os-v1-7-report-mirroring-intake` (merged)
+**Status:** COMPLETE — merged `a86ae11` 2026-06-01
 
 ### What this pass adds
 

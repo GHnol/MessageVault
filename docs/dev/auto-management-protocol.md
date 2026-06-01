@@ -96,14 +96,15 @@ This is the standard session-restart sequence (see `session-restart-protocol.md`
 4. Read `CURRENT_STATE.md`.
 5. Read `NEXT_SESSION_PROMPT.md`.
 6. Run `git branch --show-current`, `git status --short`, `git log --oneline -10`.
-7. Read the package docs referenced by `AI_HANDOFF.md`.
-8. Read `docs/project-control/current-sprint.md` if relevant.
-9. Decide out loud whether this is a fresh session or a continuation.
-10. Decide out loud whether the session appears bloated or stale (long `claude --continue`, large uncached context, repeated failures, slow responses).
-11. If bloated/stale: recommend a fresh repo-truth session before doing anything else.
-12. Otherwise: state package, branch, objective, scope, exclusions, done, remaining, next exact action.
+7. Run the start router: `node scripts/start-router.mjs` — BLOCKED verdicts are hard stops; NEEDS_* verdicts require action before proceeding.
+8. Read the package docs referenced by `AI_HANDOFF.md`.
+9. Read `docs/project-control/current-sprint.md` if relevant.
+10. Decide out loud whether this is a fresh session or a continuation. Use the start router verdict as primary input.
+11. Decide out loud whether the session appears bloated or stale (long `claude --continue`, large uncached context, repeated failures, slow responses).
+12. If bloated/stale: recommend a fresh repo-truth session before doing anything else.
+13. Otherwise: state package, branch, objective, scope, exclusions, done, remaining, next exact action.
 
-Only after step 12 may any file be edited.
+Only after step 13 may any file be edited.
 
 ---
 
@@ -217,9 +218,11 @@ Acceptable to continue an existing session:
 ## What this protocol does NOT do
 
 - It does not commit or push for you. Even at boundaries, the agent proposes; the user authorizes.
-- It does not auto-switch models. The harness does not expose programmatic model switching to the agent in this version of Claude Code; claiming it would be fake automation.
+- It does not auto-switch models. The harness does not expose programmatic model switching to the agent; claiming it would be fake automation. Model switching is semi-automatic: the agent recommends, the user confirms.
 - It does not auto-compact. The user (or the harness) chooses.
+- It does not automatically inspect token usage. Token counts are user-observed in the Claude Code UI; the agent can only act on signals the user reports or that the harness shows.
 - It does not silently rewrite continuity files when their structure is uncertain. If a continuity file format change is needed, do it in a dedicated OS upgrade pass and log it in `docs/ai-system/CHANGELOG.md`.
+- It does not adopt new features merely because they are new. The scrutinous adoption rule (`docs/dev/model-routing-protocol.md` § "Scrutinous adoption rule") applies to all protocol and tooling changes.
 
 The OS is honest about which parts are policy and which parts are automatic. See `docs/ai-system/universal-standards.md` § "What is automatic, semi-automatic, and policy-driven".
 
@@ -231,13 +234,14 @@ The commands in `.claude/commands/` are the daily short interface to this protoc
 
 | Command | What it automates |
 |---|---|
-| `/start` | Session startup (Duty 1: repo-native memory read + 12-step sequence) |
+| `/start` | Session startup (Duty 1: repo-native memory read + start router + 13-step sequence) |
+| `/start-router` | Run start router — get READY/NEEDS/BLOCKED verdict before any file edit |
 | `/handoff` | Checkpoint / state update (Duty 1: trigger phrases) |
 | `/precommit` | Pre-commit gate |
 | `/closeout` | Package boundary closeout (Duty 2) |
-| `/package-start` | New package pre-flight |
-| `/switch-to-codex` | Codex relay (Codex relay readiness section) |
-| `/switch-to-claude` | Resume from Codex |
+| `/package-start` | New package pre-flight (runs start router in package-start mode) |
+| `/switch-to-codex` | Codex relay (runs start router in handoff mode first) |
+| `/switch-to-claude` | Resume from Codex (runs start router to verify safety) |
 | `/weekly-sync` | Weekly Tower sync |
 | `/status-summary` | Project state summary |
 | `/os-audit` | OS self-audit (verify bootstrap complete) |
@@ -253,7 +257,7 @@ Commands delegate to `.claude/skills/*/SKILL.md` (canonical layer). See `.claude
 
 | Trigger | Action |
 |---|---|
-| Session start | Run the 12-step session-start sequence |
+| Session start | Run the 13-step session-start sequence; use start router verdict as primary routing input |
 | File edits begin (any batch) | First batch only: capture intent in `AI_HANDOFF.md` |
 | Tests run | Update `AI_HANDOFF.md` with results |
 | Branch switch | Update `AI_HANDOFF.md`; never auto-stash |

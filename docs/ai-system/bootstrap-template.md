@@ -286,11 +286,13 @@ The new repo passes bootstrap when:
 - A fresh agent (Claude Code or Codex) can read `AGENTS.md` → tool layer → `AI_HANDOFF.md` → `CURRENT_STATE.md` and state out loud what to do next.
 - `docs/ai-system/CHANGELOG.md` has an entry for the bootstrap.
 - `version-history.md` has the bootstrap row.
-- `.gitignore` blocks Claude local settings, secrets, artifacts, and local external-sync maps.
+- `.gitignore` blocks Claude local settings, secrets, artifacts, local external-sync maps, and raw transcripts.
 - The PR template has AI-agent + continuity sections.
 - **Skills exist** — at minimum `start`, `handoff`, `precommit`, `closeout` with SKILL.md frontmatter.
+- **Start router exists** — `scripts/start-router.mjs` is present and passes `node --check`. Run it at startup: `node scripts/start-router.mjs`.
 - **OS self-audit passes** — run `/os-audit` (or `scripts/os-self-audit.mjs`) and receive `BOOTSTRAP COMPLETE`.
 - **Closeout sync contract exists** — `docs/dev/closeout-sync-contract.md` is present.
+- **Scrutinous adoption rule documented** — `docs/dev/model-routing-protocol.md` has the adoption rule section so new contributors know to evaluate features before adopting them.
 
 If any of those is missing, the bootstrap is incomplete. The OS self-audit script (`scripts/os-self-audit.mjs`) is the definitive check.
 

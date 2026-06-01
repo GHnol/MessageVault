@@ -9,6 +9,59 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — AI Project OS v1.7: Gate 4 — Start Router, Context Usage, and Model Routing Hardening
+
+**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-start-router-context-model-routing`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Scope:** Add repo-native start router (`scripts/start-router.mjs`); harden context restart, compact, clear, and handoff guidance; refresh tier-based model routing with scrutinous adoption rule, Plan Mode boundaries, and custom model settings guidance; wire start router into `/start`, `/package-start`, `/handoff`, `/switch-to-codex`, `/switch-to-claude` skills and commands; update OS audit (Section 6h); add `raw-transcripts/` to gitignore; update bootstrap template and universal standards.
+
+### Added
+
+- `scripts/start-router.mjs` — dependency-free Node ESM start router. No external API calls. No file writes. Read-only. Inspects: current branch, HEAD, git status, AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md, current-sprint.md, kanban-board.md, report-mirror-log.md, project-sync-log.md, google-calendar-sync-log.md, github-projects-sync-log.md. Produces verdict from 9 options (READY_FRESH_START, READY_CONTINUE, NEEDS_HANDOFF_UPDATE, NEEDS_STATE_SYNC, BLOCKED_DIRTY_TREE, BLOCKED_WRONG_BRANCH, BLOCKED_PACKAGE_UNAUTHORIZED, BLOCKED_EXTERNAL_SYNC_RISK, NEEDS_COORDINATOR_DECISION). CLI: `--json`, `--explain`, `--paths`, `--mode <fresh|continue|handoff|package-start>`, `--strict`, `--recommend-model`, `--context-risk`. Exit 0 on READY verdict with no FAILs; exit 1 on BLOCKED/NEEDS or any FAILs.
+- `.claude/skills/start-router/SKILL.md` — new skill: verdict table, output fields, hard stop conditions, approval boundaries.
+- `.claude/commands/start-router.md` — thin command wrapper for `/start-router`.
+
+### Updated
+
+- `.claude/skills/start/SKILL.md` — added start router and state freshness validator step to sync obligations; updated Backed by.
+- `.claude/skills/package-start/SKILL.md` — added `--mode package-start` start router step to git preflight; updated hard stop conditions.
+- `.claude/skills/handoff/SKILL.md` — added `--mode handoff` start router step before sync obligations.
+- `.claude/skills/switch-to-codex/SKILL.md` — added `--mode handoff --context-risk` start router step before handoff.
+- `.claude/skills/switch-to-claude/SKILL.md` — added start router verification step after git preflight.
+- `.claude/skills/README.md` — count updated 17 → 18; `start-router` row added.
+- `.claude/commands/start.md` — start router step added.
+- `.claude/commands/package-start.md` — start router step added.
+- `.claude/commands/switch-to-codex.md` — start router step added.
+- `.claude/commands/switch-to-claude.md` — start router step added.
+- `.claude/commands/README.md` — `/start-router` row added.
+- `docs/dev/session-restart-protocol.md` — step 8 added: run `node scripts/start-router.mjs`; relationship table updated.
+- `docs/dev/context-hygiene-protocol.md` — decision table updated with start-router row; high uncached context protocol updated (step 4: run start router; explicit note that token counts are user-observed not agent-queryable); Chat-history vs repo-native signals section added; `claude --continue` warning strengthened.
+- `docs/dev/context-budget-checklist.md` — step 1 added (start router), step 2 added (branch type); steps renumbered; output format example updated; anti-patterns table updated.
+- `docs/dev/model-routing-protocol.md` — tier definitions strengthened (Light/Default/Strongest rows improved); Strongest-tier boundary rule added; Plan Mode and opusplan section added; Scrutinous adoption rule section added; Custom model settings section expanded; "What this protocol does NOT do" updated; model ID rule preserved.
+- `docs/dev/model-switching-protocol.md` — decision flow step 1 added (run start router); steps 7–8 added (no auto-switching claim; no Strongest tier for routine edits).
+- `docs/dev/auto-management-protocol.md` — session-start protocol updated (step 7: run start router; steps renumbered 12 → 13); short command interface table updated (start-router added; package-start/switch-to-codex/switch-to-claude notes); "What this protocol does NOT do" updated (auto-switching, token count, scrutinous adoption).
+- `docs/ai-system/universal-standards.md` — Scrutinous adoption rule section added; Session startup routing section added; automation table updated (19 commands, 18 skills, start router semi-automatic row).
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6h added (22 items for start router layer); Scripts table updated; status header updated.
+- `scripts/os-self-audit.mjs` — Section 6h checks added (22 new checks for start router layer).
+- `.gitignore` — `raw-transcripts/` added.
+- `docs/project-control/current-sprint.md` — Gate 3 marked Done; Gate 4 In Progress.
+- `docs/project-control/kanban-board.md` — Gate 3 moved to Done; Gate 4 in In Progress.
+- `docs/ai-system/CHANGELOG.md` — this entry.
+- `docs/ai-system/version-history.md` — v1.7.4 row added.
+- State files updated to Gate 4 branch.
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read contents of, or written
+- `docs/project-control/external-sync-map.local.json` — not read or written
+- `local-sync-reports/` — gitignored, not committed
+- No GitHub Project mutations
+- No Package 5B work
+
+---
+
 ## 2026-06-01 — AI Project OS v1.7: Gate 3 — Report Mirroring and Project-Control Log Intake
 
 **Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-report-mirroring-intake`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.

@@ -29,16 +29,18 @@ Skip it for:
 
 State the answers out loud (briefly) before the first edit:
 
-1. **Task shape:** what kind of work — mechanical batch, exploration, implementation, audit?
-2. **Estimated tool-call budget:** rough order of magnitude (5? 50? 500?).
-3. **Search shape:** scoped (file/dir specified) or whole-repo (justified why)?
-4. **Reads needed:** which files, which line ranges if known.
-5. **Batching:** which calls can run in parallel.
-6. **Script path:** does any part justify a one-off script over many Edit calls?
-7. **Subagent path:** does any part justify delegating to `Explore` or `general-purpose`?
-8. **Tier:** which model tier is right (`model-routing-protocol.md`).
-9. **Context state:** is current session fresh, or already loaded? If already heavy, recommend `/clear` first.
-10. **Handoff state:** is `AI_HANDOFF.md` current enough that a context event would not lose work?
+1. **Start router:** run `node scripts/start-router.mjs` — is the verdict READY? If BLOCKED or NEEDS_*, resolve before continuing.
+2. **Branch type:** OS/docs-only branch? Product/feature branch? Or main (expect fresh-start only)?
+3. **Task shape:** what kind of work — mechanical batch, exploration, implementation, audit?
+4. **Estimated tool-call budget:** rough order of magnitude (5? 50? 500?).
+5. **Search shape:** scoped (file/dir specified) or whole-repo (justified why)?
+6. **Reads needed:** which files, which line ranges if known.
+7. **Batching:** which calls can run in parallel.
+8. **Script path:** does any part justify a one-off script over many Edit calls?
+9. **Subagent path:** does any part justify delegating to `Explore` or `general-purpose`?
+10. **Tier:** which model tier is right (`model-routing-protocol.md`). Default unless task is architecture, risky, or has failed twice.
+11. **Context state:** is current session fresh, or already loaded? If already heavy, recommend `/clear` first. Do not use `claude --continue` as the default after boundaries.
+12. **Handoff state:** is `AI_HANDOFF.md` current enough that a context event would not lose work?
 
 ---
 
@@ -64,12 +66,14 @@ That's it. The checklist is a discipline, not a deliverable.
 
 | Anti-pattern | What the checklist catches |
 |---|---|
-| Whole-repo Grep when one dir is enough | Step 3 forces "scoped or whole-repo? why?" |
-| Reading 10 files one at a time | Step 5 forces "which files, which ranges" |
-| Running 30 sequential edits when a script would do it once | Step 6 |
-| Spawning a subagent for a 1-file task | Step 7 |
-| Using strongest tier for routine edits | Step 8 |
-| Starting a heavy refactor in an already-bloated session | Step 9 |
-| Editing without `AI_HANDOFF.md` being current | Step 10 |
+| Starting on a BLOCKED branch | Step 1 — start router check |
+| Treating main as a working branch without checking verdict | Step 2 — branch type |
+| Whole-repo Grep when one dir is enough | Step 5 forces "scoped or whole-repo? why?" |
+| Reading 10 files one at a time | Step 6 forces "which files, which ranges" |
+| Running 30 sequential edits when a script would do it once | Step 8 |
+| Spawning a subagent for a 1-file task | Step 9 |
+| Using strongest tier for routine edits | Step 10 |
+| Defaulting to `claude --continue` after a merge or boundary | Step 11 |
+| Editing without `AI_HANDOFF.md` being current | Step 12 |
 
 See `token-efficiency-protocol.md` and `tool-batching-protocol.md` for the underlying rules.

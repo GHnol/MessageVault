@@ -33,7 +33,15 @@ Run in parallel:
 
 ## Sync obligations
 
-When preparing a handoff after meaningful work, run the state freshness validator to detect misdirection before the next agent picks up:
+When preparing a handoff after meaningful work, run the start router and state freshness validator to detect misdirection before the next agent picks up:
+
+```
+node scripts/start-router.mjs --mode handoff
+```
+
+If the start router returns `BLOCKED_*`, resolve the condition before completing the handoff.
+
+Then run the state freshness validator:
 
 ```
 node scripts/state-freshness-check.mjs
