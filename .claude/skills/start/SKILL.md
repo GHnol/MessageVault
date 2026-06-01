@@ -39,13 +39,17 @@ Also: `git rev-parse HEAD` to verify HEAD against what the durable state files r
 
 - Check that `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` reflect the current HEAD and package state.
 - If recent closeout context is needed, read `docs/project-control/report-mirror-log.md` for the latest mirrored state. The most recent entry date shows when the last operational summary was committed.
-- After the git preflight, optionally run the state freshness validator to detect misdirection before touching anything:
+- After the git preflight, run the start router and the state freshness validator to detect misdirection before touching anything:
 
   ```
+  node scripts/start-router.mjs
   node scripts/state-freshness-check.mjs
   ```
 
-  FAIL results are hard stop conditions. WARN results are informational — apply the Post-Commit State Rule.
+  Start router BLOCKED verdicts are hard stops. NEEDS_* verdicts require action before proceeding.
+  Freshness validator FAIL results are hard stop conditions. WARN results are informational — apply the Post-Commit State Rule.
+- If the start router returns `NEEDS_HANDOFF_UPDATE`, update `AI_HANDOFF.md` before continuing.
+- If the start router returns `NEEDS_STATE_SYNC`, run `node scripts/state-freshness-check.mjs` and apply the State-Sync Decision Matrix.
 - If any state doc would misdirect the next agent (wrong branch, wrong package, stale blocker), flag it and ask the Coordinator before proceeding.
 - Do not update state docs during startup unless the startup reveals operational misdirection. Cosmetic HEAD lag alone does not require a sync commit.
 
@@ -77,3 +81,5 @@ Stop and ask the Coordinator before editing anything if:
 
 `docs/dev/session-restart-protocol.md` — full 10-step sequence.
 `docs/dev/auto-management-protocol.md` — umbrella protocol.
+`scripts/start-router.mjs` — automated routing; run after git preflight.
+`scripts/state-freshness-check.mjs` — state freshness validator.

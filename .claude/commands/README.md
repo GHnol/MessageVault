@@ -16,7 +16,8 @@ When a command is invoked, Claude follows the skill protocol. The command file i
 
 | Command | Canonical skill | What it does | Backed by |
 |---|---|---|---|
-| `/start` | `start` | Session startup — read repo state, state package/branch/next action | `docs/dev/session-restart-protocol.md` |
+| `/start` | `start` | Session startup — read repo state, run start router, state package/branch/next action | `docs/dev/session-restart-protocol.md` |
+| `/start-router` | `start-router` | Run start router — get READY/NEEDS/BLOCKED verdict before any file edit | `scripts/start-router.mjs` |
 | `/handoff` | `handoff` | Update `AI_HANDOFF.md` and produce transfer packet | `docs/automation/operator-mode/context-continuity-protocol.md` |
 | `/precommit` | `precommit` | Walk the pre-commit verification gate | `docs/qa/pre-commit-verification-template.md` |
 | `/closeout` | `closeout` | Package boundary closeout + internal sync check | `docs/dev/package-boundary-closeout-protocol.md` |

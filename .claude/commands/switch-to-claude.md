@@ -4,6 +4,12 @@ Resume KeepMees work after a Codex session — read from repo truth, not from se
 
 Run: `git branch --show-current`, `git status --short`, `git log --oneline -10`
 
+Then run the start router to confirm the session is safe to resume:
+```
+node scripts/start-router.mjs
+```
+BLOCKED or NEEDS_HANDOFF_UPDATE verdicts must be resolved before editing files.
+
 Read in order:
 1. `AGENTS.md`
 2. `CLAUDE.md`

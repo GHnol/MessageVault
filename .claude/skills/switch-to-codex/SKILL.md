@@ -34,6 +34,14 @@ The working tree must be clean (or uncommitted changes must be explicitly descri
 
 ## Sync obligations
 
+Before producing the transfer packet, run the start router to check context safety:
+
+```
+node scripts/start-router.mjs --mode handoff --context-risk
+```
+
+If the start router recommends a handoff update, resolve it before switching. If it recommends `clear_and_restart`, update handoff files and recommend that Codex start from a fresh context.
+
 This skill runs the full handoff sequence (same as the `handoff` skill) before producing the transfer packet. After updating `AI_HANDOFF.md`, verify whether `CURRENT_STATE.md` and `NEXT_SESSION_PROMPT.md` also need updating to prevent misdirection of the incoming Codex session.
 
 ## Output format

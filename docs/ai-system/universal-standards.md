@@ -200,6 +200,43 @@ Policy-driven, with exceptions for genuinely independent edits.
 
 ---
 
+## Scrutinous adoption rule
+
+**Universal across all repos using this OS.**
+
+Do not adopt Claude/Codex features, Plan Mode patterns, hooks, subagents, MCP servers, extended thinking, batch APIs, or automation patterns merely because they are new or sound advanced.
+
+Only adopt if the feature materially improves one or more of:
+- Reliability (fewer failures, better recovery)
+- Automation (less manual toil for repeatable work)
+- Safety (fewer ways to make irreversible mistakes)
+- Efficiency (measurable token or time savings)
+- Product outcomes (directly benefits the project)
+
+Reject, defer, or monitor if the feature is: semantic sugar, redundant with an existing pattern, hype-driven, immature, too complex for the gain, not compatible with the AI Project OS enforcement model, not enforceable enough to justify maintenance, or not materially helpful for the project.
+
+When in doubt: document as MONITOR in the backlog. Revisit when the feature has a stable track record.
+
+Policy-driven. See `docs/dev/model-routing-protocol.md` § "Scrutinous adoption rule" for the full table.
+
+---
+
+## Session startup routing
+
+The repo includes a native start router (`scripts/start-router.mjs`) that inspects git state, durable state files, and project-control docs to recommend the safest startup route. Run it at the start of every non-trivial session, before reading state files:
+
+```
+node scripts/start-router.mjs
+```
+
+Verdicts: `READY_FRESH_START`, `READY_CONTINUE`, `NEEDS_HANDOFF_UPDATE`, `NEEDS_STATE_SYNC`, `BLOCKED_DIRTY_TREE`, `BLOCKED_WRONG_BRANCH`, `BLOCKED_PACKAGE_UNAUTHORIZED`, `BLOCKED_EXTERNAL_SYNC_RISK`, `NEEDS_COORDINATOR_DECISION`.
+
+BLOCKED verdicts are hard stops. NEEDS_* verdicts require action before proceeding. READY verdicts confirm it is safe to continue or start fresh.
+
+User-invoked via `/start-router` or as a step in `/start`. Semi-automatic: reads repo state and produces a recommendation; the agent acts on the recommendation.
+
+---
+
 ## Short Command Interface and Skills
 
 Long protocols live in repo docs. Daily operation uses short commands that delegate to canonical skills.
@@ -304,8 +341,9 @@ Every claim this OS makes is labelled. Status meanings:
 | Fresh-session restart preference at boundaries | Policy-driven — agent recommends; user decides |
 | Token efficiency rules (file reads vs paste, scoped vs whole-repo, etc.) | Policy-driven |
 | Tool batching plan format | Policy-driven |
-| Custom slash commands (`.claude/commands/*.md`) | User-invoked — 17 command wrappers committed; each delegates to matching skill. Commands: `/start`, `/handoff`, `/precommit`, `/closeout`, `/package-start`, `/switch-to-codex`, `/switch-to-claude`, `/weekly-sync`, `/calendar-sync-plan`, `/status-summary`, `/os-audit`, `/project-sync-dry-run`, `/project-sync-apply`, `/notification-setup-wizard`, `/github-project-setup`, `/github-project-template`, `/google-calendar-sync`. No automatic execution; approval boundaries unchanged. |
-| Project skills (`.claude/skills/*/SKILL.md`) | User-invoked — 16 skills with YAML frontmatter committed; skills are the canonical protocol layer; commands are compatibility wrappers. Skills: `start`, `handoff`, `precommit`, `closeout`, `package-start`, `switch-to-codex`, `switch-to-claude`, `weekly-sync`, `status-summary`, `os-audit`, `project-sync-dry-run`, `project-sync-apply`, `notification-setup-wizard`, `github-project-setup`, `github-project-template`, `google-calendar-sync`. |
+| Custom slash commands (`.claude/commands/*.md`) | User-invoked — 19 command wrappers committed; each delegates to matching skill. Commands: `/start`, `/start-router`, `/handoff`, `/precommit`, `/closeout`, `/package-start`, `/switch-to-codex`, `/switch-to-claude`, `/weekly-sync`, `/calendar-sync-plan`, `/status-summary`, `/os-audit`, `/project-sync-dry-run`, `/project-sync-apply`, `/notification-setup-wizard`, `/github-project-setup`, `/github-project-template`, `/google-calendar-sync`, `/report-intake`. No automatic execution; approval boundaries unchanged. |
+| Project skills (`.claude/skills/*/SKILL.md`) | User-invoked — 18 skills with YAML frontmatter committed; skills are the canonical protocol layer; commands are compatibility wrappers. Skills: `start`, `start-router`, `handoff`, `precommit`, `closeout`, `package-start`, `switch-to-codex`, `switch-to-claude`, `weekly-sync`, `status-summary`, `os-audit`, `project-sync-dry-run`, `project-sync-apply`, `notification-setup-wizard`, `github-project-setup`, `github-project-template`, `google-calendar-sync`, `report-intake`. |
+| Session startup router (`scripts/start-router.mjs`) | Semi-automatic — reads git state + durable state files; recommends READY/NEEDS/BLOCKED verdict; agent acts on recommendation; user confirms on BLOCKED |
 | Google Calendar live sync (`/google-calendar-sync`) | User-invoked — validates source records, runs local or live dry-run, and (after Gate 3 authorization) applies creates/updates. Three-gate model: Gate 1 repo foundation, Gate 2 read-only live dry-run, Gate 3 live apply. All mutations require `--apply` + approved artifact + Coordinator authorization. Delete/cancel requires separate per-item approval. |
 | Project subagents (`.claude/agents/*.md`) | Backlog — readiness placeholder only; no live subagents committed |
 | Closeout internal sync check | Policy-driven — mandatory after every meaningful closeout; the `closeout` skill runs it; no tool auto-enforces it |

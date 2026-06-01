@@ -1,6 +1,6 @@
 # .claude/skills — Skills (Canonical Protocol Layer)
 
-**Status:** ACTIVE — 17 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26); 1 added in v1.6 Google Calendar Live Sync (2026-05-30); 1 added in v1.7 Gate 3 Report Mirroring (2026-06-01).
+**Status:** ACTIVE — 18 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26); 1 added in v1.6 Google Calendar Live Sync (2026-05-30); 1 added in v1.7 Gate 3 Report Mirroring (2026-06-01); 1 added in v1.7 Gate 4 Start Router (2026-06-01).
 
 ---
 
@@ -18,7 +18,8 @@ This separation allows the canonical protocol to evolve independently of the com
 
 | Skill | What it does |
 |---|---|
-| `start` | Session startup — read repo state, declare package/branch/next action |
+| `start` | Session startup — read repo state, run start router, declare package/branch/next action |
+| `start-router` | Run `scripts/start-router.mjs` — get READY/NEEDS/BLOCKED verdict before any file edit |
 | `handoff` | Update `AI_HANDOFF.md` and produce transfer packet |
 | `precommit` | Walk the pre-commit verification gate |
 | `closeout` | Package boundary closeout + internal sync check |

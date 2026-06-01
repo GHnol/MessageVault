@@ -54,11 +54,14 @@ The update must include:
 
 ## Decision flow
 
-1. If the session is large but the **same task is still active**: `/compact` before switching (preserve useful context cheaply).
-2. If the task is at a boundary, the session is messy, or context is bloated: update handoff files, `/clear`, switch model, then restart from `NEXT_SESSION_PROMPT.md`.
-3. Never rely on chat history alone across a model switch.
-4. Git remains the source of truth. Repo docs remain durable memory.
-5. Do not commit or push as a side effect of a model switch unless explicitly instructed.
+1. Run the start router first: `node scripts/start-router.mjs --recommend-model` — use the context_risk output to inform the switch decision.
+2. If the session is large but the **same task is still active**: `/compact` before switching (preserve useful context cheaply).
+3. If the task is at a boundary, the session is messy, or context is bloated: update handoff files, `/clear`, switch model, then restart from `NEXT_SESSION_PROMPT.md`.
+4. Never rely on chat history alone across a model switch.
+5. Git remains the source of truth. Repo docs remain durable memory.
+6. Do not commit or push as a side effect of a model switch unless explicitly instructed.
+7. Do not claim automatic model switching — Claude Code does not expose programmatic model control to the agent. Switching is manual (user invokes) or semi-automatic (agent recommends, user confirms). Token/context counts are user-observed or harness-reported, not agent-queryable.
+8. Do not switch to the strongest tier for routine mechanical edits — see `model-routing-protocol.md` for tier guidance.
 
 ---
 

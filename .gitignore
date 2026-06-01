@@ -26,6 +26,7 @@ artifacts/
 !docs/project-control/keepmees-project-calendar.ics
 local-reports/
 local-report-intake/
+raw-transcripts/
 screenshots/
 .tmp-ai/
 _source-intake/

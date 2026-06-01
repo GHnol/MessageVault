@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- **AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake** · AI Workflow · Ph0 · branch `docs/ai-project-os-v1-7-report-mirroring-intake` · active — implementing report mirror intake script, policy, schema, log, runbook, skill
+- **AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening** · AI Workflow · Ph0 · branch `docs/ai-project-os-v1-7-start-router-context-model-routing` · active — implementing start router, context/model routing hardening
 
 ### Waiting / Blocked
 - **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · no package authorized as of 2026-05-24
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake** · AI Workflow · Ph0 · merged `a86ae11` 2026-06-01 — COMPLETE
 - **AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators** · AI Workflow · Ph0 · merged `3db3074` 2026-06-01 — COMPLETE
 - **AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan** · AI Workflow · Ph0 · merged `3c641a9` 2026-06-01 — COMPLETE
 - **AI Project OS v1.6 — Google Calendar Live Sync (Gates 1–3 + advisory repair)** · AI Workflow · Ph0 · Gate 3 merged; advisory repair merged `db45e6a` 2026-06-01 — COMPLETE
@@ -76,14 +77,14 @@
 ## View 2 — Sprint 2026-06-A: AI Project OS v1.7
 
 ### In Progress
-- AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake · AI Workflow · P1 · branch `docs/ai-project-os-v1-7-report-mirroring-intake`
+- AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening · AI Workflow · P2 · branch `docs/ai-project-os-v1-7-start-router-context-model-routing`
 
 ### Queued (pending Coordinator authorization per gate)
-- v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening
 - v1.7 Gate 5 — External Sync Consistency Validators
 - v1.7 Gate 6 — Documentation-Watch, Bootstrap Copy-Forward, Finalization
 
 ### Done (this sprint)
+- v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake · merged `a86ae11` 2026-06-01 ✓
 - v1.7 Gate 2 — Closeout and State Freshness Validators · merged `3db3074` 2026-06-01 ✓
 - v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan · merged `3c641a9` 2026-06-01 ✓
 

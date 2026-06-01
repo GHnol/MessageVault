@@ -38,15 +38,25 @@ When a trigger appears, **do not blindly clear, compact, or continue.** Run the 
 
 ## Decision table
 
+Use the start router output to inform this decision before acting:
+
+```
+node scripts/start-router.mjs --context-risk
+```
+
 | Situation | Action |
 |---|---|
 | Need to see what is consuming context | Use `/context`. Do not guess. |
 | Same task still active, useful context worth keeping | Update handoff files, then `/compact`. |
 | Switching to a different task | Update handoff files, close out current work, then `/clear`. |
-| After a task/package closeout | Update `CURRENT_STATE.md` + `NEXT_SESSION_PROMPT.md`, then `/clear`. |
+| After a task/package closeout, merge, or tool/model switch | Update `CURRENT_STATE.md` + `NEXT_SESSION_PROMPT.md`, then `/clear` + fresh session. |
 | Repeated failed attempts on the same step | Update handoff files, `/clear`, restart from `NEXT_SESSION_PROMPT.md`, consider model switch (see `model-switching-protocol.md`). |
 | Context bloated but repo handoff is current | Safe to `/clear`. |
 | Context bloated and repo handoff is NOT current | Update handoff files first. Never `/clear` on a stale handoff. |
+| Start router returns NEEDS_HANDOFF_UPDATE | Run `/handoff` before deciding to compact or clear. |
+| Start router returns NEEDS_STATE_SYNC | Run `node scripts/state-freshness-check.mjs` first, fix docs, then decide. |
+
+**Do not default to `claude --continue`.** `claude --continue` of long stale sessions drags the full prior transcript into every turn — slow, expensive, and risk of dropped decisions. Prefer a fresh session from repo truth at every package boundary, merge, or major context event. Continue an existing session only when the same narrow task is actively in-progress and context is still useful and small.
 
 ---
 
@@ -93,12 +103,27 @@ When Claude Code reports unusually high uncached token/context cost (e.g. 300k+,
 1. **Do not continue blindly.** A long uncached transcript is a continuity warning, not normal operation.
 2. **Do not default to `claude --continue`.** Long stale sessions drag the full transcript into every turn, are slow, and increase the risk of dropped decisions.
 3. **Require that `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` are current.** Update first if not.
-4. **Recommend a fresh session from repo truth.** A fresh Claude session in this repo should be able to resume from `AGENTS.md` + `CLAUDE.md` + `AI_HANDOFF.md` + `CURRENT_STATE.md` + git state, without dragging the prior transcript.
-5. **Continue the existing session only if the active uncached context is genuinely needed** and the user accepts the cost. State that judgment out loud before continuing.
+4. **Run the start router.** Use `node scripts/start-router.mjs --context-risk` to get a machine-readable assessment before deciding.
+5. **Recommend a fresh session from repo truth.** A fresh Claude session in this repo should be able to resume from `AGENTS.md` + `CLAUDE.md` + `AI_HANDOFF.md` + `CURRENT_STATE.md` + git state, without dragging the prior transcript.
+6. **Continue the existing session only if the active uncached context is genuinely needed** and the user accepts the cost. State that judgment out loud before continuing.
+
+Note: Claude Code does not expose programmatic token counts to the agent. The agent cannot automatically inspect usage — it can only observe the warning signals Claude Code shows and act on them. Token usage decisions remain user-observed or user-observed-and-reported; this protocol provides the decision logic for what to do when those signals appear.
 
 The goal: project truth lives in repo files, not in an endless chat transcript. The session is disposable; the repo is permanent.
 
 See `docs/dev/auto-management-protocol.md` § "High uncached context protocol" for the broader auto-management context.
+
+---
+
+## Chat-history vs repo-native signals
+
+Prefer repo-native signals over chat-history signals whenever possible:
+
+- Read `docs/project-control/report-mirror-log.md` for the last committed operational summary rather than relying on chat memory of a prior session.
+- Use `node scripts/state-freshness-check.mjs` to detect staleness rather than relying on pasted context.
+- Use `node scripts/start-router.mjs` to route startup rather than manually reasoning over a pasted handoff doc.
+- Avoid pasting giant logs into chat — reference the file path or pipe into the intake script.
+- Prefer local report intake (`scripts/report-mirror-intake.mjs`) over chat-history dependence for OS audit results and closeout summaries.
 
 ---
 
