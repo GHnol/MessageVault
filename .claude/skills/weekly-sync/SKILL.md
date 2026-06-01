@@ -47,6 +47,14 @@ This skill IS the internal sync check for planning-layer changes. After producin
 
 External tool updates (ClickUp, TickTick, Google Calendar) are dry-run/apply only. Propose before applying; apply only after Coordinator approval.
 
+When external tools (Google Calendar, GitHub Projects) are part of the weekly review, run the external sync consistency check to detect any drift:
+
+```
+node scripts/external-sync-consistency-check.mjs --local-only
+```
+
+Include the consistency result (PASS/WARN/FAIL) in the weekly sync output. If FAILs exist, flag them for Coordinator resolution before proposing any external sync operation.
+
 ## Output format
 
 1. Proposed weekly log entry (date, what was reviewed, what changed)

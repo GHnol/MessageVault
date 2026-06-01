@@ -9,6 +9,54 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — AI Project OS v1.7: Gate 5 — External Sync Consistency Validators
+
+**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Scope:** Add repo-native external sync consistency validator (`scripts/external-sync-consistency-check.mjs`); define consistency policy, schema, log, and fixture; add `external-sync-consistency` skill and command; integrate consistency checks into closeout, precommit, weekly-sync, and project-sync-dry-run workflows; update OS self-audit (Section 6i); update start-router with Gate 5 awareness and external sync consistency signal; update project-control state.
+
+### Added
+
+- `scripts/external-sync-consistency-check.mjs` — dependency-free Node ESM external sync consistency validator. Default local-only, read-only. CLI: `--json`, `--local-only`, `--fixture <path>`, `--fixture-test`, `--google-calendar`, `--github-projects`, `--all`, `--live-readonly`, `--strict`, `--explain`, `--paths`, `--output <path>`. Compares four layers: repo source records, local sync map (read-only, no raw contents printed), committed logs, and optional live read-only external state. Handles both apply-script shape (google_calendar.events[os_id] / github_projects.issues[os_id]) and example/direct shape — never treats container keys as os_ids. Issue codes: PASS/WARN/FAIL for Google Calendar, GitHub Projects, and cross-platform consistency. `--fixture-test` proves fixture detection logic exits 0. Privacy-safe local map summary (never prints raw contents). Confirms no mutation occurred.
+- `docs/project-control/external-sync-consistency-policy.md` — authoritative policy: four layers, when to run, FAIL/WARN/PASS criteria, privacy/safety rules, fixture validation requirements, scope guard.
+- `docs/project-control/external-sync-consistency-schema.md` — complete issue code reference: all PASS/WARN/FAIL codes for Google Calendar, GitHub Projects, and cross-platform checks; output schema; local map summary schema; fixture schema.
+- `docs/project-control/external-sync-consistency-log.md` — durable committed log of significant consistency check results (starts empty; entries added after meaningful live checks).
+- `docs/project-control/external-sync-consistency-fixture.example.json` — committed fixture with fake data only; proves 8+ classification scenarios including PASS, FAIL_GCAL_SOURCE_MISSING_LOCAL_MAP_ENTRY, FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY, FAIL_GHP_FIELD_VALUE_DRIFT, FAIL_GHP_PROJECT_ITEM_MISSING.
+- `.claude/skills/external-sync-consistency/SKILL.md` — new skill: YAML frontmatter, script commands, output format, hard stops, approval boundaries.
+- `.claude/commands/external-sync-consistency.md` — thin command wrapper for `/external-sync-consistency`.
+
+### Updated
+
+- `docs/dev/closeout-sync-contract.md` — External sync consistency requirement section added: FAIL/WARN/PASS policy table for closeout; links to policy/schema/log.
+- `docs/project-control/external-sync-safety.md` — consistency validator reference added to safety rules.
+- `.claude/skills/closeout/SKILL.md` — external sync consistency check step added before commit recommendation when external sync files changed.
+- `.claude/skills/precommit/SKILL.md` — external sync consistency check step added for commits touching external sync files.
+- `.claude/skills/weekly-sync/SKILL.md` — external sync consistency check added to weekly review obligations.
+- `.claude/skills/project-sync-dry-run/SKILL.md` — external sync consistency check added to dry-run script commands.
+- `.claude/skills/report-intake/SKILL.md` — external sync consistency check results added as an intake trigger.
+- `.claude/skills/README.md` — count updated 18 → 19; `external-sync-consistency` row added.
+- `.claude/commands/README.md` — `/external-sync-consistency` row added.
+- `scripts/os-self-audit.mjs` — Section 6i checks added (30 new checks for external sync consistency layer).
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6i added (24 items for v1.7 Gate 5 external sync consistency layer).
+- `scripts/start-router.mjs` — Gate 5 awareness: gate5InProgress/Queued detection; external sync consistency signal in externalSyncSummary; header updated to Gate 5.
+- `docs/project-control/current-sprint.md` — Gate 4 marked Done; Gate 5 In Progress.
+- `docs/project-control/kanban-board.md` — Gate 4 moved to Done; Gate 5 In Progress.
+- `docs/ai-system/CHANGELOG.md` — this entry.
+- `docs/ai-system/version-history.md` — v1.7.5 row added.
+- State files updated to Gate 5 branch.
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read contents of, or written
+- `docs/project-control/external-sync-map.local.json` — read-only diagnostic only; not written, not staged, not committed
+- `local-sync-reports/` — gitignored, not committed
+- No GitHub Project mutations
+- No Package 5B work
+
+---
+
 ## 2026-06-01 — AI Project OS v1.7: Gate 4 — Start Router, Context Usage, and Model Routing Hardening
 
 **Status:** COMPLETE — merged `352356b` 2026-06-01. No external mutations. No product code. No Package 5B.

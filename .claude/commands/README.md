@@ -35,6 +35,7 @@ When a command is invoked, Claude follows the skill protocol. The command file i
 | `/github-project-template` | `github-project-template` | Manage AI Project OS GitHub Project template (dry-run, validate, Gate 2 apply) | `docs/project-control/github-projects-template-standard.md` |
 | `/google-calendar-sync` | `google-calendar-sync` | Run Google Calendar live sync — validate, dry-run, and (Gate 3) apply | `docs/project-control/google-calendar-sync-policy.md` |
 | `/report-intake` | `report-intake` | Run the report mirror intake sequence — sanitize and preview a closeout report, then apply sanitized summary to mirror log | `docs/project-control/report-mirror-policy.md` |
+| `/external-sync-consistency` | `external-sync-consistency` | Run the external sync consistency validator — compare source records, local map, logs, and optional live read-only state | `docs/project-control/external-sync-consistency-policy.md` |
 
 ---
 

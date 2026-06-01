@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -313,6 +313,44 @@ The audit does **not** require:
 
 ---
 
+## 6i. External sync consistency validator layer (AI Project OS v1.7 Gate 5)
+
+Required when the repo has been updated to AI Project OS v1.7 Gate 5 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `scripts/external-sync-consistency-check.mjs` exists | Required | `Glob scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` supports `--json` flag | Required | `Grep "\-\-json" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` supports `--local-only` flag | Required | `Grep "\-\-local-only" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` supports `--fixture` flag | Required | `Grep "\-\-fixture" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` supports `--live-readonly` flag | Required | `Grep "\-\-live-readonly" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `PASS_GCAL_SOURCE_RECORDS_VALID` code | Required | `Grep "PASS_GCAL_SOURCE_RECORDS_VALID" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `FAIL_GCAL_SOURCE_INVALID` code | Required | `Grep "FAIL_GCAL_SOURCE_INVALID" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY` code | Required | `Grep "FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `FAIL_GCAL_DUPLICATE_DETECTED` code | Required | `Grep "FAIL_GCAL_DUPLICATE_DETECTED" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `PASS_GHP_SOURCE_RECORDS_VALID` code | Required | `Grep "PASS_GHP_SOURCE_RECORDS_VALID" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `FAIL_GHP_FIELD_VALUE_DRIFT` code | Required | `Grep "FAIL_GHP_FIELD_VALUE_DRIFT" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `FAIL_GHP_DUPLICATE_OS_ID` code | Required | `Grep "FAIL_GHP_DUPLICATE_OS_ID" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` has `PASS_EXTERNAL_LOCAL_PRIVATE_PATHS_IGNORED` code | Required | `Grep "PASS_EXTERNAL_LOCAL_PRIVATE_PATHS_IGNORED" scripts/external-sync-consistency-check.mjs` |
+| `external-sync-consistency-check.mjs` confirms no mutation occurred | Required | `Grep "no_mutation_occurred" scripts/external-sync-consistency-check.mjs` |
+| `docs/project-control/external-sync-consistency-policy.md` exists | Required | `Glob docs/project-control/external-sync-consistency-policy.md` |
+| `docs/project-control/external-sync-consistency-schema.md` exists | Required | `Glob docs/project-control/external-sync-consistency-schema.md` |
+| `docs/project-control/external-sync-consistency-log.md` exists | Required | `Glob docs/project-control/external-sync-consistency-log.md` |
+| `docs/project-control/external-sync-consistency-fixture.example.json` exists | Required | `Glob docs/project-control/external-sync-consistency-fixture.example.json` |
+| `.claude/skills/external-sync-consistency/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/external-sync-consistency/SKILL.md` |
+| `.claude/commands/external-sync-consistency.md` exists | Required | `Glob .claude/commands/external-sync-consistency.md` |
+| `closeout` SKILL.md references `external-sync-consistency-check.mjs` | Required | `Grep "external-sync-consistency-check.mjs" .claude/skills/closeout/SKILL.md` |
+| `precommit` SKILL.md references `external-sync-consistency-check.mjs` | Required | `Grep "external-sync-consistency-check.mjs" .claude/skills/precommit/SKILL.md` |
+| `closeout-sync-contract.md` has external sync consistency requirement | Required | `Grep "External sync consistency requirement" docs/dev/closeout-sync-contract.md` |
+
+The audit does **not** require:
+- A real `external-sync-map.local.json` (gitignored; expected to be absent before apply)
+- Live Google Calendar credentials or googleapis install
+- gh CLI authentication
+- Any external sync apply to have been completed
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -368,8 +406,9 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 | `scripts/github-project-setup-dry-run.mjs` | Recommended | GitHub Projects planned structure; validates example field map |
 | `scripts/github-project-field-map.mjs` | Recommended | GitHub Projects field map placeholder safety and field coverage |
 | `scripts/github-project-sync-status.mjs` | Recommended | Local structural sync status (no API calls) |
+| `scripts/external-sync-consistency-check.mjs` | Recommended | Section 6i — compare source records, local sync map, committed logs, and optional live read-only state |
 
-All scripts are read-only, dependency-free, and local-file-only. No script makes API calls without `--apply` flag and Coordinator approval.
+All scripts are read-only, dependency-free (for local-only mode), and produce no external writes. No script makes API calls without `--live-readonly` flag and Coordinator authorization.
 
 ---
 

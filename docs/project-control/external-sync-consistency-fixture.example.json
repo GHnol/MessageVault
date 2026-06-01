@@ -1,0 +1,330 @@
+{
+  "_comment": "FIXTURE FILE — fake data only. No real event IDs, project item IDs, or credentials. Used with: node scripts/external-sync-consistency-check.mjs --fixture docs/project-control/external-sync-consistency-fixture.example.json",
+  "_schema_version": "1.7.5",
+
+  "google_calendar_source_records": [
+    {
+      "os_id": "fixture-ritual-weekly-review",
+      "title": "Fixture Weekly Review",
+      "description": "Fixture description.\n\nAI_OS_ID: fixture-ritual-weekly-review",
+      "calendar_role": "ritual",
+      "start": "2026-06-01T10:00:00",
+      "end": "2026-06-01T11:00:00",
+      "timezone": "America/New_York",
+      "recurrence": "FREQ=WEEKLY;BYDAY=MO",
+      "all_day": false,
+      "status": "active",
+      "source_file": "fixture",
+      "phase": "0",
+      "package": "",
+      "owner_role": "Coordinator",
+      "calendar_relevant": true,
+      "duplicate_key": "fixture-ritual-weekly-review"
+    },
+    {
+      "os_id": "fixture-milestone-gate-review",
+      "title": "Fixture Gate Review",
+      "description": "Fixture milestone gate review.\n\nAI_OS_ID: fixture-milestone-gate-review",
+      "calendar_role": "milestone",
+      "start": "2026-07-01T14:00:00",
+      "end": "2026-07-01T15:00:00",
+      "timezone": "America/New_York",
+      "all_day": false,
+      "status": "active",
+      "source_file": "fixture",
+      "phase": "5",
+      "package": "Package 5B",
+      "owner_role": "Coordinator",
+      "calendar_relevant": true,
+      "duplicate_key": "fixture-milestone-gate-review"
+    },
+    {
+      "os_id": "fixture-ritual-no-map-entry",
+      "title": "Fixture No-Map Ritual",
+      "description": "Source record with no local map entry after apply-complete context.\n\nAI_OS_ID: fixture-ritual-no-map-entry",
+      "calendar_role": "ritual",
+      "start": "2026-06-01T09:00:00",
+      "end": "2026-06-01T09:30:00",
+      "timezone": "America/New_York",
+      "all_day": false,
+      "status": "active",
+      "source_file": "fixture",
+      "phase": "0",
+      "package": "",
+      "owner_role": "Coordinator",
+      "calendar_relevant": true,
+      "duplicate_key": "fixture-ritual-no-map-entry"
+    },
+    {
+      "os_id": "fixture-ritual-ghost-mapped",
+      "title": "Fixture Ghost Mapped Ritual",
+      "description": "Source record with local map entry but no live event.\n\nAI_OS_ID: fixture-ritual-ghost-mapped",
+      "calendar_role": "ritual",
+      "start": "2026-06-02T10:00:00",
+      "end": "2026-06-02T10:30:00",
+      "timezone": "America/New_York",
+      "all_day": false,
+      "status": "active",
+      "source_file": "fixture",
+      "phase": "0",
+      "package": "",
+      "owner_role": "Coordinator",
+      "calendar_relevant": true,
+      "duplicate_key": "fixture-ritual-ghost-mapped",
+      "_scenario": "FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY — local map entry exists but no live event found"
+    },
+    {
+      "os_id": "fixture-ritual-duplicate-live",
+      "title": "Fixture Duplicate Live Ritual",
+      "description": "Source record mapped to duplicate live events.\n\nAI_OS_ID: fixture-ritual-duplicate-live",
+      "calendar_role": "ritual",
+      "start": "2026-06-03T10:00:00",
+      "end": "2026-06-03T10:30:00",
+      "timezone": "America/New_York",
+      "all_day": false,
+      "status": "active",
+      "source_file": "fixture",
+      "phase": "0",
+      "package": "",
+      "owner_role": "Coordinator",
+      "calendar_relevant": true,
+      "duplicate_key": "fixture-ritual-duplicate-live",
+      "_scenario": "FAIL_GCAL_DUPLICATE_DETECTED — two live events with the same AI_OS_ID marker"
+    }
+  ],
+
+  "local_sync_map": {
+    "google_calendar": {
+      "fixture-ritual-weekly-review": {
+        "external_id": "fake_gcal_event_id_weekly_review",
+        "calendar_id": "primary",
+        "last_synced": "2026-06-01",
+        "status": "active"
+      },
+      "fixture-milestone-gate-review": {
+        "external_id": "fake_gcal_event_id_gate_review",
+        "calendar_id": "primary",
+        "last_synced": "2026-06-01",
+        "status": "active"
+      },
+      "fixture-ritual-ghost-mapped": {
+        "external_id": "fake_gcal_event_id_ghost_does_not_exist",
+        "calendar_id": "primary",
+        "last_synced": "2026-06-01",
+        "status": "active",
+        "_note": "ghost entry — local map has this but live event does not exist"
+      },
+      "fixture-ritual-duplicate-live": {
+        "external_id": "fake_gcal_event_id_duplicate_a",
+        "calendar_id": "primary",
+        "last_synced": "2026-06-01",
+        "status": "active"
+      }
+    },
+    "github_projects": {
+      "_project_meta": {
+        "owner": "FakeOwner",
+        "project_number": 0,
+        "project_id": "PVT_fake_project_id"
+      },
+      "fixture-ghp-task-one": {
+        "os_id": "fixture-ghp-task-one",
+        "issue_number": 100,
+        "project_item_id": "PVTI_fake_item_id_one",
+        "status": "In Progress",
+        "last_repo_sync": "2026-06-01",
+        "external_sync_status": "in-sync"
+      },
+      "fixture-ghp-task-drift": {
+        "os_id": "fixture-ghp-task-drift",
+        "issue_number": 101,
+        "project_item_id": "PVTI_fake_item_id_drift",
+        "status": "Backlog",
+        "last_repo_sync": "2026-06-01",
+        "external_sync_status": "drift"
+      }
+    }
+  },
+
+  "google_calendar_live_events": [
+    {
+      "id": "fake_gcal_event_id_weekly_review",
+      "summary": "Fixture Weekly Review",
+      "description": "Fixture description.\n\nAI_OS_ID: fixture-ritual-weekly-review",
+      "start": { "dateTime": "2026-06-01T10:00:00-04:00" },
+      "end": { "dateTime": "2026-06-01T11:00:00-04:00" },
+      "extendedProperties": {
+        "private": { "ai_os_id": "fixture-ritual-weekly-review" }
+      },
+      "status": "confirmed",
+      "_scenario": "PASS — source record maps to local map and live fixture event"
+    },
+    {
+      "id": "fake_gcal_event_id_gate_review",
+      "summary": "Fixture Gate Review",
+      "description": "Fixture milestone gate review.\n\nAI_OS_ID: fixture-milestone-gate-review",
+      "start": { "dateTime": "2026-07-01T14:00:00-04:00" },
+      "end": { "dateTime": "2026-07-01T15:00:00-04:00" },
+      "extendedProperties": {
+        "private": { "ai_os_id": "fixture-milestone-gate-review" }
+      },
+      "status": "confirmed",
+      "_scenario": "PASS — source record maps to local map and live fixture event"
+    },
+    {
+      "id": "fake_gcal_event_id_duplicate_a",
+      "summary": "Fixture Duplicate Live Ritual",
+      "description": "Fixture duplicate.\n\nAI_OS_ID: fixture-ritual-duplicate-live",
+      "start": { "dateTime": "2026-06-03T10:00:00-04:00" },
+      "end": { "dateTime": "2026-06-03T10:30:00-04:00" },
+      "extendedProperties": {
+        "private": { "ai_os_id": "fixture-ritual-duplicate-live" }
+      },
+      "status": "confirmed",
+      "_scenario": "FAIL_GCAL_DUPLICATE_DETECTED — first of two events with same AI_OS_ID"
+    },
+    {
+      "id": "fake_gcal_event_id_duplicate_b",
+      "summary": "Fixture Duplicate Live Ritual",
+      "description": "Fixture duplicate (second copy).\n\nAI_OS_ID: fixture-ritual-duplicate-live",
+      "start": { "dateTime": "2026-06-03T10:00:00-04:00" },
+      "end": { "dateTime": "2026-06-03T10:30:00-04:00" },
+      "extendedProperties": {
+        "private": { "ai_os_id": "fixture-ritual-duplicate-live" }
+      },
+      "status": "confirmed",
+      "_scenario": "FAIL_GCAL_DUPLICATE_DETECTED — second of two events with same AI_OS_ID"
+    }
+  ],
+
+  "_missing_scenario": "fixture-ritual-no-map-entry has no local map entry AND no live event — triggers FAIL_GCAL_SOURCE_MISSING_LOCAL_MAP_ENTRY",
+
+  "github_projects_source_records": [
+    {
+      "os_id": "fixture-ghp-task-one",
+      "title": "Fixture GHP Task One",
+      "body": "Fixture task one.\n\n<!-- ai-os-id: fixture-ghp-task-one -->",
+      "type": "task",
+      "package": "v1.7",
+      "phase": "0",
+      "lane": "OS Infrastructure",
+      "status": "In Progress",
+      "priority": "P1",
+      "risk_level": "Low",
+      "decision_needed": false,
+      "calendar_relevant": false,
+      "ticktick_relevant": false,
+      "owner_role": "Claude",
+      "source_file": "fixture",
+      "success_criteria": "Fixture task passes consistency check",
+      "dependencies": [],
+      "labels": [],
+      "external_sync_status": "in-sync",
+      "last_repo_sync": "2026-06-01",
+      "_scenario": "PASS — source record maps to local map and live item with matching status"
+    },
+    {
+      "os_id": "fixture-ghp-task-drift",
+      "title": "Fixture GHP Task Drift",
+      "body": "Fixture task with field drift.\n\n<!-- ai-os-id: fixture-ghp-task-drift -->",
+      "type": "task",
+      "package": "v1.7",
+      "phase": "0",
+      "lane": "OS Infrastructure",
+      "status": "In Progress",
+      "priority": "P2",
+      "risk_level": "Low",
+      "decision_needed": false,
+      "calendar_relevant": false,
+      "ticktick_relevant": false,
+      "owner_role": "Claude",
+      "source_file": "fixture",
+      "success_criteria": "Fixture task field drift detected",
+      "dependencies": [],
+      "labels": [],
+      "external_sync_status": "drift",
+      "last_repo_sync": "2026-06-01",
+      "_scenario": "FAIL_GHP_FIELD_VALUE_DRIFT — source has status=In Progress but live item has status=Backlog"
+    },
+    {
+      "os_id": "fixture-ghp-task-missing",
+      "title": "Fixture GHP Task Missing",
+      "body": "Fixture task with no live item.\n\n<!-- ai-os-id: fixture-ghp-task-missing -->",
+      "type": "task",
+      "package": "v1.7",
+      "phase": "0",
+      "lane": "OS Infrastructure",
+      "status": "Ready",
+      "priority": "P2",
+      "risk_level": "Low",
+      "decision_needed": false,
+      "calendar_relevant": false,
+      "ticktick_relevant": false,
+      "owner_role": "Claude",
+      "source_file": "fixture",
+      "success_criteria": "Missing project item detected",
+      "dependencies": [],
+      "labels": [],
+      "external_sync_status": "unknown",
+      "last_repo_sync": "2026-06-01",
+      "_scenario": "FAIL_GHP_PROJECT_ITEM_MISSING — local map entry but no matching live item"
+    }
+  ],
+
+  "github_project_live_items": [
+    {
+      "id": "PVTI_fake_item_id_one",
+      "os_id": "fixture-ghp-task-one",
+      "body": "Fixture task one.\n\n<!-- ai-os-id: fixture-ghp-task-one -->",
+      "issue_number": 100,
+      "field_values": {
+        "status": "In Progress",
+        "owner_role": "Claude"
+      },
+      "_scenario": "PASS — status matches source record"
+    },
+    {
+      "id": "PVTI_fake_item_id_drift",
+      "os_id": "fixture-ghp-task-drift",
+      "body": "Fixture task with field drift.\n\n<!-- ai-os-id: fixture-ghp-task-drift -->",
+      "issue_number": 101,
+      "field_values": {
+        "status": "Backlog",
+        "owner_role": "Claude"
+      },
+      "_scenario": "FAIL_GHP_FIELD_VALUE_DRIFT — status is Backlog but source says In Progress"
+    }
+  ],
+
+  "_scenario_notes": {
+    "PASS_GCAL_LIVE_NO_OP": "fixture-ritual-weekly-review and fixture-milestone-gate-review",
+    "FAIL_GCAL_SOURCE_MISSING_LOCAL_MAP_ENTRY": "fixture-ritual-no-map-entry (no local map entry)",
+    "FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY": "fixture-ritual-ghost-mapped (local map entry exists, no live event)",
+    "FAIL_GCAL_DUPLICATE_DETECTED": "fixture-ritual-duplicate-live (two live events with same AI_OS_ID)",
+    "PASS_GHP_LIVE_ITEMS_ALIGNED": "fixture-ghp-task-one",
+    "FAIL_GHP_FIELD_VALUE_DRIFT": "fixture-ghp-task-drift (source=In Progress, live=Backlog)",
+    "FAIL_GHP_SOURCE_MISSING_LOCAL_MAP_ENTRY": "fixture-ghp-task-missing (no local map entry, no live item)",
+    "FAIL_GHP_DUPLICATE_OS_ID": "see duplicate_os_id_fixture below (separate fixture key)"
+  },
+
+  "_duplicate_os_id_fixture_note": "To test FAIL_GHP_DUPLICATE_OS_ID: create a source records array with two entries sharing the same os_id. The validator checks for this during source record validation.",
+
+  "_expected_issues": [
+    "PASS_GCAL_SOURCE_RECORDS_VALID",
+    "PASS_GCAL_LOCAL_MAP_PRESENT",
+    "PASS_GCAL_LIVE_NO_OP",
+    "FAIL_GCAL_SOURCE_MISSING_LOCAL_MAP_ENTRY",
+    "FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY",
+    "FAIL_GCAL_DUPLICATE_DETECTED",
+    "FAIL_GCAL_POSSIBLE_DUPLICATE",
+    "PASS_GHP_SOURCE_RECORDS_VALID",
+    "PASS_GHP_LOCAL_MAP_PRESENT",
+    "PASS_GHP_LIVE_ITEMS_ALIGNED",
+    "FAIL_GHP_FIELD_VALUE_DRIFT",
+    "FAIL_GHP_SOURCE_MISSING_LOCAL_MAP_ENTRY"
+  ],
+  "_expected_issues_note": "Used with --fixture-test flag. All codes must be detected for the test to pass. Intentional FAIL codes prove each detection scenario works.",
+
+  "_no_mutation_occurred": true,
+  "_no_real_data": "This fixture uses fake placeholder IDs and fake data only. No real event IDs, project item IDs, issue numbers, or credentials."
+}

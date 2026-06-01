@@ -303,6 +303,38 @@ checkGrep('model-routing-protocol.md rejects opusplan', 'docs/dev/model-routing-
 checkGrep('model-routing-protocol.md has tier-based routing (not brittle model IDs)', 'docs/dev/model-routing-protocol.md', 'Model ID rule');
 checkGitignore('raw-transcripts/ gitignored (v1.7 Gate 4)', 'raw-transcripts/example.md');
 
+// --- Section 6i: External sync consistency validator layer (AI Project OS v1.7 Gate 5) ---
+checkFile('scripts/external-sync-consistency-check.mjs (v1.7 external sync consistency validator)', 'scripts/external-sync-consistency-check.mjs');
+checkGrep('external-sync-consistency-check.mjs supports --json flag', 'scripts/external-sync-consistency-check.mjs', '--json');
+checkGrep('external-sync-consistency-check.mjs supports --local-only flag', 'scripts/external-sync-consistency-check.mjs', '--local-only');
+checkGrep('external-sync-consistency-check.mjs supports --fixture flag', 'scripts/external-sync-consistency-check.mjs', '--fixture');
+checkGrep('external-sync-consistency-check.mjs supports --live-readonly flag', 'scripts/external-sync-consistency-check.mjs', '--live-readonly');
+checkGrep('external-sync-consistency-check.mjs supports --google-calendar flag', 'scripts/external-sync-consistency-check.mjs', '--google-calendar');
+checkGrep('external-sync-consistency-check.mjs supports --github-projects flag', 'scripts/external-sync-consistency-check.mjs', '--github-projects');
+checkGrep('external-sync-consistency-check.mjs has PASS_GCAL_SOURCE_RECORDS_VALID code', 'scripts/external-sync-consistency-check.mjs', 'PASS_GCAL_SOURCE_RECORDS_VALID');
+checkGrep('external-sync-consistency-check.mjs has FAIL_GCAL_SOURCE_INVALID code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_GCAL_SOURCE_INVALID');
+checkGrep('external-sync-consistency-check.mjs has FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_GCAL_MAPPED_EVENT_MISSING_REMOTELY');
+checkGrep('external-sync-consistency-check.mjs has FAIL_GCAL_DUPLICATE_DETECTED code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_GCAL_DUPLICATE_DETECTED');
+checkGrep('external-sync-consistency-check.mjs has PASS_GHP_SOURCE_RECORDS_VALID code', 'scripts/external-sync-consistency-check.mjs', 'PASS_GHP_SOURCE_RECORDS_VALID');
+checkGrep('external-sync-consistency-check.mjs has FAIL_GHP_SOURCE_INVALID code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_GHP_SOURCE_INVALID');
+checkGrep('external-sync-consistency-check.mjs has FAIL_GHP_FIELD_VALUE_DRIFT code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_GHP_FIELD_VALUE_DRIFT');
+checkGrep('external-sync-consistency-check.mjs has FAIL_GHP_DUPLICATE_OS_ID code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_GHP_DUPLICATE_OS_ID');
+checkGrep('external-sync-consistency-check.mjs has PASS_EXTERNAL_LOCAL_PRIVATE_PATHS_IGNORED code', 'scripts/external-sync-consistency-check.mjs', 'PASS_EXTERNAL_LOCAL_PRIVATE_PATHS_IGNORED');
+checkGrep('external-sync-consistency-check.mjs has FAIL_EXTERNAL_SYNC_MAP_IN_GIT_STATUS code', 'scripts/external-sync-consistency-check.mjs', 'FAIL_EXTERNAL_SYNC_MAP_IN_GIT_STATUS');
+checkGrep('external-sync-consistency-check.mjs never prints raw local map contents', 'scripts/external-sync-consistency-check.mjs', 'no raw contents printed');
+checkGrep('external-sync-consistency-check.mjs confirms no mutation occurred', 'scripts/external-sync-consistency-check.mjs', 'no_mutation_occurred');
+checkFile('docs/project-control/external-sync-consistency-policy.md (v1.7 consistency policy)', 'docs/project-control/external-sync-consistency-policy.md');
+checkFile('docs/project-control/external-sync-consistency-schema.md (v1.7 consistency schema)', 'docs/project-control/external-sync-consistency-schema.md');
+checkFile('docs/project-control/external-sync-consistency-log.md (v1.7 consistency log)', 'docs/project-control/external-sync-consistency-log.md');
+checkFile('docs/project-control/external-sync-consistency-fixture.example.json (v1.7 fixture)', 'docs/project-control/external-sync-consistency-fixture.example.json');
+checkFile('.claude/skills/external-sync-consistency/SKILL.md (v1.7 external-sync-consistency skill)', '.claude/skills/external-sync-consistency/SKILL.md');
+checkFile('.claude/commands/external-sync-consistency.md (v1.7 external-sync-consistency command)', '.claude/commands/external-sync-consistency.md');
+checkGrep('external-sync-consistency SKILL.md has name:', '.claude/skills/external-sync-consistency/SKILL.md', 'name:');
+checkGrep('external-sync-consistency SKILL.md has description:', '.claude/skills/external-sync-consistency/SKILL.md', 'description:');
+checkGrep('closeout SKILL.md references external-sync-consistency-check.mjs', '.claude/skills/closeout/SKILL.md', 'external-sync-consistency-check.mjs');
+checkGrep('precommit SKILL.md references external-sync-consistency-check.mjs', '.claude/skills/precommit/SKILL.md', 'external-sync-consistency-check.mjs');
+checkGrep('closeout-sync-contract.md has external sync consistency requirement', 'docs/dev/closeout-sync-contract.md', 'External sync consistency requirement');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

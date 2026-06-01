@@ -40,6 +40,14 @@ Run the state freshness validator before recommending commit or merge:
 node scripts/state-freshness-check.mjs
 ```
 
+If external sync files changed in this pass (source records, sync logs, `external-sync-map.local.json`, or any `google-calendar-*` / `github-projects-*` files), also run the external sync consistency check before recommending commit:
+
+```
+node scripts/external-sync-consistency-check.mjs
+```
+
+If FAILs are reported, fix them before proceeding. See `docs/project-control/external-sync-consistency-policy.md` for FAIL/WARN/PASS criteria.
+
 If FAILs are reported, fix them before proceeding. WARNs must be disclosed in the closeout report. See `docs/dev/closeout-sync-contract.md` § "State-Sync Decision Matrix" for FAIL/WARN/PASS criteria.
 
 Run the report mirror check before recommending commit or merge:

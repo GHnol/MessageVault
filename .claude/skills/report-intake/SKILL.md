@@ -11,6 +11,7 @@ Capture sanitized operational summaries from closeout reports, planning gates, h
 
 - At every meaningful package closeout, OS gate closeout, or merge
 - After any external sync operation (Google Calendar, GitHub Projects)
+- After an external sync consistency check that produced a meaningful FAIL or PASS result (use `--type os_audit` or appropriate type)
 - After any major planning change or Coordinator decision
 - After any branch handoff (Claude ↔ Codex)
 - After an OS audit run with a new verdict
