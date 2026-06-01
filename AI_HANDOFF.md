@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.7 Gate 5 COMPLETE. Implementation committed `a9a94e5`, merged to main `2b37e13` 2026-06-01. Working tree clean. 253 OS audit pass. Package 5B blocked. Gate 6 pending Coordinator authorization.
+**Status:** `in-progress` — AI Project OS v1.7 Gate 6 IN PROGRESS. On branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`. Implementation complete; commit pending Coordinator approval. Gates 1–5 all merged to main. Working tree has Gate 6 changes. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `2b37e13` — Merge branch 'docs/ai-project-os-v1-7-external-sync-consistency-validators' |
+| **Active pass** | `AI Project OS v1.7 Gate 6` — Documentation-Watch and Bootstrap Copy-Forward Finalization |
+| **Active branch** | `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` |
+| **main HEAD** | `5432650` — docs: sync state after AI Project OS v1.7 Gate 5 merge |
 | **Last completed pass** | `AI Project OS v1.7 Gate 5` — external sync consistency validators — merged `2b37e13` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
@@ -28,11 +28,39 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — v1.7 Gate 5)
+## Objective (current pass — v1.7 Gate 6)
+
+AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization.
+
+**Gate 6 IN PROGRESS — implementation complete; commit pending Coordinator approval.**
+
+Delivered:
+1. `docs/ai-system/documentation-watch-policy.md` — ADOPT/DEFER/REJECT/MONITOR policy; scrutinous adoption rule; browsing boundary; cadence; trigger events.
+2. `docs/ai-system/documentation-watch-sources.md` — 10 official source categories with adoption risk and review triggers.
+3. `docs/ai-system/documentation-watch-evaluation-template.md` — reusable 30+-field evaluation template.
+4. `docs/ai-system/documentation-watch-log.md` — durable log; Gate 6 establishment entry; no live browsing.
+5. `docs/ai-system/bootstrap-copy-forward-guide.md` — universal vs. project-specific vs. never-copy guidance.
+6. `docs/ai-system/universal-vs-project-specific-map.md` — full artifact table for every OS file.
+7. `docs/ai-system/puzzle-alignment-checklist.md` — Puzzle gap analysis; what it needs from v1.6 and v1.7.
+8. `docs/ai-system/future-repo-bootstrap-checklist.md` — bootstrap sequence for any new serious repo.
+9. `.claude/skills/documentation-watch/SKILL.md` + `.claude/commands/documentation-watch.md` — new skill and command.
+10. `.claude/skills/bootstrap-copy-forward/SKILL.md` + `.claude/commands/bootstrap-copy-forward.md` — new skill and command.
+11. `scripts/documentation-watch-check.mjs` — docs-watch framework validator.
+12. `scripts/bootstrap-copy-forward-audit.mjs` — copy-forward readiness validator.
+13. `scripts/os-self-audit.mjs` — Section 6j checks added (~38 new checks).
+14. `docs/ai-system/os-self-audit-checklist.md` — Section 6j added (24 items).
+15. Project-control state, CHANGELOG, version-history, current-sprint, kanban-board updated.
+16. `.claude/skills/README.md`, `.claude/commands/README.md`, `docs/ai-system/README.md`, `docs/ai-system/universal-standards.md` updated.
+
+**Next exact action:** Coordinator reviews Gate 6 implementation. If approved, commit and merge, then run final v1.7 state sync.
+
+---
+
+## Objective (prior completed pass — v1.7 Gate 5)
 
 AI Project OS v1.7 Gate 5 — External Sync Consistency Validators.
 
-**Gate 5 IN PROGRESS.** Delivered so far:
+**Gate 5 COMPLETE — committed `a9a94e5` 2026-06-01, merged `2b37e13`.** Delivered:
 1. `scripts/external-sync-consistency-check.mjs` — dependency-free Node ESM consistency validator. Four layers: source records, local sync map (read-only, privacy-safe), committed logs, live read-only external. Issue codes for Google Calendar, GitHub Projects, cross-platform. CLI: `--json`, `--local-only`, `--fixture`, `--google-calendar`, `--github-projects`, `--all`, `--live-readonly`, `--strict`, `--explain`, `--paths`, `--output`. No mutations.
 2. `docs/project-control/external-sync-consistency-policy.md` — policy: four layers, FAIL/WARN/PASS criteria, privacy rules.
 3. `docs/project-control/external-sync-consistency-schema.md` — complete issue code reference.
@@ -163,13 +191,16 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 5 merged to main (`2b37e13`) 2026-06-01. State-sync commit in progress.
+Gate 6 implementation complete on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`. All files created and verified.
 
-Push to `origin/main` pending separate Coordinator authorization.
+**Coordinator reviews Gate 6 implementation.** If approved:
+1. Commit with message: `docs: finalize AI Project OS v1.7 bootstrap hardening`
+2. Merge to main
+3. Run final v1.7 state sync (state-sync commit on main)
+4. Push origin/main (with explicit Coordinator authorization)
+5. Coordinator decides whether to authorize Package 5B
 
-Coordinator then authorizes v1.7 Gate 6 (Documentation-Watch and Bootstrap Copy-Forward Finalization) or any other next direction.
-
-Do not start Gate 6 or Package 5B. Do not push without explicit instruction. No external mutations authorized.
+Do not commit, push, or merge without explicit instruction. Do not start Package 5B — blocked. No external mutations.
 
 ---
 

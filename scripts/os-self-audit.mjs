@@ -335,6 +335,43 @@ checkGrep('closeout SKILL.md references external-sync-consistency-check.mjs', '.
 checkGrep('precommit SKILL.md references external-sync-consistency-check.mjs', '.claude/skills/precommit/SKILL.md', 'external-sync-consistency-check.mjs');
 checkGrep('closeout-sync-contract.md has external sync consistency requirement', 'docs/dev/closeout-sync-contract.md', 'External sync consistency requirement');
 
+// --- Section 6j: Documentation-watch and Bootstrap copy-forward layer (AI Project OS v1.7 Gate 6) ---
+checkFile('docs/ai-system/documentation-watch-policy.md (v1.7 Gate 6)', 'docs/ai-system/documentation-watch-policy.md');
+checkFile('docs/ai-system/documentation-watch-sources.md (v1.7 Gate 6)', 'docs/ai-system/documentation-watch-sources.md');
+checkFile('docs/ai-system/documentation-watch-evaluation-template.md (v1.7 Gate 6)', 'docs/ai-system/documentation-watch-evaluation-template.md');
+checkFile('docs/ai-system/documentation-watch-log.md (v1.7 Gate 6)', 'docs/ai-system/documentation-watch-log.md');
+checkFile('docs/ai-system/bootstrap-copy-forward-guide.md (v1.7 Gate 6)', 'docs/ai-system/bootstrap-copy-forward-guide.md');
+checkFile('docs/ai-system/universal-vs-project-specific-map.md (v1.7 Gate 6)', 'docs/ai-system/universal-vs-project-specific-map.md');
+checkFile('docs/ai-system/puzzle-alignment-checklist.md (v1.7 Gate 6)', 'docs/ai-system/puzzle-alignment-checklist.md');
+checkFile('docs/ai-system/future-repo-bootstrap-checklist.md (v1.7 Gate 6)', 'docs/ai-system/future-repo-bootstrap-checklist.md');
+checkFile('.claude/skills/documentation-watch/SKILL.md (v1.7 Gate 6)', '.claude/skills/documentation-watch/SKILL.md');
+checkFile('.claude/commands/documentation-watch.md (v1.7 Gate 6)', '.claude/commands/documentation-watch.md');
+checkFile('.claude/skills/bootstrap-copy-forward/SKILL.md (v1.7 Gate 6)', '.claude/skills/bootstrap-copy-forward/SKILL.md');
+checkFile('.claude/commands/bootstrap-copy-forward.md (v1.7 Gate 6)', '.claude/commands/bootstrap-copy-forward.md');
+checkFile('scripts/documentation-watch-check.mjs (v1.7 Gate 6)', 'scripts/documentation-watch-check.mjs');
+checkFile('scripts/bootstrap-copy-forward-audit.mjs (v1.7 Gate 6)', 'scripts/bootstrap-copy-forward-audit.mjs');
+checkGrep('documentation-watch-policy.md has ADOPT classification', 'docs/ai-system/documentation-watch-policy.md', 'ADOPT');
+checkGrep('documentation-watch-policy.md has DEFER classification', 'docs/ai-system/documentation-watch-policy.md', 'DEFER');
+checkGrep('documentation-watch-policy.md has REJECT classification', 'docs/ai-system/documentation-watch-policy.md', 'REJECT');
+checkGrep('documentation-watch-policy.md has MONITOR classification', 'docs/ai-system/documentation-watch-policy.md', 'MONITOR');
+checkGrep('documentation-watch-policy.md has official-source-only rule', 'docs/ai-system/documentation-watch-policy.md', 'Only official docs are authoritative');
+checkGrep('documentation-watch-policy.md has scrutinous adoption rule', 'docs/ai-system/documentation-watch-policy.md', 'Scrutinous adoption rule');
+checkGrep('documentation-watch-policy.md has browsing boundary', 'docs/ai-system/documentation-watch-policy.md', 'Browsing boundary');
+checkGrep('documentation-watch-log.md has Purpose section', 'docs/ai-system/documentation-watch-log.md', '## Purpose');
+checkGrep('documentation-watch-log.md has at least one entry', 'docs/ai-system/documentation-watch-log.md', 'DW-');
+checkGrep('documentation-watch SKILL.md has name:', '.claude/skills/documentation-watch/SKILL.md', 'name:');
+checkGrep('documentation-watch SKILL.md has description:', '.claude/skills/documentation-watch/SKILL.md', 'description:');
+checkGrep('documentation-watch SKILL.md has ADOPT classification', '.claude/skills/documentation-watch/SKILL.md', 'ADOPT');
+checkGrep('bootstrap-copy-forward-guide.md has Universal assets section', 'docs/ai-system/bootstrap-copy-forward-guide.md', 'Universal assets');
+checkGrep('bootstrap-copy-forward-guide.md has never-copy rule', 'docs/ai-system/bootstrap-copy-forward-guide.md', 'must NEVER be copied');
+checkGrep('universal-vs-project-specific-map.md has never-copy column', 'docs/ai-system/universal-vs-project-specific-map.md', 'Never copy?');
+checkGrep('universal-vs-project-specific-map.md covers external-sync-map.local.json', 'docs/ai-system/universal-vs-project-specific-map.md', 'external-sync-map.local.json');
+checkGrep('puzzle-alignment-checklist.md has authorization reminder', 'docs/ai-system/puzzle-alignment-checklist.md', 'requires explicit Coordinator authorization');
+checkGrep('future-repo-bootstrap-checklist.md has required files section', 'docs/ai-system/future-repo-bootstrap-checklist.md', 'Required files');
+checkGrep('future-repo-bootstrap-checklist.md has OS self-audit requirement', 'docs/ai-system/future-repo-bootstrap-checklist.md', 'OS self-audit requirement');
+checkGrep('bootstrap-copy-forward SKILL.md has name:', '.claude/skills/bootstrap-copy-forward/SKILL.md', 'name:');
+checkGrep('bootstrap-copy-forward SKILL.md has description:', '.claude/skills/bootstrap-copy-forward/SKILL.md', 'description:');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

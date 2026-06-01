@@ -16,19 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-01` (Gate 5 merge + state-sync)
+**Last updated:** `2026-06-01` (Gate 6 implementation in progress)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `2b37e13` — Merge branch 'docs/ai-project-os-v1-7-external-sync-consistency-validators' |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `5432650` — docs: sync state after AI Project OS v1.7 Gate 5 merge |
+| Active branch | `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` |
+| Active pass | `AI Project OS v1.7 Gate 6` — IN PROGRESS; commit pending Coordinator approval |
 | Last completed pass | `AI Project OS v1.7 Gate 5` — external sync consistency validators — merged `2b37e13` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | v1.7 Gate 6 pending Coordinator authorization; Package 5B blocked until v1.7 complete |
-| OS audit | Gate 5: 253 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
+| Next authorized target | Gate 6 commit + merge pending Coordinator approval; Package 5B blocked until v1.7 complete |
+| OS audit | Gate 5: 253 pass, 0 warn, 0 fail; Gate 6 adds ~38 new checks (~291 expected after commit) |
 | Package 5B | Not started — blocked until v1.7 complete and explicit Coordinator authorization |
+| v1.7 Gate 6 | IN PROGRESS — docs-watch framework + Bootstrap copy-forward guide + skills/scripts delivered; commit pending |
 | v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01; `scripts/external-sync-consistency-check.mjs` + policy/schema/log/fixture/skill + 253 OS audit checks delivered |
 | v1.7 Gate 4 | COMPLETE — merged `352356b` 2026-06-01; `scripts/start-router.mjs` + routing hardening + 223 OS audit checks delivered |
 | v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01; `scripts/report-mirror-intake.mjs` + policy/schema/log/runbook/skill delivered |

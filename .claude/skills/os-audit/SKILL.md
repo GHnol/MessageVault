@@ -15,6 +15,7 @@ Run this before claiming the repo is "fully bootstrapped" with the AI Project OS
 - Before proposing that the OS bootstrap is complete
 - When the Coordinator asks "is the OS complete?"
 - Before copying this OS to another repo (Puzzle, etc.)
+- As part of the Bootstrap copy-forward readiness check
 
 **Invocation type:** User-invoked.
 

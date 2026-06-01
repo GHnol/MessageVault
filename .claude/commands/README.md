@@ -36,6 +36,8 @@ When a command is invoked, Claude follows the skill protocol. The command file i
 | `/google-calendar-sync` | `google-calendar-sync` | Run Google Calendar live sync — validate, dry-run, and (Gate 3) apply | `docs/project-control/google-calendar-sync-policy.md` |
 | `/report-intake` | `report-intake` | Run the report mirror intake sequence — sanitize and preview a closeout report, then apply sanitized summary to mirror log | `docs/project-control/report-mirror-policy.md` |
 | `/external-sync-consistency` | `external-sync-consistency` | Run the external sync consistency validator — compare source records, local map, logs, and optional live read-only state | `docs/project-control/external-sync-consistency-policy.md` |
+| `/documentation-watch` | `documentation-watch` | Run docs-watch review — evaluate official tool changes against scrutinous adoption rule; classify as ADOPT/DEFER/REJECT/MONITOR | `docs/ai-system/documentation-watch-policy.md` |
+| `/bootstrap-copy-forward` | `bootstrap-copy-forward` | Run bootstrap copy-forward audit — verify readiness and plan for copying OS from KeepMees into Puzzle or future repo | `docs/ai-system/bootstrap-copy-forward-guide.md` |
 
 ---
 

@@ -27,9 +27,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-01
-**Last mirrored:** RPT-20260601-001 (IN PROGRESS — Gate 3 implementation pass, pending Coordinator approval and commit)
-**Active gate:** v1.7 Gate 3 — implementation in progress on branch `docs/ai-project-os-v1-7-report-mirroring-intake`
-**Next expected mirror:** v1.7 Gate 3 closeout entry will be updated to `mirrored` after commit
+**Last mirrored:** RPT-20260601-002 (Gate 6 implementation pass — documentation-watch framework + Bootstrap copy-forward finalization)
+**Active gate:** v1.7 Gate 6 — implementation complete on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`; commit pending Coordinator approval
+**Next expected mirror:** v1.7 Gate 6 commit closeout after Coordinator approves and commit is created
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,11 +39,31 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260601-002 | package_closeout | v1.7 Gate 6 | docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization | 5432650 | mirrored | 2026-06-01 |
 | RPT-20260601-001 | package_closeout | v1.7 Gate 3 | docs/ai-project-os-v1-7-report-mirroring-intake | d872f68 | in-progress | 2026-06-01 |
 
 ---
 
 ## Entry detail
+
+### RPT-20260601-002 — package_closeout — v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization
+
+**Created:** 2026-06-01T00:00:00Z | **Branch:** docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization | **HEAD:** 5432650 | **Status:** mirrored
+
+AI Project OS v1.7 Gate 6 implementation complete. Added documentation-watch evaluation framework (policy, official source categories, evaluation template, durable log, skill, command, validator script). Finalized Bootstrap Core copy-forward guidance (universal-vs-project-specific artifact map, Puzzle alignment checklist, future-repo bootstrap checklist, copy-forward guide, skill, command, audit script). Added Section 6j to OS self-audit checklist and script (~35 new checks; total 288 pass). Updated skill roster (19 → 21), command roster (+2), weekly-sync skill (docs-watch check), os-audit skill (copy-forward readiness note), universal-standards.md (automation table), bootstrap-template.md (verification section + template contents). Updated project-control state: current-sprint Gate 6 In Progress, kanban Gate 6 In Progress. Updated state docs to Gate 6 branch.
+
+**Files created:** 14 new (docs-watch policy/sources/template/log, copy-forward guide, universal-vs-project-specific map, puzzle-alignment-checklist, future-repo-bootstrap-checklist, 2 skills, 2 commands, 2 scripts).
+**Files modified:** 16 (os-self-audit.mjs, os-self-audit-checklist.md, CHANGELOG.md, version-history.md, README.md, universal-standards.md, bootstrap-template.md, skills/README.md, commands/README.md, weekly-sync SKILL.md, os-audit SKILL.md, current-sprint.md, kanban-board.md, AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md).
+
+**Tests/validators:** node --check all 8 scripts: PASS | documentation-watch-check: 36 pass, 0 fail | bootstrap-copy-forward-audit: 45 pass, 0 fail | os-self-audit: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE | state-freshness: WARN (0 FAILs, 4 cosmetic WARNs accepted) | external-sync-consistency --local-only: 7 pass, 4 warn, 0 fail | fixture-test: PASS 12/12 | project-control-sync-validate: 11 pass, 0 fail | google-calendar-source-validate: 151 pass, 0 fail | google-calendar-sync-dry-run --local-only: 10 READY_FOR_LIVE_COMPARE | github-project-field-map: PASS | github-project-sync-status: PASS
+**External operations:** none — no Google Calendar mutation, no GitHub Project mutation, no live docs browsing | **Hard exclusions:** confirmed — no index.html, no src/**, no public/**, no amplify/**, no root package.json, no credentials, no tokens, no external-sync-map.local.json staged, no local-sync-reports committed, no raw-transcripts committed
+**Next action:** Coordinator approves Gate 6; commit with recommended message; merge to main; run final v1.7 state sync; push origin/main; then Coordinator decides on Package 5B
+**Package 5B:** not started — blocked until v1.7 complete and Coordinator explicitly authorizes product work
+**Follow-up:** false
+
+*Entry added manually (Option A) as the Gate 6 implementation record. No raw transcript, credential, token, local artifact path, or private content is included. Source type: manual_paste.*
+
+---
 
 ### RPT-20260601-001 — package_closeout — v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake
 
