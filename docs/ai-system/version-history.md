@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.6.3 | AI Project OS v1.6 — Advisory Repair: Sync-Map Read Path | 2026-06-01 | COMPLETE — on branch `fix/google-calendar-sync-map-read-path`; commit pending Coordinator approval; post-repair dry-run: 10 NO_OP, 0 MISSING_LOCAL_MAPPING |
 | 1.6.2 | AI Project OS v1.6 — Gate 2D Repair: Canonical OAuth Bootstrap | 2026-05-31 | In progress on branch `docs/google-calendar-oauth-path-alignment`; no OAuth run; no live API; Gate 2D re-run pending after merge |
 | 1.6.1 | AI Project OS v1.6 — Gate 2A: Live Dry-Run Comparison Logic | 2026-05-31 | Gate 2A in progress (branch `docs/google-calendar-live-dry-run-logic`, uncommitted); Gate 2B pending googleapis + credentials |
 | 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync, Gate 1 | 2026-05-30 | Gate 1 COMPLETE — merged `5c4bd28`; Gate 2A in progress; Gate 2B/3 pending Coordinator authorization |

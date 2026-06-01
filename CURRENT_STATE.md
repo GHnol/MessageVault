@@ -21,13 +21,13 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `95d3594` — fix: implement Gate 3 live apply and correct OAuth scope (state-sync commit pending) |
-| Active branch | `main` |
-| Active pass | None |
-| Last completed pass | `AI Project OS v1.6 Gate 3` — Live Calendar Apply — 2026-06-01 |
+| main HEAD | `1d83026` — docs: record v1.6 Gate 3 live apply completion |
+| Active branch | `fix/google-calendar-sync-map-read-path` |
+| Active pass | Advisory repair — sync-map read path fix (commit pending) |
+| Last completed pass | `AI Project OS v1.6 advisory repair` — sync-map read path — 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator authorizes Package 5B or optional follow-up advisory pass |
-| OS audit | Gate 3 apply: 166 pass, 0 warn, 0 fail |
+| Next authorized target | Coordinator authorizes advisory repair commit, then Package 5B or other |
+| OS audit | Advisory repair: 166 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
@@ -36,7 +36,8 @@
 | v1.6 Gate 2D Repair | COMPLETE — merged `fe1315a` 2026-05-31 |
 | v1.6 Gate 2D live dry-run | COMPLETE — 2026-06-01. 478 events fetched. 10 CREATE, 0 blockers. `gate3_apply_allowed: true`. |
 | v1.6 Gate 3 | COMPLETE — 2026-06-01. 10 events created. 0 errors. Post-apply dry-run: all 10 NO_OP, high confidence. |
-| v1.6 overall | **COMPLETE** — Gate 3 live apply succeeded 2026-06-01. |
+| v1.6 advisory repair | COMPLETE — 2026-06-01. Sync-map read path fixed. Post-repair dry-run: 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING. |
+| v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01. |
 
 ---
 
