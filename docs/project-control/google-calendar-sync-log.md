@@ -10,6 +10,19 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — Gate 3: live apply COMPLETE — 10 event(s) created
+
+- **Gate:** Gate 3
+- **Method:** api-apply (live create/update)
+- **Changed by:** Claude Code (Sonnet 4.6) + Coordinator (Gate 3 authorization)
+- **Events created:** keepmees-ritual-ceo-review-weekly, keepmees-ritual-coordinator-planning-weekly, keepmees-ritual-dev-review-weekly, keepmees-ritual-product-design-review-weekly, keepmees-ritual-project-control-sync-weekly, keepmees-ritual-monthly-roadmap-reset, keepmees-ritual-monthly-budget-review, keepmees-ritual-monthly-risk-review, keepmees-milestone-phase-gate-review, keepmees-milestone-launch-readiness-review
+- **Events updated:** none
+- **Events removed:** none
+- **Credential status:** present (gitignored)
+- **Notes:** Gate 3 live apply complete. Artifact: `local-sync-reports/google-calendar-dry-run-live-2026-06-01T00-21-06-514Z.json`. Created: 10. Updated: 0. Errors: 0. Event IDs written to `docs/project-control/external-sync-map.local.json` (gitignored, local-only). No events deleted or cancelled. v1.6 Gate 3 COMPLETE.
+
+---
+
 ## How to add an entry
 
 ```markdown
