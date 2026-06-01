@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.6 advisory repair MERGED to main 2026-06-01. Merge commit: `db45e6a`. main HEAD: `db45e6a`. Working tree clean. 166 OS audit pass. Package 5B blocked.
+**Status:** `in-progress` — AI Project OS v1.7 Gate 1 audit complete. Planning artifact created. Awaiting Coordinator review and Gate 2 authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,29 +18,32 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `db45e6a` — merge: Google Calendar sync-map read path advisory repair |
+| **Active pass** | `AI Project OS v1.7 — Zero-Fault Closeout Contract` — Gate 1 (audit and planning) |
+| **Active branch** | `docs/ai-project-os-v1-7-zero-fault-audit` |
+| **main HEAD** | `96033b7` — docs: sync state after Google Calendar sync-map advisory repair |
 | **Last completed pass** | `AI Project OS v1.6 advisory repair` — sync-map read path — merged `db45e6a` 2026-06-01 |
-| **Active package** | None |
+| **Active package** | None (v1.7 is OS-layer work, not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
-| **Package 5B** | Not started — blocked pending Coordinator authorization |
+| **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
 
 ---
 
-## Objective (last completed pass)
+## Objective (active pass — v1.7 Gate 1)
 
-Advisory repair — Google Calendar sync-map read path — 2026-06-01. Delivered:
-1. Root cause identified: `runLiveMode` in `scripts/google-calendar-sync-dry-run.mjs` passed `fixtureLocalMap: {}` (empty) to `compareSourceToEvents`, never reading `external-sync-map.local.json`.
-2. Fix: `loadLocalSyncMap()` function added — reads `external-sync-map.local.json` in read-only mode, supports apply-script shape (`google_calendar.events[os_id]`) and example shape (`google_calendar[os_id]` directly).
-3. `buildLocalMapDiagnostics()` added — safe diagnostics section in artifact (no raw event IDs or credentials).
-4. `--sync-map-fixture <path>` flag added to fixture mode — proves read path without live calendar access.
-5. New fixture file: `docs/project-control/google-calendar-external-sync-map.fixture.json` (fake placeholder IDs only).
-6. `docs/project-control/google-calendar-sync-log.md` updated with repair entry.
-7. Post-repair live dry-run: 488 events fetched, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers, `gate3_apply_allowed: true`.
-8. OS self-audit: 166 pass, 0 warn, 0 fail. Hard-exclusion diff: clean.
+AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan.
 
-No credential or token contents printed. No events deleted or cancelled.
+**Gate 1 is complete.** Delivered:
+1. Full audit of all 43+ OS docs, 22 scripts, 18 commands, 16 skills, 1 agents placeholder, 5 validators.
+2. Enforceability map: automatic / script-assisted / skill-routed / approval-gated / policy-only / manual / backlog.
+3. Gap report across 10 audit dimensions (closeout, freshness, mirroring, context, model routing, custom settings, docs-watch, notifications, external sync, bootstrap copy-forward).
+4. State-sync commit strategy decision matrix (addendum A).
+5. Playwright and test trustworthiness map (addendum B) — 1603 tests confirmed; `test-strategy.md` count stale (says 1466).
+6. 6-gate v1.7 implementation plan with per-gate file targets, script specs, and commit messages.
+7. Classification of all v1.7 candidates: IMPLEMENT NOW / IMPLEMENT LATER / MANUAL ONLY / REJECT / MONITOR.
+8. Identified stale state: `kanban-board.md` and `current-sprint.md` are operationally misleading (v1.3–v1.6 not in Done; Sprint 2026-05-B shows as active).
+9. Planning artifact: `docs/ai-system/v1-7-zero-fault-audit-plan.md`.
+
+No scripts, skills, commands, or OS protocol docs modified in Gate 1.
 
 ---
 
@@ -87,7 +90,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Advisory repair merged to `main` (`db45e6a`). Coordinator authorizes next product package (Package 5B or other). No product package work authorized without explicit instruction. Push to `origin/main` pending separate Coordinator authorization.
+Coordinator reviews `docs/ai-system/v1-7-zero-fault-audit-plan.md` Gate 1 report. If approved:
+1. Authorize v1.7 Gate 2 (Closeout and State Freshness Validators).
+2. Specify any reclassifications (IMPLEMENT NOW ↔ LATER ↔ REJECT).
+3. Confirm kanban/sprint stale state correction is in scope for Gate 2.
+4. This branch (`docs/ai-project-os-v1-7-zero-fault-audit`) needs a commit and merge to main before Gate 2 begins.
+
+Do not start Gate 2 without Coordinator approval. Do not start Package 5B. Do not push without explicit instruction.
 
 ---
 
