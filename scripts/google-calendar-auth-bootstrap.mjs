@@ -43,8 +43,9 @@ const CANONICAL_TOKEN_FILE = 'docs/project-control/google-calendar-token.local.j
 const LEGACY_CREDENTIALS_FILE = 'google-calendar-credentials.json';
 const LEGACY_TOKEN_FILE = 'token.json';
 
-// OAuth scope for read-only dry-run (Gate 2B)
-const SCOPE_READONLY = 'https://www.googleapis.com/auth/calendar.readonly';
+// calendar.events covers both read (Gate 2B dry-run) and create/update (Gate 3 apply).
+// calendar.readonly would block Gate 3 writes — do not revert to readonly-only.
+const SCOPE_EVENTS = 'https://www.googleapis.com/auth/calendar.events';
 
 const args = process.argv.slice(2);
 const isAuthStatus = args.includes('--auth-status');
@@ -225,7 +226,7 @@ async function runInitOAuth() {
 
   const authUrl = oAuth2Client.generateAuthUrl({
     access_type: 'offline',
-    scope: [SCOPE_READONLY],
+    scope: [SCOPE_EVENTS],
     prompt: 'consent',
   });
 

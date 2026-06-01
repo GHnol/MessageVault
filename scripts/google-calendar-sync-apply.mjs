@@ -55,7 +55,7 @@
  *     → per-item delete/cancel (separate Coordinator approval required)
  */
 
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { resolve, join } from 'path';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
@@ -339,11 +339,188 @@ console.log('  [PASS] googleapis package found');
 console.log('');
 
 // --- Gate 3 live apply implementation ---
-// Full implementation delivered in Gate 3 authorized session.
-// All guards above are real and functional; this block executes when all pass.
-console.log('Gate 3 live apply: implementation pending Gate 3 authorized session.');
-console.log('All pre-flight guards are real. Live API calls are implemented in the Gate 3 pass.');
-console.log('');
-console.log('---');
-console.log('No external sync was performed. No files were modified by this script (Gate 3 pending).');
-process.exit(0);
+
+async function runGate3Apply() {
+  let google;
+  try {
+    const mod = await import('googleapis');
+    google = mod.google;
+  } catch {
+    abort('googleapis not importable. Install: cd scripts && npm install googleapis');
+  }
+
+  let credentials, token;
+  try {
+    credentials = JSON.parse(readFileSync(join(ROOT, credFile), 'utf8'));
+  } catch (e) {
+    abort(`Could not parse ${credFile}: ${e.message}`);
+  }
+  try {
+    token = JSON.parse(readFileSync(join(ROOT, tokenFile), 'utf8'));
+  } catch (e) {
+    abort(`Could not parse ${tokenFile}: ${e.message}`);
+  }
+
+  const { client_secret, client_id, redirect_uris } =
+    credentials.installed || credentials.web || {};
+  const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris?.[0]);
+  oAuth2Client.setCredentials(token);
+
+  const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
+  const calendarId = 'primary';
+  const applyTimestamp = new Date().toISOString();
+  const applyDate = applyTimestamp.slice(0, 10);
+
+  const createItems = artifact.results.filter(r => r.classification === 'CREATE');
+  const updateItems = artifact.results.filter(r => r.classification === 'UPDATE');
+  const skipItems = artifact.results.filter(r => r.classification === 'NO_OP');
+
+  console.log('Applying Gate 3 changes:');
+  console.log(`  CREATE: ${createItems.length}`);
+  console.log(`  UPDATE: ${updateItems.length}`);
+  console.log(`  NO_OP (skip): ${skipItems.length}`);
+  console.log('');
+
+  const createdEvents = [];
+  const updatedEvents = [];
+  const errors = [];
+
+  for (const item of createItems) {
+    const payload = item.proposed_event_payload;
+    console.log(`  [CREATE] ${item.os_id}...`);
+    try {
+      const res = await calendar.events.insert({ calendarId, resource: payload });
+      createdEvents.push({
+        os_id: item.os_id,
+        event_id: res.data.id,
+        title: payload.summary,
+        html_link: res.data.htmlLink,
+      });
+      console.log(`    [OK] event id: ${res.data.id}`);
+    } catch (e) {
+      errors.push({ os_id: item.os_id, operation: 'CREATE', error: e.message });
+      console.log(`    [ERROR] ${e.message}`);
+    }
+  }
+
+  for (const item of updateItems) {
+    const payload = item.proposed_event_payload;
+    const eventId = item.matched_event?.id;
+    if (!eventId) {
+      errors.push({ os_id: item.os_id, operation: 'UPDATE', error: 'matched_event.id missing from artifact' });
+      console.log(`  [UPDATE ERROR] ${item.os_id} — matched_event.id missing`);
+      continue;
+    }
+    console.log(`  [UPDATE] ${item.os_id} (id: ${eventId})...`);
+    try {
+      const res = await calendar.events.update({ calendarId, eventId, resource: payload });
+      updatedEvents.push({ os_id: item.os_id, event_id: res.data.id, title: payload.summary });
+      console.log(`    [OK] event id: ${res.data.id}`);
+    } catch (e) {
+      errors.push({ os_id: item.os_id, operation: 'UPDATE', error: e.message });
+      console.log(`    [ERROR] ${e.message}`);
+    }
+  }
+
+  console.log('');
+  console.log('APPLY RESULTS:');
+  console.log(`  Created: ${createdEvents.length}`);
+  console.log(`  Updated: ${updatedEvents.length}`);
+  console.log(`  Skipped (NO_OP): ${skipItems.length}`);
+  console.log(`  Errors: ${errors.length}`);
+  console.log('');
+
+  if (errors.length > 0) {
+    console.log('ERRORS:');
+    for (const e of errors) {
+      console.log(`  [${e.operation} ERROR] ${e.os_id}: ${e.error}`);
+    }
+    console.log('');
+  }
+
+  // Write event IDs to external-sync-map.local.json (local-only, gitignored)
+  const mapPath = join(ROOT, LOCAL_MAP_FILE);
+  let syncMap = {};
+  if (existsSync(mapPath)) {
+    try { syncMap = JSON.parse(readFileSync(mapPath, 'utf8')); } catch { /* start fresh */ }
+  }
+  if (!syncMap.google_calendar) {
+    syncMap.google_calendar = { _last_synced: applyDate, events: {} };
+  }
+  syncMap.google_calendar._last_synced = applyDate;
+  if (!syncMap.google_calendar.events) syncMap.google_calendar.events = {};
+  for (const ev of [...createdEvents, ...updatedEvents]) {
+    syncMap.google_calendar.events[ev.os_id] = {
+      external_id: ev.event_id,
+      os_id: ev.os_id,
+      title: ev.title,
+      operation: createdEvents.includes(ev) ? 'created' : 'updated',
+      applied_at: applyTimestamp,
+    };
+  }
+  syncMap._last_updated = applyDate;
+  writeFileSync(mapPath, JSON.stringify(syncMap, null, 2), 'utf8');
+  console.log(`external-sync-map.local.json updated (local-only, gitignored).`);
+  console.log('');
+
+  // Update sync log
+  const syncLogPath = join(ROOT, 'docs/project-control/google-calendar-sync-log.md');
+  let syncLogContent;
+  try { syncLogContent = readFileSync(syncLogPath, 'utf8'); } catch (e) {
+    abort(`Could not read sync log: ${e.message}`);
+  }
+  const createdList = createdEvents.map(e => e.os_id).join(', ') || 'none';
+  const updatedList = updatedEvents.map(e => e.os_id).join(', ') || 'none';
+  const errorNote = errors.length > 0
+    ? ` Errors: ${errors.map(e => `${e.os_id} (${e.operation}): ${e.error}`).join('; ')}.`
+    : '';
+  const logEntry =
+    `## ${applyDate} — Gate 3: live apply COMPLETE — ${createdEvents.length} event(s) created\n\n` +
+    `- **Gate:** Gate 3\n` +
+    `- **Method:** api-apply (live create/update)\n` +
+    `- **Changed by:** Claude Code (Sonnet 4.6) + Coordinator (Gate 3 authorization)\n` +
+    `- **Events created:** ${createdEvents.length > 0 ? createdList : 'none'}\n` +
+    `- **Events updated:** ${updatedEvents.length > 0 ? updatedList : 'none'}\n` +
+    `- **Events removed:** none\n` +
+    `- **Credential status:** present (gitignored)\n` +
+    `- **Notes:** Gate 3 live apply complete. Artifact: \`${dryRunArtifactPath}\`. ` +
+    `Created: ${createdEvents.length}. Updated: ${updatedEvents.length}. Errors: ${errors.length}.` +
+    `${errorNote} Event IDs written to \`${LOCAL_MAP_FILE}\` (gitignored, local-only). ` +
+    `No events deleted or cancelled. v1.6 Gate 3 ${errors.length === 0 ? 'COMPLETE' : 'PARTIAL — see errors'}.` +
+    `\n\n---\n\n`;
+  // Match marker regardless of line ending style (\r\n on Windows, \n on Unix)
+  const insertMarkerRe = /Newest entries first\.(\r?\n){2}---(\r?\n){2}/;
+  const insertMatch = insertMarkerRe.exec(syncLogContent);
+  if (insertMatch) {
+    const pos = insertMatch.index + insertMatch[0].length;
+    syncLogContent = syncLogContent.slice(0, pos) + logEntry + syncLogContent.slice(pos);
+  } else {
+    syncLogContent += '\n' + logEntry;
+  }
+  writeFileSync(syncLogPath, syncLogContent, 'utf8');
+  console.log('google-calendar-sync-log.md updated.');
+  console.log('');
+
+  const status = errors.length === 0 ? 'COMPLETE' : 'PARTIAL';
+  console.log(`GATE 3 APPLY: ${status}`);
+  console.log(`  Events created:        ${createdEvents.length}`);
+  console.log(`  Events updated:        ${updatedEvents.length}`);
+  console.log(`  Events skipped (NO_OP): ${skipItems.length}`);
+  console.log(`  Errors:                ${errors.length}`);
+  console.log(`  Artifact used:         ${dryRunArtifactPath}`);
+  console.log(`  Sync map updated:      ${LOCAL_MAP_FILE} (local-only, gitignored)`);
+  console.log(`  Sync log updated:      docs/project-control/google-calendar-sync-log.md`);
+  console.log('');
+  console.log('---');
+  if (errors.length === 0) {
+    console.log('Gate 3 apply complete. All events created. No events deleted or cancelled.');
+  } else {
+    console.log(`Gate 3 apply partial. ${errors.length} error(s) encountered. Review errors above.`);
+  }
+  console.log('No files committed.');
+}
+
+runGate3Apply().catch(e => {
+  console.error(`\nFATAL: Gate 3 apply failed: ${e.message}`);
+  process.exit(1);
+});

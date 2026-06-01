@@ -27,6 +27,19 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — Gate 3: live apply BLOCKED — scope blocker (0 events created)
+
+- **Gate:** Gate 3
+- **Method:** api-apply (live create/update attempted)
+- **Changed by:** Claude Code (Sonnet 4.6) + Coordinator (Gate 3 authorization)
+- **Events created:** none
+- **Events updated:** none
+- **Events removed:** none
+- **Credential status:** present (gitignored)
+- **Notes:** Gate 3 live apply attempted. All 10 CREATE events failed with "Request had insufficient authentication scopes." Root cause: OAuth token was bootstrapped with `calendar.readonly` scope (Gate 2D), which does not permit event creation. Fix: `scripts/google-calendar-auth-bootstrap.mjs` updated to request `calendar.events` scope. Coordinator must re-run `--init-oauth` to generate a new write-capable token, then re-run Gate 3. No calendar events created, updated, or deleted. Sync map and sync log updated locally. v1.6 Gate 3 NOT COMPLETE — requires re-bootstrap and re-apply.
+
+---
+
 ## 2026-06-01 — Gate 2D: live read-only dry-run COMPLETE
 
 - **Gate:** Gate 2D
@@ -80,3 +93,4 @@ Newest entries first.
 ---
 
 ## Future entries go above this line
+
