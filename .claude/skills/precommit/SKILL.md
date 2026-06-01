@@ -33,7 +33,17 @@ Run in parallel:
 
 ## Sync obligations
 
-None specific to this skill — precommit is read-only (verification only). However, if the verification reveals state docs are stale enough to misdirect the next agent, flag it and recommend a sync update before commit.
+Run the state freshness validator as part of the pre-commit gate:
+
+```
+node scripts/state-freshness-check.mjs
+```
+
+If FAILs are reported, they must be resolved before recommending commit. WARNs must be disclosed. Apply the Post-Commit State Rule: WARN_HEAD_HASH_LAG is cosmetic and does not block commit. See `docs/dev/closeout-sync-contract.md` § "State-Sync Decision Matrix".
+
+For OS/docs-only packages (no app or `src/` changes): the state freshness check and `node scripts/os-self-audit.mjs` satisfy the pre-commit verification gate. Full app/E2E suites are not required.
+
+If the verification reveals state docs are stale enough to misdirect the next agent, flag it and recommend a sync update before commit.
 
 ## Output format
 

@@ -34,6 +34,14 @@ Run in parallel:
 
 ## Sync obligations
 
+Run the state freshness validator before recommending commit or merge:
+
+```
+node scripts/state-freshness-check.mjs
+```
+
+If FAILs are reported, fix them before proceeding. WARNs must be disclosed in the closeout report. See `docs/dev/closeout-sync-contract.md` § "State-Sync Decision Matrix" for FAIL/WARN/PASS criteria.
+
 After package verification and continuity file updates, run the internal sync check defined in `docs/dev/closeout-sync-contract.md`. The sync check verifies:
 
 - `CURRENT_STATE.md` — updated with last-closed package

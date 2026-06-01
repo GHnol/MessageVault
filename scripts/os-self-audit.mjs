@@ -240,6 +240,21 @@ checkGrep('google-calendar-sync-apply.mjs has --apply hard stop', 'scripts/googl
 checkGrep('google-calendar-source-records.json is valid JSON (grep check)', 'docs/project-control/google-calendar-source-records.json', 'os_id');
 checkGrep('google-calendar-source-records.json has AI_OS_ID markers', 'docs/project-control/google-calendar-source-records.json', 'AI_OS_ID:');
 
+// --- Section 6f: State freshness validator layer (AI Project OS v1.7 Gate 2) ---
+checkFile('scripts/state-freshness-check.mjs (v1.7 state freshness validator)', 'scripts/state-freshness-check.mjs');
+checkGrep('state-freshness-check.mjs supports --json flag', 'scripts/state-freshness-check.mjs', '--json');
+checkGrep('state-freshness-check.mjs supports --strict flag', 'scripts/state-freshness-check.mjs', '--strict');
+checkGrep('state-freshness-check.mjs has FAIL_WRONG_ACTIVE_BRANCH code', 'scripts/state-freshness-check.mjs', 'FAIL_WRONG_ACTIVE_BRANCH');
+checkGrep('state-freshness-check.mjs has FAIL_PACKAGE_5B_UNAUTHORIZED code', 'scripts/state-freshness-check.mjs', 'FAIL_PACKAGE_5B_UNAUTHORIZED');
+checkGrep('state-freshness-check.mjs has FAIL_TEST_BASELINE_MATERIAL_MISMATCH code', 'scripts/state-freshness-check.mjs', 'FAIL_TEST_BASELINE_MATERIAL_MISMATCH');
+checkGrep('state-freshness-check.mjs has FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED code', 'scripts/state-freshness-check.mjs', 'FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED');
+checkGrep('state-freshness-check.mjs has WARN_HEAD_HASH_LAG code', 'scripts/state-freshness-check.mjs', 'WARN_HEAD_HASH_LAG');
+checkGrep('state-freshness-check.mjs does not make external API calls', 'scripts/state-freshness-check.mjs', 'No external dependencies. No API calls. No external writes.');
+checkGrep('closeout-sync-contract.md has state-sync decision matrix', 'docs/dev/closeout-sync-contract.md', 'State-Sync Decision Matrix');
+checkGrep('closeout-sync-contract.md references state-freshness-check.mjs', 'docs/dev/closeout-sync-contract.md', 'state-freshness-check.mjs');
+checkGrep('closeout SKILL.md references state-freshness-check.mjs', '.claude/skills/closeout/SKILL.md', 'state-freshness-check.mjs');
+checkGrep('precommit SKILL.md references state-freshness-check.mjs', '.claude/skills/precommit/SKILL.md', 'state-freshness-check.mjs');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

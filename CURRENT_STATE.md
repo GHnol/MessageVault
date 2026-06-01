@@ -21,25 +21,19 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `3c641a9` — merge: AI Project OS v1.7 Gate 1 zero-fault audit and implementation plan |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `2645ebb` — docs: sync state after AI Project OS v1.7 Gate 1 merge |
+| Active branch | `docs/ai-project-os-v1-7-state-freshness-validators` |
+| Active pass | `AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators` (IN PROGRESS) |
 | Last completed pass | `AI Project OS v1.7 Gate 1` — audit and planning — merged `3c641a9` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | v1.7 Gate 2 pending Coordinator authorization; Package 5B blocked until v1.7 complete |
-| OS audit | Gate 1: 166 pass, 0 warn, 0 fail |
+| Next authorized target | v1.7 Gate 2 COMMIT pending Coordinator approval; Gate 3 queued; Package 5B blocked |
+| OS audit | Gate 1: 166 pass, 0 warn, 0 fail. Gate 2 target: ~179 pass. |
 | Package 5B | Not started — blocked until v1.7 complete and explicit Coordinator authorization |
+| v1.7 Gate 2 | IN PROGRESS — branch `docs/ai-project-os-v1-7-state-freshness-validators`; implementation complete; pending commit |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
-| Stale state flagged | `kanban-board.md` and `current-sprint.md` are operationally misleading — Gate 2 target |
+| Stale state fixed | `kanban-board.md`, `current-sprint.md`, `test-strategy.md`, `model-routing-protocol.md` — corrected in Gate 2 |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
-| v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
-| v1.6 Gate 2A | COMPLETE — merged `a530c56` 2026-05-31 |
-| v1.6 Gate 2C | COMPLETE — merged `041761a` 2026-05-31 |
-| v1.6 Gate 2D Repair | COMPLETE — merged `fe1315a` 2026-05-31 |
-| v1.6 Gate 2D live dry-run | COMPLETE — 2026-06-01. 478 events fetched. 10 CREATE, 0 blockers. `gate3_apply_allowed: true`. |
-| v1.6 Gate 3 | COMPLETE — 2026-06-01. 10 events created. 0 errors. Post-apply dry-run: all 10 NO_OP, high confidence. |
-| v1.6 advisory repair | COMPLETE — 2026-06-01. Sync-map read path fixed. Post-repair dry-run: 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING. |
-| v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01. |
+| v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01 |
 
 ---
 

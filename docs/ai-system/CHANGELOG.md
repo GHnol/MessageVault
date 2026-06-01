@@ -9,6 +9,56 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — AI Project OS v1.7: Gate 2 — Closeout and State Freshness Validators
+
+**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-state-freshness-validators`; commit pending Coordinator approval. No OAuth run. No live calendar mutations. No product code. No Package 5B.
+**Scope:** Add repo-native state freshness validator (`scripts/state-freshness-check.mjs`); document state-sync decision matrix; correct stale kanban/sprint; update test-strategy.md baseline; refresh model-routing-protocol.md; wire validator into closeout/precommit/handoff/start skills; update OS self-audit.
+
+### Added
+
+- `scripts/state-freshness-check.mjs` — dependency-free Node ESM state freshness validator: reads git state + durable state files, classifies issues as FAIL/WARN/PASS. Required checks: branch alignment (FAIL_WRONG_ACTIVE_BRANCH), Package 5B not authorized (FAIL_PACKAGE_5B_UNAUTHORIZED), no merged branches in kanban In Progress (FAIL_STATUS_SYNC_BRANCH_STALE_ACTIVE), test baseline 1603 (FAIL_TEST_BASELINE_MATERIAL_MISMATCH), private files gitignored (FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED). WARN checks: HEAD hash lag, changelog/version-history stale status, model ID examples, sprint/kanban copy lag. CLI: `--json`, `--strict`, `--paths`, `--explain`. Exit 0 on PASS/WARN, exit 1 on FAIL (or any WARN under --strict).
+
+### Updated
+
+- `docs/dev/closeout-sync-contract.md` — State-Sync Decision Matrix: FAIL/WARN/PASS criteria with examples; `node scripts/state-freshness-check.mjs` as the validator command; Package 5B permanent blocked rule; external apply authorization rule; Post-Commit State Rule reminder
+- `docs/project-control/kanban-board.md` — Done column updated with v1.2, v1.3, v1.5, v1.6, v1.7 Gate 1 completions; In Progress shows Gate 2 active; Sprint 2026-06-A View 2 added; Sprint 2026-05-B moved to View 3 (CLOSED)
+- `docs/project-control/current-sprint.md` — Sprint 2026-05-B closed; Sprint 2026-06-A opened for v1.7 work; Gate 2 task list added
+- `docs/qa/test-strategy.md` — baseline updated from 1466 to 1603; `proof-approval-state-tests.mjs` (137 tests) added to Layer 1 table; pre-commit baseline section updated to 11 suites; OS-only package validation rule added (run script validators, not full app suite)
+- `docs/dev/model-routing-protocol.md` — Strongest tier example updated Opus 4.7 → Opus 4.8; model ID rule added (IDs are examples, tier is the contract); Custom model settings section added (no committed project-level settings; Plan Mode clarified; scrutinous adoption rule stated; "opusplan" rejected)
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6f added (13 items for v1.7 state freshness layer)
+- `scripts/os-self-audit.mjs` — Section 6f checks added (13 checks for state-freshness-check.mjs existence, flags, issue codes, and skill/contract integration)
+- `.claude/skills/closeout/SKILL.md` — state freshness validator step added before recommending commit/merge
+- `.claude/skills/precommit/SKILL.md` — state freshness validator step added; OS-only package validation rule added
+- `.claude/skills/handoff/SKILL.md` — state freshness validator step added when preparing transfer after meaningful work
+- `.claude/skills/start/SKILL.md` — optional state freshness validator step added after git preflight
+- `docs/ai-system/CHANGELOG.md` — this entry
+- `docs/ai-system/version-history.md` — v1.7 Gate 2 row added
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read contents of, or written
+- `docs/project-control/external-sync-map.local.json` — not read or written
+- `local-sync-reports/` — gitignored, not committed
+- `scripts/google-calendar-sync-apply.mjs` — not touched
+- No GitHub Project mutations
+- No Package 5B work
+
+### Post-Gate-2 verification plan
+
+- `node --check scripts/state-freshness-check.mjs` — PASS
+- `node scripts/state-freshness-check.mjs` — PASS or WARN only (no FAILs after state docs updated)
+- `node scripts/state-freshness-check.mjs --json` — valid JSON output
+- `node scripts/os-self-audit.mjs` — at least 179 pass, 0 fail (166 prior + 13 new Section 6f checks)
+- `node scripts/project-control-sync-validate.mjs` — VALID
+- `node scripts/google-calendar-source-validate.mjs` — VALID
+- `node scripts/google-calendar-sync-dry-run.mjs --local-only` — PASS
+- Hard-exclusion diff (index.html, src, public, amplify, package.json, package-lock.json): clean
+
+---
+
 ## 2026-06-01 — AI Project OS v1.6: Advisory Repair — Google Calendar Sync-Map Read Path
 
 **Status:** COMPLETE — on branch `fix/google-calendar-sync-map-read-path`; commit pending Coordinator approval. No OAuth run. No live calendar mutations. No product code.

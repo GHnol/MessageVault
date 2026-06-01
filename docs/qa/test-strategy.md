@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; reflects the actual test surface as of main HEAD `9191532`).
-**Last updated:** 2026-05-22 (America/New_York)
+**Status:** ACTIVE (formalized in Package 2.9; updated to 1603 baseline in AI Project OS v1.7 Gate 2).
+**Last updated:** 2026-06-01 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -16,7 +16,7 @@ KeepMees uses five distinct test layers. Each has a different cost, a different 
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of main HEAD `9191532`):**
+**Suites and counts (as of Package 5A — confirmed baseline 1603):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
@@ -30,8 +30,11 @@ KeepMees uses five distinct test layers. Each has a different cost, a different 
 | `prototype-preview-registry-tests.mjs` | 215 | Preview registry + resolver (Package 4B) |
 | `product-experience-readiness-tests.mjs` | 337 | Combined readiness resolver across all 4 product layers (Package 4C) |
 | `product-experience-consumer-tests.mjs` | 35 | Null-safe app-side bridge (Package 4D) |
+| `proof-approval-state-tests.mjs` | 137 | Proof approval state model and transitions (Package 5A) |
 
-**Total: 1466 tests.** All must remain green before any commit.
+**Total: 1603 tests.** All must remain green before any commit.
+
+Note: 1466 was the pre-Package-5A baseline. Package 5A added `proof-approval-state-tests.mjs` (137 tests), raising the confirmed baseline to 1603.
 
 **Run:**
 
@@ -131,7 +134,7 @@ cd scripts && npm run capture:b   # scenario B
 
 | Package type | Layer 1 | Layer 2 | Layer 3 | Layer 4 | Layer 5 |
 |---|---|---|---|---|---|
-| Docs-only / OS infrastructure (like 2.7, 2.8, 2.9) | — | — | — | — | required |
+| Docs-only / OS infrastructure (like 2.7, 2.8, 2.9, v1.x OS passes) | — (run script validators: `os-self-audit.mjs`, `state-freshness-check.mjs`) | — | — | — | required |
 | `src/` engine module | required | recommended if app-visible | — | — | required |
 | New product / catalog logic | required | recommended | — | — | required |
 | New persistence logic | required | required | required | — | required |
@@ -146,16 +149,20 @@ cd scripts && npm run capture:b   # scenario B
 
 ## Future packages — testing planning
 
-When Package 5A (Message Book Proof Approval State Foundation) starts, plan tests **from the beginning**, not after the code is written.
+Package 5A is COMPLETE (merged `297a221`). Its test suite (`proof-approval-state-tests.mjs`, 137 tests) covers the proof approval state model, allowed/forbidden transitions, and decoupling from checkout. See the Layer 1 suite table above.
 
-Specific layers Package 5A must cover:
+**Package 5B (not started — blocked until v1.7 complete and Coordinator authorizes):**
 
-- **Proof approval state transitions** — Layer 1 (Node unit tests). State machine: not-yet-reviewed → in-review → approved → revoked → (re-)approved; with allowed and forbidden transitions.
-- **Serialization / restore** of proof state across save/load — Layer 1 + Layer 2 + Layer 3.
-- **Product eligibility coupling** — Layer 1 (the proof state must not silently affect which products are eligible).
-- **No checkout / PDF coupling** — Layer 1 must explicitly assert that proof state remains decoupled from checkout flow (which doesn't exist yet).
+When Package 5B is authorized, plan tests **from the beginning**, not after the code is written.
 
-Tests planned and named **before** Package 5A coding starts go in the Package 5A spec, not in this doc.
+Layers Package 5B must cover:
+
+- **Proof approval state → UI surface wiring** — Layer 1 (unit) + Layer 2 (E2E seeded).
+- **Any new UI surface added by Package 5B** — Layer 2 required.
+- **End-to-end proof approval flow** — Layer 2 + Layer 3 if real-file paths are involved.
+- **Serialization / restore of any new state** — Layer 1 + Layer 2.
+
+Tests planned and named **before** Package 5B coding starts go in the Package 5B spec, not in this doc.
 
 ---
 
@@ -163,12 +170,13 @@ Tests planned and named **before** Package 5A coding starts go in the Package 5A
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 10 Node unit suites green (1466 tests).
+1. All 11 Node unit suites green (1603 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (41 tests).
 3. If real-file paths changed: E2E real-files green (64 total).
 4. If Message Book rendering changed: relevant capture harness scenario green.
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).
+7. For OS/docs-only packages: run `node scripts/os-self-audit.mjs` and `node scripts/state-freshness-check.mjs`; no full app suite required.
 
 If any of those is skipped, the agent must say so explicitly with the reason. Silent skipping is not acceptable.
 

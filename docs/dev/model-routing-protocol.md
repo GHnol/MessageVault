@@ -22,13 +22,13 @@ Routing is semi-automatic: the agent recommends, the user confirms when the choi
 
 The repo uses three tiers, named by capability rather than by specific model so the routing remains stable across model generations:
 
-| Tier | Purpose | Examples (today) |
+| Tier | Purpose | Examples (current as of 2026-06-01) |
 |---|---|---|
 | **Light** | Mechanical edits, summaries, classification, checklist generation, small cleanup | Claude Haiku 4.5 |
 | **Default** | Normal coding, debugging, tests, docs, implementation | Claude Sonnet 4.6 |
-| **Strongest** | Architecture, complex debugging, risky changes, deep review, product/system planning, failed-repeated attempts, final audits | Claude Opus 4.7 |
+| **Strongest** | Architecture, complex debugging, risky changes, deep review, product/system planning, OS validator design, failed/repeated attempts, final audits | Claude Opus 4.8 |
 
-Model IDs change over time. Tier intent does not.
+**Model ID rule:** the "Examples" column lists currently known IDs but will become stale as generations advance. Always verify the current model list against `CLAUDE.md` § Environment or the Anthropic model documentation before treating a specific ID as mandatory. The tier intent is the durable contract; the model ID is the current implementation of that tier.
 
 ---
 
@@ -104,10 +104,19 @@ The tier intent (in the routing matrix) is portable; the model IDs are not.
 
 ---
 
+## Custom model settings
+
+- Project-level `.claude/settings.json` with a model key is **not** committed in this repo — no proof it is safe or stable across Claude Code versions.
+- User-level model preference is set by the user, not the agent.
+- The agent recommends a tier; the user selects the model within that tier.
+- Plan Mode (`EnterPlanMode` tool) is a Claude Code built-in, not a separate skill. Use it for architecture and complex planning before editing files. It is not "opusplan" — that term has no technical meaning here.
+- Do not adopt new model features (batch, extended thinking, etc.) without verifying they are stable, documented, and worth the added complexity. Scrutinous adoption: default to the established approach unless there is a clear verified gain.
+
 ## What this protocol does NOT do
 
 - It does not switch models automatically. The harness exposes manual switching; this protocol guides the manual choice.
 - It does not override the user's explicit model preference for a session.
-- It does not promise a specific model is in use — model IDs may drift. The tier is the contract; the model is the implementation.
+- It does not promise a specific model is in use — model IDs may drift. The tier is the contract; the model is the current implementation of that tier.
+- It does not add "opusplan" routing — that term has no technical meaning in this repo.
 
 See `model-switching-protocol.md` for the mechanics of switching, `context-hygiene-protocol.md` for when to compact/clear before switching, and `auto-management-protocol.md` for how routing fits the broader auto-management duties.

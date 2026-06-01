@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -215,6 +215,34 @@ The audit does **not** require:
 - `googleapis` npm package installed (required only for Gate 2/3)
 - Live Google Calendar events to exist
 - Gate 2 or Gate 3 to be complete
+
+---
+
+---
+
+## 6f. State freshness validator layer (AI Project OS v1.7 Gate 2)
+
+Required when the repo has been updated to AI Project OS v1.7 Gate 2 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `scripts/state-freshness-check.mjs` exists | Required | `Glob scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` supports `--json` flag | Required | `Grep "\-\-json" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` supports `--strict` flag | Required | `Grep "\-\-strict" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` has `FAIL_WRONG_ACTIVE_BRANCH` code | Required | `Grep "FAIL_WRONG_ACTIVE_BRANCH" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` has `FAIL_PACKAGE_5B_UNAUTHORIZED` code | Required | `Grep "FAIL_PACKAGE_5B_UNAUTHORIZED" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` has `FAIL_TEST_BASELINE_MATERIAL_MISMATCH` code | Required | `Grep "FAIL_TEST_BASELINE_MATERIAL_MISMATCH" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` has `FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED` code | Required | `Grep "FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` has `WARN_HEAD_HASH_LAG` code | Required | `Grep "WARN_HEAD_HASH_LAG" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` declares no external API calls | Required | `Grep "No external dependencies. No API calls." scripts/state-freshness-check.mjs` |
+| `docs/dev/closeout-sync-contract.md` has State-Sync Decision Matrix | Required | `Grep "State-Sync Decision Matrix" docs/dev/closeout-sync-contract.md` |
+| `docs/dev/closeout-sync-contract.md` references `state-freshness-check.mjs` | Required | `Grep "state-freshness-check.mjs" docs/dev/closeout-sync-contract.md` |
+| `closeout` SKILL.md references `state-freshness-check.mjs` | Required | `Grep "state-freshness-check.mjs" .claude/skills/closeout/SKILL.md` |
+| `precommit` SKILL.md references `state-freshness-check.mjs` | Required | `Grep "state-freshness-check.mjs" .claude/skills/precommit/SKILL.md` |
+
+The audit does **not** require:
+- The script to produce zero FAILs in every repo state (FAILs are expected on an in-progress implementation branch before state docs are updated)
+- A specific verdict — PASS, WARN, and FAIL are all valid outputs depending on current state
 
 ---
 
