@@ -47,17 +47,17 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 2 (Closeout and State Freshness Validators) IN PROGRESS. Implementation complete on Gate 2 branch. Pending Coordinator review and commit authorization. |
-| Branch | `docs/ai-project-os-v1-7-state-freshness-validators` |
-| main HEAD | `2645ebb` — docs: sync state after AI Project OS v1.7 Gate 1 merge |
-| Next action | Run `/start`. Gate 2 implementation is complete. Await Coordinator review. If approved, run `/precommit` then propose commit. Do not start Gate 3 or Package 5B without explicit Coordinator authorization. |
-| OS audit | Gate 1: 166 pass, 0 warn, 0 fail. Gate 2 target: ~179 pass (run `node scripts/os-self-audit.mjs` after updates). |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — should show PASS or WARN only after Gate 2 state docs are updated. |
+| Resume into | AI Project OS v1.7 Gate 2 COMPLETE and merged 2026-06-01. State-sync on main. No active pass. Awaiting Coordinator authorization for v1.7 Gate 3 or push to origin. |
+| Branch | `main` |
+| main HEAD | `3db3074` — Merge branch 'docs/ai-project-os-v1-7-state-freshness-validators' |
+| Next action | Run `/start`. Gate 2 merged. Await Coordinator authorization for v1.7 Gate 3 or push. Do not start Gate 3 or Package 5B without explicit Coordinator authorization. |
+| OS audit | Gate 2: 179 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (3 accepted cosmetic WARNs) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
 | v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01. |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
-| v1.7 Gate 2 | IN PROGRESS — implementation complete; awaiting commit authorization. |
+| v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. `scripts/state-freshness-check.mjs` delivered. |
 | Do not | Start Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, credentials, or token. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 

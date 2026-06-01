@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — AI Project OS v1.7 Gate 2 (Closeout and State Freshness Validators) IN PROGRESS. Branch `docs/ai-project-os-v1-7-state-freshness-validators` active. Implementation complete; pending Coordinator review and commit authorization.
+**Status:** `complete` — AI Project OS v1.7 Gate 2 COMPLETE. Implementation committed `032c8c1`, merged to main `3db3074` 2026-06-01. Working tree clean. 179 OS audit pass. Package 5B blocked. Gate 3 pending Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,21 +18,21 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators` |
-| **Active branch** | `docs/ai-project-os-v1-7-state-freshness-validators` |
-| **main HEAD** | `2645ebb` — docs: sync state after AI Project OS v1.7 Gate 1 merge |
-| **Last completed pass** | `AI Project OS v1.7 Gate 1` — audit and planning — merged `3c641a9` 2026-06-01 |
-| **Active package** | None (OS infrastructure only — not a product package) |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `3db3074` — Merge branch 'docs/ai-project-os-v1-7-state-freshness-validators' |
+| **Last completed pass** | `AI Project OS v1.7 Gate 2` — state freshness validator + decision matrix — merged `3db3074` 2026-06-01 |
+| **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
 
 ---
 
-## Objective (current pass — v1.7 Gate 2)
+## Objective (last completed pass — v1.7 Gate 2)
 
 AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators.
 
-**Implementation complete — pending Coordinator review and commit.** Delivered:
+**Gate 2 COMPLETE — merged `3db3074` 2026-06-01.** Delivered:
 1. `scripts/state-freshness-check.mjs` — dependency-free Node ESM validator. FAIL/WARN/PASS classification. 8 issue codes. CLI: `--json`, `--strict`, `--paths`, `--explain`. Checks: branch alignment, Package 5B, merged branches in kanban, test baseline, gitignore, HEAD lag, changelog/version-history stale status, model ID examples, sprint/kanban copy lag.
 2. `docs/dev/closeout-sync-contract.md` — State-Sync Decision Matrix added: FAIL/WARN/PASS table with examples, validator command, Package 5B blocked rule, external apply rule, Post-Commit State Rule reminder.
 3. `docs/project-control/kanban-board.md` — Done column with v1.2–v1.7 Gate 1; Gate 2 in In Progress; Sprint 2026-06-A View 2 added.
@@ -90,18 +90,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-**Coordinator reviews Gate 2 implementation.** All deliverables listed above are complete on branch `docs/ai-project-os-v1-7-state-freshness-validators`. Working tree has changes on this branch.
+Gate 2 is merged. Run `/start` in a fresh session.
 
-If approved:
-1. Coordinator authorizes commit.
-2. Agent runs `/precommit` (state freshness check, syntax checks, hard-exclusion diff).
-3. Commit with message: `docs: add state freshness validator for AI Project OS v1.7`
-4. Merge to main with `--no-ff`.
-5. State-sync on main after merge.
-6. Push to `origin/main` (separate instruction).
-7. Coordinator then authorizes v1.7 Gate 3 or Package 5B (neither authorized yet).
+Push to `origin/main` pending separate Coordinator authorization (covers merge commit `3db3074` and this state-sync commit).
 
-Do not commit until Coordinator approves. Do not start Gate 3 or Package 5B. Do not push without explicit instruction.
+Coordinator then authorizes v1.7 Gate 3 (Report Mirroring and Project-Control Log Intake) or any other next direction.
+
+Do not start Gate 3 or Package 5B. Do not push without explicit instruction.
 
 ---
 

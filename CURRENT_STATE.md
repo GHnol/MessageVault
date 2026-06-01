@@ -21,15 +21,15 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `2645ebb` — docs: sync state after AI Project OS v1.7 Gate 1 merge |
-| Active branch | `docs/ai-project-os-v1-7-state-freshness-validators` |
-| Active pass | `AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators` (IN PROGRESS) |
-| Last completed pass | `AI Project OS v1.7 Gate 1` — audit and planning — merged `3c641a9` 2026-06-01 |
+| main HEAD | `3db3074` — Merge branch 'docs/ai-project-os-v1-7-state-freshness-validators' |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.7 Gate 2` — state freshness validator + decision matrix — merged `3db3074` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | v1.7 Gate 2 COMMIT pending Coordinator approval; Gate 3 queued; Package 5B blocked |
-| OS audit | Gate 1: 166 pass, 0 warn, 0 fail. Gate 2 target: ~179 pass. |
+| Next authorized target | v1.7 Gate 3 pending Coordinator authorization; Package 5B blocked until v1.7 complete |
+| OS audit | Gate 2: 179 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | Not started — blocked until v1.7 complete and explicit Coordinator authorization |
-| v1.7 Gate 2 | IN PROGRESS — branch `docs/ai-project-os-v1-7-state-freshness-validators`; implementation complete; pending commit |
+| v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01; `scripts/state-freshness-check.mjs` + decision matrix delivered |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
 | Stale state fixed | `kanban-board.md`, `current-sprint.md`, `test-strategy.md`, `model-routing-protocol.md` — corrected in Gate 2 |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
