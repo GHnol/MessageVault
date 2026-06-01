@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01; Section 6j added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization, 2026-06-01)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -351,6 +351,44 @@ The audit does **not** require:
 
 ---
 
+## 6j. Documentation-watch and Bootstrap copy-forward layer (AI Project OS v1.7 Gate 6)
+
+Required when the repo has been updated to AI Project OS v1.7 Gate 6 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `docs/ai-system/documentation-watch-policy.md` exists | Required | `Glob docs/ai-system/documentation-watch-policy.md` |
+| `docs/ai-system/documentation-watch-sources.md` exists | Required | `Glob docs/ai-system/documentation-watch-sources.md` |
+| `docs/ai-system/documentation-watch-evaluation-template.md` exists | Required | `Glob docs/ai-system/documentation-watch-evaluation-template.md` |
+| `docs/ai-system/documentation-watch-log.md` exists | Required | `Glob docs/ai-system/documentation-watch-log.md` |
+| `docs/ai-system/bootstrap-copy-forward-guide.md` exists | Required | `Glob docs/ai-system/bootstrap-copy-forward-guide.md` |
+| `docs/ai-system/universal-vs-project-specific-map.md` exists | Required | `Glob docs/ai-system/universal-vs-project-specific-map.md` |
+| `docs/ai-system/puzzle-alignment-checklist.md` exists | Required | `Glob docs/ai-system/puzzle-alignment-checklist.md` |
+| `docs/ai-system/future-repo-bootstrap-checklist.md` exists | Required | `Glob docs/ai-system/future-repo-bootstrap-checklist.md` |
+| `documentation-watch-policy.md` has ADOPT/DEFER/REJECT/MONITOR classifications | Required | `Grep "ADOPT" docs/ai-system/documentation-watch-policy.md` |
+| `documentation-watch-policy.md` has official-source-only rule | Required | `Grep "Only official docs are authoritative" docs/ai-system/documentation-watch-policy.md` |
+| `documentation-watch-policy.md` has scrutinous adoption rule | Required | `Grep "Scrutinous adoption rule" docs/ai-system/documentation-watch-policy.md` |
+| `documentation-watch-policy.md` has browsing boundary | Required | `Grep "Browsing boundary" docs/ai-system/documentation-watch-policy.md` |
+| `documentation-watch-log.md` has at least one entry | Required | `Grep "DW-" docs/ai-system/documentation-watch-log.md` |
+| `bootstrap-copy-forward-guide.md` has never-copy rule | Required | `Grep "must NEVER be copied" docs/ai-system/bootstrap-copy-forward-guide.md` |
+| `universal-vs-project-specific-map.md` has never-copy column | Required | `Grep "Never copy?" docs/ai-system/universal-vs-project-specific-map.md` |
+| `universal-vs-project-specific-map.md` covers external-sync-map.local.json | Required | `Grep "external-sync-map.local.json" docs/ai-system/universal-vs-project-specific-map.md` |
+| `puzzle-alignment-checklist.md` has authorization reminder | Required | `Grep "requires explicit Coordinator authorization" docs/ai-system/puzzle-alignment-checklist.md` |
+| `future-repo-bootstrap-checklist.md` has OS self-audit requirement | Required | `Grep "OS self-audit requirement" docs/ai-system/future-repo-bootstrap-checklist.md` |
+| `.claude/skills/documentation-watch/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/documentation-watch/SKILL.md` |
+| `.claude/commands/documentation-watch.md` exists | Required | `Glob .claude/commands/documentation-watch.md` |
+| `.claude/skills/bootstrap-copy-forward/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/bootstrap-copy-forward/SKILL.md` |
+| `.claude/commands/bootstrap-copy-forward.md` exists | Required | `Glob .claude/commands/bootstrap-copy-forward.md` |
+| `scripts/documentation-watch-check.mjs` exists | Required | `Glob scripts/documentation-watch-check.mjs` |
+| `scripts/bootstrap-copy-forward-audit.mjs` exists | Required | `Glob scripts/bootstrap-copy-forward-audit.mjs` |
+
+The audit does **not** require:
+- A live documentation-watch review to have been completed (the framework being installed is sufficient)
+- Puzzle alignment to be complete (the checklist documents the gap; completion requires separate Coordinator authorization)
+- Any external copy-forward operation to have been performed
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -407,6 +445,8 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 | `scripts/github-project-field-map.mjs` | Recommended | GitHub Projects field map placeholder safety and field coverage |
 | `scripts/github-project-sync-status.mjs` | Recommended | Local structural sync status (no API calls) |
 | `scripts/external-sync-consistency-check.mjs` | Recommended | Section 6i — compare source records, local sync map, committed logs, and optional live read-only state |
+| `scripts/documentation-watch-check.mjs` | Recommended | Section 6j — validate that documentation-watch policy/sources/template/log exist and contain required elements |
+| `scripts/bootstrap-copy-forward-audit.mjs` | Recommended | Section 6j — validate copy-forward guide, universal-vs-project-specific map, Puzzle checklist, future-repo checklist, and gitignore safety |
 
 All scripts are read-only, dependency-free (for local-only mode), and produce no external writes. No script makes API calls without `--live-readonly` flag and Coordinator authorization.
 

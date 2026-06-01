@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.7.6 | AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization | 2026-06-01 | IN PROGRESS — on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`; commit pending Coordinator approval |
 | 1.7.5 | AI Project OS v1.7 Gate 5 — External Sync Consistency Validators | 2026-06-01 | COMPLETE — merged `2b37e13` 2026-06-01 |
 | 1.7.4 | AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | 2026-06-01 | COMPLETE — merged `352356b` 2026-06-01 |
 | 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | COMPLETE — merged `a86ae11` 2026-06-01 |
@@ -32,6 +33,58 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | COMPLETE — merged `cebdc72` |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 1.7.6 — AI Project OS v1.7 Gate 6: Documentation-Watch and Bootstrap Copy-Forward Finalization (2026-06-01)
+
+**Branch:** `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` (in progress)
+**Status:** IN PROGRESS — commit pending Coordinator approval
+
+### What this pass adds
+
+- **`docs/ai-system/documentation-watch-policy.md`** — authoritative docs-watch policy: ADOPT/DEFER/REJECT/MONITOR classifications, adoption/rejection criteria, scrutinous adoption rule, browsing boundary, cadence, trigger events, official-source-only rule.
+- **`docs/ai-system/documentation-watch-sources.md`** — official source categories for 10 tool/platform areas; adoption risk and review triggers per source.
+- **`docs/ai-system/documentation-watch-evaluation-template.md`** — reusable evaluation record template with 30+ fields including adoption/rejection criteria assessment, Coordinator approval status, compatibility columns.
+- **`docs/ai-system/documentation-watch-log.md`** — durable committed log; Gate 6 establishment entry; no live browsing performed; no tooling adopted; first live review pending future Coordinator authorization.
+- **`docs/ai-system/bootstrap-copy-forward-guide.md`** — definitive copy-forward guidance: universal assets, project-specific assets (must adapt), local/private assets (never copy), pre-copy operation requirements.
+- **`docs/ai-system/universal-vs-project-specific-map.md`** — full artifact table mapping every OS artifact to Universal/Project-specific/Local-private/Copy-unchanged/Adapt/Never-copy classification.
+- **`docs/ai-system/puzzle-alignment-checklist.md`** — Puzzle-specific gap analysis: what v1.5 alignment covered, what v1.6/v1.7 still needs, what must not be inherited, GitHub Projects vocabulary preservation.
+- **`docs/ai-system/future-repo-bootstrap-checklist.md`** — bootstrap sequence for any new serious repo: required files, optional adapters, no-secret rules, setup order, verification order, first commit recommendation.
+- **`.claude/skills/documentation-watch/SKILL.md`** + **`.claude/commands/documentation-watch.md`** — new skill and command.
+- **`.claude/skills/bootstrap-copy-forward/SKILL.md`** + **`.claude/commands/bootstrap-copy-forward.md`** — new skill and command.
+- **`scripts/documentation-watch-check.mjs`** — dependency-free Node ESM validator for docs-watch framework files.
+- **`scripts/bootstrap-copy-forward-audit.mjs`** — dependency-free Node ESM validator for copy-forward guidance files.
+
+### What this pass updates
+
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6j added (24 items); Scripts table updated
+- `scripts/os-self-audit.mjs` — Section 6j checks added (~38 new checks); audit count rises ~253 → ~291
+- `.claude/skills/README.md` — count 19 → 21; two new skill rows
+- `.claude/commands/README.md` — two new command rows
+- `docs/project-control/current-sprint.md` — Gate 5 Done; Gate 6 In Progress
+- `docs/project-control/kanban-board.md` — Gate 6 In Progress
+- State files updated to Gate 6 branch
+
+### v1.7 completion criteria
+
+v1.7 is COMPLETE when:
+- Gates 1–6 all merged and state-synced
+- OS self-audit passes with 0 failures
+- State freshness has 0 FAILs
+- Project-control sync validates
+- External sync consistency local-only has 0 FAILs
+- Package 5B remains blocked until explicitly authorized
+- No product/app code was touched throughout v1.7
+- No external mutation occurred
+- Credentials/tokens/local maps/reports/raw transcripts remain uncommitted
+
+### Backlog (deferred)
+
+| Item | Reason deferred |
+|---|---|
+| First live documentation-watch review | Requires separate Coordinator authorization; live docs browsing not authorized in Gate 6 |
+| Puzzle alignment implementation | Package 4 paused; requires explicit Coordinator authorization |
 
 ---
 

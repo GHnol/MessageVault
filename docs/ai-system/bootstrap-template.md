@@ -293,6 +293,8 @@ The new repo passes bootstrap when:
 - **OS self-audit passes** — run `/os-audit` (or `scripts/os-self-audit.mjs`) and receive `BOOTSTRAP COMPLETE`.
 - **Closeout sync contract exists** — `docs/dev/closeout-sync-contract.md` is present.
 - **Scrutinous adoption rule documented** — `docs/dev/model-routing-protocol.md` has the adoption rule section so new contributors know to evaluate features before adopting them.
+- **Documentation-watch framework exists** — `docs/ai-system/documentation-watch-policy.md`, `documentation-watch-sources.md`, `documentation-watch-evaluation-template.md`, and `documentation-watch-log.md` are present. Run `node scripts/documentation-watch-check.mjs` — 0 failures.
+- **Bootstrap copy-forward guidance exists** — `docs/ai-system/bootstrap-copy-forward-guide.md`, `universal-vs-project-specific-map.md`, and `future-repo-bootstrap-checklist.md` are present. Run `node scripts/bootstrap-copy-forward-audit.mjs` — 0 failures.
 
 If any of those is missing, the bootstrap is incomplete. The OS self-audit script (`scripts/os-self-audit.mjs`) is the definitive check.
 
@@ -319,12 +321,14 @@ Package 5A (KeepMees Message Book Proof Approval State Foundation) is the KeepMe
 - Does not make any product decisions for the new project.
 - Does not write to external tools (GitHub Projects, Google Calendar, ClickUp, TickTick) — all external sync is dry-run/apply with approval.
 
-**What the template does include (new as of OS v0.5.0):**
+**What the template does include (updated in OS v1.7 Gate 6):**
 - Skill folders with SKILL.md frontmatter — the canonical protocol layer.
 - Thin command wrappers in `.claude/commands/` that delegate to skills.
 - Closeout sync contract (`docs/dev/closeout-sync-contract.md`) — mandatory internal sync after meaningful closeouts.
 - Project-control sync foundation — policy, dry-run format, external sync safety rules, example ID map.
 - OS self-audit (`/os-audit` + `scripts/os-self-audit.mjs`) — required before claiming bootstrap complete.
 - Notification setup wizard (`/notification-setup-wizard` + `scripts/setup-claude-notification.ps1`).
+- Documentation-watch framework — policy, source list, evaluation template, log, skill, command, and validator script.
+- Bootstrap copy-forward guidance — universal-vs-project-specific map, Puzzle alignment checklist, future-repo bootstrap checklist, copy-forward skill, command, and audit script.
 
 These are intentional gaps and additions. They keep the bootstrap safe and copy-pasteable.

@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(no active OS pass — Gate 5 merged; awaiting Coordinator authorization for Gate 6)_
+- **AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization** · AI Workflow · Ph0 · on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` — commit pending Coordinator approval
 
 ### Waiting / Blocked
 - **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · no package authorized as of 2026-05-24
@@ -79,10 +79,10 @@
 ## View 2 — Sprint 2026-06-A: AI Project OS v1.7
 
 ### In Progress
-- _(none — Gate 5 merged; awaiting Gate 6 authorization)_
+- v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization · commit pending Coordinator approval
 
 ### Queued (pending Coordinator authorization per gate)
-- v1.7 Gate 6 — Documentation-Watch, Bootstrap Copy-Forward, Finalization
+- _(none — Gate 6 in progress)_
 
 ### Done (this sprint)
 - v1.7 Gate 5 — External Sync Consistency Validators · merged `2b37e13` 2026-06-01 ✓

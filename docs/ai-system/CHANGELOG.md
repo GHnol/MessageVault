@@ -9,6 +9,54 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — AI Project OS v1.7: Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization
+
+**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Scope:** Finalize AI Project OS v1.7 by adding a documentation-watch evaluation framework and completing Bootstrap Core copy-forward guidance. Defines the scrutinous adoption process for official tool changes, separates universal OS assets from KeepMees-specific state, provides Puzzle and future-repo alignment checklists, and defines v1.7 completion criteria.
+
+### Added
+
+- `docs/ai-system/documentation-watch-policy.md` — authoritative policy: purpose, cadence, trigger events, source policy, ADOPT/DEFER/REJECT/MONITOR classifications, adoption criteria, rejection criteria, scrutinous adoption rule, approval boundary, browsing boundary.
+- `docs/ai-system/documentation-watch-sources.md` — official source categories for docs-watch reviews: Claude Code, Anthropic model/release notes, Codex, GitHub CLI, GitHub Projects GraphQL/API, GitHub Actions, Google Calendar API, Google OAuth, Node.js, npm. Each category: why it matters, what to check, adoption risk, last reviewed, next review trigger, current status.
+- `docs/ai-system/documentation-watch-evaluation-template.md` — reusable evaluation record template: review_id, date, reviewer, tool/platform, official source, change summary, affected OS area, candidate action, classification, adoption/rejection criteria assessment, complexity, risk, privacy impact, compatibility columns, implementation scope, validation, rollback, decision, Coordinator approval status, follow-up ID.
+- `docs/ai-system/documentation-watch-log.md` — durable committed log. Initial entry: Gate 6 framework establishment; no live browsing performed; no tooling adopted; first live review pending Coordinator authorization.
+- `docs/ai-system/bootstrap-copy-forward-guide.md` — definitive copy-forward guidance: universal assets (copy unchanged or adapt), project-specific assets (must rewrite), local/private assets (never copy), pre-copy operation requirements.
+- `docs/ai-system/universal-vs-project-specific-map.md` — full artifact table with columns: Universal, Project-specific, Local/private, Copy unchanged?, Adapt?, Never copy?. Covers root files, AI system layer, dev protocols, QA templates, project control docs, skills and commands, scripts, local/private files.
+- `docs/ai-system/puzzle-alignment-checklist.md` — what Puzzle already has (v1.5), what it still needs (v1.6 and v1.7 gates), what must be adapted, what must not be copied. GitHub Projects vocabulary reminder. Authorization reminder: Package 4 paused.
+- `docs/ai-system/future-repo-bootstrap-checklist.md` — step-by-step bootstrap sequence: pre-flight, required files, optional external sync adapters (GitHub Projects required, Google Calendar optional, ClickUp optional), no-secret rules, setup order, verification order, first commit recommendation, OS self-audit requirement, documentation-watch requirement.
+- `.claude/skills/documentation-watch/SKILL.md` — new skill: YAML frontmatter, purpose, when to use, files to read, official-docs browsing boundary, scrutinous adoption rule, output format, hard stop conditions, approval boundaries.
+- `.claude/commands/documentation-watch.md` — thin command wrapper for `/documentation-watch`.
+- `.claude/skills/bootstrap-copy-forward/SKILL.md` — new skill: YAML frontmatter, purpose, when to use, files to read, preflight, output format, hard stop conditions, approval boundaries.
+- `.claude/commands/bootstrap-copy-forward.md` — thin command wrapper for `/bootstrap-copy-forward`.
+- `scripts/documentation-watch-check.mjs` — dependency-free Node ESM script: validates docs-watch policy/sources/template/log exist; checks ADOPT/DEFER/REJECT/MONITOR classifications; verifies official-source-only rule; verifies scrutinous adoption rule; verifies skill/command presence. No internet. No writes.
+- `scripts/bootstrap-copy-forward-audit.mjs` — dependency-free Node ESM script: validates copy-forward guide, universal-vs-project-specific map, Puzzle checklist, future-repo checklist; verifies never-copy rules for credentials/tokens/maps; checks gitignore safety. No internet. No writes.
+
+### Updated
+
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6j added (24 items for v1.7 Gate 6 docs-watch and bootstrap copy-forward layer); Scripts table updated with two new scripts; status header updated.
+- `scripts/os-self-audit.mjs` — Section 6j checks added (~38 new checks for docs-watch and bootstrap copy-forward layer); audit count rises ~253 → ~291.
+- `.claude/skills/README.md` — count updated 19 → 21; `documentation-watch` and `bootstrap-copy-forward` rows added.
+- `.claude/commands/README.md` — `/documentation-watch` and `/bootstrap-copy-forward` rows added.
+- `docs/ai-system/CHANGELOG.md` — this entry.
+- `docs/ai-system/version-history.md` — v1.7.6 IN PROGRESS row added.
+- `docs/project-control/current-sprint.md` — Gate 5 Done; Gate 6 In Progress.
+- `docs/project-control/kanban-board.md` — Gate 5 Done (already present); Gate 6 In Progress.
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — updated to Gate 6 branch.
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read contents of, or written
+- `docs/project-control/external-sync-map.local.json` — not read or written
+- `local-sync-reports/` — gitignored, not committed
+- No GitHub Project mutations
+- No live docs browsing
+- No Package 5B work
+
+---
+
 ## 2026-06-01 — AI Project OS v1.7: Gate 5 — External Sync Consistency Validators
 
 **Status:** COMPLETE — merged `2b37e13` 2026-06-01. No external mutations. No product code. No Package 5B.

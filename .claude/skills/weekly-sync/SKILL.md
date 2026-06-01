@@ -55,6 +55,15 @@ node scripts/external-sync-consistency-check.mjs --local-only
 
 Include the consistency result (PASS/WARN/FAIL) in the weekly sync output. If FAILs exist, flag them for Coordinator resolution before proposing any external sync operation.
 
+Check for pending documentation-watch items. If a trigger event occurred this week (tooling release, API change, repeated workflow failure), flag it for Coordinator attention and note whether a docs-watch review should be scheduled:
+
+```
+# Check last review date and pending MONITOR items
+cat docs/ai-system/documentation-watch-log.md
+```
+
+Include in the weekly sync output: whether any docs-watch trigger events occurred; date of last documentation-watch review; whether a review is due before the next OS upgrade or copy-forward operation.
+
 ## Output format
 
 1. Proposed weekly log entry (date, what was reviewed, what changed)

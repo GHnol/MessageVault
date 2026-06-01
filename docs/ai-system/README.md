@@ -49,6 +49,14 @@ The AI Project OS layer is the **portable** layer — the part you would copy in
 | `CHANGELOG.md` | OS-level changelog — what changed in the AI Project OS itself, version by version |
 | `version-history.md` | Versioned record of OS upgrade passes (Package 2.7, 2.8, 2.9, ...) and what they delivered |
 | `os-self-audit-checklist.md` | Checklist for verifying AI Project OS bootstrap completeness; companion to `scripts/os-self-audit.mjs` |
+| `documentation-watch-policy.md` | Policy for evaluating official tool/platform changes; ADOPT/DEFER/REJECT/MONITOR framework; scrutinous adoption rule |
+| `documentation-watch-sources.md` | Official source categories for docs-watch reviews; adoption risk and review triggers per source |
+| `documentation-watch-evaluation-template.md` | Reusable template for individual tool/platform evaluation records |
+| `documentation-watch-log.md` | Durable committed log of docs-watch review sessions and outcomes |
+| `bootstrap-copy-forward-guide.md` | Definitive guidance for copying Bootstrap Core from KeepMees to Puzzle or future repos |
+| `universal-vs-project-specific-map.md` | Full artifact table: universal vs. project-specific vs. local/private; copy/adapt/never-copy classification |
+| `puzzle-alignment-checklist.md` | Puzzle-specific gap analysis: what it has, what it needs, what must not be copied |
+| `future-repo-bootstrap-checklist.md` | Step-by-step bootstrap checklist for any new repo using this OS |
 
 ---
 
