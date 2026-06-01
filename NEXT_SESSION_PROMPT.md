@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 1 COMPLETE 2026-06-01. Planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md`. Awaiting Coordinator review and Gate 2 authorization. |
-| Branch | `docs/ai-project-os-v1-7-zero-fault-audit` |
-| main HEAD | `96033b7` — docs: sync state after Google Calendar sync-map advisory repair |
-| Next action | Run `/start`. Coordinator reviews Gate 1 report. If authorized: commit Gate 1 planning artifact, merge to main, open v1.7 Gate 2 branch. Do not start Gate 2 or Package 5B without explicit Coordinator authorization. |
+| Resume into | AI Project OS v1.7 Gate 1 COMPLETE and merged 2026-06-01. Planning artifact on main. No active pass. Awaiting Coordinator authorization for v1.7 Gate 2. |
+| Branch | `main` |
+| main HEAD | `3c641a9` — merge: AI Project OS v1.7 Gate 1 zero-fault audit and implementation plan |
+| Next action | Run `/start`. v1.7 Gate 1 merged. Await Coordinator authorization for v1.7 Gate 2. Do not start Gate 2 or Package 5B without explicit Coordinator authorization. |
 | OS audit | Gate 1: 166 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |

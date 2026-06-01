@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS v1.7 Gate 1 audit complete. Planning artifact created. Awaiting Coordinator review and Gate 2 authorization.
+**Status:** `complete` — AI Project OS v1.7 Gate 1 COMPLETE. Planning artifact committed `249d8cb`, merged to main `3c641a9` 2026-06-01. Working tree clean. 166 OS audit pass. Package 5B blocked. Gate 2 pending Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,21 +18,21 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.7 — Zero-Fault Closeout Contract` — Gate 1 (audit and planning) |
-| **Active branch** | `docs/ai-project-os-v1-7-zero-fault-audit` |
-| **main HEAD** | `96033b7` — docs: sync state after Google Calendar sync-map advisory repair |
-| **Last completed pass** | `AI Project OS v1.6 advisory repair` — sync-map read path — merged `db45e6a` 2026-06-01 |
-| **Active package** | None (v1.7 is OS-layer work, not a product package) |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `3c641a9` — merge: AI Project OS v1.7 Gate 1 zero-fault audit and implementation plan |
+| **Last completed pass** | `AI Project OS v1.7 Gate 1` — audit and planning — merged `3c641a9` 2026-06-01 |
+| **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
 
 ---
 
-## Objective (active pass — v1.7 Gate 1)
+## Objective (last completed pass — v1.7 Gate 1)
 
 AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan.
 
-**Gate 1 is complete.** Delivered:
+**Gate 1 is complete and merged.** Delivered:
 1. Full audit of all 43+ OS docs, 22 scripts, 18 commands, 16 skills, 1 agents placeholder, 5 validators.
 2. Enforceability map: automatic / script-assisted / skill-routed / approval-gated / policy-only / manual / backlog.
 3. Gap report across 10 audit dimensions (closeout, freshness, mirroring, context, model routing, custom settings, docs-watch, notifications, external sync, bootstrap copy-forward).
@@ -90,11 +90,12 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Coordinator reviews `docs/ai-system/v1-7-zero-fault-audit-plan.md` Gate 1 report. If approved:
-1. Authorize v1.7 Gate 2 (Closeout and State Freshness Validators).
-2. Specify any reclassifications (IMPLEMENT NOW ↔ LATER ↔ REJECT).
-3. Confirm kanban/sprint stale state correction is in scope for Gate 2.
-4. This branch (`docs/ai-project-os-v1-7-zero-fault-audit`) needs a commit and merge to main before Gate 2 begins.
+Coordinator authorizes v1.7 Gate 2 (Closeout and State Freshness Validators). Gate 1 is merged — no further work on it. Gate 2 requires:
+1. Explicit Coordinator authorization.
+2. New branch: `docs/ai-project-os-v1-7-gate-2` (or similar).
+3. No implementation until Gate 2 is authorized.
+
+Push to `origin/main` pending separate Coordinator authorization (covers merge commit `3c641a9` and this state-sync commit).
 
 Do not start Gate 2 without Coordinator approval. Do not start Package 5B. Do not push without explicit instruction.
 

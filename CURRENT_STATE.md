@@ -21,15 +21,15 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `96033b7` — docs: sync state after Google Calendar sync-map advisory repair |
-| Active branch | `docs/ai-project-os-v1-7-zero-fault-audit` |
-| Active pass | `AI Project OS v1.7 Gate 1` — audit and planning complete; awaiting Coordinator review |
-| Last completed pass | `AI Project OS v1.6 advisory repair` — sync-map read path — merged `db45e6a` 2026-06-01 |
+| main HEAD | `3c641a9` — merge: AI Project OS v1.7 Gate 1 zero-fault audit and implementation plan |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.7 Gate 1` — audit and planning — merged `3c641a9` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator approves v1.7 Gate 2; Package 5B blocked until v1.7 complete |
-| OS audit | Gate 1 audit: 166 pass, 0 warn, 0 fail |
+| Next authorized target | v1.7 Gate 2 pending Coordinator authorization; Package 5B blocked until v1.7 complete |
+| OS audit | Gate 1: 166 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked until v1.7 complete and explicit Coordinator authorization |
-| v1.7 Gate 1 | COMPLETE — planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
+| v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
 | Stale state flagged | `kanban-board.md` and `current-sprint.md` are operationally misleading — Gate 2 target |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
 | v1.6 Gate 1 | COMPLETE — merged `5c4bd28` 2026-05-31 |
