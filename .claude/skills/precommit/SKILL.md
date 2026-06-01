@@ -43,6 +43,14 @@ If FAILs are reported, they must be resolved before recommending commit. WARNs m
 
 For OS/docs-only packages (no app or `src/` changes): the state freshness check and `node scripts/os-self-audit.mjs` satisfy the pre-commit verification gate. Full app/E2E suites are not required.
 
+If the commit includes external sync files (source records, sync logs, `external-sync-map.local.json`, or any `google-calendar-*` / `github-projects-*` policy/runbook files), also run:
+
+```
+node scripts/external-sync-consistency-check.mjs
+```
+
+FAILs must be resolved before recommending commit. Include the result in the pre-commit report. See `docs/project-control/external-sync-consistency-policy.md`.
+
 For meaningful closeout commits, verify the report mirror status before recommending commit:
 - If the commit is a package closeout, gate closeout, or merge closeout: confirm the mirror outcome is `MIRRORED`, `SKIPPED`, or `NOT NEEDED`.
 - If the mirror outcome is `BLOCKED`: resolve the block before committing.

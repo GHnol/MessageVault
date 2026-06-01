@@ -1,6 +1,6 @@
 # .claude/skills — Skills (Canonical Protocol Layer)
 
-**Status:** ACTIVE — 18 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26); 1 added in v1.6 Google Calendar Live Sync (2026-05-30); 1 added in v1.7 Gate 3 Report Mirroring (2026-06-01); 1 added in v1.7 Gate 4 Start Router (2026-06-01).
+**Status:** ACTIVE — 19 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26); 1 added in v1.6 Google Calendar Live Sync (2026-05-30); 1 added in v1.7 Gate 3 Report Mirroring (2026-06-01); 1 added in v1.7 Gate 4 Start Router (2026-06-01); 1 added in v1.7 Gate 5 External Sync Consistency Validators (2026-06-01).
 
 ---
 
@@ -36,6 +36,7 @@ This separation allows the canonical protocol to evolve independently of the com
 | `github-project-template` | Manage the canonical AI Project OS GitHub Project template — dry-run, validate, and Gate 2 apply for template creation and copy |
 | `google-calendar-sync` | Run Google Calendar live sync — validate source records, run local or live dry-run, and (after Gate 3 authorization) apply creates/updates |
 | `report-intake` | Run the report mirror intake sequence — sanitize and preview a closeout report, then apply a sanitized summary to the committed project-control mirror log |
+| `external-sync-consistency` | Run the external sync consistency validator — compare repo source records, local sync map, committed logs, and optional live read-only state for Google Calendar and GitHub Projects |
 
 ---
 

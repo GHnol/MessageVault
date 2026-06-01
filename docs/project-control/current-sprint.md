@@ -14,7 +14,7 @@
 | Sprint goal | Implement v1.7 gates: closeout validators, state freshness, report mirroring, start router, external sync consistency, docs-watch, bootstrap finalization |
 | Sprint owner | Coordinator / Claude Code (Operator Mode) |
 
-Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Closeout and State Freshness Validators) is COMPLETE — merged `3db3074` 2026-06-01. Gate 3 (Report Mirroring and Project-Control Log Intake) is COMPLETE — merged `a86ae11` 2026-06-01. Gate 4 (Start Router, Context Usage, and Model Routing Hardening) is IN PROGRESS — branch `docs/ai-project-os-v1-7-start-router-context-model-routing`.
+Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Closeout and State Freshness Validators) is COMPLETE — merged `3db3074` 2026-06-01. Gate 3 (Report Mirroring and Project-Control Log Intake) is COMPLETE — merged `a86ae11` 2026-06-01. Gate 4 (Start Router, Context Usage, and Model Routing Hardening) is COMPLETE — merged `352356b` 2026-06-01. Gate 5 (External Sync Consistency Validators) is IN PROGRESS — branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`.
 
 ---
 
@@ -42,8 +42,8 @@ Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Cl
 | 11 | v1.7 Gate 2 — Update state docs to Gate 2 branch | Gate 2 | P0 | **Done** | AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md updated ✓ |
 | 12 | v1.7 Gate 2 — Coordinator review and commit | Gate 2 | P0 | **Done** | Gate 2 merged `3db3074` 2026-06-01 ✓ |
 | 13 | v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | Gate 3 | P1 | **Done** | merged `a86ae11` 2026-06-01; `scripts/report-mirror-intake.mjs` + full report mirroring layer delivered ✓ |
-| 14 | v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | Gate 4 | P2 | **In Progress** | branch `docs/ai-project-os-v1-7-start-router-context-model-routing` — active |
-| 15 | v1.7 Gate 5 — External Sync Consistency | Gate 5 | P2 | **Queued** | Pending Gate 4 merge and Coordinator authorization |
+| 14 | v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | Gate 4 | P2 | **Done** | merged `352356b` 2026-06-01 ✓ |
+| 15 | v1.7 Gate 5 — External Sync Consistency | Gate 5 | P2 | **In Progress** | branch `docs/ai-project-os-v1-7-external-sync-consistency-validators` — active |
 | 16 | v1.7 Gate 6 — Docs-Watch and Bootstrap Finalization | Gate 6 | P2 | **Queued** | Pending Gate 5 merge and Coordinator authorization |
 
 ---

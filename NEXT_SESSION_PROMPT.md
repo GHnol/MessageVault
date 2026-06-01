@@ -47,11 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 4 COMPLETE and merged 2026-06-01. State-sync on main. No active pass. Awaiting Coordinator authorization for v1.7 Gate 5 or push to origin. |
-| Branch | `main` |
-| main HEAD | `352356b` — Merge branch 'docs/ai-project-os-v1-7-start-router-context-model-routing' |
-| Next action | Run `/start` then `node scripts/start-router.mjs`. Gate 4 merged. Await Coordinator authorization for v1.7 Gate 5 or push. Do not start Gate 5 or Package 5B without explicit Coordinator authorization. |
-| OS audit | Gate 4: 223 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| Resume into | AI Project OS v1.7 Gate 5 IN PROGRESS on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`. Implementation complete. Pending verification + Coordinator review. |
+| Branch | `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
+| main HEAD | `617b494` — docs: sync state after AI Project OS v1.7 Gate 4 merge |
+| Next action | Run `/start`. Gate 5 implementation complete and verified. Await Coordinator approval for commit. Do not commit or push without explicit instruction. |
+| OS audit | Gate 4: 223 pass; Gate 5 adds ~30 checks (est. ~253 total) — run `node scripts/os-self-audit.mjs` to confirm |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (3 accepted cosmetic WARNs) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |

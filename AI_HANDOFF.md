@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.7 Gate 4 COMPLETE. Implementation committed `027c554`, merged to main `352356b` 2026-06-01. Working tree clean. 223 OS audit pass. Package 5B blocked. Gate 5 pending Coordinator authorization.
+**Status:** `active` — AI Project OS v1.7 Gate 5 IN PROGRESS on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`. Implementation in progress. Package 5B blocked. Gate 5 pending Coordinator review.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,13 +18,37 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `352356b` — Merge branch 'docs/ai-project-os-v1-7-start-router-context-model-routing' |
+| **Active pass** | `AI Project OS v1.7 Gate 5` — External Sync Consistency Validators |
+| **Active branch** | `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
+| **main HEAD** | `617b494` — docs: sync state after AI Project OS v1.7 Gate 4 merge |
 | **Last completed pass** | `AI Project OS v1.7 Gate 4` — start router + model routing hardening — merged `352356b` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
+
+---
+
+## Objective (current pass — v1.7 Gate 5)
+
+AI Project OS v1.7 Gate 5 — External Sync Consistency Validators.
+
+**Gate 5 IN PROGRESS.** Delivered so far:
+1. `scripts/external-sync-consistency-check.mjs` — dependency-free Node ESM consistency validator. Four layers: source records, local sync map (read-only, privacy-safe), committed logs, live read-only external. Issue codes for Google Calendar, GitHub Projects, cross-platform. CLI: `--json`, `--local-only`, `--fixture`, `--google-calendar`, `--github-projects`, `--all`, `--live-readonly`, `--strict`, `--explain`, `--paths`, `--output`. No mutations.
+2. `docs/project-control/external-sync-consistency-policy.md` — policy: four layers, FAIL/WARN/PASS criteria, privacy rules.
+3. `docs/project-control/external-sync-consistency-schema.md` — complete issue code reference.
+4. `docs/project-control/external-sync-consistency-log.md` — committed log (starts empty).
+5. `docs/project-control/external-sync-consistency-fixture.example.json` — fixture with fake data; 8+ scenarios.
+6. `.claude/skills/external-sync-consistency/SKILL.md` + `.claude/commands/external-sync-consistency.md` — new skill and command.
+7. Skills updated: `closeout`, `precommit`, `weekly-sync`, `project-sync-dry-run`, `report-intake` — consistency check integration.
+8. `docs/dev/closeout-sync-contract.md` — External sync consistency requirement section.
+9. `scripts/os-self-audit.mjs` — Section 6i checks (~30 new checks).
+10. `docs/ai-system/os-self-audit-checklist.md` — Section 6i (24 items).
+11. `scripts/start-router.mjs` — Gate 5 awareness; external sync consistency signal.
+12. State files, CHANGELOG, version-history, current-sprint, kanban-board updated.
+
+**Pending:** Coordinator review, then commit.
+
+**Repair applied (post-initial-implementation):** Fixed local sync-map shape parsing (apply-script shape `google_calendar.events[os_id]` and `github_projects.issues[os_id]`), added `--fixture-test` mode, scoped `FAIL_GCAL_POSSIBLE_DUPLICATE` to KeepMees-related events only, fixed googleapis Windows ESM import path, fixed GHP live query to use stdin JSON. Local-only now exits 0 (WARN only). Fixture-test exits 0. GCal live read-only: PASS (6 pass, 0 warn, 0 fail — all 10 source records confirmed). GHP live read-only: PASS (5 pass, 13 warn, 0 fail — all 11 KM-PC-* items found; 13 WARNs are expected due to absent GHP local map section). OS audit: 253 pass, 0 warn, 0 fail.
 
 ---
 
@@ -139,13 +163,11 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 4 is merged to main (`352356b`). State-sync commit in progress.
+Gate 5 implementation is in progress on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators`.
 
-Push to `origin/main` pending separate Coordinator authorization.
+Coordinator reviews Gate 5 implementation report. If approved, commit and merge Gate 5.
 
-Coordinator then authorizes v1.7 Gate 5 (External Sync Consistency Validators) or any other next direction.
-
-Do not start Gate 5 or Package 5B. Do not push without explicit instruction. No external mutations authorized.
+Do not start Package 5B. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

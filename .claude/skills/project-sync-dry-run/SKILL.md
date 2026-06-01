@@ -34,12 +34,15 @@ Detect drift between repo project-control docs and actual project state before i
 - `git log --oneline -5`
 - `git status --short`
 
-Also run the optional script if available:
+Also run the optional scripts if available:
 
 ```
 node --check scripts/project-control-sync-dry-run.mjs
 node scripts/project-control-sync-dry-run.mjs
+node scripts/external-sync-consistency-check.mjs --local-only
 ```
+
+The external sync consistency check detects drift between source records, local sync map, and committed logs. Include its PASS/WARN/FAIL result in the dry-run output when external sync tools are within scope.
 
 **Script scope note:** The script performs a **structural check only** — it verifies required files are present. It does not check content freshness, date accuracy, sprint/kanban currency, or external tool state. A "STRUCTURAL CHECK PASSED" result from the script does not mean content is current. The full content-aware drift check is performed by this skill (Claude reading and comparing actual file content).
 

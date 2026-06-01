@@ -11,6 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.7.5 | AI Project OS v1.7 Gate 5 — External Sync Consistency Validators | 2026-06-01 | IN PROGRESS — on branch `docs/ai-project-os-v1-7-external-sync-consistency-validators` |
 | 1.7.4 | AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | 2026-06-01 | COMPLETE — merged `352356b` 2026-06-01 |
 | 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | COMPLETE — merged `a86ae11` 2026-06-01 |
 | 1.7.2 | AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators | 2026-06-01 | COMPLETE — merged `3db3074` 2026-06-01 |
@@ -31,6 +32,40 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 | 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | COMPLETE — merged `cebdc72` |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
+
+---
+
+## 1.7.5 — AI Project OS v1.7 Gate 5: External Sync Consistency Validators (2026-06-01)
+
+**Branch:** `docs/ai-project-os-v1-7-external-sync-consistency-validators` (in progress)
+**Status:** IN PROGRESS
+
+### What this pass adds
+
+- **`scripts/external-sync-consistency-check.mjs`** — repo-native external sync consistency validator. Compares four layers: repo source records, local sync map (privacy-safe, no raw contents), committed logs, live external read-only state (with `--live-readonly`). Issue codes: PASS/WARN/FAIL for Google Calendar, GitHub Projects, and cross-platform. CLI: `--json`, `--local-only`, `--fixture`, `--google-calendar`, `--github-projects`, `--all`, `--live-readonly`, `--strict`, `--explain`, `--paths`, `--output`. Read-only. No external mutations.
+- **`docs/project-control/external-sync-consistency-policy.md`** — policy: four layers, when to run, FAIL/WARN/PASS criteria, privacy rules, fixture requirements.
+- **`docs/project-control/external-sync-consistency-schema.md`** — complete issue code reference: all PASS/WARN/FAIL codes, output schema, local map summary schema, fixture schema.
+- **`docs/project-control/external-sync-consistency-log.md`** — committed log for significant consistency check results (starts empty).
+- **`docs/project-control/external-sync-consistency-fixture.example.json`** — fixture with fake data; proves 8+ classification scenarios.
+- **`.claude/skills/external-sync-consistency/SKILL.md`** + **`.claude/commands/external-sync-consistency.md`** — new skill and command.
+
+### What this pass updates
+
+- `docs/dev/closeout-sync-contract.md` — External sync consistency requirement section
+- `.claude/skills/closeout/SKILL.md`, `precommit/SKILL.md`, `weekly-sync/SKILL.md`, `project-sync-dry-run/SKILL.md`, `report-intake/SKILL.md` — external sync consistency integration
+- `.claude/skills/README.md` — count 18 → 19
+- `.claude/commands/README.md` — `/external-sync-consistency` row
+- `scripts/os-self-audit.mjs` — Section 6i checks (~30 new checks); audit count rises ~223 → ~253
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6i added (24 items)
+- `scripts/start-router.mjs` — Gate 5 awareness; external sync consistency signal
+- `docs/project-control/current-sprint.md`, `kanban-board.md` — Gate 4 Done; Gate 5 In Progress
+
+### Backlog (deferred to Gate 6)
+
+| Item | Deferred to |
+|---|---|
+| Docs-watch evaluation template | Gate 6 |
+| Bootstrap-template.md v1.7 update | Gate 6 |
 
 ---
 

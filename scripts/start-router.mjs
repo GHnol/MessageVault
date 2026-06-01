@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Start Router — AI Project OS v1.7 Gate 4
+ * Start Router — AI Project OS v1.7 Gate 4 (updated Gate 5)
  *
  * Inspects repo state and recommends the appropriate session startup route:
  * fresh session, continuation, handoff update, state sync, or blocked condition.
@@ -220,6 +220,8 @@ const latestGateText = firstMatch(stateContent, [
 const gate3InProgress  = Boolean(sprintContent && /gate 3[^)]*in progress/i.test(sprintContent));
 const gate4InProgress  = Boolean(sprintContent && /gate 4[^)]*in progress/i.test(sprintContent));
 const gate4Queued      = Boolean(sprintContent && /gate 4[^)]*queued/i.test(sprintContent));
+const gate5InProgress  = Boolean(sprintContent && /gate 5[^)]*in progress/i.test(sprintContent));
+const gate5Queued      = Boolean(sprintContent && /gate 5[^)]*queued/i.test(sprintContent));
 
 // Kanban In Progress
 const inProgressSection = kanbanContent
@@ -334,7 +336,7 @@ function determineVerdict() {
       return 'NEEDS_STATE_SYNC';
     }
     // OS work queued or in progress — Coordinator needs to authorize next step
-    if (gate4InProgress || gate4Queued || gate3InProgress) {
+    if (gate4InProgress || gate4Queued || gate3InProgress || gate5InProgress || gate5Queued) {
       return 'NEEDS_COORDINATOR_DECISION';
     }
     // Clean state — ready for fresh start
@@ -477,6 +479,12 @@ function externalSyncSummary() {
   if (ghSyncLogContent) parts.push('GitHub Projects sync log exists.');
   if (syncLogContent) parts.push('Project sync log exists.');
   if (externalApplyMentioned) parts.push('WARNING: external apply may be referenced in handoff.');
+  // External sync consistency validator signal (Gate 5)
+  const consistencyLogContent = readFileSafe('docs/project-control/external-sync-consistency-log.md');
+  if (consistencyLogContent) parts.push('External sync consistency log exists (Gate 5).');
+  if (existsSync(join(ROOT, 'scripts/external-sync-consistency-check.mjs'))) {
+    parts.push('External sync consistency validator available (scripts/external-sync-consistency-check.mjs).');
+  }
   if (parts.length === 0) return 'No external sync signals detected.';
   return parts.join(' ');
 }
@@ -533,7 +541,7 @@ if (JSON_MODE) {
   const w = (...lines) => lines.forEach(l => console.log(l));
 
   w('');
-  w('=== Start Router — AI Project OS v1.7 Gate 4 ===');
+  w('=== Start Router — AI Project OS v1.7 Gate 5 ===');
   w('');
   w(`Verdict:              ${verdict}`);
   w(`Branch:               ${output.branch}`);

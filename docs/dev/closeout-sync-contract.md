@@ -265,6 +265,29 @@ A complete closeout report (produced by the `closeout` skill, output to chat) in
 
 ---
 
+## External sync consistency requirement (AI Project OS v1.7 Gate 5)
+
+When external sync files changed in a pass (source records, sync logs, sync map, or any `google-calendar-*` / `github-projects-*` policy/runbook files), the external sync consistency validator must be run before the closeout is proposed:
+
+```
+node scripts/external-sync-consistency-check.mjs
+node scripts/external-sync-consistency-check.mjs --local-only
+```
+
+FAIL results block the closeout. WARN results must be disclosed in the closeout report. PASS allows proceeding.
+
+| Outcome | Required action |
+|---|---|
+| PASS | Include in closeout report; proceed |
+| WARN | Disclose in closeout report; explain each WARN; may proceed unless escalated |
+| FAIL | Fix before proposing commit; do not proceed until resolved |
+
+Policy: `docs/project-control/external-sync-consistency-policy.md`
+Schema: `docs/project-control/external-sync-consistency-schema.md`
+Log: `docs/project-control/external-sync-consistency-log.md`
+
+---
+
 ## What this contract does NOT do
 
 - It does not commit or push — those remain explicit user-instruction steps.
