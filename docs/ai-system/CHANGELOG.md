@@ -9,6 +9,64 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — AI Project OS v1.6: Advisory Repair — Google Calendar Sync-Map Read Path
+
+**Status:** COMPLETE — on branch `fix/google-calendar-sync-map-read-path`; commit pending Coordinator approval. No OAuth run. No live calendar mutations. No product code.
+**Scope:** Fix `MISSING_LOCAL_MAPPING` advisory that appeared for all 10 events in post-Gate-3 dry-run. Dry-run script was not reading `external-sync-map.local.json` in live mode (passed empty map). Add fixture coverage for sync-map read path.
+
+### Root cause
+
+`runLiveMode` in `scripts/google-calendar-sync-dry-run.mjs` called `compareSourceToEvents` with `fixtureLocalMap: {}` (hardcoded empty object). The real `external-sync-map.local.json` was never read. All 10 events classified as `missing_local_mapping: true` even after Gate 3 apply wrote the map.
+
+### Fixed
+
+- `scripts/google-calendar-sync-dry-run.mjs` — added:
+  - `LOCAL_MAP_FILE` constant
+  - `--sync-map-fixture <path>` CLI flag (fixture mode external sync map)
+  - `loadLocalSyncMap(filePath)` — reads local map in read-only mode; supports apply-script shape (`google_calendar.events[os_id]`) and example shape (`google_calendar[os_id]` directly)
+  - `buildLocalMapDiagnostics(mapResult, sourceOsIds)` — safe diagnostics (no raw IDs or credentials)
+  - `runLiveMode` now loads and passes `localMapResult.entries` to `compareSourceToEvents`
+  - `runFixtureMode` now supports `--sync-map-fixture` to override embedded `fixtureLocalMap`
+  - `buildArtifact` now includes `local_map_diagnostics` section in artifact output
+
+### Added
+
+- `docs/project-control/google-calendar-external-sync-map.fixture.json` — committed fixture sync map with fake placeholder IDs; exercises NO_OP/UPDATE/REMOTE_DRIFT with `missing_local_mapping:false` and MAPPED_EVENT_MISSING_REMOTELY
+
+### Updated
+
+- `docs/project-control/google-calendar-sync-log.md` — advisory repair entry added
+- `AI_HANDOFF.md` — updated to repair pass state
+- `CURRENT_STATE.md` — updated to repair pass state
+- `docs/ai-system/CHANGELOG.md` — this entry
+- `docs/ai-system/version-history.md` — v1.6.3 row added
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read contents of, or written
+- `docs/project-control/external-sync-map.local.json` — read-only in dry-run; not written, not staged, not committed
+- `local-sync-reports/` — gitignored, not committed
+- `scripts/google-calendar-sync-apply.mjs` — not touched (no Gate 3 work)
+- `scripts/google-calendar-auth-bootstrap.mjs` — not touched (no OAuth work)
+- No GitHub Project mutations
+- No Package 5B work
+
+### Post-repair verification
+
+- `node --check` all scripts: PASS
+- `node scripts/google-calendar-source-validate.mjs`: PASS (151 items, 0 fail)
+- `node scripts/google-calendar-sync-dry-run.mjs --local-only`: PASS (10 READY_FOR_LIVE_COMPARE)
+- Embedded fixture: PASS (all 11 classifications preserved)
+- `--sync-map-fixture` fixture: PASS (NO_OP/UPDATE/REMOTE_DRIFT with `missing_local_mapping:false`; MAPPED_EVENT_MISSING_REMOTELY from ghost ID)
+- Post-repair live read-only dry-run: 488 events fetched, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers
+- `node scripts/os-self-audit.mjs`: 166 pass, 0 warn, 0 fail
+- Hard-exclusion diff (index.html, src, public, amplify, package.json, package-lock.json): clean
+
+---
+
 ## 2026-05-31 — AI Project OS v1.6: Google Calendar Live Sync, Gate 2D Repair — Canonical OAuth Bootstrap
 
 **Status:** IN PROGRESS — on branch `docs/google-calendar-oauth-path-alignment`, uncommitted. No OAuth run. No live API call. No product code. No Package 5B.

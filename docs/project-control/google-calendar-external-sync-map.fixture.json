@@ -1,0 +1,40 @@
+{
+  "_comment": "FIXTURE ONLY — Fake placeholder IDs for sync-map read path validation. Never use real event IDs, real calendar IDs, or real external identifiers here.",
+  "_fixture_version": "1",
+  "_purpose": "Tests the dry-run script sync-map read path using --fixture --sync-map-fixture mode. All external_id values are fake placeholders invented for testing only.",
+  "_use_with": "node scripts/google-calendar-sync-dry-run.mjs --fixture docs/project-control/google-calendar-live-events.fixture.json --sync-map-fixture docs/project-control/google-calendar-external-sync-map.fixture.json",
+  "_classifications_proved": [
+    "NO_OP with missing_local_mapping:false — keepmees-ritual-ceo-review-weekly has a map entry pointing to a live fixture event",
+    "UPDATE with missing_local_mapping:false — keepmees-ritual-coordinator-planning-weekly has a map entry pointing to a live fixture event",
+    "REMOTE_DRIFT with missing_local_mapping:false — keepmees-ritual-monthly-roadmap-reset has a map entry pointing to a live fixture event",
+    "MAPPED_EVENT_MISSING_REMOTELY — keepmees-ritual-monthly-risk-review has a map entry but the external_id is not present in the live fixture events",
+    "CREATE/ADOPTION_REQUIRED/DUPLICATE_DETECTED/POSSIBLE_DUPLICATE/NEEDS_MANUAL_REVIEW — source records not in this map; missing_local_mapping advisory not applicable to those classifications"
+  ],
+
+  "google_calendar": {
+    "keepmees-ritual-ceo-review-weekly": {
+      "external_id": "fixture_sync_map_id_001_ceo_review_placeholder",
+      "calendar_id": "fixture-calendar@group.calendar.google.com",
+      "last_synced": "2026-06-01",
+      "status": "active"
+    },
+    "keepmees-ritual-coordinator-planning-weekly": {
+      "external_id": "fixture_sync_map_id_002_coordinator_planning_placeholder",
+      "calendar_id": "fixture-calendar@group.calendar.google.com",
+      "last_synced": "2026-06-01",
+      "status": "active"
+    },
+    "keepmees-ritual-monthly-roadmap-reset": {
+      "external_id": "fixture_sync_map_id_006_roadmap_reset_placeholder",
+      "calendar_id": "fixture-calendar@group.calendar.google.com",
+      "last_synced": "2026-06-01",
+      "status": "active"
+    },
+    "keepmees-ritual-monthly-risk-review": {
+      "external_id": "fixture_sync_map_ghost_id_not_in_events_list_placeholder",
+      "calendar_id": "fixture-calendar@group.calendar.google.com",
+      "last_synced": "2026-05-01",
+      "status": "active"
+    }
+  }
+}

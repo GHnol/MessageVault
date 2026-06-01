@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.6 COMPLETE 2026-06-01. Gate 3 live apply succeeded: 10 Google Calendar events created, 0 errors. Post-apply dry-run: all 10 NO_OP, high confidence. Working tree has one staged change (google-calendar-sync-log.md + state docs — state-sync commit pending). Package 5B blocked.
+**Status:** `repair-complete-pending-commit` — AI Project OS v1.6 advisory repair pass complete 2026-06-01. Sync-map read path fixed in `google-calendar-sync-dry-run.mjs`. Post-repair live read-only dry-run: 488 events fetched, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers. Branch: `fix/google-calendar-sync-map-read-path`. Commit pending Coordinator approval. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `95d3594` — fix: implement Gate 3 live apply and correct OAuth scope (state-sync commit pending) |
-| **Last completed pass** | `AI Project OS v1.6 Gate 3` — Live Calendar Apply — 2026-06-01 |
+| **Active pass** | Advisory repair — sync-map read path fix |
+| **Active branch** | `fix/google-calendar-sync-map-read-path` |
+| **main HEAD** | `1d83026` — docs: record v1.6 Gate 3 live apply completion |
+| **Last completed pass** | `AI Project OS v1.6 advisory repair` — sync-map read path — 2026-06-01 |
 | **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked pending Coordinator authorization |
@@ -30,21 +30,21 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (last completed pass)
 
-AI Project OS v1.6 Gate 3 — Live Calendar Apply — 2026-06-01. Delivered:
-1. OAuth re-bootstrap completed: `node scripts/google-calendar-auth-bootstrap.mjs --init-oauth` run with explicit Coordinator authorization. Token rewritten to `docs/project-control/google-calendar-token.local.json` (gitignored, not committed). New scope: `calendar.events` (write-capable).
-2. Auth-status verified `READY` before and after re-bootstrap.
-3. Gate 3 live apply completed: `node scripts/google-calendar-sync-apply.mjs --approved-dry-run local-sync-reports/google-calendar-dry-run-live-2026-06-01T00-21-06-514Z.json --apply --confirm-live-calendar-apply` run with explicit Coordinator authorization.
-4. 10 Google Calendar events created. 0 updated. 0 errors. 0 events deleted or cancelled.
-5. `docs/project-control/external-sync-map.local.json` updated locally (gitignored, not committed).
-6. `docs/project-control/google-calendar-sync-log.md` updated (tracked — included in state-sync commit).
-7. Post-apply live read-only dry-run: 488 events fetched. All 10 source records classified NO_OP, high confidence.
-8. Advisory: post-apply dry-run reports `MISSING_LOCAL_MAPPING` for all 10 events — not a Gate 3 blocker; all 10 matched by live event ID and classified NO_OP. Follow-up scoped pass recommended.
+Advisory repair — Google Calendar sync-map read path — 2026-06-01. Delivered:
+1. Root cause identified: `runLiveMode` in `scripts/google-calendar-sync-dry-run.mjs` passed `fixtureLocalMap: {}` (empty) to `compareSourceToEvents`, never reading `external-sync-map.local.json`.
+2. Fix: `loadLocalSyncMap()` function added — reads `external-sync-map.local.json` in read-only mode, supports apply-script shape (`google_calendar.events[os_id]`) and example shape (`google_calendar[os_id]` directly).
+3. `buildLocalMapDiagnostics()` added — safe diagnostics section in artifact (no raw event IDs or credentials).
+4. `--sync-map-fixture <path>` flag added to fixture mode — proves read path without live calendar access.
+5. New fixture file: `docs/project-control/google-calendar-external-sync-map.fixture.json` (fake placeholder IDs only).
+6. `docs/project-control/google-calendar-sync-log.md` updated with repair entry.
+7. Post-repair live dry-run: 488 events fetched, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers, `gate3_apply_allowed: true`.
+8. OS self-audit: 166 pass, 0 warn, 0 fail. Hard-exclusion diff: clean.
 
 No credential or token contents printed. No events deleted or cancelled.
 
 ---
 
-## Gate status (v1.6)
+## Gate status (v1.6 + advisory repair)
 
 | Gate | Status |
 |---|---|
@@ -54,18 +54,19 @@ No credential or token contents printed. No events deleted or cancelled.
 | Gate 2D Repair — OAuth Bootstrap + Path Alignment | COMPLETE — merged `fe1315a` 2026-05-31 |
 | Gate 2D — Live Calendar Read-Only Dry-Run | COMPLETE — 2026-06-01. 478 events fetched. 10 CREATE, 0 blockers. Artifact: `local-sync-reports/google-calendar-dry-run-live-2026-06-01T00-21-06-514Z.json` |
 | Gate 3 — Live Calendar Apply | COMPLETE — 2026-06-01. 10 events created. 0 errors. Post-apply dry-run: all 10 NO_OP, high confidence. |
+| Advisory Repair — Sync-Map Read Path | COMPLETE — 2026-06-01. Post-repair live dry-run: 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers. Commit pending Coordinator approval. |
 
-**AI Project OS v1.6 — COMPLETE.**
-
----
-
-## Follow-up advisory (non-blocking)
-
-Post-apply live dry-run (`--live-readonly`) reported `MISSING_LOCAL_MAPPING` advisory for all 10 events even though `external-sync-map.local.json` was written locally by the apply script. All 10 records still classified NO_OP with high confidence because they were matched by live Google Calendar event ID. This is not a Gate 3 blocker. A future scoped pass should investigate and align the sync map read path in the dry-run script.
+**AI Project OS v1.6 — COMPLETE. Advisory repair complete — commit pending.**
 
 ---
 
-## Hard exclusions verified (Gate 3 live apply)
+## Advisory status
+
+RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has been repaired. Root cause was that `runLiveMode` passed an empty map to `compareSourceToEvents`. Fixed by reading `external-sync-map.local.json` and supporting both the apply-script shape and the example shape. Post-repair live dry-run confirms: 0 MISSING_LOCAL_MAPPING, 10 NO_OP, 0 blockers.
+
+---
+
+## Hard exclusions verified (advisory repair)
 
 - `index.html` — not touched
 - `src/**` — not touched
@@ -86,7 +87,7 @@ Post-apply live dry-run (`--live-readonly`) reported `MISSING_LOCAL_MAPPING` adv
 
 ## Next exact action
 
-State-sync commit pending Coordinator approval. After commit: Coordinator authorizes next product package (Package 5B or other) or optional follow-up advisory pass for `MISSING_LOCAL_MAPPING` sync map alignment. No product package work authorized without explicit instruction.
+Advisory repair commit pending Coordinator approval. Files to commit: `scripts/google-calendar-sync-dry-run.mjs`, `docs/project-control/google-calendar-external-sync-map.fixture.json`, `docs/project-control/google-calendar-sync-log.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`. After commit: merge to `main`, then Coordinator authorizes next product package (Package 5B or other). No product package work authorized without explicit instruction.
 
 ---
 

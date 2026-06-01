@@ -10,6 +10,19 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — Sync-map read path advisory repair: post-repair live read-only dry-run COMPLETE
+
+- **Gate:** Advisory repair (v1.6 post-Gate-3 follow-up)
+- **Method:** api-dry-run (read-only — no calendar mutations)
+- **Changed by:** Claude Code (Sonnet 4.6) + Coordinator (advisory repair authorization)
+- **Events created:** none
+- **Events updated:** none
+- **Events removed:** none
+- **Credential status:** present (gitignored)
+- **Notes:** Advisory repair: fixed `google-calendar-sync-dry-run.mjs` to read `external-sync-map.local.json` in live mode (previously passed empty map). Also supports both `apply`-script shape (`google_calendar.events[os_id]`) and `example` shape (`google_calendar[os_id]` directly). Added `--sync-map-fixture` flag for fixture-mode read-path testing. Post-repair live dry-run result: 488 events fetched, 10 source records, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers, `gate3_apply_allowed: true`. Artifact: `local-sync-reports/google-calendar-dry-run-sync-map-repair.json` (gitignored, local-only). No calendar events created, updated, or deleted. Advisory resolved.
+
+---
+
 ## 2026-06-01 — Gate 3: live apply COMPLETE — 10 event(s) created
 
 - **Gate:** Gate 3

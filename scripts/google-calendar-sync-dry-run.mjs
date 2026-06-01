@@ -75,6 +75,7 @@ const CANONICAL_TOKEN_FILE = 'docs/project-control/google-calendar-token.local.j
 const LEGACY_CREDENTIALS_FILE = 'google-calendar-credentials.json';
 const LEGACY_TOKEN_FILE = 'token.json';
 const REPORT_DIR = 'local-sync-reports';
+const LOCAL_MAP_FILE = 'docs/project-control/external-sync-map.local.json';
 
 const args = process.argv.slice(2);
 const isHelp = args.includes('--help') || args.includes('-h');
@@ -83,6 +84,9 @@ const isLive = args.includes('--live') || args.includes('--live-readonly');
 const isFixture = args.includes('--fixture');
 const isLocalOnly = !isHelp && !isAuthStatus && !isLive && !isFixture;
 const allowLegacyRoot = args.includes('--allow-legacy-root-credentials');
+
+const syncMapFixtureIdx = args.indexOf('--sync-map-fixture');
+const syncMapFixtureArg = syncMapFixtureIdx >= 0 ? args[syncMapFixtureIdx + 1] : null;
 
 const fixtureIdx = args.indexOf('--fixture');
 const fixtureArg = fixtureIdx >= 0 ? args[fixtureIdx + 1] : null;
@@ -618,7 +622,7 @@ function compareSourceToEvents(sourceRecords, liveEvents, options = {}) {
 // ─── Artifact builder ──────────────────────────────────────────────────────
 
 function buildArtifact(actions, options = {}) {
-  const { mode, sourceCount, liveCount, calendarId } = options;
+  const { mode, sourceCount, liveCount, calendarId, localMapDiagnostics } = options;
 
   const summary = {};
   for (const cls of Object.values(C)) summary[cls] = 0;
@@ -664,6 +668,7 @@ function buildArtifact(actions, options = {}) {
         ? 'Generated from fixture/mock data. Re-run with --live-readonly for real Google Calendar comparison (Gate 2B).'
         : '',
     ].filter(Boolean),
+    ...(localMapDiagnostics ? { local_map_diagnostics: localMapDiagnostics } : {}),
   };
 }
 
@@ -730,6 +735,91 @@ function resolveCredPaths() {
   return { credFile, tokenFile };
 }
 
+// ─── Local sync map loading (read-only) ───────────────────────────────────
+
+/**
+ * Load and normalize the local Google Calendar sync map (read-only).
+ * Supports both the apply-script shape (google_calendar.events[os_id])
+ * and the example shape (google_calendar[os_id] directly).
+ * Never writes, never stages, never commits.
+ */
+function loadLocalSyncMap(filePath) {
+  const fullPath = join(ROOT, filePath);
+  const result = {
+    local_map_path: filePath,
+    local_map_present: existsSync(fullPath),
+    local_map_read: false,
+    entries: {},
+    local_map_entries_count: 0,
+    map_shape_detected: 'none',
+    warnings: [],
+    errors: [],
+  };
+
+  if (!result.local_map_present) {
+    result.warnings.push('local_map_not_found — MISSING_LOCAL_MAPPING advisory will apply to all source records with live matches');
+    return result;
+  }
+
+  let raw;
+  try {
+    raw = JSON.parse(readFileSync(fullPath, 'utf8'));
+    result.local_map_read = true;
+  } catch (e) {
+    result.errors.push(`failed to parse sync map: ${e.message}`);
+    return result;
+  }
+
+  const gcal = raw.google_calendar;
+  if (!gcal || typeof gcal !== 'object') {
+    result.warnings.push('google_calendar section missing or invalid in sync map');
+    return result;
+  }
+
+  if (gcal.events && typeof gcal.events === 'object') {
+    // Apply-script shape: google_calendar.events[os_id]
+    result.map_shape_detected = 'apply';
+    for (const [osId, entry] of Object.entries(gcal.events)) {
+      if (typeof entry === 'object' && entry !== null) {
+        result.entries[osId] = entry;
+      }
+    }
+  } else {
+    // Example shape: google_calendar[os_id] directly (skip metadata keys)
+    result.map_shape_detected = 'example';
+    for (const [key, entry] of Object.entries(gcal)) {
+      if (key.startsWith('_')) continue;
+      if (typeof entry === 'object' && entry !== null && entry.external_id) {
+        result.entries[key] = entry;
+      }
+    }
+  }
+
+  result.local_map_entries_count = Object.keys(result.entries).length;
+  return result;
+}
+
+/**
+ * Build safe local sync map diagnostics for the artifact.
+ * Never includes raw event IDs or credential paths.
+ */
+function buildLocalMapDiagnostics(mapResult, sourceOsIds) {
+  const resolved = sourceOsIds.filter(id => !!mapResult.entries[id]);
+  const unresolved = sourceOsIds.filter(id => !mapResult.entries[id]);
+  return {
+    local_map_path: mapResult.local_map_path,
+    local_map_present: mapResult.local_map_present,
+    local_map_read: mapResult.local_map_read,
+    local_map_entries_count: mapResult.local_map_entries_count,
+    source_records_with_local_map_count: resolved.length,
+    source_records_missing_local_map_count: unresolved.length,
+    unresolved_os_ids: unresolved,
+    map_shape_detected: mapResult.map_shape_detected,
+    warnings: mapResult.warnings,
+    errors: mapResult.errors,
+  };
+}
+
 // ─── Help mode ─────────────────────────────────────────────────────────────
 
 function runHelp() {
@@ -741,6 +831,10 @@ MODES (default: --local-only)
   (no flag)         Local-only validation — no API calls, no credentials needed
   --local-only      Same as default
   --fixture <path>  Fixture/mock comparison — no API calls, no credentials needed
+  --sync-map-fixture <path>
+                    External sync map fixture (JSON, example shape) — used with --fixture
+                    to test sync-map read path without the embedded fixtureLocalMap.
+                    Must be a committed file with fake placeholder IDs only.
   --auth-status     Credential/token readiness check (existence + gitignore only)
   --live-readonly   Live Google Calendar comparison, read-only (Gate 2B)
                     Requires: credentials + token + Coordinator authorization
@@ -983,11 +1077,33 @@ function runFixtureMode(records, fixturePath, outputArg) {
   }
 
   const liveEvents = fixture.events || [];
-  const fixtureLocalMap = fixture.fixtureLocalMap || {};
   const calendarId = fixture.calendarId || 'fixture-calendar';
 
+  let fixtureLocalMap, localMapResult;
+  if (syncMapFixtureArg) {
+    localMapResult = loadLocalSyncMap(syncMapFixtureArg);
+    fixtureLocalMap = localMapResult.entries;
+    if (localMapResult.errors.length > 0) {
+      console.error(`FATAL: Sync map fixture error: ${localMapResult.errors[0]}`);
+      process.exit(1);
+    }
+    console.log(`Sync map fixture: ${syncMapFixtureArg}`);
+    console.log(`  Entries: ${localMapResult.local_map_entries_count} (shape: ${localMapResult.map_shape_detected})`);
+  } else {
+    fixtureLocalMap = fixture.fixtureLocalMap || {};
+    localMapResult = {
+      local_map_path: 'embedded-fixture-local-map',
+      local_map_present: true,
+      local_map_read: true,
+      entries: fixtureLocalMap,
+      local_map_entries_count: Object.keys(fixtureLocalMap).filter(k => !k.startsWith('_')).length,
+      map_shape_detected: 'fixture-embedded',
+      warnings: [],
+      errors: [],
+    };
+    console.log(`Fixture local map entries: ${localMapResult.local_map_entries_count} (embedded in fixture file)`);
+  }
   console.log(`Fixture events: ${liveEvents.length}`);
-  console.log(`Fixture local map entries: ${Object.keys(fixtureLocalMap).filter(k => !k.startsWith('_')).length}`);
   console.log('');
 
   const invalidRecords = records.filter(r => validateRecord(r).length > 0);
@@ -1001,11 +1117,15 @@ function runFixtureMode(records, fixturePath, outputArg) {
   printComparisonResults(actions);
   const gate3Allowed = printComparisonSummary(actions);
 
+  const sourceOsIds = records.map(r => r.os_id);
+  const localMapDiagnostics = buildLocalMapDiagnostics(localMapResult, sourceOsIds);
+
   const artifact = buildArtifact(actions, {
     mode: 'fixture',
     sourceCount: records.length,
     liveCount: liveEvents.length,
     calendarId,
+    localMapDiagnostics,
   });
 
   const relPath = resolveOutputPath(outputArg, 'fixture');
@@ -1107,6 +1227,20 @@ async function runLiveMode(records, outputArg) {
 
   const calendarId = 'primary';
 
+  // Load local sync map (read-only) — provides os_id → event_id mappings from Gate 3 apply
+  const localMapResult = loadLocalSyncMap(LOCAL_MAP_FILE);
+  console.log(`Local sync map: ${LOCAL_MAP_FILE}`);
+  console.log(`  Present: ${localMapResult.local_map_present ? 'YES' : 'NO'}`);
+  if (localMapResult.local_map_read) {
+    console.log(`  Entries: ${localMapResult.local_map_entries_count} (shape: ${localMapResult.map_shape_detected})`);
+  } else if (localMapResult.errors.length > 0) {
+    console.log(`  Read error: ${localMapResult.errors[0]}`);
+  }
+  for (const w of localMapResult.warnings) {
+    console.log(`  Warning: ${w}`);
+  }
+  console.log('');
+
   // Validate source records before making any API call
   const invalidRecords = records.filter(r => validateRecord(r).length > 0);
   if (invalidRecords.length > 0) {
@@ -1141,16 +1275,20 @@ async function runLiveMode(records, outputArg) {
   console.log(`Fetched ${liveEvents.length} events from calendar "${calendarId}".`);
   console.log('');
 
-  const actions = compareSourceToEvents(records, liveEvents, { fixtureLocalMap: {}, calendarId });
+  const actions = compareSourceToEvents(records, liveEvents, { fixtureLocalMap: localMapResult.entries, calendarId });
 
   printComparisonResults(actions);
   const gate3Allowed = printComparisonSummary(actions);
+
+  const sourceOsIds = records.map(r => r.os_id);
+  const localMapDiagnostics = buildLocalMapDiagnostics(localMapResult, sourceOsIds);
 
   const artifact = buildArtifact(actions, {
     mode: 'live',
     sourceCount: records.length,
     liveCount: liveEvents.length,
     calendarId,
+    localMapDiagnostics,
   });
 
   const relPath = resolveOutputPath(outputArg, 'live');
