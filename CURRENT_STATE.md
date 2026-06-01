@@ -16,22 +16,22 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-01`
+**Last updated:** `2026-06-01` (Gate 3 implementation)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `3db3074` — Merge branch 'docs/ai-project-os-v1-7-state-freshness-validators' |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `d872f68` — docs: sync state after AI Project OS v1.7 Gate 2 merge |
+| Active branch | `docs/ai-project-os-v1-7-report-mirroring-intake` |
+| Active pass | `AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake` — IN PROGRESS |
 | Last completed pass | `AI Project OS v1.7 Gate 2` — state freshness validator + decision matrix — merged `3db3074` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | v1.7 Gate 3 pending Coordinator authorization; Package 5B blocked until v1.7 complete |
-| OS audit | Gate 2: 179 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
+| Next authorized target | v1.7 Gate 3 commit/merge pending Coordinator approval; Package 5B blocked until v1.7 complete |
+| OS audit | Gate 3 (pending): ~201 pass expected; Gate 2: 179 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked until v1.7 complete and explicit Coordinator authorization |
+| v1.7 Gate 3 | IN PROGRESS — branch `docs/ai-project-os-v1-7-report-mirroring-intake`; implementation complete, pending Coordinator review |
 | v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01; `scripts/state-freshness-check.mjs` + decision matrix delivered |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
-| Stale state fixed | `kanban-board.md`, `current-sprint.md`, `test-strategy.md`, `model-routing-protocol.md` — corrected in Gate 2 |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |
 | v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01 |
 

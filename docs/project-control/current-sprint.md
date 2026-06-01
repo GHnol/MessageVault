@@ -14,7 +14,7 @@
 | Sprint goal | Implement v1.7 gates: closeout validators, state freshness, report mirroring, start router, external sync consistency, docs-watch, bootstrap finalization |
 | Sprint owner | Coordinator / Claude Code (Operator Mode) |
 
-Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Closeout and State Freshness Validators) is IN PROGRESS.
+Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Closeout and State Freshness Validators) is COMPLETE — merged `3db3074` 2026-06-01. Gate 3 (Report Mirroring and Project-Control Log Intake) is IN PROGRESS — branch `docs/ai-project-os-v1-7-report-mirroring-intake`.
 
 ---
 
@@ -30,18 +30,18 @@ Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Cl
 | # | Task | Gate | Priority | Status | Success criteria |
 |---|---|---|---|---|---|
 | 1 | v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan | Gate 1 | P0 | **Done** | Audit artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md`, merged `3c641a9` ✓ |
-| 2 | v1.7 Gate 2 — Create `scripts/state-freshness-check.mjs` | Gate 2 | P0 | **In Progress** | Script passes `node --check`; FAIL/WARN/PASS logic confirmed; exits 0 on PASS/WARN |
-| 3 | v1.7 Gate 2 — Add state-sync decision matrix to closeout-sync-contract.md | Gate 2 | P0 | **In Progress** | FAIL/WARN/PASS table with examples; command reference; Package 5B rule |
-| 4 | v1.7 Gate 2 — Correct kanban-board.md (v1.3–v1.6 in Done; Gate 2 in In Progress) | Gate 2 | P1 | **In Progress** | Done column reflects all completed OS passes |
-| 5 | v1.7 Gate 2 — Open Sprint 2026-06-A in current-sprint.md | Gate 2 | P1 | **In Progress** | This file |
-| 6 | v1.7 Gate 2 — Update test-strategy.md test count to 1603 | Gate 2 | P0 | **In Progress** | 1603 appears; 1466 removed from pre-commit baseline |
-| 7 | v1.7 Gate 2 — Refresh model IDs in model-routing-protocol.md | Gate 2 | P1 | **In Progress** | Opus 4.8 referenced; tier-based routing preserved; no brittle ID lock-in |
-| 8 | v1.7 Gate 2 — Integrate validator into skills/commands | Gate 2 | P1 | **In Progress** | closeout, precommit, handoff skills reference `state-freshness-check.mjs` |
-| 9 | v1.7 Gate 2 — Update os-self-audit.mjs (new checks) | Gate 2 | P1 | **In Progress** | OS audit count increases; `state-freshness-check.mjs` file check added |
-| 10 | v1.7 Gate 2 — Update CHANGELOG and version-history | Gate 2 | P1 | **In Progress** | Gate 2 IN PROGRESS entry; v1.7 version index row |
-| 11 | v1.7 Gate 2 — Update state docs to Gate 2 branch | Gate 2 | P0 | **In Progress** | AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md reflect branch |
-| 12 | v1.7 Gate 2 — Coordinator review and commit | Gate 2 | P0 | **Waiting** | Coordinator approves; commit created |
-| 13 | v1.7 Gate 3 — Report Mirroring | Gate 3 | P1 | **Queued** | Pending Gate 2 merge and Coordinator authorization |
+| 2 | v1.7 Gate 2 — Create `scripts/state-freshness-check.mjs` | Gate 2 | P0 | **Done** | Script passes `node --check`; FAIL/WARN/PASS logic confirmed; exits 0 on PASS/WARN ✓ |
+| 3 | v1.7 Gate 2 — Add state-sync decision matrix to closeout-sync-contract.md | Gate 2 | P0 | **Done** | FAIL/WARN/PASS table with examples; command reference; Package 5B rule ✓ |
+| 4 | v1.7 Gate 2 — Correct kanban-board.md (v1.3–v1.6 in Done; Gate 2 in In Progress) | Gate 2 | P1 | **Done** | Done column reflects all completed OS passes ✓ |
+| 5 | v1.7 Gate 2 — Open Sprint 2026-06-A in current-sprint.md | Gate 2 | P1 | **Done** | This file ✓ |
+| 6 | v1.7 Gate 2 — Update test-strategy.md test count to 1603 | Gate 2 | P0 | **Done** | 1603 appears; 1466 removed from pre-commit baseline ✓ |
+| 7 | v1.7 Gate 2 — Refresh model IDs in model-routing-protocol.md | Gate 2 | P1 | **Done** | Opus 4.8 referenced; tier-based routing preserved; no brittle ID lock-in ✓ |
+| 8 | v1.7 Gate 2 — Integrate validator into skills/commands | Gate 2 | P1 | **Done** | closeout, precommit, handoff skills reference `state-freshness-check.mjs` ✓ |
+| 9 | v1.7 Gate 2 — Update os-self-audit.mjs (new checks) | Gate 2 | P1 | **Done** | OS audit count increases; `state-freshness-check.mjs` file check added ✓ |
+| 10 | v1.7 Gate 2 — Update CHANGELOG and version-history | Gate 2 | P1 | **Done** | Gate 2 IN PROGRESS → COMPLETE entry; v1.7 version index row ✓ |
+| 11 | v1.7 Gate 2 — Update state docs to Gate 2 branch | Gate 2 | P0 | **Done** | AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md updated ✓ |
+| 12 | v1.7 Gate 2 — Coordinator review and commit | Gate 2 | P0 | **Done** | Gate 2 merged `3db3074` 2026-06-01 ✓ |
+| 13 | v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | Gate 3 | P1 | **In Progress** | branch `docs/ai-project-os-v1-7-report-mirroring-intake` — implementation in progress |
 | 14 | v1.7 Gate 4 — Start Router | Gate 4 | P2 | **Queued** | Pending Gate 3 merge and Coordinator authorization |
 | 15 | v1.7 Gate 5 — External Sync Consistency | Gate 5 | P2 | **Queued** | Pending Gate 4 merge and Coordinator authorization |
 | 16 | v1.7 Gate 6 — Docs-Watch and Bootstrap Finalization | Gate 6 | P2 | **Queued** | Pending Gate 5 merge and Coordinator authorization |

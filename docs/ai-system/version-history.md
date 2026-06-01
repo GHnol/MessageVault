@@ -11,7 +11,8 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.7.2 | AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators | 2026-06-01 | IN PROGRESS — branch `docs/ai-project-os-v1-7-state-freshness-validators`; commit pending Coordinator approval |
+| 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | IN PROGRESS — branch `docs/ai-project-os-v1-7-report-mirroring-intake`; commit pending Coordinator approval |
+| 1.7.2 | AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators | 2026-06-01 | COMPLETE — merged `3db3074` 2026-06-01 |
 | 1.7.1 | AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan | 2026-06-01 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
 | 1.6.3 | AI Project OS v1.6 — Advisory Repair: Sync-Map Read Path | 2026-06-01 | COMPLETE — merged `db45e6a` 2026-06-01; post-repair dry-run: 10 NO_OP, 0 MISSING_LOCAL_MAPPING |
 | 1.6.2 | AI Project OS v1.6 — Gate 2D Repair: Canonical OAuth Bootstrap | 2026-05-31 | COMPLETE — merged as part of v1.6 pipeline; canonical OAuth paths aligned |
@@ -32,10 +33,44 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ---
 
+## 1.7.3 — AI Project OS v1.7 Gate 3: Report Mirroring and Project-Control Log Intake (2026-06-01)
+
+**Branch:** `docs/ai-project-os-v1-7-report-mirroring-intake` (in progress)
+**Status:** IN PROGRESS — commit pending Coordinator approval
+
+### What this pass adds
+
+- **`scripts/report-mirror-intake.mjs`** — dependency-free Node ESM report mirror intake script. Default dry-run. `--input` or `--stdin` modes. `--type`, `--apply`, `--redact-only`, `--json`, `--redact-risk-accepted` flags. Auto-detects report type. Extracts safe metadata. Redacts `ghp_*`, `github_pat_*`, `ghs_*`, PEM blocks, `GOCSPX-*`, `ya29.*`, `1//*` patterns. Rejects high-risk input unless `--redact-risk-accepted`. Never prints secret values. Exit 0 on success; exit 1 on error.
+- **`docs/project-control/report-mirror-policy.md`** — authoritative policy for what is and is not mirrored, when entries are mandatory, skip/not-needed/blocked rules, automation distinctions, redaction safeguards.
+- **`docs/project-control/report-mirror-schema.md`** — field definitions: `report_id`, 10 `report_type` values, 4 `source_type` values, metadata fields, 4 `mirror_status` values; committed entry format; fake-data example.
+- **`docs/project-control/report-mirror-log.md`** — durable committed index of sanitized mirror entries. Starts empty; first entry at Gate 3 closeout.
+- **`docs/project-control/report-intake-runbook.md`** — step-by-step intake process for script-assisted, stdin, and manual-paste modes; redaction guide; skip/reject handling; CLI reference.
+- **`.claude/skills/report-intake/SKILL.md`** — new skill with YAML frontmatter, full protocol.
+- **`.claude/commands/report-intake.md`** — thin command wrapper for `/report-intake`.
+
+### What this pass updates
+
+- `docs/dev/closeout-sync-contract.md` — Report mirroring requirement section; mirror outcome in required closeout report format
+- `.claude/skills/closeout/SKILL.md`, `handoff/SKILL.md`, `precommit/SKILL.md`, `start/SKILL.md`, `weekly-sync/SKILL.md` — report mirroring integration
+- `.claude/skills/README.md` — count 16 → 17; `report-intake` row
+- `.claude/commands/README.md` — `/report-intake` row
+- `scripts/os-self-audit.mjs` — Section 6g checks (22 new checks); audit count rises from ~179 to ~201
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6g (19 items for report mirroring layer)
+- `docs/project-control/current-sprint.md` — Gate 2 tasks marked Done; Gate 3 In Progress
+- `docs/project-control/kanban-board.md` — Gate 2 moved to Done; Gate 3 in In Progress
+- `.gitignore` — `local-report-intake/` added
+- `docs/ai-system/CHANGELOG.md`, `version-history.md` — this entry
+
+### Backlog (deferred)
+
+- Automatic hook-based transcript capture — deferred pending stable, privacy-safe transcript export format from Claude Code harness
+
+---
+
 ## 1.7.2 — AI Project OS v1.7 Gate 2: Closeout and State Freshness Validators (2026-06-01)
 
-**Branch:** `docs/ai-project-os-v1-7-state-freshness-validators` (in progress)
-**Status:** IN PROGRESS — commit pending Coordinator approval
+**Branch:** `docs/ai-project-os-v1-7-state-freshness-validators` (merged)
+**Status:** COMPLETE — merged `3db3074` 2026-06-01
 
 ### What this pass adds
 

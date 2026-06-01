@@ -43,6 +43,13 @@ If FAILs are reported, they must be resolved before recommending commit. WARNs m
 
 For OS/docs-only packages (no app or `src/` changes): the state freshness check and `node scripts/os-self-audit.mjs` satisfy the pre-commit verification gate. Full app/E2E suites are not required.
 
+For meaningful closeout commits, verify the report mirror status before recommending commit:
+- If the commit is a package closeout, gate closeout, or merge closeout: confirm the mirror outcome is `MIRRORED`, `SKIPPED`, or `NOT NEEDED`.
+- If the mirror outcome is `BLOCKED`: resolve the block before committing.
+- State the mirror outcome in the pre-commit report.
+
+See `docs/project-control/report-mirror-policy.md`.
+
 If the verification reveals state docs are stale enough to misdirect the next agent, flag it and recommend a sync update before commit.
 
 ## Output format
