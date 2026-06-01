@@ -21,12 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `1d83026` — docs: record v1.6 Gate 3 live apply completion |
-| Active branch | `fix/google-calendar-sync-map-read-path` |
-| Active pass | Advisory repair — sync-map read path fix (commit pending) |
-| Last completed pass | `AI Project OS v1.6 advisory repair` — sync-map read path — 2026-06-01 |
+| main HEAD | `db45e6a` — merge: Google Calendar sync-map read path advisory repair |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.6 advisory repair` — sync-map read path — merged `db45e6a` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator authorizes advisory repair commit, then Package 5B or other |
+| Next authorized target | Coordinator authorizes Package 5B or other |
 | OS audit | Advisory repair: 166 pass, 0 warn, 0 fail |
 | Package 5B | Not started — blocked |
 | v1.5 Gate 2 | COMPLETE — "AI Project OS Template" (GHnol/projects/2); 13 fields; 14 views |

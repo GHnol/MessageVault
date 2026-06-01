@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `repair-complete-pending-commit` — AI Project OS v1.6 advisory repair pass complete 2026-06-01. Sync-map read path fixed in `google-calendar-sync-dry-run.mjs`. Post-repair live read-only dry-run: 488 events fetched, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers. Branch: `fix/google-calendar-sync-map-read-path`. Commit pending Coordinator approval. Package 5B blocked.
+**Status:** `complete` — AI Project OS v1.6 advisory repair MERGED to main 2026-06-01. Merge commit: `db45e6a`. main HEAD: `db45e6a`. Working tree clean. 166 OS audit pass. Package 5B blocked.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Advisory repair — sync-map read path fix |
-| **Active branch** | `fix/google-calendar-sync-map-read-path` |
-| **main HEAD** | `1d83026` — docs: record v1.6 Gate 3 live apply completion |
-| **Last completed pass** | `AI Project OS v1.6 advisory repair` — sync-map read path — 2026-06-01 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `db45e6a` — merge: Google Calendar sync-map read path advisory repair |
+| **Last completed pass** | `AI Project OS v1.6 advisory repair` — sync-map read path — merged `db45e6a` 2026-06-01 |
 | **Active package** | None |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked pending Coordinator authorization |
@@ -54,9 +54,9 @@ No credential or token contents printed. No events deleted or cancelled.
 | Gate 2D Repair — OAuth Bootstrap + Path Alignment | COMPLETE — merged `fe1315a` 2026-05-31 |
 | Gate 2D — Live Calendar Read-Only Dry-Run | COMPLETE — 2026-06-01. 478 events fetched. 10 CREATE, 0 blockers. Artifact: `local-sync-reports/google-calendar-dry-run-live-2026-06-01T00-21-06-514Z.json` |
 | Gate 3 — Live Calendar Apply | COMPLETE — 2026-06-01. 10 events created. 0 errors. Post-apply dry-run: all 10 NO_OP, high confidence. |
-| Advisory Repair — Sync-Map Read Path | COMPLETE — 2026-06-01. Post-repair live dry-run: 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers. Commit pending Coordinator approval. |
+| Advisory Repair — Sync-Map Read Path | COMPLETE — merged `db45e6a` 2026-06-01. Post-repair live dry-run: 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING, 0 blockers. |
 
-**AI Project OS v1.6 — COMPLETE. Advisory repair complete — commit pending.**
+**AI Project OS v1.6 — COMPLETE. Advisory repair merged `db45e6a` 2026-06-01.**
 
 ---
 
@@ -87,7 +87,7 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Advisory repair commit pending Coordinator approval. Files to commit: `scripts/google-calendar-sync-dry-run.mjs`, `docs/project-control/google-calendar-external-sync-map.fixture.json`, `docs/project-control/google-calendar-sync-log.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`. After commit: merge to `main`, then Coordinator authorizes next product package (Package 5B or other). No product package work authorized without explicit instruction.
+Advisory repair merged to `main` (`db45e6a`). Coordinator authorizes next product package (Package 5B or other). No product package work authorized without explicit instruction. Push to `origin/main` pending separate Coordinator authorization.
 
 ---
 
