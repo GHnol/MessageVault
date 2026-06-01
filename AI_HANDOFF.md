@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — AI Project OS v1.7 Gate 4 IN PROGRESS. Branch `docs/ai-project-os-v1-7-start-router-context-model-routing` created. Implementation in progress. Package 5B: not started, blocked. No external mutations permitted.
+**Status:** `complete` — AI Project OS v1.7 Gate 4 COMPLETE. Implementation committed `027c554`, merged to main `352356b` 2026-06-01. Working tree clean. 223 OS audit pass. Package 5B blocked. Gate 5 pending Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,21 +18,21 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.7 Gate 4` — Start Router, Context Usage, and Model Routing Hardening |
-| **Active branch** | `docs/ai-project-os-v1-7-start-router-context-model-routing` |
-| **main HEAD** | `8f18bb1` — docs: sync state after AI Project OS v1.7 Gate 3 merge |
-| **Last completed pass** | `AI Project OS v1.7 Gate 3` — report mirroring intake — merged `a86ae11` 2026-06-01 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `352356b` — Merge branch 'docs/ai-project-os-v1-7-start-router-context-model-routing' |
+| **Last completed pass** | `AI Project OS v1.7 Gate 4` — start router + model routing hardening — merged `352356b` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
 
 ---
 
-## Objective (active pass — v1.7 Gate 4)
+## Objective (last completed pass — v1.7 Gate 4)
 
 AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening.
 
-**IN PROGRESS — branch `docs/ai-project-os-v1-7-start-router-context-model-routing`**. Delivered so far:
+**Gate 4 COMPLETE — merged `352356b` 2026-06-01.** Delivered:
 1. `scripts/start-router.mjs` — dependency-free Node ESM start router. 9 verdicts, 8 CLI modes. Read-only.
 2. `.claude/skills/start-router/SKILL.md` + `.claude/commands/start-router.md` — new skill and command.
 3. Skills updated: `start`, `package-start`, `handoff`, `switch-to-codex`, `switch-to-claude` — all reference start router.
@@ -53,11 +53,9 @@ AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Har
 18. `docs/ai-system/version-history.md` — v1.7.4 IN PROGRESS row.
 19. State files updated to Gate 4 branch.
 
-**Next exact action:** Coordinator reviews Gate 4 implementation report. If approved, commit and merge Gate 4.
-
 ---
 
-## Summary (last completed pass — v1.7 Gate 3)
+## Summary (prior completed pass — v1.7 Gate 3)
 
 AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake.
 
@@ -141,11 +139,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 4 implementation is in progress on branch `docs/ai-project-os-v1-7-start-router-context-model-routing`.
+Gate 4 is merged to main (`352356b`). State-sync commit in progress.
 
-Run all verification commands, then produce the Gate 4 implementation report for Coordinator review. If approved, commit and merge Gate 4. Do not commit or push without explicit Coordinator instruction.
+Push to `origin/main` pending separate Coordinator authorization.
 
-Do not start Gate 5 or Package 5B without separate Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+Coordinator then authorizes v1.7 Gate 5 (External Sync Consistency Validators) or any other next direction.
+
+Do not start Gate 5 or Package 5B. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

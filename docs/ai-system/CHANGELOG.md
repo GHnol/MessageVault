@@ -11,7 +11,7 @@ Newest entries first.
 
 ## 2026-06-01 — AI Project OS v1.7: Gate 4 — Start Router, Context Usage, and Model Routing Hardening
 
-**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-start-router-context-model-routing`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Status:** COMPLETE — merged `352356b` 2026-06-01. No external mutations. No product code. No Package 5B.
 **Scope:** Add repo-native start router (`scripts/start-router.mjs`); harden context restart, compact, clear, and handoff guidance; refresh tier-based model routing with scrutinous adoption rule, Plan Mode boundaries, and custom model settings guidance; wire start router into `/start`, `/package-start`, `/handoff`, `/switch-to-codex`, `/switch-to-claude` skills and commands; update OS audit (Section 6h); add `raw-transcripts/` to gitignore; update bootstrap template and universal standards.
 
 ### Added

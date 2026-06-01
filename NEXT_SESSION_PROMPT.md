@@ -47,18 +47,18 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 4 IN PROGRESS. Branch `docs/ai-project-os-v1-7-start-router-context-model-routing`. Implementation complete. Awaiting Coordinator review and commit authorization. |
-| Branch | `docs/ai-project-os-v1-7-start-router-context-model-routing` |
-| main HEAD | `8f18bb1` — docs: sync state after AI Project OS v1.7 Gate 3 merge |
-| Next action | Run `/start` then `node scripts/start-router.mjs`. Gate 4 implementation complete. Await Coordinator review. Do not commit or push without explicit Coordinator instruction. Do not start Gate 5 or Package 5B without authorization. |
-| OS audit | Gate 4: ~223 expected pass (pending final verification run) |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only expected (cosmetic HEAD lag) |
+| Resume into | AI Project OS v1.7 Gate 4 COMPLETE and merged 2026-06-01. State-sync on main. No active pass. Awaiting Coordinator authorization for v1.7 Gate 5 or push to origin. |
+| Branch | `main` |
+| main HEAD | `352356b` — Merge branch 'docs/ai-project-os-v1-7-start-router-context-model-routing' |
+| Next action | Run `/start` then `node scripts/start-router.mjs`. Gate 4 merged. Await Coordinator authorization for v1.7 Gate 5 or push. Do not start Gate 5 or Package 5B without explicit Coordinator authorization. |
+| OS audit | Gate 4: 223 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (3 accepted cosmetic WARNs) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
 | v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. |
 | v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01. |
-| v1.7 Gate 4 | IN PROGRESS — `scripts/start-router.mjs` + routing hardening delivered; commit pending Coordinator approval. |
+| v1.7 Gate 4 | COMPLETE — merged `352356b` 2026-06-01. `scripts/start-router.mjs` + model routing hardening + 223 OS audit checks delivered. |
 | Do not | Start Gate 5 or Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 

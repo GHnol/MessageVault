@@ -16,20 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-01` (Gate 4 in progress)
+**Last updated:** `2026-06-01` (Gate 4 merge + state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `8f18bb1` — docs: sync state after AI Project OS v1.7 Gate 3 merge |
-| Active branch | `docs/ai-project-os-v1-7-start-router-context-model-routing` |
-| Active pass | `AI Project OS v1.7 Gate 4` — Start Router, Context Usage, and Model Routing Hardening (IN PROGRESS) |
-| Last completed pass | `AI Project OS v1.7 Gate 3` — report mirroring intake — merged `a86ae11` 2026-06-01 |
+| main HEAD | `352356b` — Merge branch 'docs/ai-project-os-v1-7-start-router-context-model-routing' |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `AI Project OS v1.7 Gate 4` — start router + model routing hardening — merged `352356b` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator reviews Gate 4 report; Package 5B blocked until v1.7 complete |
-| OS audit | Gate 4: ~223 expected pass (201 prior + 22 Section 6h checks), pending final run |
+| Next authorized target | v1.7 Gate 5 pending Coordinator authorization; Package 5B blocked until v1.7 complete |
+| OS audit | Gate 4: 223 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | Not started — blocked until v1.7 complete and explicit Coordinator authorization |
-| v1.7 Gate 4 | IN PROGRESS — branch `docs/ai-project-os-v1-7-start-router-context-model-routing`; `scripts/start-router.mjs` + routing hardening delivered |
+| v1.7 Gate 4 | COMPLETE — merged `352356b` 2026-06-01; `scripts/start-router.mjs` + routing hardening + 223 OS audit checks delivered |
 | v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01; `scripts/report-mirror-intake.mjs` + policy/schema/log/runbook/skill delivered |
 | v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01; `scripts/state-freshness-check.mjs` + decision matrix delivered |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
