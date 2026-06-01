@@ -25,6 +25,7 @@ Note: This skill is the escalation path for the internal sync check. After every
 4. `docs/project-control/kanban-board.md`
 5. `CURRENT_STATE.md`
 6. `docs/project-control/calendar-sync-policy.md` (for calendar staleness check)
+7. `docs/project-control/report-mirror-log.md` (for recent closeout context — last mirrored entry date)
 
 ## Required git preflight
 

@@ -255,6 +255,30 @@ checkGrep('closeout-sync-contract.md references state-freshness-check.mjs', 'doc
 checkGrep('closeout SKILL.md references state-freshness-check.mjs', '.claude/skills/closeout/SKILL.md', 'state-freshness-check.mjs');
 checkGrep('precommit SKILL.md references state-freshness-check.mjs', '.claude/skills/precommit/SKILL.md', 'state-freshness-check.mjs');
 
+// --- Section 6g: Report mirroring intake layer (AI Project OS v1.7 Gate 3) ---
+checkFile('scripts/report-mirror-intake.mjs (v1.7 report mirror intake script)', 'scripts/report-mirror-intake.mjs');
+checkFile('docs/project-control/report-mirror-policy.md (v1.7 report mirror policy)', 'docs/project-control/report-mirror-policy.md');
+checkFile('docs/project-control/report-mirror-schema.md (v1.7 report mirror schema)', 'docs/project-control/report-mirror-schema.md');
+checkFile('docs/project-control/report-mirror-log.md (v1.7 report mirror log)', 'docs/project-control/report-mirror-log.md');
+checkFile('docs/project-control/report-intake-runbook.md (v1.7 report intake runbook)', 'docs/project-control/report-intake-runbook.md');
+checkFile('.claude/skills/report-intake/SKILL.md (v1.7 report-intake skill)', '.claude/skills/report-intake/SKILL.md');
+checkFile('.claude/commands/report-intake.md (v1.7 report-intake command)', '.claude/commands/report-intake.md');
+checkGrep('report-mirror-intake.mjs supports --apply flag', 'scripts/report-mirror-intake.mjs', '--apply');
+checkGrep('report-mirror-intake.mjs supports --dry-run / default dry-run', 'scripts/report-mirror-intake.mjs', 'DRY_RUN');
+checkGrep('report-mirror-intake.mjs supports --stdin', 'scripts/report-mirror-intake.mjs', '--stdin');
+checkGrep('report-mirror-intake.mjs supports --input flag', 'scripts/report-mirror-intake.mjs', '--input');
+checkGrep('report-mirror-intake.mjs has redaction for ghp_ tokens', 'scripts/report-mirror-intake.mjs', 'ghp_');
+checkGrep('report-mirror-intake.mjs has redaction for github_pat_ tokens', 'scripts/report-mirror-intake.mjs', 'github_pat_');
+checkGrep('report-mirror-intake.mjs has redaction for PEM private key blocks', 'scripts/report-mirror-intake.mjs', 'BEGIN');
+checkGrep('report-mirror-intake.mjs never prints secret values (HIGH_RISK_PATTERNS)', 'scripts/report-mirror-intake.mjs', 'HIGH_RISK_PATTERNS');
+checkGrep('report-mirror-log.md has Purpose section', 'docs/project-control/report-mirror-log.md', '## Purpose');
+checkGrep('report-mirror-policy.md explains mirroring vs not mirroring', 'docs/project-control/report-mirror-policy.md', 'What is mirrored vs what is not');
+checkGrep('closeout-sync-contract.md has report mirroring requirement', 'docs/dev/closeout-sync-contract.md', 'Report mirroring requirement');
+checkGitignore('local-reports/ gitignored (v1.7 Gate 3)', 'local-reports/example.md');
+checkGitignore('local-report-intake/ gitignored (v1.7 Gate 3)', 'local-report-intake/example.md');
+checkGrep('closeout SKILL.md references report-mirror-intake.mjs', '.claude/skills/closeout/SKILL.md', 'report-mirror-intake.mjs');
+checkGrep('handoff SKILL.md references report-mirror-intake.mjs', '.claude/skills/handoff/SKILL.md', 'report-mirror-intake.mjs');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

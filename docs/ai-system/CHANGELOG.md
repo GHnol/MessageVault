@@ -9,9 +9,66 @@ Newest entries first.
 
 ---
 
+## 2026-06-01 — AI Project OS v1.7: Gate 3 — Report Mirroring and Project-Control Log Intake
+
+**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-report-mirroring-intake`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Scope:** Add repo-native report mirror intake layer (`scripts/report-mirror-intake.mjs`); define report schema, policy, and runbook; create committed project-control mirror log; add `report-intake` skill and command; integrate report mirroring into closeout/handoff/precommit/start/weekly-sync workflows; update OS self-audit to 6g checks; update gitignore with `local-report-intake/`.
+
+### Added
+
+- `scripts/report-mirror-intake.mjs` — dependency-free Node ESM report mirror intake script. Default dry-run. Accepts `--input <path>` or `--stdin`. Supports `--type <report_type>`, `--apply`, `--redact-only`, `--json`, `--redact-risk-accepted`. Auto-detects report type from content. Extracts safe metadata (branch, HEAD, files changed, tests run, next action). Redacts `ghp_*`, `github_pat_*`, `ghs_*`, PEM private key blocks, `GOCSPX-*`, `ya29.*`, `1//*` patterns. Rejects input with high-risk secret patterns unless `--redact-risk-accepted` provided. Never prints detected secret values. Appends sanitized entry to `report-mirror-log.md` in `--apply` mode. Exit 0 on success; exit 1 on missing input, unsupported type, secret-risk rejection, schema failure, or write error.
+- `docs/project-control/report-mirror-policy.md` — authoritative policy: what mirroring means, what is committed vs not committed, when mirror entry is mandatory, when skipping is allowed, automation distinctions (script-assisted vs manual-paste vs future hook-based), redaction safeguards, Post-Commit State Rule application, local paths.
+- `docs/project-control/report-mirror-schema.md` — field definitions for mirror entries: `report_id`, `report_type` (10 values), `source_type` (4 values), metadata fields, `mirror_status` (4 values), `skip_reason`, `follow_up_required`; committed entry format; example entry (fake data only).
+- `docs/project-control/report-mirror-log.md` — durable committed index of sanitized mirror entries. Initial state: empty (Gate 3 in progress). First entry to be added at Gate 3 closeout.
+- `docs/project-control/report-intake-runbook.md` — step-by-step intake process: script-assisted from file, script-assisted from stdin, manual paste, redact-only mode, handling raw transcripts, redaction guide, skip/reject handling, CLI quick reference, exit codes.
+- `.claude/skills/report-intake/SKILL.md` — new skill: YAML frontmatter, purpose, when to use, files to read, git preflight, input rules, redaction rules, dry-run and apply behavior, output format, hard stops, approval boundaries.
+- `.claude/commands/report-intake.md` — thin command wrapper: delegates to `report-intake` skill.
+
+### Updated
+
+- `docs/dev/closeout-sync-contract.md` — Report mirroring requirement section added: `MIRRORED` / `SKIPPED` / `NOT NEEDED` / `BLOCKED` outcomes with decision table and examples; report mirror outcome added to required closeout report format (item 6); external dry-run result moved to item 7; script reference.
+- `.claude/skills/closeout/SKILL.md` — report mirror check step added before recommending commit or merge; mirror outcome required in section 6 of closeout report.
+- `.claude/skills/handoff/SKILL.md` — report mirror determination step added before completing handoff; mirror status added to transfer block format.
+- `.claude/skills/precommit/SKILL.md` — report mirror status verification added for meaningful closeout commits.
+- `.claude/skills/start/SKILL.md` — `report-mirror-log.md` added as optional context source for recent closeout history.
+- `.claude/skills/weekly-sync/SKILL.md` — `report-mirror-log.md` added to Files to read list.
+- `.claude/skills/README.md` — count updated to 17; `report-intake` row added.
+- `.claude/commands/README.md` — `/report-intake` row added.
+- `scripts/os-self-audit.mjs` — Section 6g checks added (22 new checks for report mirroring layer).
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6g added (19 items for v1.7 report mirroring layer); Scripts table updated.
+- `docs/project-control/current-sprint.md` — Gate 2 tasks marked Done; Gate 3 task marked In Progress.
+- `docs/project-control/kanban-board.md` — Gate 2 moved to Done; Gate 3 in In Progress; View 2 updated.
+- `.gitignore` — `local-report-intake/` added.
+- `docs/ai-system/CHANGELOG.md` — this entry.
+- `docs/ai-system/version-history.md` — v1.7.3 row added.
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json` — no dependency changes
+- No live Google Calendar mutations
+- No credential files created, read contents of, or written
+- `docs/project-control/external-sync-map.local.json` — not read or written
+- `local-sync-reports/` — gitignored, not committed
+- No GitHub Project mutations
+- No Package 5B work
+
+### Post-Gate-3 verification plan
+
+- `node --check scripts/report-mirror-intake.mjs` — PASS
+- `node scripts/report-mirror-intake.mjs --help` — prints usage
+- `node scripts/report-mirror-intake.mjs --input <local-fixture> --type package_closeout --dry-run` — PASS
+- Redaction test with fake token strings — script must not print token values
+- `node scripts/os-self-audit.mjs` — at least 201 pass, 0 fail (179 prior + 22 new Section 6g checks)
+- `node scripts/state-freshness-check.mjs` — WARN only (no new FAILs)
+- `node scripts/project-control-sync-validate.mjs` — VALID
+- Hard-exclusion diff (index.html, src, public, amplify, package.json, package-lock.json): clean
+
+---
+
 ## 2026-06-01 — AI Project OS v1.7: Gate 2 — Closeout and State Freshness Validators
 
-**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-state-freshness-validators`; commit pending Coordinator approval. No OAuth run. No live calendar mutations. No product code. No Package 5B.
+**Status:** COMPLETE — merged `3db3074` 2026-06-01. No OAuth run. No live calendar mutations. No product code. No Package 5B.
 **Scope:** Add repo-native state freshness validator (`scripts/state-freshness-check.mjs`); document state-sync decision matrix; correct stale kanban/sprint; update test-strategy.md baseline; refresh model-routing-protocol.md; wire validator into closeout/precommit/handoff/start skills; update OS self-audit.
 
 ### Added

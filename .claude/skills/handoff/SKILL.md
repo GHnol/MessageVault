@@ -41,6 +41,15 @@ node scripts/state-freshness-check.mjs
 
 FAILs must be resolved before the handoff is complete. WARNs must be noted in the transfer block. See `docs/dev/closeout-sync-contract.md` § "State-Sync Decision Matrix".
 
+Before completing the handoff, determine the report mirror outcome:
+
+- If this handoff closes a meaningful work unit (package, gate, incident): state whether a mirror entry is needed.
+- If MIRRORED: run `node scripts/report-mirror-intake.mjs --input <local-path> --type handoff --dry-run` and include the mirror status in the transfer block.
+- If SKIPPED or NOT NEEDED: state the reason.
+- The incoming agent reads the mirror status from the transfer block before resuming.
+
+See `docs/project-control/report-mirror-policy.md`.
+
 After updating `AI_HANDOFF.md`, check whether `CURRENT_STATE.md` and `NEXT_SESSION_PROMPT.md` also need updating. Apply the Post-Commit State Rule: update only if the docs would misdirect the next agent. Cosmetic HEAD lag does not require a sync commit.
 
 If this handoff is at a package boundary, also check:
@@ -63,7 +72,7 @@ If this handoff is at a package boundary, also check:
 2. Output a transfer block to chat:
 
    > **TRANSFER PACKET**
-   > Package: … | Branch: … | HEAD: … | Done: … | Remaining: … | Blocked: … | Next action: … | Handoff file: updated ✓
+   > Package: … | Branch: … | HEAD: … | Done: … | Remaining: … | Blocked: … | Next action: … | Handoff file: updated ✓ | Mirror status: MIRRORED / SKIPPED / NOT NEEDED
 
 ## Hard stop conditions
 

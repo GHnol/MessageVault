@@ -216,6 +216,36 @@ The Post-Commit State Rule (canonical wording: `docs/ai-system/universal-standar
 
 ---
 
+## Report mirroring requirement
+
+Every meaningful closeout must state a report mirror outcome. The outcome is one of:
+
+| Outcome | Meaning | When to use |
+|---|---|---|
+| `MIRRORED` | Sanitized entry added to `report-mirror-log.md` | Package closeout, gate closeout, merge closeout, external sync apply, major planning change, tool switch handoff, incident resolution, OS audit with new verdict |
+| `SKIPPED` | No committed entry; reason stated | Local-only dry-run with no external operation; trivial cosmetic edit with no operational value; validator run with unchanged result |
+| `NOT NEEDED` | No operational value; reason stated | Cosmetic Post-Commit State Rule hash lag only; tiny typo correction |
+| `BLOCKED` | Report contains sensitive data; follow-up required | Report was rejected due to secret-risk detection; sanitize before resubmitting |
+
+Report mirroring is required as a **check** at every meaningful closeout. It is not required as a **committed log entry** every time.
+
+Examples:
+- Package closeout with hashes, files, and next action → `MIRRORED`
+- State-sync commit for cosmetic hash lag only → `NOT NEEDED`
+- Local-only `--dry-run` with no apply → `SKIPPED — local artifact only`
+- Report pasted from chat contains an accidentally included credential pattern → `BLOCKED until sanitized`
+
+Script:
+```
+node scripts/report-mirror-intake.mjs --input <path> --type <type> --dry-run
+node scripts/report-mirror-intake.mjs --input <path> --type <type> --apply
+```
+
+Policy: `docs/project-control/report-mirror-policy.md`
+Runbook: `docs/project-control/report-intake-runbook.md`
+
+---
+
 ## Required closeout report format
 
 A complete closeout report (produced by the `closeout` skill, output to chat) includes:
@@ -225,12 +255,13 @@ A complete closeout report (produced by the `closeout` skill, output to chat) in
 3. Verification results
 4. Files changed vs. authorized scope
 5. Internal sync check result — what was verified, what was updated, what was skipped and why
-6. External dry-run result (if applicable) — proposed delta or "no external sync needed"
-7. Proposed commit message
-8. Proposed merge plan
-9. Proposed status-sync commit plan
-10. Recommended session shape for next package
-11. Blockers, if any
+6. Report mirror outcome — `MIRRORED` / `SKIPPED` / `NOT NEEDED` / `BLOCKED` with reason
+7. External dry-run result (if applicable) — proposed delta or "no external sync needed"
+8. Proposed commit message
+9. Proposed merge plan
+10. Proposed status-sync commit plan
+11. Recommended session shape for next package
+12. Blockers, if any
 
 ---
 

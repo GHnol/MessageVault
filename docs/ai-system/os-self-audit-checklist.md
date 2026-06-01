@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -246,6 +246,38 @@ The audit does **not** require:
 
 ---
 
+## 6g. Report mirroring intake layer (AI Project OS v1.7 Gate 3)
+
+Required when the repo has been updated to AI Project OS v1.7 Gate 3 or later.
+
+| Item | Classification | Check |
+|---|---|---|
+| `scripts/report-mirror-intake.mjs` exists | Required | `Glob scripts/report-mirror-intake.mjs` |
+| `docs/project-control/report-mirror-policy.md` exists | Required | `Glob docs/project-control/report-mirror-policy.md` |
+| `docs/project-control/report-mirror-schema.md` exists | Required | `Glob docs/project-control/report-mirror-schema.md` |
+| `docs/project-control/report-mirror-log.md` exists | Required | `Glob docs/project-control/report-mirror-log.md` |
+| `docs/project-control/report-intake-runbook.md` exists | Required | `Glob docs/project-control/report-intake-runbook.md` |
+| `.claude/skills/report-intake/SKILL.md` exists | Required | `Glob .claude/skills/report-intake/SKILL.md` |
+| `.claude/commands/report-intake.md` exists | Required | `Glob .claude/commands/report-intake.md` |
+| `report-mirror-intake.mjs` supports `--apply` flag | Required | `Grep "\-\-apply" scripts/report-mirror-intake.mjs` |
+| `report-mirror-intake.mjs` supports `--stdin` | Required | `Grep "\-\-stdin" scripts/report-mirror-intake.mjs` |
+| `report-mirror-intake.mjs` has `ghp_` redaction | Required | `Grep "ghp_" scripts/report-mirror-intake.mjs` |
+| `report-mirror-intake.mjs` has PEM block redaction | Required | `Grep "BEGIN" scripts/report-mirror-intake.mjs` |
+| `report-mirror-intake.mjs` uses HIGH_RISK_PATTERNS (never prints values) | Required | `Grep "HIGH_RISK_PATTERNS" scripts/report-mirror-intake.mjs` |
+| `report-mirror-log.md` has Purpose section | Required | `Grep "## Purpose" docs/project-control/report-mirror-log.md` |
+| `report-mirror-policy.md` explains what is and is not mirrored | Required | `Grep "What is mirrored vs what is not" docs/project-control/report-mirror-policy.md` |
+| `closeout-sync-contract.md` has report mirroring requirement | Required | `Grep "Report mirroring requirement" docs/dev/closeout-sync-contract.md` |
+| `local-reports/` is gitignored | Required | `git check-ignore -v local-reports/example.md` |
+| `local-report-intake/` is gitignored | Required | `git check-ignore -v local-report-intake/example.md` |
+| `closeout` SKILL.md references `report-mirror-intake.mjs` | Required | `Grep "report-mirror-intake.mjs" .claude/skills/closeout/SKILL.md` |
+| `handoff` SKILL.md references `report-mirror-intake.mjs` | Required | `Grep "report-mirror-intake.mjs" .claude/skills/handoff/SKILL.md` |
+
+The audit does **not** require:
+- An existing committed mirror entry in `report-mirror-log.md` (the log starts empty)
+- `local-report-intake/` directory to exist locally (it is created on first use)
+
+---
+
 ## 7. QA templates
 
 | Item | Classification | Check |
@@ -294,7 +326,7 @@ Flag any item where stale wording would misdirect the next agent. Apply the Post
 
 | Script | Classification | What it checks |
 |---|---|---|
-| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c + 6d + 6e (file existence, gitignore, Grep-based checks, GitHub Projects and Google Calendar layers) |
+| `scripts/os-self-audit.mjs` | Recommended | Sections 1–9 + 6b + 6c + 6d + 6e + 6f + 6g (file existence, gitignore, Grep-based checks, GitHub Projects, Google Calendar, state freshness, and report mirroring layers) |
 | `scripts/project-control-sync-validate.mjs` | Recommended | Section 6 — project-control doc consistency |
 | `scripts/google-calendar-source-validate.mjs` | Recommended | Section 6e — Google Calendar source record schema validation |
 | `scripts/generate-project-calendar.mjs` | Recommended | Generates committed .ics from source records (no API calls) |

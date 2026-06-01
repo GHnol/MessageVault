@@ -47,18 +47,18 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 2 COMPLETE and merged 2026-06-01. State-sync on main. No active pass. Awaiting Coordinator authorization for v1.7 Gate 3 or push to origin. |
-| Branch | `main` |
-| main HEAD | `3db3074` — Merge branch 'docs/ai-project-os-v1-7-state-freshness-validators' |
-| Next action | Run `/start`. Gate 2 merged. Await Coordinator authorization for v1.7 Gate 3 or push. Do not start Gate 3 or Package 5B without explicit Coordinator authorization. |
-| OS audit | Gate 2: 179 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (3 accepted cosmetic WARNs) |
+| Resume into | AI Project OS v1.7 Gate 3 IN PROGRESS. Branch `docs/ai-project-os-v1-7-report-mirroring-intake`. Implementation complete. Awaiting Coordinator approval to commit and merge Gate 3. |
+| Branch | `docs/ai-project-os-v1-7-report-mirroring-intake` |
+| main HEAD | `d872f68` — docs: sync state after AI Project OS v1.7 Gate 2 merge |
+| Next action | Run `/start`. Gate 3 implementation done. Await Coordinator approval. If approved: commit, merge, push, then proceed to v1.7 Gate 4. Do not start Package 5B without explicit Coordinator authorization. |
+| OS audit | Gate 3 expected: ~201 pass, 0 fail. Gate 2 verified: 179 pass, 0 warn, 0 fail. |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only expected (cosmetic lag) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
-| v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01. |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
-| v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. `scripts/state-freshness-check.mjs` delivered. |
-| Do not | Start Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, credentials, or token. |
+| v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. |
+| v1.7 Gate 3 | IN PROGRESS — branch `docs/ai-project-os-v1-7-report-mirroring-intake`. Pending Coordinator review. |
+| Do not | Start Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, credentials, or token. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---

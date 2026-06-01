@@ -38,6 +38,7 @@ Also: `git rev-parse HEAD` to verify HEAD against what the durable state files r
 ## Sync obligations
 
 - Check that `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` reflect the current HEAD and package state.
+- If recent closeout context is needed, read `docs/project-control/report-mirror-log.md` for the latest mirrored state. The most recent entry date shows when the last operational summary was committed.
 - After the git preflight, optionally run the state freshness validator to detect misdirection before touching anything:
 
   ```

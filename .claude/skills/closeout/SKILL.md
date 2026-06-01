@@ -42,6 +42,16 @@ node scripts/state-freshness-check.mjs
 
 If FAILs are reported, fix them before proceeding. WARNs must be disclosed in the closeout report. See `docs/dev/closeout-sync-contract.md` § "State-Sync Decision Matrix" for FAIL/WARN/PASS criteria.
 
+Run the report mirror check before recommending commit or merge:
+
+- Determine the mirror outcome for this closeout: `MIRRORED`, `SKIPPED`, `NOT NEEDED`, or `BLOCKED`.
+- If MIRRORED: run `node scripts/report-mirror-intake.mjs --input <local-path> --type <type> --dry-run` and confirm the sanitized preview.
+- If SKIPPED or NOT NEEDED: state the reason explicitly in the closeout report.
+- If BLOCKED: state the block reason and follow-up required.
+- Include the mirror outcome in section 6 of the closeout report.
+
+See `docs/project-control/report-mirror-policy.md` and `docs/dev/closeout-sync-contract.md` § "Report mirroring" for when each outcome applies.
+
 After package verification and continuity file updates, run the internal sync check defined in `docs/dev/closeout-sync-contract.md`. The sync check verifies:
 
 - `CURRENT_STATE.md` — updated with last-closed package
@@ -65,7 +75,7 @@ A complete boundary report to chat:
 3. Verification results (which tests/checks ran, results, which were skipped and why)
 4. Files changed vs. authorized scope
 5. Continuity files updated (yes/no for each)
-6. Internal sync check result
+6. Internal sync check result + report mirror outcome (`MIRRORED` / `SKIPPED` / `NOT NEEDED` / `BLOCKED`)
 7. Proposed commit message (exact text)
 8. Proposed merge plan (branch → main, `--no-ff`, push order)
 9. Proposed status-sync commit plan (branch name, files to update)
