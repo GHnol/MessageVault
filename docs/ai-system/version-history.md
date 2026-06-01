@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.7.6 | AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization | 2026-06-01 | IN PROGRESS — on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`; commit pending Coordinator approval |
+| 1.7.6 | AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization | 2026-06-01 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01 |
 | 1.7.5 | AI Project OS v1.7 Gate 5 — External Sync Consistency Validators | 2026-06-01 | COMPLETE — merged `2b37e13` 2026-06-01 |
 | 1.7.4 | AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | 2026-06-01 | COMPLETE — merged `352356b` 2026-06-01 |
 | 1.7.3 | AI Project OS v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake | 2026-06-01 | COMPLETE — merged `a86ae11` 2026-06-01 |
@@ -38,8 +38,8 @@ Version numbers are internal to this layer (not semver of any product code). Min
 
 ## 1.7.6 — AI Project OS v1.7 Gate 6: Documentation-Watch and Bootstrap Copy-Forward Finalization (2026-06-01)
 
-**Branch:** `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` (in progress)
-**Status:** IN PROGRESS — commit pending Coordinator approval
+**Branch:** `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` (merged)
+**Status:** COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01. AI Project OS v1.7 COMPLETE.
 
 ### What this pass adds
 

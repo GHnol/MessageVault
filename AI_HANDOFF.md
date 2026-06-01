@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — AI Project OS v1.7 Gate 6 IN PROGRESS. On branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`. Implementation complete; commit pending Coordinator approval. Gates 1–5 all merged to main. Working tree has Gate 6 changes. Package 5B blocked.
+**Status:** `complete` — AI Project OS v1.7 COMPLETE. Gate 6 committed `99d5515`, merged to main `f30ea62` 2026-06-01. All 6 gates complete. Working tree clean. 288 OS audit pass. Package 5B blocked until separate Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,13 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `AI Project OS v1.7 Gate 6` — Documentation-Watch and Bootstrap Copy-Forward Finalization |
-| **Active branch** | `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` |
-| **main HEAD** | `5432650` — docs: sync state after AI Project OS v1.7 Gate 5 merge |
-| **Last completed pass** | `AI Project OS v1.7 Gate 5` — external sync consistency validators — merged `2b37e13` 2026-06-01 |
+| **Active pass** | None — AI Project OS v1.7 COMPLETE |
+| **Active branch** | `main` |
+| **main HEAD** | `f30ea62` — Merge branch 'docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization' |
+| **Last completed pass** | `AI Project OS v1.7 Gate 6` — docs-watch and bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
-| **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
+| **Package 5B** | Not started — blocked until explicit Coordinator authorization |
 
 ---
 
@@ -191,16 +191,16 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Gate 6 implementation complete on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`. All files created and verified.
+AI Project OS v1.7 COMPLETE — Gate 6 merged to main `f30ea62` 2026-06-01. State-sync commit in progress.
 
-**Coordinator reviews Gate 6 implementation.** If approved:
-1. Commit with message: `docs: finalize AI Project OS v1.7 bootstrap hardening`
-2. Merge to main
-3. Run final v1.7 state sync (state-sync commit on main)
-4. Push origin/main (with explicit Coordinator authorization)
-5. Coordinator decides whether to authorize Package 5B
+Push to `origin/main` pending separate Coordinator authorization.
 
-Do not commit, push, or merge without explicit instruction. Do not start Package 5B — blocked. No external mutations.
+Coordinator then decides:
+- Authorize push to `origin/main`, or
+- Authorize Package 5B (product work), or
+- Authorize any other next direction
+
+Do not start Package 5B without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

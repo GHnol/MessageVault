@@ -47,21 +47,22 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 6 IN PROGRESS on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`. Implementation complete; commit pending Coordinator approval. |
-| Branch | `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization` |
-| main HEAD | `5432650` — docs: sync state after AI Project OS v1.7 Gate 5 merge |
-| Next action | Run `/start` then `node scripts/start-router.mjs`. Await Coordinator approval for Gate 6 commit. Do not start Package 5B without explicit Coordinator authorization. |
-| OS audit | Gate 5 baseline: 253 pass, 0 warn, 0 fail. Gate 6 adds ~38 new checks (~291 expected after commit). |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — expect WARN only (cosmetic WARNs accepted) |
+| Resume into | AI Project OS v1.7 COMPLETE. Gate 6 committed `99d5515`, merged to main `f30ea62` 2026-06-01. No active pass. Awaiting Coordinator direction. |
+| Branch | `main` |
+| main HEAD | `f30ea62` — Merge branch 'docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization' |
+| Next action | Run `/start` then `node scripts/start-router.mjs`. v1.7 complete. Push to `origin/main` or Package 5B both require separate Coordinator authorization. |
+| OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic WARNs accepted) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
-| Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
-| v1.7 Gate 6 | IN PROGRESS — docs-watch framework + Bootstrap copy-forward guidance + 21 skills/commands + 2 new scripts delivered. Commit pending Coordinator approval. |
-| v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01. `scripts/external-sync-consistency-check.mjs` + 253 OS audit checks delivered. |
+| Package 5B | Not started — blocked until explicit Coordinator authorization. |
+| v1.7 overall | **COMPLETE** — all 6 gates merged to main 2026-06-01. |
+| v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01. Docs-watch + bootstrap copy-forward. |
+| v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01. `scripts/external-sync-consistency-check.mjs` + 253 OS audit checks. |
 | v1.7 Gate 4 | COMPLETE — merged `352356b` 2026-06-01. |
 | v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01. |
 | v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
-| Do not | Start Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token; browse live docs without explicit Coordinator authorization. |
+| Do not | Start Package 5B without explicit Coordinator authorization; modify `index.html` / `src/**`; run any `--apply` script without approval; push without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token; browse live docs without explicit Coordinator authorization. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
