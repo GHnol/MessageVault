@@ -125,6 +125,85 @@ See `docs/project-control/external-sync-safety.md` for the full safety rules.
 
 ---
 
+## State-Sync Decision Matrix (AI Project OS v1.7)
+
+Run the freshness validator before proposing a commit or merge:
+
+```
+node scripts/state-freshness-check.mjs
+node scripts/state-freshness-check.mjs --json
+node scripts/state-freshness-check.mjs --strict
+```
+
+### FAIL — must fix before commit / merge / next package
+
+A FAIL means the doc would misdirect the next agent into unsafe or wrong work. Fix before committing.
+
+| Condition | Code | Example |
+|---|---|---|
+| State doc records a branch that does not match `git branch --show-current` | `FAIL_WRONG_ACTIVE_BRANCH` | `AI_HANDOFF.md` says `main` but current branch is `docs/ai-project-os-v1-7-*` |
+| Active package shown as "in progress" for an already-merged branch | `FAIL_WRONG_ACTIVE_PACKAGE` | Handoff says Package 5A in progress after `297a221` merged |
+| Package 5B shown as started or authorized without a blocker qualifier | `FAIL_PACKAGE_5B_UNAUTHORIZED` | `Active package: Package 5B — implementing proof approval UI` |
+| Implementation branch shown as active after merge | `FAIL_STATUS_SYNC_BRANCH_STALE_ACTIVE` | Kanban In Progress contains `docs/google-calendar-live-sync-gate-1` after merge |
+| Completed gate still marked in-progress in a way that authorizes wrong work | `FAIL_COMPLETED_GATE_MARKED_IN_PROGRESS` | v1.6 Gate 3 marked NOT COMPLETE in a state doc used to decide whether to run apply |
+| External apply shown as authorized when it is not | `FAIL_EXTERNAL_APPLY_AUTH_MISMATCH` | Handoff says `gate3_apply_allowed: true` without Coordinator approval |
+| Local/private file not protected by `.gitignore` | `FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED` | `external-sync-map.local.json` not gitignored |
+| Test baseline materially wrong in a way that affects package verification | `FAIL_TEST_BASELINE_MATERIAL_MISMATCH` | `test-strategy.md` says 1466 tests but confirmed baseline is 1603 |
+| Kanban In Progress column references a merged/closed implementation branch | `FAIL_STATUS_SYNC_BRANCH_STALE_ACTIVE` | `fix/google-calendar-sync-map-read-path` in In Progress after merge |
+
+### WARN — disclose in closeout report; no follow-up sync commit required unless escalated
+
+A WARN means the doc is cosmetically stale but does not authorize wrong work. Include in the closeout report; fix when convenient but do not spin a state-sync commit solely for this.
+
+| Condition | Code | Example |
+|---|---|---|
+| HEAD hash in state doc lags by one or more commits; branch/package/task pointer is correct | `WARN_HEAD_HASH_LAG` | `AI_HANDOFF.md` says HEAD `3c641a9` but actual HEAD is `2645ebb` (one state-sync commit ahead) |
+| CHANGELOG entry says "IN PROGRESS" for a completed/merged pass | `WARN_CHANGELOG_STATUS_LAG` | v1.6 Gate 2A entry still says `Status: IN PROGRESS` after v1.6 is fully merged |
+| version-history entry says "In progress on branch" for a merged branch | `WARN_VERSION_HISTORY_STATUS_LAG` | `docs/google-calendar-oauth-path-alignment` listed as in-progress after merge |
+| Timestamp in state doc is a few hours or days stale but operational fields are accurate | `WARN_TIMESTAMP_STALE` | `Last updated: 2026-05-31` when today is `2026-06-01` |
+| Model ID examples in routing docs name a superseded model generation | `WARN_MODEL_EXAMPLE_REFRESH_NEEDED` | `model-routing-protocol.md` says Opus 4.7 but current is Opus 4.8 |
+| Project-control docs are behind but do not authorize wrong work | `WARN_PROJECT_CONTROL_COPY_LAG` | `kanban-board.md` missing v1.5/v1.6 in Done; `current-sprint.md` closed with no new sprint |
+
+### PASS — no action required
+
+PASS means the field is current, or any lag is cosmetic and covered by the Post-Commit State Rule.
+
+| Condition | Example |
+|---|---|
+| Branch, package, and next-action all match git state | `AI_HANDOFF.md` says `docs/ai-project-os-v1-7-*`, git agrees |
+| Package 5B correctly shows "blocked" or "not started" | `Package 5B: Not started — blocked until v1.7 complete and Coordinator authorization` |
+| No external apply authorized without explicit approval artifact | Apply guards in place; `gate3_apply_allowed: false` |
+| All local/private files are gitignored | `external-sync-map.local.json` → matched by `.gitignore` |
+| Test baseline reflects the actual confirmed count | `test-strategy.md` says 1603 (Package 5A baseline) |
+| Cosmetic HEAD lag is the only issue; operational fields are correct | Branch and package are correct; one-commit hash lag only |
+
+### Package 5B permanent rule
+
+**Package 5B remains blocked until ALL of the following are true:**
+1. v1.7 all gates are complete and merged.
+2. The Coordinator explicitly authorizes Package 5B product work in that session.
+3. A fresh session is started and reads the authorization from AI_HANDOFF.md.
+
+The validator (`FAIL_PACKAGE_5B_UNAUTHORIZED`) flags any state doc that shows Package 5B as active without all three conditions verified.
+
+### External apply authorization rule
+
+**No external system may be mutated without explicit Coordinator approval AND a valid approved artifact:**
+
+- Google Calendar: requires `--apply` + `--approved-dry-run <path>` + `--confirm-live-calendar-apply`; `gate3_apply_allowed: true` in the approved artifact.
+- GitHub Projects: requires `--apply` + explicit Coordinator authorization in the session.
+- ClickUp / TickTick: approval-gated via `/project-sync-apply` only.
+
+The validator (`FAIL_EXTERNAL_APPLY_AUTH_MISMATCH`) flags any state doc that shows external apply as authorized or pending when it is not.
+
+### Post-Commit State Rule reminder
+
+Do not spin a state-sync commit solely because of cosmetic HEAD hash lag. Durable state files may describe the pre-commit verified state or the expected post-commit state. Commit hashes belong in post-commit reports (chat, PR body, changelog) — not amended into the committed file. The next session verifies HEAD during preflight; that verification is the corrective control.
+
+Canonical rule: `docs/ai-system/universal-standards.md` § "Post-Commit State Rule"
+
+---
+
 ## How to avoid recursive state-sync churn
 
 The Post-Commit State Rule (canonical wording: `docs/ai-system/universal-standards.md` § "Post-Commit State Rule") prevents recursive loops:

@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-05-25 (America/New_York)
+**Last updated:** 2026-06-01 (America/New_York)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -9,76 +9,81 @@
 
 | Field | Value |
 |---|---|
-| Sprint name | Sprint 2026-05-B — AI Project OS Framework Groundwork |
-| Sprint dates | 2026-05-24 → 2026-05-25 (CLOSED) |
-| Sprint goal | Complete the AI Project OS framework: make skills canonical, add closeout sync contract, add project-control sync foundation, add OS self-audit |
+| Sprint name | Sprint 2026-06-A — AI Project OS v1.7 Zero-Fault Hardening |
+| Sprint dates | 2026-06-01 → ongoing (per gate cadence) |
+| Sprint goal | Implement v1.7 gates: closeout validators, state freshness, report mirroring, start router, external sync consistency, docs-watch, bootstrap finalization |
 | Sprint owner | Coordinator / Claude Code (Operator Mode) |
 
-Sprint 2026-05-B is CLOSED. AI Project OS Framework Groundwork Pass is COMPLETE — implementation merged `cc7139a`. Status-sync in progress.
+Sprint 2026-06-A is ACTIVE. Gate 1 (Zero-Fault OS Audit) is COMPLETE. Gate 2 (Closeout and State Freshness Validators) is IN PROGRESS.
 
 ---
 
 ## Active lanes this sprint
 
-- AI Workflow / Agent System (primary — OS framework completion) ✓
-- Coordinator / Project Control (sync foundation) ✓
+- AI Workflow / Agent System (primary — v1.7 OS hardening)
+- Coordinator / Project Control (state cleanup, sprint management)
 
 ---
 
 ## Sprint tasks
 
-| # | Task | Lane | Priority | Status | Success criteria |
+| # | Task | Gate | Priority | Status | Success criteria |
 |---|---|---|---|---|---|
-| 1 | Make skills canonical (.claude/skills/*/SKILL.md) | AI Workflow | P0 | **Done** | 13 skills with SKILL.md frontmatter ✓ |
-| 2 | Update command wrappers to delegate to skills | AI Workflow | P0 | **Done** | All 14 command wrappers point to skill ✓ |
-| 3 | Add closeout sync contract | AI Workflow | P0 | **Done** | `docs/dev/closeout-sync-contract.md` present ✓ |
-| 4 | Add project-control sync foundation | Coordinator | P0 | **Done** | Policy, dry-run format, external safety, example map, log ✓ |
-| 5 | Add OS self-audit | AI Workflow | P0 | **Done** | Checklist + script present; 88 pass ✓ |
-| 6 | Add notification setup wizard | AI Workflow | P1 | **Done** | Script + skill + command wrapper present ✓ |
-| 7 | Update Bootstrap Core (standards, template, changelog, version-history) | AI Workflow | P0 | **Done** | All 5 AI system docs updated to v0.5.0 ✓ |
-| 8 | Correct stale project-control state (current-sprint, kanban-board) | Coordinator | P1 | **Done** | Reflect Package 5A complete ✓ |
-| 9 | Update .gitignore for new artifact types | AI Workflow | P1 | **Done** | external-sync-map.local.json and dry-run outputs ignored ✓ |
-| 10 | Coordinator reviews and approves commit | Coordinator | P0 | **Done** | Commit approved, merged `cc7139a` ✓ |
-| 11 | Status-sync closeout | Coordinator | P0 | **Done** | State files reflect COMPLETE ✓ |
+| 1 | v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan | Gate 1 | P0 | **Done** | Audit artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md`, merged `3c641a9` ✓ |
+| 2 | v1.7 Gate 2 — Create `scripts/state-freshness-check.mjs` | Gate 2 | P0 | **In Progress** | Script passes `node --check`; FAIL/WARN/PASS logic confirmed; exits 0 on PASS/WARN |
+| 3 | v1.7 Gate 2 — Add state-sync decision matrix to closeout-sync-contract.md | Gate 2 | P0 | **In Progress** | FAIL/WARN/PASS table with examples; command reference; Package 5B rule |
+| 4 | v1.7 Gate 2 — Correct kanban-board.md (v1.3–v1.6 in Done; Gate 2 in In Progress) | Gate 2 | P1 | **In Progress** | Done column reflects all completed OS passes |
+| 5 | v1.7 Gate 2 — Open Sprint 2026-06-A in current-sprint.md | Gate 2 | P1 | **In Progress** | This file |
+| 6 | v1.7 Gate 2 — Update test-strategy.md test count to 1603 | Gate 2 | P0 | **In Progress** | 1603 appears; 1466 removed from pre-commit baseline |
+| 7 | v1.7 Gate 2 — Refresh model IDs in model-routing-protocol.md | Gate 2 | P1 | **In Progress** | Opus 4.8 referenced; tier-based routing preserved; no brittle ID lock-in |
+| 8 | v1.7 Gate 2 — Integrate validator into skills/commands | Gate 2 | P1 | **In Progress** | closeout, precommit, handoff skills reference `state-freshness-check.mjs` |
+| 9 | v1.7 Gate 2 — Update os-self-audit.mjs (new checks) | Gate 2 | P1 | **In Progress** | OS audit count increases; `state-freshness-check.mjs` file check added |
+| 10 | v1.7 Gate 2 — Update CHANGELOG and version-history | Gate 2 | P1 | **In Progress** | Gate 2 IN PROGRESS entry; v1.7 version index row |
+| 11 | v1.7 Gate 2 — Update state docs to Gate 2 branch | Gate 2 | P0 | **In Progress** | AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md reflect branch |
+| 12 | v1.7 Gate 2 — Coordinator review and commit | Gate 2 | P0 | **Waiting** | Coordinator approves; commit created |
+| 13 | v1.7 Gate 3 — Report Mirroring | Gate 3 | P1 | **Queued** | Pending Gate 2 merge and Coordinator authorization |
+| 14 | v1.7 Gate 4 — Start Router | Gate 4 | P2 | **Queued** | Pending Gate 3 merge and Coordinator authorization |
+| 15 | v1.7 Gate 5 — External Sync Consistency | Gate 5 | P2 | **Queued** | Pending Gate 4 merge and Coordinator authorization |
+| 16 | v1.7 Gate 6 — Docs-Watch and Bootstrap Finalization | Gate 6 | P2 | **Queued** | Pending Gate 5 merge and Coordinator authorization |
 
 ---
 
 ## Blocked tasks
 
-None.
+- Package 5B — blocked until v1.7 COMPLETE and Coordinator explicitly authorizes product work.
 
 ---
 
 ## Sprint success criteria
 
-- All 13 skills created with SKILL.md frontmatter ✓
-- All 14 command wrappers present and pointing to skills ✓
-- Closeout sync contract present and referenced in agent layers ✓
-- Project-control sync foundation present (policy, dry-run format, external safety, log) ✓
-- OS self-audit checklist present; `node scripts/os-self-audit.mjs` passes (88/88) ✓
-- Bootstrap Core updated to reflect v0.5.0 ✓
-- No app code touched; no product package started; no external tool writes ✓
-- Implementation committed `219f0b3`, merged `cc7139a` ✓
-
-## Closeout notes
-
-Sprint 2026-05-B is CLOSED. Status-sync commit in progress. Next sprint begins when Coordinator authorizes next product package.
+- `scripts/state-freshness-check.mjs` passes syntax check and produces correct FAIL/WARN/PASS output
+- State-sync decision matrix documented in `closeout-sync-contract.md`
+- `kanban-board.md` reflects all completed OS passes in Done; Gate 2 in In Progress
+- `current-sprint.md` (this file) reflects Sprint 2026-06-A active
+- `test-strategy.md` updated to 1603 with proof-approval-state suite row
+- `model-routing-protocol.md` updated to Opus 4.8; tier-based routing preserved
+- `scripts/os-self-audit.mjs` count increases (at least 170 items)
+- No app code touched; no product package started; no external tool writes
+- All existing validators pass
 
 ---
 
-## Sprint closeout record
+## Sprint closeout record (Gates 1+ — updated as gates close)
 
 ```
-SPRINT CLOSEOUT — Sprint 2026-05-B
+SPRINT GATE 1 CLOSEOUT — Sprint 2026-06-A
 
-Sprint goal met? yes
-Completed: all 10 implementation tasks (skills, commands, contracts, sync foundation, audit, wizard, bootstrap core, project-control state, gitignore, commit approval)
+Gate 1 goal met? yes
+Completed: Zero-Fault OS Audit (audit artifact + 6-gate plan)
 Not completed (carry over): none
-Decisions made: Coordinator approved commit, merge, push
-OS pass merged? yes — implementation commit 219f0b3, merge cc7139a
-Next product package authorized? no — Coordinator decides
-Risks changed? none
-Next sprint name + dates: to be decided by Coordinator
-Repo docs updated: current-sprint.md, kanban-board.md, CURRENT_STATE.md, AI_HANDOFF.md (status-sync in progress)
+Decisions made: Coordinator authorized Gate 2
+OS pass merged? yes — Gate 1 merged 3c641a9 2026-06-01
+Package 5B: not started, blocked
 External tools synced? none
 ```
+
+---
+
+## Historical: Sprint 2026-05-B (CLOSED)
+
+Sprint 2026-05-B (2026-05-24 → 2026-05-25): AI Project OS Framework Groundwork — all 11 tasks complete; implementation merged `cc7139a`. See View 3 in `kanban-board.md` for full task list.

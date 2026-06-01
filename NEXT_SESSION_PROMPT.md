@@ -47,17 +47,17 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 Gate 1 COMPLETE and merged 2026-06-01. Planning artifact on main. No active pass. Awaiting Coordinator authorization for v1.7 Gate 2. |
-| Branch | `main` |
-| main HEAD | `3c641a9` — merge: AI Project OS v1.7 Gate 1 zero-fault audit and implementation plan |
-| Next action | Run `/start`. v1.7 Gate 1 merged. Await Coordinator authorization for v1.7 Gate 2. Do not start Gate 2 or Package 5B without explicit Coordinator authorization. |
-| OS audit | Gate 1: 166 pass, 0 warn, 0 fail (`node scripts/os-self-audit.mjs`) |
+| Resume into | AI Project OS v1.7 Gate 2 (Closeout and State Freshness Validators) IN PROGRESS. Implementation complete on Gate 2 branch. Pending Coordinator review and commit authorization. |
+| Branch | `docs/ai-project-os-v1-7-state-freshness-validators` |
+| main HEAD | `2645ebb` — docs: sync state after AI Project OS v1.7 Gate 1 merge |
+| Next action | Run `/start`. Gate 2 implementation is complete. Await Coordinator review. If approved, run `/precommit` then propose commit. Do not start Gate 3 or Package 5B without explicit Coordinator authorization. |
+| OS audit | Gate 1: 166 pass, 0 warn, 0 fail. Gate 2 target: ~179 pass (run `node scripts/os-self-audit.mjs` after updates). |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — should show PASS or WARN only after Gate 2 state docs are updated. |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
 | Package 5B | Not started — blocked until v1.7 complete and Coordinator authorizes product work. |
-| v1.6 advisory repair | COMPLETE — merged `db45e6a` 2026-06-01. Post-repair dry-run: 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING. Advisory RESOLVED. |
-| v1.6 overall | **COMPLETE** |
-| v1.7 Gate 1 | COMPLETE — audit done; planning artifact created; stale kanban/sprint flagged as Gate 2 target |
-| Stale state warning | `kanban-board.md` (missing v1.3–v1.6 in Done), `current-sprint.md` (Sprint 2026-05-B still shows as active) — operationally misleading. Gate 2 will correct. |
+| v1.6 overall | **COMPLETE** — Gate 3 live apply + advisory repair succeeded 2026-06-01. |
+| v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
+| v1.7 Gate 2 | IN PROGRESS — implementation complete; awaiting commit authorization. |
 | Do not | Start Package 5B; modify `index.html` / `src/**`; run any `--apply` script without Coordinator approval; push or merge without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, credentials, or token. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 

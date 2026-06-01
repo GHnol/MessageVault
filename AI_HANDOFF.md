@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.7 Gate 1 COMPLETE. Planning artifact committed `249d8cb`, merged to main `3c641a9` 2026-06-01. Working tree clean. 166 OS audit pass. Package 5B blocked. Gate 2 pending Coordinator authorization.
+**Status:** `active` — AI Project OS v1.7 Gate 2 (Closeout and State Freshness Validators) IN PROGRESS. Branch `docs/ai-project-os-v1-7-state-freshness-validators` active. Implementation complete; pending Coordinator review and commit authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,32 +18,32 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `3c641a9` — merge: AI Project OS v1.7 Gate 1 zero-fault audit and implementation plan |
+| **Active pass** | `AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators` |
+| **Active branch** | `docs/ai-project-os-v1-7-state-freshness-validators` |
+| **main HEAD** | `2645ebb` — docs: sync state after AI Project OS v1.7 Gate 1 merge |
 | **Last completed pass** | `AI Project OS v1.7 Gate 1` — audit and planning — merged `3c641a9` 2026-06-01 |
-| **Active package** | None |
+| **Active package** | None (OS infrastructure only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | Not started — blocked until v1.7 complete + explicit Coordinator authorization |
 
 ---
 
-## Objective (last completed pass — v1.7 Gate 1)
+## Objective (current pass — v1.7 Gate 2)
 
-AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan.
+AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators.
 
-**Gate 1 is complete and merged.** Delivered:
-1. Full audit of all 43+ OS docs, 22 scripts, 18 commands, 16 skills, 1 agents placeholder, 5 validators.
-2. Enforceability map: automatic / script-assisted / skill-routed / approval-gated / policy-only / manual / backlog.
-3. Gap report across 10 audit dimensions (closeout, freshness, mirroring, context, model routing, custom settings, docs-watch, notifications, external sync, bootstrap copy-forward).
-4. State-sync commit strategy decision matrix (addendum A).
-5. Playwright and test trustworthiness map (addendum B) — 1603 tests confirmed; `test-strategy.md` count stale (says 1466).
-6. 6-gate v1.7 implementation plan with per-gate file targets, script specs, and commit messages.
-7. Classification of all v1.7 candidates: IMPLEMENT NOW / IMPLEMENT LATER / MANUAL ONLY / REJECT / MONITOR.
-8. Identified stale state: `kanban-board.md` and `current-sprint.md` are operationally misleading (v1.3–v1.6 not in Done; Sprint 2026-05-B shows as active).
-9. Planning artifact: `docs/ai-system/v1-7-zero-fault-audit-plan.md`.
-
-No scripts, skills, commands, or OS protocol docs modified in Gate 1.
+**Implementation complete — pending Coordinator review and commit.** Delivered:
+1. `scripts/state-freshness-check.mjs` — dependency-free Node ESM validator. FAIL/WARN/PASS classification. 8 issue codes. CLI: `--json`, `--strict`, `--paths`, `--explain`. Checks: branch alignment, Package 5B, merged branches in kanban, test baseline, gitignore, HEAD lag, changelog/version-history stale status, model ID examples, sprint/kanban copy lag.
+2. `docs/dev/closeout-sync-contract.md` — State-Sync Decision Matrix added: FAIL/WARN/PASS table with examples, validator command, Package 5B blocked rule, external apply rule, Post-Commit State Rule reminder.
+3. `docs/project-control/kanban-board.md` — Done column with v1.2–v1.7 Gate 1; Gate 2 in In Progress; Sprint 2026-06-A View 2 added.
+4. `docs/project-control/current-sprint.md` — Sprint 2026-05-B closed as historical; Sprint 2026-06-A opened with Gate 2 task list.
+5. `docs/qa/test-strategy.md` — baseline 1466 → 1603; `proof-approval-state-tests.mjs` (137 tests) added; OS-only validation rule added.
+6. `docs/dev/model-routing-protocol.md` — Opus 4.7 → Opus 4.8; model ID rule; custom model settings section; "opusplan" rejected.
+7. Skills updated: `closeout`, `precommit`, `handoff`, `start` — all reference `state-freshness-check.mjs`.
+8. `scripts/os-self-audit.mjs` — 13 new Section 6f checks; count rises to ~179.
+9. `docs/ai-system/os-self-audit-checklist.md` — Section 6f added.
+10. `docs/ai-system/CHANGELOG.md`, `version-history.md` — Gate 2 IN PROGRESS entries; v1.6.x stale statuses corrected.
+11. State files (`AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`) updated to Gate 2 branch.
 
 ---
 
@@ -90,14 +90,18 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Coordinator authorizes v1.7 Gate 2 (Closeout and State Freshness Validators). Gate 1 is merged — no further work on it. Gate 2 requires:
-1. Explicit Coordinator authorization.
-2. New branch: `docs/ai-project-os-v1-7-gate-2` (or similar).
-3. No implementation until Gate 2 is authorized.
+**Coordinator reviews Gate 2 implementation.** All deliverables listed above are complete on branch `docs/ai-project-os-v1-7-state-freshness-validators`. Working tree has changes on this branch.
 
-Push to `origin/main` pending separate Coordinator authorization (covers merge commit `3c641a9` and this state-sync commit).
+If approved:
+1. Coordinator authorizes commit.
+2. Agent runs `/precommit` (state freshness check, syntax checks, hard-exclusion diff).
+3. Commit with message: `docs: add state freshness validator for AI Project OS v1.7`
+4. Merge to main with `--no-ff`.
+5. State-sync on main after merge.
+6. Push to `origin/main` (separate instruction).
+7. Coordinator then authorizes v1.7 Gate 3 or Package 5B (neither authorized yet).
 
-Do not start Gate 2 without Coordinator approval. Do not start Package 5B. Do not push without explicit instruction.
+Do not commit until Coordinator approves. Do not start Gate 3 or Package 5B. Do not push without explicit instruction.
 
 ---
 

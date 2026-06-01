@@ -38,7 +38,14 @@ Also: `git rev-parse HEAD` to verify HEAD against what the durable state files r
 ## Sync obligations
 
 - Check that `AI_HANDOFF.md`, `CURRENT_STATE.md`, and `NEXT_SESSION_PROMPT.md` reflect the current HEAD and package state.
-- If any of them would misdirect the next agent (wrong branch, wrong package, stale blocker), flag it and ask the Coordinator before proceeding.
+- After the git preflight, optionally run the state freshness validator to detect misdirection before touching anything:
+
+  ```
+  node scripts/state-freshness-check.mjs
+  ```
+
+  FAIL results are hard stop conditions. WARN results are informational — apply the Post-Commit State Rule.
+- If any state doc would misdirect the next agent (wrong branch, wrong package, stale blocker), flag it and ask the Coordinator before proceeding.
 - Do not update state docs during startup unless the startup reveals operational misdirection. Cosmetic HEAD lag alone does not require a sync commit.
 
 ## Output format

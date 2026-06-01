@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-05-26 (America/New_York)
+**Last updated:** 2026-06-01 (America/New_York)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — no active implementation pass)_
+- **AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators** · AI Workflow · Ph0 · branch `docs/ai-project-os-v1-7-state-freshness-validators` · active — implementing state freshness validator, decision matrix, stale state cleanup_
 
 ### Waiting / Blocked
 - **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · no package authorized as of 2026-05-24
@@ -44,14 +44,19 @@
 - _(empty)_
 
 ### Done
-- **GitHub Project Board — OS Infrastructure Foundation** · OS Infrastructure · Ph0 · 11 Issues, 13 fields, 14 views operational at https://github.com/users/GHnol/projects/1 · `98f029d` — COMPLETE
+- **AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan** · AI Workflow · Ph0 · merged `3c641a9` 2026-06-01 — COMPLETE
+- **AI Project OS v1.6 — Google Calendar Live Sync (Gates 1–3 + advisory repair)** · AI Workflow · Ph0 · Gate 3 merged; advisory repair merged `db45e6a` 2026-06-01 — COMPLETE
+- **AI Project OS v1.5 — Template GitHub Project Standard** · AI Workflow · Ph0 · Gate 2 complete 2026-05-27; template project #2 created — COMPLETE
 - **AI Project OS v1.4 — GitHub Projects Live Provisioning Integration** · AI Workflow · Ph0 · merged `1623e7e` — COMPLETE
-- **AI Project OS Framework Groundwork Pass** · AI Workflow · Ph0 · merged `cc7139a` — COMPLETE
+- **AI Project OS v1.3 — External Board Provider Update (GitHub Projects default)** · AI Workflow · Ph0 · merged `3dcf917` — COMPLETE
+- **AI Project OS v1.2 — External Setup Alignment Patch** · AI Workflow · Ph0 · merged `328d81e` — COMPLETE
+- **GitHub Project Board — OS Infrastructure Foundation** · OS Infrastructure · Ph0 · 11 Issues, 13 fields, 14 views operational at https://github.com/users/GHnol/projects/1 · `98f029d` — COMPLETE
+- **AI Project OS Framework Groundwork Pass (v0.5.0)** · AI Workflow · Ph0 · merged `cc7139a` — COMPLETE
 - **Package 5A — Message Book Proof Approval State Foundation** · Development · Ph12 · merged `297a221`, status-sync `926ec37` — COMPLETE
-- **AI Project OS Usability Patch — Short Command Interface** · AI Workflow · Ph0 · merged `cb920be` — COMPLETE
-- **Package 2.9 — AI Project OS Auto-Management Upgrade** · AI Workflow · Ph0 · merged `a20af30` — COMPLETE
-- **Package 2.8 — Project Control Tower** · Coordinator · Ph0 · merged `bdb73db` — COMPLETE
-- **Package 2.7 — AI Development Operating System Upgrade** · AI Workflow · Ph0 · merged `cebdc72` — COMPLETE
+- **AI Project OS Usability Patch — Short Command Interface (v0.4.0)** · AI Workflow · Ph0 · merged `cb920be` — COMPLETE
+- **Package 2.9 — AI Project OS Auto-Management Upgrade (v0.3.0)** · AI Workflow · Ph0 · merged `a20af30` — COMPLETE
+- **Package 2.8 — Project Control Tower (v0.2.0)** · Coordinator · Ph0 · merged `bdb73db` — COMPLETE
+- **Package 2.7 — AI Development Operating System Upgrade (v0.1.0)** · AI Workflow · Ph0 · merged `cebdc72` — COMPLETE
 - Packages 1, 2, 2.5A, 2.5B, 2.6, 2.6.1, 3A, 3B, 3C, 4A, 4B, 4C, 4D, 4E, 4E.1 · see `docs/command-center/current-status.md`
 - **Figma Build Package v1.1 brief** · Design · Ph7 · written, preserved
 
@@ -67,10 +72,23 @@
 
 ---
 
-## View 2 — Sprint 2026-05-B (CLOSED)
+## View 2 — Sprint 2026-06-A: AI Project OS v1.7
 
 ### In Progress
-- Status-sync closeout · Coordinator · P0
+- AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators · AI Workflow · P0 · branch `docs/ai-project-os-v1-7-state-freshness-validators`
+
+### Queued (pending Coordinator authorization per gate)
+- v1.7 Gate 3 — Report Mirroring and Project-Control Log Intake
+- v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening
+- v1.7 Gate 5 — External Sync Consistency Validators
+- v1.7 Gate 6 — Documentation-Watch, Bootstrap Copy-Forward, Finalization
+
+### Done (this sprint)
+- v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan · merged `3c641a9` 2026-06-01 ✓
+
+---
+
+## View 3 — Sprint 2026-05-B (CLOSED)
 
 ### Done (this sprint)
 - Skills canonical (.claude/skills/*/SKILL.md × 13) ✓
@@ -83,6 +101,7 @@
 - Agent layer docs updated (AGENTS, CLAUDE, .codex) ✓
 - current-sprint.md and kanban-board.md corrected ✓
 - Implementation committed (219f0b3) and merged (cc7139a) ✓
+- Status-sync closeout ✓
 
 ---
 

@@ -33,6 +33,14 @@ Run in parallel:
 
 ## Sync obligations
 
+When preparing a handoff after meaningful work, run the state freshness validator to detect misdirection before the next agent picks up:
+
+```
+node scripts/state-freshness-check.mjs
+```
+
+FAILs must be resolved before the handoff is complete. WARNs must be noted in the transfer block. See `docs/dev/closeout-sync-contract.md` § "State-Sync Decision Matrix".
+
 After updating `AI_HANDOFF.md`, check whether `CURRENT_STATE.md` and `NEXT_SESSION_PROMPT.md` also need updating. Apply the Post-Commit State Rule: update only if the docs would misdirect the next agent. Cosmetic HEAD lag does not require a sync commit.
 
 If this handoff is at a package boundary, also check:

@@ -11,29 +11,90 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
+| 1.7.2 | AI Project OS v1.7 Gate 2 — Closeout and State Freshness Validators | 2026-06-01 | IN PROGRESS — branch `docs/ai-project-os-v1-7-state-freshness-validators`; commit pending Coordinator approval |
+| 1.7.1 | AI Project OS v1.7 Gate 1 — Zero-Fault OS Audit and Implementation Plan | 2026-06-01 | COMPLETE — merged `3c641a9` 2026-06-01; planning artifact at `docs/ai-system/v1-7-zero-fault-audit-plan.md` |
 | 1.6.3 | AI Project OS v1.6 — Advisory Repair: Sync-Map Read Path | 2026-06-01 | COMPLETE — merged `db45e6a` 2026-06-01; post-repair dry-run: 10 NO_OP, 0 MISSING_LOCAL_MAPPING |
-| 1.6.2 | AI Project OS v1.6 — Gate 2D Repair: Canonical OAuth Bootstrap | 2026-05-31 | In progress on branch `docs/google-calendar-oauth-path-alignment`; no OAuth run; no live API; Gate 2D re-run pending after merge |
-| 1.6.1 | AI Project OS v1.6 — Gate 2A: Live Dry-Run Comparison Logic | 2026-05-31 | Gate 2A in progress (branch `docs/google-calendar-live-dry-run-logic`, uncommitted); Gate 2B pending googleapis + credentials |
-| 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync, Gate 1 | 2026-05-30 | Gate 1 COMPLETE — merged `5c4bd28`; Gate 2A in progress; Gate 2B/3 pending Coordinator authorization |
-| 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | complete — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27 |
-| 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | merged (`1623e7e`) |
-| 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | merged (`3dcf917`) |
-| 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | merged (`328d81e`) |
-| 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | merged (`cc7139a`) |
-| 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | merged (`cb920be`) |
-| 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | merged (`9be0f81`) |
-| 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | merged (`a20af30`) |
-| 0.2.0 | Package 2.8 — KeepMees Project Control Tower | 2026-05-17 | merged (`bdb73db`) |
-| 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | merged (`cebdc72`) |
+| 1.6.2 | AI Project OS v1.6 — Gate 2D Repair: Canonical OAuth Bootstrap | 2026-05-31 | COMPLETE — merged as part of v1.6 pipeline; canonical OAuth paths aligned |
+| 1.6.1 | AI Project OS v1.6 — Gate 2A: Live Dry-Run Comparison Logic | 2026-05-31 | COMPLETE — merged as part of v1.6 pipeline; all 11 classifications proved |
+| 1.6.0 | AI Project OS v1.6 — Google Calendar Live Sync, Gate 1 | 2026-05-30 | COMPLETE — full pipeline (Gates 1–3 + advisory repair) merged by 2026-06-01 |
+| 1.5.0 | AI Project OS v1.5 — Template GitHub Project Standard | 2026-05-26 | COMPLETE — Gate 1 merged `7c2c511`; Gate 2 complete 2026-05-27 |
+| 1.4.0 | AI Project OS v1.4 — GitHub Projects Live Provisioning Integration | 2026-05-25 | COMPLETE — merged `1623e7e` |
+| 1.3.0 | AI Project OS v1.3 — External Board Provider Update | 2026-05-25 | COMPLETE — merged `3dcf917` |
+| 1.2.0 | AI Project OS v1.2 — External Setup Alignment Patch | 2026-05-25 | COMPLETE — merged `328d81e` |
+| 0.5.0 | AI Project OS Framework Groundwork Pass | 2026-05-25 | COMPLETE — merged `cc7139a` |
+| 0.4.0 | AI Project OS Usability Patch — Short Command Interface | 2026-05-24 | COMPLETE — merged `cb920be` |
+| 0.3.1 | Patch — Post-Commit State Rule | 2026-05-22 | COMPLETE — merged `9be0f81` |
+| 0.3.0 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | 2026-05-22 | COMPLETE — merged `a20af30` |
+| 0.2.0 | Package 2.8 — KeepMees Project Control Tower | 2026-05-17 | COMPLETE — merged `bdb73db` |
+| 0.1.0 | Package 2.7 — AI Development Operating System Upgrade Pass | 2026-05-17 | COMPLETE — merged `cebdc72` |
 
 Version numbers are internal to this layer (not semver of any product code). Minor versions increment per OS upgrade pass; patch versions increment per surgical OS process correction.
 
 ---
 
+## 1.7.2 — AI Project OS v1.7 Gate 2: Closeout and State Freshness Validators (2026-06-01)
+
+**Branch:** `docs/ai-project-os-v1-7-state-freshness-validators` (in progress)
+**Status:** IN PROGRESS — commit pending Coordinator approval
+
+### What this pass adds
+
+- **`scripts/state-freshness-check.mjs`** — repo-native state freshness validator. Reads git state and durable state docs. Classifies issues as FAIL (would misdirect next agent), WARN (cosmetic/informational), or PASS. Issue codes: `FAIL_WRONG_ACTIVE_BRANCH`, `FAIL_PACKAGE_5B_UNAUTHORIZED`, `FAIL_STATUS_SYNC_BRANCH_STALE_ACTIVE`, `FAIL_TEST_BASELINE_MATERIAL_MISMATCH`, `FAIL_LOCAL_PRIVATE_FILE_NOT_IGNORED`, `WARN_HEAD_HASH_LAG`, `WARN_CHANGELOG_STATUS_LAG`, `WARN_VERSION_HISTORY_STATUS_LAG`, `WARN_MODEL_EXAMPLE_REFRESH_NEEDED`, `WARN_PROJECT_CONTROL_COPY_LAG`. CLI: `--json`, `--strict`, `--paths`, `--explain`. Exit 0 on PASS/WARN, exit 1 on FAIL. No dependencies, no API calls, no writes.
+- **State-Sync Decision Matrix** in `docs/dev/closeout-sync-contract.md` — FAIL/WARN/PASS table with examples; validator command reference; Package 5B permanent blocked rule; external apply authorization rule; Post-Commit State Rule reminder.
+
+### What this pass updates
+
+- `docs/project-control/kanban-board.md` — Done column with v1.2–v1.7 Gate 1 completions; Gate 2 in In Progress; Sprint 2026-06-A view added
+- `docs/project-control/current-sprint.md` — Sprint 2026-06-A opened for v1.7 work; Sprint 2026-05-B closed as historical record
+- `docs/qa/test-strategy.md` — baseline 1466 → 1603; `proof-approval-state-tests.mjs` (137 tests) added; OS-only package validation rule added
+- `docs/dev/model-routing-protocol.md` — Strongest tier example Opus 4.7 → Opus 4.8; model ID rule added; custom model settings section; Plan Mode clarified; "opusplan" rejected
+- `.claude/skills/closeout/SKILL.md` — freshness validator step added
+- `.claude/skills/precommit/SKILL.md` — freshness validator step added; OS-only rule
+- `.claude/skills/handoff/SKILL.md` — freshness validator step added
+- `.claude/skills/start/SKILL.md` — optional freshness validator step added
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6f (13 items)
+- `scripts/os-self-audit.mjs` — Section 6f checks (13 new checks); audit count rises from 166 to ~179
+- `docs/ai-system/CHANGELOG.md`, `version-history.md` — this entry
+
+### Backlog (deferred to later Gates)
+
+| Item | Deferred to |
+|---|---|
+| Report mirroring / OS audit log | Gate 3 |
+| Start router lightweight variant | Gate 4 |
+| External sync consistency validators (live read-only) | Gate 5 |
+| Docs-watch evaluation template | Gate 6 |
+| Bootstrap-template.md v1.7 update | Gate 6 |
+
+### What should be copied to Puzzle and future repos
+
+`scripts/state-freshness-check.mjs` (adapt for the new project's state file paths), the State-Sync Decision Matrix additions to `closeout-sync-contract.md`, and the Section 6f checklist items. The validator is repo-agnostic except for the specific issue code messages that mention v1.6/v1.7 and Package 5B.
+
+---
+
+## 1.7.1 — AI Project OS v1.7 Gate 1: Zero-Fault OS Audit and Implementation Plan (2026-06-01)
+
+**Branch:** `docs/ai-project-os-v1-7-zero-fault-audit` — merged `3c641a9` 2026-06-01
+**Status:** COMPLETE
+
+### What this pass adds
+
+- **`docs/ai-system/v1-7-zero-fault-audit-plan.md`** — 15-section Gate 1 audit report: full enforceability map, 10-dimension gap report, state-sync decision matrix (Addendum A), Playwright trustworthiness map (Addendum B), 6-gate v1.7 structure, IMPLEMENT NOW / LATER / REJECT classification, and recommended commit message.
+
+### Stale state identified (Gate 2 targets)
+
+- `kanban-board.md` — missing v1.3–v1.6 in Done (operationally misleading)
+- `current-sprint.md` — Sprint 2026-05-B CLOSED with no new sprint (operationally misleading)
+- `test-strategy.md` — 1466 vs 1603 confirmed baseline (operationally misleading)
+- `version-history.md` — v1.6.2 stale "In progress" entry (cosmetic)
+- `CHANGELOG.md` — multiple v1.6 "IN PROGRESS" entries (cosmetic)
+
+---
+
 ## 1.6.0 — AI Project OS v1.6: Google Calendar Live Sync (2026-05-30)
 
-**Branch:** `docs/google-calendar-live-sync-gate-1` (Gate 1 in progress)
-**Status:** Gate 1 in progress; Gate 2 (live dry-run) and Gate 3 (live apply) pending Coordinator authorization
+**Branch:** `docs/google-calendar-live-sync-gate-1` — merged `5c4bd28`; full pipeline (Gates 1–3 + advisory repair) merged by 2026-06-01
+**Status:** COMPLETE — Gate 3 live apply ran 2026-06-01 (10 events created, 0 errors); advisory repair merged `db45e6a`; 488 events, 10 NO_OP, 0 MISSING_LOCAL_MAPPING confirmed
 
 ### What this pass adds
 
