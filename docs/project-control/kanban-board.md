@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-02 (America/New_York — Package 3D completion)
+**Last updated:** 2026-06-02 (America/New_York — Package 3E completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3D COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3E COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3D COMPLETE 2026-06-02; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3E COMPLETE 2026-06-02; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,7 +44,8 @@
 - _(empty)_
 
 ### Done
-- **Package 3D — Visual Regression Baseline Harness** · QA Infrastructure · Ph0 · implementation `5a5eaa0`, merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; Scenario A baselines; 1704 Node tests; E2E 64/64 PASS — COMPLETE
+- **Package 3E — ProductDraft and Preflight Runner Foundation** · Development / Engine · Ph12 · implementation `dd4f641`, merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; 1935 Node tests; E2E 64/64 PASS; no manufacturing readiness API — COMPLETE
+- **Package 3D — Visual Regression Baseline Harness** · QA Infrastructure · Ph0 · implementation `5a5eaa0`, merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; Scenario A baselines; E2E 64/64 PASS — COMPLETE
 - **Package 5B — Message Book Proof Approval UX Foundation** · Development · Ph12 · implementation `fb62b5c`, merged `dc4f86b` 2026-06-02; 1704 Node tests; browser QA 36/36 PASS — COMPLETE
 - **AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization** · AI Workflow · Ph0 · committed `99d5515`, merged `f30ea62` 2026-06-01 — COMPLETE
 - **AI Project OS v1.7 Gate 5 — External Sync Consistency Validators** · AI Workflow · Ph0 · merged `2b37e13` 2026-06-01 — COMPLETE

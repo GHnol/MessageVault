@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; updated to 1704 baseline in Package 5B; visual regression added in Package 3D).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 1935 baseline in Package 3E).
 **Last updated:** 2026-06-02 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -16,7 +16,7 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 5B — confirmed baseline 1704):**
+**Suites and counts (as of Package 3E — confirmed baseline 1935):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
@@ -24,7 +24,7 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `keepsake-group-tests.mjs` | 43 | KeepsakeGroup data model |
 | `product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog, required fields |
 | `product-eligibility-tests.mjs` | 76 | Per-product eligibility evaluators, LegacyKeepsakeTypesBridge |
-| `project-persistence-tests.mjs` | 135 | Snapshot, validate, deserialize, restore; proofApprovalStates; PSR restore normalization (Package 3A + 5B) |
+| `project-persistence-tests.mjs` | 157 | Snapshot, validate, deserialize, restore; proofApprovalStates; productDrafts validation + restore normalization (Package 3A + 5B + 3E) |
 | `operator-inbox-processor-tests.mjs` | 85 | Inbox processor extraction + processFile (Package 2.6, 2.6.1) |
 | `product-render-spec-tests.mjs` | 341 | Render specs + resolver; render-planning-target gate (Package 4A) |
 | `prototype-preview-registry-tests.mjs` | 215 | Preview registry + resolver (Package 4B) |
@@ -32,10 +32,12 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `product-experience-consumer-tests.mjs` | 35 | Null-safe app-side bridge (Package 4D) |
 | `proof-approval-state-tests.mjs` | 137 | Proof approval state model and transitions (Package 5A) |
 | `proof-approval-ux-tests.mjs` | 77 | Proof approval UX layer: initialize, submit, serialize/restore, prohibited fields (Package 5B) |
+| `product-draft-state-tests.mjs` | 90 | ProductDraft lifecycle state machine, transitions, semantic guards (Package 3E) |
+| `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
 
-**Total: 1704 tests.** All must remain green before any commit.
+**Total: 1935 tests.** All must remain green before any commit.
 
-Note: 1603 was the Package 5A baseline. Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 persistence tests (1695). The Package 5B correction pass added 9 more PSR restore tests, raising the confirmed baseline to 1704.
+Note: 1704 was the Package 5B baseline. Package 3E added `product-draft-state-tests.mjs` (90), `product-preflight-tests.mjs` (119), and 22 new persistence tests (135 → 157), raising the confirmed baseline to 1935.
 
 **Run:**
 
@@ -190,7 +192,7 @@ Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regres
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 12 Node unit suites green (1704 tests).
+1. All 14 Node unit suites green (1935 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (41 tests).
 3. If real-file paths changed: E2E real-files green (64 total).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).

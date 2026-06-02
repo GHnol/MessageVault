@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — Package 3E — ProductDraft and Preflight Runner Foundation IN PROGRESS on `feature/product-draft-preflight-foundation`. Awaiting Coordinator review and commit approval.
+**Status:** `complete` — Package 3E — ProductDraft and Preflight Runner Foundation COMPLETE. Implementation merged `4390038` to `main` 2026-06-02. Working tree clean. No active package.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
+**Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-02`
 
 ---
 
@@ -18,27 +18,40 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Package 3E — ProductDraft and Preflight Runner Foundation (engine layer only) |
-| **Active branch** | `feature/product-draft-preflight-foundation` |
-| **main HEAD** | `fa160de` — merge: correct active branch after Package 3D state sync |
-| **Last completed pass** | `Gate 0 housekeeping` — impl `c858c16`, merged `fa160de` 2026-06-02 |
-| **Active package** | Package 3E — ProductDraft and Preflight Runner Foundation |
-| **Last closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
-| **Prior closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
+| **Active pass** | State-sync: Package 3E completion — docs only |
+| **Active branch** | `docs/sync-after-package-3e-product-draft-preflight` |
+| **main HEAD** | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
+| **Last completed pass** | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
+| **Active package** | None |
+| **Last closed package** | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE — merged `4390038` 2026-06-02 |
+| **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3D** | COMPLETE — merged `645f6bd` 2026-06-02 |
-| **Package 3E** | IN PROGRESS — `feature/product-draft-preflight-foundation`; engine layer only; no app code |
+| **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
 | **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
 
 ---
 
-## Objective (current pass — Package 3E)
+## Objective (current pass — state-sync after Package 3E)
 
-Package 3E — ProductDraft and Preflight Runner Foundation. **IN PROGRESS. Awaiting Coordinator review and commit approval.**
+State-sync after Package 3E — marking Package 3E complete in Tower, backlog, sprint, kanban, command-center, architecture, QA. Docs only. **IN PROGRESS on `docs/sync-after-package-3e-product-draft-preflight`.**
 
-Scope: Engine layer only. `KMEngine.ProductDraftState` (per-product draft lifecycle), `KMEngine.ProductPreflight` (check registry + PAGINATION_STABILITY runner). Persistence validation and restore normalization for `productDrafts`. New test suites. No `index.html`, no proof approval modules, no readiness gate changes.
+**Next exact action:** Coordinator decides next development package or operating action. Do not start any package without explicit authorization.
 
-**Next exact action:** Coordinator reviews Package 3E implementation report. Approves commit. Do not commit without Coordinator approval.
+---
+
+## Objective (prior pass — Package 3E)
+
+Package 3E — ProductDraft and Preflight Runner Foundation. **COMPLETE — impl `dd4f641`, merged `4390038` to `main` 2026-06-02.**
+
+Delivered (engine layer only):
+- `src/products/product-draft-state.js` — `KMEngine.ProductDraftState`: 5-status draft lifecycle (none → in-progress → ready-for-preflight → preflight-passed/failed); create/advance/canAdvance/isValidStatus; immutable, JSON-safe
+- `src/products/product-preflight.js` — `KMEngine.ProductPreflight`: 10-check registry mirror; PAGINATION_STABILITY runner; 9 gated checks return not-applicable; aggregate `overallStatus` (passed/failed/incomplete/skipped); **no manufacturing readiness API**
+- `src/state/project-persistence.js` — productDrafts array validation + group serialization
+- `src/state/project-session-restore.js` — productDrafts restore normalization (drops malformed, warns)
+- New suites: `product-draft-state-tests.mjs` (90), `product-preflight-tests.mjs` (119); `project-persistence-tests.mjs` +22 (157)
+
+**Results:** 1935 Node tests, 0 failed. E2E seeded 41/41, real-files 64/64. Visual regression PASS. OS audit 304/304. No `index.html`, no proof approval modules, no readiness gates touched.
 
 ---
 

@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3E — ProductDraft and Preflight Runner Foundation — implementation on `feature/product-draft-preflight-foundation`, awaiting Coordinator review and commit approval. |
-| Branch | `feature/product-draft-preflight-foundation` |
-| main HEAD | `fa160de` — merge: correct active branch after Package 3D state sync |
-| Next action | Run `/start`. Coordinator reviews Package 3E report. If approved: commit and merge. If not yet approved: read AI_HANDOFF.md. |
+| Resume into | Package 3E COMPLETE — merged `4390038` 2026-06-02. No active package. State-sync in progress on `docs/sync-after-package-3e-product-draft-preflight`. After merge: Coordinator decides next. |
+| Branch | `docs/sync-after-package-3e-product-draft-preflight` |
+| main HEAD | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
+| Next action | Run `/start`. After state-sync merges: Await Coordinator authorization for next package. |
+| Package 3E | COMPLETE — `src/products/product-draft-state.js` + `product-preflight.js`; engine layer; no manufacturing readiness API; 1935 Node tests |
 | Package 3D | COMPLETE — `scripts/visual-regression-harness.mjs`; `vr:baseline` + `vr:check`; Scenario A baselines committed |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |

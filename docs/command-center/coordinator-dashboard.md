@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-3D state-sync)
+**Updated by:** Claude Code (post-Package-3E state-sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -64,12 +64,13 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 5A — Message Book Proof Approval State Foundation | COMPLETE | `e2df2a0` / `297a221` |
 | Package 5B — Message Book Proof Approval UX Foundation | COMPLETE | `fb62b5c` / `dc4f86b` |
 | Package 3D — Visual Regression Baseline Harness | COMPLETE | `5a5eaa0` / `645f6bd` |
+| Package 3E — ProductDraft and Preflight Runner Foundation | COMPLETE | `dd4f641` / `4390038` |
 | AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
 | AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
 | AI Project OS v1.7 (Gates 1–6) | COMPLETE | `3c641a9`→`f30ea62` 2026-06-01 |
 | Operator Reliability Repair | COMPLETE | `81b2329` / `c27502c` 2026-06-02 |
 
-Tests: **1704 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. `index.html` app behavior last changed: Package 5B (`fb62b5c`) — `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added. Package 5B also added `src/products/proof-approval-ux.js` (`KMEngine.ProofApprovalUX`: initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore; 77 new tests) and persistence additions (proofApprovalStates; 24 new tests). Package 5A (`e2df2a0`) added `src/products/proof-approval-state.js` (ProofApprovalState: STATUS constants, canTransition, create, transition; 137 new tests; no UI wiring). Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
+Tests: **1935 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests + visual regression check**. `index.html` app behavior last changed: Package 5B (`fb62b5c`) — `#bookProofPanel` + proof panel wiring. Package 3E (`dd4f641`) added `src/products/product-draft-state.js` (`KMEngine.ProductDraftState`: 5-status draft lifecycle) and `src/products/product-preflight.js` (`KMEngine.ProductPreflight`: 10-check registry mirror, PAGINATION_STABILITY runner, aggregate overallStatus incomplete while gated checks not-applicable; **no manufacturing readiness API**) plus productDrafts persistence/restore — engine layer only, no `index.html` change. Package 5A/5B added the proof approval state model + UX. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
 
 ---
 
@@ -227,9 +228,16 @@ Package 3D (COMPLETE — `645f6bd` 2026-06-02)
     → vr:baseline + vr:check npm scripts; --simulate-regression mode verified
     → No app code, no index.html, no src/**
 
+Package 3E (COMPLETE — `4390038` 2026-06-02)
+    → ProductDraft and Preflight Runner Foundation: ProductDraftState + ProductPreflight
+    → 5-status draft lifecycle; PAGINATION_STABILITY runner; 9 gated checks not-applicable
+    → aggregate overallStatus incomplete while gated; NO manufacturing readiness API
+    → productDrafts persistence/restore; 1935 Node tests; engine layer only, no index.html
+
 Coordinator decides next package ← current position
     → Candidates: scoped Phase 12 continuation (proof panel interactions, below GATE-04)
-    → OR: ProductDraft + Preflight Runner (Package 3 remaining scope)
+    → OR: preflight runners for vendor-gated checks (gated until vendor confirmed)
+    → OR: ProductDraft lifecycle hooks (KeepsakeGroup integration)
     → "Package 5C" is NOT defined — do not start without explicit Coordinator scoping
 
 Designer confirmed (budget resolved)
@@ -244,7 +252,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Decide next package after Package 3D | Roadmap decision | High — Package 3D complete; candidates in `decision-log.md` |
+| Decide next package after Package 3E | Roadmap decision | High — Package 3E complete; candidates in `decision-log.md` |
 | Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
 | `scripts/node_modules` tracked-history cleanup | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |
