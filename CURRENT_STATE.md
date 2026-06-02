@@ -21,12 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `4ae1e80` — merge: sync state after post-Package-5B weekly sync |
-| Active branch | `docs/fix-active-branch-after-5b-sync` |
-| Active pass | Housekeeping — correcting stale branch pointer in state docs |
-| Last completed pass | `Post-Package-5B Weekly Sync + State Cleanup` — merged `4ae1e80` 2026-06-02 |
+| main HEAD | `7fbb365` — merge: correct active branch after post-Package-5B state sync |
+| Active branch | `feature/visual-regression-baseline-harness` |
+| Active pass | Package 3D — Visual Regression Baseline Harness (QA infra; awaiting Coordinator baseline review) |
+| Last completed pass | `Gate 0 housekeeping` — impl `8968d41`, merged `7fbb365` 2026-06-02 |
 | Last closed package | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
-| Next authorized target | Package 3D — Visual Regression Baseline Harness (authorized; starts after Gate 0 housekeeping) |
+| Next authorized target | Package 3D commit — pending Coordinator baseline review |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01; docs-watch framework + bootstrap copy-forward guidance + 288 OS audit checks |

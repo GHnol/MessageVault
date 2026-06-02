@@ -20,6 +20,7 @@ aws-credentials*
 # Generated artifacts / exports / local reports (never commit)
 artifacts/
 !artifacts/.gitkeep
+visual-regression-output/
 *.pdf
 *.ics
 # Exception: the Project Control Tower calendar is repo-native source of truth (Package 2.8)

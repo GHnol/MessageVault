@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `housekeeping` — Correcting stale branch pointer in state docs. Working tree has 3-file housekeeping edits only. Package 3D authorized but not yet started.
+**Status:** `active` — Package 3D — Visual Regression Baseline Harness IN PROGRESS on `feature/visual-regression-baseline-harness`. Awaiting Coordinator baseline review and commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,24 +18,35 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Housekeeping — correcting stale active-branch pointer after post-5B state-sync merge |
-| **Active branch** | `docs/fix-active-branch-after-5b-sync` |
-| **main HEAD** | `4ae1e80` — merge: sync state after post-Package-5B weekly sync |
-| **Last completed pass** | `Post-Package-5B Weekly Sync + State Cleanup` — weekly sync merged `522ad12`, state cleanup merged `4ae1e80` 2026-06-02 |
-| **Active package** | None (Package 3D authorized, implementation starts after this housekeeping merges) |
+| **Active pass** | Package 3D — Visual Regression Baseline Harness (QA infrastructure only) |
+| **Active branch** | `feature/visual-regression-baseline-harness` |
+| **main HEAD** | `7fbb365` — merge: correct active branch after post-Package-5B state sync |
+| **Last completed pass** | `Gate 0 housekeeping` — impl `8968d41`, merged `7fbb365` 2026-06-02 |
+| **Active package** | Package 3D — Visual Regression Baseline Harness |
 | **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
-| **Package 3D** | Authorized — Visual Regression Baseline Harness; implementation starts after Gate 0 housekeeping merges |
+| **Package 3D** | IN PROGRESS — `feature/visual-regression-baseline-harness`; QA infrastructure; no app code |
 | **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
 
 ---
 
-## Objective (current pass — housekeeping)
+## Objective (current pass — Package 3D)
 
-Housekeeping: correcting stale active-branch pointer (`docs/sync-after-post-package-5b-weekly-sync` → `main`) in state docs after post-5B state-sync merge. Docs-only, 3 files. **IN PROGRESS on `docs/fix-active-branch-after-5b-sync`.**
+Package 3D — Visual Regression Baseline Harness. **IN PROGRESS. Awaiting Coordinator baseline review and commit approval.**
 
-**Next exact action:** After Gate 0 merges to main → create `feature/visual-regression-baseline-harness` → implement Package 3D. Do not start Package 3D until Gate 0 is merged.
+Scope: QA infrastructure only. `scripts/visual-regression-harness.mjs` with `--update-baselines`, `--check`, `--simulate-regression`, `--headed` modes. Committed Scenario A per-page baseline PNGs. New docs. No `index.html`, no `src/**`.
+
+Delivered:
+- `scripts/visual-regression-harness.mjs` — new harness script
+- `scripts/visual-regression-baselines/scenario-a/` — committed baseline PNGs + manifest
+- `scripts/package.json` — added `pixelmatch`, `pngjs`, `vr:baseline`, `vr:check`
+- `.gitignore` — added `visual-regression-output/`
+- `docs/qa/visual-regression-guide.md` — new guide
+- `docs/qa/test-strategy.md` — updated visual regression section
+- `docs/qa/e2e-regression-harness.md` — updated visual fidelity section
+
+**Next exact action:** Coordinator reviews Package 3D final report and baseline screenshots. Approves commit and merge. Do not commit until Coordinator approves.
 
 ---
 

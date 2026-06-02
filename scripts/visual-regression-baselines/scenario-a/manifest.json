@@ -1,0 +1,19 @@
+{
+  "scenario_id": "scenario-a-short-balanced",
+  "scenario_label": "Scenario A — Short / Balanced",
+  "page_count": 4,
+  "pages": [
+    "page-01.png",
+    "page-02.png",
+    "page-03.png",
+    "page-04.png"
+  ],
+  "capture_timestamp": "2026-06-02T19:51:10.459Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "threshold_default": "0.1%",
+  "book_pagination_version": "1",
+  "note": "Baselines are committed snapshots of Scenario A Message Book rendering. Update only with Coordinator authorization."
+}

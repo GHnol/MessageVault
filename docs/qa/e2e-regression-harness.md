@@ -189,14 +189,15 @@ This is not included in the E2E run to avoid making the harness slow. Run it sep
 
 ## Visual fidelity
 
-Visual screenshot diffing is **not covered** by this harness. Failure screenshots are saved to `artifacts/e2e-failures/` for debugging only — they are not used as regression baselines.
+Visual screenshot diffing is **not covered** by this harness. Failure screenshots are saved to `artifacts/e2e-failures/` for debugging only — they are not used as regression baselines. This harness verifies behavior (DOM state, API values, navigation), not visual rendering.
 
-Visual regression requires:
-- Approved baseline screenshots per scenario
-- Pixel-tolerance rules for rendering differences
-- A diff tool that can flag layout regressions vs. expected minor variation
+**Package 3D — Visual Regression Baseline Harness** is now complete. It is a separate script that captures per-page Message Book screenshots and compares them against committed baselines using `pixelmatch`:
 
-This is deferred to a future **Package 3D: Visual Regression Baseline Harness**. Until then, visual fidelity remains manual QA.
+```bash
+node scripts/visual-regression-harness.mjs --check
+```
+
+See `docs/qa/visual-regression-guide.md` for full usage. Run the visual regression check alongside this E2E harness when Message Book rendering is touched.
 
 ---
 

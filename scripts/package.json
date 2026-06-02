@@ -16,10 +16,14 @@
     "capture:c": "node capture-message-book-packet.mjs --scenarios c",
     "capture:d": "node capture-message-book-packet.mjs --scenarios d",
     "inbox:latest": "node process-operator-inbox.mjs --latest",
-    "inbox": "node process-operator-inbox.mjs"
+    "inbox": "node process-operator-inbox.mjs",
+    "vr:baseline": "node visual-regression-harness.mjs --update-baselines",
+    "vr:check": "node visual-regression-harness.mjs --check"
   },
   "dependencies": {
     "googleapis": "^173.0.0",
-    "playwright": "^1.44.0"
+    "pixelmatch": "^5.3.0",
+    "playwright": "^1.44.0",
+    "pngjs": "^7.0.0"
   }
 }
