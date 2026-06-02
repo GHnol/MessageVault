@@ -1,6 +1,6 @@
 # KeepMees Decision Log
 
-**Last updated:** 2026-05-17 (America/New_York)
+**Last updated:** 2026-06-02 (America/New_York)
 **Owner:** Coordinator / Project Control
 **Relationship:** This is the Project Control view of decisions. The authoritative record is `docs/ops/decision-register.md` (DEC-* IDs). If they differ, the decision register wins and this view is corrected.
 
@@ -58,7 +58,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after v1.7 OS completion (Package 5B — proof approval UX) | Open | Coordinator | Package 5A complete; Package 5B requires explicit Coordinator authorization |
+| Next product package after Package 5B | Open | Coordinator | Package 5B COMPLETE (merged `dc4f86b` 2026-06-02); candidates: Package 3D (Visual Regression Baseline Harness — QA infra, no external gate, requires authorization only), scoped Phase 12 continuation, or ProductDraft/preflight scope |
 
 ## Deferred
 

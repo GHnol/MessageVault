@@ -16,14 +16,14 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-02` (Operator Reliability Repair state-sync after merge)
+**Last updated:** `2026-06-02` (post-Package-5B weekly sync in progress)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `c27502c` — merge: add operator reliability repair |
-| Active branch | `main` |
-| Active pass | None — Operator Reliability Repair complete; awaiting Coordinator direction |
+| main HEAD | `f04c5bd` — docs: sync state after operator reliability repair merge |
+| Active branch | `docs/post-package-5b-weekly-sync` |
+| Active pass | Post-Package-5B weekly sync (docs only) — awaiting Coordinator approval |
 | Last completed pass | `Operator Reliability Repair` — merged `c27502c` to `main` 2026-06-02 |
 | Last closed package | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
 | Next authorized target | Coordinator decides next package or next direction |

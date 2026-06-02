@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-05-22
-**Updated by:** Claude Code (Package 5A status sync)
+**Last updated:** 2026-06-02
+**Updated by:** Claude Code (post-Package-5B weekly sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -62,10 +62,13 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.8 — KeepMees Project Control Tower | COMPLETE | `2a5fb54` / `bdb73db` |
 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | COMPLETE | `81c5069` / `a20af30` |
 | Package 5A — Message Book Proof Approval State Foundation | COMPLETE | `e2df2a0` / `297a221` |
+| Package 5B — Message Book Proof Approval UX Foundation | COMPLETE | `fb62b5c` / `dc4f86b` |
 | AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
 | AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
+| AI Project OS v1.7 (Gates 1–6) | COMPLETE | `3c641a9`→`f30ea62` 2026-06-01 |
+| Operator Reliability Repair | COMPLETE | `81b2329` / `c27502c` 2026-06-02 |
 
-Tests: **1603 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. `index.html` app behavior last changed: Package 4E (`99bdf8f`). Packages 4E.1, 2.7, 2.8, 2.9, and 5A made no `index.html` changes. Package 5A (`e2df2a0`) added `src/products/proof-approval-state.js` (ProofApprovalState: STATUS constants, canTransition, create, transition; 137 new tests; no UI wiring; no checkout/commerce/manufacturing/export logic). Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
+Tests: **1704 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests**. `index.html` app behavior last changed: Package 5B (`fb62b5c`) — `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added. Package 5B also added `src/products/proof-approval-ux.js` (`KMEngine.ProofApprovalUX`: initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore; 77 new tests) and persistence additions (proofApprovalStates; 24 new tests). Package 5A (`e2df2a0`) added `src/products/proof-approval-state.js` (ProofApprovalState: STATUS constants, canTransition, create, transition; 137 new tests; no UI wiring). Package 2.8 (`2a5fb54`) built the full KeepMees Project Control Tower. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
 
 ---
 
@@ -213,8 +216,15 @@ AI OS Framework Groundwork Pass (COMPLETE — `cc7139a`)
     → 13 skills canonical, closeout sync contract, OS self-audit, notification wizard
     → Bootstrap Core v0.5.0; project-control sync foundation; no app code
 
+Package 5B (COMPLETE — `dc4f86b` 2026-06-02)
+    → Proof approval UX foundation: KMEngine.ProofApprovalUX + index.html #bookProofPanel + persistence
+    → 1704 Node tests; browser QA 36/36 PASS
+
 Coordinator decides next package ← current position
-    → No package authorized; Coordinator decides next product package
+    → Candidates: Package 3D (Visual Regression Baseline Harness, QA infra, no external gate)
+    → OR: scoped Phase 12 continuation (proof panel interactions, below GATE-04)
+    → OR: ProductDraft + Preflight Runner (Package 3 remaining scope)
+    → "Package 5C" is NOT defined — do not start without explicit Coordinator scoping
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -228,12 +238,12 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Decide next package after AI OS Framework Groundwork Pass | Roadmap decision | High — OS foundation now complete; ready for next product package |
+| Decide next package after Package 5B | Roadmap decision | High — Package 5B complete; candidates in `decision-log.md` |
 | Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
-| `scripts/node_modules` tracked-history cleanup (separate from Package 2.8) | Repo hygiene decision | Low — backlog |
+| `scripts/node_modules` tracked-history cleanup | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |
 | NotebookLM adoption | Tool adoption | Medium |
-| Designer budget re-authorization | Budget decision | High — blocks Figma |
+| Designer budget re-authorization | Budget decision | High — blocks Figma / Phase 7+ |
 | Gift notes at launch | Product decision | Medium — needed before packaging SOP |
 | Wave 1B packaging vendor outreach (Packlane, noissue) | Vendor decision | Medium |
 

@@ -1,7 +1,7 @@
 # KeepMees Master Schedule
 
-**Last updated:** 2026-05-25 (America/New_York)
-**Assumed "today":** Monday, 2026-05-25
+**Last updated:** 2026-06-02 (America/New_York)
+**Assumed "today":** Monday, 2026-06-02
 **Owner:** Coordinator / Project Control
 **Confidence labels:** High / Medium / Low. Low = gated by external dependency or far enough out that dates are directional only. Dates are planning targets, not promises.
 
@@ -25,7 +25,7 @@
 | 9 — Vendor Readiness / Proofing | 2026-Q3/Q4 (est.) | Low | vendor responses |
 | 10 — Packaging / Gifting | 2026-Q4 (est.) | Low | Phase 9 |
 | 11 — Checkout / Sale Readiness | 2026-Q4+ (est.) | Low | vendor + server PDF |
-| 12 — Beta Proof Review (Package 5A foundation) | starts after Tower approval (~2026-05-26) | Medium (5A) / Low (full beta) | Foundation OS Gate |
+| 12 — Beta Proof Review (Packages 5A + 5B foundation) | Package 5A merged `297a221`; Package 5B merged `dc4f86b` 2026-06-02 | Medium (5A+5B done) / Low (full beta) | Further Phase 12 work gated by Coordinator decision |
 | 13 — Launch Readiness | 2026-Q4 / 2027-Q1 (directional) | Low | Phases 6–12 |
 | 14 — Launch | directional, not promised | Low | Phase 13 |
 | 15 — Post-Launch Learning / Expansion | post-launch | Low | Phase 14 |
@@ -38,9 +38,10 @@
 |---|---|---|
 | Project Control Tower built | 2026-05-17 | High (done in this package) |
 | Tower reviewed + merged | 2026-05-20 → 2026-05-23 | High |
-| Package 5A authorized (post-Tower) | ~2026-05-24 → 2026-05-26 | Medium |
-| Package 5A — Proof Approval State Foundation delivered | ~2026-06-06 (est.) | Medium |
-| Preview fidelity verification approach defined | 2026-06 (est.) | Medium |
+| Package 5A authorized (post-Tower) | DONE — 2026-05-26 | High |
+| Package 5A — Proof Approval State Foundation delivered | DONE — merged `297a221` 2026-05-26 | High |
+| Package 5B — Proof Approval UX Foundation delivered | DONE — merged `dc4f86b` 2026-06-02 | High |
+| Preview fidelity verification approach defined | 2026-06+ (est.) | Medium |
 | Designer budget decision | unscheduled — Coordinator-owned | Low |
 | Figma master accepted (Checkpoint A) | 2026-Q3 (est.) | Low |
 | Vendor confirmed (Checkpoint B) | 2026-Q3/Q4 (est.) | Low |
@@ -96,18 +97,16 @@ Phase 9/10/11 ──> Phase 13 ──> Phase 14 ──> Phase 15
 
 - **Gated (external):** Phases 7, 8, 9, 10, 11 — designer budget, vendor confirmation, server PDF infra.
 - **Blocked:** Figma execution (no confirmed designer); cover work (`isCoverUnblocked()`=false).
-- **Active:** None — v1.4 OS pass complete; no active pass or product package as of 2026-05-25. Coordinator decides next authorized work.
+- **Active:** None — Package 5B complete 2026-06-02; AI Project OS v1.7 complete. Coordinator decides next authorized work.
 
 ---
 
 ## Recommended priority order (now)
 
-1. Review + approve + merge the Project Control Tower (Package 2.8).
-2. (Founder, optional) import `.ics`, ClickUp CSV, TickTick CSV.
-3. Authorize Package 5A; Claude prepares the 5A package prompt.
-4. Execute Package 5A — Message Book Proof Approval State Foundation (scope-limited, no checkout/PDF/preview-renderer).
-5. Define preview-fidelity verification approach (Phase 6 prep, no redesign).
-6. Keep vendor/design/packaging gated; no external outreach.
+1. Coordinator decides next development package — candidates: Package 3D (Visual Regression Baseline Harness), scoped Phase 12 continuation, or ProductDraft/preflight scope.
+2. Define preview-fidelity verification approach (Phase 6 prep, no redesign) — remains open.
+3. Keep vendor/design/packaging gated; no external outreach.
+4. (Optional) Run weekly Coordinator sync ritual to keep Tower current.
 
 ---
 

@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-05-22
-**Updated by:** Claude Code (Package 5A status sync)
+**Last updated:** 2026-06-02
+**Updated by:** Claude Code (post-Package-5B weekly sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide the next development package | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Decide next development package — candidates: Package 3D (QA infra), Phase 12 continuation, or ProductDraft/preflight | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,24 +22,23 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: AI Project OS Framework Groundwork Pass COMPLETE — merged `cc7139a`. Coordinator decides next package.**
+**Status: Package 5B COMPLETE — merged `dc4f86b` 2026-06-02. Coordinator decides next package.**
 
-AI Project OS Framework Groundwork Pass is COMPLETE — merged to main (`cc7139a`). 13 skills canonical, closeout sync contract, project-control sync foundation, OS self-audit (88 pass), notification wizard; no app code.
-Package 5A (Message Book Proof Approval State Foundation) is COMPLETE — merged to main (`297a221`). `KMEngine.ProofApprovalState` with STATUS constants, `canTransition`, `create`, `transition`; 137 new tests; no UI; no `index.html` changes.
-Package 2.9 (AI Project OS Auto-Management Upgrade Pass) is COMPLETE — merged to main (`a20af30`). Universal `docs/ai-system/` layer + 7 new dev protocols + 2 new QA docs; no app code.
-Package 2.8 (KeepMees Project Control Tower) is COMPLETE — merged to main (`bdb73db`). Full repo-native Tower built; no app code.
-Package 2.7 (AI Development Operating System Upgrade Pass) is COMPLETE — merged to main (`cebdc72`). Operating infrastructure only; no app code.
-Package 4E.1 (E2E Startup Timing Reliability Patch) is COMPLETE — merged to main (`73dae00`).
-Package 4E (Product Format Availability Surface Foundation) is COMPLETE — merged to main (`7c87f20`).
-Package 4D (Product Experience Readiness Consumer Foundation) is COMPLETE — merged to main (`4747dff`).
-Package 4C (Product Experience Readiness Resolver Foundation) is COMPLETE — merged to main (`879c244`).
-Package 4B (Prototype Preview Registry Foundation) is COMPLETE — merged to main (`3f939d0`).
-Package 4A (ProductRenderSpec Foundation) is COMPLETE — merged to main (`1058dc1`).
-Package 2.6.1 (Operator Inbox Extraction Polish) is COMPLETE — merged to main (`75a2378`).
-Package 2.6 (Operator Inbox + Stream Update Processor) is COMPLETE — merged to main (`e7d635d`).
-Package 3C (Real File Import, Download, and Full-Path E2E Coverage) is COMPLETE — merged to main (`904cf51`).
-Package 3B (Automated E2E Regression Harness Foundation) is COMPLETE — merged to main (`40b4bba`).
-Package 3A (local project session save and resume foundation) is COMPLETE — merged to main (`b40fa2b`).
+Package 5B (Message Book Proof Approval UX Foundation) is COMPLETE — merged to main (`dc4f86b` 2026-06-02). `KMEngine.ProofApprovalUX` with initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore; `#bookProofPanel` in `index.html`; 1704 Node tests; browser QA 36/36 PASS.
+Package 5A (Message Book Proof Approval State Foundation) is COMPLETE — merged to main (`297a221`). `KMEngine.ProofApprovalState` with STATUS constants, `canTransition`, `create`, `transition`; 137 new tests; no UI.
+AI Project OS v1.7 (all 6 gates) is COMPLETE — all merged to main 2026-06-01. OS self-audit 304/304 pass.
+Operator Reliability Repair is COMPLETE — merged `c27502c` 2026-06-02.
+All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B, 1, 2) are COMPLETE — see `docs/command-center/current-status.md`.
+
+**Next package candidates (none authorized):**
+
+| Candidate | Type | External gate? | Risk |
+|---|---|---|---|
+| Package 3D — Visual Regression Baseline Harness | QA infrastructure | None (Coordinator authorization only) | Low |
+| Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
+| ProductDraft + Preflight Runner | Engine layer | None | Low-Medium |
+
+**"Package 5C" is not defined in the repo.** Do not start or reference it without explicit Coordinator scoping.
 
 No development package has been authorized. The next Coordinator step is to decide the next package.
 
@@ -72,7 +71,7 @@ No development package has been authorized. The next Coordinator step is to deci
 
 | Decision | What needs deciding | Downstream impact |
 |---|---|---|
-| Next package authorization | Which package to authorize next after Package 5A | Development resumption |
+| Next package authorization | Which package to authorize next after Package 5B | Development resumption |
 | Tower adoption (founder) | Whether to import `.ics`, ClickUp CSV, TickTick CSV | Personal execution layer; not required for repo to work |
 | GitHub Projects setup | Whether to create the KeepMees Command Center board | Tracking infrastructure |
 | NotebookLM adoption | Formally adopt or defer | Research/synthesis tooling |

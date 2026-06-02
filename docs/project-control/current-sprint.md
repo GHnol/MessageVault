@@ -9,12 +9,36 @@
 
 | Field | Value |
 |---|---|
-| Sprint name | Sprint 2026-06-A — AI Project OS v1.7 Zero-Fault Hardening |
-| Sprint dates | 2026-06-01 → ongoing (per gate cadence) |
-| Sprint goal | Implement v1.7 gates: closeout validators, state freshness, report mirroring, start router, external sync consistency, docs-watch, bootstrap finalization |
+| Sprint name | Sprint 2026-06-B — Next Package Selection and QA Foundation |
+| Sprint dates | 2026-06-02 → ongoing (per Coordinator direction) |
+| Sprint goal | Select and authorize the next development package; clear project-control catch-up; confirm Package 3D or Phase 12 continuation as next work |
 | Sprint owner | Coordinator / Claude Code (Operator Mode) |
 
-Sprint 2026-06-A is COMPLETE. All 6 v1.7 OS gates delivered and merged. AI Project OS v1.7 COMPLETE — merged `f30ea62` 2026-06-01. Package 5B COMPLETE — implementation committed `fb62b5c`, merged `dc4f86b` 2026-06-02.
+Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorized package. Sprint 2026-06-A is COMPLETE (see historical record below).
+
+---
+
+## Sprint tasks
+
+| # | Task | Priority | Status | Notes |
+|---|---|---|---|---|
+| 1 | Post-Package-5B project-control Tower catch-up (this sync) | P1 | **Done** | Branch `docs/post-package-5b-weekly-sync`; all Tower docs updated ✓ |
+| 2 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; candidates: Package 3D, Phase 12 continuation, ProductDraft/preflight |
+
+---
+
+## Blocked tasks
+
+- **Coordinator authorize next product package** — P0 — all development work halted pending explicit Coordinator decision. Candidates recorded in decision-log.md.
+
+---
+
+## Sprint success criteria
+
+- Tower docs reflect Package 5B COMPLETE across all project-control and command-center files
+- Sprint 2026-06-A closed as historical record; Sprint 2026-06-B opened
+- Coordinator has a clean decision packet: next package candidates, blockers, risk levels
+- No app code touched; no product package started; no external tool writes
 
 ---
 
@@ -82,6 +106,17 @@ OS pass merged? yes — Gate 1 merged 3c641a9 2026-06-01
 Package 5B: not started, blocked
 External tools synced? none
 ```
+
+---
+
+## Historical: Sprint 2026-06-A (CLOSED — COMPLETE)
+
+**Sprint name:** Sprint 2026-06-A — AI Project OS v1.7 Zero-Fault Hardening
+**Sprint dates:** 2026-06-01 → 2026-06-02
+**Sprint goal:** Implement v1.7 gates: closeout validators, state freshness, report mirroring, start router, external sync consistency, docs-watch, bootstrap finalization; then Package 5B
+**Sprint owner:** Coordinator / Claude Code (Operator Mode)
+
+All 17 tasks complete. AI Project OS v1.7 COMPLETE — all 6 gates merged to main 2026-06-01. Package 5B COMPLETE — implementation `fb62b5c`, merged `dc4f86b` 2026-06-02. Operator Reliability Repair merged `c27502c` 2026-06-02.
 
 ---
 

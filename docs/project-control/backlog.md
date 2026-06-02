@@ -1,6 +1,6 @@
 # KeepMees Backlog
 
-**Last updated:** 2026-05-17 (America/New_York)
+**Last updated:** 2026-06-02 (America/New_York)
 **Owner:** Coordinator / Project Control
 
 **Status values:** Inbox · Backlog · Ready · In Progress · Waiting / Blocked · Review · Approved · Done · Deferred · Killed
@@ -19,7 +19,7 @@
 | Commit + merge Package 2.8 (Operator Mode) | P0 | Done | 0 | approval | Tower on main + status sync | Y | Y | N |
 | Activate weekly Coordinator sync ritual | P1 | Ready | 0 | Tower merged | First weekly log entry written | Y | Y | Y |
 | Authorize Package 5A after Tower | P1 | Done | 12 | Tower merged | 5A explicitly authorized | Y | Y | N |
-| Authorize Package 5B product work | P1 | Waiting/Blocked | 12 | v1.7 complete | Package 5B explicitly authorized by Coordinator | Y | Y | N |
+| Authorize Package 5B product work | P1 | Done | 12 | v1.7 complete | Package 5B authorized and COMPLETE — merged `dc4f86b` 2026-06-02 | Y | Y | N |
 | Decide ClickUp/TickTick/Calendar adoption | P2 | Backlog | 0 | — | Founder choice recorded | Y | N | N |
 | Decide scripts/node_modules history cleanup | P3 | Deferred | 0 | — | Decision recorded in decision-log | N | Y | N |
 
@@ -37,7 +37,8 @@
 |---|---|---|---|---|---|---|---|---|
 | Prepare scoped Package 5A prompt | P1 | Done | 12 | 5A authorized | Scoped prompt (no checkout/PDF/renderer) | Y | Y | N |
 | Package 5A — Proof Approval State Foundation | P1 | Done | 12 | Tower approved | Proof state model + tests; no app-scope creep | Y | Y | N |
-| Package 5B — Proof Approval UX | P1 | Waiting/Blocked | 12 | Coordinator authorization | Scope TBD; requires explicit Coordinator authorization | Y | Y | N |
+| Package 5B — Proof Approval UX Foundation | P1 | Done | 12 | Package 5A complete | 1704 Node tests; browser QA 36/36 PASS; merged `dc4f86b` 2026-06-02 | Y | Y | N |
+| Package 3D — Visual Regression Baseline Harness | P2 | Backlog | 0 (QA infra) | Coordinator authorization | Visual regression harness for Message Book rendering; no external gate; named in `docs/qa/e2e-regression-harness.md` | N | Y | N |
 | Message Book composition continuation backlog | P2 | Backlog | 5 | — | ProductDraft / preflight runner scoped | N | Y | N |
 | Maintain E2E + unit baselines green | P1 | Ready | 0 | — | All suites green before any commit | N | Y | N |
 

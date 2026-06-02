@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-05-22
-**Updated by:** Claude Code (Package 5A status sync)
+**Last updated:** 2026-06-02
+**Updated by:** Claude Code (post-Package-5B weekly sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -30,29 +30,33 @@
 | Package 2.8 | KeepMees Project Control Tower | COMPLETE — merged to main | `2a5fb54` | `bdb73db` |
 | Package 2.9 | AI Project OS Auto-Management Upgrade Pass | COMPLETE — merged to main | `81c5069` | `a20af30` |
 | Package 5A | Message Book Proof Approval State Foundation | COMPLETE — merged to main | `e2df2a0` | `297a221` |
+| Package 5B | Message Book Proof Approval UX Foundation | COMPLETE — merged to main | `fb62b5c` | `dc4f86b` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
+| AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
+| Operator Reliability Repair | Raw transcript capture protocol, notification diagnostic, skill/command updates | COMPLETE — merged to main | `81b2329` | `c27502c` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 4E (`99bdf8f`) — product-format availability surface added to Your Keepsakes view; `buildFormatAvailability()` injects safe `.ks-format-availability` section per card via ProductExperienceConsumer
-- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`)
-- `src/state/`: 3 modules added in Package 3A (`project-persistence.js`, `project-session-restore.js`, `project-file-io.js`)
-- `src/products/`: 11 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state)
-- `src/tests/`: 11 suites, 1603 Node tests — all green
-  - `km-engine-tests.mjs`: ~96
+- App code last changed: Package 5B (`fb62b5c`) — proof approval UX foundation; `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added to `index.html`
+- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring)
+- `src/state/`: 3 modules in Package 3A; modified in Package 5B (`project-persistence.js` + `project-session-restore.js` — proofApprovalStates support)
+- `src/products/`: 13 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux)
+- `src/tests/`: 12 suites, **1704 Node tests** — all green
+  - `km-engine-tests.mjs`: 96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
-  - `project-persistence-tests.mjs`: 111
+  - `project-persistence-tests.mjs`: 135 (Package 3A + 5B additions)
   - `operator-inbox-processor-tests.mjs`: 85 (Package 2.6 + 2.6.1)
   - `product-render-spec-tests.mjs`: 341 (Package 4A)
   - `prototype-preview-registry-tests.mjs`: 215 (Package 4B)
   - `product-experience-readiness-tests.mjs`: 337 (Package 4C)
   - `product-experience-consumer-tests.mjs`: 35 (Package 4D)
   - `proof-approval-state-tests.mjs`: 137 (Package 5A)
+  - `proof-approval-ux-tests.mjs`: 77 (Package 5B)
 - `scripts/e2e-regression-harness.mjs`: 41-test seeded Playwright harness (phases 1–10 + 20 + 21, Packages 3B + 4D + 4E) + 23-test real-file coverage (phases 11–19, Package 3C) — 64 tests total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
@@ -62,14 +66,16 @@
 
 ---
 
-## Git state (as of AI Project OS Framework Groundwork Pass closeout)
+## Git state (as of post-Package-5B weekly sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `cc7139a` — merge: complete AI Project OS framework groundwork |
-| Active branch | `docs/sync-after-ai-project-os-framework-groundwork` (status-sync in progress) |
-| Working tree | Status-sync edits in progress |
-| Pushed to remote | Yes — implementation `219f0b3` + merge `cc7139a` pushed to origin/main |
+| main HEAD | `f04c5bd` — docs: sync state after operator reliability repair merge |
+| Active branch | `docs/post-package-5b-weekly-sync` (weekly sync in progress) |
+| Working tree | Weekly sync edits in progress |
+| Pushed to remote | main is current; this sync branch pending Coordinator approval |
+
+**Package 5B (`fb62b5c` / `dc4f86b`):** Message Book Proof Approval UX Foundation — `src/products/proof-approval-ux.js` added: `KMEngine.ProofApprovalUX` IIFE module (initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore). `src/state/project-persistence.js` and `project-session-restore.js` modified (proofApprovalStates). `index.html` modified (#bookProofPanel, CSS, renderBookProofPanel(), save/restore wiring). 77 new tests + 15 persistence tests = 101 new tests; total baseline 1704. Browser QA 36/36 PASS_MERGE_READY. No checkout/PDF/commerce/manufacturing scope.
 
 **Package 5A (`e2df2a0` / `297a221`):** Message Book Proof Approval State Foundation — `src/products/proof-approval-state.js` added: `KMEngine.ProofApprovalState` with STATUS (5 constants: none, pending-review, approved, changes-requested, revoked), `canTransition(from, to)`, `create(opts)`, `transition(stateRecord, toStatus, opts)`; immutable records; JSON-safe; 137 new tests (14 suites). No `index.html` changes; no UI wiring; no checkout/commerce/manufacturing/export logic; no PDF; no preview renderer. `"proof-ready"` does not appear in the implementation file.
 
@@ -100,13 +106,13 @@
 
 | Item | Status |
 |---|---|
-| Review committed Project Control Tower; decide whether to authorize Package 5A | NEEDS COORDINATOR DECISION — next action after Package 2.8 |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 5B COMPLETE; candidates in `docs/project-control/decision-log.md` |
+| Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
-| Designer budget re-authorization | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> Package 5A remains paused. The Foundation Operating System Gate (`docs/project-control/phase-gates.md` Gate 1) is now passable but requires explicit Coordinator authorization. `scripts/node_modules` tracked-history cleanup remains a separate Coordinator decision, not part of Package 2.8.
+> No active package. Package 5B COMPLETE (merged `dc4f86b` 2026-06-02). Next package candidates: Package 3D (Visual Regression Baseline Harness), scoped Phase 12 continuation, or ProductDraft/preflight scope. "Package 5C" is not defined in the repo — do not start without explicit scoping and Coordinator authorization.
 
 ---
 

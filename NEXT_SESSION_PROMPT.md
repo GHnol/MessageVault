@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Operator Reliability Repair COMPLETE — merged `c27502c` to `main` 2026-06-02. Awaiting Coordinator direction for next package. |
-| Branch | `main` |
-| main HEAD | `c27502c` — merge: add operator reliability repair |
-| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Resume into | Post-Package-5B weekly sync on `docs/post-package-5b-weekly-sync` — awaiting Coordinator commit approval. If resuming after merge: no active package, Coordinator decides next. |
+| Branch | `docs/post-package-5b-weekly-sync` (pending merge) |
+| main HEAD | `f04c5bd` — docs: sync state after operator reliability repair merge |
+| Next action | Run `/start`. If sync is approved and merged: Await Coordinator authorization for next package. If sync not yet merged: resume from `AI_HANDOFF.md`. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |
