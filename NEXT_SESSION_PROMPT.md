@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Post-Package-5B weekly sync on `docs/post-package-5b-weekly-sync` — awaiting Coordinator commit approval. If resuming after merge: no active package, Coordinator decides next. |
-| Branch | `docs/post-package-5b-weekly-sync` (pending merge) |
-| main HEAD | `f04c5bd` — docs: sync state after operator reliability repair merge |
-| Next action | Run `/start`. If sync is approved and merged: Await Coordinator authorization for next package. If sync not yet merged: resume from `AI_HANDOFF.md`. |
+| Resume into | Post-Package-5B weekly sync COMPLETE — merged `522ad12` to `main` 2026-06-02. State-sync in progress on `docs/sync-after-post-package-5b-weekly-sync`. After merge: no active package, Coordinator decides next. |
+| Branch | `docs/sync-after-post-package-5b-weekly-sync` (state-sync — pending merge to main) |
+| main HEAD | `522ad12` — merge: sync project control after Package 5B closeout |
+| Next action | Run `/start`. After state-sync merges: Await Coordinator authorization for next package. Candidates: Package 3D (Visual Regression Harness), Phase 12 continuation, or ProductDraft/preflight. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |

@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `sync-in-progress` — Post-Package-5B weekly sync on branch `docs/post-package-5b-weekly-sync`. Working tree has docs-only edits. No active product package.
+**Status:** `complete` — Post-Package-5B weekly sync COMPLETE. Weekly sync merged `522ad12` to `main` 2026-06-02. Working tree clean. No active package.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,26 +18,32 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Post-Package-5B weekly sync — Tower catch-up (docs only, no product code) |
-| **Active branch** | `docs/post-package-5b-weekly-sync` |
-| **main HEAD** | `f04c5bd` — docs: sync state after operator reliability repair merge |
-| **Last completed pass** | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
-| **Active package** | None (this is OS/operator repair, not a product package) |
-| **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
+| **Active pass** | State-sync: post-Package-5B weekly sync closeout (docs only, no product code) |
+| **Active branch** | `docs/sync-after-post-package-5b-weekly-sync` |
+| **main HEAD** | `522ad12` — merge: sync project control after Package 5B closeout |
+| **Last completed pass** | `Post-Package-5B Weekly Sync` — impl `bb45dbb`, merged `522ad12` 2026-06-02 |
+| **Active package** | None |
+| **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
+| **Package 3D** | Candidate only — not authorized; see `docs/project-control/decision-log.md` |
+| **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
 
 ---
 
 ## Objective (current pass — post-Package-5B weekly sync)
 
-Post-Package-5B weekly sync — project-control Tower catch-up (docs only). **IN PROGRESS on branch `docs/post-package-5b-weekly-sync`. Awaiting Coordinator approval before commit.**
+Post-Package-5B weekly sync — project-control Tower catch-up (docs only). **COMPLETE — impl `bb45dbb`, merged `522ad12` to `main` 2026-06-02.**
 
-Scope: Bring Tower, backlog, command-center, and state docs up to Package 5B truth. Close Sprint 2026-06-A. Open Sprint 2026-06-B. Produce next-package decision packet for Coordinator. No app code, no scripts, no external mutations.
+Delivered (15 files, docs-only):
+- Marked Package 5B Done across Tower, backlog, command-center, and state docs
+- Closed Sprint 2026-06-A; opened Sprint 2026-06-B
+- Updated `backlog.md`, `current-sprint.md`, `master-schedule.md`, `decision-log.md`, `coordinator-weekly-sync.md`, `report-mirror-log.md`, `shareable-status-summary.md`, `current-status.md`, `next-actions.md`, `coordinator-dashboard.md`, `backlog-roadmap.md`, `architecture-roadmap.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`
+- Package 3D recorded as candidate (not authorized); Package 5C confirmed not defined
+- All validators passed (OS audit 304/304, state freshness WARN-only, project-control sync 11/11, docs-watch 36/36, bootstrap 45/45)
+- No app code touched; no external mutations
 
-Files being modified: `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`, `docs/project-control/current-sprint.md`, `docs/project-control/kanban-board.md` (already current — no change needed), `docs/project-control/backlog.md`, `docs/project-control/master-schedule.md`, `docs/project-control/decision-log.md`, `docs/project-control/shareable-status-summary.md`, `docs/project-control/coordinator-weekly-sync.md`, `docs/project-control/report-mirror-log.md`, `docs/command-center/current-status.md`, `docs/command-center/next-actions.md`, `docs/command-center/coordinator-dashboard.md`, `docs/ops/backlog-roadmap.md`, `docs/architecture/architecture-roadmap.md`.
-
-**Next exact action:** Run validators, produce final report, stop before commit. Await Coordinator approval.
+**Next exact action:** Coordinator decides next development package — authorize Package 3D, a scoped Phase 12 continuation, or another operating action. Do not start any package without explicit authorization.
 
 ---
 
