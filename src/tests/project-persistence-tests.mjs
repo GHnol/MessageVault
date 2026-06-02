@@ -478,6 +478,62 @@ assert(stagingResult.appState.groups[0].id === 'group-staging',
 assert(stagingResult.appState.groups[0].messages.length === 1,
                                                          'staging group message restored');
 
+// ── Package 5B — PSR restore proofApprovalStates ──────────────────────────────
+
+suite('Package 5B — restore with proofApprovalStates does not produce unknown-field warning');
+
+var pasPendingRecord = {
+    productTypeId: 'message-book',
+    status: 'pending-review',
+    createdAt: '2026-06-02T00:00:00.000Z',
+    updatedAt: '2026-06-02T00:00:00.000Z',
+    submittedAt: '2026-06-02T00:00:00.000Z',
+    approvedAt: null, changesRequestedAt: null, revokedAt: null,
+    changeRequestReason: null, revokeReason: null, notes: null
+};
+var fileWithPAS = {
+    keepmeesVersion: '1',
+    projectSession: {
+        id: 'sess-pas',
+        memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        proofApprovalStates: { 'message-book': pasPendingRecord }
+    }
+};
+var rPAS = PSR.restore(fileWithPAS);
+assert(rPAS.success,                                          'restore with proofApprovalStates succeeds');
+assert(!rPAS.warnings.some(function (w) {
+    return w.indexOf('proofApprovalStates') >= 0;
+}), 'proofApprovalStates does NOT produce an unknown-field warning');
+
+suite('Package 5B — restore puts proofApprovalStates in appState');
+
+assert(rPAS.appState.proofApprovalStates !== undefined,
+    'appState.proofApprovalStates is present');
+assert(typeof rPAS.appState.proofApprovalStates === 'object' &&
+       rPAS.appState.proofApprovalStates !== null,
+    'appState.proofApprovalStates is a plain object');
+assert(rPAS.appState.proofApprovalStates['message-book'] !== undefined,
+    'message-book key is present in restored proofApprovalStates');
+assert(rPAS.appState.proofApprovalStates['message-book'].status === 'pending-review',
+    'proofApprovalStates status survives restore');
+
+suite('Package 5B — restore without proofApprovalStates returns empty object in appState');
+
+var fileNoPAS = {
+    keepmeesVersion: '1',
+    projectSession: {
+        id: 'sess-nopas',
+        memories: [], selectedMemoryIds: [], keepsakeGroups: []
+    }
+};
+var rNoPAS = PSR.restore(fileNoPAS);
+assert(rNoPAS.success,                                        'restore without proofApprovalStates succeeds');
+assert(typeof rNoPAS.appState.proofApprovalStates === 'object' &&
+       rNoPAS.appState.proofApprovalStates !== null,
+    'appState.proofApprovalStates defaults to object when absent');
+assert(Object.keys(rNoPAS.appState.proofApprovalStates).length === 0,
+    'default proofApprovalStates is empty');
+
 // ── ProjectPersistence + SessionSerialization compatibility ───────────────────
 
 suite('Compatibility — ProjectPersistence.validate accepts ProjectSession.create output wrapped in file envelope');
@@ -492,6 +548,97 @@ var compat = {
 };
 var vCompat = PP.validate(compat);
 assert(vCompat.valid,                                    'ProjectSession.create output validates as projectSession');
+
+// ── Package 5B — proofApprovalStates persistence ─────────────────────────────
+
+suite('Package 5B — createSnapshot includes proofApprovalStates when passed');
+
+var pasStates = { 'message-book': { productTypeId: 'message-book', status: 'pending-review', submittedAt: '2026-06-02T00:00:00.000Z' } };
+var snapWithPAS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [],
+    selectedIndices: { forEach: function () {} }, contactName: '',
+    proofApprovalStates: pasStates
+});
+assert(snapWithPAS.projectSession.proofApprovalStates !== undefined,
+    'createSnapshot includes proofApprovalStates in projectSession');
+assert(typeof snapWithPAS.projectSession.proofApprovalStates === 'object',
+    'proofApprovalStates in snapshot is an object');
+assert(snapWithPAS.projectSession.proofApprovalStates['message-book'] !== undefined,
+    'message-book key present in snapshot proofApprovalStates');
+assert(snapWithPAS.projectSession.proofApprovalStates['message-book'].status === 'pending-review',
+    'proofApprovalStates status round-trips correctly');
+
+suite('Package 5B — createSnapshot defaults proofApprovalStates safely');
+
+var snapNoPAS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [],
+    selectedIndices: { forEach: function () {} }, contactName: ''
+});
+assert(typeof snapNoPAS.projectSession.proofApprovalStates === 'object' &&
+       !Array.isArray(snapNoPAS.projectSession.proofApprovalStates),
+    'omitted proofApprovalStates defaults to plain object');
+assert(Object.keys(snapNoPAS.projectSession.proofApprovalStates).length === 0,
+    'default proofApprovalStates is empty object');
+
+suite('Package 5B — validate accepts snapshot with proofApprovalStates object');
+
+var vWithPAS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: {
+        id: 'sess-5b', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        proofApprovalStates: { 'message-book': { productTypeId: 'message-book', status: 'none' } }
+    }
+});
+assert(vWithPAS.valid,   'validate accepts projectSession with proofApprovalStates object');
+assert(vWithPAS.errors.length === 0, 'no errors for valid proofApprovalStates');
+
+suite('Package 5B — validate accepts older snapshots without proofApprovalStates');
+
+var vOldSnap = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: {
+        id: 'sess-old', memories: [], selectedMemoryIds: [], keepsakeGroups: []
+    }
+});
+assert(vOldSnap.valid,   'validate accepts old snapshot without proofApprovalStates');
+assert(vOldSnap.errors.length === 0, 'no errors for absent proofApprovalStates');
+
+suite('Package 5B — round-trip preserves proofApprovalStates');
+
+var rtPAS = { 'message-book': { productTypeId: 'message-book', status: 'pending-review', submittedAt: '2026-06-02T00:00:00.000Z', approvedAt: null } };
+var rtSnap5b = PP.createSnapshot({
+    memories: [], keepsakeGroups: [],
+    selectedIndices: { forEach: function () {} }, contactName: '',
+    proofApprovalStates: rtPAS
+});
+var rtJson5b = JSON.stringify(rtSnap5b);
+var rtParsed5b = JSON.parse(rtJson5b);
+var rtValidate5b = PP.validate(rtParsed5b);
+assert(rtValidate5b.valid, 'round-tripped proofApprovalStates snapshot validates');
+assert(rtParsed5b.projectSession.proofApprovalStates['message-book'].status === 'pending-review',
+    'proofApprovalStates status preserved through JSON round-trip');
+
+suite('Package 5B — invalid proofApprovalStates type fails validation');
+
+var vArrayPAS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: {
+        id: 'sess-bad', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        proofApprovalStates: ['not', 'an', 'object']
+    }
+});
+assert(!vArrayPAS.valid, 'validate rejects array proofApprovalStates');
+assert(vArrayPAS.errors.some(function (e) { return e.includes('proofApprovalStates'); }),
+    'error message references proofApprovalStates');
+
+var vStringPAS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: {
+        id: 'sess-bad2', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        proofApprovalStates: 'invalid'
+    }
+});
+assert(!vStringPAS.valid, 'validate rejects string proofApprovalStates');
 
 // ── Summary ───────────────────────────────────────────────────────────────────
 

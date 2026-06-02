@@ -47,14 +47,14 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Weekly sync COMPLETE — merged `dec952e` 2026-06-01. v1.7 COMPLETE. Package 5B: READY_FOR_PACKAGE_5B_PLANNING — not started, blocked pending Coordinator authorization. |
-| Branch | `main` |
-| main HEAD | `dec952e` — Merge branch 'docs/post-v1-7-weekly-sync-package-5b-readiness' |
-| Next action | Run `/start`. Await Coordinator authorization for Package 5B planning directive or push to origin/main. |
+| Resume into | Package 5B implementation complete on `feature/message-book-proof-approval-ux` — commit pending Coordinator approval. |
+| Branch | `feature/message-book-proof-approval-ux` |
+| main HEAD | `22e9628` — docs: sync state after post-v1.7 weekly sync merge |
+| Next action | Run `/start`. Read AI_HANDOFF.md — Package 5B complete, stop-before-commit. Await Coordinator commit authorization. |
 | OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic WARNs accepted) |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — branch mismatch WARNs are cosmetic (state-sync happens at commit) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
-| Package 5B | Not started — blocked until explicit Coordinator authorization. |
+| Package 5B | `feature/message-book-proof-approval-ux` — 1704 Node tests (101 new), E2E 64/64. Commit pending Coordinator approval. |
 | v1.7 overall | **COMPLETE** — all 6 gates merged to main 2026-06-01. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01. Docs-watch + bootstrap copy-forward. |
 | v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01. `scripts/external-sync-consistency-check.mjs` + 253 OS audit checks. |

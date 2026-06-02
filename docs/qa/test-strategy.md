@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; updated to 1603 baseline in AI Project OS v1.7 Gate 2).
-**Last updated:** 2026-06-01 (America/New_York)
+**Status:** ACTIVE (formalized in Package 2.9; updated to 1704 baseline in Package 5B + correction pass).
+**Last updated:** 2026-06-02 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -16,25 +16,26 @@ KeepMees uses five distinct test layers. Each has a different cost, a different 
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 5A — confirmed baseline 1603):**
+**Suites and counts (as of Package 5B — confirmed baseline 1695):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
-| `km-engine-tests.mjs` | ~96 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms |
+| `km-engine-tests.mjs` | 96 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms |
 | `keepsake-group-tests.mjs` | 43 | KeepsakeGroup data model |
 | `product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog, required fields |
 | `product-eligibility-tests.mjs` | 76 | Per-product eligibility evaluators, LegacyKeepsakeTypesBridge |
-| `project-persistence-tests.mjs` | 111 | Snapshot, validate, deserialize, restore (Package 3A) |
+| `project-persistence-tests.mjs` | 135 | Snapshot, validate, deserialize, restore; proofApprovalStates; PSR restore normalization (Package 3A + 5B) |
 | `operator-inbox-processor-tests.mjs` | 85 | Inbox processor extraction + processFile (Package 2.6, 2.6.1) |
 | `product-render-spec-tests.mjs` | 341 | Render specs + resolver; render-planning-target gate (Package 4A) |
 | `prototype-preview-registry-tests.mjs` | 215 | Preview registry + resolver (Package 4B) |
 | `product-experience-readiness-tests.mjs` | 337 | Combined readiness resolver across all 4 product layers (Package 4C) |
 | `product-experience-consumer-tests.mjs` | 35 | Null-safe app-side bridge (Package 4D) |
 | `proof-approval-state-tests.mjs` | 137 | Proof approval state model and transitions (Package 5A) |
+| `proof-approval-ux-tests.mjs` | 77 | Proof approval UX layer: initialize, submit, serialize/restore, prohibited fields (Package 5B) |
 
-**Total: 1603 tests.** All must remain green before any commit.
+**Total: 1704 tests.** All must remain green before any commit.
 
-Note: 1466 was the pre-Package-5A baseline. Package 5A added `proof-approval-state-tests.mjs` (137 tests), raising the confirmed baseline to 1603.
+Note: 1603 was the Package 5A baseline. Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 persistence tests (1695). The Package 5B correction pass added 9 more PSR restore tests, raising the confirmed baseline to 1704.
 
 **Run:**
 
@@ -149,20 +150,17 @@ cd scripts && npm run capture:b   # scenario B
 
 ## Future packages — testing planning
 
-Package 5A is COMPLETE (merged `297a221`). Its test suite (`proof-approval-state-tests.mjs`, 137 tests) covers the proof approval state model, allowed/forbidden transitions, and decoupling from checkout. See the Layer 1 suite table above.
+Package 5A is COMPLETE (merged `297a221`). Its test suite (`proof-approval-state-tests.mjs`, 137 tests) covers the proof approval state model, allowed/forbidden transitions, and decoupling from checkout.
 
-**Package 5B (not started — blocked until v1.7 complete and Coordinator authorizes):**
+**Package 5B — implementation complete, commit pending Coordinator approval:**
 
-When Package 5B is authorized, plan tests **from the beginning**, not after the code is written.
+Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence tests:
 
-Layers Package 5B must cover:
+- `proof-approval-ux-tests.mjs` — API shape, initialize/idempotency, getState before/after, submitForReview, double-submit guard, getStatusLabel all 5 statuses, getAllowedUserActions all 5 statuses, serialize JSON-safety, restore rehydrate/null/empty/extra-fields, duplicate-submit-after-restore, prohibited fields guard.
+- Project-persistence additions — createSnapshot with proofApprovalStates, default to {}, validate accepts/rejects, round-trip, invalid type rejection.
+- Package 5B correction pass — PSR restore: proofApprovalStates in KNOWN_SESSION_FIELDS (no warning), present in appState after restore, defaults to {} when absent from older snapshots.
 
-- **Proof approval state → UI surface wiring** — Layer 1 (unit) + Layer 2 (E2E seeded).
-- **Any new UI surface added by Package 5B** — Layer 2 required.
-- **End-to-end proof approval flow** — Layer 2 + Layer 3 if real-file paths are involved.
-- **Serialization / restore of any new state** — Layer 1 + Layer 2.
-
-Tests planned and named **before** Package 5B coding starts go in the Package 5B spec, not in this doc.
+Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
 ---
 
@@ -170,7 +168,7 @@ Tests planned and named **before** Package 5B coding starts go in the Package 5B
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 11 Node unit suites green (1603 tests).
+1. All 12 Node unit suites green (1704 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (41 tests).
 3. If real-file paths changed: E2E real-files green (64 total).
 4. If Message Book rendering changed: relevant capture harness scenario green.
