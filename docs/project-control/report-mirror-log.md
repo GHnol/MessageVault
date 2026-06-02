@@ -27,9 +27,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-02
-**Last mirrored:** RPT-20260602-001 (post-Package-5B weekly sync — Tower catch-up + next package decision packet)
-**Active gate:** None — AI Project OS v1.7 COMPLETE; Package 5B COMPLETE; weekly sync in progress on branch `docs/post-package-5b-weekly-sync`
-**Next expected mirror:** Post-sync commit closeout after Coordinator approves weekly sync commit
+**Last mirrored:** RPT-20260602-001 (post-Package-5B weekly sync — Tower catch-up + next package decision packet — COMPLETE)
+**Active gate:** None — AI Project OS v1.7 COMPLETE; Package 5B COMPLETE; weekly sync COMPLETE merged `522ad12` 2026-06-02
+**Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,7 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
-| RPT-20260602-001 | status_sync | post-Package-5B weekly sync | docs/post-package-5b-weekly-sync | f04c5bd | in-progress | 2026-06-02 |
+| RPT-20260602-001 | status_sync | post-Package-5B weekly sync | docs/post-package-5b-weekly-sync | bb45dbb / 522ad12 | mirrored | 2026-06-02 |
 | RPT-20260601-003 | status_sync | v1.7 final + weekly sync | docs/post-v1-7-weekly-sync-package-5b-readiness | 4c4ffd4 | mirrored | 2026-06-01 |
 | RPT-20260601-002 | package_closeout | v1.7 Gate 6 | docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization | 5432650 | mirrored | 2026-06-01 |
 | RPT-20260601-001 | package_closeout | v1.7 Gate 3 | docs/ai-project-os-v1-7-report-mirroring-intake | d872f68 | in-progress | 2026-06-01 |
@@ -50,7 +50,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 ### RPT-20260602-001 — status_sync — Post-Package-5B Weekly Sync + Tower Catch-Up
 
-**Created:** 2026-06-02T00:00:00Z | **Branch:** docs/post-package-5b-weekly-sync | **HEAD:** f04c5bd | **Status:** in-progress
+**Created:** 2026-06-02T00:00:00Z | **Branch:** docs/post-package-5b-weekly-sync | **HEAD:** bb45dbb (impl) / 522ad12 (merge) | **Status:** mirrored
 
 Package 5B COMPLETE — implementation `fb62b5c`, merge `dc4f86b` 2026-06-02. 1704 Node unit tests, 0 failed. E2E seeded 41/41. E2E real-files 64/64. Browser QA 36/36 PASS_MERGE_READY. `KMEngine.ProofApprovalUX` module delivered; `#bookProofPanel` wired into `index.html`. No checkout/PDF/commerce/manufacturing/Review view scope. Post-Package-5B weekly sync run as project-control Tower catch-up. Sprint 2026-06-A closed (all 17 tasks done); Sprint 2026-06-B opened. Coordinator decision packet produced: next package candidates Package 3D (Visual Regression Baseline Harness — QA infra, no external gate), Phase 12 continuation (below GATE-04), or ProductDraft/preflight. "Package 5C" not defined in repo.
 
