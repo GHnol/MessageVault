@@ -74,16 +74,19 @@
             keepmeesVersion: SCHEMA_VERSION,
             exportedAt:      now,
             projectSession: {
-                id:                opts.sessionId || ('sess-' + Date.now().toString(36)),
-                version:           SCHEMA_VERSION,
-                createdAt:         opts.createdAt || now,
-                updatedAt:         now,
-                contactName:       typeof opts.contactName === 'string' ? opts.contactName : '',
-                memories:          memories,
-                selectedMemoryIds: selectedMemoryIds,
-                keepsakeGroups:    serializedGroups,
-                productDrafts:     opts.productDrafts || [],
-                messageBookState:  safeBookState
+                id:                 opts.sessionId || ('sess-' + Date.now().toString(36)),
+                version:            SCHEMA_VERSION,
+                createdAt:          opts.createdAt || now,
+                updatedAt:          now,
+                contactName:        typeof opts.contactName === 'string' ? opts.contactName : '',
+                memories:           memories,
+                selectedMemoryIds:  selectedMemoryIds,
+                keepsakeGroups:     serializedGroups,
+                productDrafts:      opts.productDrafts || [],
+                proofApprovalStates: (opts.proofApprovalStates && typeof opts.proofApprovalStates === 'object' && !Array.isArray(opts.proofApprovalStates))
+                    ? opts.proofApprovalStates
+                    : {},
+                messageBookState:   safeBookState
             }
         };
     }
@@ -117,6 +120,10 @@
         }
         if (!Array.isArray(s.keepsakeGroups)) {
             errors.push('projectSession.keepsakeGroups must be an array');
+        }
+        if (s.proofApprovalStates !== undefined && s.proofApprovalStates !== null &&
+                (typeof s.proofApprovalStates !== 'object' || Array.isArray(s.proofApprovalStates))) {
+            errors.push('projectSession.proofApprovalStates must be a plain object if present');
         }
         return { valid: errors.length === 0, errors: errors };
     }

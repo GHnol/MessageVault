@@ -5,7 +5,7 @@
     var KNOWN_SESSION_FIELDS = [
         'id', 'version', 'createdAt', 'updatedAt', 'contactName',
         'memories', 'selectedMemoryIds', 'keepsakeGroups',
-        'productDrafts', 'messageBookState'
+        'productDrafts', 'proofApprovalStates', 'messageBookState'
     ];
 
     // Restore a deserialized project file into typed app state.
@@ -15,11 +15,12 @@
     //   { success: false, appState: null,  warnings: [...], errors: [...] }
     //
     // appState shape:
-    //   memories         — NormalizedMemory array (= chatMessagesData)
-    //   selectedIndices  — int[] of indices into memories
-    //   groups           — keepsakeGroups array (thick: with .messages refs)
-    //   contactName      — string
-    //   messageBookState — object | null
+    //   memories             — NormalizedMemory array (= chatMessagesData)
+    //   selectedIndices      — int[] of indices into memories
+    //   groups               — keepsakeGroups array (thick: with .messages refs)
+    //   contactName          — string
+    //   proofApprovalStates  — plain object (defaults to {})
+    //   messageBookState     — object | null
     //
     // Contract: does NOT mutate app globals. Caller applies the result.
     function restore(data) {
@@ -115,6 +116,13 @@
             messageBookState = s.messageBookState;
         }
 
+        // ── proofApprovalStates ───────────────────────────────────────────────
+        var proofApprovalStates = {};
+        if (s.proofApprovalStates && typeof s.proofApprovalStates === 'object' &&
+                !Array.isArray(s.proofApprovalStates)) {
+            proofApprovalStates = s.proofApprovalStates;
+        }
+
         // ── Unknown fields — report but do not crash ──────────────────────────
         for (var key in s) {
             if (s.hasOwnProperty(key) && KNOWN_SESSION_FIELDS.indexOf(key) === -1) {
@@ -125,11 +133,12 @@
         return {
             success:  errors.length === 0,
             appState: {
-                memories:         memories,
-                selectedIndices:  selectedIndices,
-                groups:           groups,
-                contactName:      contactName,
-                messageBookState: messageBookState
+                memories:            memories,
+                selectedIndices:     selectedIndices,
+                groups:              groups,
+                contactName:         contactName,
+                proofApprovalStates: proofApprovalStates,
+                messageBookState:    messageBookState
             },
             warnings: warnings,
             errors:   errors

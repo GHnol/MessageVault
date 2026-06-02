@@ -3052,7 +3052,53 @@
             .book-page-break-marker::before,
             .book-page-break-marker::after { background: repeating-linear-gradient(90deg, #3a3a3c 0, #3a3a3c 4px, transparent 4px, transparent 8px); }
             .book-page-break-marker span { color: #3a3a3c; }
+
+            .book-proof-panel { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.07); }
+            .book-proof-hint { color: #636366; }
+            .book-proof-status { color: #aeaeb2; }
+            .book-proof-status.book-proof-pending { color: #0a84ff; }
+            .book-proof-status.book-proof-approved { color: #30d158; }
+            .book-proof-status.book-proof-changes { color: #ff9f0a; }
+            .book-proof-status.book-proof-revoked { color: #636366; }
+            .book-proof-reason { color: #636366; }
+            .book-proof-disabled .book-proof-status { color: #3a3a3c; }
         }
+
+        .book-proof-panel {
+            width: 100%;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+        .book-proof-panel-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .book-proof-btn {
+            background: #007aff; color: #fff;
+            border: none; border-radius: 8px;
+            padding: 7px 14px; font-size: 13px; font-weight: 500;
+            cursor: pointer; white-space: nowrap; letter-spacing: -0.1px;
+        }
+        .book-proof-btn:hover { background: #0066cc; }
+        .book-proof-hint {
+            font-size: 12px; color: #8e8e93; margin: 0; flex: 1;
+        }
+        .book-proof-status {
+            font-size: 13px; font-weight: 500; color: #48484a;
+        }
+        .book-proof-status.book-proof-pending { color: #007aff; }
+        .book-proof-status.book-proof-approved { color: #34c759; }
+        .book-proof-status.book-proof-changes { color: #ff9f0a; }
+        .book-proof-status.book-proof-revoked { color: #8e8e93; }
+        .book-proof-reason {
+            font-size: 12px; color: #8e8e93; margin: 2px 0 0; flex-basis: 100%;
+        }
+        .book-proof-disabled .book-proof-status { color: #c7c7cc; }
     </style>
 </head>
 <body>
@@ -3331,6 +3377,7 @@
                 </div>
             </div>
         </div>
+        <div id="bookProofPanel" class="book-proof-panel" style="display:none;"></div>
         <div class="book-shell">
             <div class="book-controls-bar" id="bookControlsBar"></div>
             <div class="book-sections-bar" id="bookSectionsBar"></div>
@@ -3438,6 +3485,14 @@
     <script src="src/products/product-experience-consumer.js"></script>
 
     <!-- ════════════════════════════════════════════
+         KEEPMEES ENGINE — PACKAGE 5B
+         Proof approval: state model → UX layer.
+         Load order: proof-approval-state → proof-approval-ux
+    ════════════════════════════════════════════ -->
+    <script src="src/products/proof-approval-state.js"></script>
+    <script src="src/products/proof-approval-ux.js"></script>
+
+    <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>
@@ -3518,6 +3573,7 @@
         const bookControlsBar = document.getElementById('bookControlsBar');
         const bookSectionsBar = document.getElementById('bookSectionsBar');
         const bookCanvas = document.getElementById('bookCanvas');
+        const bookProofPanel = document.getElementById('bookProofPanel');
         const reviewBookBtn = document.getElementById('reviewBookBtn');
 
         // Loading
@@ -8117,6 +8173,67 @@ ${keepsakeFooter}
             });
         }
 
+        function renderBookProofPanel() {
+            const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            if (!UX) { bookProofPanel.style.display = 'none'; return; }
+
+            UX.initialize('message-book');
+
+            const state = messageBookState;
+            const hasContent = !!(state && state.sections &&
+                state.sections.some(function (s) {
+                    return s.included !== false && s.messages && s.messages.length > 0;
+                }));
+
+            const record = UX.getState('message-book');
+            const status = record ? record.status : 'none';
+
+            var html = '';
+            if (status === 'none') {
+                if (hasContent) {
+                    html = '<div class="book-proof-panel-inner">' +
+                        '<button type="button" class="book-proof-btn" id="bookProofSubmitBtn">Mark ready for proof review</button>' +
+                        '<p class="book-proof-hint">Records local proof review status. It does not send files, create a PDF, or place an order.</p>' +
+                        '</div>';
+                } else {
+                    html = '<div class="book-proof-panel-inner book-proof-disabled">' +
+                        '<span class="book-proof-status">No content — add messages to a keepsake group to enable proof review.</span>' +
+                        '</div>';
+                }
+            } else if (status === 'pending-review') {
+                html = '<div class="book-proof-panel-inner">' +
+                    '<span class="book-proof-status book-proof-pending">Marked ready for proof review</span>' +
+                    '</div>';
+            } else if (status === 'approved') {
+                html = '<div class="book-proof-panel-inner">' +
+                    '<span class="book-proof-status book-proof-approved">Approved</span>' +
+                    '</div>';
+            } else if (status === 'changes-requested') {
+                var crReason = record.changeRequestReason || '';
+                html = '<div class="book-proof-panel-inner">' +
+                    '<span class="book-proof-status book-proof-changes">Changes requested</span>' +
+                    (crReason ? '<p class="book-proof-reason">' + escapeHTML(crReason) + '</p>' : '') +
+                    '</div>';
+            } else if (status === 'revoked') {
+                var rvReason = record.revokeReason || '';
+                html = '<div class="book-proof-panel-inner">' +
+                    '<span class="book-proof-status book-proof-revoked">Approval revoked</span>' +
+                    (rvReason ? '<p class="book-proof-reason">' + escapeHTML(rvReason) + '</p>' : '') +
+                    '</div>';
+            }
+
+            bookProofPanel.innerHTML = html;
+            bookProofPanel.style.display = '';
+
+            const submitBtn = document.getElementById('bookProofSubmitBtn');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function () {
+                    const result = UX.submitForReview('message-book');
+                    if (result.success) renderBookProofPanel();
+                });
+            }
+        }
+
         function renderBookView() {
             syncBookSections();
 
@@ -8177,6 +8294,8 @@ ${keepsakeFooter}
             activePages.forEach((page, i) => {
                 bookCanvas.appendChild(buildPageDOMElement(page, i + 1, showPgNums));
             });
+
+            renderBookProofPanel();
         }
 
         function showBookView(returnView) {
@@ -8221,16 +8340,18 @@ ${keepsakeFooter}
         }
 
         function saveProject() {
-            const PP = window.KMEngine && window.KMEngine.ProjectPersistence;
-            const IO = window.KMEngine && window.KMEngine.ProjectFileIO;
+            const PP   = window.KMEngine && window.KMEngine.ProjectPersistence;
+            const IO   = window.KMEngine && window.KMEngine.ProjectFileIO;
+            const PAUX = window.KMEngine && window.KMEngine.ProofApprovalUX;
             if (!PP || !IO) return;
 
             const snapshot = PP.createSnapshot({
-                memories:        window.chatMessagesData || [],
-                keepsakeGroups:  keepsakeGroups,
-                selectedIndices: selectedIndices,
-                contactName:     chatHeaderName.innerText.trim(),
-                messageBookState: messageBookState
+                memories:           window.chatMessagesData || [],
+                keepsakeGroups:     keepsakeGroups,
+                selectedIndices:    selectedIndices,
+                contactName:        chatHeaderName.innerText.trim(),
+                messageBookState:   messageBookState,
+                proofApprovalStates: PAUX ? PAUX.serialize() : {}
             });
             IO.save(snapshot, chatHeaderName.innerText.trim());
         }
@@ -8272,6 +8393,11 @@ ${keepsakeFooter}
 
             if (appState.messageBookState) {
                 messageBookState = appState.messageBookState;
+            }
+
+            const PAUX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            if (PAUX) {
+                PAUX.restore(appState.proofApprovalStates || {});
             }
 
             // Render conversation (also shows chatView)

@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.7 COMPLETE. Post-v1.7 weekly sync COMPLETE — merged `dec952e` 2026-06-01. Package 5B readiness: READY_FOR_PACKAGE_5B_PLANNING. Package 5B: not started — blocked until Coordinator explicitly authorizes product work. Working tree clean. 288 OS audit pass.
+**Status:** `package-5b-complete` — Package 5B implementation complete on branch `feature/message-book-proof-approval-ux`. All files written, tested, E2E green. Commit pending Coordinator approval.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
 ---
 
@@ -18,41 +18,33 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — weekly sync complete, v1.7 COMPLETE, awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `dec952e` — Merge branch 'docs/post-v1-7-weekly-sync-package-5b-readiness' |
+| **Active pass** | `Package 5B — Message Book Proof Approval UX Foundation` |
+| **Active branch** | `feature/message-book-proof-approval-ux` |
+| **Branch base** | `main` @ `22e9628` |
+| **main HEAD** | `22e9628` — docs: sync state after post-v1.7 weekly sync merge |
 | **Last completed pass** | `AI Project OS v1.7 Gate 6` — docs-watch and bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
-| **Active package** | None (OS foundation work only — not a product package) |
+| **Active package** | `Package 5B — Message Book Proof Approval UX Foundation` — implementation complete, commit pending Coordinator approval |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
-| **Package 5B** | Not started — blocked until explicit Coordinator authorization |
+| **Package 5B** | implementation complete — commit pending Coordinator approval |
 
 ---
 
-## Objective (current pass — v1.7 Gate 6)
+## Objective (current pass — Package 5B)
 
-AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization.
+Package 5B — Message Book Proof Approval UX Foundation.
 
-**Gate 6 IN PROGRESS — implementation complete; commit pending Coordinator approval.**
+**IMPLEMENTATION COMPLETE — stop before commit, awaiting Coordinator approval.**
 
 Delivered:
-1. `docs/ai-system/documentation-watch-policy.md` — ADOPT/DEFER/REJECT/MONITOR policy; scrutinous adoption rule; browsing boundary; cadence; trigger events.
-2. `docs/ai-system/documentation-watch-sources.md` — 10 official source categories with adoption risk and review triggers.
-3. `docs/ai-system/documentation-watch-evaluation-template.md` — reusable 30+-field evaluation template.
-4. `docs/ai-system/documentation-watch-log.md` — durable log; Gate 6 establishment entry; no live browsing.
-5. `docs/ai-system/bootstrap-copy-forward-guide.md` — universal vs. project-specific vs. never-copy guidance.
-6. `docs/ai-system/universal-vs-project-specific-map.md` — full artifact table for every OS file.
-7. `docs/ai-system/puzzle-alignment-checklist.md` — Puzzle gap analysis; what it needs from v1.6 and v1.7.
-8. `docs/ai-system/future-repo-bootstrap-checklist.md` — bootstrap sequence for any new serious repo.
-9. `.claude/skills/documentation-watch/SKILL.md` + `.claude/commands/documentation-watch.md` — new skill and command.
-10. `.claude/skills/bootstrap-copy-forward/SKILL.md` + `.claude/commands/bootstrap-copy-forward.md` — new skill and command.
-11. `scripts/documentation-watch-check.mjs` — docs-watch framework validator.
-12. `scripts/bootstrap-copy-forward-audit.mjs` — copy-forward readiness validator.
-13. `scripts/os-self-audit.mjs` — Section 6j checks added (~38 new checks).
-14. `docs/ai-system/os-self-audit-checklist.md` — Section 6j added (24 items).
-15. Project-control state, CHANGELOG, version-history, current-sprint, kanban-board updated.
-16. `.claude/skills/README.md`, `.claude/commands/README.md`, `docs/ai-system/README.md`, `docs/ai-system/universal-standards.md` updated.
+1. `src/products/proof-approval-ux.js` (new) — KMEngine.ProofApprovalUX IIFE module. initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore. No DOM, no external deps. All transitions via KMEngine.ProofApprovalState.transition().
+2. `src/tests/proof-approval-ux-tests.mjs` (new) — 77 tests across 15 suites covering full API, all statuses, serialize/restore, idempotency, prohibited fields guard.
+3. `src/state/project-persistence.js` (modified) — Added proofApprovalStates to createSnapshot and validation. Backward-compatible: old snapshots without the field remain valid.
+4. `src/tests/project-persistence-tests.mjs` (modified) — Added 15 new Package 5B tests across 6 suites.
+5. `index.html` (modified) — Script tags, DOM element (#bookProofPanel), CSS, DOM ref, renderBookProofPanel(), renderBookView() call, saveProject() wiring, handleProjectFileLoad() restore wiring.
 
-**Next exact action:** Coordinator reviews Gate 6 implementation. If approved, commit and merge, then run final v1.7 state sync.
+**Test results:** 1704 Node unit tests (1603 baseline + 101 new), 0 failed. E2E seeded 41/41, real-files 64/64 — all green. Correction pass: scripts/package.json and scripts/package-lock.json reverted. PSR restore warning fixed: proofApprovalStates added to KNOWN_SESSION_FIELDS, returned in appState, index.html bypass removed.
+
+**Next exact action:** Coordinator reviews Package 5B implementation report. If approved, commit with recommended message. Do not commit or push without approval.
 
 ---
 
