@@ -321,14 +321,16 @@ Package 5A (KeepMees Message Book Proof Approval State Foundation) is the KeepMe
 - Does not make any product decisions for the new project.
 - Does not write to external tools (GitHub Projects, Google Calendar, ClickUp, TickTick) — all external sync is dry-run/apply with approval.
 
-**What the template does include (updated in OS v1.7 Gate 6):**
+**What the template does include (updated in Operator Reliability Repair, 2026-06-02):**
 - Skill folders with SKILL.md frontmatter — the canonical protocol layer.
 - Thin command wrappers in `.claude/commands/` that delegate to skills.
 - Closeout sync contract (`docs/dev/closeout-sync-contract.md`) — mandatory internal sync after meaningful closeouts.
 - Project-control sync foundation — policy, dry-run format, external sync safety rules, example ID map.
 - OS self-audit (`/os-audit` + `scripts/os-self-audit.mjs`) — required before claiming bootstrap complete.
 - Notification setup wizard (`/notification-setup-wizard` + `scripts/setup-claude-notification.ps1`).
+- Notification check script (`scripts/notification-check.mjs`) — diagnoses PermissionRequest and Stop hook config.
 - Documentation-watch framework — policy, source list, evaluation template, log, skill, command, and validator script.
 - Bootstrap copy-forward guidance — universal-vs-project-specific map, Puzzle alignment checklist, future-repo bootstrap checklist, copy-forward skill, command, and audit script.
+- Raw transcript capture protocol — file-first response protocol, skill, command, and verification script (`scripts/raw-transcript-check.mjs`). Verbatim final-response capture; gitignored; policy-driven.
 
 These are intentional gaps and additions. They keep the bootstrap safe and copy-pasteable.

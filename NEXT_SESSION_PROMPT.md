@@ -47,14 +47,15 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 5B COMPLETE — merged `dc4f86b` 2026-06-02. State-sync complete. Awaiting Coordinator direction for next package. |
-| Branch | `main` |
-| main HEAD | `dc4f86b` — merge: add Message Book proof approval UX foundation |
-| Next action | Run `/start`. Await Coordinator authorization for next package. |
-| OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
+| Resume into | Operator Reliability Repair — implementation complete on `docs/operator-reliability-repair`, uncommitted. Awaiting Coordinator commit authorization. After commit + merge: awaiting next package direction. |
+| Branch | `docs/operator-reliability-repair` |
+| main HEAD | `f5884ea` — merge: sync operating docs after Package 5B completion |
+| Next action | Run `/start`. Coordinator authorizes Operator Reliability Repair commit, then decides next package. |
+| OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
+| Operator Reliability Repair | Implementation complete — uncommitted. 19 files changed/created. OS audit 304/304. Notification Stop hook missing (manual user setup required — see `docs/dev/notification-setup.md`). |
 | v1.7 overall | **COMPLETE** — all 6 gates merged to main 2026-06-01. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01. Docs-watch + bootstrap copy-forward. |
 | v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01. `scripts/external-sync-consistency-check.mjs` + 253 OS audit checks. |

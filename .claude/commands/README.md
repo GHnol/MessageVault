@@ -38,6 +38,7 @@ When a command is invoked, Claude follows the skill protocol. The command file i
 | `/external-sync-consistency` | `external-sync-consistency` | Run the external sync consistency validator — compare source records, local map, logs, and optional live read-only state | `docs/project-control/external-sync-consistency-policy.md` |
 | `/documentation-watch` | `documentation-watch` | Run docs-watch review — evaluate official tool changes against scrutinous adoption rule; classify as ADOPT/DEFER/REJECT/MONITOR | `docs/ai-system/documentation-watch-policy.md` |
 | `/bootstrap-copy-forward` | `bootstrap-copy-forward` | Run bootstrap copy-forward audit — verify readiness and plan for copying OS from KeepMees into Puzzle or future repo | `docs/ai-system/bootstrap-copy-forward-guide.md` |
+| `/raw-transcript-capture` | `raw-transcript-capture` | Execute file-first response protocol — write full final response to local gitignored file before returning in chat | `docs/dev/raw-transcript-capture-protocol.md` |
 
 ---
 

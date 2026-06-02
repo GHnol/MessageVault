@@ -214,6 +214,69 @@ If empty, the default is `~/.claude/`.
 
 ---
 
+## Completion sound (Stop hook) — manual setup required
+
+> **Status: Manual setup required — not repo-enforceable.**
+>
+> The `Stop` hook fires when Claude finishes a turn. It is not committed to the repo and cannot be enforced from the repo. Each user must add it manually to their own `CLAUDE_CONFIG_DIR/settings.json`. After adding it, verify with `node scripts/notification-check.mjs`.
+
+The `PermissionRequest` hook fires when Claude is waiting for tool permission. The **completion sound** — the sound that fires when Claude finishes a turn — requires a separate `Stop` hook. These are two distinct hook events.
+
+If you hear a permission sound but no completion sound, the `Stop` hook is missing from your settings.json.
+
+### Adding the Stop hook
+
+Add a `Stop` entry alongside any existing hooks in your user-level `settings.json`:
+
+```json
+{
+  "hooks": {
+    "Notification": "powershell -NoProfile -Command \"[console]::beep(880,250)\"",
+    "Stop": "powershell -NoProfile -Command \"[console]::beep(660,200)\""
+  }
+}
+```
+
+Use a different pitch (660 Hz vs 880 Hz) so you can distinguish "done thinking" from "waiting for permission."
+
+**This change must be made in each `CLAUDE_CONFIG_DIR` you use for KeepMees work.** See § "Multi-account setup" and § "CLAUDE_CONFIG_DIR troubleshooting" below.
+
+The repo cannot enforce this setting — it is user-level only. No repo file, script, or hook can install it for you. The `setup-claude-notification.ps1` script installs `PermissionRequest` only; the `Stop` hook must be added manually until the wizard is updated in a future authorized pass.
+
+### Diagnosing your current notification config
+
+After adding the hook, verify it was applied correctly:
+
+```
+node scripts/notification-check.mjs
+```
+
+This script (dependency-free, read-only):
+- Detects all Claude Code config dirs (default, iCloud account dir, `CLAUDE_CONFIG_DIR` env)
+- Reports which hook events are configured in each settings.json
+- Reports `[PASS]` or `[WARN]` for `Stop` (completion sound) and `Notification`/`PermissionRequest`
+- Prints manual test instructions
+
+**Required outcome after adding the Stop hook:** `[PASS] Stop hook is configured` for every config dir used for KeepMees work.
+
+Run it any time you suspect a hook is not firing.
+
+### Completion sound — manual test
+
+1. Run any Claude Code prompt that generates a response.
+2. When Claude finishes and the prompt returns, you should hear the completion sound.
+3. If not heard: test the `Stop` hook command directly in PowerShell:
+   ```powershell
+   powershell -NoProfile -Command "[console]::beep(660,200)"
+   ```
+4. If no sound: check Windows volume mixer → find your terminal app → unmute.
+5. If still no sound: try a system sound instead:
+   ```powershell
+   powershell -NoProfile -Command "[System.Media.SystemSounds]::Asterisk.Play()"
+   ```
+
+---
+
 ## What NOT to do
 
 - **Do not commit your hook config to the repo.** `~/.claude/settings.json` is a personal preference. Each contributor's OS, sound preferences, and audio setup differ.

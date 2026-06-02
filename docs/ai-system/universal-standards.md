@@ -333,6 +333,8 @@ Every claim this OS makes is labelled. Status meanings:
 | Git identity / remote correctness before commit/push | Policy-driven — `CLAUDE.md` § "Git identity (KeepMees repo)" requires the agent to run `git remote -v`, `git config user.name`, `git config user.email` before any git push, commit, or gh command. **No hook or script auto-enforces this** unless a future pass adds one. |
 | Commit / push / merge | Policy-driven — no commit, push, or merge without explicit user instruction. The agent must wait. (Git itself does not enforce this; the rule is procedural.) |
 | Permission/wait notification beep | User-level setup — each contributor installs the hook in their own `CLAUDE_CONFIG_DIR`; once installed, the harness fires it automatically for that contributor; not committed; not enforced on other contributors |
+| Completion sound (Stop hook) | User-level setup — distinct from the permission beep; requires a `Stop` hook in settings.json; diagnose with `node scripts/notification-check.mjs`; see `docs/dev/notification-setup.md` § "Completion sound" |
+| Raw transcript capture (file-first response protocol) | Policy-driven — Claude must write the full final response to `raw-transcripts/claude-code/` before returning it in chat; gitignored; enforced procedurally; not technically enforced by harness. See `docs/dev/raw-transcript-capture-protocol.md`. Verify: `node scripts/raw-transcript-check.mjs` |
 | Model routing (tier per task) | Semi-automatic — agent recommends, user confirms costly switches |
 | Model switching mechanics | Manual — the user invokes the switch; the agent recommends a checkpoint first (policy-driven) |
 | Tool switching (Claude ↔ Codex) | Semi-automatic — agent writes handoff and produces transfer packet; user confirms the switch |

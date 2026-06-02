@@ -159,10 +159,30 @@ Package 5B remains blocked until AI Project OS v1.7 all gates are complete and t
 
 ---
 
+## Raw transcript capture vs report mirroring
+
+These are distinct and complementary — not alternatives:
+
+| | Raw transcript capture | Report mirroring |
+|---|---|---|
+| **Purpose** | Full verbatim final response for operator review | Sanitized operational summary for repo history |
+| **Committed** | No — local only, gitignored | Yes — `report-mirror-log.md` |
+| **Content** | Full verbatim response | Stripped down to key operational facts |
+| **Trigger** | Every operationally significant final response | Every meaningful closeout event |
+| **Path** | `raw-transcripts/claude-code/` | `docs/project-control/report-mirror-log.md` |
+
+A raw transcript file for a closeout may be used as input to the `report-mirror-intake.mjs` script. Always run `--redact-only` first to confirm no credential-adjacent content is present before passing to `--apply`.
+
+Protocol: `docs/dev/raw-transcript-capture-protocol.md`
+Script: `scripts/raw-transcript-check.mjs`
+
+---
+
 ## Local paths for raw artifacts
 
 Raw transcripts, local report artifacts, and generated intake files must stay at:
 
+- `raw-transcripts/claude-code/` — gitignored (verbatim final response files)
 - `local-reports/` — gitignored
 - `local-report-intake/` — gitignored
 - `local-sync-reports/` — gitignored

@@ -150,11 +150,23 @@ Output shows the sanitized version and lists what was redacted. No entry is appe
 
 ## How to handle raw transcript exports
 
-1. **Never commit raw exports.** Claude Code session exports and ChatGPT conversation exports are private.
-2. Store them at `local-reports/` or `local-report-intake/` — both are gitignored.
-3. Run the intake script in `--redact-only` mode first to preview sanitization.
-4. If the redacted version is still too raw (full conversation visible, personal context, etc.), do not use it as intake. Write the sanitized summary manually instead.
-5. Never pipe a full raw transcript into `--apply` mode.
+**File-first raw transcripts** (from the Operator Reliability Repair protocol) are stored at `raw-transcripts/claude-code/` and are always gitignored. These contain the verbatim final Claude Code response. They are distinct from sanitized mirror entries.
+
+To use a raw transcript file as input for report mirroring:
+
+1. **Never commit raw transcript files.** They are local only, stored at `raw-transcripts/claude-code/` (gitignored).
+2. Run `--redact-only` first to preview sanitization before any apply:
+   ```
+   node scripts/report-mirror-intake.mjs --input raw-transcripts/claude-code/<file>.md --redact-only
+   ```
+3. Review the redacted version — if it is still too raw (full conversation visible, personal context, etc.), write the sanitized summary manually instead.
+4. Never pipe a raw transcript file directly to `--apply` without a dry-run review.
+
+For non-file-first transcripts (pre-existing session exports, ChatGPT exports):
+- Store at `local-reports/` or `local-report-intake/` — both are gitignored.
+- Follow the same redact-only → dry-run → apply sequence.
+
+See `docs/dev/raw-transcript-capture-protocol.md` for the file-first protocol and the distinction between raw transcripts and report mirror entries.
 
 ---
 

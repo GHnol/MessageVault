@@ -58,6 +58,15 @@ Before completing the handoff, determine the report mirror outcome:
 
 See `docs/project-control/report-mirror-policy.md`.
 
+Use the file-first response record protocol (Type 1) for the handoff transfer block. Before returning the final transfer packet in chat:
+
+1. Write the full transfer packet to `raw-transcripts/claude-code/<timestamp>-handoff.md`.
+2. Confirm the file is gitignored and does not appear in `git status --short`.
+3. Return the same content in chat.
+4. Append the capture status block. State "File-first response record written" — not "raw transcript exact match."
+
+See `docs/dev/raw-transcript-capture-protocol.md`.
+
 After updating `AI_HANDOFF.md`, check whether `CURRENT_STATE.md` and `NEXT_SESSION_PROMPT.md` also need updating. Apply the Post-Commit State Rule: update only if the docs would misdirect the next agent. Cosmetic HEAD lag does not require a sync commit.
 
 If this handoff is at a package boundary, also check:
