@@ -112,10 +112,21 @@ Appended to: docs/project-control/report-mirror-log.md
 Mirror status: mirrored
 ```
 
+## Raw transcript files vs report mirror input
+
+Raw transcript files (`raw-transcripts/claude-code/*.md`) are the verbatim final Claude Code response — captured locally by the file-first response protocol. They are NOT the same as report mirror input.
+
+- Raw transcript files are gitignored, local-only, and never committed.
+- Report mirror input is sanitized and committed to `report-mirror-log.md`.
+- If a raw transcript file exists for a closeout, it may be used as input for `--input` to the report-mirror-intake script, but run `--redact-only` first to confirm no credential-adjacent content is present.
+- Never pipe a raw transcript file directly to `--apply` without a dry-run review.
+
+See `docs/dev/raw-transcript-capture-protocol.md` for the file-first protocol.
+
 ## Hard stops
 
 - Do not run `--apply` on input that has not passed a dry-run review.
-- Do not run `--apply` on raw transcript files.
+- Do not run `--apply` on raw transcript files without dry-run review.
 - Do not run `--apply` if the dry-run reports a secret-risk rejection.
 - Do not commit `local-report-intake/` or `local-reports/` files.
 - Do not use `--apply` on input from `local-sync-reports/` (external sync artifacts — reference only).

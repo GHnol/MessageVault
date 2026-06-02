@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 5B COMPLETE. Implementation committed `fb62b5c`, merged to main `dc4f86b` 2026-06-02. Browser QA passed (36/36). 1704 Node tests green. Working tree clean. No active package.
+**Status:** `ready-for-merge` — Operator Reliability Repair (OS/operator workflow only, not a product package). Committed `81b2329` on `docs/operator-reliability-repair`. Awaiting Coordinator merge authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,14 +18,46 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — Package 5B complete; awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `dc4f86b` — merge: add Message Book proof approval UX foundation |
+| **Active pass** | Operator Reliability Repair — OS/operator workflow only |
+| **Active branch** | `docs/operator-reliability-repair` | committed `81b2329` |
+| **main HEAD** | `f5884ea` — merge: sync operating docs after Package 5B completion |
 | **Last completed pass** | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
-| **Active package** | None |
-| **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — implementation `fb62b5c`, merge `dc4f86b` |
+| **Active package** | None (this is OS/operator repair, not a product package) |
+| **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
+
+---
+
+## Objective (current pass — Operator Reliability Repair)
+
+Operator Reliability Repair — OS/operator workflow only. **Implementation complete; awaiting Coordinator commit authorization.**
+
+Delivered:
+1. `docs/dev/raw-transcript-capture-protocol.md` (new) — honest file-first response protocol with limitation statement, metadata block format, path convention, and gitignore verification steps.
+2. `.claude/skills/raw-transcript-capture/SKILL.md` (new) — skill for executing the file-first protocol at every operationally significant response.
+3. `.claude/commands/raw-transcript-capture.md` (new) — thin command wrapper.
+4. `scripts/raw-transcript-check.mjs` (new) — dependency-free verification script; confirms gitignore, lists recent transcripts, checks git status.
+5. `scripts/notification-check.mjs` (new) — dependency-free diagnostic for PermissionRequest and Stop hook config across all config dirs.
+6. `.claude/skills/closeout/SKILL.md` (modified) — added file-first protocol step.
+7. `.claude/skills/handoff/SKILL.md` (modified) — added file-first protocol step.
+8. `.claude/skills/report-intake/SKILL.md` (modified) — added raw transcript vs mirror distinction.
+9. `.claude/skills/weekly-sync/SKILL.md` (modified) — added file-first protocol step.
+10. `.claude/commands/README.md` (modified) — added `/raw-transcript-capture` command.
+11. `.claude/skills/README.md` (modified) — added skill to roster; updated count to 22.
+12. `docs/dev/closeout-sync-contract.md` (modified) — added Raw transcript capture requirement section.
+13. `docs/dev/notification-setup.md` (modified) — added completion sound (Stop hook) section + diagnostic script reference.
+14. `docs/project-control/report-mirror-policy.md` (modified) — added raw transcript vs mirror distinction section.
+15. `docs/project-control/report-intake-runbook.md` (modified) — updated raw transcript export handling.
+16. `docs/ai-system/universal-standards.md` (modified) — added raw transcript capture and completion sound to automation table.
+17. `docs/ai-system/bootstrap-template.md` (modified) — added raw transcript capture and notification-check to bootstrap template.
+18. `docs/ai-system/os-self-audit-checklist.md` (modified) — added Section 6k (16 new checks).
+19. `scripts/os-self-audit.mjs` (modified) — added Section 6k checks; total now 304 pass.
+
+**OS audit:** 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE.
+**Notification diagnosis:** `Stop` hook is missing in both config dirs (`~/.claude-account-icloud` and `~/.claude`). `Notification` and `PermissionRequest` are configured. Manual step required to add Stop hook — see `docs/dev/notification-setup.md`.
+
+**Next exact action:** Coordinator reviews and authorizes merge of `docs/operator-reliability-repair` → `main`. Do not push or merge without explicit authorization.
 
 ---
 

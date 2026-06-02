@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01; Section 6j added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization, 2026-06-01)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01; Section 6j added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization, 2026-06-01; Section 6k added in Operator Reliability Repair 2026-06-02)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -386,6 +386,36 @@ The audit does **not** require:
 - A live documentation-watch review to have been completed (the framework being installed is sufficient)
 - Puzzle alignment to be complete (the checklist documents the gap; completion requires separate Coordinator authorization)
 - Any external copy-forward operation to have been performed
+
+---
+
+## 6k. Raw transcript capture and notification reliability layer (Operator Reliability Repair, 2026-06-02)
+
+Required when the repo has been updated to include the Operator Reliability Repair pass.
+
+| Item | Classification | Check |
+|---|---|---|
+| `docs/dev/raw-transcript-capture-protocol.md` exists | Required | `Glob docs/dev/raw-transcript-capture-protocol.md` |
+| `raw-transcript-capture-protocol.md` has file-first protocol section | Required | `Grep "File-first response protocol" docs/dev/raw-transcript-capture-protocol.md` |
+| `raw-transcript-capture-protocol.md` has honest type distinction (Type 2 not yet implemented) | Required | `Grep "Not yet implemented" docs/dev/raw-transcript-capture-protocol.md` |
+| `raw-transcript-capture-protocol.md` has metadata block format | Required | `Grep "Written before final response" docs/dev/raw-transcript-capture-protocol.md` |
+| `scripts/raw-transcript-check.mjs` exists | Required | `Glob scripts/raw-transcript-check.mjs` |
+| `scripts/notification-check.mjs` exists | Required | `Glob scripts/notification-check.mjs` |
+| `.claude/skills/raw-transcript-capture/SKILL.md` exists with frontmatter | Required | `Read .claude/skills/raw-transcript-capture/SKILL.md` |
+| `.claude/commands/raw-transcript-capture.md` exists | Required | `Glob .claude/commands/raw-transcript-capture.md` |
+| `raw-transcripts/` is gitignored | Required | `git check-ignore -v raw-transcripts/example.md` |
+| `closeout-sync-contract.md` has file-first response record requirement | Required | `Grep "File-first response record requirement" docs/dev/closeout-sync-contract.md` |
+| `closeout` SKILL.md references `raw-transcript-capture-protocol.md` | Required | `Grep "raw-transcript-capture-protocol.md" .claude/skills/closeout/SKILL.md` |
+| `handoff` SKILL.md references `raw-transcript-capture-protocol.md` | Required | `Grep "raw-transcript-capture-protocol.md" .claude/skills/handoff/SKILL.md` |
+| `report-mirror-policy.md` distinguishes raw transcript from mirror | Required | `Grep "Raw transcript capture vs report mirroring" docs/project-control/report-mirror-policy.md` |
+| `universal-standards.md` has raw transcript capture entry in automation table | Required | `Grep "Raw transcript capture" docs/ai-system/universal-standards.md` |
+| `notification-setup.md` has completion sound (Stop hook) section | Required | `Grep "Completion sound" docs/dev/notification-setup.md` |
+| `notification-check.mjs` checks for Stop hook | Required | `Grep "Stop hook" scripts/notification-check.mjs` |
+
+The audit does **not** require:
+- Any raw transcript file to exist in `raw-transcripts/claude-code/` (the directory is created on first use)
+- The notification hooks to already be installed (user-level setup; the diagnostic script checks status)
+- Byte-for-byte proof of file-chat identity (the protocol documents this as technically unenforceable)
 
 ---
 

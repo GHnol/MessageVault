@@ -60,6 +60,16 @@ Run the report mirror check before recommending commit or merge:
 
 See `docs/project-control/report-mirror-policy.md` and `docs/dev/closeout-sync-contract.md` § "Report mirroring" for when each outcome applies.
 
+Use the file-first response record protocol (Type 1) for the closeout report itself. Before returning the final closeout report in chat:
+
+1. Write the full report to `raw-transcripts/claude-code/<timestamp>-closeout-<package>.md`.
+2. Confirm `git check-ignore -v` confirms the file is gitignored.
+3. Confirm the file does not appear in `git status --short`.
+4. Return the same content in chat.
+5. Append the capture status block to the end of the closeout report. State "File-first response record written" — not "raw transcript exact match."
+
+See `docs/dev/raw-transcript-capture-protocol.md` for the full protocol and capture status block format. Verify with `node scripts/raw-transcript-check.mjs`.
+
 After package verification and continuity file updates, run the internal sync check defined in `docs/dev/closeout-sync-contract.md`. The sync check verifies:
 
 - `CURRENT_STATE.md` — updated with last-closed package

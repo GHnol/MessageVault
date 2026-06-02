@@ -288,6 +288,40 @@ Log: `docs/project-control/external-sync-consistency-log.md`
 
 ---
 
+## File-first response record requirement (Operator Reliability Repair, 2026-06-02)
+
+Every operationally significant final response must use the file-first response record protocol (Type 1). At every meaningful closeout, the closeout report itself must be written to a local gitignored file before being returned in chat.
+
+**This is Type 1 capture only.** The file-first response record writes Claude's planned response to a local file before the chat response is generated. It is the canonical response record when no terminal-level logging is active. It is NOT a byte-for-byte terminal transcript. True terminal transcript capture (Type 2) is not yet implemented.
+
+**Required steps (within the `closeout` and `handoff` skills):**
+
+1. Compose the full final response before returning any chat output.
+2. Write to `raw-transcripts/claude-code/<timestamp>-closeout-<task>.md` (gitignored).
+3. Confirm `git check-ignore -v` confirms the file is gitignored.
+4. Confirm the file does not appear in `git status --short`.
+5. Return the same content in chat.
+6. Append the capture status block at the end of the response. Say "File-first response record written" — not "raw transcript exact match."
+
+**The honest limitation:** The file-first record is written from Claude's planned response content. The chat response is then generated from the same plan in a separate step. Minor differences can exist between the two. The correct claim is "File-first response record (Type 1) — substantive content matches planned response; not a byte-for-byte terminal transcript." Do not claim byte-for-byte identity with the terminal output.
+
+**Verification script:**
+```
+node scripts/raw-transcript-check.mjs
+```
+
+**Protocol document:** `docs/dev/raw-transcript-capture-protocol.md`
+
+| Outcome | Capture type | Meaning |
+|---|---|---|
+| File written before chat response | Type 1 — PASS | File-first response record protocol followed |
+| File written after chat response | Type 1 — PARTIAL | Post-hoc; not guaranteed to match |
+| True terminal transcript active | Type 2 — PASS | Not yet implemented |
+| Write failed | None — FAIL | Note in capture status block |
+| Sensitive data prevented file write | None — SKIP | Note in capture status block |
+
+---
+
 ## What this contract does NOT do
 
 - It does not commit or push — those remain explicit user-instruction steps.

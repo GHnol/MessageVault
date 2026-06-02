@@ -372,6 +372,24 @@ checkGrep('future-repo-bootstrap-checklist.md has OS self-audit requirement', 'd
 checkGrep('bootstrap-copy-forward SKILL.md has name:', '.claude/skills/bootstrap-copy-forward/SKILL.md', 'name:');
 checkGrep('bootstrap-copy-forward SKILL.md has description:', '.claude/skills/bootstrap-copy-forward/SKILL.md', 'description:');
 
+// --- Section 6k: Raw transcript capture and notification reliability layer (Operator Reliability Repair 2026-06-02) ---
+checkFile('docs/dev/raw-transcript-capture-protocol.md (Operator Reliability Repair)', 'docs/dev/raw-transcript-capture-protocol.md');
+checkGrep('raw-transcript-capture-protocol.md has file-first protocol section', 'docs/dev/raw-transcript-capture-protocol.md', 'File-first response protocol');
+checkGrep('raw-transcript-capture-protocol.md has honest limitation statement (type distinction)', 'docs/dev/raw-transcript-capture-protocol.md', 'Not yet implemented');
+checkGrep('raw-transcript-capture-protocol.md has metadata block format', 'docs/dev/raw-transcript-capture-protocol.md', 'Written before final response');
+checkFile('scripts/raw-transcript-check.mjs (Operator Reliability Repair)', 'scripts/raw-transcript-check.mjs');
+checkFile('scripts/notification-check.mjs (Operator Reliability Repair)', 'scripts/notification-check.mjs');
+checkFile('.claude/skills/raw-transcript-capture/SKILL.md (Operator Reliability Repair)', '.claude/skills/raw-transcript-capture/SKILL.md');
+checkFile('.claude/commands/raw-transcript-capture.md (Operator Reliability Repair)', '.claude/commands/raw-transcript-capture.md');
+checkGitignore('raw-transcripts/ gitignored (Operator Reliability Repair)', 'raw-transcripts/example.md');
+checkGrep('closeout-sync-contract.md has file-first response record requirement', 'docs/dev/closeout-sync-contract.md', 'File-first response record requirement');
+checkGrep('closeout SKILL.md references raw-transcript-capture-protocol.md', '.claude/skills/closeout/SKILL.md', 'raw-transcript-capture-protocol.md');
+checkGrep('handoff SKILL.md references raw-transcript-capture-protocol.md', '.claude/skills/handoff/SKILL.md', 'raw-transcript-capture-protocol.md');
+checkGrep('report-mirror-policy.md distinguishes raw transcript from mirror', 'docs/project-control/report-mirror-policy.md', 'Raw transcript capture vs report mirroring');
+checkGrep('universal-standards.md has raw transcript capture entry', 'docs/ai-system/universal-standards.md', 'Raw transcript capture');
+checkGrep('notification-setup.md has completion sound section', 'docs/dev/notification-setup.md', 'Completion sound');
+checkGrep('notification-check.mjs checks for Stop hook', 'scripts/notification-check.mjs', 'Stop hook');
+
 // --- Section 7: QA templates ---
 const qaDocs = [
   'pre-commit-verification-template.md', 'package-verification-template.md', 'test-strategy.md',

@@ -1,6 +1,6 @@
 # .claude/skills — Skills (Canonical Protocol Layer)
 
-**Status:** ACTIVE — 21 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26); 1 added in v1.6 Google Calendar Live Sync (2026-05-30); 1 added in v1.7 Gate 3 Report Mirroring (2026-06-01); 1 added in v1.7 Gate 4 Start Router (2026-06-01); 1 added in v1.7 Gate 5 External Sync Consistency Validators (2026-06-01); 2 added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization (2026-06-01).
+**Status:** ACTIVE — 22 live skills. 13 shipped in AI Project OS Framework Groundwork Pass (2026-05-24); 1 added in v1.3 External Board Provider Update (2026-05-25); 1 added in v1.5 Template GitHub Project Standard (2026-05-26); 1 added in v1.6 Google Calendar Live Sync (2026-05-30); 1 added in v1.7 Gate 3 Report Mirroring (2026-06-01); 1 added in v1.7 Gate 4 Start Router (2026-06-01); 1 added in v1.7 Gate 5 External Sync Consistency Validators (2026-06-01); 2 added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization (2026-06-01); 1 added in Operator Reliability Repair (2026-06-02).
 
 ---
 
@@ -39,6 +39,7 @@ This separation allows the canonical protocol to evolve independently of the com
 | `external-sync-consistency` | Run the external sync consistency validator — compare repo source records, local sync map, committed logs, and optional live read-only state for Google Calendar and GitHub Projects |
 | `documentation-watch` | Run the AI Project OS documentation-watch review — evaluate official tool and platform changes against the scrutinous adoption rule and classify findings as ADOPT, DEFER, REJECT, or MONITOR |
 | `bootstrap-copy-forward` | Run the bootstrap copy-forward audit — verify copy-forward readiness and produce a structured plan for copying the OS from KeepMees into Puzzle or a future repo |
+| `raw-transcript-capture` | Execute the file-first response protocol — write the full final response to a local gitignored raw transcript file before returning it in chat |
 
 ---
 
