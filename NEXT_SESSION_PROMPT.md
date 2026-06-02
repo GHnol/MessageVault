@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Post-v1.7 Weekly Sync in progress. Branch `docs/post-v1-7-weekly-sync-package-5b-readiness`. v1.7 COMPLETE. Awaiting Coordinator sync review and Package 5B authorization decision. |
-| Branch | `docs/post-v1-7-weekly-sync-package-5b-readiness` |
-| main HEAD | `4c4ffd4` — docs: sync state after AI Project OS v1.7 Gate 6 merge |
-| Next action | Run `/start`. Coordinator reviews weekly sync report. If approved, commit sync, merge to main, then decide on Package 5B authorization or other next direction. |
+| Resume into | Weekly sync COMPLETE — merged `dec952e` 2026-06-01. v1.7 COMPLETE. Package 5B: READY_FOR_PACKAGE_5B_PLANNING — not started, blocked pending Coordinator authorization. |
+| Branch | `main` |
+| main HEAD | `dec952e` — Merge branch 'docs/post-v1-7-weekly-sync-package-5b-readiness' |
+| Next action | Run `/start`. Await Coordinator authorization for Package 5B planning directive or push to origin/main. |
 | OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic WARNs accepted) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |

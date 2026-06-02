@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Post-v1.7 Weekly Sync (project-control checkpoint). Package 5B: not started — blocked until Coordinator explicitly authorizes product work. Branch `docs/post-v1-7-weekly-sync-package-5b-readiness` created 2026-06-01. All validators passing. Project Control Tower review underway. Weekly sync commit pending Coordinator approval.
+**Status:** `complete` — AI Project OS v1.7 COMPLETE. Post-v1.7 weekly sync COMPLETE — merged `dec952e` 2026-06-01. Package 5B readiness: READY_FOR_PACKAGE_5B_PLANNING. Package 5B: not started — blocked until Coordinator explicitly authorizes product work. Working tree clean. 288 OS audit pass.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Weekly Sync — post-v1.7 Package 5B Readiness Review (project-control checkpoint only) |
-| **Active branch** | `docs/post-v1-7-weekly-sync-package-5b-readiness` |
-| **main HEAD** | `4c4ffd4` — docs: sync state after AI Project OS v1.7 Gate 6 merge |
+| **Active pass** | None — weekly sync complete, v1.7 COMPLETE, awaiting Coordinator direction |
+| **Active branch** | `main` |
+| **main HEAD** | `dec952e` — Merge branch 'docs/post-v1-7-weekly-sync-package-5b-readiness' |
 | **Last completed pass** | `AI Project OS v1.7 Gate 6` — docs-watch and bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
@@ -191,13 +191,12 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Weekly sync in progress on branch `docs/post-v1-7-weekly-sync-package-5b-readiness`. Validator results all clean. Project-control state review and document updates in progress.
+Weekly sync merged `dec952e` 2026-06-01. Package 5B readiness: READY_FOR_PACKAGE_5B_PLANNING — no blockers.
 
-After sync complete:
-1. Coordinator reviews weekly sync report
-2. If approved, commit sync updates (project-control docs only — no app code, no external mutations)
-3. Merge to main
-4. Coordinator decides Package 5B authorization or other next direction
+Coordinator decides:
+- Authorize Package 5B planning directive (recommended next step), or
+- Authorize push to `origin/main`, or
+- Authorize any other next direction
 
 Do not start Package 5B without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
