@@ -160,7 +160,7 @@ Newest entries first.
 
 ## 2026-06-01 — AI Project OS v1.7: Gate 3 — Report Mirroring and Project-Control Log Intake
 
-**Status:** IN PROGRESS — on branch `docs/ai-project-os-v1-7-report-mirroring-intake`; commit pending Coordinator approval. No external mutations. No product code. No Package 5B.
+**Status:** COMPLETE — merged `a86ae11` 2026-06-01. No external mutations. No product code. No Package 5B.
 **Scope:** Add repo-native report mirror intake layer (`scripts/report-mirror-intake.mjs`); define report schema, policy, and runbook; create committed project-control mirror log; add `report-intake` skill and command; integrate report mirroring into closeout/handoff/precommit/start/weekly-sync workflows; update OS self-audit to 6g checks; update gitignore with `local-report-intake/`.
 
 ### Added
@@ -325,7 +325,7 @@ Newest entries first.
 
 ## 2026-05-31 — AI Project OS v1.6: Google Calendar Live Sync, Gate 2D Repair — Canonical OAuth Bootstrap
 
-**Status:** IN PROGRESS — on branch `docs/google-calendar-oauth-path-alignment`, uncommitted. No OAuth run. No live API call. No product code. No Package 5B.
+**Status:** COMPLETE — merged as part of v1.6 pipeline 2026-05-31. No OAuth run. No live API call. No product code. No Package 5B.
 **Scope:** Repair Gate 2D tooling blocker. Align credential/token paths to canonical `docs/project-control/` convention. Add `scripts/google-calendar-auth-bootstrap.mjs` with `--auth-status` and `--init-oauth`. Update dry-run script with `--auth-status`, `--help`, `resolveCredPaths()`, and explicit legacy root credential fallback. Update docs, skill, runbook, credential guide, OS audit checks.
 
 ### Added
@@ -358,7 +358,7 @@ Newest entries first.
 
 ## 2026-05-31 — AI Project OS v1.6: Google Calendar Live Sync, Gate 2A
 
-**Status:** IN PROGRESS — Gate 2A comparison logic on branch `docs/google-calendar-live-dry-run-logic`, uncommitted. Gate 2B (live dry-run) requires googleapis install approval + credentials.
+**Status:** COMPLETE — merged as part of v1.6 pipeline 2026-05-31. Gate 2B–3 and advisory repair followed on subsequent branches.
 **Scope:** Implement fixture-testable live comparison logic in `google-calendar-sync-dry-run.mjs`. All 11 classification values proved locally. No live API calls. No product code. No Package 5B.
 
 ### Added
@@ -395,7 +395,7 @@ Newest entries first.
 
 ## 2026-05-30 — AI Project OS v1.6: Google Calendar Live Sync, Gate 1
 
-**Status:** IN PROGRESS — Gate 1 implementation on branch `docs/google-calendar-live-sync-gate-1`; Gate 2 (live dry-run) and Gate 3 (live apply) require separate Coordinator authorization.
+**Status:** COMPLETE — merged `5c4bd28` 2026-05-30. Full v1.6 pipeline (Gates 1–3 + advisory repair) merged by 2026-06-01.
 **Scope:** Establish the repo-native Google Calendar live sync foundation. Real live sync (not .ics-only). Three-gate model: Gate 1 = repo foundation (this pass), Gate 2 = read-only live dry-run, Gate 3 = approved live apply. No app code; no Package 5B work; no v1.7 automation.
 
 ### Added
@@ -708,8 +708,8 @@ New command wrappers added: `os-audit.md`, `project-sync-dry-run.md`, `project-s
 
 ## 2026-05-24 — AI Project OS Usability Patch
 
-**Status:** IN PROGRESS — docs/config only; no product/app changes.
-**Branch:** `docs/ai-project-os-usability-patch` (pending)
+**Status:** COMPLETE — merged `cb920be` 2026-05-24. Docs/config only; no product/app changes.
+**Branch:** `docs/ai-project-os-usability-patch` (merged)
 **Scope:** AI Project OS usability improvements only. No `index.html`, `src/**`, `scripts/**`, no product implementation, no vendor/design/checkout work.
 
 ### Added (Short Command Interface — universal)

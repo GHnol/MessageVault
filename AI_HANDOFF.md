@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.7 COMPLETE. Gate 6 committed `99d5515`, merged to main `f30ea62` 2026-06-01. All 6 gates complete. Working tree clean. 288 OS audit pass. Package 5B blocked until separate Coordinator authorization.
+**Status:** `in-progress` — Post-v1.7 Weekly Sync (project-control checkpoint). Package 5B: not started — blocked until Coordinator explicitly authorizes product work. Branch `docs/post-v1-7-weekly-sync-package-5b-readiness` created 2026-06-01. All validators passing. Project Control Tower review underway. Weekly sync commit pending Coordinator approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-01`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — AI Project OS v1.7 COMPLETE |
-| **Active branch** | `main` |
-| **main HEAD** | `f30ea62` — Merge branch 'docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization' |
+| **Active pass** | Weekly Sync — post-v1.7 Package 5B Readiness Review (project-control checkpoint only) |
+| **Active branch** | `docs/post-v1-7-weekly-sync-package-5b-readiness` |
+| **main HEAD** | `4c4ffd4` — docs: sync state after AI Project OS v1.7 Gate 6 merge |
 | **Last completed pass** | `AI Project OS v1.7 Gate 6` — docs-watch and bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
 | **Active package** | None (OS foundation work only — not a product package) |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
@@ -191,14 +191,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-AI Project OS v1.7 COMPLETE — Gate 6 merged to main `f30ea62` 2026-06-01. State-sync commit in progress.
+Weekly sync in progress on branch `docs/post-v1-7-weekly-sync-package-5b-readiness`. Validator results all clean. Project-control state review and document updates in progress.
 
-Push to `origin/main` pending separate Coordinator authorization.
-
-Coordinator then decides:
-- Authorize push to `origin/main`, or
-- Authorize Package 5B (product work), or
-- Authorize any other next direction
+After sync complete:
+1. Coordinator reviews weekly sync report
+2. If approved, commit sync updates (project-control docs only — no app code, no external mutations)
+3. Merge to main
+4. Coordinator decides Package 5B authorization or other next direction
 
 Do not start Package 5B without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
