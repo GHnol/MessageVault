@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | AI Project OS v1.7 COMPLETE. Gate 6 committed `99d5515`, merged to main `f30ea62` 2026-06-01. No active pass. Awaiting Coordinator direction. |
-| Branch | `main` |
-| main HEAD | `f30ea62` — Merge branch 'docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization' |
-| Next action | Run `/start` then `node scripts/start-router.mjs`. v1.7 complete. Push to `origin/main` or Package 5B both require separate Coordinator authorization. |
+| Resume into | Post-v1.7 Weekly Sync in progress. Branch `docs/post-v1-7-weekly-sync-package-5b-readiness`. v1.7 COMPLETE. Awaiting Coordinator sync review and Package 5B authorization decision. |
+| Branch | `docs/post-v1-7-weekly-sync-package-5b-readiness` |
+| main HEAD | `4c4ffd4` — docs: sync state after AI Project OS v1.7 Gate 6 merge |
+| Next action | Run `/start`. Coordinator reviews weekly sync report. If approved, commit sync, merge to main, then decide on Package 5B authorization or other next direction. |
 | OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic WARNs accepted) |
 | Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |

@@ -58,7 +58,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next package after Tower (likely Package 5A unless review reveals a blocker) | Open | Coordinator | Decide at Tower approval |
+| Next product package after v1.7 OS completion (Package 5B — proof approval UX) | Open | Coordinator | Package 5A complete; Package 5B requires explicit Coordinator authorization |
 
 ## Deferred
 

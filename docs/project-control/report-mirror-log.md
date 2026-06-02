@@ -27,9 +27,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-01
-**Last mirrored:** RPT-20260601-002 (Gate 6 implementation pass — documentation-watch framework + Bootstrap copy-forward finalization)
-**Active gate:** v1.7 Gate 6 — implementation complete on branch `docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization`; commit pending Coordinator approval
-**Next expected mirror:** v1.7 Gate 6 commit closeout after Coordinator approves and commit is created
+**Last mirrored:** RPT-20260601-003 (post-v1.7 weekly sync — v1.7 final completion + Package 5B readiness)
+**Active gate:** None — AI Project OS v1.7 COMPLETE; weekly sync in progress on branch `docs/post-v1-7-weekly-sync-package-5b-readiness`
+**Next expected mirror:** Post-sync commit closeout after Coordinator approves weekly sync commit
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,12 +39,31 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260601-003 | status_sync | v1.7 final + weekly sync | docs/post-v1-7-weekly-sync-package-5b-readiness | 4c4ffd4 | mirrored | 2026-06-01 |
 | RPT-20260601-002 | package_closeout | v1.7 Gate 6 | docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization | 5432650 | mirrored | 2026-06-01 |
 | RPT-20260601-001 | package_closeout | v1.7 Gate 3 | docs/ai-project-os-v1-7-report-mirroring-intake | d872f68 | in-progress | 2026-06-01 |
 
 ---
 
 ## Entry detail
+
+### RPT-20260601-003 — status_sync — v1.7 Final Completion + Post-v1.7 Weekly Sync + Package 5B Readiness
+
+**Created:** 2026-06-01T00:00:00Z | **Branch:** docs/post-v1-7-weekly-sync-package-5b-readiness | **HEAD:** 4c4ffd4 | **Status:** mirrored
+
+AI Project OS v1.7 COMPLETE — all 6 gates merged to main by 2026-06-01. Final state: Gate 1 merged `3c641a9`, Gate 2 merged `3db3074`, Gate 3 merged `a86ae11`, Gate 4 merged `352356b`, Gate 5 merged `2b37e13`, Gate 6 committed `99d5515` merged `f30ea62`, post-merge state-sync `4c4ffd4`. Post-v1.7 weekly sync run as project-control checkpoint. Package 5B readiness determined: READY_FOR_PACKAGE_5B_PLANNING — no state FAIL blockers, no external sync FAILs, no risk-register hard blockers.
+
+**Validators (all clean):** OS self-audit 288 pass, 0 fail | state-freshness WARN only | project-control sync validate 11 pass, 0 fail | external sync consistency local-only 7 pass, 4 warn (expected), 0 fail | external sync fixture-test PASS 12/12 | GCal source validate 151 pass, 0 fail | docs-watch 36 pass, 0 fail | bootstrap copy-forward 45 pass, 0 fail | all 8 scripts node --check PASS.
+**Files modified (project-control sync):** AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md, shareable-status-summary.md, backlog.md, decision-log.md, CHANGELOG.md (stale markers), project-sync-log.md, report-mirror-log.md.
+**External operations:** none — no Google Calendar mutation, no GitHub Project mutation, no live docs browsing, no credentials read or printed.
+**Hard exclusions:** confirmed — index.html, src/**, public/**, amplify/**, root package.json untouched; no credentials/tokens/external-sync-map committed.
+**Package 5B:** not started — blocked until Coordinator explicitly authorizes product work.
+**Next action:** Coordinator reviews weekly sync report; if approved, commit and merge; then Coordinator decides Package 5B authorization.
+**Follow-up:** false
+
+*Entry added manually (Option A) as the weekly sync + v1.7 final state record. No raw transcript, credential, token, or local artifact content included. Source type: manual_paste.*
+
+---
 
 ### RPT-20260601-002 — package_closeout — v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization
 

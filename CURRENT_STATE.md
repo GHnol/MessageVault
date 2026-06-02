@@ -16,14 +16,14 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-01` (Gate 6 merge + v1.7 state-sync)
+**Last updated:** `2026-06-01` (post-v1.7 weekly sync — Package 5B readiness review)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `f30ea62` — Merge branch 'docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization' |
-| Active branch | `main` |
-| Active pass | None — AI Project OS v1.7 COMPLETE |
+| main HEAD | `4c4ffd4` — docs: sync state after AI Project OS v1.7 Gate 6 merge |
+| Active branch | `docs/post-v1-7-weekly-sync-package-5b-readiness` |
+| Active pass | Weekly Sync — post-v1.7 Package 5B Readiness Review (project-control checkpoint) |
 | Last completed pass | `AI Project OS v1.7 Gate 6` — docs-watch + bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
 | Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
 | Next authorized target | Push `origin/main` or Package 5B — both require separate Coordinator authorization |
