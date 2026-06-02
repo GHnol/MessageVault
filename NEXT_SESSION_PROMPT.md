@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Gate 0 housekeeping on `docs/fix-active-branch-after-3d-sync`. After merge: Package 3E authorized — create `feature/product-draft-preflight-foundation`. |
-| Branch | `docs/fix-active-branch-after-3d-sync` |
-| main HEAD | `e31ccaf` — merge: sync operating docs after Package 3D completion |
-| Next action | Run `/start`. After Gate 0 merges: create `feature/product-draft-preflight-foundation` and implement Package 3E (ProductDraft and Preflight Runner Foundation). |
+| Resume into | Package 3E — ProductDraft and Preflight Runner Foundation — implementation on `feature/product-draft-preflight-foundation`, awaiting Coordinator review and commit approval. |
+| Branch | `feature/product-draft-preflight-foundation` |
+| main HEAD | `fa160de` — merge: correct active branch after Package 3D state sync |
+| Next action | Run `/start`. Coordinator reviews Package 3E report. If approved: commit and merge. If not yet approved: read AI_HANDOFF.md. |
 | Package 3D | COMPLETE — `scripts/visual-regression-harness.mjs`; `vr:baseline` + `vr:check`; Scenario A baselines committed |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |

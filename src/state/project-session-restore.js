@@ -93,6 +93,23 @@
                 }
             }
 
+            // Normalize productDrafts: drop malformed entries, keep well-formed ones.
+            var rawDrafts = Array.isArray(rg.productDrafts) ? rg.productDrafts : [];
+            var normalizedDrafts = [];
+            for (var di = 0; di < rawDrafts.length; di++) {
+                var d = rawDrafts[di];
+                if (d && typeof d === 'object' &&
+                        typeof d.productTypeId === 'string' && d.productTypeId !== '' &&
+                        typeof d.status === 'string') {
+                    normalizedDrafts.push(d);
+                } else {
+                    warnings.push(
+                        'Group "' + rg.id + '": productDraft at index ' + di +
+                        ' is malformed (missing productTypeId or status) — dropped'
+                    );
+                }
+            }
+
             groups.push({
                 id:                rg.id,
                 messages:          restoredMsgs,
@@ -102,7 +119,7 @@
                 lastComposedAt:    rg.lastComposedAt    || null,
                 memoryIds:         rg.memoryIds         || [],
                 sourcePlatformIds: rg.sourcePlatformIds || [],
-                productDrafts:     rg.productDrafts     || [],
+                productDrafts:     normalizedDrafts,
                 metadata:          rg.metadata          || {}
             });
         }
