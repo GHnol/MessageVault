@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3D — Visual Regression Baseline Harness — implementation on `feature/visual-regression-baseline-harness`, awaiting Coordinator baseline review and commit approval. |
-| Branch | `feature/visual-regression-baseline-harness` |
-| main HEAD | `7fbb365` — merge: correct active branch after post-Package-5B state sync |
-| Next action | Run `/start`. Coordinator reviews Package 3D report and baselines. If approved: commit and merge. If not yet approved: read AI_HANDOFF.md for current state. |
+| Resume into | Package 3D COMPLETE — merged `645f6bd` 2026-06-02. No active package. State-sync in progress on `docs/sync-after-package-3d-visual-regression`. After merge: Coordinator decides next. |
+| Branch | `docs/sync-after-package-3d-visual-regression` |
+| main HEAD | `645f6bd` — merge: add Message Book visual regression baseline harness |
+| Next action | Run `/start`. After state-sync merges: Await Coordinator authorization for next package. Package 3D visual regression harness is now active at `scripts/visual-regression-harness.mjs`. |
+| Package 3D | COMPLETE — `scripts/visual-regression-harness.mjs`; `vr:baseline` + `vr:check`; Scenario A baselines committed |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |

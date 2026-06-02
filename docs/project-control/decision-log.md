@@ -58,7 +58,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 5B | Open | Coordinator | Package 5B COMPLETE (merged `dc4f86b` 2026-06-02); candidates: Package 3D (Visual Regression Baseline Harness — QA infra, no external gate, requires authorization only), scoped Phase 12 continuation, or ProductDraft/preflight scope |
+| Next product package after Package 3D | Open | Coordinator | Package 3D COMPLETE (merged `645f6bd` 2026-06-02); candidates: scoped Phase 12 continuation, ProductDraft/preflight scope, or another QA/OS pass |
 
 ## Deferred
 

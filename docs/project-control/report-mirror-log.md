@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-02
-**Last mirrored:** RPT-20260602-001 (post-Package-5B weekly sync — Tower catch-up + next package decision packet — COMPLETE)
-**Active gate:** None — AI Project OS v1.7 COMPLETE; Package 5B COMPLETE; weekly sync COMPLETE merged `522ad12` 2026-06-02
+**Last mirrored:** RPT-20260602-002 (Package 3D closeout — Visual Regression Baseline Harness COMPLETE)
+**Active gate:** None — Package 3D COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260602-002 | package_closeout | Package 3D — Visual Regression Baseline Harness | feature/visual-regression-baseline-harness | 5a5eaa0 / 645f6bd | mirrored | 2026-06-02 |
 | RPT-20260602-001 | status_sync | post-Package-5B weekly sync | docs/post-package-5b-weekly-sync | bb45dbb / 522ad12 | mirrored | 2026-06-02 |
 | RPT-20260601-003 | status_sync | v1.7 final + weekly sync | docs/post-v1-7-weekly-sync-package-5b-readiness | 4c4ffd4 | mirrored | 2026-06-01 |
 | RPT-20260601-002 | package_closeout | v1.7 Gate 6 | docs/ai-project-os-v1-7-docs-watch-bootstrap-finalization | 5432650 | mirrored | 2026-06-01 |
@@ -47,6 +48,23 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260602-002 — package_closeout — Package 3D — Visual Regression Baseline Harness
+
+**Created:** 2026-06-02T00:00:00Z | **Branch:** feature/visual-regression-baseline-harness | **HEAD:** 5a5eaa0 (impl) / 645f6bd (merge) | **Status:** mirrored
+
+Package 3D — Visual Regression Baseline Harness COMPLETE — implementation `5a5eaa0`, merge `645f6bd` 2026-06-02. Delivered: `scripts/visual-regression-harness.mjs` (4 modes: `--update-baselines`, `--check`, `--simulate-regression`, `--headed`; port 7333; pixelmatch + pngjs; Scenario A); committed Scenario A 4-page baseline PNGs + manifest (BOOK_PAGINATION_VERSION=1; ~66 KB total); `vr:baseline` + `vr:check` npm scripts; `visual-regression-output/` gitignored; `docs/qa/visual-regression-guide.md`; 5-layer QA strategy expanded to 6 layers. No `index.html`, no `src/**`, no root package files changed. Founder-approved baselines: opening page, section content pages, ending page all correct. Simulation verified: --simulate-regression exits 1, detects 185,150 px mismatch, no repo files modified.
+
+**Tests:** 1704 Node tests, 0 failed | E2E seeded 41/41 | E2E real-files 64/64 | --check exits 0 | --simulate-regression exits 1 (correct) | OS audit 304/304.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, src/**, public/**, amplify/**, root package.json untouched; no credentials/tokens/external-sync-map committed.
+**Package 5C:** not defined — do not start without explicit Coordinator scoping.
+**Next action:** Coordinator decides next development package or operating action.
+**Follow-up:** false
+
+*Entry added as the Package 3D closeout record. No raw transcript, credential, token, or local artifact content included. Source type: manual_paste.*
+
+---
 
 ### RPT-20260602-001 — status_sync — Post-Package-5B Weekly Sync + Tower Catch-Up
 
