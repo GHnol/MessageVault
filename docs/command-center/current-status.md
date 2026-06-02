@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-3D state-sync)
+**Updated by:** Claude Code (post-Package-3E state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -32,6 +32,7 @@
 | Package 5A | Message Book Proof Approval State Foundation | COMPLETE — merged to main | `e2df2a0` | `297a221` |
 | Package 5B | Message Book Proof Approval UX Foundation | COMPLETE — merged to main | `fb62b5c` | `dc4f86b` |
 | Package 3D | Visual Regression Baseline Harness | COMPLETE — merged to main | `5a5eaa0` | `645f6bd` |
+| Package 3E | ProductDraft and Preflight Runner Foundation | COMPLETE — merged to main | `dd4f641` | `4390038` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
@@ -41,16 +42,16 @@
 
 ## App code state
 
-- App code last changed: Package 5B (`fb62b5c`) — proof approval UX foundation; `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added to `index.html`
-- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring)
-- `src/state/`: 3 modules in Package 3A; modified in Package 5B (`project-persistence.js` + `project-session-restore.js` — proofApprovalStates support)
-- `src/products/`: 13 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux)
-- `src/tests/`: 12 suites, **1704 Node tests** — all green
+- App code last changed: Package 5B (`fb62b5c`) — proof approval UX foundation; `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added to `index.html`. (Package 3E added engine modules only — no `index.html` change.)
+- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring). Package 3E: NOT touched.
+- `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
+- `src/products/`: 15 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight)
+- `src/tests/`: 14 suites, **1935 Node tests** — all green
   - `km-engine-tests.mjs`: 96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
-  - `project-persistence-tests.mjs`: 135 (Package 3A + 5B additions)
+  - `project-persistence-tests.mjs`: 157 (Package 3A + 5B + 3E additions)
   - `operator-inbox-processor-tests.mjs`: 85 (Package 2.6 + 2.6.1)
   - `product-render-spec-tests.mjs`: 341 (Package 4A)
   - `prototype-preview-registry-tests.mjs`: 215 (Package 4B)
@@ -58,6 +59,8 @@
   - `product-experience-consumer-tests.mjs`: 35 (Package 4D)
   - `proof-approval-state-tests.mjs`: 137 (Package 5A)
   - `proof-approval-ux-tests.mjs`: 77 (Package 5B)
+  - `product-draft-state-tests.mjs`: 90 (Package 3E)
+  - `product-preflight-tests.mjs`: 119 (Package 3E)
 - `scripts/e2e-regression-harness.mjs`: 41-test seeded Playwright harness (phases 1–10 + 20 + 21, Packages 3B + 4D + 4E) + 23-test real-file coverage (phases 11–19, Package 3C) — 64 tests total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
@@ -67,16 +70,18 @@
 
 ---
 
-## Git state (as of post-Package-5B weekly sync)
+## Git state (as of post-Package-3E state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `f04c5bd` — docs: sync state after operator reliability repair merge |
-| Active branch | `docs/post-package-5b-weekly-sync` (weekly sync in progress) |
-| Working tree | Weekly sync edits in progress |
-| Pushed to remote | main is current; this sync branch pending Coordinator approval |
+| main HEAD | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
+| Active branch | `docs/sync-after-package-3e-product-draft-preflight` (state-sync in progress) |
+| Working tree | State-sync edits in progress |
+| Pushed to remote | main is current through Package 3E merge; this sync branch pending merge |
 
-**Package 5B (`fb62b5c` / `dc4f86b`):** Message Book Proof Approval UX Foundation — `src/products/proof-approval-ux.js` added: `KMEngine.ProofApprovalUX` IIFE module (initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore). `src/state/project-persistence.js` and `project-session-restore.js` modified (proofApprovalStates). `index.html` modified (#bookProofPanel, CSS, renderBookProofPanel(), save/restore wiring). 77 new tests + 15 persistence tests = 101 new tests; total baseline 1704. Browser QA 36/36 PASS_MERGE_READY. No checkout/PDF/commerce/manufacturing scope.
+**Package 3E (`dd4f641` / `4390038`):** ProductDraft and Preflight Runner Foundation — `src/products/product-draft-state.js` (`KMEngine.ProductDraftState`: 5-status lifecycle, create/advance/canAdvance/isValidStatus, immutable, JSON-safe) + `src/products/product-preflight.js` (`KMEngine.ProductPreflight`: 10-check registry mirror, PAGINATION_STABILITY runner, 9 gated checks not-applicable, aggregate overallStatus passed/failed/incomplete/skipped, **no manufacturing readiness API**). `project-persistence.js` + `project-session-restore.js` modified (productDrafts validation, group serialization, restore normalization). 90 + 119 + 22 new tests; total baseline 1935. E2E 41/41 + 64/64. Visual regression PASS. No `index.html`, no proof approval modules, no readiness gates touched.
+
+**Package 5B (`fb62b5c` / `dc4f86b`):** Message Book Proof Approval UX Foundation — `KMEngine.ProofApprovalUX` + `#bookProofPanel` in `index.html` + proofApprovalStates persistence. Browser QA 36/36 PASS_MERGE_READY. No checkout/PDF/commerce/manufacturing scope.
 
 **Package 5A (`e2df2a0` / `297a221`):** Message Book Proof Approval State Foundation — `src/products/proof-approval-state.js` added: `KMEngine.ProofApprovalState` with STATUS (5 constants: none, pending-review, approved, changes-requested, revoked), `canTransition(from, to)`, `create(opts)`, `transition(stateRecord, toStatus, opts)`; immutable records; JSON-safe; 137 new tests (14 suites). No `index.html` changes; no UI wiring; no checkout/commerce/manufacturing/export logic; no PDF; no preview renderer. `"proof-ready"` does not appear in the implementation file.
 
@@ -107,13 +112,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3D COMPLETE (merged `645f6bd` 2026-06-02); candidates in `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3E COMPLETE (merged `4390038` 2026-06-02); candidates in `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> No active package. Package 3D COMPLETE (merged `645f6bd` 2026-06-02). Visual regression harness now active at `scripts/visual-regression-harness.mjs`. Next package candidates: scoped Phase 12 continuation, ProductDraft/preflight scope, or another authorized direction. "Package 5C" is not defined in the repo — do not start without explicit scoping and Coordinator authorization.
+> No active package. Package 3E COMPLETE (merged `4390038` 2026-06-02). `KMEngine.ProductDraftState` and `KMEngine.ProductPreflight` now active (engine layer; no manufacturing readiness API; PAGINATION_STABILITY is the only runnable preflight check, aggregate status incomplete while gated checks are not-applicable). Next package candidates: scoped Phase 12 continuation, preflight runners for vendor-gated checks, or another authorized direction. "Package 5C" is not defined in the repo — do not start without explicit scoping and Coordinator authorization.
 
 ---
 

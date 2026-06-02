@@ -16,20 +16,22 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-02` (Package 3D completion state-sync)
-**Updated by:** `Claude Code (Sonnet 4.6)`
+**Last updated:** `2026-06-02` (Package 3E completion state-sync)
+**Updated by:** `Claude Code (Opus 4.8)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `fa160de` — merge: correct active branch after Package 3D state sync |
-| Active branch | `feature/product-draft-preflight-foundation` |
-| Active pass | Package 3E — ProductDraft and Preflight Runner Foundation (engine layer; awaiting Coordinator review) |
-| Last completed pass | `Gate 0 housekeeping` — impl `c858c16`, merged `fa160de` 2026-06-02 |
-| Last closed package | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE |
-| Next authorized target | Package 3E commit — pending Coordinator review |
-| OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
+| main HEAD | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
+| Active branch | `docs/sync-after-package-3e-product-draft-preflight` |
+| Active pass | State-sync: Package 3E completion (docs only) |
+| Last completed pass | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
+| Last closed package | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **1935 Node tests** (14 suites); E2E seeded 41/41; E2E real-files 64/64; visual regression PASS |
+| OS audit | 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
+| Package 3E | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer; no manufacturing readiness API |
 | Package 3D | COMPLETE — merged `645f6bd` 2026-06-02; visual regression harness; Scenario A baselines |
-| Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
+| Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. Browser QA 36/36 PASS. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01; docs-watch framework + bootstrap copy-forward guidance + 288 OS audit checks |
@@ -45,7 +47,7 @@
 
 ## Delivered packages (summary)
 
-Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1, Packages 2.7, 2.8, 2.9, and Package 5A are COMPLETE and merged. Test baseline: **1603 Node unit tests** (1466 prior + 137 new from Package 5A) + 41 seeded E2E + 23 real-files E2E (64 combined), all green. Packages 2.7, 2.8, 2.9 added operating infrastructure only (no app code). Package 5A added `proof-approval-state.js` — state model only, no UI.
+Authoritative table: `docs/command-center/current-status.md`. Packages 1 → 4E.1, 2.7, 2.8, 2.9, 5A, 5B, 3D, and 3E are COMPLETE and merged. Test baseline: **1935 Node unit tests** (14 suites) + 41 seeded E2E + 23 real-files E2E (64 combined) + visual regression check, all green. Package 5A added `proof-approval-state.js` (state model); 5B added `proof-approval-ux.js` + `#bookProofPanel`; 3D added the visual regression harness; 3E added `product-draft-state.js` + `product-preflight.js` (engine layer, no app code, no manufacturing readiness API).
 
 ---
 

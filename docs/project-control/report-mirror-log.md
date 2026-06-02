@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-02
-**Last mirrored:** RPT-20260602-002 (Package 3D closeout — Visual Regression Baseline Harness COMPLETE)
-**Active gate:** None — Package 3D COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260602-003 (Package 3E closeout — ProductDraft and Preflight Runner Foundation COMPLETE)
+**Active gate:** None — Package 3E COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260602-003 | package_closeout | Package 3E — ProductDraft and Preflight Runner Foundation | feature/product-draft-preflight-foundation | dd4f641 / 4390038 | mirrored | 2026-06-02 |
 | RPT-20260602-002 | package_closeout | Package 3D — Visual Regression Baseline Harness | feature/visual-regression-baseline-harness | 5a5eaa0 / 645f6bd | mirrored | 2026-06-02 |
 | RPT-20260602-001 | status_sync | post-Package-5B weekly sync | docs/post-package-5b-weekly-sync | bb45dbb / 522ad12 | mirrored | 2026-06-02 |
 | RPT-20260601-003 | status_sync | v1.7 final + weekly sync | docs/post-v1-7-weekly-sync-package-5b-readiness | 4c4ffd4 | mirrored | 2026-06-01 |
@@ -48,6 +49,23 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260602-003 — package_closeout — Package 3E — ProductDraft and Preflight Runner Foundation
+
+**Created:** 2026-06-02T00:00:00Z | **Branch:** feature/product-draft-preflight-foundation | **HEAD:** dd4f641 (impl) / 4390038 (merge) | **Status:** mirrored
+
+Package 3E — ProductDraft and Preflight Runner Foundation COMPLETE — implementation `dd4f641`, merge `4390038` 2026-06-02. Gate 0 housekeeping (`c858c16` / `fa160de`) corrected the stale active-branch pointer before implementation. Delivered (engine layer only): `src/products/product-draft-state.js` (`KMEngine.ProductDraftState`: 5-status draft lifecycle none→in-progress→ready-for-preflight→preflight-passed/failed; create/advance/canAdvance/isValidStatus; immutable, JSON-safe) and `src/products/product-preflight.js` (`KMEngine.ProductPreflight`: SEVERITY/CHECK_STATUS/CHECK_REGISTRY 10-check mirror; run/runAll; PAGINATION_STABILITY runnable; 9 gated checks not-applicable; aggregate overallStatus passed/failed/incomplete/skipped). Persistence: productDrafts validation + group serialization in project-persistence.js; restore normalization (drops malformed, warns) in project-session-restore.js. Per Coordinator correction: ProductPreflight exposes NO manufacturing readiness API — no isManufacturingReady(), runAll returns incomplete while gated checks are not-applicable.
+
+**Tests:** 1935 Node tests, 0 failed (product-draft-state 90, product-preflight 119, project-persistence 157, +existing). E2E seeded 41/41. E2E real-files 64/64. Visual regression PASS. OS audit 304/304. project-control-sync-validate 11/11. docs-watch 36/36. bootstrap copy-forward 45/45.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, proof-approval-state.js, proof-approval-ux.js, product-render-spec.js, product-experience-readiness.js, public/**, amplify/**, root package.json, scripts/package.json untouched; no external-sync-map; no credentials/tokens/raw-transcripts committed. proofSupported stays false; no readiness gate flipped.
+**Package 5C:** not defined — do not start without explicit Coordinator scoping.
+**Next action:** Coordinator decides next development package or operating action.
+**Follow-up:** false
+
+*Entry added as the Package 3E closeout record. No raw transcript, credential, token, or local artifact content included. Source type: manual_paste.*
+
+---
 
 ### RPT-20260602-002 — package_closeout — Package 3D — Visual Regression Baseline Harness
 

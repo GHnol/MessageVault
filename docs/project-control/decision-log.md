@@ -58,7 +58,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 3D | Open | Coordinator | Package 3D COMPLETE (merged `645f6bd` 2026-06-02); candidates: scoped Phase 12 continuation, ProductDraft/preflight scope, or another QA/OS pass |
+| Next product package after Package 3E | Open | Coordinator | Package 3E COMPLETE (merged `4390038` 2026-06-02); ProductDraft model + preflight foundation delivered; candidates: scoped Phase 12 continuation, preflight runners for gated checks (vendor-gated), or another QA/OS pass |
 
 ## Deferred
 

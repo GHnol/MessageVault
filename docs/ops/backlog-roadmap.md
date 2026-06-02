@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-5B weekly sync)
+**Updated by:** Claude Code (post-Package-3E state-sync)
 **Status:** Active
 
 ---
@@ -210,13 +210,30 @@ What this does NOT deliver: actual preview UI, mug/sticker/framed-print/fridge-m
 
 ## Upcoming packages
 
-### Package 3 remaining scope (not yet scheduled)
+### Package 3E — ProductDraft and Preflight Runner Foundation
 
-The following items from original Package 3 scope are not yet started and not yet authorized as a named package:
-- `ProductDraft` model — per-group, per-product draft container
-- Preflight runner — executes the 10 checks in `BOOK_PREFLIGHT_CHECK_REGISTRY`
-- KeepsakeGroup + product draft lifecycle hooks
-- Test coverage for all new modules
+**Branch:** `feature/product-draft-preflight-foundation`
+**Status:** COMPLETE — merged to main (feature: `dd4f641`, merge: `4390038` 2026-06-02)
+
+Delivered (engine layer only):
+- `src/products/product-draft-state.js` — `KMEngine.ProductDraftState`: STATUS (none, in-progress, ready-for-preflight, preflight-passed, preflight-failed); `canAdvance`, `create`, `advance`, `isValidStatus`; immutable result envelopes; JSON-safe records
+- `src/products/product-preflight.js` — `KMEngine.ProductPreflight`: SEVERITY, CHECK_STATUS, CHECK_REGISTRY (10-check mirror of `BOOK_PREFLIGHT_CHECK_REGISTRY`); `run`, `runAll`, `createResult`, `createReport`; PAGINATION_STABILITY is the only runnable check; 9 gated checks return not-applicable; aggregate `overallStatus` = passed/failed/incomplete/skipped; **no `isManufacturingReady()` and no manufacturing readiness signal**
+- `src/state/project-persistence.js` — productDrafts array validation + group serialization
+- `src/state/project-session-restore.js` — productDrafts restore normalization (drops malformed, warns; backward-compatible)
+- `src/tests/product-draft-state-tests.mjs` (90 tests), `src/tests/product-preflight-tests.mjs` (119 tests), `project-persistence-tests.mjs` (+22)
+
+**Tests:** 1935 Node unit tests, 0 failed | E2E seeded 41/41 | E2E real-files 64/64 | visual regression PASS.
+
+What this does NOT deliver: UI wiring, proof approval changes, readiness gate flips, checkout, PDF, commerce, manufacturing readiness, vendor exports. No `index.html` changes; no proof approval modules touched; `proofSupported` stays false on all products.
+
+---
+
+### Package 3 remaining scope (after Package 3E)
+
+The following items from original Package 3 scope remain not yet authorized as a named package:
+- Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed; PAGINATION_STABILITY delivered in 3E)
+- KeepsakeGroup + ProductDraft lifecycle hooks (ProductDraft model delivered in 3E)
+- Session UI wiring for draft/preflight state (none in 3E — engine layer only)
 
 ---
 

@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-3D state-sync)
+**Updated by:** Claude Code (post-Package-3E state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide next development package — Package 3D complete; candidates: Phase 12 continuation, ProductDraft/preflight, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Decide next development package — Package 3E complete; candidates: Phase 12 continuation, preflight runners for vendor-gated checks, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,22 +22,22 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3D COMPLETE — merged `645f6bd` 2026-06-02. Coordinator decides next package.**
+**Status: Package 3E COMPLETE — merged `4390038` 2026-06-02. Coordinator decides next package.**
 
-Package 3D (Visual Regression Baseline Harness) is COMPLETE — merged to main (`645f6bd` 2026-06-02). `scripts/visual-regression-harness.mjs` with `--update-baselines`, `--check`, `--simulate-regression` modes; Scenario A 4-page baselines committed; `BOOK_PAGINATION_VERSION=1`; pixelmatch comparison; `vr:baseline` + `vr:check` npm scripts.
+Package 3E (ProductDraft and Preflight Runner Foundation) is COMPLETE — merged to main (`4390038` 2026-06-02). `KMEngine.ProductDraftState` (per-product draft lifecycle) + `KMEngine.ProductPreflight` (10-check registry mirror, PAGINATION_STABILITY runnable, 9 gated checks not-applicable, aggregate overallStatus incomplete while gated; no manufacturing readiness API); productDrafts persistence validation + restore normalization; 1935 Node tests.
+Package 3D (Visual Regression Baseline Harness) is COMPLETE — merged to main (`645f6bd` 2026-06-02). `scripts/visual-regression-harness.mjs`; Scenario A baselines; `vr:baseline` + `vr:check`.
 Package 5B (Message Book Proof Approval UX Foundation) is COMPLETE — merged to main (`dc4f86b` 2026-06-02).
-Package 5A (Message Book Proof Approval State Foundation) is COMPLETE — merged to main (`297a221`). `KMEngine.ProofApprovalState` with STATUS constants, `canTransition`, `create`, `transition`; 137 new tests; no UI.
+Package 5A (Message Book Proof Approval State Foundation) is COMPLETE — merged to main (`297a221`).
 AI Project OS v1.7 (all 6 gates) is COMPLETE — all merged to main 2026-06-01. OS self-audit 304/304 pass.
-Operator Reliability Repair is COMPLETE — merged `c27502c` 2026-06-02.
 All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B, 1, 2) are COMPLETE — see `docs/command-center/current-status.md`.
 
 **Next package candidates (none authorized):**
 
 | Candidate | Type | External gate? | Risk |
 |---|---|---|---|
-| Package 3D — Visual Regression Baseline Harness | QA infrastructure | None (Coordinator authorization only) | Low |
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
-| ProductDraft + Preflight Runner | Engine layer | None | Low-Medium |
+| Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
+| ProductDraft lifecycle hooks (KeepsakeGroup integration) | Engine layer | None | Low-Medium |
 
 **"Package 5C" is not defined in the repo.** Do not start or reference it without explicit Coordinator scoping.
 
