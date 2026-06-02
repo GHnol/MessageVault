@@ -21,12 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `645f6bd` — merge: add Message Book visual regression baseline harness |
-| Active branch | `docs/sync-after-package-3d-visual-regression` |
-| Active pass | State-sync: Package 3D completion (docs only) |
-| Last completed pass | `Package 3D — Visual Regression Baseline Harness` — impl `5a5eaa0`, merged `645f6bd` 2026-06-02 |
+| main HEAD | `e31ccaf` — merge: sync operating docs after Package 3D completion |
+| Active branch | `docs/fix-active-branch-after-3d-sync` |
+| Active pass | Housekeeping — correcting stale branch pointer after Package 3D state-sync merge |
+| Last completed pass | `Package 3D — Visual Regression Baseline Harness` — all merges complete 2026-06-02 |
 | Last closed package | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
+| Next authorized target | Package 3E — ProductDraft and Preflight Runner Foundation (authorized; starts after Gate 0) |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3D | COMPLETE — merged `645f6bd` 2026-06-02; visual regression harness; Scenario A baselines |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |

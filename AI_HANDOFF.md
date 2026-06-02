@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3D — Visual Regression Baseline Harness COMPLETE. Implementation merged `645f6bd` to `main` 2026-06-02. Working tree clean. No active package.
+**Status:** `housekeeping` — Correcting stale branch pointer after Package 3D state-sync merge. Package 3E authorized and ready to start.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,24 +18,25 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | State-sync: Package 3D completion — docs only |
-| **Active branch** | `docs/sync-after-package-3d-visual-regression` |
-| **main HEAD** | `645f6bd` — merge: add Message Book visual regression baseline harness |
-| **Last completed pass** | `Package 3D — Visual Regression Baseline Harness` — impl `5a5eaa0`, merged `645f6bd` 2026-06-02 |
-| **Active package** | None |
+| **Active pass** | Housekeeping — correcting stale active-branch pointer after Package 3D state-sync merge |
+| **Active branch** | `docs/fix-active-branch-after-3d-sync` |
+| **main HEAD** | `e31ccaf` — merge: sync operating docs after Package 3D completion |
+| **Last completed pass** | `Package 3D — Visual Regression Baseline Harness` — impl `5a5eaa0`, merged `645f6bd`; state-sync impl `cfa9b96`, merged `e31ccaf` 2026-06-02 |
+| **Active package** | None (Package 3E authorized; implementation starts after housekeeping merges) |
 | **Last closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Prior closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3D** | COMPLETE — merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; 4-page Scenario A baselines; `BOOK_PAGINATION_VERSION=1` |
+| **Package 3E** | Authorized — ProductDraft and Preflight Runner Foundation; implementation starts after Gate 0 merges |
 | **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
 
 ---
 
-## Objective (current pass — state-sync after Package 3D)
+## Objective (current pass — housekeeping)
 
-State-sync after Package 3D — marking Package 3D complete in Tower, backlog, sprint, kanban, command-center. Docs only. **IN PROGRESS on `docs/sync-after-package-3d-visual-regression`.**
+Housekeeping: correcting stale active-branch pointer after Package 3D state-sync merge. 3 state files only. **IN PROGRESS on `docs/fix-active-branch-after-3d-sync`.**
 
-**Next exact action:** Coordinator decides next development package or operating action. Do not start any package without explicit authorization.
+**Next exact action:** After Gate 0 merges → create `feature/product-draft-preflight-foundation` → implement Package 3E.
 
 ---
 
