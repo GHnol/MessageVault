@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-17 (Package 4E in progress)
+**Last updated:** 2026-06-02 (Package 5B complete)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 4E)
+## Current architecture (post-Package 5B)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -40,7 +40,10 @@ src/
     prototype-preview-resolver.js      — resolve preview readiness against a KeepsakeGroup
     product-experience-readiness.js    — combined readiness resolver (all 4 layers); EXPERIENCE_STATUS; resolveForProduct/resolveAllForGroup
     product-experience-consumer.js     — app-side bridge to ProductExperienceReadiness; null-safe; view-model layer only
+    proof-approval-state.js            — KMEngine.ProofApprovalState; STATUS (5 constants); canTransition; create; transition — Package 5A
+    proof-approval-ux.js               — KMEngine.ProofApprovalUX; initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore — Package 5B
 index.html (keepsakes view)          — buildFormatAvailability() injects .ks-format-availability section per card via ProductExperienceConsumer — Package 4E
+index.html (proof panel)             — #bookProofPanel, CSS, renderBookProofPanel(), save/restore wiring — Package 5B
   tests/
     km-engine-tests.mjs
     keepsake-group-tests.mjs
@@ -50,6 +53,8 @@ index.html (keepsakes view)          — buildFormatAvailability() injects .ks-f
     prototype-preview-registry-tests.mjs
     product-experience-readiness-tests.mjs
     product-experience-consumer-tests.mjs
+    proof-approval-state-tests.mjs     — 137 tests; state model, transitions — Package 5A
+    proof-approval-ux-tests.mjs        — 77 tests; UX layer API, serialize/restore — Package 5B
 ```
 
 All modules expose into `window.KMEngine`. No build step.

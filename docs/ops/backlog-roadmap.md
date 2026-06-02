@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-05-22
-**Updated by:** Claude Code (Package 2.9 status sync)
+**Last updated:** 2026-06-02
+**Updated by:** Claude Code (post-Package-5B weekly sync)
 **Status:** Active
 
 ---
@@ -398,9 +398,35 @@ What this does NOT deliver: proof approval UI, proof approval wired into `index.
 
 ---
 
+### Package 5B — Message Book Proof Approval UX Foundation
+
+**Branch:** `feature/proof-approval-ux-foundation`
+**Status:** COMPLETE — merged to main (feature: `fb62b5c`, merge: `dc4f86b` 2026-06-02)
+
+Delivered:
+- `src/products/proof-approval-ux.js` — `KMEngine.ProofApprovalUX` IIFE module: `initialize`, `getState`, `submitForReview`, `getStatusLabel`, `getAllowedUserActions`, `serialize`, `restore`
+- `src/tests/proof-approval-ux-tests.mjs` — 77 tests across 15 suites covering API shape, initialize/idempotency, submitForReview, double-submit guard, status labels, allowed user actions, serialize JSON-safety, restore rehydrate/null/empty, prohibited fields guard
+- `src/state/project-persistence.js` (modified) — `proofApprovalStates` added to `createSnapshot` and validation
+- `src/state/project-session-restore.js` (modified) — `proofApprovalStates` in `KNOWN_SESSION_FIELDS`, returned in `appState`
+- `src/tests/project-persistence-tests.mjs` (modified) — 24 new Package 5B tests; PSR restore normalization
+- `index.html` (modified) — script tags, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring
+
+**Tests: 1704 Node unit tests, 0 failed** | **E2E seeded: 41/41** | **E2E real-files: 64/64** | **Browser QA: 36/36 PASS_MERGE_READY**
+
+What this does NOT deliver: full customer-facing proof approval UX (digital facsimile review requires PDF pipeline — GATE-04), checkout/payment, PDF generation, commerce or manufacturing readiness, preview renderer work, standalone keepsake flows, Review view changes.
+
+---
+
 ### Coordinator decides next package — (current position)
 
-**Status:** No package authorized. Coordinator reviews Package 5A and decides the next step.
+**Status:** No package authorized. Package 5B COMPLETE — Coordinator decides the next step.
+
+Next package candidates (from repo docs):
+- **Package 3D — Visual Regression Baseline Harness** (QA infrastructure; explicitly named in `docs/qa/e2e-regression-harness.md`; no external gate — Coordinator authorization only)
+- **Scoped Phase 12 continuation** — further proof panel interaction work; requires careful scoping to stay below GATE-04 (full proof UX requires PDF pipeline + checkout)
+- **ProductDraft model + Preflight runner** — Package 3 remaining scope; engine-layer only; no external gate
+
+**"Package 5C" is not defined.** Do not create or authorize a Package 5C without first scoping it explicitly against Phase 12 deliverables and GATE-04 bounds.
 
 ---
 
@@ -410,7 +436,7 @@ What this does NOT deliver: proof approval UI, proof approval wired into `index.
 
 Possible scope areas for future packages:
 - ProductDraft model — per-group, per-product draft container
-- Preflight runner — executes the 10 checks in BOOK_PREFLIGHT_CHECK_REGISTRY
+- Preflight runner — executes the 10 checks in `BOOK_PREFLIGHT_CHECK_REGISTRY`
 - Source adapter completions (WhatsApp, Android SMS) — if prioritized
 - Preview renderer implementation for non-book formats — requires Coordinator authorization
 - Visual regression harness — requires Coordinator authorization (Package 3D scope)
