@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-01 (America/New_York)
+**Last updated:** 2026-06-02 (America/New_York)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -32,7 +32,7 @@
 - _(empty — AI Project OS v1.7 COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · no package authorized as of 2026-05-24
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 5B COMPLETE 2026-06-02; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 5B — Message Book Proof Approval UX Foundation** · Development · Ph12 · implementation `fb62b5c`, merged `dc4f86b` 2026-06-02; 1704 Node tests; browser QA 36/36 PASS — COMPLETE
 - **AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization** · AI Workflow · Ph0 · committed `99d5515`, merged `f30ea62` 2026-06-01 — COMPLETE
 - **AI Project OS v1.7 Gate 5 — External Sync Consistency Validators** · AI Workflow · Ph0 · merged `2b37e13` 2026-06-01 — COMPLETE
 - **AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening** · AI Workflow · Ph0 · merged `352356b` 2026-06-01 — COMPLETE

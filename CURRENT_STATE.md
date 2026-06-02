@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-02` (Package 5B implementation complete, commit pending Coordinator approval)
+**Last updated:** `2026-06-02` (Package 5B closeout state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `22e9628` — docs: sync state after post-v1.7 weekly sync merge |
-| Active branch | `feature/message-book-proof-approval-ux` |
-| Active pass | `Package 5B — Message Book Proof Approval UX Foundation` — implementation complete, commit pending Coordinator approval |
-| Last completed pass | `AI Project OS v1.7 Gate 6` — docs-watch + bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
-| Last closed package | `Package 5A — Message Book Proof Approval State Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator commit approval for Package 5B |
+| main HEAD | `dc4f86b` — merge: add Message Book proof approval UX foundation |
+| Active branch | `main` |
+| Active pass | None — Package 5B complete; awaiting Coordinator direction |
+| Last completed pass | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
+| Last closed package | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or next direction |
 | OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
-| Package 5B | implementation complete on `feature/message-book-proof-approval-ux` — commit pending Coordinator approval |
+| Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01; docs-watch framework + bootstrap copy-forward guidance + 288 OS audit checks |
 | v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01; `scripts/external-sync-consistency-check.mjs` + policy/schema/log/fixture/skill + 253 OS audit checks delivered |
 | v1.7 Gate 4 | COMPLETE — merged `352356b` 2026-06-01; `scripts/start-router.mjs` + routing hardening + 223 OS audit checks delivered |

@@ -16,7 +16,7 @@ KeepMees uses five distinct test layers. Each has a different cost, a different 
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 5B — confirmed baseline 1695):**
+**Suites and counts (as of Package 5B — confirmed baseline 1704):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
@@ -152,7 +152,7 @@ cd scripts && npm run capture:b   # scenario B
 
 Package 5A is COMPLETE (merged `297a221`). Its test suite (`proof-approval-state-tests.mjs`, 137 tests) covers the proof approval state model, allowed/forbidden transitions, and decoupling from checkout.
 
-**Package 5B — implementation complete, commit pending Coordinator approval:**
+**Package 5B — COMPLETE (merged `dc4f86b` 2026-06-02):**
 
 Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence tests:
 
