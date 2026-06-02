@@ -640,6 +640,140 @@ var vStringPAS = PP.validate({
 });
 assert(!vStringPAS.valid, 'validate rejects string proofApprovalStates');
 
+// ── Package 3E: productDrafts validation ─────────────────────────────────────
+
+suite('Package 3E — productDrafts validation');
+
+// absent → valid (backward compat)
+var vNoDrafts = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 'sess-nd', memories: [], selectedMemoryIds: [], keepsakeGroups: [] }
+});
+assert(vNoDrafts.valid, 'productDrafts absent → valid (backward compat)');
+
+// null → valid (treated as absent)
+var vNullDrafts = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 'sess-nul', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        productDrafts: null }
+});
+assert(vNullDrafts.valid, 'productDrafts null → valid (treated as absent)');
+
+// empty array → valid
+var vEmptyDrafts = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 'sess-empty', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        productDrafts: [] }
+});
+assert(vEmptyDrafts.valid, 'productDrafts [] → valid');
+
+// non-array → invalid
+var vBadDrafts = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 'sess-bad', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        productDrafts: { type: 'object-not-array' } }
+});
+assert(!vBadDrafts.valid, 'productDrafts non-array object → invalid');
+assert(vBadDrafts.errors.some(function (e) { return e.includes('productDrafts'); }),
+    'error message references productDrafts');
+
+// string → invalid
+var vStrDrafts = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 'sess-str', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        productDrafts: 'invalid' }
+});
+assert(!vStrDrafts.valid, 'productDrafts string → invalid');
+
+// well-formed draft records → valid
+var vWellDrafts = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 'sess-well', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        productDrafts: [{ productTypeId: 'message-book', status: 'in-progress',
+                          createdAt: '2026-06-02T00:00:00Z', updatedAt: '2026-06-02T00:00:00Z',
+                          preflightRunAt: null, notes: null }] }
+});
+assert(vWellDrafts.valid, 'well-formed ProductDraftState records in productDrafts → valid');
+
+// ── Package 3E: productDrafts restore normalization ───────────────────────────
+
+suite('Package 3E — productDrafts restore normalization');
+
+// Group productDrafts: empty array → preserved
+var snapEmpty = PP.createSnapshot({
+    memories: [], keepsakeGroups: [
+        { id: 'g1', messages: [], messageIndices: [], customName: null,
+          chosenTypeId: null, lastComposedAt: null, memoryIds: [], sourcePlatformIds: [],
+          productDrafts: [], metadata: {} }
+    ], selectedIndices: { forEach: function () {} }, contactName: ''
+});
+var restEmpty = PSR.restore(snapEmpty);
+assert(restEmpty.success, 'restore with empty group productDrafts succeeds');
+assert(Array.isArray(restEmpty.appState.groups[0].productDrafts), 'empty productDrafts restored as array');
+assert(restEmpty.appState.groups[0].productDrafts.length === 0, 'empty productDrafts has 0 entries');
+
+// Well-formed draft record → preserved
+var wellDraft = { productTypeId: 'message-book', status: 'in-progress',
+                  createdAt: '2026-06-02T00:00:00Z', updatedAt: '2026-06-02T00:00:00Z',
+                  preflightRunAt: null, notes: null };
+var snapWell = PP.createSnapshot({
+    memories: [], keepsakeGroups: [
+        { id: 'g2', messages: [], messageIndices: [], customName: null,
+          chosenTypeId: null, lastComposedAt: null, memoryIds: [], sourcePlatformIds: [],
+          productDrafts: [wellDraft], metadata: {} }
+    ], selectedIndices: { forEach: function () {} }, contactName: ''
+});
+var restWell = PSR.restore(snapWell);
+assert(restWell.success, 'restore with well-formed group productDrafts succeeds');
+assert(restWell.appState.groups[0].productDrafts.length === 1, 'well-formed draft preserved');
+assert(restWell.appState.groups[0].productDrafts[0].productTypeId === 'message-book',
+    'well-formed draft productTypeId preserved');
+
+// Malformed draft record → dropped with warning
+var badDraft = { notAProductTypeId: 'oops', status: 42 };
+var snapBad = PP.createSnapshot({
+    memories: [], keepsakeGroups: [
+        { id: 'g3', messages: [], messageIndices: [], customName: null,
+          chosenTypeId: null, lastComposedAt: null, memoryIds: [], sourcePlatformIds: [],
+          productDrafts: [wellDraft, badDraft], metadata: {} }
+    ], selectedIndices: { forEach: function () {} }, contactName: ''
+});
+var restBad = PSR.restore(snapBad);
+assert(restBad.success, 'restore with one malformed draft still succeeds');
+assert(restBad.appState.groups[0].productDrafts.length === 1, 'malformed draft dropped');
+assert(restBad.warnings.some(function (w) { return w.includes('malformed') || w.includes('productDraft'); }),
+    'malformed draft drop emits warning');
+
+// Group productDrafts absent → []
+var snapAbsent = PP.createSnapshot({
+    memories: [], keepsakeGroups: [
+        { id: 'g4', messages: [], messageIndices: [], customName: null,
+          chosenTypeId: null, lastComposedAt: null, memoryIds: [], sourcePlatformIds: [],
+          metadata: {} }
+    ], selectedIndices: { forEach: function () {} }, contactName: ''
+});
+var restAbsent = PSR.restore(snapAbsent);
+assert(restAbsent.success, 'restore with absent group productDrafts succeeds');
+assert(Array.isArray(restAbsent.appState.groups[0].productDrafts), 'absent productDrafts → array');
+assert(restAbsent.appState.groups[0].productDrafts.length === 0, 'absent productDrafts → empty array');
+
+// ── Package 3E: proofApprovalStates behavior unchanged ───────────────────────
+
+suite('Package 3E — proofApprovalStates behavior unchanged (regression)');
+var snapPAS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} },
+    contactName: '', proofApprovalStates: { 'message-book': { productTypeId: 'message-book',
+        status: 'pending-review', createdAt: '2026-06-02T00:00:00Z',
+        updatedAt: '2026-06-02T00:00:00Z', submittedAt: '2026-06-02T00:00:00Z',
+        approvedAt: null, changesRequestedAt: null, revokedAt: null,
+        changeRequestReason: null, revokeReason: null, notes: null } }
+});
+var restPAS = PSR.restore(snapPAS);
+assert(restPAS.success, 'proofApprovalStates snapshot restores successfully');
+assert(typeof restPAS.appState.proofApprovalStates === 'object', 'proofApprovalStates restored as object');
+assert(restPAS.appState.proofApprovalStates['message-book'] !== undefined,
+    'proofApprovalStates entry preserved');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 console.log('\n─────────────────────────────────────');

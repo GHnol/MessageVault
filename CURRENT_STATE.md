@@ -21,12 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `e31ccaf` — merge: sync operating docs after Package 3D completion |
-| Active branch | `docs/fix-active-branch-after-3d-sync` |
-| Active pass | Housekeeping — correcting stale branch pointer after Package 3D state-sync merge |
-| Last completed pass | `Package 3D — Visual Regression Baseline Harness` — all merges complete 2026-06-02 |
+| main HEAD | `fa160de` — merge: correct active branch after Package 3D state sync |
+| Active branch | `feature/product-draft-preflight-foundation` |
+| Active pass | Package 3E — ProductDraft and Preflight Runner Foundation (engine layer; awaiting Coordinator review) |
+| Last completed pass | `Gate 0 housekeeping` — impl `c858c16`, merged `fa160de` 2026-06-02 |
 | Last closed package | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE |
-| Next authorized target | Package 3E — ProductDraft and Preflight Runner Foundation (authorized; starts after Gate 0) |
+| Next authorized target | Package 3E commit — pending Coordinator review |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3D | COMPLETE — merged `645f6bd` 2026-06-02; visual regression harness; Scenario A baselines |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |

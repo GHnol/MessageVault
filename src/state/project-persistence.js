@@ -49,6 +49,7 @@
                 lastComposedAt:    g.lastComposedAt    || null,
                 memoryIds:         g.memoryIds         || [],
                 sourcePlatformIds: g.sourcePlatformIds || [],
+                productDrafts:     Array.isArray(g.productDrafts) ? g.productDrafts : [],
                 metadata:          g.metadata          || {}
             };
         });
@@ -124,6 +125,10 @@
         if (s.proofApprovalStates !== undefined && s.proofApprovalStates !== null &&
                 (typeof s.proofApprovalStates !== 'object' || Array.isArray(s.proofApprovalStates))) {
             errors.push('projectSession.proofApprovalStates must be a plain object if present');
+        }
+        if (s.productDrafts !== undefined && s.productDrafts !== null &&
+                !Array.isArray(s.productDrafts)) {
+            errors.push('projectSession.productDrafts must be an array if present');
         }
         return { valid: errors.length === 0, errors: errors };
     }
