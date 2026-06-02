@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `package-5b-complete` — Package 5B implementation complete on branch `feature/message-book-proof-approval-ux`. All files written, tested, E2E green. Commit pending Coordinator approval.
+**Status:** `complete` — Package 5B COMPLETE. Implementation committed `fb62b5c`, merged to main `dc4f86b` 2026-06-02. Browser QA passed (36/36). 1704 Node tests green. Working tree clean. No active package.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,33 +18,34 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 5B — Message Book Proof Approval UX Foundation` |
-| **Active branch** | `feature/message-book-proof-approval-ux` |
-| **Branch base** | `main` @ `22e9628` |
-| **main HEAD** | `22e9628` — docs: sync state after post-v1.7 weekly sync merge |
-| **Last completed pass** | `AI Project OS v1.7 Gate 6` — docs-watch and bootstrap copy-forward finalization — committed `99d5515`, merged `f30ea62` 2026-06-01 |
-| **Active package** | `Package 5B — Message Book Proof Approval UX Foundation` — implementation complete, commit pending Coordinator approval |
+| **Active pass** | None — Package 5B complete; awaiting Coordinator direction |
+| **Active branch** | `main` |
+| **main HEAD** | `dc4f86b` — merge: add Message Book proof approval UX foundation |
+| **Last completed pass** | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
+| **Active package** | None |
+| **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — implementation `fb62b5c`, merge `dc4f86b` |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
-| **Package 5B** | implementation complete — commit pending Coordinator approval |
+| **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 
 ---
 
-## Objective (current pass — Package 5B)
+## Objective (last completed pass — Package 5B)
 
-Package 5B — Message Book Proof Approval UX Foundation.
-
-**IMPLEMENTATION COMPLETE — stop before commit, awaiting Coordinator approval.**
+Package 5B — Message Book Proof Approval UX Foundation. **COMPLETE.**
 
 Delivered:
-1. `src/products/proof-approval-ux.js` (new) — KMEngine.ProofApprovalUX IIFE module. initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore. No DOM, no external deps. All transitions via KMEngine.ProofApprovalState.transition().
-2. `src/tests/proof-approval-ux-tests.mjs` (new) — 77 tests across 15 suites covering full API, all statuses, serialize/restore, idempotency, prohibited fields guard.
-3. `src/state/project-persistence.js` (modified) — Added proofApprovalStates to createSnapshot and validation. Backward-compatible: old snapshots without the field remain valid.
-4. `src/tests/project-persistence-tests.mjs` (modified) — Added 15 new Package 5B tests across 6 suites.
-5. `index.html` (modified) — Script tags, DOM element (#bookProofPanel), CSS, DOM ref, renderBookProofPanel(), renderBookView() call, saveProject() wiring, handleProjectFileLoad() restore wiring.
+1. `src/products/proof-approval-ux.js` (new) — KMEngine.ProofApprovalUX IIFE module: initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore.
+2. `src/tests/proof-approval-ux-tests.mjs` (new) — 77 tests across 15 suites.
+3. `src/state/project-persistence.js` (modified) — proofApprovalStates in createSnapshot and validation.
+4. `src/state/project-session-restore.js` (modified) — proofApprovalStates in KNOWN_SESSION_FIELDS, returned in appState.
+5. `src/tests/project-persistence-tests.mjs` (modified) — 24 new Package 5B tests.
+6. `index.html` (modified) — script tags, #bookProofPanel, CSS, renderBookProofPanel(), save/restore wiring.
 
-**Test results:** 1704 Node unit tests (1603 baseline + 101 new), 0 failed. E2E seeded 41/41, real-files 64/64 — all green. Correction pass: scripts/package.json and scripts/package-lock.json reverted. PSR restore warning fixed: proofApprovalStates added to KNOWN_SESSION_FIELDS, returned in appState, index.html bypass removed.
+**Results:** 1704 Node unit tests, 0 failed. E2E seeded 41/41, real-files 64/64. Browser QA 36/36 PASS_MERGE_READY. No console errors or warnings.
 
-**Next exact action:** Coordinator reviews Package 5B implementation report. If approved, commit with recommended message. Do not commit or push without approval.
+**Implementation commit:** `fb62b5c` | **Merge commit:** `dc4f86b` | **Date:** 2026-06-02
+
+**Next exact action:** Coordinator decides next package or next operating action. Do not start any package without explicit authorization.
 
 ---
 
@@ -183,14 +184,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Weekly sync merged `dec952e` 2026-06-01. Package 5B readiness: READY_FOR_PACKAGE_5B_PLANNING — no blockers.
+Package 5B COMPLETE — merged `dc4f86b` 2026-06-02. State-sync merged to main.
 
 Coordinator decides:
-- Authorize Package 5B planning directive (recommended next step), or
-- Authorize push to `origin/main`, or
+- Authorize Package 5C or the next product package, or
 - Authorize any other next direction
 
-Do not start Package 5B without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

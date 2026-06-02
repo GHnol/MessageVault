@@ -47,14 +47,14 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 5B implementation complete on `feature/message-book-proof-approval-ux` — commit pending Coordinator approval. |
-| Branch | `feature/message-book-proof-approval-ux` |
-| main HEAD | `22e9628` — docs: sync state after post-v1.7 weekly sync merge |
-| Next action | Run `/start`. Read AI_HANDOFF.md — Package 5B complete, stop-before-commit. Await Coordinator commit authorization. |
+| Resume into | Package 5B COMPLETE — merged `dc4f86b` 2026-06-02. State-sync complete. Awaiting Coordinator direction for next package. |
+| Branch | `main` |
+| main HEAD | `dc4f86b` — merge: add Message Book proof approval UX foundation |
+| Next action | Run `/start`. Await Coordinator authorization for next package. |
 | OS audit | Gate 6: 288 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
-| State freshness | Run `node scripts/state-freshness-check.mjs` — branch mismatch WARNs are cosmetic (state-sync happens at commit) |
-| Package 5A | COMPLETE — merged `297a221`. 1603 Node tests passing. |
-| Package 5B | `feature/message-book-proof-approval-ux` — 1704 Node tests (101 new), E2E 64/64. Commit pending Coordinator approval. |
+| State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
+| Package 5A | COMPLETE — merged `297a221`. |
+| Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 overall | **COMPLETE** — all 6 gates merged to main 2026-06-01. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01. Docs-watch + bootstrap copy-forward. |
 | v1.7 Gate 5 | COMPLETE — merged `2b37e13` 2026-06-01. `scripts/external-sync-consistency-check.mjs` + 253 OS audit checks. |
@@ -62,7 +62,7 @@ Stop and ask the Coordinator if **any** of these are true:
 | v1.7 Gate 3 | COMPLETE — merged `a86ae11` 2026-06-01. |
 | v1.7 Gate 2 | COMPLETE — merged `3db3074` 2026-06-01. |
 | v1.7 Gate 1 | COMPLETE — merged `3c641a9` 2026-06-01. |
-| Do not | Start Package 5B without explicit Coordinator authorization; modify `index.html` / `src/**`; run any `--apply` script without approval; push without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token; browse live docs without explicit Coordinator authorization. |
+| Do not | Start any package without explicit Coordinator authorization; modify `index.html` / `src/**` outside an authorized package; run any `--apply` script without approval; push without explicit instruction; stage or commit `external-sync-map.local.json`, `local-sync-reports/`, `local-report-intake/`, `raw-transcripts/`, credentials, or token; browse live docs without explicit Coordinator authorization. |
 | Authoritative restart prompt for Tower work | `docs/project-control/next-session-prompt.md` |
 
 ---
