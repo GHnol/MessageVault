@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; updated to 1704 baseline in Package 5B + correction pass).
+**Status:** ACTIVE (formalized in Package 2.9; updated to 1704 baseline in Package 5B; visual regression added in Package 3D).
 **Last updated:** 2026-06-02 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -8,9 +8,9 @@ This document is the single answer to "what tests exist, what should be added, a
 
 ---
 
-## The five layers
+## The six layers
 
-KeepMees uses five distinct test layers. Each has a different cost, a different fidelity, and a different trigger.
+KeepMees uses six distinct test layers. Each has a different cost, a different fidelity, and a different trigger.
 
 ### Layer 1 — Node unit tests (`src/tests/*.mjs`)
 
@@ -121,7 +121,29 @@ cd scripts && npm run capture:b   # scenario B
 
 ---
 
-### Layer 5 — Docs / package verification
+### Layer 5 — Visual regression (`scripts/visual-regression-harness.mjs`)
+
+**What:** Per-page screenshot comparison against committed Scenario A baselines using `pixelmatch`. Detects layout regressions in Message Book rendering.
+
+**Run:**
+
+```bash
+node scripts/visual-regression-harness.mjs --check
+# or
+cd scripts && npm run vr:check
+```
+
+**Triggers (must run before commit when):**
+
+- `index.html` rendering logic changed (pagination, section structure, bubble layout)
+- Message Book composition engine touched
+- `BOOK_PAGINATION_VERSION` bumped
+
+See `docs/qa/visual-regression-guide.md` for full usage, baseline update policy, and threshold documentation.
+
+---
+
+### Layer 6 — Docs / package verification
 
 **What:** No automated runner. Manual verification per `docs/qa/package-verification-template.md`.
 
@@ -133,16 +155,16 @@ cd scripts && npm run capture:b   # scenario B
 
 ## Required tests by package type
 
-| Package type | Layer 1 | Layer 2 | Layer 3 | Layer 4 | Layer 5 |
-|---|---|---|---|---|---|
-| Docs-only / OS infrastructure (like 2.7, 2.8, 2.9, v1.x OS passes) | — (run script validators: `os-self-audit.mjs`, `state-freshness-check.mjs`) | — | — | — | required |
-| `src/` engine module | required | recommended if app-visible | — | — | required |
-| New product / catalog logic | required | recommended | — | — | required |
-| New persistence logic | required | required | required | — | required |
-| New UI surface in `index.html` | recommended | required | required if real-file path | — | required |
-| Pagination / rendering / preview | required | required | — | required | required |
-| Real-file import path | required | required | required | — | required |
-| Bug fix that's behavior-visible | recommended | required | required if real-file | — | required |
+| Package type | Layer 1 | Layer 2 | Layer 3 | Layer 4 | Layer 5 | Layer 6 |
+|---|---|---|---|---|---|---|
+| Docs-only / OS infrastructure (like 2.7, 2.8, 2.9, v1.x OS passes) | — (run script validators: `os-self-audit.mjs`, `state-freshness-check.mjs`) | — | — | — | — | required |
+| `src/` engine module | required | recommended if app-visible | — | — | — | required |
+| New product / catalog logic | required | recommended | — | — | — | required |
+| New persistence logic | required | required | required | — | — | required |
+| New UI surface in `index.html` | recommended | required | required if real-file path | — | — | required |
+| Pagination / rendering / preview | required | required | — | required | **required** | required |
+| Real-file import path | required | required | required | — | — | required |
+| Bug fix that's behavior-visible | recommended | required | required if real-file | — | recommended | required |
 
 "Required" means: run it before commit, or document why it was skipped.
 
@@ -171,7 +193,7 @@ Before any commit instruction is acted on, the agent must verify:
 1. All 12 Node unit suites green (1704 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (41 tests).
 3. If real-file paths changed: E2E real-files green (64 total).
-4. If Message Book rendering changed: relevant capture harness scenario green.
+4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).
 7. For OS/docs-only packages: run `node scripts/os-self-audit.mjs` and `node scripts/state-freshness-check.mjs`; no full app suite required.
@@ -182,7 +204,7 @@ If any of those is skipped, the agent must say so explicitly with the reason. Si
 
 ## What this strategy does NOT do
 
-- It does not cover visual regression. That's planned (Package 3D scope, not authorized).
+- Visual regression for Message Book is now covered by Layer 5 (Package 3D, `scripts/visual-regression-harness.mjs`).
 - It does not cover browser smoke tests outside the E2E harness.
 - It does not cover load/performance testing.
 - It does not cover security testing.
@@ -196,7 +218,7 @@ These gaps are documented and tracked — not hidden.
 
 | Item | Reason it's a gap | Where tracked |
 |---|---|---|
-| Visual regression for Message Book | Package 3D scope — not authorized | `docs/ops/backlog-roadmap.md` |
+| Visual regression for Message Book | Package 3D COMPLETE — Layer 5 active | `scripts/visual-regression-harness.mjs`, `docs/qa/visual-regression-guide.md` |
 | Print-preview verification scripts | Vendor-gated | This file |
 | Load / performance testing | Not in launch set | This file |
 | Security testing pipeline | Future phase | This file |
@@ -214,5 +236,6 @@ When any of these moves from gap to authorized, add tests **first**, code second
 - `docs/qa/pre-commit-verification-template.md` — hygiene gate before commit
 - `docs/qa/package-verification-template.md` — per-package verification (Package 2.9)
 - `docs/qa/release-readiness-template.md` — release gate
-- `docs/qa/e2e-regression-harness.md` — harness operating manual
+- `docs/qa/e2e-regression-harness.md` — E2E harness operating manual
+- `docs/qa/visual-regression-guide.md` — visual regression harness (Package 3D)
 - `docs/dev/auto-management-protocol.md` — how testing fits the broader OS

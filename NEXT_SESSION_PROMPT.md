@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Gate 0 housekeeping in progress on `docs/fix-active-branch-after-5b-sync`. After merge: Package 3D authorized — create `feature/visual-regression-baseline-harness`. |
-| Branch | `docs/fix-active-branch-after-5b-sync` |
-| main HEAD | `4ae1e80` — merge: sync state after post-Package-5B weekly sync |
-| Next action | Run `/start`. After Gate 0 merges to main: create `feature/visual-regression-baseline-harness` and implement Package 3D. |
+| Resume into | Package 3D — Visual Regression Baseline Harness — implementation on `feature/visual-regression-baseline-harness`, awaiting Coordinator baseline review and commit approval. |
+| Branch | `feature/visual-regression-baseline-harness` |
+| main HEAD | `7fbb365` — merge: correct active branch after post-Package-5B state sync |
+| Next action | Run `/start`. Coordinator reviews Package 3D report and baselines. If approved: commit and merge. If not yet approved: read AI_HANDOFF.md for current state. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |
