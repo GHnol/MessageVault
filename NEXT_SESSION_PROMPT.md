@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Operator Reliability Repair — committed `81b2329` on `docs/operator-reliability-repair`. Awaiting Coordinator merge authorization. After merge: awaiting next package direction. |
-| Branch | `docs/operator-reliability-repair` |
-| main HEAD | `f5884ea` — merge: sync operating docs after Package 5B completion |
-| Next action | Run `/start`. Coordinator authorizes Operator Reliability Repair commit, then decides next package. |
+| Resume into | Operator Reliability Repair COMPLETE — merged `c27502c` to `main` 2026-06-02. Awaiting Coordinator direction for next package. |
+| Branch | `main` |
+| main HEAD | `c27502c` — merge: add operator reliability repair |
+| Next action | Run `/start`. Await Coordinator authorization for next package. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |

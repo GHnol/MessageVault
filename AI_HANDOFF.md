@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `ready-for-merge` — Operator Reliability Repair (OS/operator workflow only, not a product package). Committed `81b2329` on `docs/operator-reliability-repair`. Awaiting Coordinator merge authorization.
+**Status:** `complete` — Operator Reliability Repair MERGED to `main` as `c27502c` 2026-06-02. Working tree clean. No active package.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Operator Reliability Repair — OS/operator workflow only |
-| **Active branch** | `docs/operator-reliability-repair` | committed `81b2329` |
-| **main HEAD** | `f5884ea` — merge: sync operating docs after Package 5B completion |
+| **Active pass** | None — Operator Reliability Repair complete; awaiting Coordinator direction |
+| **Active branch** | `main` |
+| **main HEAD** | `c27502c` — merge: add operator reliability repair |
 | **Last completed pass** | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
 | **Active package** | None (this is OS/operator repair, not a product package) |
 | **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
@@ -31,7 +31,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (current pass — Operator Reliability Repair)
 
-Operator Reliability Repair — OS/operator workflow only. **Implementation complete; awaiting Coordinator commit authorization.**
+Operator Reliability Repair — OS/operator workflow only. **COMPLETE — merged `c27502c` to `main` 2026-06-02.**
 
 Delivered:
 1. `docs/dev/raw-transcript-capture-protocol.md` (new) — honest file-first response protocol with limitation statement, metadata block format, path convention, and gitignore verification steps.
@@ -57,7 +57,7 @@ Delivered:
 **OS audit:** 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE.
 **Notification diagnosis:** `Stop` hook is missing in both config dirs (`~/.claude-account-icloud` and `~/.claude`). `Notification` and `PermissionRequest` are configured. Manual step required to add Stop hook — see `docs/dev/notification-setup.md`.
 
-**Next exact action:** Coordinator reviews and authorizes merge of `docs/operator-reliability-repair` → `main`. Do not push or merge without explicit authorization.
+**Next exact action:** Coordinator decides next package or next direction. Do not start any package without explicit authorization.
 
 ---
 
