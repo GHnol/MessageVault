@@ -47,7 +47,7 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Operator Reliability Repair — implementation complete on `docs/operator-reliability-repair`, uncommitted. Awaiting Coordinator commit authorization. After commit + merge: awaiting next package direction. |
+| Resume into | Operator Reliability Repair — committed `81b2329` on `docs/operator-reliability-repair`. Awaiting Coordinator merge authorization. After merge: awaiting next package direction. |
 | Branch | `docs/operator-reliability-repair` |
 | main HEAD | `f5884ea` — merge: sync operating docs after Package 5B completion |
 | Next action | Run `/start`. Coordinator authorizes Operator Reliability Repair commit, then decides next package. |

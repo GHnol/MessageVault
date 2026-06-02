@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Operator Reliability Repair (OS/operator workflow only, not a product package). Implementation complete; uncommitted. Awaiting Coordinator commit authorization.
+**Status:** `ready-for-merge` — Operator Reliability Repair (OS/operator workflow only, not a product package). Committed `81b2329` on `docs/operator-reliability-repair`. Awaiting Coordinator merge authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -19,7 +19,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | Field | Value |
 |---|---|
 | **Active pass** | Operator Reliability Repair — OS/operator workflow only |
-| **Active branch** | `docs/operator-reliability-repair` (branched from main `f5884ea`; uncommitted changes) |
+| **Active branch** | `docs/operator-reliability-repair` | committed `81b2329` |
 | **main HEAD** | `f5884ea` — merge: sync operating docs after Package 5B completion |
 | **Last completed pass** | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
 | **Active package** | None (this is OS/operator repair, not a product package) |
@@ -57,7 +57,7 @@ Delivered:
 **OS audit:** 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE.
 **Notification diagnosis:** `Stop` hook is missing in both config dirs (`~/.claude-account-icloud` and `~/.claude`). `Notification` and `PermissionRequest` are configured. Manual step required to add Stop hook — see `docs/dev/notification-setup.md`.
 
-**Next exact action:** Coordinator reviews and authorizes commit.
+**Next exact action:** Coordinator reviews and authorizes merge of `docs/operator-reliability-repair` → `main`. Do not push or merge without explicit authorization.
 
 ---
 

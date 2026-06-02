@@ -22,11 +22,11 @@
 | Field | Value |
 |---|---|
 | main HEAD | `f5884ea` — merge: sync operating docs after Package 5B completion |
-| Active branch | `docs/operator-reliability-repair` (branched from main `f5884ea`; uncommitted changes) |
+| Active branch | `docs/operator-reliability-repair` — committed `81b2329`; awaiting merge |
 | Active pass | Operator Reliability Repair — OS/operator workflow only |
 | Last completed pass | `Package 5B — Message Book Proof Approval UX Foundation` — committed `fb62b5c`, merged `dc4f86b` 2026-06-02 |
 | Last closed package | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator authorizes Operator Reliability Repair commit, then decides next package |
+| Next authorized target | Coordinator authorizes merge of `docs/operator-reliability-repair` → `main`, then decides next package |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01; docs-watch framework + bootstrap copy-forward guidance + 288 OS audit checks |
