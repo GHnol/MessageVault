@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-5B weekly sync)
+**Updated by:** Claude Code (post-Package-3D state-sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -63,6 +63,7 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 2.9 — AI Project OS Auto-Management Upgrade Pass | COMPLETE | `81c5069` / `a20af30` |
 | Package 5A — Message Book Proof Approval State Foundation | COMPLETE | `e2df2a0` / `297a221` |
 | Package 5B — Message Book Proof Approval UX Foundation | COMPLETE | `fb62b5c` / `dc4f86b` |
+| Package 3D — Visual Regression Baseline Harness | COMPLETE | `5a5eaa0` / `645f6bd` |
 | AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
 | AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
 | AI Project OS v1.7 (Gates 1–6) | COMPLETE | `3c641a9`→`f30ea62` 2026-06-01 |
@@ -220,9 +221,14 @@ Package 5B (COMPLETE — `dc4f86b` 2026-06-02)
     → Proof approval UX foundation: KMEngine.ProofApprovalUX + index.html #bookProofPanel + persistence
     → 1704 Node tests; browser QA 36/36 PASS
 
+Package 3D (COMPLETE — `645f6bd` 2026-06-02)
+    → Visual Regression Baseline Harness: scripts/visual-regression-harness.mjs
+    → Scenario A 4-page baselines committed; BOOK_PAGINATION_VERSION=1; pixelmatch comparison
+    → vr:baseline + vr:check npm scripts; --simulate-regression mode verified
+    → No app code, no index.html, no src/**
+
 Coordinator decides next package ← current position
-    → Candidates: Package 3D (Visual Regression Baseline Harness, QA infra, no external gate)
-    → OR: scoped Phase 12 continuation (proof panel interactions, below GATE-04)
+    → Candidates: scoped Phase 12 continuation (proof panel interactions, below GATE-04)
     → OR: ProductDraft + Preflight Runner (Package 3 remaining scope)
     → "Package 5C" is NOT defined — do not start without explicit Coordinator scoping
 
@@ -238,7 +244,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Decide next package after Package 5B | Roadmap decision | High — Package 5B complete; candidates in `decision-log.md` |
+| Decide next package after Package 3D | Roadmap decision | High — Package 3D complete; candidates in `decision-log.md` |
 | Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
 | `scripts/node_modules` tracked-history cleanup | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |

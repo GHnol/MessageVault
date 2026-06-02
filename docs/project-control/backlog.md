@@ -38,7 +38,7 @@
 | Prepare scoped Package 5A prompt | P1 | Done | 12 | 5A authorized | Scoped prompt (no checkout/PDF/renderer) | Y | Y | N |
 | Package 5A — Proof Approval State Foundation | P1 | Done | 12 | Tower approved | Proof state model + tests; no app-scope creep | Y | Y | N |
 | Package 5B — Proof Approval UX Foundation | P1 | Done | 12 | Package 5A complete | 1704 Node tests; browser QA 36/36 PASS; merged `dc4f86b` 2026-06-02 | Y | Y | N |
-| Package 3D — Visual Regression Baseline Harness | P2 | Backlog | 0 (QA infra) | Coordinator authorization | Visual regression harness for Message Book rendering; no external gate; named in `docs/qa/e2e-regression-harness.md` | N | Y | N |
+| Package 3D — Visual Regression Baseline Harness | P2 | Done | 0 (QA infra) | — | `scripts/visual-regression-harness.mjs`; Scenario A baselines; merged `645f6bd` 2026-06-02 | N | Y | N |
 | Message Book composition continuation backlog | P2 | Backlog | 5 | — | ProductDraft / preflight runner scoped | N | Y | N |
 | Maintain E2E + unit baselines green | P1 | Ready | 0 | — | All suites green before any commit | N | Y | N |
 

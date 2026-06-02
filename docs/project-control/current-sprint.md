@@ -22,14 +22,15 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 
 | # | Task | Priority | Status | Notes |
 |---|---|---|---|---|
-| 1 | Post-Package-5B project-control Tower catch-up (this sync) | P1 | **Done** | Branch `docs/post-package-5b-weekly-sync`; all Tower docs updated ✓ |
-| 2 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; candidates: Package 3D, Phase 12 continuation, ProductDraft/preflight |
+| 1 | Post-Package-5B project-control Tower catch-up | P1 | **Done** | Branch `docs/post-package-5b-weekly-sync`; all Tower docs updated ✓ |
+| 2 | Package 3D — Visual Regression Baseline Harness | P1 | **Done** | impl `5a5eaa0`, merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; Scenario A baselines; 1704 tests; E2E 64/64 ✓ |
+| 3 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — all development work halted pending explicit Coordinator decision. Candidates recorded in decision-log.md.
+- **Coordinator authorize next product package** — P0 — Package 3D complete; all further development work halted pending Coordinator decision.
 
 ---
 

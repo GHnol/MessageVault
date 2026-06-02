@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — Package 3D — Visual Regression Baseline Harness IN PROGRESS on `feature/visual-regression-baseline-harness`. Awaiting Coordinator baseline review and commit approval.
+**Status:** `complete` — Package 3D — Visual Regression Baseline Harness COMPLETE. Implementation merged `645f6bd` to `main` 2026-06-02. Working tree clean. No active package.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,35 +18,41 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Package 3D — Visual Regression Baseline Harness (QA infrastructure only) |
-| **Active branch** | `feature/visual-regression-baseline-harness` |
-| **main HEAD** | `7fbb365` — merge: correct active branch after post-Package-5B state sync |
-| **Last completed pass** | `Gate 0 housekeeping` — impl `8968d41`, merged `7fbb365` 2026-06-02 |
-| **Active package** | Package 3D — Visual Regression Baseline Harness |
-| **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
-| **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
+| **Active pass** | State-sync: Package 3D completion — docs only |
+| **Active branch** | `docs/sync-after-package-3d-visual-regression` |
+| **main HEAD** | `645f6bd` — merge: add Message Book visual regression baseline harness |
+| **Last completed pass** | `Package 3D — Visual Regression Baseline Harness` — impl `5a5eaa0`, merged `645f6bd` 2026-06-02 |
+| **Active package** | None |
+| **Last closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
+| **Prior closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
-| **Package 3D** | IN PROGRESS — `feature/visual-regression-baseline-harness`; QA infrastructure; no app code |
+| **Package 3D** | COMPLETE — merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; 4-page Scenario A baselines; `BOOK_PAGINATION_VERSION=1` |
 | **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
 
 ---
 
-## Objective (current pass — Package 3D)
+## Objective (current pass — state-sync after Package 3D)
 
-Package 3D — Visual Regression Baseline Harness. **IN PROGRESS. Awaiting Coordinator baseline review and commit approval.**
+State-sync after Package 3D — marking Package 3D complete in Tower, backlog, sprint, kanban, command-center. Docs only. **IN PROGRESS on `docs/sync-after-package-3d-visual-regression`.**
 
-Scope: QA infrastructure only. `scripts/visual-regression-harness.mjs` with `--update-baselines`, `--check`, `--simulate-regression`, `--headed` modes. Committed Scenario A per-page baseline PNGs. New docs. No `index.html`, no `src/**`.
+**Next exact action:** Coordinator decides next development package or operating action. Do not start any package without explicit authorization.
+
+---
+
+## Objective (prior pass — Package 3D)
+
+Package 3D — Visual Regression Baseline Harness. **COMPLETE — impl `5a5eaa0`, merged `645f6bd` to `main` 2026-06-02.**
 
 Delivered:
-- `scripts/visual-regression-harness.mjs` — new harness script
-- `scripts/visual-regression-baselines/scenario-a/` — committed baseline PNGs + manifest
+- `scripts/visual-regression-harness.mjs` — 4 modes: `--update-baselines`, `--check`, `--simulate-regression`, `--headed`; port 7333; pixelmatch + pngjs; Scenario A
+- `scripts/visual-regression-baselines/scenario-a/` — 4 committed page PNGs + manifest; BOOK_PAGINATION_VERSION=1; ~66 KB total
 - `scripts/package.json` — added `pixelmatch`, `pngjs`, `vr:baseline`, `vr:check`
 - `.gitignore` — added `visual-regression-output/`
-- `docs/qa/visual-regression-guide.md` — new guide
-- `docs/qa/test-strategy.md` — updated visual regression section
-- `docs/qa/e2e-regression-harness.md` — updated visual fidelity section
+- `docs/qa/visual-regression-guide.md` — usage guide, baseline policy, threshold docs
+- `docs/qa/test-strategy.md` — 5 layers → 6 layers; visual regression added as Layer 5
+- `docs/qa/e2e-regression-harness.md` — visual fidelity section updated; Package 3D complete reference
 
-**Next exact action:** Coordinator reviews Package 3D final report and baseline screenshots. Approves commit and merge. Do not commit until Coordinator approves.
+**Results:** 1704 Node tests, E2E 41/41 seeded, 64/64 real-files; `--check` exits 0; `--simulate-regression` exits 1 (185,150 px mismatch detected on page 1); no app code touched.
 
 ---
 

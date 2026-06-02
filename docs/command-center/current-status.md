@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-5B weekly sync)
+**Updated by:** Claude Code (post-Package-3D state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -31,6 +31,7 @@
 | Package 2.9 | AI Project OS Auto-Management Upgrade Pass | COMPLETE — merged to main | `81c5069` | `a20af30` |
 | Package 5A | Message Book Proof Approval State Foundation | COMPLETE — merged to main | `e2df2a0` | `297a221` |
 | Package 5B | Message Book Proof Approval UX Foundation | COMPLETE — merged to main | `fb62b5c` | `dc4f86b` |
+| Package 3D | Visual Regression Baseline Harness | COMPLETE — merged to main | `5a5eaa0` | `645f6bd` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
@@ -106,13 +107,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 5B COMPLETE; candidates in `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3D COMPLETE (merged `645f6bd` 2026-06-02); candidates in `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> No active package. Package 5B COMPLETE (merged `dc4f86b` 2026-06-02). Next package candidates: Package 3D (Visual Regression Baseline Harness), scoped Phase 12 continuation, or ProductDraft/preflight scope. "Package 5C" is not defined in the repo — do not start without explicit scoping and Coordinator authorization.
+> No active package. Package 3D COMPLETE (merged `645f6bd` 2026-06-02). Visual regression harness now active at `scripts/visual-regression-harness.mjs`. Next package candidates: scoped Phase 12 continuation, ProductDraft/preflight scope, or another authorized direction. "Package 5C" is not defined in the repo — do not start without explicit scoping and Coordinator authorization.
 
 ---
 

@@ -16,17 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-02` (Package 3D implementation in progress)
+**Last updated:** `2026-06-02` (Package 3D completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `7fbb365` — merge: correct active branch after post-Package-5B state sync |
-| Active branch | `feature/visual-regression-baseline-harness` |
-| Active pass | Package 3D — Visual Regression Baseline Harness (QA infra; awaiting Coordinator baseline review) |
-| Last completed pass | `Gate 0 housekeeping` — impl `8968d41`, merged `7fbb365` 2026-06-02 |
-| Last closed package | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
-| Next authorized target | Package 3D commit — pending Coordinator baseline review |
+| main HEAD | `645f6bd` — merge: add Message Book visual regression baseline harness |
+| Active branch | `docs/sync-after-package-3d-visual-regression` |
+| Active pass | State-sync: Package 3D completion (docs only) |
+| Last completed pass | `Package 3D — Visual Regression Baseline Harness` — impl `5a5eaa0`, merged `645f6bd` 2026-06-02 |
+| Last closed package | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
+| Package 3D | COMPLETE — merged `645f6bd` 2026-06-02; visual regression harness; Scenario A baselines |
+| Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01; docs-watch framework + bootstrap copy-forward guidance + 288 OS audit checks |

@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-5B weekly sync)
+**Updated by:** Claude Code (post-Package-3D state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide next development package — candidates: Package 3D (QA infra), Phase 12 continuation, or ProductDraft/preflight | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Decide next development package — Package 3D complete; candidates: Phase 12 continuation, ProductDraft/preflight, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,9 +22,10 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 5B COMPLETE — merged `dc4f86b` 2026-06-02. Coordinator decides next package.**
+**Status: Package 3D COMPLETE — merged `645f6bd` 2026-06-02. Coordinator decides next package.**
 
-Package 5B (Message Book Proof Approval UX Foundation) is COMPLETE — merged to main (`dc4f86b` 2026-06-02). `KMEngine.ProofApprovalUX` with initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore; `#bookProofPanel` in `index.html`; 1704 Node tests; browser QA 36/36 PASS.
+Package 3D (Visual Regression Baseline Harness) is COMPLETE — merged to main (`645f6bd` 2026-06-02). `scripts/visual-regression-harness.mjs` with `--update-baselines`, `--check`, `--simulate-regression` modes; Scenario A 4-page baselines committed; `BOOK_PAGINATION_VERSION=1`; pixelmatch comparison; `vr:baseline` + `vr:check` npm scripts.
+Package 5B (Message Book Proof Approval UX Foundation) is COMPLETE — merged to main (`dc4f86b` 2026-06-02).
 Package 5A (Message Book Proof Approval State Foundation) is COMPLETE — merged to main (`297a221`). `KMEngine.ProofApprovalState` with STATUS constants, `canTransition`, `create`, `transition`; 137 new tests; no UI.
 AI Project OS v1.7 (all 6 gates) is COMPLETE — all merged to main 2026-06-01. OS self-audit 304/304 pass.
 Operator Reliability Repair is COMPLETE — merged `c27502c` 2026-06-02.
