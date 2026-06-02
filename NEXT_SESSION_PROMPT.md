@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Post-Package-5B weekly sync COMPLETE — merged `522ad12` to `main` 2026-06-02. State-sync in progress on `docs/sync-after-post-package-5b-weekly-sync`. After merge: no active package, Coordinator decides next. |
-| Branch | `docs/sync-after-post-package-5b-weekly-sync` (state-sync — pending merge to main) |
-| main HEAD | `522ad12` — merge: sync project control after Package 5B closeout |
-| Next action | Run `/start`. After state-sync merges: Await Coordinator authorization for next package. Candidates: Package 3D (Visual Regression Harness), Phase 12 continuation, or ProductDraft/preflight. |
+| Resume into | Gate 0 housekeeping in progress on `docs/fix-active-branch-after-5b-sync`. After merge: Package 3D authorized — create `feature/visual-regression-baseline-harness`. |
+| Branch | `docs/fix-active-branch-after-5b-sync` |
+| main HEAD | `4ae1e80` — merge: sync state after post-Package-5B weekly sync |
+| Next action | Run `/start`. After Gate 0 merges to main: create `feature/visual-regression-baseline-harness` and implement Package 3D. |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
 | State freshness | Run `node scripts/state-freshness-check.mjs` — WARN only (cosmetic hash lag, Post-Commit State Rule) |
 | Package 5A | COMPLETE — merged `297a221`. |

@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-02` (post-Package-5B weekly sync — state-sync after merge)
+**Last updated:** `2026-06-02` (Package 3D implementation in progress)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `522ad12` — merge: sync project control after Package 5B closeout |
-| Active branch | `docs/sync-after-post-package-5b-weekly-sync` |
-| Active pass | State-sync: post-Package-5B weekly sync closeout (docs only, no product code) |
-| Last completed pass | `Post-Package-5B Weekly Sync` — impl `bb45dbb`, merged `522ad12` 2026-06-02 |
+| main HEAD | `4ae1e80` — merge: sync state after post-Package-5B weekly sync |
+| Active branch | `docs/fix-active-branch-after-5b-sync` |
+| Active pass | Housekeeping — correcting stale branch pointer in state docs |
+| Last completed pass | `Post-Package-5B Weekly Sync + State Cleanup` — merged `4ae1e80` 2026-06-02 |
 | Last closed package | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or next direction |
+| Next authorized target | Package 3D — Visual Regression Baseline Harness (authorized; starts after Gate 0 housekeeping) |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. 1704 Node tests. Browser QA 36/36 PASS. |
 | v1.7 Gate 6 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01; docs-watch framework + bootstrap copy-forward guidance + 288 OS audit checks |

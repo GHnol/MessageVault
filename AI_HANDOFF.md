@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Post-Package-5B weekly sync COMPLETE. Weekly sync merged `522ad12` to `main` 2026-06-02. Working tree clean. No active package.
+**Status:** `housekeeping` — Correcting stale branch pointer in state docs. Working tree has 3-file housekeeping edits only. Package 3D authorized but not yet started.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-02`
 
@@ -18,32 +18,36 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | State-sync: post-Package-5B weekly sync closeout (docs only, no product code) |
-| **Active branch** | `docs/sync-after-post-package-5b-weekly-sync` |
-| **main HEAD** | `522ad12` — merge: sync project control after Package 5B closeout |
-| **Last completed pass** | `Post-Package-5B Weekly Sync` — impl `bb45dbb`, merged `522ad12` 2026-06-02 |
-| **Active package** | None |
+| **Active pass** | Housekeeping — correcting stale active-branch pointer after post-5B state-sync merge |
+| **Active branch** | `docs/fix-active-branch-after-5b-sync` |
+| **main HEAD** | `4ae1e80` — merge: sync state after post-Package-5B weekly sync |
+| **Last completed pass** | `Post-Package-5B Weekly Sync + State Cleanup` — weekly sync merged `522ad12`, state cleanup merged `4ae1e80` 2026-06-02 |
+| **Active package** | None (Package 3D authorized, implementation starts after this housekeeping merges) |
 | **Last closed package** | `Package 5B — Message Book Proof Approval UX Foundation` — FULLY COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Prior closed package** | `Package 5A — Message Book Proof Approval State Foundation` (merged `297a221`) |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
-| **Package 3D** | Candidate only — not authorized; see `docs/project-control/decision-log.md` |
+| **Package 3D** | Authorized — Visual Regression Baseline Harness; implementation starts after Gate 0 housekeeping merges |
 | **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
 
 ---
 
-## Objective (current pass — post-Package-5B weekly sync)
+## Objective (current pass — housekeeping)
+
+Housekeeping: correcting stale active-branch pointer (`docs/sync-after-post-package-5b-weekly-sync` → `main`) in state docs after post-5B state-sync merge. Docs-only, 3 files. **IN PROGRESS on `docs/fix-active-branch-after-5b-sync`.**
+
+**Next exact action:** After Gate 0 merges to main → create `feature/visual-regression-baseline-harness` → implement Package 3D. Do not start Package 3D until Gate 0 is merged.
+
+---
+
+## Objective (prior pass — post-Package-5B weekly sync)
 
 Post-Package-5B weekly sync — project-control Tower catch-up (docs only). **COMPLETE — impl `bb45dbb`, merged `522ad12` to `main` 2026-06-02.**
 
 Delivered (15 files, docs-only):
 - Marked Package 5B Done across Tower, backlog, command-center, and state docs
 - Closed Sprint 2026-06-A; opened Sprint 2026-06-B
-- Updated `backlog.md`, `current-sprint.md`, `master-schedule.md`, `decision-log.md`, `coordinator-weekly-sync.md`, `report-mirror-log.md`, `shareable-status-summary.md`, `current-status.md`, `next-actions.md`, `coordinator-dashboard.md`, `backlog-roadmap.md`, `architecture-roadmap.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`
-- Package 3D recorded as candidate (not authorized); Package 5C confirmed not defined
-- All validators passed (OS audit 304/304, state freshness WARN-only, project-control sync 11/11, docs-watch 36/36, bootstrap 45/45)
+- All validators passed (OS audit 304/304, state freshness WARN-only, project-control sync 11/11)
 - No app code touched; no external mutations
-
-**Next exact action:** Coordinator decides next development package — authorize Package 3D, a scoped Phase 12 continuation, or another operating action. Do not start any package without explicit authorization.
 
 ---
 
