@@ -47,11 +47,12 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate. IN PROGRESS on branch `task/package-3h-draft-preflight-proof-panel-gate`. |
-| Branch | `task/package-3h-draft-preflight-proof-panel-gate` |
-| main HEAD | `a02d138` — merge: sync operating docs after Package 3G completion |
-| Next action | Run `/start`. Resume Package 3H implementation from `AI_HANDOFF.md`. |
-| Package 3G | COMPLETE — lifecycle modules in browser; showBookView draft init; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests); 2039 Node tests; E2E 47/47 seeded; 70/70 real-files |
+| Resume into | Package 3H COMPLETE — merged `1297f92` 2026-06-03. State-sync in progress. No active package. |
+| Branch | `docs/sync-after-package-3h-draft-preflight-proof-panel-gate` (state-sync only; resumes from main after merge) |
+| main HEAD | `1297f92` — merge: gate proof panel on draft book check status |
+| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Package 3H | COMPLETE — proof panel gated on draft book check (PAGINATION_STABILITY); Phase 23 E2E (6 tests); 2039 Node tests; E2E 53/53 seeded; 76/76 real-files; visual regression PASS |
+| Package 3G | COMPLETE — lifecycle modules in browser; showBookView draft init; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
 | Package 3F | COMPLETE — `src/products/product-draft-lifecycle.js` + `src/tests/product-draft-lifecycle-tests.mjs`; 2039 Node tests; engine layer; no app code |
 | Package 3E | COMPLETE — `src/products/product-draft-state.js` + `product-preflight.js`; engine layer; no manufacturing readiness API; 1935 Node tests |
 | Package 3D | COMPLETE — `scripts/visual-regression-harness.mjs`; `vr:baseline` + `vr:check`; Scenario A baselines committed |

@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-03
-**Last mirrored:** RPT-20260603-002 (Package 3G closeout — Session UI Wiring for ProductDraft Lifecycle COMPLETE)
-**Active gate:** None — Package 3G COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260603-003 (Package 3H closeout — Draft-Preflight Status Surface and Proof Panel Gate COMPLETE)
+**Active gate:** None — Package 3H COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260603-003 | package_closeout | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | task/package-3h-draft-preflight-proof-panel-gate | c0ee68d / 1297f92 | mirrored | 2026-06-03 |
 | RPT-20260603-002 | package_closeout | Package 3G — Session UI Wiring for ProductDraft Lifecycle | feature/product-draft-lifecycle-session-wiring | 05f4048 / 3192a15 | mirrored | 2026-06-03 |
 | RPT-20260603-001 | package_closeout | Package 3F — ProductDraft Lifecycle Coordinator | feature/product-draft-lifecycle-coordinator | 18f3544 / 395629e | mirrored | 2026-06-03 |
 | RPT-20260602-003 | package_closeout | Package 3E — ProductDraft and Preflight Runner Foundation | feature/product-draft-preflight-foundation | dd4f641 / 4390038 | mirrored | 2026-06-02 |
@@ -51,6 +52,23 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260603-003 — package_closeout — Package 3H — Draft-Preflight Status Surface and Proof Panel Gate
+
+**Created:** 2026-06-03T00:00:00Z | **Branch:** task/package-3h-draft-preflight-proof-panel-gate | **HEAD:** c0ee68d (impl) / 1297f92 (merge) | **Status:** mirrored
+
+Package 3H — Draft-Preflight Status Surface and Proof Panel Gate COMPLETE — implementation `c0ee68d`, merge `1297f92` 2026-06-03. Delivered (index.html wiring only; zero engine module changes): (1) `showBookView()` extended — after existing none→in-progress draft init loop, a second loop auto-runs PAGINATION_STABILITY book check for each real group whose draft is at `in-progress`. Advances: in-progress → ready-for-preflight → preflight-passed/failed via `ProductPreflight.run('PAGINATION_STABILITY', inputs)` + `createReport([result])` + `applyPreflightResult`. `runAll()` NOT called; 9 vendor-gated checks remain not-applicable. (2) `renderBookProofPanel()` extended — reads draft status for all real groups; gates "Mark ready for proof review" button on `_allBookCheckPassed` (all groups preflight-passed). If gate not met: shows "Book check needs attention before proof review." (preflight-failed) or "Checking whether this book is ready for proof review." (transient). "preflight" not in any user-visible string. All non-none proof states (pending-review, approved, changes-requested, revoked) unchanged. (3) E2E Phase 22 updated — 4 assertions changed from `in-progress` to `preflight-passed` to reflect new expected state. (4) E2E Phase 23 added — 6 tests: book-check auto-advance, getGroupDraft status, proof panel button gate, idempotency, save/restore, ProofApprovalUX independence. (5) State, project-control, and architecture docs updated.
+
+**Tests:** 2039 Node tests, 0 failed. E2E seeded 53/53. E2E real-files 76/76. Visual regression PASS (harness captures per-page `.book-page` elements; proof panel not included in captures; all 4 Scenario A baselines unchanged). OS audit 324/0/0. Hard exclusion diff: empty.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — src/products/**, src/state/**, public/**, amplify/**, root package.json, scripts/package.json, scripts/package-lock.json untouched; proofSupported stays false; no readiness gate flipped; no GATE-04 crossing; no checkout/PDF/digital facsimile/vendor/manufacturing; no admin approve/revoke/request-changes; no credentials/tokens/raw-transcripts committed; local-artifacts/ preserved and locally ignored only.
+**Package 5C:** not defined — do not start without explicit Coordinator scoping.
+**Next action:** Coordinator decides next development package or operating action. Recommended next: AI Project OS v1.8 standalone export task from main using `local-artifacts/ai-os-v1-4-2-input/` as the v1.4.2 structural baseline.
+**Follow-up:** false
+
+*Entry added as the Package 3H closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260603-002 — package_closeout — Package 3G — Session UI Wiring for ProductDraft Lifecycle
 

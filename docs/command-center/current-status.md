@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-03
-**Updated by:** Claude Code (post-Package-3F state-sync)
+**Updated by:** Claude Code (post-Package-3H state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -35,6 +35,7 @@
 | Package 3E | ProductDraft and Preflight Runner Foundation | COMPLETE — merged to main | `dd4f641` | `4390038` |
 | Package 3F | ProductDraft Lifecycle Coordinator | COMPLETE — merged to main | `18f3544` | `395629e` |
 | Package 3G | Session UI Wiring for ProductDraft Lifecycle | COMPLETE — merged to main | `05f4048` | `3192a15` |
+| Package 3H | Draft-Preflight Status Surface and Proof Panel Gate | COMPLETE — merged to main | `c0ee68d` | `1297f92` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
@@ -44,7 +45,7 @@
 
 ## App code state
 
-- App code last changed: Package 3G (`05f4048`) — lifecycle modules loaded in browser runtime; `showBookView()` draft init; `enterComposition()` hook; `getGroupDraft()` test helper on `window.__km`. No rendering, proof panel, or eligibility logic changed. (Package 5B last changed `index.html` for UI: `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring.)
+- App code last changed: Package 3H (`c0ee68d`) — `showBookView()` auto-runs PAGINATION_STABILITY book check for in-progress drafts; `renderBookProofPanel()` gated on all real groups reaching preflight-passed. Phase 22 E2E tests updated; Phase 23 added (6 tests). No engine module changes. (Package 3G loaded lifecycle modules in browser runtime. Package 5B added `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules, `showBookView()` draft init loop, `enterComposition()` hook, `getGroupDraft()` on `__km`).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/products/`: 16 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight, product-draft-lifecycle)

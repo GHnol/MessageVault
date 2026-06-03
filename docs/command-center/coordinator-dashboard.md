@@ -242,10 +242,20 @@ Package 3F (COMPLETE — `395629e` 2026-06-03)
     → in-place mutation of group.productDrafts; result envelopes {success, error, draft}
     → 104 tests (9 suites incl. semantic guards); 2039 Node tests total; engine layer only, no index.html
 
+Package 3G (COMPLETE — `3192a15` 2026-06-03)
+    → Session UI Wiring for ProductDraft Lifecycle
+    → showBookView() draft init (none→in-progress, idempotent); enterComposition() hook; getGroupDraft() test helper
+    → Phase 22 E2E (6 tests); 2039 Node tests; 47 seeded
+
+Package 3H (COMPLETE — `1297f92` 2026-06-03)
+    → Draft-Preflight Status Surface and Proof Panel Gate
+    → showBookView() auto-runs PAGINATION_STABILITY book check for in-progress drafts: advances to preflight-passed/failed
+    → renderBookProofPanel() gated on all real groups reaching preflight-passed; user-facing copy uses "book check" (no "preflight")
+    → Phase 23 E2E (6 tests); 2039 Node tests; 53 seeded; no engine changes; visual regression PASS
+
 Coordinator decides next package ← current position
-    → Candidates: scoped Phase 12 continuation (proof panel interactions, below GATE-04)
-    → OR: session UI wiring for draft/preflight state (engine complete in 3E + 3F)
-    → OR: preflight runners for vendor-gated checks (gated until vendor confirmed)
+    → Candidates: preflight runners for 9 vendor-gated checks (gated until vendor confirmed)
+    → OR: further scoped Phase 12 continuation
     → "Package 5C" is NOT defined — do not start without explicit Coordinator scoping
 
 Designer confirmed (budget resolved)

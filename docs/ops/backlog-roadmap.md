@@ -243,11 +243,28 @@ What this does NOT deliver: UI wiring, index.html changes, proof approval change
 
 ---
 
-### Package 3 remaining scope (after Package 3F)
+### Package 3H — Draft-Preflight Status Surface and Proof Panel Gate
+
+**Branch:** `task/package-3h-draft-preflight-proof-panel-gate`
+**Status:** COMPLETE — merged to main (feature: `c0ee68d`, merge: `1297f92` 2026-06-03)
+
+Delivered (index.html wiring only — no engine module changes):
+- `index.html` `showBookView()` — auto-runs PAGINATION_STABILITY book check for each real group whose message-book draft is at `in-progress`. Advances draft: in-progress → ready-for-preflight → preflight-passed/failed. Uses `ProductPreflight.run('PAGINATION_STABILITY', inputs)` + `createReport([result])` only; `runAll()` not called; 9 vendor-gated checks remain not-applicable.
+- `index.html` `renderBookProofPanel()` — gates "Mark ready for proof review" button on all real groups reaching `preflight-passed`. Shows "Book check needs attention before proof review." (preflight-failed) or "Checking whether this book is ready for proof review." (transient) when gate not met. "preflight" not in user-visible text. No new admin controls.
+- `scripts/e2e-regression-harness.mjs` — Phase 22 updated (draft now reaches `preflight-passed` on book entry; 4 assertion updates). Phase 23 added (6 tests): book-check auto-advance, draft status, proof panel button gate, idempotency, save/restore, ProofApprovalUX independence.
+- `docs/qa/test-strategy.md` and `docs/architecture/architecture-roadmap.md` updated.
+
+**Tests:** 2039 Node tests, 0 failed. E2E seeded 53/53. E2E real-files 76/76. Visual regression PASS (baselines unchanged — harness captures per-page elements; proof panel not captured). OS audit 324/0/0.
+
+**Hard exclusions confirmed:** src/**, proofSupported, EXPERIENCE_STATUS, approve/revoke/request-changes, checkout, PDF, digital facsimile, vendor, manufacturing, GATE-04, Package 5C.
+
+---
+
+### Package 3 remaining scope (after Package 3H)
 
 The following items from original Package 3 scope remain not yet authorized as a named package:
-- Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed; PAGINATION_STABILITY delivered in 3E)
-- Session UI wiring for draft/preflight state — DELIVERED in Package 3G (`05f4048` / `3192a15` 2026-06-03); lifecycle modules in browser; showBookView draft init; enterComposition hook; getGroupDraft test helper; Phase 22 E2E (6 tests)
+- Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed; PAGINATION_STABILITY delivered in 3E and auto-wired in 3H)
+- Session UI wiring for draft/preflight state — DELIVERED in Package 3G (`05f4048` / `3192a15` 2026-06-03) and Package 3H (`c0ee68d` / `1297f92` 2026-06-03)
 
 ---
 
