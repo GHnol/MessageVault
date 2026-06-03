@@ -11,7 +11,7 @@ Newest entries first.
 
 ## 2026-06-03 — AI Project OS v1.8: State-Zero Bootstrap Finalization
 
-**Status:** IN PROGRESS — on branch `docs/state-zero-bootstrap-finalization` 2026-06-03. Awaiting Coordinator commit approval.
+**Status:** COMPLETE — repair commit `25e2939`, merged `cf63b88` to `main` 2026-06-03. No external mutations. No product code.
 **Scope:** Add State-Zero closeout reliability layer so wrong active branch, wrong active package, and wrong next action are blocking operational FAILs (never cosmetic). Harden `state-freshness-check.mjs` and `start-router.mjs`. Update all closeout/handoff/precommit/start/weekly-sync skills. Create v1.8 final reference and provisioning pack (superseding old v1_4_2 artifacts). Update OS audit (Section 6l). Update project-control Tower docs. Docs and scripts only. No product/app code.
 
 ### Added

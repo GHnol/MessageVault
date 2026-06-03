@@ -11,7 +11,7 @@ Entries are point-in-time. Verify against `CHANGELOG.md` and git history before 
 
 | Version | Package | Date | Status |
 |---|---|---|---|
-| 1.8.0 | AI Project OS v1.8 — State-Zero Bootstrap Finalization | 2026-06-03 | IN PROGRESS — on `docs/state-zero-bootstrap-finalization` |
+| 1.8.0 | AI Project OS v1.8 — State-Zero Bootstrap Finalization | 2026-06-03 | COMPLETE — repair `25e2939`, merged `cf63b88` 2026-06-03 |
 | 1.7.6 | AI Project OS v1.7 Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization | 2026-06-01 | COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01 |
 | 1.7.5 | AI Project OS v1.7 Gate 5 — External Sync Consistency Validators | 2026-06-01 | COMPLETE — merged `2b37e13` 2026-06-01 |
 | 1.7.4 | AI Project OS v1.7 Gate 4 — Start Router, Context Usage, and Model Routing Hardening | 2026-06-01 | COMPLETE — merged `352356b` 2026-06-01 |

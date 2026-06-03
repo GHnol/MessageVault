@@ -26,7 +26,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 2 | Package 3D — Visual Regression Baseline Harness | P1 | **Done** | impl `5a5eaa0`, merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; Scenario A baselines; E2E 64/64 ✓ |
 | 3 | Package 3E — ProductDraft and Preflight Runner Foundation | P1 | **Done** | impl `dd4f641`, merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; 1935 Node tests; E2E 64/64 ✓ |
 | 4 | Package 3F — ProductDraft Lifecycle Coordinator | P1 | **Done** | impl `18f3544`, merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; 2039 Node tests; engine layer only ✓ |
-| 5 | AI Project OS v1.8 — State-Zero Bootstrap Finalization | P1 | **In Progress** | On `docs/state-zero-bootstrap-finalization` 2026-06-03; OS + docs only; awaiting Coordinator commit approval |
+| 5 | AI Project OS v1.8 — State-Zero Bootstrap Finalization | P1 | **Done** | repair `25e2939`, merged `cf63b88` 2026-06-03; State-Zero protocol + hardened scripts + v1.8 pack; 324 OS audit checks ✓ |
 | 6 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3G planned but not authorized |
 
 ---

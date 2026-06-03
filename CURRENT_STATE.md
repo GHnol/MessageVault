@@ -21,9 +21,9 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `effe6e5` — merge: correct active branch after Package 3F state sync |
-| Active branch | `docs/state-zero-bootstrap-finalization` |
-| Active pass | AI Project OS v1.8 — State-Zero Bootstrap Finalization |
+| main HEAD | `cf63b88` — merge: enforce State-Zero closeout and finalize AI OS bootstrap pack v1.8 |
+| Active branch | `main` |
+| Active pass | None |
 | Last completed pass | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
 | Last closed package | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE |
 | Next authorized target | Coordinator decides next package or operating action |

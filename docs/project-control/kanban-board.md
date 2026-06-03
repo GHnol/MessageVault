@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- **AI Project OS v1.8 — State-Zero Bootstrap Finalization** · AI Workflow · Ph0 · on `docs/state-zero-bootstrap-finalization` 2026-06-03; State-Zero rule + hardened start-router/state-freshness + v1.8 pack; docs and scripts only; awaiting Coordinator commit approval
+- _(empty — v1.8 COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
 - **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3F COMPLETE 2026-06-03; next package pending Coordinator authorization
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **AI Project OS v1.8 — State-Zero Bootstrap Finalization** · AI Workflow · Ph0 · repair `25e2939`, merged `cf63b88` 2026-06-03; State-Zero protocol + hardened scripts + v1.8 pack; 324 OS audit checks — COMPLETE
 - **Package 3F — ProductDraft Lifecycle Coordinator** · Development / Engine · Ph12 · implementation `18f3544`, merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; 2039 Node tests; engine layer only — COMPLETE
 - **Package 3E — ProductDraft and Preflight Runner Foundation** · Development / Engine · Ph12 · implementation `dd4f641`, merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; 1935 Node tests; E2E 64/64 PASS; no manufacturing readiness API — COMPLETE
 - **Package 3D — Visual Regression Baseline Harness** · QA Infrastructure · Ph0 · implementation `5a5eaa0`, merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; Scenario A baselines; E2E 64/64 PASS — COMPLETE
