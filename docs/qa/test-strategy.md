@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 1935 baseline in Package 3E).
-**Last updated:** 2026-06-02 (America/New_York)
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F).
+**Last updated:** 2026-06-03 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -16,7 +16,7 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 3E — confirmed baseline 1935):**
+**Suites and counts (as of Package 3F — confirmed baseline 2039):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
@@ -34,10 +34,11 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `proof-approval-ux-tests.mjs` | 77 | Proof approval UX layer: initialize, submit, serialize/restore, prohibited fields (Package 5B) |
 | `product-draft-state-tests.mjs` | 90 | ProductDraft lifecycle state machine, transitions, semantic guards (Package 3E) |
 | `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
+| `product-draft-lifecycle-tests.mjs` | 104 | Lifecycle coordinator API, all lifecycle paths, mutation model, duplicate handling, semantic guards (Package 3F) |
 
-**Total: 1935 tests.** All must remain green before any commit.
+**Total: 2039 tests.** All must remain green before any commit.
 
-Note: 1704 was the Package 5B baseline. Package 3E added `product-draft-state-tests.mjs` (90), `product-preflight-tests.mjs` (119), and 22 new persistence tests (135 → 157), raising the confirmed baseline to 1935.
+Note: 1935 was the Package 3E baseline. Package 3F added `product-draft-lifecycle-tests.mjs` (104 tests), raising the confirmed baseline to 2039.
 
 **Run:**
 
@@ -192,7 +193,7 @@ Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regres
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 14 Node unit suites green (1935 tests).
+1. All 15 Node unit suites green (2039 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (41 tests).
 3. If real-file paths changed: E2E real-files green (64 total).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
