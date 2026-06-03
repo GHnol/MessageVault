@@ -17,6 +17,19 @@ Keep the Project Control Tower current on a weekly cadence. The weekly sync is t
 
 Note: This skill is the escalation path for the internal sync check. After every package closeout, the closeout skill checks whether a weekly sync is needed. If yes, it flags the need — the Coordinator then authorizes and invokes this skill.
 
+## State-Zero check before sync
+
+Before producing any weekly sync output, verify State-Zero:
+
+```
+node scripts/state-freshness-check.mjs   # must report 0 FAILs
+node scripts/start-router.mjs            # must not return NEEDS_STATE_SYNC for stale branch
+```
+
+If the state docs point to a wrong active branch, fix State-Zero first. The weekly sync cannot correctly reflect project state when the state docs are operationally misleading.
+
+Full protocol: `docs/dev/state-zero-closeout-protocol.md`
+
 ## Files to read
 
 1. `docs/project-control/coordinator-weekly-sync.md` (the process)

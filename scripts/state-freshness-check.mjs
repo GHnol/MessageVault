@@ -124,20 +124,35 @@ const curStateHashes = extractHashes(curState);
 
 // ── CHECK A: Branch alignment ─────────────────────────────────────────────────
 // FAIL if state docs record a branch that does not match the current git branch.
+//
+// State-Zero rule: wrong active branch is ALWAYS a FAIL, never cosmetic.
+// The Post-Commit State Rule (hash lag) does NOT apply to branch field mismatches.
+// A state doc pointing to a merged docs/sync-* or feature/* branch while on main
+// is a State-Zero violation and must be fixed before any push or closeout.
+//
+// Reference: docs/dev/state-zero-closeout-protocol.md
 
 function checkBranchAlignment(docName, docBranch) {
   if (!docBranch) {
     addIssue('FAIL_WRONG_ACTIVE_BRANCH', 'FAIL', docName,
-      `Cannot extract active branch from ${docName}. The next agent cannot determine the correct branch.`,
+      `Cannot extract active branch from ${docName}. The next agent cannot determine the correct branch. ` +
+      `State-Zero rule: wrong active branch is always FAIL, never cosmetic.`,
       `Ensure ${docName} has a clearly formatted "Active branch" or "Branch" field.`);
     return;
   }
   if (docBranch !== currentBranch) {
+    // Detect the specific post-merge stale-sync-branch pattern
+    const isMergedSyncBranch = /^docs\/sync-|^feature\/|^docs\/fix-active-branch-/.test(docBranch) && currentBranch === 'main';
+    const specificGuidance = isMergedSyncBranch
+      ? `This is the post-merge stale-sync-branch pattern: "${docBranch}" was merged to main but state docs still point to it. ` +
+        `Update active branch to "main" and active package/pass to "None" before pushing.`
+      : `Update the branch field in ${docName} to "${currentBranch}". ` +
+        `If you just created a new implementation branch, update state docs before any other edits.`;
     addIssue('FAIL_WRONG_ACTIVE_BRANCH', 'FAIL', docName,
       `${docName} records active branch as "${docBranch}" but current git branch is "${currentBranch}". ` +
-      `The next agent would resume on the wrong branch.`,
-      `Update the branch field in ${docName} to "${currentBranch}". ` +
-      `If you just created a new implementation branch, update state docs before any other edits.`);
+      `The next agent would resume on the wrong branch. ` +
+      `State-Zero rule: this is always a FAIL — the Post-Commit State Rule does not excuse wrong active branch fields.`,
+      specificGuidance);
   } else {
     addPass(`${docName}: branch matches git ("${currentBranch}")`);
   }
@@ -403,7 +418,10 @@ if (failIssues.length > 0) verdict = 'FAIL';
 const POST_COMMIT_RULE_NOTE =
   'HEAD hash lag of 1 commit in state docs is WARN (cosmetic), not FAIL per the Post-Commit State Rule. ' +
   'The corrective control is preflight git log — not a follow-up state-sync commit. ' +
-  'See docs/ai-system/universal-standards.md § "Post-Commit State Rule".';
+  'See docs/ai-system/universal-standards.md § "Post-Commit State Rule". ' +
+  'IMPORTANT: The Post-Commit State Rule does NOT excuse wrong active branch, wrong active package, ' +
+  'or wrong next action fields. Those are State-Zero FAILs (see docs/dev/state-zero-closeout-protocol.md). ' +
+  'Only historical hash references in narrative/completed sections are cosmetic.';
 
 if (JSON_MODE) {
   const out = {

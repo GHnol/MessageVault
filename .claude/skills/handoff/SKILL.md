@@ -31,6 +31,19 @@ Run in parallel:
 - `git status --short`
 - `git log --oneline -5`
 
+## State-Zero requirement
+
+A handoff is only complete when State-Zero is achieved: active branch matches `git branch --show-current`, active package/pass is "None" when work is done, and next action is accurate. Run:
+
+```
+node scripts/state-freshness-check.mjs   # must report 0 FAILs
+node scripts/start-router.mjs --mode handoff
+```
+
+Wrong active branch is always a FAIL — never cosmetic, never excused by the Post-Commit State Rule. After any merge to `main`, update state docs to say "active branch: main" before completing the handoff.
+
+Full protocol: `docs/dev/state-zero-closeout-protocol.md`
+
 ## Sync obligations
 
 When preparing a handoff after meaningful work, run the start router and state freshness validator to detect misdirection before the next agent picks up:

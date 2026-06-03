@@ -322,6 +322,24 @@ node scripts/raw-transcript-check.mjs
 
 ---
 
+## State-Zero requirement (AI Project OS v1.8)
+
+Every final closeout — every session-ending push, merge, or closeout report — must achieve State-Zero before proposing the push or merge:
+
+**State-Zero means:** `node scripts/state-freshness-check.mjs` exits 0 with 0 FAILs, AND `node scripts/start-router.mjs` does not return `NEEDS_STATE_SYNC` for wrong operational fields.
+
+The following are never cosmetic and cannot be excused by the Post-Commit State Rule:
+- Active branch field ≠ current git branch
+- State doc references a `docs/sync-*` or `feature/*` branch while on `main`
+- Active package/pass is non-none when no package is running
+- Next action points to a closed branch or completed pass
+
+**Post-merge obligation:** After any merge to `main`, verify State-Zero before ending the session. If state docs still point to the merged branch, update them and commit the correction on a brief `docs/fix-active-branch-*` branch, then re-verify.
+
+Full protocol: `docs/dev/state-zero-closeout-protocol.md`
+
+---
+
 ## What this contract does NOT do
 
 - It does not commit or push — those remain explicit user-instruction steps.

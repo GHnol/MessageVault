@@ -66,6 +66,12 @@ Always verify current `HEAD` during preflight:
 
 If the recorded HEAD differs from the actual HEAD by one commit and the named package / branch / scope / next action are still accurate, this is a cosmetic mismatch — proceed using the live `git` values. **Do not** propose a state-sync commit just to update the hash; do so only if the docs would misdirect the next agent (wrong branch, wrong package, wrong task, weakened scope, stale blocker).
 
+**State-Zero rule:** Wrong active branch is NEVER cosmetic. If the state docs record a branch that does not match `git branch --show-current` — especially if they reference a merged `docs/sync-*` or `feature/*` branch while on `main` — that is a State-Zero FAIL requiring correction before proceeding. The Post-Commit State Rule does NOT excuse wrong active branch fields; it only excuses hash lag in narrative sections.
+
+**Post-merge obligation:** After any merge to `main`, verify that state docs say "active branch: main" before ending the session. If they still point to the merged branch, run the State-Zero closeout checklist and create a correction commit before pushing.
+
+Full protocol: `docs/dev/state-zero-closeout-protocol.md`
+
 ---
 
 ## Stop conditions

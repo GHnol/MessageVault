@@ -48,6 +48,14 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | Claude/Codex interchangeable over repo substrate | Active | 2026-05 | AI Workflow | Package 2.7 |
 | Project Control Tower is the coordination layer | Active | 2026-05-17 | Coordinator | Package 2.8 (this) |
 
+## Active (governing, may evolve)
+
+(Row added 2026-06-03)
+
+| Decision | Status | Date | Owner | Notes |
+|---|---|---|---|---|
+| State-Zero Closeout Rule: wrong active branch is always FAIL, not cosmetic | Active | 2026-06-03 | AI Workflow | v1.8 — closes the gap where post-merge stale docs required Gate 0 housekeeping. Post-Commit State Rule (hash lag) and State-Zero (operational fields) are co-existing, not competing. |
+
 ## Open decisions (need a call)
 
 | Decision | Status | Owner | Notes |

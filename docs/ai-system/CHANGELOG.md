@@ -9,6 +9,61 @@ Newest entries first.
 
 ---
 
+## 2026-06-03 — AI Project OS v1.8: State-Zero Bootstrap Finalization
+
+**Status:** IN PROGRESS — on branch `docs/state-zero-bootstrap-finalization` 2026-06-03. Awaiting Coordinator commit approval.
+**Scope:** Add State-Zero closeout reliability layer so wrong active branch, wrong active package, and wrong next action are blocking operational FAILs (never cosmetic). Harden `state-freshness-check.mjs` and `start-router.mjs`. Update all closeout/handoff/precommit/start/weekly-sync skills. Create v1.8 final reference and provisioning pack (superseding old v1_4_2 artifacts). Update OS audit (Section 6l). Update project-control Tower docs. Docs and scripts only. No product/app code.
+
+### Added
+
+- `docs/dev/state-zero-closeout-protocol.md` — State-Zero definition, FAIL classification, post-merge obligation, recurring stale-doc failure mode, closeout checklist, relationship to Post-Commit State Rule, backed-by references.
+- `docs/ai-system/AI_Project_OS_Final_Reference_COMPLETE_v1_8.md` — single-file orientation document for v1.8; supersedes `v1_4_2` pack references; covers all OS capabilities from v0.1.0 through v1.8.
+- `docs/ai-system/AI_Project_OS_Full_Provisioning_Pack_v1_8.md` — step-by-step provisioning sequence for new repos; covers all 13 steps and key copy-forward lessons from KeepMees; supersedes `v1_4_2` pack.
+
+### Modified
+
+- `scripts/state-freshness-check.mjs` — FAIL_WRONG_ACTIVE_BRANCH explanation updated with State-Zero rule note and Post-Commit State Rule limitation; POST_COMMIT_RULE_NOTE clarified to explicitly exclude wrong active branch from hash-lag cosmetic exception; specific detection of post-merge stale-sync-branch pattern.
+- `scripts/start-router.mjs` — NEEDS_STATE_SYNC now fires when state docs point to a non-main branch while on `main`, regardless of whether handoff status is "complete." Removes the `!handoffIsComplete` guard that previously allowed wrong active branch to pass through as READY_FRESH_START. Adds State-Zero FAIL comment.
+- `scripts/os-self-audit.mjs` — Section 6l added (20 checks for State-Zero reliability layer); audit count rises 304 → 324.
+- `docs/ai-system/os-self-audit-checklist.md` — Section 6l added (21 items).
+- `docs/dev/closeout-sync-contract.md` — State-Zero requirement section added before "What this contract does NOT do."
+- `docs/dev/session-restart-protocol.md` — State-Zero rule section added to HEAD verification block; post-merge obligation stated.
+- `docs/ai-system/universal-standards.md` — State-Zero Closeout Rule section added (co-exists with Post-Commit State Rule; FAIL vs WARN table; verification commands).
+- `docs/ai-system/bootstrap-template.md` — Step 8b added: State-Zero Closeout Rule for new repos; cross-references listed.
+- `.claude/skills/closeout/SKILL.md` — State-Zero requirement block added before sync obligations.
+- `.claude/skills/handoff/SKILL.md` — State-Zero requirement block added before sync obligations.
+- `.claude/skills/precommit/SKILL.md` — State-Zero requirement block added before sync obligations.
+- `.claude/skills/start/SKILL.md` — State-Zero check at startup block added; NEEDS_STATE_SYNC wrong-branch wording clarified; Post-Commit State Rule scope tightened.
+- `.claude/skills/weekly-sync/SKILL.md` — State-Zero check before sync block added.
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — updated to current branch and pass.
+- `docs/project-control/current-sprint.md`, `kanban-board.md`, `backlog.md`, `decision-log.md` — updated to reflect v1.8 pass.
+- `docs/ai-system/CHANGELOG.md` — this entry.
+- `docs/ai-system/version-history.md` — v1.8.0 IN PROGRESS row added.
+
+### Root cause documented
+
+Package 3F state-sync left state docs pointing to `docs/sync-after-package-3f-product-draft-lifecycle` instead of `main`. The start-router had a bug: `NEEDS_STATE_SYNC` was gated on `!handoffIsComplete`, so a "complete" handoff status suppressed the branch-mismatch check. The fix removes that gate.
+
+### Intentionally NOT changed
+
+- `index.html`, `src/**` — no product or app code
+- Root `package.json`, root `package-lock.json`
+- No live Google Calendar mutations
+- No GitHub Project mutations
+- No GitHub Issues created
+- No raw transcripts, local sync maps, credentials, or scripts/node_modules read or written
+- No Package 3G work
+- No Type 2 terminal transcript implementation
+
+---
+
+## 2026-06-02 — AI Project OS: Operator Reliability Repair
+
+**Status:** COMPLETE — merged `c27502c` 2026-06-02.
+**Scope:** Raw transcript Type 1 file-first response protocol; notification diagnostic; OS audit Section 6k; 19 files created or modified.
+
+---
+
 ## 2026-06-01 — AI Project OS v1.7: Gate 6 — Documentation-Watch and Bootstrap Copy-Forward Finalization
 
 **Status:** COMPLETE — committed `99d5515`, merged `f30ea62` 2026-06-01. No external mutations. No product code. No Package 5B. AI Project OS v1.7 COMPLETE.

@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3F COMPLETE; awaiting Coordinator direction)_
+- **AI Project OS v1.8 — State-Zero Bootstrap Finalization** · AI Workflow · Ph0 · on `docs/state-zero-bootstrap-finalization` 2026-06-03; State-Zero rule + hardened start-router/state-freshness + v1.8 pack; docs and scripts only; awaiting Coordinator commit approval
 
 ### Waiting / Blocked
 - **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3F COMPLETE 2026-06-03; next package pending Coordinator authorization
