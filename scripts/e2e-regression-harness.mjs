@@ -708,8 +708,9 @@ async function main() {
         assert(isFunction, 'window.__km.getGroupDraft is not a function');
     });
 
-    await harness.run('message-book draft initializes to in-progress on book view entry', async page => {
-        // Rebuild: reload → seed → select all → review → keepsakes → open book view
+    await harness.run('message-book draft advances to preflight-passed on book view entry', async page => {
+        // Rebuild: reload → seed → select all → review → keepsakes → open book view.
+        // Package 3H: book check runs automatically; draft should reach preflight-passed.
         await page.reload({ waitUntil: 'domcontentloaded' });
         await waitForKm(page);
         await page.evaluate(msgs => window.__km.seedChatMessages(msgs), TEST_MESSAGES);
@@ -731,12 +732,13 @@ async function main() {
         assert(groupId !== null, 'No keepsake group found after seeding');
         const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
         assert(draft !== null, 'getGroupDraft returned null — draft not initialized');
-        assert(draft.status === 'in-progress',
-            'Expected draft.status "in-progress", got "' + (draft && draft.status) + '"');
+        assert(draft.status === 'preflight-passed',
+            'Expected draft.status "preflight-passed" after book check, got "' + (draft && draft.status) + '"');
     });
 
-    await harness.run('message-book draft re-entry is idempotent', async page => {
-        // Navigate back to keepsakes then re-enter book view
+    await harness.run('message-book draft re-entry is idempotent (stays preflight-passed)', async page => {
+        // Navigate back to keepsakes then re-enter book view.
+        // Book check only runs when draft is in-progress; preflight-passed draft is not re-checked.
         await page.click('#bookBackBtn');
         await page.waitForFunction(
             () => document.getElementById('keepsakesView').style.display !== 'none',
@@ -752,13 +754,13 @@ async function main() {
         assert(groupId !== null, 'No group found on idempotency re-entry');
         const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
         assert(draft !== null, 'Draft missing after re-entry');
-        assert(draft.status === 'in-progress',
-            'Draft should remain "in-progress" on re-entry, got "' + (draft && draft.status) + '"');
+        assert(draft.status === 'preflight-passed',
+            'Draft should remain "preflight-passed" on re-entry, got "' + (draft && draft.status) + '"');
     });
 
     await harness.run('proof panel state not affected by draft initialization', async page => {
         // renderBookProofPanel (called by renderBookView) initializes proof state to 'none'.
-        // Verifies draft in-progress does not corrupt proof approval state.
+        // Verifies draft preflight-passed does not auto-submit the proof approval state.
         const result = await page.evaluate(() => {
             const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
             if (!UX) return { ok: false, reason: 'no-ux' };
@@ -767,11 +769,12 @@ async function main() {
             return { ok: state.status === 'none', status: state.status };
         });
         assert(result.ok,
-            'Proof state should be "none" (unaffected by draft in-progress), got: ' + result.status);
+            'Proof state should be "none" (unaffected by draft preflight-passed), got: ' + result.status);
     });
 
     await harness.run('draft persists through save and restore', async page => {
-        // Capture snapshot from book view (includes group productDrafts), reload, restore, verify
+        // Capture snapshot from book view (includes group productDrafts at preflight-passed),
+        // reload, restore, verify preflight-passed state is preserved.
         const snapshot = await page.evaluate(() => window.__km.captureProjectSnapshot());
         assert(snapshot !== null, 'captureProjectSnapshot returned null');
         await page.reload({ waitUntil: 'domcontentloaded' });
@@ -789,8 +792,141 @@ async function main() {
         assert(groupId !== null, 'No group after restore');
         const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
         assert(draft !== null, 'Draft not restored — getGroupDraft returned null');
-        assert(draft.status === 'in-progress',
-            'Restored draft status should be "in-progress", got "' + (draft && draft.status) + '"');
+        assert(draft.status === 'preflight-passed',
+            'Restored draft status should be "preflight-passed", got "' + (draft && draft.status) + '"');
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // PHASE 23 — Draft book check and proof panel gate (Package 3H)
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n── PHASE 23 — Draft book check and proof panel gate ──\n');
+
+    await harness.run('book check auto-runs on entry and advances draft to preflight-passed', async page => {
+        // Fresh start: reload → seed → select → review → keepsakes → book view.
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        await page.evaluate(msgs => window.__km.seedChatMessages(msgs), TEST_MESSAGES);
+        await page.click('#selectAllBtn');
+        await page.click('#selectionContinue');
+        await page.waitForFunction(() => {
+            const el = document.getElementById('reviewView');
+            return el && el.style.display !== 'none';
+        });
+        await page.evaluate(() => window.__km.showKeepsakesView());
+        await page.click('#ksBookBtn');
+        await assertVisible(page, '#bookView', 'Book view — Phase 23');
+        await page.waitForSelector('#bookCanvas .book-page', { timeout: 5_000 });
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No group found in Phase 23');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'getGroupDraft returned null in Phase 23');
+        assert(draft.status === 'preflight-passed',
+            'Expected draft.status "preflight-passed" after book check, got "' + (draft && draft.status) + '"');
+    });
+
+    await harness.run('getGroupDraft returns preflight-passed after book view entry', async page => {
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No group for Phase 23 draft status check');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'getGroupDraft returned null');
+        assert(draft.status === 'preflight-passed',
+            'getGroupDraft should return preflight-passed, got: ' + (draft && draft.status));
+    });
+
+    await harness.run('proof panel shows "Mark ready for proof review" after book check passes', async page => {
+        const hasBtn = await page.evaluate(() => !!document.getElementById('bookProofSubmitBtn'));
+        assert(hasBtn,
+            '"Mark ready for proof review" button not found — book check gate may be blocking it or proof status is not none');
+    });
+
+    await harness.run('re-entering book view keeps draft at preflight-passed (idempotent)', async page => {
+        await page.click('#bookBackBtn');
+        await page.waitForFunction(
+            () => document.getElementById('keepsakesView').style.display !== 'none',
+            { timeout: 5_000 }
+        );
+        await page.click('#ksBookBtn');
+        await assertVisible(page, '#bookView', 'Book view — Phase 23 idempotency re-entry');
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No group on Phase 23 re-entry');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'Draft missing after Phase 23 re-entry');
+        assert(draft.status === 'preflight-passed',
+            'Draft should remain "preflight-passed" on re-entry, got: ' + (draft && draft.status));
+    });
+
+    await harness.run('save/restore preserves preflight-passed draft state', async page => {
+        const snapshot = await page.evaluate(() => window.__km.captureProjectSnapshot());
+        assert(snapshot !== null, 'captureProjectSnapshot returned null in Phase 23');
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        await page.evaluate(async json => {
+            const file = new File([json], 'phase23-persist.keepmees.json', { type: 'application/json' });
+            await window.__km.handleProjectFileLoad(file);
+        }, snapshot);
+        await assertVisible(page, '#chatView', 'Chat view after Phase 23 restore');
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No group after Phase 23 restore');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'Draft not restored in Phase 23');
+        assert(draft.status === 'preflight-passed',
+            'Restored draft should be "preflight-passed", got: ' + (draft && draft.status));
+    });
+
+    await harness.run('ProofApprovalUX state is independent until user submits proof review', async page => {
+        // Navigate to book view from restored project; proof state should be none (independent of draft).
+        await page.evaluate(() => window.__km.showKeepsakesView());
+        await page.click('#ksBookBtn');
+        await assertVisible(page, '#bookView', 'Book view — Phase 23 proof independence');
+        await page.waitForSelector('#bookCanvas .book-page', { timeout: 5_000 });
+        // Verify proof state is 'none' before any user action.
+        const proofBefore = await page.evaluate(() => {
+            const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            if (!UX) return { ok: false, reason: 'no-ux' };
+            const s = UX.getState('message-book');
+            return { ok: s && s.status === 'none', status: s ? s.status : null };
+        });
+        assert(proofBefore.ok,
+            'Proof state should be "none" before user submits, got: ' + proofBefore.status);
+        // Click the proof review button.
+        const btn = await page.$('#bookProofSubmitBtn');
+        assert(btn !== null, '"Mark ready for proof review" button not found before submit');
+        await btn.click();
+        // After submit: proof = pending-review; draft remains preflight-passed.
+        const afterSubmit = await page.evaluate(() => {
+            const UX  = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            const PDL = window.KMEngine && window.KMEngine.ProductDraftLifecycle;
+            if (!UX || !PDL) return { ok: false, reason: 'engine missing' };
+            const proofState = UX.getState('message-book');
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            const draft = g ? PDL.getDraft(g, 'message-book') : null;
+            return {
+                proofStatus: proofState ? proofState.status : null,
+                draftStatus: draft ? draft.status : null,
+                ok: proofState && proofState.status === 'pending-review' &&
+                    draft && draft.status === 'preflight-passed'
+            };
+        });
+        assert(afterSubmit.ok,
+            'After submit: expected proof=pending-review and draft=preflight-passed, got proof=' +
+            afterSubmit.proofStatus + ' draft=' + afterSubmit.draftStatus);
     });
 
     // ─────────────────────────────────────────────────────────────────────────

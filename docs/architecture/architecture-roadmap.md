@@ -80,6 +80,11 @@ DELIVERED (Package 3F, 2026-06-03):
 DELIVERED (Package 3G, 2026-06-03):
 - `index.html` — loads `product-draft-state.js`, `product-preflight.js`, `product-draft-lifecycle.js` in the browser runtime. `enterComposition()` initializes the group draft and advances none→in-progress on message-book entry (idempotent). `window.__km.getGroupDraft(groupId, typeId)` test helper for E2E session-level verification. E2E Phase 22 (6 tests): module availability, draft init, idempotency, proof panel independence, save/restore persistence.
 
+DELIVERED (Package 3H, 2026-06-03):
+- `index.html` `showBookView()` — auto-runs PAGINATION_STABILITY book check on entry for in-progress drafts: advances in-progress → ready-for-preflight → preflight-passed/failed. Uses `ProductPreflight.run('PAGINATION_STABILITY', inputs)` + `createReport([result])` only; `runAll()` not called; 9 vendor-gated checks remain not-applicable.
+- `index.html` `renderBookProofPanel()` — gates "Mark ready for proof review" on all real groups reaching preflight-passed; shows user-facing "Book check complete" / "Book check needs attention" copy (no "preflight" in visible text); no new approve/revoke/request-changes controls.
+- E2E Phase 23 (6 tests): book-check auto-advance, draft status verification, proof panel button gate, idempotency, save/restore, ProofApprovalUX independence.
+
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)
 - `src/tests/` — additional test files per new module
