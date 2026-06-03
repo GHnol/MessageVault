@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-03` (Package 3H branch start)
+**Last updated:** `2026-06-03` (Package 3H completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `a02d138` — merge: sync operating docs after Package 3G completion |
-| Active branch | `task/package-3h-draft-preflight-proof-panel-gate` |
-| Active pass | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — IN PROGRESS |
-| Last completed pass | `Package 3G — Session UI Wiring for ProductDraft Lifecycle` — impl `05f4048`, merged `3192a15` 2026-06-03 |
-| Last closed package | `Package 3G — Session UI Wiring for ProductDraft Lifecycle` — FULLY COMPLETE |
-| Next authorized target | Complete Package 3H and return to Coordinator |
-| Test baseline | **2039 Node tests** (15 suites); E2E seeded 47/47; E2E real-files 70/70; visual regression PASS (baseline unchanged) |
+| main HEAD | `1297f92` — merge: gate proof panel on draft book check status |
+| Active branch | `docs/sync-after-package-3h-draft-preflight-proof-panel-gate` (state-sync only) |
+| Active pass | None |
+| Last completed pass | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — impl `c0ee68d`, merged `1297f92` 2026-06-03 |
+| Last closed package | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **2039 Node tests** (15 suites); E2E seeded 53/53; E2E real-files 76/76; visual regression PASS (baseline unchanged) |
+| Package 3H | COMPLETE — merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book view entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); no engine changes |
 | Package 3G | COMPLETE — merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView wiring; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
 | Package 3F | COMPLETE — merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; engine layer; in-place mutation of `group.productDrafts`; no app code |
 | OS audit | 324 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |

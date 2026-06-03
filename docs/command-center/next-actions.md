@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-03
-**Updated by:** Claude Code (post-Package-3G state-sync)
+**Updated by:** Claude Code (post-Package-3H state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide next development package — Package 3G complete; candidates: Phase 12 continuation, preflight runners for vendor-gated checks, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Decide next development package — Package 3H complete; candidates: preflight runners for 9 vendor-gated checks, further Phase 12 continuation, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,9 +22,10 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3G COMPLETE — merged `3192a15` 2026-06-03. Coordinator decides next package.**
+**Status: Package 3H COMPLETE — merged `1297f92` 2026-06-03. Coordinator decides next package.**
 
-Package 3G (Session UI Wiring for ProductDraft Lifecycle) is COMPLETE — merged to main (`3192a15` 2026-06-03). Lifecycle modules loaded in browser; `showBookView()` initializes group drafts (none→in-progress, idempotent); `enterComposition()` forward-compat hook; `window.__km.getGroupDraft()` test helper; Phase 22 E2E (6 tests); 47 seeded / 70 real-files total. Engine, proof, preflight, and readiness gate exclusions confirmed.
+Package 3H (Draft-Preflight Status Surface and Proof Panel Gate) is COMPLETE — merged to main (`1297f92` 2026-06-03). `showBookView()` auto-runs PAGINATION_STABILITY book check for in-progress drafts and advances to preflight-passed/failed. `renderBookProofPanel()` gated on all real groups reaching preflight-passed. Phase 23 E2E (6 tests); 53 seeded / 76 real-files total. No engine changes. "preflight" not in user-visible text. GATE-04, checkout, PDF, vendor, manufacturing, and readiness gate exclusions confirmed.
+Package 3G (Session UI Wiring for ProductDraft Lifecycle) is COMPLETE — merged to main (`3192a15` 2026-06-03). Lifecycle modules loaded in browser; `showBookView()` initializes group drafts (none→in-progress, idempotent); `enterComposition()` forward-compat hook; `window.__km.getGroupDraft()` test helper; Phase 22 E2E (6 tests).
 Package 3F (ProductDraft Lifecycle Coordinator) is COMPLETE — merged to main (`395629e` 2026-06-03).
 Package 3E (ProductDraft and Preflight Runner Foundation) is COMPLETE — merged to main (`4390038` 2026-06-02).
 Package 3D (Visual Regression Baseline Harness) is COMPLETE — merged to main (`645f6bd` 2026-06-02).

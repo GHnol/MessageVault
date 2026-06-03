@@ -187,7 +187,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3H — Draft-Preflight Status Surface and Proof Panel Gate (IN PROGRESS, 2026-06-03):**
+**Package 3H — Draft-Preflight Status Surface and Proof Panel Gate (COMPLETE — merged `1297f92` 2026-06-03):**
 
 Package 3H adds no new Node unit tests (zero engine module changes). E2E Phase 23 adds 6 seeded tests covering draft book-check auto-advance, proof panel gating, idempotency, save/restore, and ProofApprovalUX independence. Phase 22 tests updated to reflect the new expected state (draft reaches `preflight-passed` on book view entry). Visual regression baselines updated for Scenario A (proof panel appearance changes). Layer 2 target: 53 seeded tests. Layer 3 unchanged: 70 real-files tests.
 
