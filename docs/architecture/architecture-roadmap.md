@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-02 (Package 3E complete)
+**Last updated:** 2026-06-03 (Package 3F complete)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3E)
+## Current architecture (post-Package 3F)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -44,6 +44,7 @@ src/
     proof-approval-ux.js               — KMEngine.ProofApprovalUX; initialize, getState, submitForReview, getStatusLabel, getAllowedUserActions, serialize, restore — Package 5B
     product-draft-state.js             — KMEngine.ProductDraftState; STATUS (5 constants); canAdvance; create; advance; per-product draft lifecycle — Package 3E
     product-preflight.js               — KMEngine.ProductPreflight; SEVERITY/CHECK_STATUS/CHECK_REGISTRY (10-check mirror); run/runAll; PAGINATION_STABILITY runnable; no manufacturing readiness API — Package 3E
+    product-draft-lifecycle.js         — KMEngine.ProductDraftLifecycle; stateless coordinator; getDraft, initDraft, advanceDraft, applyPreflightResult, resetDraft; in-place mutation of group.productDrafts — Package 3F
 index.html (keepsakes view)          — buildFormatAvailability() injects .ks-format-availability section per card via ProductExperienceConsumer — Package 4E
 index.html (proof panel)             — #bookProofPanel, CSS, renderBookProofPanel(), save/restore wiring — Package 5B
   tests/
@@ -59,6 +60,7 @@ index.html (proof panel)             — #bookProofPanel, CSS, renderBookProofPa
     proof-approval-ux-tests.mjs        — 77 tests; UX layer API, serialize/restore — Package 5B
     product-draft-state-tests.mjs      — 90 tests; draft lifecycle, transitions, semantic guards — Package 3E
     product-preflight-tests.mjs        — 119 tests; check registry, PAGINATION_STABILITY, aggregate status — Package 3E
+    product-draft-lifecycle-tests.mjs  — 104 tests; coordinator API, mutation model, all lifecycle paths, semantic guards — Package 3F
 ```
 
 All modules expose into `window.KMEngine`. No build step.
@@ -71,11 +73,13 @@ DELIVERED (Package 3E, merged `4390038` 2026-06-02):
 - `src/products/product-draft-state.js` — ProductDraft lifecycle state model (per-product draft container). Delivered as `ProductDraftState`.
 - `src/products/product-preflight.js` — engine-side preflight infrastructure executing checks from a registry mirroring `BOOK_PREFLIGHT_CHECK_REGISTRY`. PAGINATION_STABILITY is fully runnable; the other 9 checks return not-applicable until manufacturing/vendor/PDF inputs exist. No manufacturing readiness API.
 
+DELIVERED (Package 3F, 2026-06-03):
+- `src/products/product-draft-lifecycle.js` — stateless lifecycle coordinator bridging `ProductDraftState` and `ProductPreflight` results within a `KeepsakeGroup`. Provides `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`. In-place mutation of `group.productDrafts`. No UI wiring; engine layer only.
+
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)
-- ProductDraft lifecycle hooks integrating `ProductDraftState` with KeepsakeGroup
+- Session UI wiring for draft/preflight state (save/restore flow surfaced in index.html)
 - `src/tests/` — additional test files per new module
-- Session UI wiring (save/restore flow surfaced in index.html)
 
 ---
 

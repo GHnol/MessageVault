@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `authorized` — Package 3F — ProductDraft Lifecycle Coordinator. Branch field corrected to `main` (was `docs/sync-after-package-3e-product-draft-preflight`, now merged). Package 3F implementation pending on `feature/product-draft-lifecycle-coordinator`.
+**Status:** `implemented` — Package 3F — ProductDraft Lifecycle Coordinator. `KMEngine.ProductDraftLifecycle` implemented on `feature/product-draft-lifecycle-coordinator`. 2039 Node tests, 0 failed. Awaiting Coordinator review and merge authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
@@ -19,10 +19,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | Field | Value |
 |---|---|
 | **Active pass** | Package 3F — ProductDraft Lifecycle Coordinator (authorized; implementation branch pending) |
-| **Active branch** | `main` (housekeeping); implementation on `feature/product-draft-lifecycle-coordinator` |
+| **Active branch** | `feature/product-draft-lifecycle-coordinator` |
 | **main HEAD** | `3a1f145` — merge: sync operating docs after Package 3E completion |
 | **Last completed pass** | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
-| **Active package** | `Package 3F — ProductDraft Lifecycle Coordinator` — AUTHORIZED; not yet implemented |
+| **Active package** | `Package 3F — ProductDraft Lifecycle Coordinator` — IMPLEMENTED; awaiting merge authorization |
 | **Last closed package** | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE — merged `4390038` 2026-06-02 |
 | **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -40,7 +40,7 @@ Deliverables:
 - `src/products/product-draft-lifecycle.js` — `KMEngine.ProductDraftLifecycle`: stateless coordinator; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; result envelopes `{ success, error, draft }`
 - `src/tests/product-draft-lifecycle-tests.mjs` — ~80 tests; semantic guards
 
-**Next exact action:** Create branch `feature/product-draft-lifecycle-coordinator` and implement. Do not implement until housekeeping commit and merge are complete.
+**Next exact action:** Coordinator reviews implementation report and authorizes merge. Do not merge without explicit authorization. Do not start any new package until Package 3F is merged and state-synced.
 
 ---
 

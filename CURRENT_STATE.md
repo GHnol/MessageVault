@@ -22,11 +22,11 @@
 | Field | Value |
 |---|---|
 | main HEAD | `3a1f145` — merge: sync operating docs after Package 3E completion |
-| Active branch | `main` (housekeeping); `feature/product-draft-lifecycle-coordinator` (implementation pending) |
-| Active pass | Package 3F — ProductDraft Lifecycle Coordinator (authorized; not yet implemented) |
+| Active branch | `feature/product-draft-lifecycle-coordinator` |
+| Active pass | Package 3F — ProductDraft Lifecycle Coordinator (implemented; awaiting merge authorization) |
 | Last completed pass | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
 | Last closed package | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE |
-| Next authorized target | `Package 3F — ProductDraft Lifecycle Coordinator` — AUTHORIZED 2026-06-03 |
+| Next authorized target | Coordinator authorizes merge of Package 3F |
 | Test baseline | **1935 Node tests** (14 suites); E2E seeded 41/41; E2E real-files 64/64; visual regression PASS |
 | OS audit | 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3E | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer; no manufacturing readiness API |
