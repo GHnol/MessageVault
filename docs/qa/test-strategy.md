@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G).
 **Last updated:** 2026-06-03 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -63,7 +63,7 @@ Or run all suites individually as part of pre-commit verification.
 
 **What:** Headless Chromium running the actual `index.html` against deterministic seed data (`scripts/e2e-test-data.mjs`).
 
-**Coverage:** Phases 1–10 + 20 + 21 of `scripts/e2e-regression-harness.mjs`. **41 tests.**
+**Coverage:** Phases 1–10 + 20 + 21 + 22 of `scripts/e2e-regression-harness.mjs`. **47 tests.**
 
 **Run:**
 

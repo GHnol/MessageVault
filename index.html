@@ -3493,6 +3493,15 @@
     <script src="src/products/proof-approval-ux.js"></script>
 
     <!-- ════════════════════════════════════════════
+         KEEPMEES ENGINE — PACKAGE 3G
+         ProductDraft lifecycle session wiring.
+         Load order: product-draft-state → product-preflight → product-draft-lifecycle
+    ════════════════════════════════════════════ -->
+    <script src="src/products/product-draft-state.js"></script>
+    <script src="src/products/product-preflight.js"></script>
+    <script src="src/products/product-draft-lifecycle.js"></script>
+
+    <!-- ════════════════════════════════════════════
          JAVASCRIPT
     ════════════════════════════════════════════ -->
     <script>
@@ -6214,6 +6223,16 @@ ${keepsakeFooter}
             touchGroup(groupId);
             compositionState = { groupId, typeId };
             compositionReturnView = returnView || reviewView;
+            if (typeId === 'message-book') {
+                var PDL = window.KMEngine && window.KMEngine.ProductDraftLifecycle;
+                if (PDL) {
+                    PDL.initDraft(group, 'message-book');
+                    var _d = PDL.getDraft(group, 'message-book');
+                    if (_d && _d.status === 'none') {
+                        PDL.advanceDraft(group, 'message-book', 'in-progress');
+                    }
+                }
+            }
             renderCompositionView();
             showView(compositionView);
             // Always start at the top of the canvas — consistent for short and long previews
@@ -8301,6 +8320,19 @@ ${keepsakeFooter}
         function showBookView(returnView) {
             initMessageBookState();
             bookReturnView = returnView || keepsakesView;
+            var PDL = window.KMEngine && window.KMEngine.ProductDraftLifecycle;
+            if (PDL) {
+                var realGroups = keepsakeGroups.filter(function(g) {
+                    return g.id !== 'group-staging' && g.messages && g.messages.length > 0;
+                });
+                for (var _gi = 0; _gi < realGroups.length; _gi++) {
+                    PDL.initDraft(realGroups[_gi], 'message-book');
+                    var _d = PDL.getDraft(realGroups[_gi], 'message-book');
+                    if (_d && _d.status === 'none') {
+                        PDL.advanceDraft(realGroups[_gi], 'message-book', 'in-progress');
+                    }
+                }
+            }
             renderBookView();
             showView(bookView);
             bookCanvas.scrollTop = 0;
@@ -8502,6 +8534,14 @@ ${keepsakeFooter}
                 var KM = window.KMEngine;
                 if (!KM || !KM.ProductExperienceConsumer) return null;
                 return KM.ProductExperienceConsumer.resolveForGroup(group);
+            },
+            // Package 3G: ProductDraft lifecycle test helper
+            getGroupDraft(groupId, typeId) {
+                var PDL = window.KMEngine && window.KMEngine.ProductDraftLifecycle;
+                if (!PDL) return null;
+                var g = keepsakeGroups.find(function(gr) { return gr.id === groupId; });
+                if (!g) return null;
+                return PDL.getDraft(g, typeId || 'message-book');
             },
         };
 

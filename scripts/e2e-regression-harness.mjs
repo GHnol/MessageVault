@@ -688,6 +688,112 @@ async function main() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
+    // PHASE 22 — ProductDraft lifecycle session wiring (Package 3G)
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n── PHASE 22 — ProductDraft lifecycle session wiring ──\n');
+
+    await harness.run('ProductDraftLifecycle engine modules loaded', async page => {
+        const loaded = await page.evaluate(() => ({
+            state:     !!(window.KMEngine && window.KMEngine.ProductDraftState),
+            preflight: !!(window.KMEngine && window.KMEngine.ProductPreflight),
+            lifecycle: !!(window.KMEngine && window.KMEngine.ProductDraftLifecycle),
+        }));
+        assert(loaded.state,     'KMEngine.ProductDraftState not loaded');
+        assert(loaded.preflight, 'KMEngine.ProductPreflight not loaded');
+        assert(loaded.lifecycle, 'KMEngine.ProductDraftLifecycle not loaded');
+    });
+
+    await harness.run('getGroupDraft helper exposed on window.__km', async page => {
+        const isFunction = await page.evaluate(() => typeof window.__km.getGroupDraft === 'function');
+        assert(isFunction, 'window.__km.getGroupDraft is not a function');
+    });
+
+    await harness.run('message-book draft initializes to in-progress on book view entry', async page => {
+        // Rebuild: reload → seed → select all → review → keepsakes → open book view
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        await page.evaluate(msgs => window.__km.seedChatMessages(msgs), TEST_MESSAGES);
+        await page.click('#selectAllBtn');
+        await page.click('#selectionContinue');
+        await page.waitForFunction(() => {
+            const el = document.getElementById('reviewView');
+            return el && el.style.display !== 'none';
+        });
+        await page.evaluate(() => window.__km.showKeepsakesView());
+        await page.click('#ksBookBtn');
+        await assertVisible(page, '#bookView', 'Book view after ksBookBtn click');
+        await page.waitForSelector('#bookCanvas .book-page', { timeout: 5_000 });
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No keepsake group found after seeding');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'getGroupDraft returned null — draft not initialized');
+        assert(draft.status === 'in-progress',
+            'Expected draft.status "in-progress", got "' + (draft && draft.status) + '"');
+    });
+
+    await harness.run('message-book draft re-entry is idempotent', async page => {
+        // Navigate back to keepsakes then re-enter book view
+        await page.click('#bookBackBtn');
+        await page.waitForFunction(
+            () => document.getElementById('keepsakesView').style.display !== 'none',
+            { timeout: 5_000 }
+        );
+        await page.click('#ksBookBtn');
+        await assertVisible(page, '#bookView', 'Book view on idempotency re-entry');
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No group found on idempotency re-entry');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'Draft missing after re-entry');
+        assert(draft.status === 'in-progress',
+            'Draft should remain "in-progress" on re-entry, got "' + (draft && draft.status) + '"');
+    });
+
+    await harness.run('proof panel state not affected by draft initialization', async page => {
+        // renderBookProofPanel (called by renderBookView) initializes proof state to 'none'.
+        // Verifies draft in-progress does not corrupt proof approval state.
+        const result = await page.evaluate(() => {
+            const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            if (!UX) return { ok: false, reason: 'no-ux' };
+            const state = UX.getState('message-book');
+            if (!state) return { ok: false, reason: 'proof-state-null' };
+            return { ok: state.status === 'none', status: state.status };
+        });
+        assert(result.ok,
+            'Proof state should be "none" (unaffected by draft in-progress), got: ' + result.status);
+    });
+
+    await harness.run('draft persists through save and restore', async page => {
+        // Capture snapshot from book view (includes group productDrafts), reload, restore, verify
+        const snapshot = await page.evaluate(() => window.__km.captureProjectSnapshot());
+        assert(snapshot !== null, 'captureProjectSnapshot returned null');
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        await page.evaluate(async json => {
+            const file = new File([json], 'draft-persist-test.keepmees.json', { type: 'application/json' });
+            await window.__km.handleProjectFileLoad(file);
+        }, snapshot);
+        await assertVisible(page, '#chatView', 'Chat view after restore');
+        const groupId = await page.evaluate(() => {
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            return g ? g.id : null;
+        });
+        assert(groupId !== null, 'No group after restore');
+        const draft = await page.evaluate(gid => window.__km.getGroupDraft(gid, 'message-book'), groupId);
+        assert(draft !== null, 'Draft not restored — getGroupDraft returned null');
+        assert(draft.status === 'in-progress',
+            'Restored draft status should be "in-progress", got "' + (draft && draft.status) + '"');
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
     // REAL-FILES PHASES (only when --real-files is passed)
     // ─────────────────────────────────────────────────────────────────────────
 
