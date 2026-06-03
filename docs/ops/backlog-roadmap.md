@@ -247,7 +247,7 @@ What this does NOT deliver: UI wiring, index.html changes, proof approval change
 
 The following items from original Package 3 scope remain not yet authorized as a named package:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed; PAGINATION_STABILITY delivered in 3E)
-- Session UI wiring for draft/preflight state (none in 3E or 3F — engine layer only)
+- Session UI wiring for draft/preflight state — DELIVERED in Package 3G (`05f4048` / `3192a15` 2026-06-03); lifecycle modules in browser; showBookView draft init; enterComposition hook; getGroupDraft test helper; Phase 22 E2E (6 tests)
 
 ---
 

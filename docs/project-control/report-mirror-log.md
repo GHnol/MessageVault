@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-03
-**Last mirrored:** RPT-20260603-001 (Package 3F closeout — ProductDraft Lifecycle Coordinator COMPLETE)
-**Active gate:** None — Package 3F COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260603-002 (Package 3G closeout — Session UI Wiring for ProductDraft Lifecycle COMPLETE)
+**Active gate:** None — Package 3G COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260603-002 | package_closeout | Package 3G — Session UI Wiring for ProductDraft Lifecycle | feature/product-draft-lifecycle-session-wiring | 05f4048 / 3192a15 | mirrored | 2026-06-03 |
 | RPT-20260603-001 | package_closeout | Package 3F — ProductDraft Lifecycle Coordinator | feature/product-draft-lifecycle-coordinator | 18f3544 / 395629e | mirrored | 2026-06-03 |
 | RPT-20260602-003 | package_closeout | Package 3E — ProductDraft and Preflight Runner Foundation | feature/product-draft-preflight-foundation | dd4f641 / 4390038 | mirrored | 2026-06-02 |
 | RPT-20260602-002 | package_closeout | Package 3D — Visual Regression Baseline Harness | feature/visual-regression-baseline-harness | 5a5eaa0 / 645f6bd | mirrored | 2026-06-02 |
@@ -50,6 +51,23 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260603-002 — package_closeout — Package 3G — Session UI Wiring for ProductDraft Lifecycle
+
+**Created:** 2026-06-03T00:00:00Z | **Branch:** feature/product-draft-lifecycle-session-wiring | **HEAD:** 05f4048 (impl) / 3192a15 (merge) | **Status:** mirrored
+
+Package 3G — Session UI Wiring for ProductDraft Lifecycle COMPLETE — implementation `05f4048`, merge `3192a15` 2026-06-03. Delivered: (1) `index.html` script tags load `product-draft-state.js`, `product-preflight.js`, `product-draft-lifecycle.js` in the browser runtime; (2) `showBookView()` lifecycle init loop — iterates all real keepsake groups (non-staging, messages > 0), calls `PDL.initDraft(group, 'message-book')`, advances none→in-progress on first entry, idempotent on re-entry; (3) `enterComposition()` forward-compat hook for `typeId === 'message-book'` (current code path uses showBookView; hook activates when/if message-book joins per-group composition flow); (4) `window.__km.getGroupDraft(groupId, typeId)` — test helper delegating to `PDL.getDraft`; (5) E2E Phase 22 (6 tests): module availability, draft init on book view entry, idempotency, proof panel independence, save/restore persistence. Architectural note disclosed and approved by Coordinator: showBookView() is the correct active wiring point; enterComposition hook is forward-compatible only.
+
+**Tests:** 2039 Node tests, 0 failed. E2E seeded 47/47. E2E real-files 70/70. OS audit 324/0/0. State freshness WARN-only (cosmetic hash lag). project-control-sync-validate 11/11.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — product-draft-state.js, product-preflight.js, product-draft-lifecycle.js, proof-approval-state.js, proof-approval-ux.js, product-experience-readiness.js, product-render-spec.js, project-persistence.js, project-session-restore.js, public/**, amplify/**, root package.json, scripts/package.json untouched; no runAll(), no applyPreflightResult(); no proofSupported flip; no readiness gate; no checkout/PDF/vendor/manufacturing; no credentials/tokens/raw-transcripts committed.
+**Package 5C:** not defined — do not start without explicit Coordinator scoping.
+**Next action:** Coordinator decides next development package or operating action.
+**Follow-up:** false
+
+*Entry added as the Package 3G closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260603-001 — package_closeout — Package 3F — ProductDraft Lifecycle Coordinator
 

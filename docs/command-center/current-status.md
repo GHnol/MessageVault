@@ -34,6 +34,7 @@
 | Package 3D | Visual Regression Baseline Harness | COMPLETE — merged to main | `5a5eaa0` | `645f6bd` |
 | Package 3E | ProductDraft and Preflight Runner Foundation | COMPLETE — merged to main | `dd4f641` | `4390038` |
 | Package 3F | ProductDraft Lifecycle Coordinator | COMPLETE — merged to main | `18f3544` | `395629e` |
+| Package 3G | Session UI Wiring for ProductDraft Lifecycle | COMPLETE — merged to main | `05f4048` | `3192a15` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
@@ -43,8 +44,8 @@
 
 ## App code state
 
-- App code last changed: Package 5B (`fb62b5c`) — proof approval UX foundation; `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added to `index.html`. (Packages 3E and 3F added engine modules only — no `index.html` change.)
-- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring). Packages 3E and 3F: NOT touched.
+- App code last changed: Package 3G (`05f4048`) — lifecycle modules loaded in browser runtime; `showBookView()` draft init; `enterComposition()` hook; `getGroupDraft()` test helper on `window.__km`. No rendering, proof panel, or eligibility logic changed. (Package 5B last changed `index.html` for UI: `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring.)
+- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules, `showBookView()` draft init loop, `enterComposition()` hook, `getGroupDraft()` on `__km`).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/products/`: 16 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight, product-draft-lifecycle)
 - `src/tests/`: 15 suites, **2039 Node tests** — all green
@@ -63,7 +64,7 @@
   - `product-draft-state-tests.mjs`: 90 (Package 3E)
   - `product-preflight-tests.mjs`: 119 (Package 3E)
   - `product-draft-lifecycle-tests.mjs`: 104 (Package 3F)
-- `scripts/e2e-regression-harness.mjs`: 41-test seeded Playwright harness (phases 1–10 + 20 + 21, Packages 3B + 4D + 4E) + 23-test real-file coverage (phases 11–19, Package 3C) — 64 tests total
+- `scripts/e2e-regression-harness.mjs`: 47-test seeded Playwright harness (phases 1–10 + 20 + 21 + 22, Packages 3B + 4D + 4E + 3G) + 23-test real-file coverage (phases 11–19, Package 3C) — 70 tests total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
