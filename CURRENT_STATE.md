@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-02` (Package 3E completion state-sync)
-**Updated by:** `Claude Code (Opus 4.8)`
+**Last updated:** `2026-06-03` (Gate 0 housekeeping — branch field correction; Package 3F authorized)
+**Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
-| Active branch | `docs/sync-after-package-3e-product-draft-preflight` |
-| Active pass | State-sync: Package 3E completion (docs only) |
+| main HEAD | `3a1f145` — merge: sync operating docs after Package 3E completion |
+| Active branch | `main` (housekeeping); `feature/product-draft-lifecycle-coordinator` (implementation pending) |
+| Active pass | Package 3F — ProductDraft Lifecycle Coordinator (authorized; not yet implemented) |
 | Last completed pass | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
 | Last closed package | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
+| Next authorized target | `Package 3F — ProductDraft Lifecycle Coordinator` — AUTHORIZED 2026-06-03 |
 | Test baseline | **1935 Node tests** (14 suites); E2E seeded 41/41; E2E real-files 64/64; visual regression PASS |
 | OS audit | 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3E | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer; no manufacturing readiness API |

@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3E — ProductDraft and Preflight Runner Foundation COMPLETE. Implementation merged `4390038` to `main` 2026-06-02. Working tree clean. No active package.
+**Status:** `authorized` — Package 3F — ProductDraft Lifecycle Coordinator. Branch field corrected to `main` (was `docs/sync-after-package-3e-product-draft-preflight`, now merged). Package 3F implementation pending on `feature/product-draft-lifecycle-coordinator`.
 
-**Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-02`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
 ---
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | State-sync: Package 3E completion — docs only |
-| **Active branch** | `docs/sync-after-package-3e-product-draft-preflight` |
-| **main HEAD** | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
+| **Active pass** | Package 3F — ProductDraft Lifecycle Coordinator (authorized; implementation branch pending) |
+| **Active branch** | `main` (housekeeping); implementation on `feature/product-draft-lifecycle-coordinator` |
+| **main HEAD** | `3a1f145` — merge: sync operating docs after Package 3E completion |
 | **Last completed pass** | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
-| **Active package** | None |
+| **Active package** | `Package 3F — ProductDraft Lifecycle Coordinator` — AUTHORIZED; not yet implemented |
 | **Last closed package** | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE — merged `4390038` 2026-06-02 |
 | **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -32,11 +32,15 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — state-sync after Package 3E)
+## Objective (current pass — Package 3F implementation)
 
-State-sync after Package 3E — marking Package 3E complete in Tower, backlog, sprint, kanban, command-center, architecture, QA. Docs only. **IN PROGRESS on `docs/sync-after-package-3e-product-draft-preflight`.**
+Package 3F — ProductDraft Lifecycle Coordinator. Authorized by Coordinator 2026-06-03. Engine layer only.
 
-**Next exact action:** Coordinator decides next development package or operating action. Do not start any package without explicit authorization.
+Deliverables:
+- `src/products/product-draft-lifecycle.js` — `KMEngine.ProductDraftLifecycle`: stateless coordinator; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; result envelopes `{ success, error, draft }`
+- `src/tests/product-draft-lifecycle-tests.mjs` — ~80 tests; semantic guards
+
+**Next exact action:** Create branch `feature/product-draft-lifecycle-coordinator` and implement. Do not implement until housekeeping commit and merge are complete.
 
 ---
 
