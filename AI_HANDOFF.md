@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3F — ProductDraft Lifecycle Coordinator COMPLETE. Implementation merged `395629e` to `main` 2026-06-03. State-sync merged `57754fc` to `main` 2026-06-03. No active package. Awaiting Coordinator authorization.
+**Status:** `active` — AI Project OS v1.8 — State-Zero Bootstrap Finalization repair pass. IN PROGRESS on `docs/state-zero-bootstrap-finalization` as of 2026-06-03.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `57754fc` — merge: sync operating docs after Package 3F completion |
+| **Active pass** | AI Project OS v1.8 — State-Zero Bootstrap Finalization |
+| **Active branch** | `docs/state-zero-bootstrap-finalization` |
+| **main HEAD** | `effe6e5` — merge: correct active branch after Package 3F state sync |
 | **Last completed pass** | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
 | **Active package** | None |
 | **Last closed package** | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE — merged `395629e` 2026-06-03 |
@@ -32,11 +32,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — state-sync after Package 3F)
+## Objective (current pass — AI Project OS v1.8 State-Zero Bootstrap Finalization)
 
-State-sync after Package 3F — marking Package 3F complete in Tower, backlog, sprint, kanban, command-center. Docs only. **IN PROGRESS on `docs/sync-after-package-3f-product-draft-lifecycle`.**
+OS reliability repair: enforce State-Zero closeout rule so wrong active branch/package/next-action are blocking FAILs. Harden `state-freshness-check.mjs` and `start-router.mjs` against post-merge stale docs. Update closeout, handoff, precommit, weekly-sync, and start skills. Add v1.8 final reference and provisioning pack. Update OS audit. Update project-control Tower docs. Docs and scripts only.
 
-**Next exact action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Status:** IN PROGRESS on `docs/state-zero-bootstrap-finalization` 2026-06-03. Awaiting Coordinator commit approval.
+
+**Next exact action:** Coordinator reviews and approves commit. Do not push until Coordinator approves.
 
 ---
 

@@ -238,6 +238,27 @@ If the project commits a specific generated file (like KeepMees does with `keepm
 
 ---
 
+## 8b. State-Zero Closeout Rule (universal — travels with the OS, added v1.8)
+
+The State-Zero rule lives in `docs/ai-system/universal-standards.md` and travels to every repo bootstrapped from this template. It complements the Post-Commit State Rule:
+
+- Post-Commit State Rule: hash lag in narrative fields is WARN (cosmetic).
+- State-Zero rule: wrong active branch, wrong active package, wrong next action are FAIL (operational) — never cosmetic, even when the handoff status is "complete."
+
+Confirm that, after any merge to `main`, the state docs (`AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`) say "active branch: main" before the session ends. A merged sync branch still showing as active is a State-Zero violation.
+
+In the new repo, create `docs/dev/state-zero-closeout-protocol.md` (copy from KeepMees and adapt). Add State-Zero references to the closeout, handoff, precommit, and start skills.
+
+Cross-references that must exist in the new repo:
+- `docs/dev/state-zero-closeout-protocol.md` (protocol)
+- `docs/dev/closeout-sync-contract.md` § "State-Zero requirement" (contract)
+- `docs/dev/session-restart-protocol.md` § "State-Zero rule" (restart)
+- `scripts/state-freshness-check.mjs` — State-Zero FAIL_WRONG_ACTIVE_BRANCH rule
+- `scripts/start-router.mjs` — NEEDS_STATE_SYNC regardless of handoffIsComplete
+- Skills: `closeout`, `handoff`, `precommit`, `start`, `weekly-sync` reference `state-zero-closeout-protocol.md`
+
+---
+
 ## 8a. Post-Commit State Rule (universal — travels with the OS)
 
 The Post-Commit State Rule lives in `docs/ai-system/universal-standards.md` and travels to every repo bootstrapped from this template. Confirm it is present in the copied `universal-standards.md` and that the matching cross-references exist in:

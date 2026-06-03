@@ -32,6 +32,21 @@ Run in parallel:
 - `git status --short`
 - `git log --oneline -10`
 
+## State-Zero requirement
+
+Before recommending any commit, push, or merge, achieve State-Zero:
+
+```
+node scripts/state-freshness-check.mjs   # must report 0 FAILs
+node scripts/start-router.mjs            # must not return NEEDS_STATE_SYNC for stale branch fields
+```
+
+State-Zero means: active branch matches `git branch --show-current`, active package/pass is "None" when no package is running, and next action points to Coordinator decision rather than a closed branch. Wrong active branch is always a FAIL — it cannot be excused by the Post-Commit State Rule.
+
+**Post-merge obligation:** After any merge to `main`, verify that state docs say "active branch: main". If they still point to the merged sync branch, update them before the session ends.
+
+Full protocol: `docs/dev/state-zero-closeout-protocol.md`
+
 ## Sync obligations
 
 Run the state freshness validator before recommending commit or merge:

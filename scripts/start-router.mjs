@@ -327,12 +327,14 @@ function determineVerdict() {
 
   // On main, clean tree
   if (isOnMain && !isDirty) {
-    // State docs still point to a non-main active branch (operationally misleading)
-    if (stateActiveBranch && stateActiveBranch !== 'main' && !handoffIsComplete) {
+    // State docs still point to a non-main active branch (operationally misleading).
+    // This is a State-Zero FAIL — must fix before proceeding, regardless of handoff completion status.
+    // The Post-Commit State Rule does NOT excuse wrong active branch; it only excuses hash lag.
+    if (stateActiveBranch && stateActiveBranch !== 'main') {
       return 'NEEDS_STATE_SYNC';
     }
-    // Active handoff on another branch but we're on main (clean) — state needs sync
-    if (handoffIsActive && handoffBranch && handoffBranch !== 'main') {
+    // Handoff branch field points to a non-main branch while on main — same State-Zero FAIL.
+    if (handoffBranch && handoffBranch !== 'main') {
       return 'NEEDS_STATE_SYNC';
     }
     // OS work queued or in progress — Coordinator needs to authorize next step

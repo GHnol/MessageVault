@@ -118,6 +118,7 @@
 
 | Task | Pri | Status | Phase | Deps | Success criteria | TT | CU | Cal |
 |---|---|---|---|---|---|---|---|---|
+| AI Project OS v1.8 — State-Zero Bootstrap Finalization | P1 | In Progress | 0 | — | State-Zero protocol + hardened scripts + v1.8 pack; OS + docs only; 2026-06-03 on `docs/state-zero-bootstrap-finalization` | N | Y | N |
 | Maintain Tower after each package | P1 | Ready | 0 | — | Tower re-synced post-closeout | N | Y | N |
 | Keep continuity protocols in force | P1 | Ready | 0 | — | Sessions resume from repo only | N | Y | N |
 | n8n/Make/Zapier automation | P3 | Deferred | 0 | — | Not built now; future phase | N | N | N |

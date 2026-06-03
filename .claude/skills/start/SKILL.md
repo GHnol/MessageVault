@@ -47,11 +47,15 @@ Also: `git rev-parse HEAD` to verify HEAD against what the durable state files r
   ```
 
   Start router BLOCKED verdicts are hard stops. NEEDS_* verdicts require action before proceeding.
-  Freshness validator FAIL results are hard stop conditions. WARN results are informational — apply the Post-Commit State Rule.
+  Freshness validator FAIL results are hard stop conditions. WARN results are informational — apply the Post-Commit State Rule **for hash lag only**; wrong active branch, wrong active package, and wrong next action are always FAIL, never cosmetic.
 - If the start router returns `NEEDS_HANDOFF_UPDATE`, update `AI_HANDOFF.md` before continuing.
-- If the start router returns `NEEDS_STATE_SYNC`, run `node scripts/state-freshness-check.mjs` and apply the State-Sync Decision Matrix.
+- If the start router returns `NEEDS_STATE_SYNC`: this is a State-Zero violation — the state docs point to a wrong branch, wrong package, or stale next action. Run `node scripts/state-freshness-check.mjs`, identify the operational FAILs, fix them, and re-run before proceeding. Wrong active branch is always a FAIL regardless of whether the handoff status is "complete."
 - If any state doc would misdirect the next agent (wrong branch, wrong package, stale blocker), flag it and ask the Coordinator before proceeding.
-- Do not update state docs during startup unless the startup reveals operational misdirection. Cosmetic HEAD lag alone does not require a sync commit.
+- Do not update state docs during startup unless the startup reveals operational misdirection. Cosmetic HEAD lag alone does not require a sync commit. But wrong active branch ALWAYS requires correction.
+
+**State-Zero at startup:** If `start-router.mjs` returns `NEEDS_STATE_SYNC` specifically because state docs point to a merged sync branch (`docs/sync-*`, `feature/*`) while on `main`, run the State-Zero closeout checklist before any other work. This is not cosmetic.
+
+Full State-Zero protocol: `docs/dev/state-zero-closeout-protocol.md`
 
 ## Output format
 

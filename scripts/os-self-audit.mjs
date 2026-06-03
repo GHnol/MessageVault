@@ -403,6 +403,28 @@ checkGitignore('.claude/settings.local.json gitignored', '.claude/settings.local
 checkGitignore('.env gitignored', '.env');
 checkGitignore('external-sync-map.local.json gitignored', 'docs/project-control/external-sync-map.local.json');
 
+// --- Section 6l: State-Zero closeout reliability layer (AI Project OS v1.8) ---
+checkFile('docs/dev/state-zero-closeout-protocol.md (v1.8 State-Zero protocol)', 'docs/dev/state-zero-closeout-protocol.md');
+checkGrep('state-zero-closeout-protocol.md defines State-Zero', 'docs/dev/state-zero-closeout-protocol.md', 'State-Zero means');
+checkGrep('state-zero-closeout-protocol.md has wrong-active-branch FAIL rule', 'docs/dev/state-zero-closeout-protocol.md', 'Active branch field ≠');
+checkGrep('state-zero-closeout-protocol.md has post-merge obligation', 'docs/dev/state-zero-closeout-protocol.md', 'Post-merge obligation');
+checkGrep('state-zero-closeout-protocol.md has PCSR limitation statement', 'docs/dev/state-zero-closeout-protocol.md', 'Post-Commit State Rule does NOT');
+checkGrep('state-zero-closeout-protocol.md has closeout checklist', 'docs/dev/state-zero-closeout-protocol.md', 'State-Zero closeout checklist');
+checkGrep('closeout-sync-contract.md has State-Zero requirement section', 'docs/dev/closeout-sync-contract.md', 'State-Zero requirement');
+checkGrep('session-restart-protocol.md has State-Zero rule', 'docs/dev/session-restart-protocol.md', 'State-Zero rule');
+checkGrep('universal-standards.md has State-Zero Closeout Rule section', 'docs/ai-system/universal-standards.md', 'State-Zero Closeout Rule');
+checkGrep('bootstrap-template.md includes State-Zero requirement', 'docs/ai-system/bootstrap-template.md', 'State-Zero Closeout Rule');
+checkGrep('closeout SKILL.md references state-zero-closeout-protocol.md', '.claude/skills/closeout/SKILL.md', 'state-zero-closeout-protocol.md');
+checkGrep('handoff SKILL.md references state-zero-closeout-protocol.md', '.claude/skills/handoff/SKILL.md', 'state-zero-closeout-protocol.md');
+checkGrep('precommit SKILL.md references state-zero-closeout-protocol.md', '.claude/skills/precommit/SKILL.md', 'state-zero-closeout-protocol.md');
+checkGrep('start SKILL.md references state-zero-closeout-protocol.md', '.claude/skills/start/SKILL.md', 'state-zero-closeout-protocol.md');
+checkGrep('weekly-sync SKILL.md references state-zero-closeout-protocol.md', '.claude/skills/weekly-sync/SKILL.md', 'state-zero-closeout-protocol.md');
+checkGrep('state-freshness-check.mjs FAIL_WRONG_ACTIVE_BRANCH has State-Zero note', 'scripts/state-freshness-check.mjs', 'State-Zero rule');
+checkGrep('state-freshness-check.mjs PCSR note clarifies hash-lag-only scope', 'scripts/state-freshness-check.mjs', 'Post-Commit State Rule does NOT');
+checkGrep('start-router.mjs NEEDS_STATE_SYNC fires on stale branch regardless of handoffIsComplete', 'scripts/start-router.mjs', 'State-Zero FAIL');
+checkGrep('state-zero-closeout-protocol.md references state-freshness-check.mjs', 'docs/dev/state-zero-closeout-protocol.md', 'state-freshness-check.mjs');
+checkGrep('state-zero-closeout-protocol.md references start-router.mjs', 'docs/dev/state-zero-closeout-protocol.md', 'start-router.mjs');
+
 // --- Section 9: Post-Commit State Rule cross-references ---
 checkGrep('Post-Commit State Rule in universal-standards.md', 'docs/ai-system/universal-standards.md', 'Post-Commit State Rule');
 checkGrep('Post-Commit State Rule in package-boundary-closeout-protocol.md', 'docs/dev/package-boundary-closeout-protocol.md', 'Post-Commit State Rule');

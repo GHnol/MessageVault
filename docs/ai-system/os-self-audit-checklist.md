@@ -1,6 +1,6 @@
 # AI Project OS Self-Audit Checklist
 
-**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01; Section 6j added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization, 2026-06-01; Section 6k added in Operator Reliability Repair 2026-06-02)
+**Status:** ACTIVE (introduced in AI Project OS Framework Groundwork Pass, 2026-05-24; updated in v1.3 External Board Provider Update, 2026-05-25; Section 6c added in v1.4 Live Provisioning Integration, 2026-05-25; Section 6d added in v1.5 Template GitHub Project Standard, 2026-05-26; Section 6e added in v1.6 Google Calendar Live Sync, 2026-05-30; Section 6f added in v1.7 Gate 2 State Freshness Validators, 2026-06-01; Section 6g added in v1.7 Gate 3 Report Mirroring, 2026-06-01; Section 6h added in v1.7 Gate 4 Start Router, 2026-06-01; Section 6i added in v1.7 Gate 5 External Sync Consistency Validators, 2026-06-01; Section 6j added in v1.7 Gate 6 Documentation-Watch and Bootstrap Copy-Forward Finalization, 2026-06-01; Section 6k added in Operator Reliability Repair 2026-06-02; Section 6l added in v1.8 State-Zero Bootstrap Finalization 2026-06-03)
 **Use:** Run this checklist (via `/os-audit` or `scripts/os-self-audit.mjs`) before claiming a repo is fully bootstrapped with the AI Project OS.
 
 Each item is classified as **Required** (FAIL if missing) or **Recommended** (WARN if missing).
@@ -416,6 +416,33 @@ The audit does **not** require:
 - Any raw transcript file to exist in `raw-transcripts/claude-code/` (the directory is created on first use)
 - The notification hooks to already be installed (user-level setup; the diagnostic script checks status)
 - Byte-for-byte proof of file-chat identity (the protocol documents this as technically unenforceable)
+
+---
+
+## 6l. State-Zero closeout reliability layer (AI Project OS v1.8, 2026-06-03)
+
+| Item | Classification | Check |
+|---|---|---|
+| `docs/dev/state-zero-closeout-protocol.md` exists | Required | `Glob docs/dev/state-zero-closeout-protocol.md` |
+| `state-zero-closeout-protocol.md` defines State-Zero | Required | `Grep "State-Zero means" docs/dev/state-zero-closeout-protocol.md` |
+| `state-zero-closeout-protocol.md` has wrong-active-branch FAIL rule | Required | `Grep "Active branch field ≠" docs/dev/state-zero-closeout-protocol.md` |
+| `state-zero-closeout-protocol.md` has post-merge obligation | Required | `Grep "Post-merge obligation" docs/dev/state-zero-closeout-protocol.md` |
+| `state-zero-closeout-protocol.md` has PCSR limitation statement | Required | `Grep "Post-Commit State Rule does NOT" docs/dev/state-zero-closeout-protocol.md` |
+| `state-zero-closeout-protocol.md` has closeout checklist | Required | `Grep "State-Zero closeout checklist" docs/dev/state-zero-closeout-protocol.md` |
+| `closeout-sync-contract.md` has State-Zero requirement section | Required | `Grep "State-Zero requirement" docs/dev/closeout-sync-contract.md` |
+| `session-restart-protocol.md` has State-Zero rule | Required | `Grep "State-Zero rule" docs/dev/session-restart-protocol.md` |
+| `universal-standards.md` has State-Zero Closeout Rule section | Required | `Grep "State-Zero Closeout Rule" docs/ai-system/universal-standards.md` |
+| `bootstrap-template.md` includes State-Zero requirement | Required | `Grep "State-Zero Closeout Rule" docs/ai-system/bootstrap-template.md` |
+| `closeout` SKILL.md references `state-zero-closeout-protocol.md` | Required | `Grep "state-zero-closeout-protocol.md" .claude/skills/closeout/SKILL.md` |
+| `handoff` SKILL.md references `state-zero-closeout-protocol.md` | Required | `Grep "state-zero-closeout-protocol.md" .claude/skills/handoff/SKILL.md` |
+| `precommit` SKILL.md references `state-zero-closeout-protocol.md` | Required | `Grep "state-zero-closeout-protocol.md" .claude/skills/precommit/SKILL.md` |
+| `start` SKILL.md references `state-zero-closeout-protocol.md` | Required | `Grep "state-zero-closeout-protocol.md" .claude/skills/start/SKILL.md` |
+| `weekly-sync` SKILL.md references `state-zero-closeout-protocol.md` | Required | `Grep "state-zero-closeout-protocol.md" .claude/skills/weekly-sync/SKILL.md` |
+| `state-freshness-check.mjs` FAIL_WRONG_ACTIVE_BRANCH has State-Zero note | Required | `Grep "State-Zero rule" scripts/state-freshness-check.mjs` |
+| `state-freshness-check.mjs` POST_COMMIT_RULE_NOTE clarifies hash-lag-only scope | Required | `Grep "Post-Commit State Rule does NOT" scripts/state-freshness-check.mjs` |
+| `start-router.mjs` NEEDS_STATE_SYNC fires on stale branch regardless of handoffIsComplete | Required | `Grep "State-Zero FAIL" scripts/start-router.mjs` |
+| `state-zero-closeout-protocol.md` references `state-freshness-check.mjs` | Required | `Grep "state-freshness-check.mjs" docs/dev/state-zero-closeout-protocol.md` |
+| `state-zero-closeout-protocol.md` references `start-router.mjs` | Required | `Grep "start-router.mjs" docs/dev/state-zero-closeout-protocol.md` |
 
 ---
 

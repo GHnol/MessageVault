@@ -154,6 +154,40 @@ Policy-driven. The agent must apply this rule when proposing or refusing follow-
 
 ---
 
+## State-Zero Closeout Rule
+
+**Status:** ACTIVE (introduced in AI Project OS v1.8). Universal across KeepMees, Puzzle, and any future repo bootstrapped from this OS.
+
+**State-Zero** is the requirement that, at every clean stopping point (post-merge, post-push, pre-session-end), the operational state docs are fully aligned with the actual repo state. It is a complement to the Post-Commit State Rule, not a replacement.
+
+| Rule | Applies to |
+|---|---|
+| Post-Commit State Rule | Hash lag in narrative sections only — WARN, never FAIL |
+| State-Zero Closeout Rule | Branch field, active package, next action — FAIL if wrong, never cosmetic |
+
+**What is always a State-Zero FAIL:**
+- Active branch field ≠ `git branch --show-current`
+- State docs reference a `docs/sync-*` or `feature/*` branch while on `main` (post-merge stale)
+- Active package/pass is non-none when no package is running
+- Next action points to a closed branch or completed pass
+
+**What is WARN only under the Post-Commit State Rule:**
+- Historical hash references in completed-package tables and narrative sections
+- CHANGELOG "IN PROGRESS" status for archived passes
+- Timestamp stale by hours when all operational fields are accurate
+
+**Post-merge obligation (in every repo using this OS):** After any merge to `main`, verify state docs say "active branch: main" before ending the session. If they still point to the merged sync branch, update them on a `docs/fix-active-branch-*` branch and merge. This obligation is mandatory, not cosmetic.
+
+**Verification commands:**
+```
+node scripts/state-freshness-check.mjs   # 0 FAILs required
+node scripts/start-router.mjs            # must not return NEEDS_STATE_SYNC for wrong branch
+```
+
+Full protocol (KeepMees): `docs/dev/state-zero-closeout-protocol.md`
+
+---
+
 ## Testing as a first-class concern
 
 Testing is not cleanup-later. Every package that touches behavior must declare:

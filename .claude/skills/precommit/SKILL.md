@@ -31,6 +31,18 @@ Run in parallel:
 - `git config user.name`
 - `git config user.email`
 
+## State-Zero requirement
+
+Pre-commit gate requires State-Zero: active branch matches `git branch --show-current`, no wrong package/next-action fields. A commit that includes state docs pointing to the wrong active branch is a NO-GO.
+
+```
+node scripts/state-freshness-check.mjs   # must report 0 FAILs (operational fields)
+```
+
+State-freshness FAILs on operational fields (wrong active branch, wrong active package) are always NO-GO. Only `WARN_HEAD_HASH_LAG` is cosmetic. The Post-Commit State Rule does NOT excuse wrong active branch fields.
+
+Full protocol: `docs/dev/state-zero-closeout-protocol.md`
+
 ## Sync obligations
 
 Run the state freshness validator as part of the pre-commit gate:
