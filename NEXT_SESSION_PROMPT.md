@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3F — ProductDraft Lifecycle Coordinator COMPLETE — merged `395629e` 2026-06-03. No active package. Coordinator decides next. |
-| Branch | `main` |
-| main HEAD | `cf63b88` — merge: enforce State-Zero closeout and finalize AI OS bootstrap pack v1.8 |
-| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Resume into | Package 3G — Session UI Wiring for ProductDraft Lifecycle — IN PROGRESS. Implementation complete; awaiting Coordinator commit approval. |
+| Branch | `feature/product-draft-lifecycle-session-wiring` |
+| main HEAD | `edd7bae` — docs: sync operating docs after AI Project OS v1.8 State-Zero completion |
+| Next action | Run `/start`. Coordinator reviews Package 3G implementation report, approves commit. |
+| Package 3G | IN PROGRESS — lifecycle modules loaded in browser; showBookView draft init; getGroupDraft test helper; Phase 22 E2E 6 tests; 2039 Node tests; E2E seeded 47/47; real-files 70/70 |
 | Package 3F | COMPLETE — `src/products/product-draft-lifecycle.js` + `src/tests/product-draft-lifecycle-tests.mjs`; 2039 Node tests; engine layer; no app code |
 | Package 3E | COMPLETE — `src/products/product-draft-state.js` + `product-preflight.js`; engine layer; no manufacturing readiness API; 1935 Node tests |
 | Package 3D | COMPLETE — `scripts/visual-regression-harness.mjs`; `vr:baseline` + `vr:check`; Scenario A baselines committed |

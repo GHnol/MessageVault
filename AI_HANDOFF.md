@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — AI Project OS v1.8 — State-Zero Bootstrap Finalization. Repair commit `25e2939`, merged `cf63b88` to `main` 2026-06-03. No active package. Awaiting Coordinator authorization.
+**Status:** `in-progress` — Package 3G — Session UI Wiring for ProductDraft Lifecycle. Branch `feature/product-draft-lifecycle-session-wiring`. Implementation complete; awaiting Coordinator pre-commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `cf63b88` — merge: enforce State-Zero closeout and finalize AI OS bootstrap pack v1.8 |
+| **Active pass** | Package 3G — Session UI Wiring for ProductDraft Lifecycle |
+| **Active branch** | `feature/product-draft-lifecycle-session-wiring` |
+| **main HEAD** | `edd7bae` — docs: sync operating docs after AI Project OS v1.8 State-Zero completion |
 | **Last completed pass** | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
-| **Active package** | None |
+| **Active package** | Package 3G — IN PROGRESS |
 | **Last closed package** | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE — merged `395629e` 2026-06-03 |
 | **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -32,13 +32,34 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## Objective (active pass — Package 3G)
+
+Package 3G — Session UI Wiring for ProductDraft Lifecycle. Wire ProductDraft lifecycle engine into Message Book session flow.
+
+**Delivered (implementation complete, awaiting commit approval):**
+- `index.html` — script tags load `product-draft-state.js`, `product-preflight.js`, `product-draft-lifecycle.js` in the browser runtime
+- `index.html` `showBookView()` — initializes all real keepsake group drafts and advances none→in-progress on each book view entry (idempotent)
+- `index.html` `enterComposition()` — hook for message-book typeId (forward-compatibility; current code path uses showBookView)
+- `window.__km.getGroupDraft(groupId, typeId)` — test helper exposed for E2E session-level verification
+- `scripts/e2e-regression-harness.mjs` — Phase 22 (6 tests): module availability, draft init, idempotency, proof panel independence, save/restore persistence
+- `docs/qa/test-strategy.md` — E2E count 41→47; Phase 22 added
+- `docs/architecture/architecture-roadmap.md` — Package 3G wiring entry added
+
+**Results:** 2039 Node tests, 0 failed. E2E seeded 47/47. E2E real-files 70/70. OS audit 324/304 pass. State validators: FAIL (branch lag — expected; state docs updated). Project-control sync: PASS.
+
+**Hard exclusions verified:** No engine file changes, no runAll(), no applyPreflightResult(), no renderBookProofPanel() changes, no ProofApprovalUX/State changes, no proofSupported, no readiness gate, no checkout/PDF/vendor/manufacturing/Review view/GATE-04.
+
+**Architectural note:** Package instruction specified `enterComposition()` as the wiring point. Actual current entry point for Message Book is `showBookView()` (enterComposition is never called with typeId='message-book'). Wired in both: `showBookView()` for current behavior, `enterComposition()` hook for forward compatibility. Disclosed for Coordinator review.
+
+**Next exact action:** Stop. Await Coordinator pre-commit review and approval before committing.
+
+---
+
 ## Objective (last completed pass — AI Project OS v1.8 State-Zero Bootstrap Finalization)
 
 OS reliability repair: enforce State-Zero closeout rule so wrong active branch/package/next-action are blocking FAILs. Harden `state-freshness-check.mjs` and `start-router.mjs` against post-merge stale docs. Update closeout, handoff, precommit, weekly-sync, and start skills. Add v1.8 final reference and provisioning pack. Update OS audit. Update project-control Tower docs. Docs and scripts only.
 
 **COMPLETE — repair commit `25e2939`, merged `cf63b88` to `main` 2026-06-03.**
-
-**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 ---
 

@@ -16,20 +16,21 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-03` (Package 3F completion state-sync)
+**Last updated:** `2026-06-03` (Package 3G in-progress — awaiting commit approval)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `cf63b88` — merge: enforce State-Zero closeout and finalize AI OS bootstrap pack v1.8 |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `edd7bae` — docs: sync operating docs after AI Project OS v1.8 State-Zero completion |
+| Active branch | `feature/product-draft-lifecycle-session-wiring` |
+| Active pass | Package 3G — Session UI Wiring for ProductDraft Lifecycle — IN PROGRESS |
 | Last completed pass | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
 | Last closed package | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
-| Test baseline | **2039 Node tests** (15 suites); E2E seeded 41/41; E2E real-files 64/64; visual regression PASS (baseline unchanged) |
+| Next authorized target | Coordinator pre-commit approval for Package 3G |
+| Test baseline | **2039 Node tests** (15 suites); E2E seeded 47/47; E2E real-files 70/70; visual regression PASS (baseline unchanged) |
+| Package 3G | IN PROGRESS — branch `feature/product-draft-lifecycle-session-wiring`; lifecycle modules loaded; showBookView wiring; getGroupDraft helper; Phase 22 E2E (6 tests) |
 | Package 3F | COMPLETE — merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; engine layer; in-place mutation of `group.productDrafts`; no app code |
-| OS audit | 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
+| OS audit | 324 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3E | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer; no manufacturing readiness API |
 | Package 3D | COMPLETE — merged `645f6bd` 2026-06-02; visual regression harness; Scenario A baselines |
 | Package 5B | COMPLETE — merged `dc4f86b` 2026-06-02. Browser QA 36/36 PASS. |

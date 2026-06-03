@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-03 (Package 3F complete)
+**Last updated:** 2026-06-03 (Package 3G complete)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3F)
+## Current architecture (post-Package 3G)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -47,6 +47,7 @@ src/
     product-draft-lifecycle.js         — KMEngine.ProductDraftLifecycle; stateless coordinator; getDraft, initDraft, advanceDraft, applyPreflightResult, resetDraft; in-place mutation of group.productDrafts — Package 3F
 index.html (keepsakes view)          — buildFormatAvailability() injects .ks-format-availability section per card via ProductExperienceConsumer — Package 4E
 index.html (proof panel)             — #bookProofPanel, CSS, renderBookProofPanel(), save/restore wiring — Package 5B
+index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraft + advanceDraft none→in-progress on message-book entry; getGroupDraft test helper on window.__km — Package 3G
   tests/
     km-engine-tests.mjs
     keepsake-group-tests.mjs
@@ -76,9 +77,11 @@ DELIVERED (Package 3E, merged `4390038` 2026-06-02):
 DELIVERED (Package 3F, 2026-06-03):
 - `src/products/product-draft-lifecycle.js` — stateless lifecycle coordinator bridging `ProductDraftState` and `ProductPreflight` results within a `KeepsakeGroup`. Provides `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`. In-place mutation of `group.productDrafts`. No UI wiring; engine layer only.
 
+DELIVERED (Package 3G, 2026-06-03):
+- `index.html` — loads `product-draft-state.js`, `product-preflight.js`, `product-draft-lifecycle.js` in the browser runtime. `enterComposition()` initializes the group draft and advances none→in-progress on message-book entry (idempotent). `window.__km.getGroupDraft(groupId, typeId)` test helper for E2E session-level verification. E2E Phase 22 (6 tests): module availability, draft init, idempotency, proof panel independence, save/restore persistence.
+
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)
-- Session UI wiring for draft/preflight state (save/restore flow surfaced in index.html)
 - `src/tests/` — additional test files per new module
 
 ---
