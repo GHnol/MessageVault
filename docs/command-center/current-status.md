@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-06-02
-**Updated by:** Claude Code (post-Package-3E state-sync)
+**Last updated:** 2026-06-03
+**Updated by:** Claude Code (post-Package-3F state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -33,6 +33,7 @@
 | Package 5B | Message Book Proof Approval UX Foundation | COMPLETE — merged to main | `fb62b5c` | `dc4f86b` |
 | Package 3D | Visual Regression Baseline Harness | COMPLETE — merged to main | `5a5eaa0` | `645f6bd` |
 | Package 3E | ProductDraft and Preflight Runner Foundation | COMPLETE — merged to main | `dd4f641` | `4390038` |
+| Package 3F | ProductDraft Lifecycle Coordinator | COMPLETE — merged to main | `18f3544` | `395629e` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
@@ -42,11 +43,11 @@
 
 ## App code state
 
-- App code last changed: Package 5B (`fb62b5c`) — proof approval UX foundation; `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added to `index.html`. (Package 3E added engine modules only — no `index.html` change.)
-- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring). Package 3E: NOT touched.
+- App code last changed: Package 5B (`fb62b5c`) — proof approval UX foundation; `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring added to `index.html`. (Packages 3E and 3F added engine modules only — no `index.html` change.)
+- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring). Packages 3E and 3F: NOT touched.
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
-- `src/products/`: 15 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight)
-- `src/tests/`: 14 suites, **1935 Node tests** — all green
+- `src/products/`: 16 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight, product-draft-lifecycle)
+- `src/tests/`: 15 suites, **2039 Node tests** — all green
   - `km-engine-tests.mjs`: 96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
@@ -61,6 +62,7 @@
   - `proof-approval-ux-tests.mjs`: 77 (Package 5B)
   - `product-draft-state-tests.mjs`: 90 (Package 3E)
   - `product-preflight-tests.mjs`: 119 (Package 3E)
+  - `product-draft-lifecycle-tests.mjs`: 104 (Package 3F)
 - `scripts/e2e-regression-harness.mjs`: 41-test seeded Playwright harness (phases 1–10 + 20 + 21, Packages 3B + 4D + 4E) + 23-test real-file coverage (phases 11–19, Package 3C) — 64 tests total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)

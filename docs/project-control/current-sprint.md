@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-02 (America/New_York)
+**Last updated:** 2026-06-03 (America/New_York)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -11,7 +11,7 @@
 |---|---|
 | Sprint name | Sprint 2026-06-B — Next Package Selection and QA Foundation |
 | Sprint dates | 2026-06-02 → ongoing (per Coordinator direction) |
-| Sprint goal | Select and authorize the next development package; clear project-control catch-up; confirm Package 3D or Phase 12 continuation as next work |
+| Sprint goal | Select and authorize the next development package; Package 3F delivered; clear project-control catch-up |
 | Sprint owner | Coordinator / Claude Code (Operator Mode) |
 
 Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorized package. Sprint 2026-06-A is COMPLETE (see historical record below).
@@ -25,13 +25,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 1 | Post-Package-5B project-control Tower catch-up | P1 | **Done** | Branch `docs/post-package-5b-weekly-sync`; all Tower docs updated ✓ |
 | 2 | Package 3D — Visual Regression Baseline Harness | P1 | **Done** | impl `5a5eaa0`, merged `645f6bd` 2026-06-02; `scripts/visual-regression-harness.mjs`; Scenario A baselines; E2E 64/64 ✓ |
 | 3 | Package 3E — ProductDraft and Preflight Runner Foundation | P1 | **Done** | impl `dd4f641`, merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; 1935 Node tests; E2E 64/64 ✓ |
-| 4 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required |
+| 4 | Package 3F — ProductDraft Lifecycle Coordinator | P1 | **Done** | impl `18f3544`, merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; 2039 Node tests; engine layer only ✓ |
+| 5 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3E complete; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3F complete 2026-06-03; all further development work halted pending Coordinator decision.
 
 ---
 

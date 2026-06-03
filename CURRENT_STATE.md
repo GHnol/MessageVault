@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-03` (Gate 0 housekeeping — branch field correction; Package 3F authorized)
+**Last updated:** `2026-06-03` (Package 3F completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `3a1f145` — merge: sync operating docs after Package 3E completion |
-| Active branch | `feature/product-draft-lifecycle-coordinator` |
-| Active pass | Package 3F — ProductDraft Lifecycle Coordinator (implemented; awaiting merge authorization) |
-| Last completed pass | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
-| Last closed package | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE |
-| Next authorized target | Coordinator authorizes merge of Package 3F |
-| Test baseline | **1935 Node tests** (14 suites); E2E seeded 41/41; E2E real-files 64/64; visual regression PASS |
+| main HEAD | `395629e` — merge: add ProductDraft lifecycle coordinator foundation |
+| Active branch | `docs/sync-after-package-3f-product-draft-lifecycle` |
+| Active pass | State-sync: Package 3F completion (docs only) |
+| Last completed pass | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
+| Last closed package | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **2039 Node tests** (15 suites); E2E seeded 41/41; E2E real-files 64/64; visual regression PASS (baseline unchanged) |
+| Package 3F | COMPLETE — merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; engine layer; in-place mutation of `group.productDrafts`; no app code |
 | OS audit | 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3E | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer; no manufacturing readiness API |
 | Package 3D | COMPLETE — merged `645f6bd` 2026-06-02; visual regression harness; Scenario A baselines |

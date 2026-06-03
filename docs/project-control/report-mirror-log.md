@@ -26,9 +26,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 
 ## Latest state summary
 
-**As of:** 2026-06-02
-**Last mirrored:** RPT-20260602-003 (Package 3E closeout — ProductDraft and Preflight Runner Foundation COMPLETE)
-**Active gate:** None — Package 3E COMPLETE; no active package; awaiting Coordinator direction
+**As of:** 2026-06-03
+**Last mirrored:** RPT-20260603-001 (Package 3F closeout — ProductDraft Lifecycle Coordinator COMPLETE)
+**Active gate:** None — Package 3F COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260603-001 | package_closeout | Package 3F — ProductDraft Lifecycle Coordinator | feature/product-draft-lifecycle-coordinator | 18f3544 / 395629e | mirrored | 2026-06-03 |
 | RPT-20260602-003 | package_closeout | Package 3E — ProductDraft and Preflight Runner Foundation | feature/product-draft-preflight-foundation | dd4f641 / 4390038 | mirrored | 2026-06-02 |
 | RPT-20260602-002 | package_closeout | Package 3D — Visual Regression Baseline Harness | feature/visual-regression-baseline-harness | 5a5eaa0 / 645f6bd | mirrored | 2026-06-02 |
 | RPT-20260602-001 | status_sync | post-Package-5B weekly sync | docs/post-package-5b-weekly-sync | bb45dbb / 522ad12 | mirrored | 2026-06-02 |
@@ -49,6 +50,23 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260603-001 — package_closeout — Package 3F — ProductDraft Lifecycle Coordinator
+
+**Created:** 2026-06-03T00:00:00Z | **Branch:** feature/product-draft-lifecycle-coordinator | **HEAD:** 18f3544 (impl) / 395629e (merge) | **Status:** mirrored
+
+Package 3F — ProductDraft Lifecycle Coordinator COMPLETE — implementation `18f3544`, merge `395629e` 2026-06-03. Gate 0 housekeeping (`1f9998a` / `ed30885`) corrected stale active-branch pointer before implementation. Delivered (engine layer only): `src/products/product-draft-lifecycle.js` (`KMEngine.ProductDraftLifecycle`: stateless coordinator bridging `ProductDraftState` and `ProductPreflight` results within a KeepsakeGroup; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; result envelopes `{ success, error, draft }`). `applyPreflightResult` consumes a pre-computed preflight report; does not run `ProductPreflight` internally. `resetDraft` allows reset from `ready-for-preflight`, `preflight-passed`, `preflight-failed`; rejects `none` and `in-progress`. Mutation model: in-place (consistent with `KeepsakeGroup.touch()` and index.html conventions). docs/architecture/architecture-roadmap.md and docs/qa/test-strategy.md updated in implementation commit.
+
+**Tests:** 2039 Node tests, 0 failed (product-draft-lifecycle 104, product-draft-state 90, product-preflight 119, +existing 1935 baseline). E2E not run — engine-layer only, no index.html change. Visual regression not run — no rendering/layout change. OS audit 304/304. project-control-sync-validate 11/11. state-freshness WARN-only (cosmetic hash lag).
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, proof-approval-state.js, proof-approval-ux.js, product-draft-state.js, product-preflight.js, product-experience-readiness.js, project-persistence.js, project-session-restore.js, keepsake-group.js, public/**, amplify/**, root package.json, scripts/package.json untouched; no external-sync-map; no credentials/tokens/raw-transcripts committed. No readiness gate flipped.
+**Package 5C:** not defined — do not start without explicit Coordinator scoping.
+**Next action:** Coordinator decides next development package or operating action.
+**Follow-up:** false
+
+*Entry added as the Package 3F closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260602-003 — package_closeout — Package 3E — ProductDraft and Preflight Runner Foundation
 
