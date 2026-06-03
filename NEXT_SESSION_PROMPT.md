@@ -47,8 +47,8 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3H COMPLETE — merged `1297f92` 2026-06-03. State-sync in progress. No active package. |
-| Branch | `docs/sync-after-package-3h-draft-preflight-proof-panel-gate` (state-sync only; resumes from main after merge) |
+| Resume into | Package 3H COMPLETE — merged `1297f92` 2026-06-03. No active package. Coordinator decides next. |
+| Branch | `main` |
 | main HEAD | `1297f92` — merge: gate proof panel on draft book check status |
 | Next action | Run `/start`. Await Coordinator authorization for next package. |
 | Package 3H | COMPLETE — proof panel gated on draft book check (PAGINATION_STABILITY); Phase 23 E2E (6 tests); 2039 Node tests; E2E 53/53 seeded; 76/76 real-files; visual regression PASS |

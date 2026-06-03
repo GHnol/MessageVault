@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None (state-sync only) |
-| **Active branch** | `docs/sync-after-package-3h-draft-preflight-proof-panel-gate` |
-| **main HEAD** | `1297f92` — merge: gate proof panel on draft book check status |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `69ab20e` — merge: sync operating docs after Package 3H completion |
 | **Last completed pass** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — impl `c0ee68d`, merged `1297f92` 2026-06-03 |
 | **Active package** | None |
 | **Last closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
