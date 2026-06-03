@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3G — Session UI Wiring for ProductDraft Lifecycle. Impl `05f4048`, merged `3192a15` to `main` 2026-06-03. State-sync in progress. No active package. Awaiting Coordinator authorization.
+**Status:** `implementation-complete` — Package 3H — Draft-Preflight Status Surface and Proof Panel Gate. Branch `task/package-3h-draft-preflight-proof-panel-gate`. Base `a02d138` (main). Implementation complete 2026-06-03. Awaiting Coordinator commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `3192a15` — merge: wire ProductDraft lifecycle into Message Book session flow |
+| **Active pass** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` |
+| **Active branch** | `task/package-3h-draft-preflight-proof-panel-gate` |
+| **main HEAD** | `a02d138` — merge: sync operating docs after Package 3G completion |
 | **Last completed pass** | `Package 3G — Session UI Wiring for ProductDraft Lifecycle` — impl `05f4048`, merged `3192a15` 2026-06-03 |
-| **Active package** | None |
+| **Active package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — implementation complete; awaiting commit |
 | **Last closed package** | `Package 3G — Session UI Wiring for ProductDraft Lifecycle` — FULLY COMPLETE — merged `3192a15` 2026-06-03 |
 | **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -32,7 +32,26 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (last completed pass — Package 3G)
+## Objective (active pass — Package 3H)
+
+Package 3H — Draft-Preflight Status Surface and Proof Panel Gate. **Implementation complete — awaiting Coordinator commit approval.**
+
+Branch: `task/package-3h-draft-preflight-proof-panel-gate`. Base: `a02d138`.
+
+Delivered:
+- `index.html` `showBookView()` — auto-runs PAGINATION_STABILITY book check for each real group whose draft is at `in-progress`: advances in-progress → ready-for-preflight → preflight-passed/failed. Uses `ProductPreflight.run('PAGINATION_STABILITY', inputs)` + `createReport([result])` only. `runAll()` not called. 9 vendor-gated checks remain not-applicable.
+- `index.html` `renderBookProofPanel()` — gates "Mark ready for proof review" button on all real groups reaching `preflight-passed`. Shows "Book check needs attention before proof review." (preflight-failed) or "Checking whether this book is ready for proof review." (transient) when not yet passed. No "preflight" in user-visible text. No new admin controls.
+- `scripts/e2e-regression-harness.mjs` — Phase 22 tests updated (draft now reaches `preflight-passed` on book entry). Phase 23 (6 tests): book-check auto-advance, draft status, proof panel button gate, idempotency, save/restore, ProofApprovalUX independence.
+- `docs/qa/test-strategy.md` — E2E seeded 47→53; Phase 23 added; pre-commit baseline counts updated.
+- `docs/architecture/architecture-roadmap.md` — Package 3H entry added.
+
+**Results:** 2039 Node tests, 0 failed. E2E seeded 53/53. E2E real-files 76/76. Visual regression PASS (harness captures per-page elements; proof panel not captured). OS audit 324/0/0. Hard exclusions confirmed empty.
+
+**Next exact action:** Coordinator reviews implementation report and baseline review packet. If approved: commit with recommended message, then closeout.
+
+---
+
+## Objective (prior completed pass — Package 3G)
 
 Package 3G — Session UI Wiring for ProductDraft Lifecycle. **COMPLETE — impl `05f4048`, merged `3192a15` to `main` 2026-06-03.**
 

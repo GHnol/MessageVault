@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3G — Session UI Wiring for ProductDraft Lifecycle COMPLETE — merged `3192a15` 2026-06-03. No active package. Coordinator decides next. |
-| Branch | `main` |
-| main HEAD | `3192a15` — merge: wire ProductDraft lifecycle into Message Book session flow |
-| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Resume into | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate. IN PROGRESS on branch `task/package-3h-draft-preflight-proof-panel-gate`. |
+| Branch | `task/package-3h-draft-preflight-proof-panel-gate` |
+| main HEAD | `a02d138` — merge: sync operating docs after Package 3G completion |
+| Next action | Run `/start`. Resume Package 3H implementation from `AI_HANDOFF.md`. |
 | Package 3G | COMPLETE — lifecycle modules in browser; showBookView draft init; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests); 2039 Node tests; E2E 47/47 seeded; 70/70 real-files |
 | Package 3F | COMPLETE — `src/products/product-draft-lifecycle.js` + `src/tests/product-draft-lifecycle-tests.mjs`; 2039 Node tests; engine layer; no app code |
 | Package 3E | COMPLETE — `src/products/product-draft-state.js` + `product-preflight.js`; engine layer; no manufacturing readiness API; 1935 Node tests |

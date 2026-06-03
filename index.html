@@ -8207,12 +8207,40 @@ ${keepsakeFooter}
             const record = UX.getState('message-book');
             const status = record ? record.status : 'none';
 
+            // Package 3H: check draft book-check status across all real groups.
+            // The proof button only appears when all real groups have passed the book check.
+            var _PDL = window.KMEngine && window.KMEngine.ProductDraftLifecycle;
+            var _allBookCheckPassed = false;
+            var _anyBookCheckFailed = false;
+            if (_PDL) {
+                var _realGrps = keepsakeGroups.filter(function(g) {
+                    return g.id !== 'group-staging' && g.messages && g.messages.length > 0;
+                });
+                if (_realGrps.length > 0) {
+                    _allBookCheckPassed = _realGrps.every(function(g) {
+                        var _rd = _PDL.getDraft(g, 'message-book');
+                        return _rd && _rd.status === 'preflight-passed';
+                    });
+                    _anyBookCheckFailed = _realGrps.some(function(g) {
+                        var _rd = _PDL.getDraft(g, 'message-book');
+                        return _rd && _rd.status === 'preflight-failed';
+                    });
+                }
+            }
+
             var html = '';
             if (status === 'none') {
-                if (hasContent) {
+                if (hasContent && _allBookCheckPassed) {
                     html = '<div class="book-proof-panel-inner">' +
                         '<button type="button" class="book-proof-btn" id="bookProofSubmitBtn">Mark ready for proof review</button>' +
                         '<p class="book-proof-hint">Records local proof review status. It does not send files, create a PDF, or place an order.</p>' +
+                        '</div>';
+                } else if (hasContent) {
+                    var _bookCheckMsg = _anyBookCheckFailed
+                        ? 'Book check needs attention before proof review.'
+                        : 'Checking whether this book is ready for proof review.';
+                    html = '<div class="book-proof-panel-inner book-proof-disabled">' +
+                        '<span class="book-proof-status">' + _bookCheckMsg + '</span>' +
                         '</div>';
                 } else {
                     html = '<div class="book-proof-panel-inner book-proof-disabled">' +
@@ -8330,6 +8358,28 @@ ${keepsakeFooter}
                     var _d = PDL.getDraft(realGroups[_gi], 'message-book');
                     if (_d && _d.status === 'none') {
                         PDL.advanceDraft(realGroups[_gi], 'message-book', 'in-progress');
+                    }
+                }
+                // Package 3H: auto-run pagination stability book check for in-progress drafts.
+                // Only runs when draft.status === 'in-progress' — naturally idempotent for re-entries.
+                // Uses only ProductPreflight.run('PAGINATION_STABILITY') + createReport([result]).
+                // runAll() is never called; the 9 vendor-gated checks remain not-applicable.
+                var _PP = window.KMEngine && window.KMEngine.ProductPreflight;
+                if (_PP && messageBookState) {
+                    var _cn = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+                    for (var _ci = 0; _ci < realGroups.length; _ci++) {
+                        var _cd = PDL.getDraft(realGroups[_ci], 'message-book');
+                        if (!_cd || _cd.status !== 'in-progress') continue;
+                        var _advR = PDL.advanceDraft(realGroups[_ci], 'message-book', 'ready-for-preflight');
+                        if (!_advR.success) continue;
+                        var _psResult = _PP.run('PAGINATION_STABILITY', {
+                            messageBookState:         messageBookState,
+                            generateCompositionUnits: generateCompositionUnits,
+                            paginateUnits:            paginateUnits,
+                            contactName:              _cn
+                        });
+                        var _pfReport = _PP.createReport([_psResult]);
+                        PDL.applyPreflightResult(realGroups[_ci], 'message-book', _pfReport);
                     }
                 }
             }
