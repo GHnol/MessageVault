@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `implemented` — Package 3F — ProductDraft Lifecycle Coordinator. `KMEngine.ProductDraftLifecycle` implemented on `feature/product-draft-lifecycle-coordinator`. 2039 Node tests, 0 failed. Awaiting Coordinator review and merge authorization.
+**Status:** `complete` — Package 3F — ProductDraft Lifecycle Coordinator COMPLETE. Implementation merged `395629e` to `main` 2026-06-03. State-sync in progress on `docs/sync-after-package-3f-product-draft-lifecycle`.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
@@ -18,12 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Package 3F — ProductDraft Lifecycle Coordinator (authorized; implementation branch pending) |
-| **Active branch** | `feature/product-draft-lifecycle-coordinator` |
-| **main HEAD** | `3a1f145` — merge: sync operating docs after Package 3E completion |
-| **Last completed pass** | `Package 3E — ProductDraft and Preflight Runner Foundation` — impl `dd4f641`, merged `4390038` 2026-06-02 |
-| **Active package** | `Package 3F — ProductDraft Lifecycle Coordinator` — IMPLEMENTED; awaiting merge authorization |
-| **Last closed package** | `Package 3E — ProductDraft and Preflight Runner Foundation` — FULLY COMPLETE — merged `4390038` 2026-06-02 |
+| **Active pass** | State-sync: Package 3F completion (docs only) |
+| **Active branch** | `docs/sync-after-package-3f-product-draft-lifecycle` |
+| **main HEAD** | `395629e` — merge: add ProductDraft lifecycle coordinator foundation |
+| **Last completed pass** | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
+| **Active package** | None |
+| **Last closed package** | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE — merged `395629e` 2026-06-03 |
 | **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3D** | COMPLETE — merged `645f6bd` 2026-06-02 |
@@ -32,15 +32,25 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — Package 3F implementation)
+## Objective (current pass — state-sync after Package 3F)
 
-Package 3F — ProductDraft Lifecycle Coordinator. Authorized by Coordinator 2026-06-03. Engine layer only.
+State-sync after Package 3F — marking Package 3F complete in Tower, backlog, sprint, kanban, command-center. Docs only. **IN PROGRESS on `docs/sync-after-package-3f-product-draft-lifecycle`.**
 
-Deliverables:
+**Next exact action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+
+---
+
+## Objective (prior pass — Package 3F)
+
+Package 3F — ProductDraft Lifecycle Coordinator. **COMPLETE — impl `18f3544`, merged `395629e` to `main` 2026-06-03.**
+
+Delivered (engine layer only):
 - `src/products/product-draft-lifecycle.js` — `KMEngine.ProductDraftLifecycle`: stateless coordinator; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; result envelopes `{ success, error, draft }`
-- `src/tests/product-draft-lifecycle-tests.mjs` — ~80 tests; semantic guards
+- `src/tests/product-draft-lifecycle-tests.mjs` — 104 tests across 9 suites; semantic guards
+- `docs/architecture/architecture-roadmap.md` — post-Package 3F update; lifecycle coordinator added to module tree
+- `docs/qa/test-strategy.md` — baseline 1935 → 2039; new suite row added
 
-**Next exact action:** Coordinator reviews implementation report and authorizes merge. Do not merge without explicit authorization. Do not start any new package until Package 3F is merged and state-synced.
+**Results:** 2039 Node tests, 0 failed. No E2E (engine-layer only, no index.html). No visual regression. No `index.html`, no proof approval modules, no readiness gates touched.
 
 ---
 

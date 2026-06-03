@@ -228,12 +228,26 @@ What this does NOT deliver: UI wiring, proof approval changes, readiness gate fl
 
 ---
 
-### Package 3 remaining scope (after Package 3E)
+### Package 3F — ProductDraft Lifecycle Coordinator
+
+**Branch:** `feature/product-draft-lifecycle-coordinator`
+**Status:** COMPLETE — merged to main (feature: `18f3544`, merge: `395629e` 2026-06-03)
+
+Delivered (engine layer only):
+- `src/products/product-draft-lifecycle.js` — `KMEngine.ProductDraftLifecycle`: stateless coordinator; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; result envelopes `{ success, error, draft }`
+- `src/tests/product-draft-lifecycle-tests.mjs` — 104 tests across 9 suites; semantic guards
+
+**Tests:** 2039 Node unit tests, 0 failed | No E2E (engine-layer only) | No visual regression.
+
+What this does NOT deliver: UI wiring, index.html changes, proof approval changes, readiness gate changes, persistence changes, checkout, PDF, commerce, manufacturing readiness.
+
+---
+
+### Package 3 remaining scope (after Package 3F)
 
 The following items from original Package 3 scope remain not yet authorized as a named package:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed; PAGINATION_STABILITY delivered in 3E)
-- KeepsakeGroup + ProductDraft lifecycle hooks (ProductDraft model delivered in 3E)
-- Session UI wiring for draft/preflight state (none in 3E — engine layer only)
+- Session UI wiring for draft/preflight state (none in 3E or 3F — engine layer only)
 
 ---
 
