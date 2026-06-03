@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3F — ProductDraft Lifecycle Coordinator COMPLETE. Implementation merged `395629e` to `main` 2026-06-03. State-sync in progress on `docs/sync-after-package-3f-product-draft-lifecycle`.
+**Status:** `complete` — Package 3F — ProductDraft Lifecycle Coordinator COMPLETE. Implementation merged `395629e` to `main` 2026-06-03. State-sync merged `57754fc` to `main` 2026-06-03. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | State-sync: Package 3F completion (docs only) |
-| **Active branch** | `docs/sync-after-package-3f-product-draft-lifecycle` |
-| **main HEAD** | `395629e` — merge: add ProductDraft lifecycle coordinator foundation |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `57754fc` — merge: sync operating docs after Package 3F completion |
 | **Last completed pass** | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
 | **Active package** | None |
 | **Last closed package** | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE — merged `395629e` 2026-06-03 |

@@ -48,8 +48,8 @@ Stop and ask the Coordinator if **any** of these are true:
 | Field | Value |
 |---|---|
 | Resume into | Package 3F — ProductDraft Lifecycle Coordinator COMPLETE — merged `395629e` 2026-06-03. No active package. Coordinator decides next. |
-| Branch | `docs/sync-after-package-3f-product-draft-lifecycle` (state-sync; merges to main) |
-| main HEAD | `395629e` — merge: add ProductDraft lifecycle coordinator foundation (after state-sync merge) |
+| Branch | `main` |
+| main HEAD | `57754fc` — merge: sync operating docs after Package 3F completion |
 | Next action | Run `/start`. Await Coordinator authorization for next package. |
 | Package 3F | COMPLETE — `src/products/product-draft-lifecycle.js` + `src/tests/product-draft-lifecycle-tests.mjs`; 2039 Node tests; engine layer; no app code |
 | Package 3E | COMPLETE — `src/products/product-draft-state.js` + `product-preflight.js`; engine layer; no manufacturing readiness API; 1935 Node tests |

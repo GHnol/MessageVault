@@ -21,9 +21,9 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `395629e` — merge: add ProductDraft lifecycle coordinator foundation |
-| Active branch | `docs/sync-after-package-3f-product-draft-lifecycle` |
-| Active pass | State-sync: Package 3F completion (docs only) |
+| main HEAD | `57754fc` — merge: sync operating docs after Package 3F completion |
+| Active branch | `main` |
+| Active pass | None |
 | Last completed pass | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
 | Last closed package | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE |
 | Next authorized target | Coordinator decides next package or operating action |
