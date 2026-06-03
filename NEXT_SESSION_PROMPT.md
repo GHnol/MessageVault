@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3E COMPLETE — merged `4390038` 2026-06-02. No active package. State-sync in progress on `docs/sync-after-package-3e-product-draft-preflight`. After merge: Coordinator decides next. |
-| Branch | `docs/sync-after-package-3e-product-draft-preflight` |
-| main HEAD | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
-| Next action | Run `/start`. After state-sync merges: Await Coordinator authorization for next package. |
+| Resume into | Package 3F — ProductDraft Lifecycle Coordinator. AUTHORIZED 2026-06-03. Implementation branch: `feature/product-draft-lifecycle-coordinator`. Engine layer only. |
+| Branch | `feature/product-draft-lifecycle-coordinator` (implementation) |
+| main HEAD | `3a1f145` — merge: sync operating docs after Package 3E completion |
+| Next action | Run `/start`. If implementation branch exists and is in-flight, continue from `AI_HANDOFF.md`. If main is clean and implementation not started, begin Package 3F on `feature/product-draft-lifecycle-coordinator`. |
 | Package 3E | COMPLETE — `src/products/product-draft-state.js` + `product-preflight.js`; engine layer; no manufacturing readiness API; 1935 Node tests |
 | Package 3D | COMPLETE — `scripts/visual-regression-harness.mjs`; `vr:baseline` + `vr:check`; Scenario A baselines committed |
 | OS audit | Operator Reliability Repair: 304 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE (`node scripts/os-self-audit.mjs`) |
