@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-03 (America/New_York — Package 3F completion)
+**Last updated:** 2026-06-03 (America/New_York — Package 3G completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — v1.8 COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3G COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3F COMPLETE 2026-06-03; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3G COMPLETE 2026-06-03; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3G — Session UI Wiring for ProductDraft Lifecycle** · Development · Ph12 · implementation `05f4048`, merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E (6 tests); 2039 Node tests; E2E 47/47 seeded — COMPLETE
 - **AI Project OS v1.8 — State-Zero Bootstrap Finalization** · AI Workflow · Ph0 · repair `25e2939`, merged `cf63b88` 2026-06-03; State-Zero protocol + hardened scripts + v1.8 pack; 324 OS audit checks — COMPLETE
 - **Package 3F — ProductDraft Lifecycle Coordinator** · Development / Engine · Ph12 · implementation `18f3544`, merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; 2039 Node tests; engine layer only — COMPLETE
 - **Package 3E — ProductDraft and Preflight Runner Foundation** · Development / Engine · Ph12 · implementation `dd4f641`, merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; 1935 Node tests; E2E 64/64 PASS; no manufacturing readiness API — COMPLETE

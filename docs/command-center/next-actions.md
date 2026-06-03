@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-03
-**Updated by:** Claude Code (post-Package-3F state-sync)
+**Updated by:** Claude Code (post-Package-3G state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide next development package — Package 3F complete; candidates: Phase 12 continuation, preflight runners for vendor-gated checks, session UI wiring for draft/preflight, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Decide next development package — Package 3G complete; candidates: Phase 12 continuation, preflight runners for vendor-gated checks, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,9 +22,10 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3F COMPLETE — merged `395629e` 2026-06-03. Coordinator decides next package.**
+**Status: Package 3G COMPLETE — merged `3192a15` 2026-06-03. Coordinator decides next package.**
 
-Package 3F (ProductDraft Lifecycle Coordinator) is COMPLETE — merged to main (`395629e` 2026-06-03). `KMEngine.ProductDraftLifecycle`: stateless coordinator bridging `ProductDraftState` and `ProductPreflight` within a KeepsakeGroup; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; 104 tests; 2039 Node tests total; engine layer only.
+Package 3G (Session UI Wiring for ProductDraft Lifecycle) is COMPLETE — merged to main (`3192a15` 2026-06-03). Lifecycle modules loaded in browser; `showBookView()` initializes group drafts (none→in-progress, idempotent); `enterComposition()` forward-compat hook; `window.__km.getGroupDraft()` test helper; Phase 22 E2E (6 tests); 47 seeded / 70 real-files total. Engine, proof, preflight, and readiness gate exclusions confirmed.
+Package 3F (ProductDraft Lifecycle Coordinator) is COMPLETE — merged to main (`395629e` 2026-06-03).
 Package 3E (ProductDraft and Preflight Runner Foundation) is COMPLETE — merged to main (`4390038` 2026-06-02).
 Package 3D (Visual Regression Baseline Harness) is COMPLETE — merged to main (`645f6bd` 2026-06-02).
 Package 5B (Message Book Proof Approval UX Foundation) is COMPLETE — merged to main (`dc4f86b` 2026-06-02).
@@ -37,7 +38,6 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | Candidate | Type | External gate? | Risk |
 |---|---|---|---|
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
-| Session UI wiring for draft/preflight state | Product — Phase 12 | None (engine complete) | Medium |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
 **"Package 5C" is not defined in the repo.** Do not start or reference it without explicit Coordinator scoping.

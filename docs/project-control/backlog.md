@@ -41,7 +41,8 @@
 | Package 3D — Visual Regression Baseline Harness | P2 | Done | 0 (QA infra) | — | `scripts/visual-regression-harness.mjs`; Scenario A baselines; merged `645f6bd` 2026-06-02 | N | Y | N |
 | Package 3E — ProductDraft and Preflight Runner Foundation | P2 | Done | 12 | — | `ProductDraftState` + `ProductPreflight`; PAGINATION_STABILITY runnable; no manufacturing readiness API; merged `4390038` 2026-06-02 | N | Y | N |
 | Package 3F — ProductDraft Lifecycle Coordinator | P2 | Done | 12 | Package 3E complete | `KMEngine.ProductDraftLifecycle`; engine layer; 2039 Node tests; merged `395629e` 2026-06-03 | N | Y | N |
-| Message Book composition continuation backlog | P2 | Backlog | 5 | — | ProductDraft + lifecycle coordinator delivered (3E + 3F); remaining: preflight runners for gated checks, session UI wiring | N | Y | N |
+| Package 3G — Session UI Wiring for ProductDraft Lifecycle | P2 | Done | 12 | Package 3F complete | lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E; merged `3192a15` 2026-06-03 | N | Y | N |
+| Message Book composition continuation backlog | P2 | Backlog | 5 | — | ProductDraft + lifecycle coordinator + session wiring delivered (3E + 3F + 3G); remaining: preflight runners for gated checks | N | Y | N |
 | Maintain E2E + unit baselines green | P1 | Ready | 0 | — | All suites green before any commit | N | Y | N |
 
 ## Lane: Design System

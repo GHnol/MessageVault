@@ -11,7 +11,7 @@
 |---|---|
 | Sprint name | Sprint 2026-06-B — Next Package Selection and QA Foundation |
 | Sprint dates | 2026-06-02 → ongoing (per Coordinator direction) |
-| Sprint goal | Select and authorize the next development package; Package 3F delivered; clear project-control catch-up |
+| Sprint goal | Select and authorize the next development package; Package 3G delivered; clear project-control catch-up |
 | Sprint owner | Coordinator / Claude Code (Operator Mode) |
 
 Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorized package. Sprint 2026-06-A is COMPLETE (see historical record below).
@@ -27,13 +27,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 3 | Package 3E — ProductDraft and Preflight Runner Foundation | P1 | **Done** | impl `dd4f641`, merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; 1935 Node tests; E2E 64/64 ✓ |
 | 4 | Package 3F — ProductDraft Lifecycle Coordinator | P1 | **Done** | impl `18f3544`, merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; 2039 Node tests; engine layer only ✓ |
 | 5 | AI Project OS v1.8 — State-Zero Bootstrap Finalization | P1 | **Done** | repair `25e2939`, merged `cf63b88` 2026-06-03; State-Zero protocol + hardened scripts + v1.8 pack; 324 OS audit checks ✓ |
-| 6 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3G planned but not authorized |
+| 6 | Package 3G — Session UI Wiring for ProductDraft Lifecycle | P1 | **Done** | impl `05f4048`, merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E (6 tests); 47/47 seeded ✓ |
+| 7 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3G COMPLETE 2026-06-03 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3F complete 2026-06-03; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3G complete 2026-06-03; all further development work halted pending Coordinator decision.
 
 ---
 

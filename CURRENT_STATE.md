@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-03` (Package 3G in-progress — awaiting commit approval)
+**Last updated:** `2026-06-03` (Package 3G completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `edd7bae` — docs: sync operating docs after AI Project OS v1.8 State-Zero completion |
-| Active branch | `feature/product-draft-lifecycle-session-wiring` |
-| Active pass | Package 3G — Session UI Wiring for ProductDraft Lifecycle — IN PROGRESS |
-| Last completed pass | `Package 3F — ProductDraft Lifecycle Coordinator` — impl `18f3544`, merged `395629e` 2026-06-03 |
-| Last closed package | `Package 3F — ProductDraft Lifecycle Coordinator` — FULLY COMPLETE |
-| Next authorized target | Coordinator pre-commit approval for Package 3G |
+| main HEAD | `3192a15` — merge: wire ProductDraft lifecycle into Message Book session flow |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `Package 3G — Session UI Wiring for ProductDraft Lifecycle` — impl `05f4048`, merged `3192a15` 2026-06-03 |
+| Last closed package | `Package 3G — Session UI Wiring for ProductDraft Lifecycle` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
 | Test baseline | **2039 Node tests** (15 suites); E2E seeded 47/47; E2E real-files 70/70; visual regression PASS (baseline unchanged) |
-| Package 3G | IN PROGRESS — branch `feature/product-draft-lifecycle-session-wiring`; lifecycle modules loaded; showBookView wiring; getGroupDraft helper; Phase 22 E2E (6 tests) |
+| Package 3G | COMPLETE — merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView wiring; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
 | Package 3F | COMPLETE — merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; engine layer; in-place mutation of `group.productDrafts`; no app code |
 | OS audit | 324 pass, 0 warn, 0 fail — BOOTSTRAP COMPLETE |
 | Package 3E | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer; no manufacturing readiness API |

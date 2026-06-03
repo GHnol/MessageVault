@@ -66,12 +66,13 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 3D — Visual Regression Baseline Harness | COMPLETE | `5a5eaa0` / `645f6bd` |
 | Package 3E — ProductDraft and Preflight Runner Foundation | COMPLETE | `dd4f641` / `4390038` |
 | Package 3F — ProductDraft Lifecycle Coordinator | COMPLETE | `18f3544` / `395629e` |
+| Package 3G — Session UI Wiring for ProductDraft Lifecycle | COMPLETE | `05f4048` / `3192a15` |
 | AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
 | AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
 | AI Project OS v1.7 (Gates 1–6) | COMPLETE | `3c641a9`→`f30ea62` 2026-06-01 |
 | Operator Reliability Repair | COMPLETE | `81b2329` / `c27502c` 2026-06-02 |
 
-Tests: **2039 Node tests passing, 0 failures + 41 seeded E2E + 64 real-files E2E browser tests + visual regression check**. `index.html` app behavior last changed: Package 5B (`fb62b5c`) — `#bookProofPanel` + proof panel wiring. Package 3F (`18f3544`) added `src/products/product-draft-lifecycle.js` (`KMEngine.ProductDraftLifecycle`: stateless coordinator; `getDraft`, `initDraft`, `advanceDraft`, `applyPreflightResult`, `resetDraft`; in-place mutation of `group.productDrafts`; 104 tests) — engine layer only, no `index.html` change. Package 3E added `ProductDraftState` + `ProductPreflight`. Package 5A/5B added the proof approval state model + UX. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
+Tests: **2039 Node tests passing, 0 failures + 47 seeded E2E + 70 real-files E2E browser tests + visual regression check**. `index.html` app behavior last changed: Package 3G (`05f4048`) — lifecycle modules loaded; `showBookView()` draft init; `enterComposition()` forward-compat hook; `getGroupDraft()` test helper. No rendering, proof panel, readiness gate, or eligibility logic changed. Package 5B (`fb62b5c`) last added proof panel UI (`#bookProofPanel`, CSS, `renderBookProofPanel()`). Package 3F added engine layer only; Package 3G wired it into the browser session. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
 
 ---
 
