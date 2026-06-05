@@ -34,6 +34,7 @@ load('src/adapters/txt-export-adapter.js');
 load('src/adapters/imessage-chatdb-adapter.js');
 load('src/adapters/manual-entry-adapter.js');
 load('src/adapters/whatsapp-txt-adapter.js');
+load('src/adapters/android-sms-xml-adapter.js');
 load('src/adapters/future-adapter-stubs.js');
 load('src/core/project-session.js');
 load('src/state/session-serialization.js');
@@ -65,7 +66,7 @@ assert(KMEngine.getSourcePlatform('imessage').status  === 'supported',   'imessa
 assert(KMEngine.getSourcePlatform('txt-export').status === 'supported',  'txt-export is supported');
 assert(KMEngine.getSourcePlatform('manual').status    === 'supported',   'manual is supported');
 assert(KMEngine.getSourcePlatform('whatsapp').status  === 'supported',   'whatsapp is supported');
-assert(KMEngine.getSourcePlatform('android-sms').status === 'stub',      'android-sms is stub');
+assert(KMEngine.getSourcePlatform('android-sms').status === 'supported', 'android-sms is supported');
 assert(KMEngine.getSourcePlatform('instagram-dm').status === 'stub',     'instagram-dm is stub');
 assert(KMEngine.getSourcePlatform('telegram').status  === 'stub',        'telegram is stub');
 assert(KMEngine.getSourcePlatform('screenshot-image').status === 'deferred', 'screenshot-image is deferred');
@@ -260,6 +261,16 @@ assert(KMEngine.whatsappTxtAdapter.canHandle('[6/1/24, 9:00:00 AM] Alice: Hi') =
 const waResult = KMEngine.whatsappTxtAdapter['import']('[6/1/24, 9:00:00 AM] Alice: Hi\n[6/1/24, 9:01:00 AM] Bob: Hey\n');
 assert(waResult.sourcePlatformId === 'whatsapp',             'import() returns ImportResult with sourcePlatformId whatsapp');
 assert(Array.isArray(waResult.memories) && waResult.memories.length === 2, 'import() returns memories array with correct count');
+
+// ── ANDROID SMS XML ADAPTER — smoke ──────────────────────────────────────────
+
+suite('androidSmsAdapter — smoke');
+assert(KMEngine.androidSmsAdapter !== undefined,                     'androidSmsAdapter exists on KMEngine');
+assert(KMEngine.adapters['android-sms-xml-v1'] === KMEngine.androidSmsAdapter, 'android-sms-xml-v1 registered in KMEngine.adapters');
+assert(KMEngine.androidSmsAdapter.canHandle('<smses count="1"><sms date="1705305600000" type="1" address="+1555" body="Hi" readable_date="Jan 15, 2024" contact_name="Alice" /></smses>') === true, 'canHandle returns true for SMS Backup & Restore XML');
+const smsResult = KMEngine.androidSmsAdapter['import']('<smses count="1"><sms date="1705305600000" type="1" address="+15559990001" body="Hello" readable_date="Jan 15, 2024 8:00:00 AM" contact_name="Alice" /></smses>');
+assert(Array.isArray(smsResult.memories) && smsResult.memories.length === 1, 'import() returns memories array with correct count');
+assert(smsResult.sourcePlatformId === 'android-sms',                'import() returns ImportResult with sourcePlatformId android-sms');
 
 // ── PROJECT SESSION schema ────────────────────────────────────────────────────
 

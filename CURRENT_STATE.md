@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-05` (Package 3L completion state-sync)
+**Last updated:** `2026-06-05` (Package 3M in-progress state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `b28979c` — docs: sync operating docs after Package 3L completion |
+| Active branch | `feature/android-sms-xml-adapter` |
+| Active pass | Package 3M — Android SMS XML Adapter — IN PROGRESS, awaiting commit approval |
 | Last completed pass | `Package 3L — WhatsApp Self-Identification` — impl `7540cc6`, merged `16d0ca6` 2026-06-05 |
 | Last closed package | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
-| Test baseline | **2269 Node tests** (17 suites); E2E seeded 57/57; E2E real-files 95/95; visual regression PASS (baseline unchanged) |
+| Next authorized target | Coordinator approves commit for Package 3M |
+| Test baseline | **2358 Node tests** (18 suites); E2E seeded 57/57; E2E real-files 95/95; visual regression PASS (baseline unchanged) |
+| Package 3M | IN PROGRESS — branch `feature/android-sms-xml-adapter`; `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; type=1/2 senderRole; MMS attachment-placeholder; DOM-free parser; 84 new tests + 5 km-engine smoke; engine-only; no UI wiring |
 | Package 3L | COMPLETE — merged `16d0ca6` 2026-06-05; `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; no engine changes |
 | Package 3K | COMPLETE — merged `a048d0d` 2026-06-05; WhatsApp TXT import routing in `readTxtFile()`; script tag for `whatsapp-txt-adapter.js`; Phase 26 E2E (5 tests); 9/9 manual QA; no engine changes |
 | Package 3J | COMPLETE — merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; 91 new tests; whatsapp platform `supported`; engine-only; UI wiring delivered in Package 3K |

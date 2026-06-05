@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added).
 **Last updated:** 2026-06-05 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -16,13 +16,14 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 3J — confirmed baseline 2269):**
+**Suites and counts (as of Package 3M — confirmed baseline 2358):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
+| `android-sms-xml-adapter-tests.mjs` | 84 | Android SMS XML adapter: API shape, canHandle (accepts/rejects), SMS type=1/type=2 parsing, senderRole derivation, MMS attachment placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards — Package 3M |
 | `whatsapp-txt-adapter-tests.mjs` | 91 | WhatsApp adapter: API shape, canHandle (bracket/hyphen/rejects), parsing, multi-line, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards — Package 3J |
 | `import-quality-report-tests.mjs` | 91 | ImportQualityReport.compute(): API shape, all metric fields, edge cases, semantic guards — Package 3I |
-| `km-engine-tests.mjs` | 101 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms; +5 whatsapp smoke assertions — Package 3J |
+| `km-engine-tests.mjs` | 106 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms; +5 whatsapp smoke assertions (Package 3J); +5 android-sms smoke assertions (Package 3M) |
 | `keepsake-group-tests.mjs` | 43 | KeepsakeGroup data model |
 | `product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog, required fields |
 | `product-eligibility-tests.mjs` | 76 | Per-product eligibility evaluators, LegacyKeepsakeTypesBridge |
@@ -38,9 +39,9 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
 | `product-draft-lifecycle-tests.mjs` | 104 | Lifecycle coordinator API, all lifecycle paths, mutation model, duplicate handling, semantic guards (Package 3F) |
 
-**Total: 2269 tests.** All must remain green before any commit.
+**Total: 2358 tests.** All must remain green before any commit.
 
-Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the baseline to 2173. Package 3J added 91 tests (`whatsapp-txt-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2269.
+Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the baseline to 2173. Package 3J added 91 tests (`whatsapp-txt-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2269. Package 3M added 84 tests (`android-sms-xml-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2358.
 
 **Run:**
 

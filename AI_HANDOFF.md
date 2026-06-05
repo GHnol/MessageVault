@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3L — WhatsApp Self-Identification. Impl `7540cc6`, merged `16d0ca6` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
+**Status:** `in_progress` — Package 3M — Android SMS XML Adapter. Branch `feature/android-sms-xml-adapter`. Implementation complete. Awaiting Coordinator commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,11 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
-| **Last completed pass** | `Package 3L — WhatsApp Self-Identification` — impl `7540cc6`, merged `16d0ca6` 2026-06-05 |
-| **Active package** | None |
+| **Active pass** | Package 3M — Android SMS XML Adapter |
+| **Active branch** | `feature/android-sms-xml-adapter` |
+| **Branch base** | `main` at `b28979c` |
+| **main HEAD** | `b28979c` — docs: sync operating docs after Package 3L completion |
+| **Last completed pass** | `Package 3L — WhatsApp Self-Identification` — impl `7540bc6`, merged `16d0ca6` 2026-06-05 |
+| **Active package** | Package 3M — Android SMS XML Adapter — IN PROGRESS |
 | **Last closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
 | **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
@@ -32,7 +33,42 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — Package 3L — WhatsApp Self-Identification)
+## Objective (current pass — Package 3M — Android SMS XML Adapter)
+
+Package 3M — Android SMS XML Adapter. **IN PROGRESS — branch `feature/android-sms-xml-adapter`. Implementation complete. Awaiting Coordinator commit approval.**
+
+Branch: `feature/android-sms-xml-adapter` — base: `main` at `b28979c`
+
+Delivered:
+- `src/adapters/android-sms-xml-adapter.js` — `KMEngine.androidSmsAdapter`; ADAPTER_ID `android-sms-xml-v1`; PLATFORM_ID `android-sms`; ADAPTER_VERSION `1`; `canHandle(input)` (detects `<smses` root + `/<sms\b/` or `/<mms\b/` message elements); `parseElements(xml)` DOM-free regex-based scanner preserving document order; `normalizeAll(elements)` → `NormalizedMemory[]` with `type=1→contact`, `type=2→self`, MMS→attachment-placeholder; `import(rawText)` full pipeline; millisecond-epoch timestamp conversion; `importWarnings` for missing sender/address; no external dependencies; registered as `KMEngine.androidSmsAdapter` and `KMEngine.adapters['android-sms-xml-v1']`
+- `scripts/fixtures/fake-android-sms-backup.xml` — 10-element fake fixture: 8 SMS (6 valid, 1 empty body, 1 missing sender → skipped) + 2 MMS; fake names and numbers only
+- `src/adapters/future-adapter-stubs.js` — removed `android-sms-xml-v1` stub entry
+- `src/core/source-platforms.js` — android-sms status `'stub'` → `'supported'`; notes updated
+- `src/tests/android-sms-xml-adapter-tests.mjs` — 84 tests across 14 suites (API shape, canHandle accepts/rejects, SMS type=1/2 parsing, senderRole, MMS placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards)
+- `src/tests/km-engine-tests.mjs` — loads `android-sms-xml-adapter.js` before stubs; updated android-sms platform assertion to `supported`; added 5 smoke assertions (→106 total)
+- `docs/qa/test-strategy.md` — baseline updated 2269→2358; android-sms suite row added; Package 3M note
+- `docs/architecture/architecture-roadmap.md` — module map updated; Package 3M IN PROGRESS entry
+
+**Verification results:** 84 new tests + 5 km-engine smoke tests = 89 new tests. All 18 test suites green (2358/2358). No E2E required (engine-only; same precedent as Package 3J). No visual regression required. Hard exclusion diff confirmed empty.
+
+**Next exact action:** Coordinator reviews implementation and approves commit. Do not commit without explicit approval. Do not push without explicit instruction.
+
+**Hard exclusions verified:**
+- index.html: not touched
+- scripts/e2e-regression-harness.mjs: not touched
+- src/products/*: not touched
+- src/state/*: not touched
+- src/core/normalized-memory.js: not touched
+- src/core/import-adapters.js: not touched
+- src/core/import-quality-report.js: not touched
+- ProductDraft, Preflight, Lifecycle, ProofApproval, readiness, render spec, checkout, PDF, vendor, manufacturing, GATE-04, Review view, standalone keepsake flows: not touched
+- Pagination constants, BOOK_PAGINATION_VERSION: not touched
+- No new dependencies installed
+- No external systems mutated
+
+---
+
+## Objective (last completed pass — Package 3L — WhatsApp Self-Identification)
 
 Package 3L — WhatsApp Self-Identification. **COMPLETE — impl `7540cc6`, merged `16d0ca6` to `main` 2026-06-05.**
 
@@ -459,13 +495,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3J COMPLETE — merged `f1eca34` 2026-06-05. State-sync complete.
+Package 3M — implementation complete on branch `feature/android-sms-xml-adapter`. Coordinator reviews and approves commit. After commit approval, run pre-commit verification gate (`/precommit`), then commit, then merge, then state-sync.
 
-Coordinator decides:
-- Authorize next development package, or
-- Authorize any other next direction
-
-Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+Do not commit without explicit Coordinator approval. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

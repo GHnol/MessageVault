@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3L in progress — WhatsApp self-identification)
+**Last updated:** 2026-06-05 (Package 3M in progress — Android SMS XML adapter)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3J)
+## Current architecture (post-Package 3M)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -21,13 +21,14 @@ src/
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
-    source-platforms.js       — source platform registry (whatsapp now 'supported' — Package 3J)
+    source-platforms.js       — source platform registry (whatsapp + android-sms now 'supported' — Packages 3J + 3M)
     keepsake-group.js         — KeepsakeGroup model
   adapters/
     imessage-chatdb-adapter.js
     txt-export-adapter.js
     manual-entry-adapter.js
-    whatsapp-txt-adapter.js   — KMEngine.whatsappTxtAdapter; bracket + hyphen format; parse/normalizeAll/import; ADAPTER_ID whatsapp-txt-v1 — Package 3J
+    whatsapp-txt-adapter.js        — KMEngine.whatsappTxtAdapter; bracket + hyphen format; parse/normalizeAll/import; ADAPTER_ID whatsapp-txt-v1 — Package 3J
+    android-sms-xml-adapter.js     — KMEngine.androidSmsAdapter; SMS Backup & Restore XML; type=1/2 senderRole; MMS attachment placeholder; regex-based DOM-free parser; ADAPTER_ID android-sms-xml-v1 — Package 3M
     future-adapter-stubs.js
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -64,7 +65,8 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     product-draft-state-tests.mjs      — 90 tests; draft lifecycle, transitions, semantic guards — Package 3E
     product-preflight-tests.mjs        — 119 tests; check registry, PAGINATION_STABILITY, aggregate status — Package 3E
     product-draft-lifecycle-tests.mjs  — 104 tests; coordinator API, mutation model, all lifecycle paths, semantic guards — Package 3F
-    whatsapp-txt-adapter-tests.mjs     — 91 tests; API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards — Package 3J
+    whatsapp-txt-adapter-tests.mjs          — 91 tests; API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards — Package 3J
+    android-sms-xml-adapter-tests.mjs       — 84 tests; API shape, canHandle accepts/rejects, SMS type=1/2 parsing, senderRole, MMS attachment placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards — Package 3M
 ```
 
 All modules expose into `window.KMEngine`. No build step.
@@ -112,10 +114,19 @@ DELIVERED (Package 3K, merged `a048d0d` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state.
 - Self/sender identification (senderRole = 'self') delivered in Package 3L.
 
-IN PROGRESS (Package 3L, branch `feature/whatsapp-self-id`):
+DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3M, branch `feature/android-sms-xml-adapter`):
+- `src/adapters/android-sms-xml-adapter.js` — `KMEngine.androidSmsAdapter`; ADAPTER_ID `android-sms-xml-v1`; SMS Backup & Restore XML format; regex-based DOM-free parser (works in Node without jsdom); `canHandle` detects `<smses>` root with `<sms\b` or `<mms\b` message elements; `type=1` → senderRole `contact`, `type=2` → senderRole `self`; MMS elements normalized as attachment-placeholder (conservative); millisecond-epoch timestamps converted to ISO-8601; `importWarnings` for missing sender/address; no DOM, no external dependencies; engine-only.
+- `src/adapters/future-adapter-stubs.js` — removed `android-sms-xml-v1` stub entry.
+- `src/core/source-platforms.js` — android-sms platform `status: 'stub'` → `'supported'`; notes updated.
+- `scripts/fixtures/fake-android-sms-backup.xml` — 10-element fake fixture (8 SMS, 2 MMS; 1 malformed/skipped).
+- `src/tests/android-sms-xml-adapter-tests.mjs` — 84 tests across 14 suites.
+- `src/tests/km-engine-tests.mjs` — loads `android-sms-xml-adapter.js` before stubs; updated android-sms platform assertion to `supported`; +5 smoke assertions.
+- No `index.html` changes. No E2E changes. UI wiring is a separate follow-on package.
 
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)
