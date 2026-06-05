@@ -130,13 +130,14 @@ suite('Suite 3 — create() validation failure', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Suite 4 — canTransition() allowed transitions (6 cases)
+// Suite 4 — canTransition() allowed transitions (7 cases)
 // ─────────────────────────────────────────────────────────────────────────────
 suite('Suite 4 — canTransition() allowed transitions', function () {
     const KM = makeCtx();
     const ct = KM.ProofApprovalState.canTransition;
 
     assert(ct('none',              'pending-review')    === true, 'none → pending-review');
+    assert(ct('pending-review',    'none')              === true, 'pending-review → none (user withdrawal)');
     assert(ct('pending-review',    'approved')          === true, 'pending-review → approved');
     assert(ct('pending-review',    'changes-requested') === true, 'pending-review → changes-requested');
     assert(ct('changes-requested', 'pending-review')    === true, 'changes-requested → pending-review');
@@ -145,7 +146,7 @@ suite('Suite 4 — canTransition() allowed transitions', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Suite 5 — canTransition() blocked transitions (12 cases)
+// Suite 5 — canTransition() blocked transitions (11 cases)
 // ─────────────────────────────────────────────────────────────────────────────
 suite('Suite 5 — canTransition() blocked transitions', function () {
     const KM = makeCtx();
@@ -154,7 +155,6 @@ suite('Suite 5 — canTransition() blocked transitions', function () {
     assert(ct('none',              'approved')          === false, 'none → approved blocked');
     assert(ct('none',              'changes-requested') === false, 'none → changes-requested blocked');
     assert(ct('none',              'revoked')           === false, 'none → revoked blocked');
-    assert(ct('pending-review',    'none')              === false, 'pending-review → none blocked');
     assert(ct('changes-requested', 'approved')          === false, 'changes-requested → approved blocked');
     assert(ct('changes-requested', 'revoked')           === false, 'changes-requested → revoked blocked');
     assert(ct('approved',          'pending-review')    === false, 'approved → pending-review blocked');
@@ -439,6 +439,46 @@ suite('Suite 14 — Semantic guard tests', function () {
     assert(s3.manufacturingReady === undefined, 'CHANGES_REQUESTED state has no manufacturingReady field');
     assert(s3.exportReady        === undefined, 'CHANGES_REQUESTED state has no exportReady field');
     assert(s3.checkoutReady      === undefined, 'CHANGES_REQUESTED state has no checkoutReady field');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 15 — pending-review → none (user withdrawal) transition
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 15 — pending-review → none withdrawal transition', function () {
+    const KM  = makeCtx();
+    const PAS = KM.ProofApprovalState;
+
+    const s0 = PAS.create({ productTypeId: 'message-book' }).state;
+    const s1 = PAS.transition(s0, 'pending-review').state;
+    const res = PAS.transition(s1, 'none');
+
+    assert(res.success === true,           'pending-review→none succeeds');
+    assert(res.error   === null,           'pending-review→none error is null');
+    assert(res.state.status === 'none',    'status is none after withdrawal');
+    assert(res.state.submittedAt === null, 'submittedAt reset to null on withdrawal');
+    assert(typeof res.state.updatedAt === 'string' && res.state.updatedAt.length > 0,
+        'updatedAt is updated on withdrawal');
+    assert(res.state.createdAt === s1.createdAt, 'createdAt preserved through withdrawal');
+
+    // Immutability — original pending-review record unchanged
+    assert(s1.status      === 'pending-review', 'original pending-review record status unchanged');
+    assert(typeof s1.submittedAt === 'string',   'original submittedAt still set on pre-withdrawal record');
+
+    // No prohibited fields introduced by withdrawal
+    assert(res.state.approvedAt          === null,      'approvedAt remains null after withdrawal');
+    assert(res.state.changesRequestedAt  === null,      'changesRequestedAt remains null after withdrawal');
+    assert(res.state.revokedAt           === null,      'revokedAt remains null after withdrawal');
+    assert(res.state.commerceReady       === undefined, 'no commerceReady after withdrawal');
+    assert(res.state.manufacturingReady  === undefined, 'no manufacturingReady after withdrawal');
+    assert(res.state.checkoutReady       === undefined, 'no checkoutReady after withdrawal');
+    assert(res.state.orderReady          === undefined, 'no orderReady after withdrawal');
+
+    // After withdrawal, state can be submitted again
+    const resubmit = PAS.transition(res.state, 'pending-review');
+    assert(resubmit.success === true, 'can resubmit after withdrawal');
+    assert(resubmit.state.status === 'pending-review', 'resubmit reaches pending-review');
+    assert(typeof resubmit.state.submittedAt === 'string' && resubmit.state.submittedAt.length > 0,
+        'submittedAt set again on resubmit after withdrawal');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

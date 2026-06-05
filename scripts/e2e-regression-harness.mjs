@@ -930,6 +930,124 @@ async function main() {
     });
 
     // ─────────────────────────────────────────────────────────────────────────
+    // PHASE 24 — Proof panel withdrawal flow and DOM state (Package 5C)
+    // ─────────────────────────────────────────────────────────────────────────
+    console.log('\n── PHASE 24 — Proof panel withdrawal and pending-review DOM state ──\n');
+
+    await harness.run('pending-review panel shows status text in DOM after submit', async page => {
+        // State carried forward from Phase 23: proof is pending-review; book view is visible.
+        // Verify the DOM shows the expected pending-review text (not just JS state).
+        const pendingText = await page.evaluate(() => {
+            const el = document.querySelector('.book-proof-status.book-proof-pending');
+            return el ? el.textContent.trim() : null;
+        });
+        assert(pendingText !== null,
+            '.book-proof-status.book-proof-pending element not found in DOM after submit');
+        assert(pendingText === 'Marked ready for proof review',
+            'Pending-review status text expected "Marked ready for proof review", got: ' + pendingText);
+    });
+
+    await harness.run('cancel proof review button exists when pending-review', async page => {
+        const hasCancel = await page.evaluate(() => !!document.getElementById('bookProofCancelBtn'));
+        assert(hasCancel, '#bookProofCancelBtn not found when proof state is pending-review');
+        // Submit button must NOT be present (it is only shown for status===none)
+        const hasSubmit = await page.evaluate(() => !!document.getElementById('bookProofSubmitBtn'));
+        assert(!hasSubmit, '#bookProofSubmitBtn must not be present when proof is pending-review');
+    });
+
+    await harness.run('clicking cancel restores panel to submit-ready state', async page => {
+        const cancelBtn = await page.$('#bookProofCancelBtn');
+        assert(cancelBtn !== null, '#bookProofCancelBtn not found before cancel click');
+        await cancelBtn.click();
+        // After cancel: proof = none; draft still preflight-passed; submit button visible
+        const afterCancel = await page.evaluate(() => {
+            const UX  = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            const PDL = window.KMEngine && window.KMEngine.ProductDraftLifecycle;
+            if (!UX || !PDL) return { ok: false, reason: 'engine missing' };
+            const proofState = UX.getState('message-book');
+            const groups = window.__km.getKeepsakeGroups();
+            const g = groups.find(gr => gr.id !== 'group-staging' && gr.messages.length > 0);
+            const draft = g ? PDL.getDraft(g, 'message-book') : null;
+            return {
+                proofStatus: proofState ? proofState.status : null,
+                submittedAt: proofState ? proofState.submittedAt : 'not-checked',
+                draftStatus: draft ? draft.status : null,
+                hasSubmitBtn: !!document.getElementById('bookProofSubmitBtn'),
+                hasCancelBtn: !!document.getElementById('bookProofCancelBtn'),
+                ok: proofState && proofState.status === 'none' &&
+                    proofState.submittedAt === null &&
+                    draft && draft.status === 'preflight-passed' &&
+                    !!document.getElementById('bookProofSubmitBtn') &&
+                    !document.getElementById('bookProofCancelBtn')
+            };
+        });
+        assert(afterCancel.ok,
+            'After cancel: expected proof=none, submittedAt=null, draft=preflight-passed, ' +
+            'submitBtn=visible, cancelBtn=gone. Got proof=' + afterCancel.proofStatus +
+            ' draft=' + afterCancel.draftStatus +
+            ' submitBtn=' + afterCancel.hasSubmitBtn +
+            ' cancelBtn=' + afterCancel.hasCancelBtn);
+    });
+
+    await harness.run('save/restore with pending-review proof state restores cancel button', async page => {
+        // Submit for review to get back to pending-review.
+        await page.evaluate(() => {
+            const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            UX.submitForReview('message-book');
+        });
+        // Capture a snapshot that includes proofApprovalStates explicitly.
+        // Note: captureProjectSnapshot() omits proofApprovalStates by design (to isolate earlier
+        // phase tests). Here we construct the full snapshot manually for save/restore fidelity.
+        const snapshot = await page.evaluate(() => {
+            const PP   = window.KMEngine && window.KMEngine.ProjectPersistence;
+            const PAUX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            if (!PP || !PAUX) return null;
+            return JSON.stringify(PP.createSnapshot({
+                memories:            window.chatMessagesData || [],
+                keepsakeGroups:      window.__km.getKeepsakeGroups(),
+                selectedIndices:     [],
+                contactName:         window.__km.getContactName(),
+                messageBookState:    window.__km.messageBookState,
+                proofApprovalStates: PAUX.serialize()
+            }));
+        });
+        assert(snapshot !== null, 'captureSnapshot with proofApprovalStates returned null');
+        // Reload and restore.
+        await page.reload({ waitUntil: 'domcontentloaded' });
+        await waitForKm(page);
+        await page.evaluate(async json => {
+            const file = new File([json], 'phase24-proof-restore.keepmees.json', { type: 'application/json' });
+            await window.__km.handleProjectFileLoad(file);
+        }, snapshot);
+        await assertVisible(page, '#chatView', 'Chat view after Phase 24 restore');
+        // Navigate to book view to trigger proof panel render.
+        await page.evaluate(() => window.__km.showKeepsakesView());
+        await page.click('#ksBookBtn');
+        await assertVisible(page, '#bookView', 'Book view after Phase 24 restore');
+        await page.waitForSelector('#bookCanvas .book-page', { timeout: 5_000 });
+        // Verify proof panel shows pending-review state with cancel button.
+        const restored = await page.evaluate(() => {
+            const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
+            if (!UX) return { ok: false, reason: 'no-ux' };
+            const s = UX.getState('message-book');
+            return {
+                status: s ? s.status : null,
+                hasPendingText: !!document.querySelector('.book-proof-status.book-proof-pending'),
+                hasCancelBtn: !!document.getElementById('bookProofCancelBtn'),
+                hasSubmitBtn: !!document.getElementById('bookProofSubmitBtn'),
+                ok: s && s.status === 'pending-review' &&
+                    !!document.querySelector('.book-proof-status.book-proof-pending') &&
+                    !!document.getElementById('bookProofCancelBtn') &&
+                    !document.getElementById('bookProofSubmitBtn')
+            };
+        });
+        assert(restored.ok,
+            'After restore: expected proof=pending-review, pending text visible, cancelBtn present, submitBtn absent. ' +
+            'Got status=' + restored.status + ' pendingText=' + restored.hasPendingText +
+            ' cancelBtn=' + restored.hasCancelBtn + ' submitBtn=' + restored.hasSubmitBtn);
+    });
+
+    // ─────────────────────────────────────────────────────────────────────────
     // REAL-FILES PHASES (only when --real-files is passed)
     // ─────────────────────────────────────────────────────────────────────────
 

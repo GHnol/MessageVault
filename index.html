@@ -3062,6 +3062,8 @@
             .book-proof-status.book-proof-revoked { color: #636366; }
             .book-proof-reason { color: #636366; }
             .book-proof-disabled .book-proof-status { color: #3a3a3c; }
+            .book-proof-cancel-btn { color: #636366; }
+            .book-proof-cancel-btn:hover { color: #0a84ff; }
         }
 
         .book-proof-panel {
@@ -3085,6 +3087,12 @@
             cursor: pointer; white-space: nowrap; letter-spacing: -0.1px;
         }
         .book-proof-btn:hover { background: #0066cc; }
+        .book-proof-cancel-btn {
+            background: none; color: #8e8e93;
+            border: none; font-size: 13px; padding: 4px 8px;
+            cursor: pointer; white-space: nowrap;
+        }
+        .book-proof-cancel-btn:hover { color: #007aff; }
         .book-proof-hint {
             font-size: 12px; color: #8e8e93; margin: 0; flex: 1;
         }
@@ -8250,6 +8258,8 @@ ${keepsakeFooter}
             } else if (status === 'pending-review') {
                 html = '<div class="book-proof-panel-inner">' +
                     '<span class="book-proof-status book-proof-pending">Marked ready for proof review</span>' +
+                    '<button type="button" class="book-proof-cancel-btn" id="bookProofCancelBtn">Cancel proof review</button>' +
+                    '<p class="book-proof-hint">Removes local proof review marking. No files were sent.</p>' +
                     '</div>';
             } else if (status === 'approved') {
                 html = '<div class="book-proof-panel-inner">' +
@@ -8276,6 +8286,14 @@ ${keepsakeFooter}
             if (submitBtn) {
                 submitBtn.addEventListener('click', function () {
                     const result = UX.submitForReview('message-book');
+                    if (result.success) renderBookProofPanel();
+                });
+            }
+
+            const cancelBtn = document.getElementById('bookProofCancelBtn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function () {
+                    const result = UX.withdrawSubmission('message-book');
                     if (result.success) renderBookProofPanel();
                 });
             }

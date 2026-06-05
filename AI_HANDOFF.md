@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3H — Draft-Preflight Status Surface and Proof Panel Gate. Impl `c0ee68d`, merged `1297f92` to `main` 2026-06-03. State-sync in progress. No active package. Awaiting Coordinator authorization.
+**Status:** `in-progress` — Package 5C — Proof Panel User Withdrawal and UX Completion. Branch `feature/proof-panel-user-withdrawal`. Implementation complete; pending Coordinator review and commit authorization. Package 3H was the last completed package (impl `c0ee68d`, merged `1297f92` to `main` 2026-06-03).
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-03`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-04`
 
 ---
 
@@ -18,17 +18,52 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `69ab20e` — merge: sync operating docs after Package 3H completion |
+| **Active pass** | `Package 5C — Proof Panel User Withdrawal and UX Completion` |
+| **Active branch** | `feature/proof-panel-user-withdrawal` |
+| **main HEAD** | `25bee3e` — docs: correct active branch after Package 3H state sync |
 | **Last completed pass** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — impl `c0ee68d`, merged `1297f92` 2026-06-03 |
-| **Active package** | None |
+| **Active package** | `Package 5C — Proof Panel User Withdrawal and UX Completion` — implementation complete 2026-06-04; pending Coordinator commit approval |
 | **Last closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
 | **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
+| **Package 5C** | IN PROGRESS — branch `feature/proof-panel-user-withdrawal` — impl complete 2026-06-04; pending Coordinator commit approval |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3D** | COMPLETE — merged `645f6bd` 2026-06-02 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
-| **Package 5C** | Not defined in repo — do not start without explicit Coordinator scoping |
+
+---
+
+## Objective (active pass — Package 5C)
+
+Package 5C — Proof Panel User Withdrawal and UX Completion. **IN PROGRESS — implementation complete 2026-06-04; pending Coordinator commit authorization.**
+
+Branch: `feature/proof-panel-user-withdrawal` — base: `main` at `25bee3e`
+
+Delivered:
+- `src/products/proof-approval-state.js` — added `['pending-review', 'none']` to `_allowed` transitions; `transition()` now handles `pending-review→none` (sets `submittedAt=null`, preserves `createdAt`, updates `updatedAt`; no prohibited fields)
+- `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)` method; updated `getAllowedUserActions('pending-review')` to return `['withdraw-submission']`; exposed `withdrawSubmission` on `KMEngine.ProofApprovalUX`
+- `index.html` `renderBookProofPanel()` — pending-review branch now includes "Cancel proof review" button (`#bookProofCancelBtn`) + hint text "Removes local proof review marking. No files were sent."; cancel button click handler calls `UX.withdrawSubmission('message-book')` + immediate re-render; added CSS for `.book-proof-cancel-btn` (light + dark mode)
+- `src/tests/proof-approval-state-tests.mjs` — Suite 4: +1 allowed assertion; Suite 5: −1 blocked assertion (11 not 12); new Suite 15: withdrawal transition (18 assertions total)
+- `src/tests/proof-approval-ux-tests.mjs` — Suite 1: +1 API shape assertion; Suite 8: updated pending-review to `withdraw-submission` (+2 assertions); new Suite 16 + 16b: withdrawSubmission tests (+25 assertions total)
+- `scripts/e2e-regression-harness.mjs` — Phase 24 (4 tests): pending-review DOM state, cancel button existence, withdrawal flow, save/restore with pending-review proof state
+- `docs/qa/test-strategy.md` — updated Node baseline 2039→2082; E2E seeded 53→57; Phase 24 added
+- `docs/architecture/architecture-roadmap.md` — Package 5C entry added
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — updated to Package 5C in-progress state
+
+**Results:** 2082 Node tests, 0 failed. E2E seeded 57/57. E2E real-files 76/76 (real-files not re-run — Phase 24 is seeded-only). Visual regression PASS (baselines unchanged; proof panel not in capture zone). OS audit 324/0/0. Hard exclusions confirmed empty.
+
+**Next exact action:** Coordinator reviews implementation report, approves commit, then merge to main.
+
+**Hard exclusions verified:**
+- ProductDraftState, ProductPreflight, ProductDraftLifecycle: not touched
+- product-experience-readiness.js, product-render-spec.js: not touched
+- proofSupported: not flipped; EXPERIENCE_STATUS.PROOF_READY: not changed
+- No approve/revoke/request-changes/admin UI added
+- No PDF, checkout, order, vendor, manufacturing, digital facsimile scope
+- Pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS: not touched
+- Review view, standalone keepsake flows: not touched
+- project-persistence.js, project-session-restore.js: not touched
+- No new dependencies installed
+- No external systems mutated
 
 ---
 
