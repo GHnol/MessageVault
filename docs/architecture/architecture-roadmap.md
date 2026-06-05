@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-04 (Package 5C implementation complete — pending commit)
+**Last updated:** 2026-06-04 (Package 3I implementation complete — pending commit)
 **Status:** Active
 
 ---
@@ -11,13 +11,14 @@
 
 ---
 
-## Current architecture (post-Package 3G)
+## Current architecture (post-Package 3I)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
 src/
   core/
     import-adapters.js        — adapter registry + import result shape
+    import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
     source-platforms.js       — source platform registry
@@ -85,11 +86,16 @@ DELIVERED (Package 3H, 2026-06-03):
 - `index.html` `renderBookProofPanel()` — gates "Mark ready for proof review" on all real groups reaching preflight-passed; shows user-facing "Book check complete" / "Book check needs attention" copy (no "preflight" in visible text); no new approve/revoke/request-changes controls.
 - E2E Phase 23 (6 tests): book-check auto-advance, draft status verification, proof panel button gate, idempotency, save/restore, ProofApprovalUX independence.
 
-DELIVERED (Package 5C, 2026-06-04 — pending commit):
-- `src/products/proof-approval-state.js` — added `pending-review→none` (user withdrawal) to allowed transition list; `transition()` handles withdrawal: `submittedAt` reset to `null`, `createdAt` preserved, `updatedAt` updated; no prohibited fields. Local proof state only — does not cross GATE-04.
-- `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)` method (mirrors `submitForReview` in reverse; result envelope); updated `getAllowedUserActions('pending-review')` to return `['withdraw-submission']` instead of `[]`.
-- `index.html` `renderBookProofPanel()` — pending-review branch now includes "Cancel proof review" button (`#bookProofCancelBtn`) and hint text "Removes local proof review marking. No files were sent."; cancel button click handler calls `UX.withdrawSubmission('message-book')` + immediate re-render; added `.book-proof-cancel-btn` CSS (light + dark mode).
-- E2E Phase 24 (4 tests): pending-review DOM state after submit, cancel button presence, withdrawal flow (cancel → panel returns to submit-ready), save/restore with pending-review proof state.
+DELIVERED (Package 5C, 2026-06-04):
+- `src/products/proof-approval-state.js` — added `pending-review→none` (user withdrawal); see Package 5C closeout.
+- `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)`; `getAllowedUserActions('pending-review')` → `['withdraw-submission']`.
+- `index.html` `renderBookProofPanel()` — cancel button + hint + CSS. E2E Phase 24 (4 tests).
+
+DELIVERED (Package 3I, 2026-06-04 — pending commit):
+- `src/core/import-quality-report.js` — `KMEngine.ImportQualityReport`; `compute(memories)` pure function; accepts NormalizedMemory[]; returns totalMessages, dateRange, uniqueSenderCount, senderList, selfMessageCount, contactMessageCount, attachmentOnlyCount, messagesWithReactionsCount, totalReactionCount, sourcePlatformId, messagesWithoutTimestamp, messagesWithoutText; no DOM, no side effects, Node-testable; no estimated pages or volumes.
+- `index.html` — script tag for `import-quality-report.js`; `#importQualityPanel` div between search bar and chat messages; `renderImportQualityPanel(memories)` function; called from `readTxtFile()` and `openConversation()` only (not from restore path); CSS for `.import-quality-inner` and `.import-quality-chip` (light + dark mode); exposed on `window.__km`.
+- `src/tests/import-quality-report-tests.mjs` — 91 tests across 12 suites.
+- E2E Phase 25 (4 tests, in real-files block): panel visible, correct count, date range, hidden on fresh load.
 
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)

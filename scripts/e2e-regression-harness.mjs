@@ -1083,6 +1083,55 @@ async function main() {
         });
 
         // ─────────────────────────────────────────────────────────────────────
+        // PHASE 25 — Import quality report (Package 3I)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 25 — Import quality report ──\n');
+
+        await harness.run('#importQualityPanel is visible after txt import', async page => {
+            // State from Phase 11: txt file already imported; chat view is visible.
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#importQualityPanel should be visible and non-empty after txt import');
+        });
+
+        await harness.run('quality panel shows correct imported message count', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                return el ? el.textContent.trim() : '';
+            });
+            assert(panelText.includes(String(TXT_FIXTURE_COUNT)),
+                'Panel should contain TXT_FIXTURE_COUNT (' + TXT_FIXTURE_COUNT + '), got: ' + panelText);
+        });
+
+        await harness.run('quality panel contains non-empty date range text', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                return el ? el.textContent.trim() : '';
+            });
+            // Date range appears as month+year tokens; any non-trivial text after the count
+            assert(panelText.length > String(TXT_FIXTURE_COUNT).length + 10,
+                'Panel should contain more than just the count — expected date range info. Got: ' + panelText);
+        });
+
+        await harness.run('after reload without import, panel is hidden or empty', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hiddenOrEmpty = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                if (!el) return true; // absent is acceptable
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hiddenOrEmpty, '#importQualityPanel should be hidden or empty on fresh load without import');
+            // Re-import txt fixture so Phase 12 can continue from the expected state.
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
         // PHASE 12 — Selection, review, and keepsake groups from .txt import
         // ─────────────────────────────────────────────────────────────────────
         console.log('\n── PHASE 12 — Selection and review from txt ──\n');
