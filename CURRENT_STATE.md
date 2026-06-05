@@ -16,19 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-05` (Package 3Q IN PROGRESS — branch created)
+**Last updated:** `2026-06-05` (Package 3Q COMPLETE — state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `9b4601d` — docs: sync operating docs after Package 3P completion |
-| Active branch | `feature/instagram-dm-self-id` |
-| Active pass | `Package 3Q — Instagram DM Self-Identification Sender Picker` |
-| Last completed pass | `Package 3P — Instagram DM JSON UI Wiring` — impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |
-| Last closed package | `Package 3P — Instagram DM JSON UI Wiring` — FULLY COMPLETE |
-| Next authorized target | Complete Package 3Q implementation and verification |
-| Test baseline | **2450 Node tests** (19 suites); E2E seeded 57/57; E2E real-files 106/106; visual regression PASS (baseline unchanged) |
-| Package 3P | COMPLETE — merged `d99fb84` 2026-06-05; Instagram DM JSON import routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; drop hint + ingest card copy updated; Phase 29 E2E (5 tests); 10/10 manual QA; no engine changes; no sender picker (self-ID deferred to Package 3Q) |
+| main HEAD | `ff1c3ed` — merge: add Instagram DM self-identification sender picker (Package 3Q) |
+| Active branch | `main` |
+| Active pass | None — awaiting Coordinator direction |
+| Last completed pass | `Package 3Q — Instagram DM Self-Identification Sender Picker` — impl `8ca92c4`, merged `ff1c3ed` 2026-06-05 |
+| Last closed package | `Package 3Q — Instagram DM Self-Identification Sender Picker` — FULLY COMPLETE |
+| Next authorized target | Await Coordinator decision on next package |
+| Test baseline | **2450 Node tests** (19 suites); E2E seeded 57/57; E2E real-files 112/112; visual regression PASS (baseline unchanged) |
+| Package 3Q | COMPLETE — merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; Instagram picker hide in all non-Instagram import paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 21/21 manual QA; no engine changes; no adapter changes; no persistence schema changes |
+| Package 3P | COMPLETE — merged `d99fb84` 2026-06-05; Instagram DM JSON import routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; drop hint + ingest card copy updated; Phase 29 E2E (5 tests); 10/10 manual QA; no engine changes; no sender picker (self-ID delivered in Package 3Q) |
 | Package 3O | COMPLETE — merged `26f2633` 2026-06-05; `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 87 new tests + 5 km-engine smoke; engine-only; instagram-dm platform `supported`; no UI wiring |
 | Package 3N | COMPLETE — merged `6d61367` 2026-06-05; Android SMS XML browser import routing; `#fileInput accept=".txt,.xml"`; routing guard in `readTxtFile()`; Phase 28 E2E (6 tests); 19/19 manual QA; no engine changes; no sender picker |
 | Package 3M | COMPLETE — merged `1228f41` 2026-06-05; `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; 84 new tests + 5 km-engine smoke; engine-only; android-sms platform `supported`; no UI wiring |

@@ -191,7 +191,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3Q — Instagram DM Self-Identification Sender Picker (IN PROGRESS — branch `feature/instagram-dm-self-id`, 2026-06-05):**
+**Package 3Q — Instagram DM Self-Identification Sender Picker (COMPLETE — merged `ff1c3ed` 2026-06-05):**
 
 Package 3Q adds no new Node unit tests (no new engine module; senderRole already tested via `import-quality-report-tests.mjs`). Adds E2E Phase 30 (6 real-files tests): sender picker visible after Instagram DM import; Alice Smith and bob_jones_99 chips present; selecting Alice Smith → 4 `.me` rows; selfMessageCount = 4; selecting Skip → 0 `.me`; non-Instagram reimport hides picker. Node baseline unchanged: 2450 / 19 suites. Layer 2 unchanged: 57 seeded. Layer 3: 112 total when running `npm run e2e:real` (+6 Phase 30). Visual regression PASS expected (sender picker above page canvas capture zone; baselines unaffected). No engine changes. No adapter changes. `#instagramSenderPicker` added to `index.html`; `showInstagramSenderPicker` + `applyInstagramSelfSender` added; `window.__km.applyInstagramSelfSender` exposed.
 

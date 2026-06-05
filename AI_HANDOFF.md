@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3Q — Instagram DM Self-Identification Sender Picker. Branch: `feature/instagram-dm-self-id`. Base: `main` at `9b4601d`. Authorized 2026-06-05.
+**Status:** `complete` — Package 3Q — Instagram DM Self-Identification Sender Picker. impl `8ca92c4`, merged `ff1c3ed` to `main` 2026-06-05. No active package. Awaiting Coordinator direction.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,17 +18,49 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3Q — Instagram DM Self-Identification Sender Picker` |
-| **Active branch** | `feature/instagram-dm-self-id` |
-| **main HEAD** | `9b4601d` — docs: sync operating docs after Package 3P completion |
-| **Last completed pass** | `Package 3P — Instagram DM JSON UI Wiring` — impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |
-| **Active package** | `Package 3Q — Instagram DM Self-Identification Sender Picker` |
-| **Last closed package** | `Package 3P — Instagram DM JSON UI Wiring` — FULLY COMPLETE — merged `d99fb84` 2026-06-05 |
+| **Active pass** | None — awaiting Coordinator direction |
+| **Active branch** | `main` |
+| **main HEAD** | `ff1c3ed` — merge: add Instagram DM self-identification sender picker (Package 3Q) |
+| **Last completed pass** | `Package 3Q — Instagram DM Self-Identification Sender Picker` — impl `8ca92c4`, merged `ff1c3ed` 2026-06-05 |
+| **Active package** | None |
+| **Last closed package** | `Package 3Q — Instagram DM Self-Identification Sender Picker` — FULLY COMPLETE — merged `ff1c3ed` 2026-06-05 |
 | **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (last completed pass — Package 3Q — Instagram DM Self-Identification Sender Picker)
+
+Package 3Q — Instagram DM Self-Identification Sender Picker. **COMPLETE — impl `8ca92c4`, merged `ff1c3ed` to `main` 2026-06-05.**
+
+Branch: `feature/instagram-dm-self-id` — base: `main` at `9b4601d`
+
+Files modified:
+- `index.html` — `<div id="instagramSenderPicker">` after `#whatsappSenderPicker`; `const instagramSenderPicker` binding; `showInstagramSenderPicker(memories)` function; `applyInstagramSelfSender(senderName)` function; Instagram picker hide in WA branch before return; Instagram picker hide in non-WA guard block; `showInstagramSenderPicker(result.memories)` call in Instagram branch; Instagram picker hide in restore path; `window.__km.applyInstagramSelfSender` exposed for E2E testability
+- `scripts/e2e-regression-harness.mjs` — `IG_ALICE_COUNT=4` + `IG_BOB_COUNT=4` constants; Phase 30 (6 real-files tests): picker visible → Alice Smith + bob_jones_99 chips → Alice Smith→4 .me → IQR selfMessageCount=4 → Skip→0 .me → non-Instagram reimport hides picker
+- `docs/qa/test-strategy.md` — status line; Layer 3 count 106→112; pre-commit baseline 106→112; Package 3Q note
+- `docs/architecture/architecture-roadmap.md` — header updated; architecture section updated; Package 3Q IN PROGRESS entry
+- `src/core/source-platforms.js` — instagram-dm notes: "pending (Package 3Q)" → "delivered (Package 3Q)"
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — branch and active package updated
+
+**Verification results:** 2450/2450 Node (19 suites). E2E seeded 57/57. E2E real-files 112/112 (+6 Phase 30). Visual regression PASS (baselines unchanged). Manual QA 21/21 PASS. Hard exclusion diff clean. OS audit 324/0/0. No engine changes. No adapter changes. No persistence schema changes.
+
+**Next exact action:** No active package. Await Coordinator authorization for next package. Do not start any development work without explicit Coordinator instruction.
+
+**Hard exclusions verified:**
+- src/adapters/instagram-dm-adapter.js: not touched
+- src/core/normalized-memory.js: not touched
+- src/core/import-adapters.js: not touched
+- src/core/import-quality-report.js: not touched
+- src/products/*: not touched
+- src/state/*: not touched
+- Pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS: not touched
+- Proof panel, Review view, standalone keepsake flows, draft/preflight/lifecycle: not touched
+- No new dependencies installed
+- No external systems mutated
 
 ---
 
@@ -565,11 +597,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3O COMPLETE — impl `ebb7a55`, merged `26f2633` 2026-06-05. State-sync complete.
+Package 3Q COMPLETE — impl `8ca92c4`, merged `ff1c3ed` 2026-06-05. State-sync complete.
 
 Coordinator decides:
 - Authorize next development package, or
 - Authorize any other next direction
+
+Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
 Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 

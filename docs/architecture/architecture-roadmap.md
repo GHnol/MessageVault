@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3Q IN PROGRESS — Instagram DM self-identification sender picker)
+**Last updated:** 2026-06-05 (Package 3Q COMPLETE — Instagram DM self-identification sender picker)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3Q, in progress)
+## Current architecture (post-Package 3Q)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -126,7 +126,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3Q, branch `feature/instagram-dm-self-id`, base `9b4601d`):
+DELIVERED (Package 3Q, merged `ff1c3ed` 2026-06-05):
 - `index.html` — `<div id="instagramSenderPicker">` after `#whatsappSenderPicker`; `const instagramSenderPicker` binding; `showInstagramSenderPicker(memories)` function; `applyInstagramSelfSender(senderName)` function; Instagram picker hide in WA branch + non-WA guard block + Instagram branch call + restore path; `window.__km.applyInstagramSelfSender` exposed for E2E testability.
 - `scripts/e2e-regression-harness.mjs` — `IG_ALICE_COUNT = 4` and `IG_BOB_COUNT = 4` constants; Phase 30 (6 real-files tests): picker visible; Alice Smith + bob_jones_99 chips; Alice Smith → 4 `.me`; selfMessageCount = 4; Skip → 0 `.me`; non-Instagram reimport hides picker.
 - No adapter changes. No engine changes. No persistence schema changes.
