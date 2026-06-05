@@ -44,11 +44,11 @@
         {
             id: 'android-sms',
             label: 'Android SMS (XML Backup)',
-            status: 'stub',
+            status: 'supported',
             importModes: ['xml-backup'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'SMS Backup & Restore XML format. Adapter not yet implemented.'
+            notes: 'SMS Backup & Restore XML format. Engine adapter android-sms-xml-v1 implemented (Package 3M). UI wiring pending a later package.'
         },
         {
             id: 'instagram-dm',
