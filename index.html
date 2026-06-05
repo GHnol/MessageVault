@@ -50,6 +50,11 @@
                 --selection-glow: rgba(72, 207, 162, 0.22);
                 --selection-lift: rgba(0, 0, 0, 0.3);
             }
+            .import-quality-inner {
+                background: #1c1c1e;
+                color: #8e8e93;
+            }
+            .import-quality-chip strong { color: #e5e5ea; }
         }
 
         body {
@@ -788,6 +793,29 @@
 
         .header-btn.secondary {
             background: #e5e5ea;
+            color: #1d1d1f;
+        }
+
+        .import-quality-panel {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 8px 16px 0;
+        }
+        .import-quality-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+            background: #f5f5f7;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #636366;
+        }
+        .import-quality-chip {
+            white-space: nowrap;
+        }
+        .import-quality-chip strong {
             color: #1d1d1f;
         }
 
@@ -3362,6 +3390,7 @@
             </div>
             <button type="button" class="search-close" id="searchClose">Done</button>
         </div>
+        <div class="import-quality-panel" id="importQualityPanel" style="display:none;"></div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="selection-bar" id="selectionBar">
             <span class="selection-count" id="selectionCount"></span>
@@ -3455,6 +3484,7 @@
     <script src="src/core/source-platforms.js"></script>
     <script src="src/core/normalized-memory.js"></script>
     <script src="src/core/import-adapters.js"></script>
+    <script src="src/core/import-quality-report.js"></script>
     <script src="src/adapters/txt-export-adapter.js"></script>
     <script src="src/adapters/imessage-chatdb-adapter.js"></script>
     <script src="src/adapters/manual-entry-adapter.js"></script>
@@ -3552,7 +3582,8 @@
         const txtBack = document.getElementById('txtBack');
         const txtDropZone = document.getElementById('txtDropZone');
         const fileInput = document.getElementById('fileInput');
-        const txtStatus = document.getElementById('txtStatus');
+        const txtStatus           = document.getElementById('txtStatus');
+        const importQualityPanel  = document.getElementById('importQualityPanel');
 
         // Picker
         const contactList = document.getElementById('contactList');
@@ -3774,6 +3805,63 @@
             el.className = 'status' + (isError ? ' error' : '');
         }
 
+        function renderImportQualityPanel(memories) {
+            if (!importQualityPanel) return;
+            const IQR = window.KMEngine && window.KMEngine.ImportQualityReport;
+            if (!IQR || !Array.isArray(memories) || memories.length === 0) {
+                importQualityPanel.style.display = 'none';
+                importQualityPanel.innerHTML = '';
+                return;
+            }
+            const r = IQR.compute(memories);
+            if (r.totalMessages === 0) {
+                importQualityPanel.style.display = 'none';
+                importQualityPanel.innerHTML = '';
+                return;
+            }
+
+            var chips = [];
+
+            // Total
+            chips.push('<span class="import-quality-chip"><strong>' +
+                r.totalMessages.toLocaleString() + '</strong> messages</span>');
+
+            // Date range
+            if (r.dateRange.first && r.dateRange.last) {
+                var fDate = new Date(r.dateRange.first);
+                var lDate = new Date(r.dateRange.last);
+                var fStr  = fDate.toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+                var lStr  = lDate.toLocaleDateString(undefined, { month: 'short', year: 'numeric' });
+                var dateLabel = fStr === lStr ? fStr : (fStr + ' to ' + lStr);
+                chips.push('<span class="import-quality-chip">' + dateLabel + '</span>');
+            }
+
+            // Senders
+            if (r.uniqueSenderCount > 0) {
+                chips.push('<span class="import-quality-chip"><strong>' +
+                    r.uniqueSenderCount + '</strong> ' +
+                    (r.uniqueSenderCount === 1 ? 'sender' : 'senders') + '</span>');
+            }
+
+            // Attachments
+            if (r.attachmentOnlyCount > 0) {
+                chips.push('<span class="import-quality-chip"><strong>' +
+                    r.attachmentOnlyCount + '</strong> ' +
+                    (r.attachmentOnlyCount === 1 ? 'attachment' : 'attachments') + '</span>');
+            }
+
+            // Reactions
+            if (r.totalReactionCount > 0) {
+                chips.push('<span class="import-quality-chip"><strong>' +
+                    r.totalReactionCount + '</strong> ' +
+                    (r.totalReactionCount === 1 ? 'reaction' : 'reactions') + '</span>');
+            }
+
+            importQualityPanel.innerHTML =
+                '<div class="import-quality-inner">' + chips.join(' · ') + '</div>';
+            importQualityPanel.style.display = '';
+        }
+
         /* ─────────────────────────────────────────────
            .txt flow (PRESERVED — unchanged logic)
         ───────────────────────────────────────────── */
@@ -3790,6 +3878,7 @@
                     : normalizedMessages;
                 showStatusIn(txtStatus, `Found ${normalizedMessages.length.toLocaleString()} messages — processed locally`);
                 renderConversation(normalizedMessages);
+                renderImportQualityPanel(window.chatMessagesData);
             };
 
             reader.readAsText(file);
@@ -4224,6 +4313,7 @@
                     backToPickerBtn.style.display = 'inline-flex';
                     showView(chatView);
                     renderConversation(messages);
+                    renderImportQualityPanel(window.chatMessagesData);
                     hideLoading();
                 } catch (err) {
                     hideLoading();
@@ -8611,6 +8701,8 @@ ${keepsakeFooter}
                 if (!g) return null;
                 return PDL.getDraft(g, typeId || 'message-book');
             },
+            // Package 3I: import quality report bridge for E2E testability
+            renderImportQualityPanel,
         };
 
     </script>

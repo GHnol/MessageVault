@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I).
 **Last updated:** 2026-06-04 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -16,10 +16,11 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 5C — confirmed baseline 2082):**
+**Suites and counts (as of Package 3I — confirmed baseline 2173):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
+| `import-quality-report-tests.mjs` | 91 | ImportQualityReport.compute(): API shape, all metric fields, edge cases, semantic guards — Package 3I |
 | `km-engine-tests.mjs` | 96 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms |
 | `keepsake-group-tests.mjs` | 43 | KeepsakeGroup data model |
 | `product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog, required fields |
@@ -36,9 +37,9 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
 | `product-draft-lifecycle-tests.mjs` | 104 | Lifecycle coordinator API, all lifecycle paths, mutation model, duplicate handling, semantic guards (Package 3F) |
 
-**Total: 2082 tests.** All must remain green before any commit.
+**Total: 2173 tests.** All must remain green before any commit.
 
-Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (+18 proof-approval-state, +25 proof-approval-ux), raising the confirmed baseline to 2082.
+Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the confirmed baseline to 2173.
 
 **Run:**
 
@@ -63,7 +64,7 @@ Or run all suites individually as part of pre-commit verification.
 
 **What:** Headless Chromium running the actual `index.html` against deterministic seed data (`scripts/e2e-test-data.mjs`).
 
-**Coverage:** Phases 1–10 + 20 + 21 + 22 + 23 + 24 of `scripts/e2e-regression-harness.mjs`. **57 tests.**
+**Coverage:** Phases 1–10 + 20 + 21 + 22 + 23 + 24 of `scripts/e2e-regression-harness.mjs`. **57 tests.** (Phase 25 is in the real-files harness.)
 
 **Run:**
 
@@ -187,6 +188,10 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
+**Package 3I — Import Quality Report (IN PROGRESS — branch `feature/import-quality-report`, 2026-06-04):**
+
+Package 3I adds 91 tests in new `import-quality-report-tests.mjs` (12 suites: API shape, empty input, totalMessages, dateRange, null/invalid timestamps, uniqueSenderCount/senderList, self/contact split, attachmentOnlyCount, reactions, sourcePlatformId, all-attachment corpus, semantic guards). Node baseline: 2173. E2E Phase 25 adds 4 real-files tests: panel visible after txt import, correct count, date range present, panel hidden on fresh load (in real-files block after Phase 11). Layer 2 unchanged: 57 seeded. Layer 3: 84 total when running `npm run e2e:real` (57 seeded + 23 real-files + 4 Phase 25). Visual regression PASS (panel above page canvas, not in capture zone; baselines unchanged). No GATE-04 crossing. Pure additive import flow enhancement.
+
 **Package 3H — Draft-Preflight Status Surface and Proof Panel Gate (COMPLETE — merged `1297f92` 2026-06-03):**
 
 Package 3H adds no new Node unit tests (zero engine module changes). E2E Phase 23 adds 6 seeded tests covering draft book-check auto-advance, proof panel gating, idempotency, save/restore, and ProofApprovalUX independence. Phase 22 tests updated to reflect the new expected state (draft reaches `preflight-passed` on book view entry). Visual regression baselines updated for Scenario A (proof panel appearance changes). Layer 2 target: 53 seeded tests. Layer 3 unchanged: 70 real-files tests.
@@ -201,9 +206,9 @@ Package 5C adds 18 tests to `proof-approval-state-tests.mjs` (Suite 4 +1, Suite 
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 15 Node unit suites green (2082 tests).
+1. All 16 Node unit suites green (2173 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (80 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (84 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

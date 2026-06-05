@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 5C COMPLETE — merged `4733c32` 2026-06-04. No active package. Coordinator decides next. |
-| Branch | `main` |
-| main HEAD | `4733c32` — merge: add proof panel user withdrawal flow |
-| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Resume into | Package 3I — Import Quality Report — implementation complete 2026-06-04; pending Coordinator commit approval on `feature/import-quality-report`. |
+| Branch | `feature/import-quality-report` |
+| main HEAD | `725585c` — merge: sync operating docs after Package 5C completion |
+| Next action | Run `/start`. Coordinator reviews Package 3I report and approves commit if satisfied. After commit + merge, run `/closeout`. |
+| Package 3I | IN PROGRESS — `src/core/import-quality-report.js` + 91 tests + `#importQualityPanel` UI + Phase 25 E2E (4 tests); 2173 Node; 57/57 seeded; 84/84 real-files; pending commit |
 | Package 5C | COMPLETE — user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA; merged `4733c32` 2026-06-04 |
 | Package 3H | COMPLETE — proof panel gated on draft book check (PAGINATION_STABILITY); Phase 23 E2E (6 tests); 2039 Node tests; E2E 53/53 seeded; 76/76 real-files; visual regression PASS |
 | Package 3G | COMPLETE — lifecycle modules in browser; showBookView draft init; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
