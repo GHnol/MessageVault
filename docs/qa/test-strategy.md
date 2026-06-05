@@ -191,7 +191,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3P — Instagram DM JSON UI Wiring (IN PROGRESS — branch `feature/instagram-dm-ui-wiring`, 2026-06-05):**
+**Package 3P — Instagram DM JSON UI Wiring (COMPLETE — merged `d99fb84` 2026-06-05):**
 
 Package 3P adds no new Node unit tests (no new engine module; adapter fully tested in Package 3O). Adds E2E Phase 29 (5 real-files tests): Instagram DM JSON import via file input; chat view visible; count = 8 (10 messages − 1 is_unsent skip − 1 missing-sender skip); importQualityPanel visible and non-empty; sourcePlatformId = 'instagram-dm'. Node baseline unchanged: 2450 / 19 suites. Layer 2 unchanged: 57 seeded. Layer 3: 106 total when running `npm run e2e:real` (+5 Phase 29). Visual regression PASS (baselines unchanged; import panel above page canvas capture zone). No sender picker (self-ID deferred to Package 3Q). No engine changes. `#fileInput` accept updated to `.txt,.xml,.json`. Script tag added for `instagram-dm-adapter.js`.
 

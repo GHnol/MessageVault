@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-05` (Package 3P IN PROGRESS — branch created)
+**Last updated:** `2026-06-05` (Package 3P COMPLETE — state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `157927a` — docs: sync operating docs after Package 3O completion |
-| Active branch | `feature/instagram-dm-ui-wiring` |
-| Active pass | `Package 3P — Instagram DM JSON UI Wiring` — IN PROGRESS |
-| Last completed pass | `Package 3O — Instagram DM JSON Adapter` — impl `ebb7a55`, merged `26f2633` 2026-06-05 |
-| Last closed package | `Package 3O — Instagram DM JSON Adapter` — FULLY COMPLETE |
-| Next authorized target | Complete Package 3P; await Coordinator commit approval |
-| Test baseline | **2450 Node tests** (19 suites); E2E seeded 57/57; E2E real-files 101/101 (→106 after Package 3P); visual regression PASS (baseline unchanged) |
+| main HEAD | `d99fb84` — merge: add Instagram DM JSON import routing (Package 3P) |
+| Active branch | `main` |
+| Active pass | None — awaiting Coordinator direction |
+| Last completed pass | `Package 3P — Instagram DM JSON UI Wiring` — impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |
+| Last closed package | `Package 3P — Instagram DM JSON UI Wiring` — FULLY COMPLETE |
+| Next authorized target | Await Coordinator decision on next package |
+| Test baseline | **2450 Node tests** (19 suites); E2E seeded 57/57; E2E real-files 106/106; visual regression PASS (baseline unchanged) |
+| Package 3P | COMPLETE — merged `d99fb84` 2026-06-05; Instagram DM JSON import routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; drop hint + ingest card copy updated; Phase 29 E2E (5 tests); 10/10 manual QA; no engine changes; no sender picker (self-ID deferred to Package 3Q) |
 | Package 3O | COMPLETE — merged `26f2633` 2026-06-05; `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 87 new tests + 5 km-engine smoke; engine-only; instagram-dm platform `supported`; no UI wiring |
 | Package 3N | COMPLETE — merged `6d61367` 2026-06-05; Android SMS XML browser import routing; `#fileInput accept=".txt,.xml"`; routing guard in `readTxtFile()`; Phase 28 E2E (6 tests); 19/19 manual QA; no engine changes; no sender picker |
 | Package 3M | COMPLETE — merged `1228f41` 2026-06-05; `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; 84 new tests + 5 km-engine smoke; engine-only; android-sms platform `supported`; no UI wiring |

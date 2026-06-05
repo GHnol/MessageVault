@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3P IN PROGRESS — Instagram DM JSON UI wiring)
+**Last updated:** 2026-06-05 (Package 3P COMPLETE — Instagram DM JSON UI wiring)
 **Status:** Active
 
 ---
@@ -125,8 +125,8 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3P — Instagram DM JSON UI Wiring — branch `feature/instagram-dm-ui-wiring`):
-- `index.html` — `<script src="src/adapters/instagram-dm-adapter.js">` tag (after android-sms-xml-adapter.js, before future-adapter-stubs.js); `#fileInput` `accept=".txt,.xml,.json"`; Instagram DM routing guard in `readTxtFile()` (after Android SMS guard, before legacy TXT fallback); drop zone hint and landing card copy updated for .json; no engine changes; no sender picker (self-ID deferred to Package 3Q)
+DELIVERED (Package 3P, merged `d99fb84` 2026-06-05):
+- `index.html` — `<script src="src/adapters/instagram-dm-adapter.js">` tag (after android-sms-xml-adapter.js, before future-adapter-stubs.js); `#fileInput` `accept=".txt,.xml,.json"`; Instagram DM routing guard in `readTxtFile()` (after Android SMS guard, before legacy TXT fallback); drop zone hint updated to "Supports .txt, .xml and .json exports"; landing card copy updated for .json; no engine changes; no sender picker (self-ID deferred to Package 3Q)
 - `scripts/e2e-regression-harness.mjs` — Phase 29 (5 real-files tests): Instagram DM JSON import, count=8, IQR panel visible, sourcePlatformId='instagram-dm'; INSTAGRAM_FIXTURE/INSTAGRAM_FIXTURE_COUNT constants
 
 DELIVERED (Package 3O, merged `26f2633` 2026-06-05):

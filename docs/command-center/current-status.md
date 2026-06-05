@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-05
-**Updated by:** Claude Code (post-Package-3O state-sync)
+**Updated by:** Claude Code (post-Package-3P state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -47,13 +47,14 @@
 | Package 3M | Android SMS XML Adapter | COMPLETE — merged to main | `e5bc179` | `1228f41` |
 | Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
 | Package 3O | Instagram DM JSON Adapter | COMPLETE — merged to main | `ebb7a55` | `26f2633` |
+| Package 3P | Instagram DM JSON UI Wiring | COMPLETE — merged to main | `fa6f6f2` | `d99fb84` |
 | Operator Reliability Repair | Raw transcript capture protocol, notification diagnostic, skill/command updates | COMPLETE — merged to main | `81b2329` | `c27502c` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 3N (`04d30ed`) — `index.html` Android SMS routing guard in `readTxtFile()` (after WA guard + picker hide, before pipe-delimited fallback); `android-sms-xml-adapter.js` script tag; `#fileInput accept=".txt,.xml"`; drop zone text/hint and landing card copy updated for .xml. (Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard in `readTxtFile()`. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3P (`fa6f6f2`) — `index.html` Instagram DM routing guard in `readTxtFile()` (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy and drop hint updated for .json. (Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard in `readTxtFile()`. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
@@ -77,11 +78,12 @@
   - `product-preflight-tests.mjs`: 119 (Package 3E)
   - `product-draft-lifecycle-tests.mjs`: 104 (Package 3F)
   - `import-quality-report-tests.mjs`: 91 (Package 3I; 12 suites: API shape, all metric fields, edge cases, semantic guards)
+- `src/adapters/instagram-dm-adapter.js`: new (Package 3O); `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON; canHandle/import; senderRole always contact; browser-loaded (Package 3P)
 - `src/adapters/whatsapp-txt-adapter.js`: new (Package 3J); `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; canHandle/normalizeAll/import; ADAPTER_ID `whatsapp-txt-v1`
 - `src/core/source-platforms.js`: modified (Package 3J); WhatsApp platform `stub` → `supported`
 - `src/adapters/future-adapter-stubs.js`: modified (Package 3J); removed `whatsapp-txt-v1` stub
 - `scripts/fixtures/fake-whatsapp-chat.txt`: new (Package 3J); fake bracket-format WhatsApp fixture
-- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 38-test real-file coverage (phases 11–19 + Phases 25–27, Packages 3C + 3I + 3K + 3L) — 95 total
+- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 49-test real-file coverage (phases 11–19 + Phases 25–29, Packages 3C + 3I + 3K + 3L + 3N + 3P) — 106 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -90,14 +92,16 @@
 
 ---
 
-## Git state (as of post-Package-3I state-sync)
+## Git state (as of post-Package-3P state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
+| main HEAD | `d99fb84` — merge: add Instagram DM JSON import routing (Package 3P) |
 | Active branch | `main` |
 | Working tree | Clean (pending state-sync commit) |
-| Pushed to remote | main is current through Package 3L merge |
+| Pushed to remote | main is current through Package 3O merge; Package 3P push pending |
+
+**Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
 **Package 3L (`7540cc6` / `16d0ca6`):** WhatsApp Self-Identification — `#whatsappSenderPicker` inline panel in `index.html` (CSS `.whatsapp-sender-picker` + `.sender-chip` + `.sender-chip.active` + dark-mode; HTML div; `showWhatsAppSenderPicker(memories)` extracts unique senders and builds chip UI; `applyWhatsAppSelfSender(senderName)` mutates `chatMessagesData[i].senderRole` in-place then re-renders conversation + quality panel; `renderConversation()` updated to use `senderRole==='self' || sender==='Me'` for bubble class and header detection — fully backward-compatible); picker shown after WA import, hidden on non-WA import and project restore; `applyWhatsAppSelfSender` exposed on `window.__km`; Phase 27 E2E (6 tests); 29/29 manual QA PASS (29 Playwright checks: fresh load hidden; 8 WA rows; Alice+Bob+Skip chips; Alice→4 me, header=Bob; Bob→4 me, header=Alice; Skip→0 me; TXT picker hidden; sender=Me fallback works; senderRole persists through save/restore; picker hidden post-restore; re-import re-shows picker; double-click idempotent; 0 console errors). No engine changes; no state/ changes; no src/tests/ changes.
 
