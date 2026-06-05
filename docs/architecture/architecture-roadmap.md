@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3K complete — WhatsApp TXT UI wiring)
+**Last updated:** 2026-06-05 (Package 3L in progress — WhatsApp self-identification)
 **Status:** Active
 
 ---
@@ -110,7 +110,12 @@ DELIVERED (Package 3J, merged `f1eca34` 2026-06-05):
 DELIVERED (Package 3K, merged `a048d0d` 2026-06-05):
 - `index.html` — added `<script src="src/adapters/whatsapp-txt-adapter.js">` tag in adapter block; `readTxtFile()` now detects WhatsApp format via `KMEngine.whatsappTxtAdapter.canHandle(text)` and routes to `adapter.import(text)` before falling through to the existing pipe-delimited path; both paths call `renderConversation` and `renderImportQualityPanel`.
 - `scripts/e2e-regression-harness.mjs` — Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state.
-- Self/sender identification (senderRole = 'self') deferred to Package 3L.
+- Self/sender identification (senderRole = 'self') delivered in Package 3L.
+
+IN PROGRESS (Package 3L, branch `feature/whatsapp-self-id`):
+- `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
+- `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
+- No engine changes. No persistence changes.
 
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)

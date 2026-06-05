@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3K — WhatsApp TXT UI Wiring. Impl `bbd2097`, merged `a048d0d` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
+**Status:** `in-progress` — Package 3L — WhatsApp Self-Identification. Branch `feature/whatsapp-self-id`, base `main` at `2e901a4`. Implementation complete; awaiting Coordinator commit approval.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `a048d0d` — merge: add WhatsApp TXT import routing (Package 3K) |
+| **Active pass** | `Package 3L — WhatsApp Self-Identification` |
+| **Active branch** | `feature/whatsapp-self-id` |
+| **main HEAD** | `2e901a4` — docs: sync operating docs after Package 3K completion |
 | **Last completed pass** | `Package 3K — WhatsApp TXT UI Wiring` — impl `bbd2097`, merged `a048d0d` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3L — WhatsApp Self-Identification` — IN PROGRESS |
 | **Last closed package** | `Package 3K — WhatsApp TXT UI Wiring` — FULLY COMPLETE — merged `a048d0d` 2026-06-05 |
 | **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
@@ -32,26 +32,24 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — Package 3K — WhatsApp TXT UI Wiring)
+## Objective (current pass — Package 3L — WhatsApp Self-Identification)
 
-Package 3K — WhatsApp TXT UI Wiring. **COMPLETE — impl `bbd2097`, merged `a048d0d` to `main` 2026-06-05.**
+Package 3L — WhatsApp Self-Identification. **IN PROGRESS — branch `feature/whatsapp-self-id`, base `main` at `2e901a4`. Implementation complete; awaiting Coordinator commit approval.**
 
-Branch: `feature/whatsapp-txt-ui-wiring` — base: `main` at `6eef338`
+Branch: `feature/whatsapp-self-id` — base: `main` at `2e901a4`
 
-Delivered (implementation complete; awaiting Coordinator commit approval):
-- `index.html` — `<script src="src/adapters/whatsapp-txt-adapter.js">` tag added in adapter block before `future-adapter-stubs.js`; `readTxtFile()` modified to detect WhatsApp format via `canHandle(text)` guard and route to `adapter.import(text)` before the existing pipe-delimited path; both paths call `renderConversation` and `renderImportQualityPanel`
-- `scripts/e2e-regression-harness.mjs` — `WA_FIXTURE` + `WA_FIXTURE_COUNT = 8` constants; Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state
-- `docs/qa/test-strategy.md` — E2E real-files count 84→89; Phase 26 note; Layer 3 description updated; pre-commit baseline updated
-- `docs/architecture/architecture-roadmap.md` — Package 3J entry updated to DELIVERED; Package 3K IN PROGRESS entry added
+Delivered:
+- `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel (`.whatsapp-sender-picker`, `.sender-picker-inner`, `.sender-chip`, `.sender-chip.active`, dark-mode overrides); `#whatsappSenderPicker` div after `#importQualityPanel`; `const whatsappSenderPicker` binding; two targeted changes to `renderConversation()` using `senderRole === 'self' || sender === 'Me'` for bubble class and header detection; new `showWhatsAppSenderPicker(memories)` function; new `applyWhatsAppSelfSender(senderName)` function; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`
+- `scripts/e2e-regression-harness.mjs` — `WA_ALICE_COUNT = 4`, `WA_BOB_COUNT = 4` constants; Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me`; selfMessageCount = 4; Skip → 0 `.me`; non-WA import hides picker
+- `docs/qa/test-strategy.md` — E2E real-files 89→95; Phase 27 note; Layer 3 description updated; pre-commit baseline updated; Package 3L IN PROGRESS entry added
+- `docs/architecture/architecture-roadmap.md` — Package 3L IN PROGRESS entry; last-updated header
 
-**Results:** 2269 Node tests, 0 failed (unchanged). E2E seeded 57/57. E2E real-files 89/89 (+5 Phase 26). Visual regression PASS (baselines unchanged). Manual QA PASS (8 rows, Alice header, 0 me / 8 them bubbles, 1 attachment bubble, panel text "8 messages · Jun 2024 · 2 senders · 1 attachment", TXT regression pass, fresh reload panel hidden).
+**Results:** 2269 Node tests, 0 failed (unchanged). E2E seeded 57/57. E2E real-files 95/95 (+6 Phase 27). Visual regression PASS (baselines unchanged; sender picker above capture zone). Manual QA PASS (29/29 Playwright checks: fresh load picker hidden; 8 WA rows; Alice+Bob+Skip chips; Alice→4 me rows, header=Bob; Bob→4 me rows, header=Alice; Skip→0 me; TXT picker hidden; sender=Me fallback works; save+restore preserves senderRole; picker hidden post-restore; re-import re-shows picker; double-click idempotent; 0 console errors).
 
-**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
+**Next exact action:** Coordinator approves commit. Recommended message: `feat: add WhatsApp self-identification sender picker`. Do not commit without explicit instruction.
 
 **Hard exclusions verified:**
 - src/adapters/whatsapp-txt-adapter.js: not touched
-- src/adapters/txt-export-adapter.js: not touched
-- src/core/import-quality-report.js: not touched
 - src/core/normalized-memory.js: not touched
 - src/core/import-adapters.js: not touched
 - src/core/source-platforms.js: not touched
@@ -62,6 +60,16 @@ Delivered (implementation complete; awaiting Coordinator commit approval):
 - Pagination constants, Review view, standalone keepsake flows: not touched
 - No new dependencies installed
 - No external systems mutated
+
+---
+
+## Objective (last completed pass — Package 3K — WhatsApp TXT UI Wiring)
+
+Package 3K — WhatsApp TXT UI Wiring. **COMPLETE — impl `bbd2097`, merged `a048d0d` to `main` 2026-06-05.**
+
+Branch: `feature/whatsapp-txt-ui-wiring` — base: `main` at `6eef338`
+
+Delivered: `index.html` WA detection guard + adapter routing in `readTxtFile()`; script tag for `whatsapp-txt-adapter.js`; Phase 26 E2E (5 tests); 2269 Node; 57/57 seeded; 89/89 real-files; visual regression PASS; 9/9 manual QA.
 
 ---
 
