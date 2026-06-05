@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-04 (Package 3I implementation complete — pending commit)
+**Last updated:** 2026-06-05 (Package 3J in progress — whatsapp-txt-adapter)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3I)
+## Current architecture (post-Package 3J)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -21,12 +21,13 @@ src/
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
-    source-platforms.js       — source platform registry
+    source-platforms.js       — source platform registry (whatsapp now 'supported' — Package 3J)
     keepsake-group.js         — KeepsakeGroup model
   adapters/
     imessage-chatdb-adapter.js
     txt-export-adapter.js
     manual-entry-adapter.js
+    whatsapp-txt-adapter.js   — KMEngine.whatsappTxtAdapter; bracket + hyphen format; parse/normalizeAll/import; ADAPTER_ID whatsapp-txt-v1 — Package 3J
     future-adapter-stubs.js
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -63,6 +64,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     product-draft-state-tests.mjs      — 90 tests; draft lifecycle, transitions, semantic guards — Package 3E
     product-preflight-tests.mjs        — 119 tests; check registry, PAGINATION_STABILITY, aggregate status — Package 3E
     product-draft-lifecycle-tests.mjs  — 104 tests; coordinator API, mutation model, all lifecycle paths, semantic guards — Package 3F
+    whatsapp-txt-adapter-tests.mjs     — 91 tests; API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards — Package 3J
 ```
 
 All modules expose into `window.KMEngine`. No build step.
@@ -91,11 +93,19 @@ DELIVERED (Package 5C, 2026-06-04):
 - `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)`; `getAllowedUserActions('pending-review')` → `['withdraw-submission']`.
 - `index.html` `renderBookProofPanel()` — cancel button + hint + CSS. E2E Phase 24 (4 tests).
 
-DELIVERED (Package 3I, 2026-06-04 — pending commit):
+DELIVERED (Package 3I, 2026-06-04):
 - `src/core/import-quality-report.js` — `KMEngine.ImportQualityReport`; `compute(memories)` pure function; accepts NormalizedMemory[]; returns totalMessages, dateRange, uniqueSenderCount, senderList, selfMessageCount, contactMessageCount, attachmentOnlyCount, messagesWithReactionsCount, totalReactionCount, sourcePlatformId, messagesWithoutTimestamp, messagesWithoutText; no DOM, no side effects, Node-testable; no estimated pages or volumes.
 - `index.html` — script tag for `import-quality-report.js`; `#importQualityPanel` div between search bar and chat messages; `renderImportQualityPanel(memories)` function; called from `readTxtFile()` and `openConversation()` only (not from restore path); CSS for `.import-quality-inner` and `.import-quality-chip` (light + dark mode); exposed on `window.__km`.
 - `src/tests/import-quality-report-tests.mjs` — 91 tests across 12 suites.
 - E2E Phase 25 (4 tests, in real-files block): panel visible, correct count, date range, hidden on fresh load.
+
+IN PROGRESS (Package 3J, 2026-06-05 — branch `feature/whatsapp-txt-adapter`):
+- `src/adapters/whatsapp-txt-adapter.js` — `KMEngine.whatsappTxtAdapter`; ADAPTER_ID `whatsapp-txt-v1`; bracket format `[M/D/YY, H:MM:SS AM] Sender: text` and hyphen format `M/D/YY, H:MM AM - Sender: text`; `canHandle`, `normalizeAll`, `import`; multi-line continuation; system-message skipping; media placeholder (`<Media omitted>` etc → `isAttachmentOnly: true`, text `[Attachment]`); senderRole `contact` for all senders; provenance populated; engine layer only — no index.html wiring.
+- `src/adapters/future-adapter-stubs.js` — removed `whatsapp-txt-v1` entry; real adapter now owns that ID.
+- `src/core/source-platforms.js` — WhatsApp platform `status: 'stub'` → `'supported'`; notes updated.
+- `scripts/fixtures/fake-whatsapp-chat.txt` — fake-data bracket-format WhatsApp fixture (9 lines: 1 system notice, 8 messages including 1 media, 1 multi-line).
+- `src/tests/whatsapp-txt-adapter-tests.mjs` — 91 tests across 14 suites.
+- `src/tests/km-engine-tests.mjs` — loads `whatsapp-txt-adapter.js` before stubs; updated whatsapp platform assertion to `supported`; added 5 smoke assertions.
 
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)

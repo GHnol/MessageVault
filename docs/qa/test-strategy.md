@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I).
-**Last updated:** 2026-06-04 (America/New_York)
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J).
+**Last updated:** 2026-06-05 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -16,12 +16,13 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 3I — confirmed baseline 2173):**
+**Suites and counts (as of Package 3J — confirmed baseline 2269):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
+| `whatsapp-txt-adapter-tests.mjs` | 91 | WhatsApp adapter: API shape, canHandle (bracket/hyphen/rejects), parsing, multi-line, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards — Package 3J |
 | `import-quality-report-tests.mjs` | 91 | ImportQualityReport.compute(): API shape, all metric fields, edge cases, semantic guards — Package 3I |
-| `km-engine-tests.mjs` | 96 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms |
+| `km-engine-tests.mjs` | 101 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms; +5 whatsapp smoke assertions — Package 3J |
 | `keepsake-group-tests.mjs` | 43 | KeepsakeGroup data model |
 | `product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog, required fields |
 | `product-eligibility-tests.mjs` | 76 | Per-product eligibility evaluators, LegacyKeepsakeTypesBridge |
@@ -37,9 +38,9 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
 | `product-draft-lifecycle-tests.mjs` | 104 | Lifecycle coordinator API, all lifecycle paths, mutation model, duplicate handling, semantic guards (Package 3F) |
 
-**Total: 2173 tests.** All must remain green before any commit.
+**Total: 2269 tests.** All must remain green before any commit.
 
-Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the confirmed baseline to 2173.
+Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the baseline to 2173. Package 3J added 91 tests (`whatsapp-txt-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2269.
 
 **Run:**
 
@@ -188,6 +189,10 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
+**Package 3J — WhatsApp TXT Adapter (IN PROGRESS — branch `feature/whatsapp-txt-adapter`, 2026-06-05):**
+
+Package 3J adds 91 tests in new `whatsapp-txt-adapter-tests.mjs` (14 suites: API shape, canHandle bracket, canHandle hyphen, canHandle rejects, fixture import, hyphen import, multi-line continuation, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards). Adds 5 smoke assertions to `km-engine-tests.mjs`. Node baseline: 2269. No E2E required (engine-only; no index.html changes). Visual regression not required. No GATE-04 crossing. Engine adapter only; UI wiring pending.
+
 **Package 3I — Import Quality Report (COMPLETE — merged `60cdd31` 2026-06-04):**
 
 Package 3I adds 91 tests in new `import-quality-report-tests.mjs` (12 suites: API shape, empty input, totalMessages, dateRange, null/invalid timestamps, uniqueSenderCount/senderList, self/contact split, attachmentOnlyCount, reactions, sourcePlatformId, all-attachment corpus, semantic guards). Node baseline: 2173. E2E Phase 25 adds 4 real-files tests: panel visible after txt import, correct count, date range present, panel hidden on fresh load (in real-files block after Phase 11). Layer 2 unchanged: 57 seeded. Layer 3: 84 total when running `npm run e2e:real` (57 seeded + 23 real-files + 4 Phase 25). Visual regression PASS (panel above page canvas, not in capture zone; baselines unchanged). No GATE-04 crossing. Pure additive import flow enhancement.
@@ -206,7 +211,7 @@ Package 5C adds 18 tests to `proof-approval-state-tests.mjs` (Suite 4 +1, Suite 
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 16 Node unit suites green (2173 tests).
+1. All 17 Node unit suites green (2269 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
 3. If real-file paths changed: E2E real-files green (84 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).

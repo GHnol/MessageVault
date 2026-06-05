@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-04` (Package 3I completion state-sync)
+**Last updated:** `2026-06-05` (Package 3J in-progress state update)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `60cdd31` — merge: add import quality report after successful message import |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `037053e` — merge: sync operating docs after Package 3I completion |
+| Active branch | `feature/whatsapp-txt-adapter` |
+| Active pass | `Package 3J — WhatsApp TXT Adapter` — IN PROGRESS |
 | Last completed pass | `Package 3I — Import Quality Report` — impl `c0c8f7a`, merged `60cdd31` 2026-06-04 |
 | Last closed package | `Package 3I — Import Quality Report` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
-| Test baseline | **2173 Node tests** (16 suites); E2E seeded 57/57; E2E real-files 84/84; visual regression PASS (baseline unchanged) |
+| Next authorized target | Package 3J implementation complete — awaiting Coordinator commit approval |
+| Test baseline | **2269 Node tests** (17 suites); E2E seeded 57/57; E2E real-files 84/84; visual regression PASS (baseline unchanged) |
+| Package 3J | IN PROGRESS — branch `feature/whatsapp-txt-adapter`; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format parsing; 91 new tests; engine-only |
 | Package 3I | COMPLETE — merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 17/17 browser QA |
 | Package 5C | COMPLETE — merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 27/27 browser QA |
 | Package 3H | COMPLETE — merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book view entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); no engine changes |

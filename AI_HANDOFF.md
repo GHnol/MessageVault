@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3I — Import Quality Report. Impl `c0c8f7a`, merged `60cdd31` to `main` 2026-06-04. State-sync in progress. No active package. Awaiting Coordinator authorization.
+**Status:** `in-progress` — Package 3J — WhatsApp TXT Adapter. Branch `feature/whatsapp-txt-adapter`. Engine implementation complete; docs updated. Awaiting Coordinator commit approval.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-04`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
 ---
 
@@ -18,17 +18,53 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `60cdd31` — merge: add import quality report after successful message import |
+| **Active pass** | `Package 3J — WhatsApp TXT Adapter` |
+| **Active branch** | `feature/whatsapp-txt-adapter` |
+| **Branch base** | `main` at `037053e` |
+| **main HEAD** | `037053e` — merge: sync operating docs after Package 3I completion |
 | **Last completed pass** | `Package 3I — Import Quality Report` — impl `c0c8f7a`, merged `60cdd31` 2026-06-04 |
-| **Active package** | None |
+| **Active package** | `Package 3J — WhatsApp TXT Adapter` — IN PROGRESS |
 | **Last closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Prior closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active — Package 3J — WhatsApp TXT Adapter)
+
+Package 3J — WhatsApp TXT Adapter. **IN PROGRESS — branch `feature/whatsapp-txt-adapter`, base `main` at `037053e`.**
+
+Branch: `feature/whatsapp-txt-adapter`
+
+Delivered (implementation complete; awaiting Coordinator commit approval):
+- `scripts/fixtures/fake-whatsapp-chat.txt` — fake-data bracket-format WhatsApp fixture: 1 system notice + 8 messages (1 media, 1 multi-line)
+- `src/adapters/whatsapp-txt-adapter.js` — `KMEngine.whatsappTxtAdapter`; ADAPTER_ID `whatsapp-txt-v1`; PLATFORM_ID `whatsapp`; ADAPTER_VERSION `1`; `canHandle(input)` (bracket + hyphen detection); `normalizeAll(parsedMessages)` (system-message skip, media placeholder, provenance, senderRole contact); `import(rawText)` (full pipeline: parse → normalizeAll → participants → createImportResult); bracket regex `[M/D/YY, H:MM:SS AM]` and hyphen regex `M/D/YY, H:MM AM -`; multi-line continuation; MEDIA_RE handles `<Media omitted>` / image / video / audio / sticker / GIF; graceful timestamp fallback; registered as `KMEngine.whatsappTxtAdapter` and `KMEngine.adapters['whatsapp-txt-v1']`
+- `src/adapters/future-adapter-stubs.js` — removed `whatsapp-txt-v1` entry; real adapter now owns that ID
+- `src/core/source-platforms.js` — WhatsApp status `stub` → `supported`; notes updated to reflect adapter + pending UI wiring
+- `src/tests/whatsapp-txt-adapter-tests.mjs` — 91 tests across 14 suites; loads `source-platforms.js`, `normalized-memory.js`, `import-adapters.js`, `whatsapp-txt-adapter.js`; uses fixture file
+- `src/tests/km-engine-tests.mjs` — loads `whatsapp-txt-adapter.js` before `future-adapter-stubs.js`; updated whatsapp status assertion to `supported`; added `whatsappTxtAdapter — smoke` suite (5 assertions); suite count +1 (→ 17 suites), test count +5 (→ 101)
+- `docs/qa/test-strategy.md` — baseline 2173 → 2269; Package 3J note; 17 suites
+- `docs/architecture/architecture-roadmap.md` — current architecture updated; `whatsapp-txt-adapter.js` in module map; Package 3J delivered section
+
+**Results:** 2269 Node tests, 0 failed. E2E not required (engine-only). Visual regression not required. Hard exclusion diff: empty (verified).
+
+**Next exact action:** Coordinator reviews Package 3J implementation report. If approved, commit per recommended message. Do not commit without explicit Coordinator authorization.
+
+**Hard exclusions verified:**
+- index.html: not touched
+- scripts/e2e-regression-harness.mjs: not touched
+- src/products/*: not touched
+- src/state/*: not touched
+- src/core/normalized-memory.js: not touched
+- src/core/import-adapters.js: not touched
+- src/core/project-session.js: not touched
+- Proof panel, ProductDraft, ProductPreflight, ProductDraftLifecycle, product readiness, render spec, checkout, PDF, vendor, manufacturing, GATE-04, Review view, standalone keepsake flows: not touched
+- Pagination constants: not touched
+- No new dependencies installed
+- No external systems mutated
 
 ---
 
@@ -383,13 +419,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 5B COMPLETE — merged `dc4f86b` 2026-06-02. State-sync merged to main.
+Package 3J implementation complete — awaiting Coordinator commit approval.
 
 Coordinator decides:
-- Authorize Package 5C or the next product package, or
-- Authorize any other next direction
+- Approve commit per recommended message (feat: add WhatsApp TXT adapter), or
+- Authorize next package after commit + merge
 
-Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+Do not commit without explicit Coordinator approval. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

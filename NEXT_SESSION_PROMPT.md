@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3I COMPLETE — merged `60cdd31` 2026-06-04. No active package. Coordinator decides next. |
-| Branch | `main` |
-| main HEAD | `60cdd31` — merge: add import quality report after successful message import |
-| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Resume into | Package 3J IN PROGRESS — branch `feature/whatsapp-txt-adapter`. Implementation complete. Awaiting Coordinator commit approval. |
+| Branch | `feature/whatsapp-txt-adapter` |
+| Branch base | `main` at `037053e` |
+| Next action | Run `/start`. Await Coordinator commit approval or next direction. |
+| Package 3J | IN PROGRESS — `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; 91 new tests (`whatsapp-txt-adapter-tests.mjs`); 5 km-engine smoke tests; 2269 Node; E2E not required; engine-only; no index.html changes |
 | Package 3I | COMPLETE — `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 2173 Node; 57/57 seeded; 84/84 real-files; 17/17 browser QA; merged `60cdd31` 2026-06-04 |
 | Package 5C | COMPLETE — user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA; merged `4733c32` 2026-06-04 |
 | Package 3H | COMPLETE — proof panel gated on draft book check (PAGINATION_STABILITY); Phase 23 E2E (6 tests); 2039 Node tests; E2E 53/53 seeded; 76/76 real-files; visual regression PASS |
