@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3M — Android SMS XML Adapter. Impl `e5bc179`, merged `1228f41` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
+**Status:** `in-progress` — Package 3N — Android SMS UI Wiring. Branch `feature/android-sms-ui-wiring` from `main` at `ed7e2c5`. Implementation in progress 2026-06-05.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `1228f41` — merge: add Android SMS XML adapter (Package 3M) |
+| **Active pass** | `Package 3N — Android SMS UI Wiring` |
+| **Active branch** | `feature/android-sms-ui-wiring` |
+| **main HEAD** | `ed7e2c5` — docs: sync operating docs after Package 3M completion |
 | **Last completed pass** | `Package 3M — Android SMS XML Adapter` — impl `e5bc179`, merged `1228f41` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3N — Android SMS UI Wiring` — IN PROGRESS |
 | **Last closed package** | `Package 3M — Android SMS XML Adapter` — FULLY COMPLETE — merged `1228f41` 2026-06-05 |
 | **Prior closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
@@ -32,7 +32,23 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — Package 3M — Android SMS XML Adapter)
+## Objective (current pass — Package 3N — Android SMS UI Wiring)
+
+Package 3N — Android SMS UI Wiring. **IN PROGRESS — branch `feature/android-sms-ui-wiring` from `main` at `ed7e2c5`.**
+
+Authorized scope:
+- `index.html`: script tag for `android-sms-xml-adapter.js`; `#fileInput` `accept=".txt,.xml"`; Android SMS routing guard in `readTxtFile()`; minimal copy updates (drop zone, landing card)
+- `scripts/e2e-regression-harness.mjs`: Phase 28 (6 real-files tests); ANDROID_FIXTURE/ANDROID_FIXTURE_COUNT/ANDROID_SELF_COUNT constants
+- `docs/qa/test-strategy.md`: E2E real-files 95→101; Phase 28 note
+- `docs/architecture/architecture-roadmap.md`: Package 3N entry
+
+Hard exclusions: `android-sms-xml-adapter.js`, `normalized-memory.js`, `import-adapters.js`, `import-quality-report.js`, `future-adapter-stubs.js`, `src/products/*`, `src/state/*`, `renderConversation()`, `renderImportQualityPanel()`, `parseMessages()`, `applyReactions()`, pagination constants, BOOK_PAGINATION_VERSION, proof/draft/keepsake flows.
+
+**Next exact action:** Complete implementation, run all verifications (2358 Node / 57 seeded / 101 real-files / visual regression / manual QA), produce implementation report, await Coordinator commit approval.
+
+---
+
+## Objective (last completed pass — Package 3M — Android SMS XML Adapter)
 
 Package 3M — Android SMS XML Adapter. **COMPLETE — impl `e5bc179`, merged `1228f41` to `main` 2026-06-05.**
 
@@ -494,13 +510,11 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3M COMPLETE — impl `e5bc179`, merged `1228f41` 2026-06-05. State-sync complete.
+Package 3N — Android SMS UI Wiring — IN PROGRESS on `feature/android-sms-ui-wiring`.
 
-Coordinator decides:
-- Authorize next development package, or
-- Authorize any other next direction
+Complete implementation, run all verifications (2358 Node / 57 seeded / 101 real-files / visual regression PASS / manual QA), produce implementation report. Await Coordinator commit approval before committing.
 
-Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+Do not commit or push without explicit Coordinator approval. No external mutations authorized.
 
 ---
 
