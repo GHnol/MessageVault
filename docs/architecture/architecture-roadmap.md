@@ -99,13 +99,18 @@ DELIVERED (Package 3I, 2026-06-04):
 - `src/tests/import-quality-report-tests.mjs` — 91 tests across 12 suites.
 - E2E Phase 25 (4 tests, in real-files block): panel visible, correct count, date range, hidden on fresh load.
 
-IN PROGRESS (Package 3J, 2026-06-05 — branch `feature/whatsapp-txt-adapter`):
-- `src/adapters/whatsapp-txt-adapter.js` — `KMEngine.whatsappTxtAdapter`; ADAPTER_ID `whatsapp-txt-v1`; bracket format `[M/D/YY, H:MM:SS AM] Sender: text` and hyphen format `M/D/YY, H:MM AM - Sender: text`; `canHandle`, `normalizeAll`, `import`; multi-line continuation; system-message skipping; media placeholder (`<Media omitted>` etc → `isAttachmentOnly: true`, text `[Attachment]`); senderRole `contact` for all senders; provenance populated; engine layer only — no index.html wiring.
+DELIVERED (Package 3J, merged `f1eca34` 2026-06-05):
+- `src/adapters/whatsapp-txt-adapter.js` — `KMEngine.whatsappTxtAdapter`; ADAPTER_ID `whatsapp-txt-v1`; bracket format `[M/D/YY, H:MM:SS AM] Sender: text` and hyphen format `M/D/YY, H:MM AM - Sender: text`; `canHandle`, `normalizeAll`, `import`; multi-line continuation; system-message skipping; media placeholder (`<Media omitted>` etc → `isAttachmentOnly: true`, text `[Attachment]`); senderRole `contact` for all senders; provenance populated.
 - `src/adapters/future-adapter-stubs.js` — removed `whatsapp-txt-v1` entry; real adapter now owns that ID.
 - `src/core/source-platforms.js` — WhatsApp platform `status: 'stub'` → `'supported'`; notes updated.
 - `scripts/fixtures/fake-whatsapp-chat.txt` — fake-data bracket-format WhatsApp fixture (9 lines: 1 system notice, 8 messages including 1 media, 1 multi-line).
 - `src/tests/whatsapp-txt-adapter-tests.mjs` — 91 tests across 14 suites.
 - `src/tests/km-engine-tests.mjs` — loads `whatsapp-txt-adapter.js` before stubs; updated whatsapp platform assertion to `supported`; added 5 smoke assertions.
+
+IN PROGRESS (Package 3K, 2026-06-05 — branch `feature/whatsapp-txt-ui-wiring`):
+- `index.html` — added `<script src="src/adapters/whatsapp-txt-adapter.js">` tag in adapter block; `readTxtFile()` now detects WhatsApp format via `KMEngine.whatsappTxtAdapter.canHandle(text)` and routes to `adapter.import(text)` before falling through to the existing pipe-delimited path; both paths call `renderConversation` and `renderImportQualityPanel`.
+- `scripts/e2e-regression-harness.mjs` — Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state.
+- Self/sender identification (senderRole = 'self') deferred to Package 3L.
 
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)

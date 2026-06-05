@@ -55,6 +55,9 @@ const PORT       = 7332; // distinct from capture harness port 7331
 const TXT_FIXTURE       = path.join(__dir, 'fixtures', 'fake-conversation.txt');
 const TXT_FIXTURE_COUNT = 5; // matches fake-conversation.txt
 
+const WA_FIXTURE        = path.join(__dir, 'fixtures', 'fake-whatsapp-chat.txt');
+const WA_FIXTURE_COUNT  = 8; // 9 parsed lines minus 1 system-message skip
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1126,6 +1129,56 @@ async function main() {
             });
             assert(hiddenOrEmpty, '#importQualityPanel should be hidden or empty on fresh load without import');
             // Re-import txt fixture so Phase 12 can continue from the expected state.
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 26 — WhatsApp .txt file import (Package 3K)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 26 — WhatsApp .txt file import ──\n');
+
+        await harness.run('WhatsApp fixture imports through the existing TXT file input', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(WA_FIXTURE);
+            await waitForChatView(page);
+        });
+
+        await harness.run('chat view visible after WhatsApp import', async page => {
+            await assertVisible(page, '#chatView', 'Chat view after WhatsApp import');
+        });
+
+        await harness.run('rendered message count equals WA_FIXTURE_COUNT', async page => {
+            const rows = await page.locator('.message-row.selectable').count();
+            assert(rows === WA_FIXTURE_COUNT,
+                `Expected ${WA_FIXTURE_COUNT} DOM rows after WhatsApp import, got ${rows}`);
+            const dataCount = await page.evaluate(() => (window.chatMessagesData || []).length);
+            assert(dataCount === WA_FIXTURE_COUNT,
+                `Expected ${WA_FIXTURE_COUNT} in chatMessagesData after WhatsApp import, got ${dataCount}`);
+        });
+
+        await harness.run('#importQualityPanel is visible and non-empty after WhatsApp import', async page => {
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#importQualityPanel should be visible and non-empty after WhatsApp import');
+        });
+
+        await harness.run('chatMessagesData sourcePlatformId is whatsapp', async page => {
+            const platformId = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length > 0 ? data[0].sourcePlatformId : null;
+            });
+            assert(platformId === 'whatsapp',
+                `Expected sourcePlatformId 'whatsapp', got '${platformId}'`);
+            // Re-import TXT fixture so Phase 12 can continue from the expected state.
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
             await page.click('#txtUploadCard');
             await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
             await waitForChatView(page);
