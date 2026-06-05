@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-05
-**Updated by:** Claude Code (post-Package-3J state-sync)
+**Updated by:** Claude Code (post-Package-3L state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -37,6 +37,8 @@
 | Package 3G | Session UI Wiring for ProductDraft Lifecycle | COMPLETE — merged to main | `05f4048` | `3192a15` |
 | Package 3H | Draft-Preflight Status Surface and Proof Panel Gate | COMPLETE — merged to main | `c0ee68d` | `1297f92` |
 | Package 5C | Proof Panel User Withdrawal and UX Completion | COMPLETE — merged to main | `7b00f31` | `4733c32` |
+| Package 3L | WhatsApp Self-Identification | COMPLETE — merged to main | `7540cc6` | `16d0ca6` |
+| Package 3K | WhatsApp TXT UI Wiring | COMPLETE — merged to main | `bbd2097` | `a048d0d` |
 | Package 3J | WhatsApp TXT Adapter | COMPLETE — merged to main | `96ea7e3` | `f1eca34` |
 | Package 3I | Import Quality Report | COMPLETE — merged to main | `c0c8f7a` | `60cdd31` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
@@ -48,7 +50,7 @@
 
 ## App code state
 
-- App code last changed: Package 3I (`c0c8f7a`) — `src/core/import-quality-report.js` (new engine module); `index.html` `#importQualityPanel` + `renderImportQualityPanel()` + script tag + CSS; called from `readTxtFile()` and `openConversation()` only. (Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only, no index.html changes. Package 5C added cancel button in proof panel. Package 3H gated proof panel on book check. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3L (`7540cc6`) — `index.html` `#whatsappSenderPicker` panel (CSS + HTML + JS); `showWhatsAppSenderPicker()` + `applyWhatsAppSelfSender()` functions; two targeted changes to `renderConversation()` using `senderRole === 'self' || sender === 'Me'` for bubble class and header detection; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`. (Package 3K added WA detection guard in `readTxtFile()` + script tag. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
@@ -75,7 +77,7 @@
 - `src/core/source-platforms.js`: modified (Package 3J); WhatsApp platform `stub` → `supported`
 - `src/adapters/future-adapter-stubs.js`: modified (Package 3J); removed `whatsapp-txt-v1` stub
 - `scripts/fixtures/fake-whatsapp-chat.txt`: new (Package 3J); fake bracket-format WhatsApp fixture
-- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 27-test real-file coverage (phases 11–19 + Phase 25, Packages 3C + 3I) — 84 total
+- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 38-test real-file coverage (phases 11–19 + Phases 25–27, Packages 3C + 3I + 3K + 3L) — 95 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -88,10 +90,14 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `f1eca34` — merge: add WhatsApp TXT adapter |
+| main HEAD | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
 | Active branch | `main` |
 | Working tree | Clean (pending state-sync commit) |
-| Pushed to remote | main is current through Package 3J merge |
+| Pushed to remote | main is current through Package 3L merge |
+
+**Package 3L (`7540cc6` / `16d0ca6`):** WhatsApp Self-Identification — `#whatsappSenderPicker` inline panel in `index.html` (CSS `.whatsapp-sender-picker` + `.sender-chip` + `.sender-chip.active` + dark-mode; HTML div; `showWhatsAppSenderPicker(memories)` extracts unique senders and builds chip UI; `applyWhatsAppSelfSender(senderName)` mutates `chatMessagesData[i].senderRole` in-place then re-renders conversation + quality panel; `renderConversation()` updated to use `senderRole==='self' || sender==='Me'` for bubble class and header detection — fully backward-compatible); picker shown after WA import, hidden on non-WA import and project restore; `applyWhatsAppSelfSender` exposed on `window.__km`; Phase 27 E2E (6 tests); 29/29 manual QA PASS (29 Playwright checks: fresh load hidden; 8 WA rows; Alice+Bob+Skip chips; Alice→4 me, header=Bob; Bob→4 me, header=Alice; Skip→0 me; TXT picker hidden; sender=Me fallback works; senderRole persists through save/restore; picker hidden post-restore; re-import re-shows picker; double-click idempotent; 0 console errors). No engine changes; no state/ changes; no src/tests/ changes.
+
+**Package 3K (`bbd2097` / `a048d0d`):** WhatsApp TXT UI Wiring — `readTxtFile()` in `index.html` now detects WhatsApp format via `KMEngine.whatsappTxtAdapter.canHandle(text)` before falling through to pipe-delimited TXT path; script tag added for `whatsapp-txt-adapter.js`; both paths call `renderConversation` and `renderImportQualityPanel`; Phase 26 E2E (5 tests); 9/9 manual QA PASS. No engine changes; no state/ changes.
 
 **Package 3I (`c0c8f7a` / `60cdd31`):** Import Quality Report — `src/core/import-quality-report.js` (`KMEngine.ImportQualityReport`; `compute(memories)` pure function; returns totalMessages, dateRange, senderList, attachmentOnlyCount, totalReactionCount, etc.); `#importQualityPanel` added to `#chatView`; `renderImportQualityPanel()` called after `readTxtFile()` and `openConversation()` only (not restore path); Phase 25 E2E (4 tests); 91 Node tests; 2173 total Node; 57/57 seeded + 84/84 real-files; browser QA 17/17 PASS. No GATE-04 crossing; no proof/draft/readiness scope; no estimated pages/volumes; restore path unchanged.
 
@@ -130,7 +136,7 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3J COMPLETE (merged `f1eca34` 2026-06-05); candidates in `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3L COMPLETE (merged `16d0ca6` 2026-06-05); candidates in `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |

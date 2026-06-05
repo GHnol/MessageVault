@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3L — WhatsApp Self-Identification. Branch `feature/whatsapp-self-id`, base `main` at `2e901a4`. Implementation complete; awaiting Coordinator commit approval.
+**Status:** `complete` — Package 3L — WhatsApp Self-Identification. Impl `7540cc6`, merged `16d0ca6` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,12 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3L — WhatsApp Self-Identification` |
-| **Active branch** | `feature/whatsapp-self-id` |
-| **main HEAD** | `2e901a4` — docs: sync operating docs after Package 3K completion |
-| **Last completed pass** | `Package 3K — WhatsApp TXT UI Wiring` — impl `bbd2097`, merged `a048d0d` 2026-06-05 |
-| **Active package** | `Package 3L — WhatsApp Self-Identification` — IN PROGRESS |
-| **Last closed package** | `Package 3K — WhatsApp TXT UI Wiring` — FULLY COMPLETE — merged `a048d0d` 2026-06-05 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
+| **Last completed pass** | `Package 3L — WhatsApp Self-Identification` — impl `7540cc6`, merged `16d0ca6` 2026-06-05 |
+| **Active package** | None |
+| **Last closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
 | **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -34,7 +34,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (current pass — Package 3L — WhatsApp Self-Identification)
 
-Package 3L — WhatsApp Self-Identification. **IN PROGRESS — branch `feature/whatsapp-self-id`, base `main` at `2e901a4`. Implementation complete; awaiting Coordinator commit approval.**
+Package 3L — WhatsApp Self-Identification. **COMPLETE — impl `7540cc6`, merged `16d0ca6` to `main` 2026-06-05.**
 
 Branch: `feature/whatsapp-self-id` — base: `main` at `2e901a4`
 
@@ -46,7 +46,7 @@ Delivered:
 
 **Results:** 2269 Node tests, 0 failed (unchanged). E2E seeded 57/57. E2E real-files 95/95 (+6 Phase 27). Visual regression PASS (baselines unchanged; sender picker above capture zone). Manual QA PASS (29/29 Playwright checks: fresh load picker hidden; 8 WA rows; Alice+Bob+Skip chips; Alice→4 me rows, header=Bob; Bob→4 me rows, header=Alice; Skip→0 me; TXT picker hidden; sender=Me fallback works; save+restore preserves senderRole; picker hidden post-restore; re-import re-shows picker; double-click idempotent; 0 console errors).
 
-**Next exact action:** Coordinator approves commit. Recommended message: `feat: add WhatsApp self-identification sender picker`. Do not commit without explicit instruction.
+**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - src/adapters/whatsapp-txt-adapter.js: not touched

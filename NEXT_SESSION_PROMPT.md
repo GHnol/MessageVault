@@ -47,11 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3L IN PROGRESS — `feature/whatsapp-self-id`. Implementation complete; awaiting Coordinator commit approval. |
-| Branch | `feature/whatsapp-self-id` |
-| main HEAD | `2e901a4` — docs: sync operating docs after Package 3K completion |
-| Next action | Run `/start`. Report implementation complete. Await Coordinator commit approval. |
-| Package 3L | IN PROGRESS — `#whatsappSenderPicker` inline panel; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; 2269 Node; 57/57 seeded; 95/95 real-files; visual regression PASS; no engine changes |
+| Resume into | Package 3L COMPLETE — merged `16d0ca6` 2026-06-05. No active package. Coordinator decides next. |
+| Branch | `main` |
+| main HEAD | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
+| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Package 3L | COMPLETE — `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; 2269 Node; 57/57 seeded; 95/95 real-files; visual regression PASS; no engine changes; merged `16d0ca6` 2026-06-05 |
 | Package 3K | COMPLETE — `readTxtFile()` WhatsApp detection guard; `whatsapp-txt-adapter.js` script tag; Phase 26 E2E (5 tests); 2269 Node; 57/57 seeded; 89/89 real-files; visual regression PASS; 9/9 manual QA; merged `a048d0d` 2026-06-05 |
 | Package 3J | COMPLETE — `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; 91 new tests (`whatsapp-txt-adapter-tests.mjs`); 5 km-engine smoke tests; 2269 Node; E2E not required; engine-only; whatsapp platform `supported`; merged `f1eca34` 2026-06-05 |
 | Package 3I | COMPLETE — `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 2173 Node; 57/57 seeded; 84/84 real-files; 17/17 browser QA; merged `60cdd31` 2026-06-04 |

@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-05 (America/New_York)
+**Last updated:** 2026-06-05 (America/New_York — Package 3L completion)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -32,13 +32,15 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 8 | Package 5C — Proof Panel User Withdrawal and UX Completion | P1 | **Done** | impl `7b00f31`, merged `4733c32` 2026-06-04; withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA ✓ |
 | 9 | Package 3I — Import Quality Report | P2 | **Done** | impl `c0c8f7a`, merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel`; Phase 25 E2E (4 tests); 2173 Node; 84/84 real-files; 17/17 browser QA ✓ |
 | 10 | Package 3J — WhatsApp TXT Adapter | P2 | **Done** | impl `96ea7e3`, merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; 91 new tests; whatsapp platform `supported`; engine-only; 2269 Node ✓ |
-| 11 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3J COMPLETE 2026-06-05 |
+| 11 | Package 3K — WhatsApp TXT UI Wiring | P1 | **Done** | impl `bbd2097`, merged `a048d0d` 2026-06-05; `readTxtFile()` WA guard; script tag; Phase 26 E2E (5 tests); 2269 Node; 89/89 real-files; 9/9 manual QA ✓ |
+| 12 | Package 3L — WhatsApp Self-Identification | P1 | **Done** | impl `7540cc6`, merged `16d0ca6` 2026-06-05; `#whatsappSenderPicker`; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; Phase 27 E2E (6 tests); 2269 Node; 95/95 real-files; 29/29 manual QA ✓ |
+| 13 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3L COMPLETE 2026-06-05 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3J COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3L COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
 
 ---
 

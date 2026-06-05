@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-05` (Package 3L in-progress state-sync)
+**Last updated:** `2026-06-05` (Package 3L completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `2e901a4` — docs: sync operating docs after Package 3K completion |
-| Active branch | `feature/whatsapp-self-id` |
-| Active pass | `Package 3L — WhatsApp Self-Identification` — IN PROGRESS |
-| Last completed pass | `Package 3K — WhatsApp TXT UI Wiring` — impl `bbd2097`, merged `a048d0d` 2026-06-05 |
-| Last closed package | `Package 3K — WhatsApp TXT UI Wiring` — FULLY COMPLETE |
-| Next authorized target | Coordinator approves Package 3L commit |
+| main HEAD | `16d0ca6` — merge: add WhatsApp self-identification sender picker |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `Package 3L — WhatsApp Self-Identification` — impl `7540cc6`, merged `16d0ca6` 2026-06-05 |
+| Last closed package | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
 | Test baseline | **2269 Node tests** (17 suites); E2E seeded 57/57; E2E real-files 95/95; visual regression PASS (baseline unchanged) |
-| Package 3L | IN PROGRESS — branch `feature/whatsapp-self-id`; `#whatsappSenderPicker` inline panel; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender` functions; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; no engine changes |
+| Package 3L | COMPLETE — merged `16d0ca6` 2026-06-05; `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; no engine changes |
 | Package 3K | COMPLETE — merged `a048d0d` 2026-06-05; WhatsApp TXT import routing in `readTxtFile()`; script tag for `whatsapp-txt-adapter.js`; Phase 26 E2E (5 tests); 9/9 manual QA; no engine changes |
 | Package 3J | COMPLETE — merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; 91 new tests; whatsapp platform `supported`; engine-only; UI wiring delivered in Package 3K |
 | Package 3I | COMPLETE — merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 17/17 browser QA |

@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-05
-**Last mirrored:** RPT-20260605-001 (Package 3J closeout — WhatsApp TXT Adapter COMPLETE)
-**Active gate:** None — Package 3J COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260605-003 (Package 3L closeout — WhatsApp Self-Identification COMPLETE)
+**Active gate:** None — Package 3L COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,8 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260605-003 | package_closeout | Package 3L — WhatsApp Self-Identification | feature/whatsapp-self-id | 7540cc6 / 16d0ca6 | mirrored | 2026-06-05 |
+| RPT-20260605-002 | package_closeout | Package 3K — WhatsApp TXT UI Wiring | feature/whatsapp-txt-ui-wiring | bbd2097 / a048d0d | mirrored | 2026-06-05 |
 | RPT-20260605-001 | package_closeout | Package 3J — WhatsApp TXT Adapter | feature/whatsapp-txt-adapter | 96ea7e3 / f1eca34 | mirrored | 2026-06-05 |
 | RPT-20260604-002 | package_closeout | Package 3I — Import Quality Report | feature/import-quality-report | c0c8f7a / 60cdd31 | mirrored | 2026-06-04 |
 | RPT-20260604-001 | package_closeout | Package 5C — Proof Panel User Withdrawal and UX Completion | feature/proof-panel-user-withdrawal | 7b00f31 / 4733c32 | mirrored | 2026-06-04 |
@@ -55,6 +57,38 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260605-003 — package_closeout — Package 3L — WhatsApp Self-Identification
+
+**Created:** 2026-06-05T00:00:00Z | **Branch:** feature/whatsapp-self-id | **HEAD:** 7540cc6 (impl) / 16d0ca6 (merge) | **Status:** mirrored
+
+Package 3L — WhatsApp Self-Identification COMPLETE — implementation `7540cc6`, merge `16d0ca6` 2026-06-05. Delivered: (1) `index.html` CSS — `.whatsapp-sender-picker`, `.sender-picker-inner`, `.sender-chip`, `.sender-chip.active`, `.sender-chip.skip-chip` styles + dark-mode overrides. (2) `index.html` HTML — `<div id="whatsappSenderPicker" style="display:none;">` placed after `#importQualityPanel`. (3) `index.html` JS — `const whatsappSenderPicker` binding; `showWhatsAppSenderPicker(memories)` extracts unique sender names in first-seen order, renders label + chips + Skip chip, attaches click handlers; `applyWhatsAppSelfSender(senderName)` mutates `chatMessagesData[i].senderRole` in-place (`'self'` for matching sender, `'contact'` for all others; `null` resets all to `'contact'`), calls `renderConversation` + `renderImportQualityPanel`, updates `.active` chip state; `renderConversation()` changed at two points to use `senderRole === 'self' || sender === 'Me'` for bubble class and header name (backward-compatible fallback preserved); `readTxtFile()` WA branch calls `showWhatsAppSenderPicker` after import; non-WA branch hides and resets picker; restore path hides and resets picker; `applyWhatsAppSelfSender` exposed on `window.__km`. (4) `scripts/e2e-regression-harness.mjs` — `WA_ALICE_COUNT = 4`, `WA_BOB_COUNT = 4` constants; Phase 27 block (6 real-files tests): picker visible after WA import; Alice + Bob chips; Alice → 4 `.me` rows; selfMessageCount = 4 via ImportQualityReport; Skip → 0 `.me` rows; non-WA TXT import hides picker. (5) `docs/qa/test-strategy.md` — E2E real-files 89→95; Phase 27 note; Package 3L entry. (6) `docs/architecture/architecture-roadmap.md` — Package 3L IN PROGRESS → delivered entry.
+
+**Tests:** 2269 Node tests (17 suites), 0 failed. E2E seeded 57/57 (unchanged). E2E real-files 95/95 (+6 Phase 27). Manual QA 29/29 PASS (Playwright-automated: fresh load hidden; 8 WA rows; Alice+Bob+Skip chips; Alice→4 me, header=Bob; Bob→4 me, header=Alice; Skip→0 me; TXT picker hidden; sender=Me fallback works; senderRole persists save/restore; picker hidden post-restore; re-import re-shows picker; double-click idempotent; 0 console errors). Visual regression PASS (baselines unchanged; picker above capture zone). OS audit 324/0/0. State freshness WARN-only (2 cosmetic hash lags, 0 FAILs). project-control sync validate 11/11.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — `src/adapters/whatsapp-txt-adapter.js`, `src/core/*`, `src/state/*`, `src/products/*`, `src/tests/*`, `scripts/fixtures/*`, `scripts/visual-regression-baselines/*`, `public/**`, `amplify/**`, root `package.json` untouched; no pagination constants, no Review view, no standalone keepsake flows, no ProductDraft/Preflight/Lifecycle/ProofApproval modules, no readiness gate, no GATE-04 crossing, no checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3L closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
+
+### RPT-20260605-002 — package_closeout — Package 3K — WhatsApp TXT UI Wiring
+
+**Created:** 2026-06-05T00:00:00Z | **Branch:** feature/whatsapp-txt-ui-wiring | **HEAD:** bbd2097 (impl) / a048d0d (merge) | **Status:** mirrored
+
+Package 3K — WhatsApp TXT UI Wiring COMPLETE — implementation `bbd2097`, merge `a048d0d` 2026-06-05. Delivered: (1) `index.html` — `<script src="src/adapters/whatsapp-txt-adapter.js">` tag added in adapter block before `future-adapter-stubs.js`. (2) `index.html` `readTxtFile()` — added WhatsApp detection guard: checks `KMEngine.whatsappTxtAdapter.canHandle(text)` before the existing pipe-delimited path; routes to `adapter.import(text)`, assigns `result.memories` to `window.chatMessagesData`, calls `renderConversation` and `renderImportQualityPanel` then returns early. (3) `scripts/e2e-regression-harness.mjs` — `WA_FIXTURE` + `WA_FIXTURE_COUNT = 8` constants; Phase 26 (5 real-files tests): WhatsApp fixture imports via TXT file input; chat view visible; message count = 8; importQualityPanel visible and non-empty; sourcePlatformId = 'whatsapp'; state reset (reload + TXT re-import) so Phase 12 continues from expected state. (4) `docs/qa/test-strategy.md` — E2E real-files count 84→89; Phase 26 note; Layer 3 description updated; pre-commit baseline updated. (5) `docs/architecture/architecture-roadmap.md` — Package 3K entry. Self/sender identification deferred to Package 3L.
+
+**Tests:** 2269 Node tests, 0 failed. E2E seeded 57/57. E2E real-files 89/89 (+5 Phase 26). Visual regression PASS (baselines unchanged). Manual QA 9/9 PASS. OS audit 324/0/0. State freshness WARN-only.
+**External operations:** none.
+**Hard exclusions:** confirmed — `src/adapters/whatsapp-txt-adapter.js`, `src/core/*`, `src/state/*`, `src/products/*`, `src/tests/*`, pagination constants, Review view, standalone keepsake flows untouched; no external systems mutated.
+**Next action:** Package 3L authorized (WhatsApp self-identification).
+**Follow-up:** false
+
+*Entry added as the Package 3K closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260605-001 — package_closeout — Package 3J — WhatsApp TXT Adapter
 
