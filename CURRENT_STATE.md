@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-05` (Package 3M completion state-sync)
+**Last updated:** `2026-06-05` (Package 3N completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
 | main HEAD | `1228f41` — merge: add Android SMS XML adapter (Package 3M) |
-| Active branch | `feature/android-sms-ui-wiring` |
-| Active pass | `Package 3N — Android SMS UI Wiring` — IN PROGRESS |
-| Last completed pass | `Package 3M — Android SMS XML Adapter` — impl `e5bc179`, merged `1228f41` 2026-06-05 |
-| Last closed package | `Package 3M — Android SMS XML Adapter` — FULLY COMPLETE |
-| Next authorized target | Package 3N — Android SMS UI Wiring (AUTHORIZED, IN PROGRESS) |
-| Test baseline | **2358 Node tests** (18 suites); E2E seeded 57/57; E2E real-files 95/95; visual regression PASS (baseline unchanged) |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `Package 3N — Android SMS UI Wiring` — impl `04d30ed`, merged `6d61367` 2026-06-05 |
+| Last closed package | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **2358 Node tests** (18 suites); E2E seeded 57/57; E2E real-files 101/101; visual regression PASS (baseline unchanged) |
+| Package 3N | COMPLETE — merged `6d61367` 2026-06-05; Android SMS XML browser import routing; `#fileInput accept=".txt,.xml"`; routing guard in `readTxtFile()`; Phase 28 E2E (6 tests); 19/19 manual QA; no engine changes; no sender picker |
 | Package 3M | COMPLETE — merged `1228f41` 2026-06-05; `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; 84 new tests + 5 km-engine smoke; engine-only; android-sms platform `supported`; no UI wiring |
 | Package 3L | COMPLETE — merged `16d0ca6` 2026-06-05; `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; no engine changes |
 | Package 3K | COMPLETE — merged `a048d0d` 2026-06-05; WhatsApp TXT import routing in `readTxtFile()`; script tag for `whatsapp-txt-adapter.js`; Phase 26 E2E (5 tests); 9/9 manual QA; no engine changes |

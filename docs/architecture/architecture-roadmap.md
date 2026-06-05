@@ -114,10 +114,9 @@ DELIVERED (Package 3K, merged `a048d0d` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state.
 - Self/sender identification (senderRole = 'self') delivered in Package 3L.
 
-IN PROGRESS (Package 3N — Android SMS UI Wiring, branch `feature/android-sms-ui-wiring`):
-- `index.html` — `<script src="src/adapters/android-sms-xml-adapter.js">` tag; `#fileInput` `accept=".txt,.xml"`; Android SMS routing guard in `readTxtFile()` (after WhatsApp guard, before pipe-delimited fallback); drop zone and landing card copy updated for .xml
-- `scripts/e2e-regression-harness.mjs` — Phase 28 (6 real-files tests): Android SMS XML import, count=9, IQR panel, selfMessageCount=4, sourcePlatformId='android-sms'
-- No engine changes; no sender picker (type=2 auto-maps to senderRole:self)
+DELIVERED (Package 3N, merged `6d61367` 2026-06-05):
+- `index.html` — `<script src="src/adapters/android-sms-xml-adapter.js">` tag; `#fileInput` `accept=".txt,.xml"`; Android SMS routing guard in `readTxtFile()` (after WhatsApp guard + picker reset, before pipe-delimited fallback); drop zone text/hint and landing card copy updated for .xml; no engine changes; no sender picker (type=2 auto-maps to senderRole:self)
+- `scripts/e2e-regression-harness.mjs` — Phase 28 (6 real-files tests): import, count=9, IQR panel, selfMessageCount=4, sourcePlatformId='android-sms'; ANDROID_FIXTURE/ANDROID_FIXTURE_COUNT/ANDROID_SELF_COUNT constants
 
 DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.

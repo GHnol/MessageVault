@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-05
-**Updated by:** Claude Code (post-Package-3L state-sync)
+**Updated by:** Claude Code (post-Package-3N state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -44,20 +44,23 @@
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
+| Package 3M | Android SMS XML Adapter | COMPLETE — merged to main | `e5bc179` | `1228f41` |
+| Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
 | Operator Reliability Repair | Raw transcript capture protocol, notification diagnostic, skill/command updates | COMPLETE — merged to main | `81b2329` | `c27502c` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 3L (`7540cc6`) — `index.html` `#whatsappSenderPicker` panel (CSS + HTML + JS); `showWhatsAppSenderPicker()` + `applyWhatsAppSelfSender()` functions; two targeted changes to `renderConversation()` using `senderRole === 'self' || sender === 'Me'` for bubble class and header detection; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`. (Package 3K added WA detection guard in `readTxtFile()` + script tag. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3N (`04d30ed`) — `index.html` Android SMS routing guard in `readTxtFile()` (after WA guard + picker hide, before pipe-delimited fallback); `android-sms-xml-adapter.js` script tag; `#fileInput accept=".txt,.xml"`; drop zone text/hint and landing card copy updated for .xml. (Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard in `readTxtFile()`. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 17 suites, **2269 Node tests** — all green
+- `src/tests/`: 18 suites, **2358 Node tests** — all green
+  - `android-sms-xml-adapter-tests.mjs`: 84 (Package 3M; 14 suites: API shape, canHandle, SMS type=1/2, senderRole, MMS, fixture rawCounts, participants, NormalizedMemory fields, provenance, importWarnings, semantic guards)
   - `whatsapp-txt-adapter-tests.mjs`: 91 (Package 3J; 14 suites: API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards)
-  - `km-engine-tests.mjs`: 101 (+5 whatsapp smoke assertions — Package 3J)
+  - `km-engine-tests.mjs`: 106 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J)
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76

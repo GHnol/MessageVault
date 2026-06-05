@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3N — Android SMS UI Wiring — IN PROGRESS on `feature/android-sms-ui-wiring`. |
-| Branch | `feature/android-sms-ui-wiring` |
-| main HEAD | `ed7e2c5` — docs: sync operating docs after Package 3M completion |
-| Next action | Run `/start`. Resume Package 3N implementation. Verify all tests pass before proposing commit. |
+| Resume into | Package 3N COMPLETE — merged `6d61367` 2026-06-05. No active package. Coordinator decides next. |
+| Branch | `main` |
+| main HEAD | `6d61367` — merge: add Android SMS XML import routing (Package 3N) |
+| Next action | Run `/start`. Await Coordinator authorization for next package. |
 | Package 3M | COMPLETE — `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS Backup & Restore XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; android-sms platform `supported`; 84 new tests + 5 km-engine smoke (2358 Node total); engine-only; no UI wiring; no E2E; no visual regression; impl `e5bc179`, merged `1228f41` 2026-06-05 |
 | Package 3L | COMPLETE — `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; 2269 Node; 57/57 seeded; 95/95 real-files; visual regression PASS; no engine changes; merged `16d0ca6` 2026-06-05 |
 | Package 3K | COMPLETE — `readTxtFile()` WhatsApp detection guard; `whatsapp-txt-adapter.js` script tag; Phase 26 E2E (5 tests); 2269 Node; 57/57 seeded; 89/89 real-files; visual regression PASS; 9/9 manual QA; merged `a048d0d` 2026-06-05 |

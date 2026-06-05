@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-05
-**Last mirrored:** RPT-20260605-003 (Package 3L closeout — WhatsApp Self-Identification COMPLETE)
-**Active gate:** None — Package 3L COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260605-004 (Package 3N closeout — Android SMS UI Wiring COMPLETE)
+**Active gate:** None — Package 3N COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260605-004 | package_closeout | Package 3N — Android SMS UI Wiring | feature/android-sms-ui-wiring | 04d30ed / 6d61367 | mirrored | 2026-06-05 |
 | RPT-20260605-003 | package_closeout | Package 3L — WhatsApp Self-Identification | feature/whatsapp-self-id | 7540cc6 / 16d0ca6 | mirrored | 2026-06-05 |
 | RPT-20260605-002 | package_closeout | Package 3K — WhatsApp TXT UI Wiring | feature/whatsapp-txt-ui-wiring | bbd2097 / a048d0d | mirrored | 2026-06-05 |
 | RPT-20260605-001 | package_closeout | Package 3J — WhatsApp TXT Adapter | feature/whatsapp-txt-adapter | 96ea7e3 / f1eca34 | mirrored | 2026-06-05 |
@@ -57,6 +58,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260605-004 — package_closeout — Package 3N — Android SMS UI Wiring
+
+**Created:** 2026-06-05T00:00:00Z | **Branch:** feature/android-sms-ui-wiring | **HEAD:** 04d30ed (impl) / 6d61367 (merge) | **Status:** mirrored
+
+Package 3N — Android SMS UI Wiring COMPLETE — implementation `04d30ed`, merge `6d61367` 2026-06-05. Delivered: (1) `index.html` — `<script src="src/adapters/android-sms-xml-adapter.js">` tag added in adapter block after `whatsapp-txt-adapter.js`, before `future-adapter-stubs.js`. (2) `index.html` `#fileInput` — `accept=".txt"` → `accept=".txt,.xml"`. (3) `index.html` copy — drop zone subtitle "Drop your previously exported file below"; drop zone text "Drop your file here or click to browse"; drop zone hint "Supports .txt and .xml exports"; landing card desc "If you have a previously exported .txt or .xml file, you can load it here." (4) `index.html` `readTxtFile()` — Android SMS routing guard inserted after WA guard + picker reset, before `parseMessages` fallback: checks `KMEngine.androidSmsAdapter.canHandle(text)`; routes to `adapter.import(text)`; assigns `result.memories` to `chatMessagesData`; calls `renderConversation` + `renderImportQualityPanel`; returns early. No WhatsApp picker shown (type=2 auto-maps to senderRole:self). (5) `scripts/e2e-regression-harness.mjs` — `ANDROID_FIXTURE`, `ANDROID_FIXTURE_COUNT = 9`, `ANDROID_SELF_COUNT = 4` constants; Phase 28 (6 real-files tests): Android SMS XML fixture imports via file input; chat view visible; count = 9; importQualityPanel visible and non-empty; selfMessageCount = 4 (confirms no picker needed); sourcePlatformId = 'android-sms'; state reset (reload + TXT re-import) so Phase 12 continues from expected state. (6) `docs/qa/test-strategy.md` — E2E real-files 95→101; Phase 28 entry; pre-commit baseline updated (18 suites / 2358 Node). (7) `docs/architecture/architecture-roadmap.md` — Package 3N DELIVERED entry.
+
+**Tests:** 2358 Node tests (18 suites), 0 failed (unchanged). E2E seeded 57/57 (unchanged). E2E real-files 101/101 (+6 Phase 28). Manual QA 19/19 PASS (fresh load; androidSmsAdapter on KMEngine; chat header = Jordan; 4 .me bubbles; 5 .them bubbles; 2 [Attachment] placeholders; IQR panel with count 9; picker NOT shown; accept includes .xml and .txt; TXT re-import 5 msgs; WA re-import 8 msgs + picker shown; 0 console errors). Visual regression PASS (baselines unchanged; Android SMS uses same .me/.them bubble CSS). OS audit 324/0/0. State freshness WARN-only (2 cosmetic hash lags post-merge, 0 FAILs). project-control sync validate 11/11.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — `src/adapters/android-sms-xml-adapter.js`, `src/core/*`, `src/state/*`, `src/products/*`, `src/tests/*`, `scripts/fixtures/*`, `scripts/visual-regression-baselines/*`, `public/**`, `amplify/**`, root `package.json` untouched; no pagination constants, no renderConversation(), no parseMessages(), no applyReactions(), no renderImportQualityPanel() changes; no Review view, no standalone keepsake flows, no ProductDraft/Preflight/Lifecycle/ProofApproval modules, no readiness gate, no GATE-04 crossing, no checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3N closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260605-003 — package_closeout — Package 3L — WhatsApp Self-Identification
 

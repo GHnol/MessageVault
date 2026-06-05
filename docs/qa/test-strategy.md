@@ -190,9 +190,9 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3N — Android SMS UI Wiring (IN PROGRESS — branch `feature/android-sms-ui-wiring`, 2026-06-05):**
+**Package 3N — Android SMS UI Wiring (COMPLETE — merged `6d61367` 2026-06-05):**
 
-Package 3N adds no new Node unit tests (no new engine module; adapter fully tested in Package 3M). Adds E2E Phase 28 (6 real-files tests): Android SMS XML import via file input; chat view visible; count = 9 (10 elements − 1 missing-sender skip); importQualityPanel visible; selfMessageCount = 4 (3 type=2 SMS + 1 MMS msg_box=2 — confirmed no picker needed); sourcePlatformId = 'android-sms'. Node baseline unchanged: 2358. Layer 2 unchanged: 57 seeded. Layer 3: 101 total when running `npm run e2e:real` (+6 Phase 28). Visual regression PASS expected (Android SMS uses same .me/.them bubble CSS; baselines unaffected). No sender picker (type=2 auto-maps to senderRole:self). No engine changes.
+Package 3N adds no new Node unit tests (no new engine module; adapter fully tested in Package 3M). Adds E2E Phase 28 (6 real-files tests): Android SMS XML import via file input; chat view visible; count = 9 (10 elements − 1 missing-sender skip); importQualityPanel visible; selfMessageCount = 4 (3 type=2 SMS + 1 MMS msg_box=2 — confirmed no picker needed); sourcePlatformId = 'android-sms'. Node baseline unchanged: 2358. Layer 2 unchanged: 57 seeded. Layer 3: 101 total when running `npm run e2e:real` (+6 Phase 28). Visual regression PASS (baselines unchanged; Android SMS uses same .me/.them bubble CSS). Manual QA 19/19 PASS. No sender picker (type=2 auto-maps to senderRole:self). No engine changes.
 
 **Package 3L — WhatsApp Self-Identification (IN PROGRESS — branch `feature/whatsapp-self-id`, 2026-06-05):**
 

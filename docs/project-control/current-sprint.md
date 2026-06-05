@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-05 (America/New_York — Package 3M completion)
+**Last updated:** 2026-06-05 (America/New_York — Package 3N completion)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -35,13 +35,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 11 | Package 3K — WhatsApp TXT UI Wiring | P1 | **Done** | impl `bbd2097`, merged `a048d0d` 2026-06-05; `readTxtFile()` WA guard; script tag; Phase 26 E2E (5 tests); 2269 Node; 89/89 real-files; 9/9 manual QA ✓ |
 | 12 | Package 3L — WhatsApp Self-Identification | P1 | **Done** | impl `7540cc6`, merged `16d0ca6` 2026-06-05; `#whatsappSenderPicker`; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; Phase 27 E2E (6 tests); 2269 Node; 95/95 real-files; 29/29 manual QA ✓ |
 | 13 | Package 3M — Android SMS XML Adapter | P2 | **Done** | impl `e5bc179`, merged `1228f41` 2026-06-05; `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; DOM-free parser; android-sms `supported`; 84 new tests + 5 km-engine smoke; 2358 Node; engine-only ✓ |
-| 14 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3M COMPLETE 2026-06-05 |
+| 14 | Package 3N — Android SMS UI Wiring | P2 | **Done** | impl `04d30ed`, merged `6d61367` 2026-06-05; `readTxtFile()` Android SMS routing guard; `android-sms-xml-adapter.js` script tag; `accept=".txt,.xml"`; Phase 28 E2E (6 tests); 2358 Node; 57/57 seeded; 101/101 real-files; 19/19 manual QA ✓ |
+| 15 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3N COMPLETE 2026-06-05 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3M COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3N COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
 
 ---
 
