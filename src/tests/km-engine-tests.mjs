@@ -33,6 +33,7 @@ load('src/core/import-adapters.js');
 load('src/adapters/txt-export-adapter.js');
 load('src/adapters/imessage-chatdb-adapter.js');
 load('src/adapters/manual-entry-adapter.js');
+load('src/adapters/whatsapp-txt-adapter.js');
 load('src/adapters/future-adapter-stubs.js');
 load('src/core/project-session.js');
 load('src/state/session-serialization.js');
@@ -63,7 +64,7 @@ assert(KMEngine.SOURCE_PLATFORMS.length >= 11,                       'at least 1
 assert(KMEngine.getSourcePlatform('imessage').status  === 'supported',   'imessage is supported');
 assert(KMEngine.getSourcePlatform('txt-export').status === 'supported',  'txt-export is supported');
 assert(KMEngine.getSourcePlatform('manual').status    === 'supported',   'manual is supported');
-assert(KMEngine.getSourcePlatform('whatsapp').status  === 'stub',        'whatsapp is stub');
+assert(KMEngine.getSourcePlatform('whatsapp').status  === 'supported',   'whatsapp is supported');
 assert(KMEngine.getSourcePlatform('android-sms').status === 'stub',      'android-sms is stub');
 assert(KMEngine.getSourcePlatform('instagram-dm').status === 'stub',     'instagram-dm is stub');
 assert(KMEngine.getSourcePlatform('telegram').status  === 'stub',        'telegram is stub');
@@ -249,6 +250,16 @@ const batchResult = KMEngine.manualEntryAdapter.import([
 assert(batchResult.memories.length === 2,               'two valid entries imported');
 assert(batchResult.importWarnings.length === 1,         'one warning for the invalid entry');
 assert(batchResult.rawCounts.skipped === 1,             'rawCounts.skipped is 1');
+
+// ── WHATSAPP TXT ADAPTER — smoke ──────────────────────────────────────────────
+
+suite('whatsappTxtAdapter — smoke');
+assert(KMEngine.whatsappTxtAdapter !== undefined,             'whatsappTxtAdapter exists on KMEngine');
+assert(KMEngine.adapters['whatsapp-txt-v1'] === KMEngine.whatsappTxtAdapter, 'whatsapp-txt-v1 registered in KMEngine.adapters');
+assert(KMEngine.whatsappTxtAdapter.canHandle('[6/1/24, 9:00:00 AM] Alice: Hi') === true, 'canHandle returns true for bracket format');
+const waResult = KMEngine.whatsappTxtAdapter['import']('[6/1/24, 9:00:00 AM] Alice: Hi\n[6/1/24, 9:01:00 AM] Bob: Hey\n');
+assert(waResult.sourcePlatformId === 'whatsapp',             'import() returns ImportResult with sourcePlatformId whatsapp');
+assert(Array.isArray(waResult.memories) && waResult.memories.length === 2, 'import() returns memories array with correct count');
 
 // ── PROJECT SESSION schema ────────────────────────────────────────────────────
 

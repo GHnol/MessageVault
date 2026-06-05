@@ -35,11 +35,11 @@
         {
             id: 'whatsapp',
             label: 'WhatsApp',
-            status: 'stub',
+            status: 'supported',
             importModes: ['txt-export-chat'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'WhatsApp .txt chat export format. Adapter not yet implemented.'
+            notes: 'WhatsApp .txt chat export (bracket and hyphen formats). Engine adapter whatsapp-txt-v1 exists. UI wiring pending.'
         },
         {
             id: 'android-sms',
