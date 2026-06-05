@@ -36,6 +36,7 @@ load('src/adapters/manual-entry-adapter.js');
 load('src/adapters/whatsapp-txt-adapter.js');
 load('src/adapters/android-sms-xml-adapter.js');
 load('src/adapters/instagram-dm-adapter.js');
+load('src/adapters/facebook-messenger-adapter.js');
 load('src/adapters/future-adapter-stubs.js');
 load('src/core/project-session.js');
 load('src/state/session-serialization.js');
@@ -68,8 +69,9 @@ assert(KMEngine.getSourcePlatform('txt-export').status === 'supported',  'txt-ex
 assert(KMEngine.getSourcePlatform('manual').status    === 'supported',   'manual is supported');
 assert(KMEngine.getSourcePlatform('whatsapp').status  === 'supported',   'whatsapp is supported');
 assert(KMEngine.getSourcePlatform('android-sms').status === 'supported', 'android-sms is supported');
-assert(KMEngine.getSourcePlatform('instagram-dm').status === 'supported', 'instagram-dm is supported');
-assert(KMEngine.getSourcePlatform('telegram').status  === 'stub',        'telegram is stub');
+assert(KMEngine.getSourcePlatform('instagram-dm').status === 'supported',        'instagram-dm is supported');
+assert(KMEngine.getSourcePlatform('facebook-messenger').status === 'supported', 'facebook-messenger is supported');
+assert(KMEngine.getSourcePlatform('telegram').status  === 'stub',               'telegram is stub');
 assert(KMEngine.getSourcePlatform('screenshot-image').status === 'deferred', 'screenshot-image is deferred');
 assert(KMEngine.getSourcePlatform('audio-transcript').status === 'deferred', 'audio-transcript is deferred');
 assert(KMEngine.getSourcePlatform('video-transcript').status === 'deferred', 'video-transcript is deferred');
@@ -283,6 +285,17 @@ assert(KMEngine.instagramDmAdapter.canHandle(MINIMAL_IG) === true,            'c
 const igResult = KMEngine.instagramDmAdapter['import'](MINIMAL_IG);
 assert(igResult.sourcePlatformId === 'instagram-dm',                          'import() returns ImportResult with sourcePlatformId instagram-dm');
 assert(Array.isArray(igResult.memories) && igResult.memories.length === 1,    'import() returns memories array with correct count');
+
+// ── FACEBOOK MESSENGER ADAPTER — smoke ───────────────────────────────────────
+
+suite('facebookMessengerAdapter — smoke');
+assert(KMEngine.facebookMessengerAdapter !== undefined,                                  'facebookMessengerAdapter exists on KMEngine');
+assert(KMEngine.adapters['facebook-messenger-json-v1'] === KMEngine.facebookMessengerAdapter, 'facebook-messenger-json-v1 registered in KMEngine.adapters');
+const MINIMAL_FB = '{"participants":[{"name":"Alice"}],"messages":[{"sender_name":"Alice","timestamp_ms":1640000000000,"content":"Hi","type":"Generic"}],"magic_words":[]}';
+assert(KMEngine.facebookMessengerAdapter.canHandle(MINIMAL_FB) === true,                 'canHandle returns true for minimal valid Facebook Messenger JSON');
+const fbResult = KMEngine.facebookMessengerAdapter['import'](MINIMAL_FB);
+assert(fbResult.sourcePlatformId === 'facebook-messenger',                               'import() returns ImportResult with sourcePlatformId facebook-messenger');
+assert(Array.isArray(fbResult.memories) && fbResult.memories.length === 1,               'import() returns memories array with correct count');
 
 // ── PROJECT SESSION schema ────────────────────────────────────────────────────
 

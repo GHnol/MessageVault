@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3Q — Instagram DM Self-Identification Sender Picker. impl `8ca92c4`, merged `ff1c3ed` to `main` 2026-06-05. No active package. Awaiting Coordinator direction.
+**Status:** `in_progress` — Package 3R — Facebook Messenger JSON Adapter. Branch `feature/facebook-messenger-adapter`. Implementation complete; verification in progress. Awaiting full implementation report and Coordinator commit authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,17 +18,55 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `ff1c3ed` — merge: add Instagram DM self-identification sender picker (Package 3Q) |
+| **Active pass** | `Package 3R — Facebook Messenger JSON Adapter` |
+| **Active branch** | `feature/facebook-messenger-adapter` |
+| **main HEAD** | `7ea2b83` — docs: sync operating docs after Package 3Q completion |
 | **Last completed pass** | `Package 3Q — Instagram DM Self-Identification Sender Picker` — impl `8ca92c4`, merged `ff1c3ed` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3R — Facebook Messenger JSON Adapter` — IN PROGRESS — implementation complete; verification in progress |
 | **Last closed package** | `Package 3Q — Instagram DM Self-Identification Sender Picker` — FULLY COMPLETE — merged `ff1c3ed` 2026-06-05 |
 | **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3R — Facebook Messenger JSON Adapter)
+
+Package 3R — Facebook Messenger JSON Adapter. **IN PROGRESS — branch `feature/facebook-messenger-adapter`, base `main` at `7ea2b83`.**
+
+**Status:** Implementation complete. Tests passing. Awaiting Coordinator commit authorization.
+
+Files created:
+- `src/adapters/facebook-messenger-adapter.js` — `KMEngine.facebookMessengerAdapter`; ADAPTER_ID `facebook-messenger-json-v1`; PLATFORM_ID `facebook-messenger`; ADAPTER_VERSION `1`; `canHandle` requires `"magic_words"` string probe + `Array.isArray(parsed.magic_words)` structural check (discriminator from Instagram DM); HTML entity decoding (`&#x...;`, `&#...;`, `&apos;`, `&quot;`, `&lt;`, `&gt;`, `&amp;` last); media (photos/videos/audio_files/gifs/files/sticker) + share → attachment-placeholder; senderRole always `contact`; ms-epoch → ISO-8601; `importWarnings` for is_unsent + missing sender_name; registered as both `KMEngine.facebookMessengerAdapter` and `KMEngine.adapters['facebook-messenger-json-v1']`
+- `scripts/fixtures/fake-facebook-messenger.json` — 10-message fixture (Alice Johnson + charlie_b_99; 8 imported / 2 skipped; includes `"magic_words":[]`; 5 text + 3 attachment; HTML entities + reactions in content; is_unsent skip + missing-sender skip)
+- `src/tests/facebook-messenger-adapter-tests.mjs` — 98 tests across 17 suites (API shape, canHandle accepts, canHandle rejects Instagram DM, canHandle rejects non-Facebook, magic_words discriminator, fixture rawCounts, timestamp conversion, HTML entity decoding sender/content, senderRole, text normalization, media/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards)
+
+Files modified:
+- `src/adapters/future-adapter-stubs.js` — removed `facebook-messenger-json-v1` stub entry; only telegram-json-v1 remains
+- `src/core/source-platforms.js` — facebook-messenger status `'stub'` → `'supported'`; notes updated
+- `src/tests/km-engine-tests.mjs` — loads `facebook-messenger-adapter.js` before stubs; updated facebook-messenger platform assertion to `supported`; added `facebookMessengerAdapter — smoke` suite (+5 assertions, 117 total)
+- `docs/qa/test-strategy.md` — 2450 → 2554 baseline; 19 → 20 suites; facebook-messenger suite row; Package 3R note
+- `docs/architecture/architecture-roadmap.md` — facebook-messenger-adapter.js in module map; Package 3R IN PROGRESS entry
+
+**Verification results:** 98/98 facebook-messenger-adapter-tests.mjs. 117/117 km-engine-tests.mjs. All 20 Node suites green (2554/2554). start-router: NEEDS_COORDINATOR_DECISION (expected — mid-package). state-freshness-check: 3 FAIL (wrong branch in state docs — corrected in this update). project-control-sync-validate: 11 PASS. os-self-audit: 324 PASS. Hard exclusion diff: clean (8 authorized files only).
+
+**Next exact action:** Provide full implementation report. Stop before commit. Await Coordinator commit + merge authorization.
+
+**Hard exclusions verified:**
+- `index.html`: not touched
+- `scripts/e2e-regression-harness.mjs`: not touched
+- `src/adapters/instagram-dm-adapter.js`: not touched
+- `src/core/normalized-memory.js`: not touched
+- `src/core/import-adapters.js`: not touched
+- `src/core/import-quality-report.js`: not touched
+- `src/products/*`: not touched
+- `src/state/*`: not touched
+- Pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS: not touched
+- Proof panel, Review view, standalone keepsake flows, draft/preflight/lifecycle: not touched
+- No new dependencies installed
+- No external systems mutated
 
 ---
 
@@ -597,15 +635,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3Q COMPLETE — impl `8ca92c4`, merged `ff1c3ed` 2026-06-05. State-sync complete.
+Package 3R IN PROGRESS — `feature/facebook-messenger-adapter`. Implementation complete. 2554/2554 Node tests green. Full implementation report provided. Awaiting Coordinator commit + merge authorization.
 
-Coordinator decides:
-- Authorize next development package, or
-- Authorize any other next direction
-
-Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
-
-Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+Do not commit, push, or merge without explicit Coordinator authorization. Do not start Package 3S or any follow-on without explicit authorization. No external mutations authorized.
 
 ---
 

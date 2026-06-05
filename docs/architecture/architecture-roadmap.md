@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3Q COMPLETE — Instagram DM self-identification sender picker)
+**Last updated:** 2026-06-05 (Package 3R IN PROGRESS — Facebook Messenger JSON adapter)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3Q)
+## Current architecture (post-Package 3R)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -21,7 +21,7 @@ src/
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
-    source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm now 'supported' — Packages 3J + 3M + 3O)
+    source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm + facebook-messenger now 'supported' — Packages 3J + 3M + 3O + 3R)
     keepsake-group.js         — KeepsakeGroup model
   adapters/
     imessage-chatdb-adapter.js
@@ -31,6 +31,7 @@ src/
     android-sms-xml-adapter.js     — KMEngine.androidSmsAdapter; SMS Backup & Restore XML; type=1/2 senderRole; MMS attachment placeholder; regex-based DOM-free parser; ADAPTER_ID android-sms-xml-v1 — Package 3M
     instagram-dm-adapter.js        — KMEngine.instagramDmAdapter; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID instagram-dm-json-v1; browser-loaded (Package 3P) — Package 3O/3P
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
+    facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; engine-only — Package 3R
     future-adapter-stubs.js
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -69,6 +70,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     product-draft-lifecycle-tests.mjs  — 104 tests; coordinator API, mutation model, all lifecycle paths, semantic guards — Package 3F
     whatsapp-txt-adapter-tests.mjs          — 91 tests; API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards — Package 3J
     android-sms-xml-adapter-tests.mjs       — 84 tests; API shape, canHandle accepts/rejects, SMS type=1/2 parsing, senderRole, MMS attachment placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards — Package 3M
+    facebook-messenger-adapter-tests.mjs   — 103 tests; API shape, canHandle (accepts/rejects/magic_words discriminator), fixture rawCounts, timestamp conversion, HTML entity decoding, senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards — Package 3R
     instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
 ```
 
@@ -125,6 +127,14 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+DELIVERED (Package 3R, IN PROGRESS — branch `feature/facebook-messenger-adapter`):
+- `src/adapters/facebook-messenger-adapter.js` — `KMEngine.facebookMessengerAdapter`; ADAPTER_ID `facebook-messenger-json-v1`; Facebook Messenger JSON export; `magic_words` discriminator distinguishes from Instagram DM; HTML entity decoding; media+share → attachment-placeholder (conservative); senderRole always `contact` (self-ID deferred to UI package); ms-epoch timestamps → ISO-8601; `importWarnings` for `is_unsent` and missing sender_name; no DOM, no external dependencies; engine-only.
+- `src/adapters/future-adapter-stubs.js` — removed `facebook-messenger-json-v1` stub entry; real adapter now owns that ID.
+- `src/core/source-platforms.js` — facebook-messenger platform `status: 'stub'` → `'supported'`; notes updated.
+- `scripts/fixtures/fake-facebook-messenger.json` — 10-message fake fixture (2 participants: Alice Johnson + charlie_b_99; 8 imported / 2 skipped; text/photo/video/audio/share/sticker; HTML entities; reactions field present; magic_words: []).
+- `src/tests/facebook-messenger-adapter-tests.mjs` — 103 tests across 17 suites.
+- `src/tests/km-engine-tests.mjs` — loads `facebook-messenger-adapter.js` before stubs; updated facebook-messenger platform assertion to `supported`; +5 smoke assertions (117 total).
 
 DELIVERED (Package 3Q, merged `ff1c3ed` 2026-06-05):
 - `index.html` — `<div id="instagramSenderPicker">` after `#whatsappSenderPicker`; `const instagramSenderPicker` binding; `showInstagramSenderPicker(memories)` function; `applyInstagramSelfSender(senderName)` function; Instagram picker hide in WA branch + non-WA guard block + Instagram branch call + restore path; `window.__km.applyInstagramSelfSender` exposed for E2E testability.

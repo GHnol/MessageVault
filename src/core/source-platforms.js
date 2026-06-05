@@ -62,11 +62,11 @@
         {
             id: 'facebook-messenger',
             label: 'Facebook Messenger',
-            status: 'stub',
+            status: 'supported',
             importModes: ['json-export'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'Facebook data export (JSON). Adapter not yet implemented.'
+            notes: 'Facebook data export (JSON). Engine adapter facebook-messenger-json-v1 implemented (Package 3R). UI wiring pending a later package.'
         },
         {
             id: 'telegram',
