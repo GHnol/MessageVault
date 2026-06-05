@@ -47,11 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3R IN PROGRESS — `feature/facebook-messenger-adapter`. Implementation complete, tests passing (2554/2554). Awaiting Coordinator commit authorization. |
-| Branch | `feature/facebook-messenger-adapter` |
-| main HEAD | `7ea2b83` — docs: sync operating docs after Package 3Q completion |
-| Next action | Run `/start`. Package 3R implementation complete. Do NOT commit/merge without explicit Coordinator authorization. Do not start Package 3S without authorization. |
-| Package 3R | IN PROGRESS — `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; awaiting commit authorization |
+| Resume into | No active package — Package 3R COMPLETE. Await Coordinator direction on `main`. |
+| Branch | `main` |
+| main HEAD | `b6c85e9` — merge: add Facebook Messenger JSON adapter (Package 3R) |
+| Next action | Run `/start`. No active package. Await Coordinator authorization for next package. Do not start development without explicit approval. |
+| Package 3R | COMPLETE — `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d`, merged `b6c85e9` 2026-06-05 |
 | Package 3Q | COMPLETE — `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; picker hides on all non-Instagram paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 112/112 real-files; 21/21 manual QA; no engine/adapter/persistence changes; impl `8ca92c4`, merged `ff1c3ed` 2026-06-05 |
 | Package 3P | COMPLETE — Instagram DM JSON routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker (delivered in Package 3Q); impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |
 | Package 3O | COMPLETE — `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 87 new tests + 5 km-engine smoke (2450 Node total / 19 suites); engine-only; instagram-dm platform `supported`; no UI wiring; impl `ebb7a55`, merged `26f2633` 2026-06-05 |

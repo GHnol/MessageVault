@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-05 (America/New_York — Package 3P completion)
+**Last updated:** 2026-06-05 (America/New_York — Package 3R completion)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -38,13 +38,15 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 14 | Package 3N — Android SMS UI Wiring | P2 | **Done** | impl `04d30ed`, merged `6d61367` 2026-06-05; `readTxtFile()` Android SMS routing guard; `android-sms-xml-adapter.js` script tag; `accept=".txt,.xml"`; Phase 28 E2E (6 tests); 2358 Node; 57/57 seeded; 101/101 real-files; 19/19 manual QA ✓ |
 | 15 | Package 3O — Instagram DM JSON Adapter | P2 | **Done** | impl `ebb7a55`, merged `26f2633` 2026-06-05; `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 87 new tests + 5 km-engine smoke; 2450 Node; engine-only; instagram-dm platform `supported` ✓ |
 | 16 | Package 3P — Instagram DM JSON UI Wiring | P2 | **Done** | impl `fa6f6f2`, merged `d99fb84` 2026-06-05; `readTxtFile()` Instagram DM routing guard; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker ✓ |
-| 17 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3P COMPLETE 2026-06-05 |
+| 17 | Package 3Q — Instagram DM Self-Identification Sender Picker | P2 | **Done** | impl `8ca92c4`, merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker`; `showInstagramSenderPicker` + `applyInstagramSelfSender`; Phase 30 E2E (6 tests); 2450 Node; 112/112 real-files; 21/21 manual QA; no engine changes ✓ |
+| 18 | Package 3R — Facebook Messenger JSON Adapter | P2 | **Done** | impl `f63123d`, merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator; 98 new tests (17 suites) + 6 km-engine additions; facebook-messenger platform `supported`; 2554 Node; engine-only; no E2E ✓ |
+| 19 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3R COMPLETE 2026-06-05 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3P COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3R COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
 
 ---
 

@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-05 (America/New_York — Package 3P completion)
+**Last updated:** 2026-06-05 (America/New_York — Package 3R completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3P COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3R COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3P COMPLETE 2026-06-05; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3R COMPLETE 2026-06-05; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,8 @@
 - _(empty)_
 
 ### Done
+- **Package 3R — Facebook Messenger JSON Adapter** · Development / Engine · Ph3 · implementation `f63123d`, merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; facebook-messenger platform `supported`; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node; engine-only; no UI wiring — COMPLETE
+- **Package 3Q — Instagram DM Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `8ca92c4`, merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; picker hides on all non-Instagram paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 112/112 real-files; 21/21 manual QA; no engine/adapter changes — COMPLETE
 - **Package 3P — Instagram DM JSON UI Wiring** · Development / UI · Ph3 · implementation `fa6f6f2`, merged `d99fb84` 2026-06-05; `readTxtFile()` Instagram DM routing guard; `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker (self-ID → Package 3Q) — COMPLETE
 - **Package 3O — Instagram DM JSON Adapter** · Development / Engine · Ph3 · implementation `ebb7a55`, merged `26f2633` 2026-06-05; `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; instagram-dm platform `supported`; 87 new tests + 5 km-engine smoke; 2450 Node; engine-only; no UI wiring — COMPLETE
 - **Package 3N — Android SMS UI Wiring** · Development / UI · Ph3 · implementation `04d30ed`, merged `6d61367` 2026-06-05; `readTxtFile()` Android SMS routing guard; `android-sms-xml-adapter.js` script tag; `#fileInput accept=".txt,.xml"`; Phase 28 E2E (6 tests); 2358 Node; 101/101 real-files; 19/19 manual QA; no engine changes — COMPLETE
