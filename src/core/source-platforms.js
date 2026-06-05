@@ -57,7 +57,7 @@
             importModes: ['json-export'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'Instagram data export (JSON). Engine adapter instagram-dm-json-v1 implemented (Package 3O). UI wiring delivered (Package 3P). Sender picker pending (Package 3Q).'
+            notes: 'Instagram data export (JSON). Engine adapter instagram-dm-json-v1 implemented (Package 3O). UI wiring delivered (Package 3P). Sender picker delivered (Package 3Q).'
         },
         {
             id: 'facebook-messenger',

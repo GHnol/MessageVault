@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3P COMPLETE — Instagram DM JSON UI wiring)
+**Last updated:** 2026-06-05 (Package 3Q IN PROGRESS — Instagram DM self-identification sender picker)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3P)
+## Current architecture (post-Package 3Q, in progress)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -30,6 +30,7 @@ src/
     whatsapp-txt-adapter.js        — KMEngine.whatsappTxtAdapter; bracket + hyphen format; parse/normalizeAll/import; ADAPTER_ID whatsapp-txt-v1 — Package 3J
     android-sms-xml-adapter.js     — KMEngine.androidSmsAdapter; SMS Backup & Restore XML; type=1/2 senderRole; MMS attachment placeholder; regex-based DOM-free parser; ADAPTER_ID android-sms-xml-v1 — Package 3M
     instagram-dm-adapter.js        — KMEngine.instagramDmAdapter; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID instagram-dm-json-v1; browser-loaded (Package 3P) — Package 3O/3P
+index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
     future-adapter-stubs.js
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -124,6 +125,11 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3Q, branch `feature/instagram-dm-self-id`, base `9b4601d`):
+- `index.html` — `<div id="instagramSenderPicker">` after `#whatsappSenderPicker`; `const instagramSenderPicker` binding; `showInstagramSenderPicker(memories)` function; `applyInstagramSelfSender(senderName)` function; Instagram picker hide in WA branch + non-WA guard block + Instagram branch call + restore path; `window.__km.applyInstagramSelfSender` exposed for E2E testability.
+- `scripts/e2e-regression-harness.mjs` — `IG_ALICE_COUNT = 4` and `IG_BOB_COUNT = 4` constants; Phase 30 (6 real-files tests): picker visible; Alice Smith + bob_jones_99 chips; Alice Smith → 4 `.me`; selfMessageCount = 4; Skip → 0 `.me`; non-Instagram reimport hides picker.
+- No adapter changes. No engine changes. No persistence schema changes.
 
 DELIVERED (Package 3P, merged `d99fb84` 2026-06-05):
 - `index.html` — `<script src="src/adapters/instagram-dm-adapter.js">` tag (after android-sms-xml-adapter.js, before future-adapter-stubs.js); `#fileInput` `accept=".txt,.xml,.json"`; Instagram DM routing guard in `readTxtFile()` (after Android SMS guard, before legacy TXT fallback); drop zone hint updated to "Supports .txt, .xml and .json exports"; landing card copy updated for .json; no engine changes; no sender picker (self-ID deferred to Package 3Q)

@@ -66,6 +66,8 @@ const ANDROID_SELF_COUNT    = 4;  // 3 type=2 SMS + 1 MMS msg_box=2
 
 const INSTAGRAM_FIXTURE       = path.join(__dir, 'fixtures', 'fake-instagram-dm.json');
 const INSTAGRAM_FIXTURE_COUNT = 8;  // 10 messages - 1 is_unsent skip - 1 missing-sender skip
+const IG_ALICE_COUNT          = 4;  // Alice Smith sends 4 of the 8 imported messages
+const IG_BOB_COUNT            = 4;  // bob_jones_99 sends 4 of the 8 imported messages
 
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
@@ -1368,6 +1370,72 @@ async function main() {
             await page.click('#txtUploadCard');
             await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
             await waitForChatView(page);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 30 — Instagram DM self-identification sender picker (Package 3Q)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 30 — Instagram DM self-identification sender picker ──\n');
+
+        await harness.run('after Instagram DM import #instagramSenderPicker is visible and non-empty', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(INSTAGRAM_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('instagramSenderPicker');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#instagramSenderPicker should be visible and non-empty after Instagram DM import');
+        });
+
+        await harness.run('sender picker chips include Alice Smith and bob_jones_99', async page => {
+            const names = await page.evaluate(() => {
+                const chips = document.querySelectorAll('#instagramSenderPicker .sender-chip:not(.skip-chip)');
+                return Array.from(chips).map(c => c.textContent.trim());
+            });
+            assert(names.includes('Alice Smith'), `Expected Alice Smith chip, got: ${names.join(', ')}`);
+            assert(names.includes('bob_jones_99'), `Expected bob_jones_99 chip, got: ${names.join(', ')}`);
+        });
+
+        await harness.run('selecting Alice Smith flips exactly IG_ALICE_COUNT rows to .me', async page => {
+            await page.evaluate(() => window.__km.applyInstagramSelfSender('Alice Smith'));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === IG_ALICE_COUNT,
+                `Expected ${IG_ALICE_COUNT} .me rows after selecting Alice Smith, got ${meCount}`);
+        });
+
+        await harness.run('selecting Alice Smith updates selfMessageCount via ImportQualityReport', async page => {
+            const selfCount = await page.evaluate(() => {
+                const IQR = window.KMEngine && window.KMEngine.ImportQualityReport;
+                const data = window.chatMessagesData || [];
+                if (!IQR || !data.length) return -1;
+                return IQR.compute(data).selfMessageCount;
+            });
+            assert(selfCount === IG_ALICE_COUNT,
+                `Expected selfMessageCount ${IG_ALICE_COUNT} after selecting Alice Smith, got ${selfCount}`);
+        });
+
+        await harness.run('selecting Skip reverts all Instagram messages to .them', async page => {
+            await page.evaluate(() => window.__km.applyInstagramSelfSender(null));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === 0, `Expected 0 .me rows after Skip, got ${meCount}`);
+        });
+
+        await harness.run('re-importing non-Instagram file hides the Instagram sender picker', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('instagramSenderPicker');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#instagramSenderPicker should be hidden after non-Instagram file import');
         });
 
         // ─────────────────────────────────────────────────────────────────────
