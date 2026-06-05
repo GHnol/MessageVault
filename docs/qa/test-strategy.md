@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112).
 **Last updated:** 2026-06-05 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -91,7 +91,7 @@ cd scripts && npm run e2e:headed
 
 **What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 + 27 + 28 + 29 — real .txt import, WhatsApp .txt import, WhatsApp self-identification sender picker, import quality report, Android SMS XML import, Instagram DM JSON import, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
 
-**Coverage:** 49 tests (48 always + 1 conditional on local chat.db). Combined seeded + real-files: **106**.
+**Coverage:** 55 tests (54 always + 1 conditional on local chat.db). Combined seeded + real-files: **112**.
 
 **Run:**
 
@@ -191,6 +191,10 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
+**Package 3Q — Instagram DM Self-Identification Sender Picker (IN PROGRESS — branch `feature/instagram-dm-self-id`, 2026-06-05):**
+
+Package 3Q adds no new Node unit tests (no new engine module; senderRole already tested via `import-quality-report-tests.mjs`). Adds E2E Phase 30 (6 real-files tests): sender picker visible after Instagram DM import; Alice Smith and bob_jones_99 chips present; selecting Alice Smith → 4 `.me` rows; selfMessageCount = 4; selecting Skip → 0 `.me`; non-Instagram reimport hides picker. Node baseline unchanged: 2450 / 19 suites. Layer 2 unchanged: 57 seeded. Layer 3: 112 total when running `npm run e2e:real` (+6 Phase 30). Visual regression PASS expected (sender picker above page canvas capture zone; baselines unaffected). No engine changes. No adapter changes. `#instagramSenderPicker` added to `index.html`; `showInstagramSenderPicker` + `applyInstagramSelfSender` added; `window.__km.applyInstagramSelfSender` exposed.
+
 **Package 3P — Instagram DM JSON UI Wiring (COMPLETE — merged `d99fb84` 2026-06-05):**
 
 Package 3P adds no new Node unit tests (no new engine module; adapter fully tested in Package 3O). Adds E2E Phase 29 (5 real-files tests): Instagram DM JSON import via file input; chat view visible; count = 8 (10 messages − 1 is_unsent skip − 1 missing-sender skip); importQualityPanel visible and non-empty; sourcePlatformId = 'instagram-dm'. Node baseline unchanged: 2450 / 19 suites. Layer 2 unchanged: 57 seeded. Layer 3: 106 total when running `npm run e2e:real` (+5 Phase 29). Visual regression PASS (baselines unchanged; import panel above page canvas capture zone). No sender picker (self-ID deferred to Package 3Q). No engine changes. `#fileInput` accept updated to `.txt,.xml,.json`. Script tag added for `instagram-dm-adapter.js`.
@@ -235,7 +239,7 @@ Before any commit instruction is acted on, the agent must verify:
 
 1. All 19 Node unit suites green (2450 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (106 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (112 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

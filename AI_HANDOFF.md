@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3P — Instagram DM JSON UI Wiring. impl `fa6f6f2`, merged `d99fb84` to `main` 2026-06-05. UI wiring only; self-identification deferred to Package 3Q. No active package. Awaiting Coordinator direction.
+**Status:** `in-progress` — Package 3Q — Instagram DM Self-Identification Sender Picker. Branch: `feature/instagram-dm-self-id`. Base: `main` at `9b4601d`. Authorized 2026-06-05.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `d99fb84` — merge: add Instagram DM JSON import routing (Package 3P) |
+| **Active pass** | `Package 3Q — Instagram DM Self-Identification Sender Picker` |
+| **Active branch** | `feature/instagram-dm-self-id` |
+| **main HEAD** | `9b4601d` — docs: sync operating docs after Package 3P completion |
 | **Last completed pass** | `Package 3P — Instagram DM JSON UI Wiring` — impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3Q — Instagram DM Self-Identification Sender Picker` |
 | **Last closed package** | `Package 3P — Instagram DM JSON UI Wiring` — FULLY COMPLETE — merged `d99fb84` 2026-06-05 |
 | **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |

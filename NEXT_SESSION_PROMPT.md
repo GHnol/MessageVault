@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active package — Package 3P COMPLETE. Await Coordinator direction on `main`. |
-| Branch | `main` |
-| main HEAD | `d99fb84` — merge: add Instagram DM JSON import routing (Package 3P) |
-| Next action | Run `/start`. No active package. Await Coordinator authorization for next package. Do not start development without explicit approval. |
+| Resume into | Package 3Q IN PROGRESS — Instagram DM Self-Identification Sender Picker — branch `feature/instagram-dm-self-id`. |
+| Branch | `feature/instagram-dm-self-id` |
+| main HEAD | `9b4601d` — docs: sync operating docs after Package 3P completion |
+| Next action | Run `/start`. Resume Package 3Q implementation. Read `AI_HANDOFF.md` for current state. |
 | Package 3P | COMPLETE — Instagram DM JSON routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker; impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |
 | Package 3O | COMPLETE — `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 87 new tests + 5 km-engine smoke (2450 Node total / 19 suites); engine-only; instagram-dm platform `supported`; no UI wiring; impl `ebb7a55`, merged `26f2633` 2026-06-05 |
 | Package 3M | COMPLETE — `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS Backup & Restore XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; android-sms platform `supported`; 84 new tests + 5 km-engine smoke (2358 Node total); engine-only; no UI wiring; no E2E; no visual regression; impl `e5bc179`, merged `1228f41` 2026-06-05 |
