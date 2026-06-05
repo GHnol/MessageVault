@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-04
-**Last mirrored:** RPT-20260604-001 (Package 5C closeout — Proof Panel User Withdrawal and UX Completion COMPLETE)
-**Active gate:** None — Package 5C COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260604-002 (Package 3I closeout — Import Quality Report COMPLETE)
+**Active gate:** None — Package 3I COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260604-002 | package_closeout | Package 3I — Import Quality Report | feature/import-quality-report | c0c8f7a / 60cdd31 | mirrored | 2026-06-04 |
 | RPT-20260604-001 | package_closeout | Package 5C — Proof Panel User Withdrawal and UX Completion | feature/proof-panel-user-withdrawal | 7b00f31 / 4733c32 | mirrored | 2026-06-04 |
 | RPT-20260603-003 | package_closeout | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | task/package-3h-draft-preflight-proof-panel-gate | c0ee68d / 1297f92 | mirrored | 2026-06-03 |
 | RPT-20260603-002 | package_closeout | Package 3G — Session UI Wiring for ProductDraft Lifecycle | feature/product-draft-lifecycle-session-wiring | 05f4048 / 3192a15 | mirrored | 2026-06-03 |
@@ -53,6 +54,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260604-002 — package_closeout — Package 3I — Import Quality Report
+
+**Created:** 2026-06-04T00:00:00Z | **Branch:** feature/import-quality-report | **HEAD:** c0c8f7a (impl) / 60cdd31 (merge) | **Status:** mirrored
+
+Package 3I — Import Quality Report COMPLETE — implementation `c0c8f7a`, merge `60cdd31` 2026-06-04. DEF-12 from deferred-gated-ideas-register is now activated and delivered. Delivered: (1) `src/core/import-quality-report.js` — `KMEngine.ImportQualityReport`; `compute(memories)` pure function returning totalMessages, dateRange, uniqueSenderCount, senderList, selfMessageCount, contactMessageCount, attachmentOnlyCount, messagesWithReactionsCount, totalReactionCount, sourcePlatformId, messagesWithoutTimestamp, messagesWithoutText; no DOM, no side effects, Node-testable; no estimated pages or volumes; no product readiness fields. (2) `src/tests/import-quality-report-tests.mjs` — 91 tests across 12 suites; semantic guards confirmed. (3) `index.html` — script tag for `import-quality-report.js`; `#importQualityPanel` div (between search bar and messages); `renderImportQualityPanel(memories)` function called from `readTxtFile()` and `openConversation()` only (not restore path); CSS for light + dark mode; `window.__km.renderImportQualityPanel` exposed. (4) E2E Phase 25 (4 tests, real-files block): panel visible after txt import, correct count, date range present, hidden on fresh load.
+
+**Tests:** 2173 Node tests, 0 failed. E2E seeded 57/57 (unchanged). E2E real-files 84/84 (+4 Phase 25). Browser/manual QA 17/17 PASS. Visual regression PASS (panel above page canvas; baselines unchanged). OS audit 324/0/0.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — src/products/*, src/state/*, src/adapters/*, src/core/normalized-memory.js, src/core/import-adapters.js, src/core/project-session.js untouched; ProductDraft/Preflight/Lifecycle/ProofApproval modules untouched; restore path (handleProjectFileLoad) does not call renderImportQualityPanel; proofSupported stays false; no readiness gate flipped; no GATE-04 crossing; no checkout/PDF/vendor/manufacturing; no credentials/tokens/raw-transcripts committed.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3I closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260604-001 — package_closeout — Package 5C — Proof Panel User Withdrawal and UX Completion
 

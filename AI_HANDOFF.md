@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3I — Import Quality Report. Branch `feature/import-quality-report`. Implementation complete; pending Coordinator review and commit authorization.
+**Status:** `complete` — Package 3I — Import Quality Report. Impl `c0c8f7a`, merged `60cdd31` to `main` 2026-06-04. State-sync in progress. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-04`
 
@@ -18,12 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3I — Import Quality Report` |
-| **Active branch** | `feature/import-quality-report` |
-| **main HEAD** | `725585c` — merge: sync operating docs after Package 5C completion |
-| **Last completed pass** | `Package 5C — Proof Panel User Withdrawal and UX Completion` — impl `7b00f31`, merged `4733c32` 2026-06-04 |
-| **Active package** | `Package 3I — Import Quality Report` — implementation complete 2026-06-04; pending Coordinator commit approval |
-| **Last closed package** | `Package 5C — Proof Panel User Withdrawal and UX Completion` — FULLY COMPLETE — merged `4733c32` 2026-06-04 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `60cdd31` — merge: add import quality report after successful message import |
+| **Last completed pass** | `Package 3I — Import Quality Report` — impl `c0c8f7a`, merged `60cdd31` 2026-06-04 |
+| **Active package** | None |
+| **Last closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Prior closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -32,9 +32,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3I)
+## Objective (last completed pass — Package 3I)
 
-Package 3I — Import Quality Report. **IN PROGRESS — implementation complete 2026-06-04; pending Coordinator commit authorization.**
+Package 3I — Import Quality Report. **COMPLETE — impl `c0c8f7a`, merged `60cdd31` to `main` 2026-06-04.**
 
 Branch: `feature/import-quality-report` — base: `main` at `725585c`
 
@@ -44,9 +44,9 @@ Delivered:
 - `index.html` — script tag for import-quality-report.js; `#importQualityPanel` div between search bar and chat messages; CSS for panel; `renderImportQualityPanel(memories)` function; called from `readTxtFile()` and `openConversation()` only (not from restore path); exposed on `window.__km`
 - `scripts/e2e-regression-harness.mjs` — Phase 25 (4 tests): panel visible after txt import, correct count, date range present, panel hidden on fresh load; placed in real-files block after Phase 11
 
-**Results:** 2173 Node tests, 0 failed. E2E seeded 57/57 (unchanged). E2E real-files 84/84 (+4 Phase 25). Visual regression PASS (baselines unchanged; `#importQualityPanel` above page canvas, not in capture zone). Hard exclusion diff: empty.
+**Results:** 2173 Node tests, 0 failed. E2E seeded 57/57 (unchanged). E2E real-files 84/84 (+4 Phase 25). Visual regression PASS (baselines unchanged; `#importQualityPanel` above page canvas, not in capture zone). Manual QA 17/17 PASS. Hard exclusion diff: empty.
 
-**Next exact action:** Coordinator reviews implementation report, approves commit, then merge to main.
+**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - src/products/*, src/state/*, src/adapters/*: not touched
