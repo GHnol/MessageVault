@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3N IN PROGRESS — Android SMS UI wiring)
+**Last updated:** 2026-06-05 (Package 3O IN PROGRESS — Instagram DM JSON adapter)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3M)
+## Current architecture (post-Package 3O)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -21,7 +21,7 @@ src/
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
-    source-platforms.js       — source platform registry (whatsapp + android-sms now 'supported' — Packages 3J + 3M)
+    source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm now 'supported' — Packages 3J + 3M + 3O)
     keepsake-group.js         — KeepsakeGroup model
   adapters/
     imessage-chatdb-adapter.js
@@ -29,6 +29,7 @@ src/
     manual-entry-adapter.js
     whatsapp-txt-adapter.js        — KMEngine.whatsappTxtAdapter; bracket + hyphen format; parse/normalizeAll/import; ADAPTER_ID whatsapp-txt-v1 — Package 3J
     android-sms-xml-adapter.js     — KMEngine.androidSmsAdapter; SMS Backup & Restore XML; type=1/2 senderRole; MMS attachment placeholder; regex-based DOM-free parser; ADAPTER_ID android-sms-xml-v1 — Package 3M
+    instagram-dm-adapter.js        — KMEngine.instagramDmAdapter; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID instagram-dm-json-v1 — Package 3O
     future-adapter-stubs.js
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -67,6 +68,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     product-draft-lifecycle-tests.mjs  — 104 tests; coordinator API, mutation model, all lifecycle paths, semantic guards — Package 3F
     whatsapp-txt-adapter-tests.mjs          — 91 tests; API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards — Package 3J
     android-sms-xml-adapter-tests.mjs       — 84 tests; API shape, canHandle accepts/rejects, SMS type=1/2 parsing, senderRole, MMS attachment placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards — Package 3M
+    instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
 ```
 
 All modules expose into `window.KMEngine`. No build step.
@@ -122,6 +124,15 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS — implementation complete, pending commit/merge (Package 3O — branch `feature/instagram-dm-adapter`):
+- `src/adapters/instagram-dm-adapter.js` — `KMEngine.instagramDmAdapter`; ADAPTER_ID `instagram-dm-json-v1`; Instagram DM single-thread JSON export format; HTML entity decoder (named + decimal + hex character references; `&amp;` last to prevent double-decode); `hasMedia` covers photos/videos/audio_files/gifs/files/sticker; media and share objects → attachment-placeholder (conservative); senderRole always `contact` (self-ID deferred to UI package); millisecond-epoch timestamps → ISO-8601; `importWarnings` for `is_unsent` and missing sender_name; no DOM, no external dependencies; engine-only.
+- `src/adapters/future-adapter-stubs.js` — removed `instagram-dm-json-v1` stub entry; real adapter now owns that ID.
+- `src/core/source-platforms.js` — instagram-dm platform `status: 'stub'` → `'supported'`; notes updated.
+- `scripts/fixtures/fake-instagram-dm.json` — 10-message fake fixture (2 participants: Alice Smith + bob_jones_99; 8 imported / 2 skipped; 5 text + 3 attachment; HTML entities in 3 content fields; 1 is_unsent skip + 1 missing-sender skip).
+- `src/tests/instagram-dm-adapter-tests.mjs` — 87 tests across 15 suites.
+- `src/tests/km-engine-tests.mjs` — loads `instagram-dm-adapter.js` before stubs; updated instagram-dm platform assertion to `supported`; +5 smoke assertions (111 total).
+- No `index.html` changes. No E2E changes. UI wiring is a separate follow-on package.
 
 DELIVERED (Package 3M, merged `1228f41` 2026-06-05):
 - `src/adapters/android-sms-xml-adapter.js` — `KMEngine.androidSmsAdapter`; ADAPTER_ID `android-sms-xml-v1`; SMS Backup & Restore XML format; regex-based DOM-free parser (works in Node without jsdom); `canHandle` detects `<smses>` root with `<sms\b` or `<mms\b` message elements; `type=1` → senderRole `contact`, `type=2` → senderRole `self`; MMS elements normalized as attachment-placeholder (conservative); millisecond-epoch timestamps converted to ISO-8601; `importWarnings` for missing sender/address; no DOM, no external dependencies; engine-only.

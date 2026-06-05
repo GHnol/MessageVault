@@ -35,6 +35,7 @@ load('src/adapters/imessage-chatdb-adapter.js');
 load('src/adapters/manual-entry-adapter.js');
 load('src/adapters/whatsapp-txt-adapter.js');
 load('src/adapters/android-sms-xml-adapter.js');
+load('src/adapters/instagram-dm-adapter.js');
 load('src/adapters/future-adapter-stubs.js');
 load('src/core/project-session.js');
 load('src/state/session-serialization.js');
@@ -67,7 +68,7 @@ assert(KMEngine.getSourcePlatform('txt-export').status === 'supported',  'txt-ex
 assert(KMEngine.getSourcePlatform('manual').status    === 'supported',   'manual is supported');
 assert(KMEngine.getSourcePlatform('whatsapp').status  === 'supported',   'whatsapp is supported');
 assert(KMEngine.getSourcePlatform('android-sms').status === 'supported', 'android-sms is supported');
-assert(KMEngine.getSourcePlatform('instagram-dm').status === 'stub',     'instagram-dm is stub');
+assert(KMEngine.getSourcePlatform('instagram-dm').status === 'supported', 'instagram-dm is supported');
 assert(KMEngine.getSourcePlatform('telegram').status  === 'stub',        'telegram is stub');
 assert(KMEngine.getSourcePlatform('screenshot-image').status === 'deferred', 'screenshot-image is deferred');
 assert(KMEngine.getSourcePlatform('audio-transcript').status === 'deferred', 'audio-transcript is deferred');
@@ -271,6 +272,17 @@ assert(KMEngine.androidSmsAdapter.canHandle('<smses count="1"><sms date="1705305
 const smsResult = KMEngine.androidSmsAdapter['import']('<smses count="1"><sms date="1705305600000" type="1" address="+15559990001" body="Hello" readable_date="Jan 15, 2024 8:00:00 AM" contact_name="Alice" /></smses>');
 assert(Array.isArray(smsResult.memories) && smsResult.memories.length === 1, 'import() returns memories array with correct count');
 assert(smsResult.sourcePlatformId === 'android-sms',                'import() returns ImportResult with sourcePlatformId android-sms');
+
+// ── INSTAGRAM DM ADAPTER — smoke ─────────────────────────────────────────────
+
+suite('instagramDmAdapter — smoke');
+assert(KMEngine.instagramDmAdapter !== undefined,                             'instagramDmAdapter exists on KMEngine');
+assert(KMEngine.adapters['instagram-dm-json-v1'] === KMEngine.instagramDmAdapter, 'instagram-dm-json-v1 registered in KMEngine.adapters');
+const MINIMAL_IG = '{"participants":[{"name":"Alice"}],"messages":[{"sender_name":"Alice","timestamp_ms":1640000000000,"content":"Hi","type":"Generic"}]}';
+assert(KMEngine.instagramDmAdapter.canHandle(MINIMAL_IG) === true,            'canHandle returns true for minimal valid Instagram DM JSON');
+const igResult = KMEngine.instagramDmAdapter['import'](MINIMAL_IG);
+assert(igResult.sourcePlatformId === 'instagram-dm',                          'import() returns ImportResult with sourcePlatformId instagram-dm');
+assert(Array.isArray(igResult.memories) && igResult.memories.length === 1,    'import() returns memories array with correct count');
 
 // ── PROJECT SESSION schema ────────────────────────────────────────────────────
 
