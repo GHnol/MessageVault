@@ -60,6 +60,10 @@ const WA_FIXTURE_COUNT  = 8; // 9 parsed lines minus 1 system-message skip
 const WA_ALICE_COUNT    = 4; // Alice sends 4 of the 8 imported messages
 const WA_BOB_COUNT      = 4; // Bob sends 4 of the 8 imported messages
 
+const ANDROID_FIXTURE       = path.join(__dir, 'fixtures', 'fake-android-sms-backup.xml');
+const ANDROID_FIXTURE_COUNT = 9;  // 10 elements - 1 missing-sender skip
+const ANDROID_SELF_COUNT    = 4;  // 3 type=2 SMS + 1 MMS msg_box=2
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1250,6 +1254,67 @@ async function main() {
                 return el.style.display === 'none' || el.innerHTML.trim().length === 0;
             });
             assert(hidden, '#whatsappSenderPicker should be hidden after non-WhatsApp TXT import');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 28 — Android SMS XML file import (Package 3N)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 28 — Android SMS XML file import ──\n');
+
+        await harness.run('Android SMS XML fixture imports through the TXT/XML file input', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(ANDROID_FIXTURE);
+            await waitForChatView(page);
+        });
+
+        await harness.run('chat view visible after Android SMS XML import', async page => {
+            await assertVisible(page, '#chatView', 'Chat view after Android SMS import');
+        });
+
+        await harness.run('rendered message count equals ANDROID_FIXTURE_COUNT', async page => {
+            const rows = await page.locator('.message-row.selectable').count();
+            assert(rows === ANDROID_FIXTURE_COUNT,
+                `Expected ${ANDROID_FIXTURE_COUNT} DOM rows after Android SMS import, got ${rows}`);
+            const dataCount = await page.evaluate(() => (window.chatMessagesData || []).length);
+            assert(dataCount === ANDROID_FIXTURE_COUNT,
+                `Expected ${ANDROID_FIXTURE_COUNT} in chatMessagesData after Android SMS import, got ${dataCount}`);
+        });
+
+        await harness.run('#importQualityPanel is visible and non-empty after Android SMS import', async page => {
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#importQualityPanel should be visible and non-empty after Android SMS import');
+        });
+
+        await harness.run('selfMessageCount equals ANDROID_SELF_COUNT — no picker needed', async page => {
+            const selfCount = await page.evaluate(() => {
+                const IQR = window.KMEngine && window.KMEngine.ImportQualityReport;
+                const data = window.chatMessagesData || [];
+                if (!IQR || !data.length) return -1;
+                return IQR.compute(data).selfMessageCount;
+            });
+            assert(selfCount === ANDROID_SELF_COUNT,
+                `Expected selfMessageCount ${ANDROID_SELF_COUNT} for Android SMS (type=2 auto-maps to self), got ${selfCount}`);
+        });
+
+        await harness.run('chatMessagesData sourcePlatformId is android-sms', async page => {
+            const platformId = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length > 0 ? data[0].sourcePlatformId : null;
+            });
+            assert(platformId === 'android-sms',
+                `Expected sourcePlatformId 'android-sms', got '${platformId}'`);
+            // Re-import TXT fixture so Phase 12 can continue from the expected state.
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
         });
 
         // ─────────────────────────────────────────────────────────────────────
