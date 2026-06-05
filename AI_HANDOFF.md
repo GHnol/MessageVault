@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 5C — Proof Panel User Withdrawal and UX Completion. Branch `feature/proof-panel-user-withdrawal`. Implementation complete; pending Coordinator review and commit authorization. Package 3H was the last completed package (impl `c0ee68d`, merged `1297f92` to `main` 2026-06-03).
+**Status:** `complete` — Package 5C — Proof Panel User Withdrawal and UX Completion. Impl `7b00f31`, merged `4733c32` to `main` 2026-06-04. State-sync in progress. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-04`
 
@@ -18,23 +18,23 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 5C — Proof Panel User Withdrawal and UX Completion` |
-| **Active branch** | `feature/proof-panel-user-withdrawal` |
-| **main HEAD** | `25bee3e` — docs: correct active branch after Package 3H state sync |
-| **Last completed pass** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — impl `c0ee68d`, merged `1297f92` 2026-06-03 |
-| **Active package** | `Package 5C — Proof Panel User Withdrawal and UX Completion` — implementation complete 2026-06-04; pending Coordinator commit approval |
-| **Last closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
-| **Prior closed package** | `Package 3D — Visual Regression Baseline Harness` — FULLY COMPLETE — merged `645f6bd` 2026-06-02 |
-| **Package 5C** | IN PROGRESS — branch `feature/proof-panel-user-withdrawal` — impl complete 2026-06-04; pending Coordinator commit approval |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `4733c32` — merge: add proof panel user withdrawal flow |
+| **Last completed pass** | `Package 5C — Proof Panel User Withdrawal and UX Completion` — impl `7b00f31`, merged `4733c32` 2026-06-04 |
+| **Active package** | None |
+| **Last closed package** | `Package 5C — Proof Panel User Withdrawal and UX Completion` — FULLY COMPLETE — merged `4733c32` 2026-06-04 |
+| **Prior closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
+| **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
-| **Package 3D** | COMPLETE — merged `645f6bd` 2026-06-02 |
+| **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
 
 ---
 
-## Objective (active pass — Package 5C)
+## Objective (last completed pass — Package 5C)
 
-Package 5C — Proof Panel User Withdrawal and UX Completion. **IN PROGRESS — implementation complete 2026-06-04; pending Coordinator commit authorization.**
+Package 5C — Proof Panel User Withdrawal and UX Completion. **COMPLETE — impl `7b00f31`, merged `4733c32` to `main` 2026-06-04.**
 
 Branch: `feature/proof-panel-user-withdrawal` — base: `main` at `25bee3e`
 
@@ -49,9 +49,9 @@ Delivered:
 - `docs/architecture/architecture-roadmap.md` — Package 5C entry added
 - `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — updated to Package 5C in-progress state
 
-**Results:** 2082 Node tests, 0 failed. E2E seeded 57/57. E2E real-files 76/76 (real-files not re-run — Phase 24 is seeded-only). Visual regression PASS (baselines unchanged; proof panel not in capture zone). OS audit 324/0/0. Hard exclusions confirmed empty.
+**Results:** 2082 Node tests, 0 failed. E2E seeded 57/57. E2E real-files 80/80 (verified in Package 5C verification pass). Visual regression PASS (baselines unchanged; proof panel not in capture zone). Browser/manual QA 27/27 PASS. OS audit 324/0/0. Hard exclusions confirmed empty.
 
-**Next exact action:** Coordinator reviews implementation report, approves commit, then merge to main.
+**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - ProductDraftState, ProductPreflight, ProductDraftLifecycle: not touched

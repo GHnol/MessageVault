@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-03 (America/New_York)
+**Last updated:** 2026-06-04 (America/New_York)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -29,13 +29,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 5 | AI Project OS v1.8 — State-Zero Bootstrap Finalization | P1 | **Done** | repair `25e2939`, merged `cf63b88` 2026-06-03; State-Zero protocol + hardened scripts + v1.8 pack; 324 OS audit checks ✓ |
 | 6 | Package 3G — Session UI Wiring for ProductDraft Lifecycle | P1 | **Done** | impl `05f4048`, merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E (6 tests); 47/47 seeded ✓ |
 | 7 | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | P1 | **Done** | impl `c0ee68d`, merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); 53/53 seeded ✓ |
-| 8 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3H COMPLETE 2026-06-03 |
+| 8 | Package 5C — Proof Panel User Withdrawal and UX Completion | P1 | **Done** | impl `7b00f31`, merged `4733c32` 2026-06-04; withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA ✓ |
+| 9 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 5C COMPLETE 2026-06-04 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3H complete 2026-06-03; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 5C COMPLETE 2026-06-04; all further development work halted pending Coordinator decision.
 
 ---
 

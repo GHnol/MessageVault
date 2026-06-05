@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-06-03
-**Updated by:** Claude Code (post-Package-3H state-sync)
+**Last updated:** 2026-06-04
+**Updated by:** Claude Code (post-Package-5C state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide next development package — Package 3H complete; candidates: preflight runners for 9 vendor-gated checks, further Phase 12 continuation, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Decide next development package — Package 5C complete; candidates: further Phase 12 continuation (below GATE-04), preflight runners for 9 vendor-gated checks, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,8 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3H COMPLETE — merged `1297f92` 2026-06-03. Coordinator decides next package.**
+**Status: Package 5C COMPLETE — merged `4733c32` 2026-06-04. Coordinator decides next package.**
 
+Package 5C (Proof Panel User Withdrawal and UX Completion) is COMPLETE — merged to main (`4733c32` 2026-06-04). `renderBookProofPanel()` pending-review branch now includes "Cancel proof review" button + "Removes local proof review marking. No files were sent." hint. Cancel calls `ProofApprovalUX.withdrawSubmission()` (pending-review→none). `ProofApprovalState` extended with pending-review→none transition. Phase 24 E2E (4 tests); 57 seeded / 80 real-files total. 27/27 browser QA PASS. GATE-04, checkout, PDF, vendor, manufacturing, admin, and readiness gate exclusions confirmed.
 Package 3H (Draft-Preflight Status Surface and Proof Panel Gate) is COMPLETE — merged to main (`1297f92` 2026-06-03). `showBookView()` auto-runs PAGINATION_STABILITY book check for in-progress drafts and advances to preflight-passed/failed. `renderBookProofPanel()` gated on all real groups reaching preflight-passed. Phase 23 E2E (6 tests); 53 seeded / 76 real-files total. No engine changes. "preflight" not in user-visible text. GATE-04, checkout, PDF, vendor, manufacturing, and readiness gate exclusions confirmed.
 Package 3G (Session UI Wiring for ProductDraft Lifecycle) is COMPLETE — merged to main (`3192a15` 2026-06-03). Lifecycle modules loaded in browser; `showBookView()` initializes group drafts (none→in-progress, idempotent); `enterComposition()` forward-compat hook; `window.__km.getGroupDraft()` test helper; Phase 22 E2E (6 tests).
 Package 3F (ProductDraft Lifecycle Coordinator) is COMPLETE — merged to main (`395629e` 2026-06-03).
@@ -41,9 +42,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**"Package 5C" is not defined in the repo.** Do not start or reference it without explicit Coordinator scoping.
-
-No development package has been authorized. The next Coordinator step is to decide the next package.
+**Package 5C is now COMPLETE.** No development package has been authorized after Package 5C. The next Coordinator step is to decide the next package.
 
 ---
 

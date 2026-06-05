@@ -465,16 +465,33 @@ What this does NOT deliver: full customer-facing proof approval UX (digital facs
 
 ---
 
+### Package 5C — Proof Panel User Withdrawal and UX Completion
+
+**Branch:** `feature/proof-panel-user-withdrawal`
+**Status:** COMPLETE — merged to main (feature: `7b00f31`, merge: `4733c32` 2026-06-04)
+
+Delivered:
+- `src/products/proof-approval-state.js` — added `['pending-review', 'none']` to `_allowed` transitions; `transition()` handles `pending-review→none` (sets `submittedAt=null`, preserves `createdAt`, updates `updatedAt`; no prohibited fields); local proof state only — does not cross GATE-04
+- `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)` method; updated `getAllowedUserActions('pending-review')` to return `['withdraw-submission']`; exposed `withdrawSubmission` on `KMEngine.ProofApprovalUX`
+- `index.html` `renderBookProofPanel()` — pending-review branch now includes "Cancel proof review" button (`#bookProofCancelBtn`) + hint text "Removes local proof review marking. No files were sent."; cancel click handler calls `UX.withdrawSubmission('message-book')` + immediate re-render; added CSS for `.book-proof-cancel-btn` (light + dark mode)
+- `src/tests/proof-approval-state-tests.mjs` — Suite 4: +1 allowed assertion; Suite 5: −1 blocked assertion (11 not 12); new Suite 15: withdrawal transition (18 assertions)
+- `src/tests/proof-approval-ux-tests.mjs` — Suite 1: +1 API shape assertion; Suite 8: updated pending-review to withdraw-submission (+2 assertions); new Suites 16 + 16b: withdrawSubmission tests (+25 assertions)
+- `scripts/e2e-regression-harness.mjs` — Phase 24 (4 tests): pending-review DOM state, cancel button existence, withdrawal flow, save/restore with pending-review proof state
+
+**Tests: 2082 Node unit tests, 0 failed** | **E2E seeded: 57/57** | **E2E real-files: 80/80** | **Browser QA: 27/27 PASS** | **Visual regression: PASS (baselines unchanged)**
+
+What this does NOT deliver: approve/request-changes/revoke admin UI, PDF, checkout, order, vendor, manufacturing, digital proof facsimile; no GATE-04 crossing; no proofSupported flip; no ProductDraft/Preflight/Lifecycle module changes.
+
+---
+
 ### Coordinator decides next package — (current position)
 
-**Status:** No package authorized. Package 5B COMPLETE — Coordinator decides the next step.
+**Status:** No package authorized. Package 5C COMPLETE — Coordinator decides the next step.
 
 Next package candidates (from repo docs):
-- **Package 3D — Visual Regression Baseline Harness** (QA infrastructure; explicitly named in `docs/qa/e2e-regression-harness.md`; no external gate — Coordinator authorization only)
-- **Scoped Phase 12 continuation** — further proof panel interaction work; requires careful scoping to stay below GATE-04 (full proof UX requires PDF pipeline + checkout)
-- **ProductDraft model + Preflight runner** — Package 3 remaining scope; engine-layer only; no external gate
-
-**"Package 5C" is not defined.** Do not create or authorize a Package 5C without first scoping it explicitly against Phase 12 deliverables and GATE-04 bounds.
+- **Further Phase 12 continuation (below GATE-04)** — e.g. proof panel status display refinements; must stay below GATE-04 (full proof UX requires PDF pipeline + checkout)
+- **Preflight runners for vendor-gated checks** — engine layer; gated until vendor confirmed
+- **Another authorized direction** — Coordinator decision required
 
 ---
 

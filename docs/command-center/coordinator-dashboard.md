@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-06-03
-**Updated by:** Claude Code (post-Package-3F state-sync)
+**Last updated:** 2026-06-04
+**Updated by:** Claude Code (post-Package-5C state-sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -67,6 +67,8 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 3E — ProductDraft and Preflight Runner Foundation | COMPLETE | `dd4f641` / `4390038` |
 | Package 3F — ProductDraft Lifecycle Coordinator | COMPLETE | `18f3544` / `395629e` |
 | Package 3G — Session UI Wiring for ProductDraft Lifecycle | COMPLETE | `05f4048` / `3192a15` |
+| Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | COMPLETE | `c0ee68d` / `1297f92` |
+| Package 5C — Proof Panel User Withdrawal and UX Completion | COMPLETE | `7b00f31` / `4733c32` |
 | AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
 | AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
 | AI Project OS v1.7 (Gates 1–6) | COMPLETE | `3c641a9`→`f30ea62` 2026-06-01 |

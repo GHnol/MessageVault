@@ -66,7 +66,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 3H | Open | Coordinator | Package 3H COMPLETE (merged `1297f92` 2026-06-03); proof panel gated on draft book check; Packages 3E–3H form the complete draft/preflight engine-to-UI chain; next candidates: preflight runners for 9 vendor-gated checks, or another scoped Phase 12 continuation |
+| Next product package after Package 5C | Open | Coordinator | Package 5C COMPLETE (merged `4733c32` 2026-06-04); user withdrawal (pending-review→none) + cancel button delivered; Packages 5A–5C form the proof approval foundation-to-UX chain; next candidates: further Phase 12 continuation (below GATE-04), preflight runners for 9 vendor-gated checks, or another authorized direction |
 
 ## Deferred
 
