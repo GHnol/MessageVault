@@ -3245,7 +3245,7 @@
                     <div class="ingest-card-icon">📄</div>
                     <div class="ingest-card-body">
                         <div class="ingest-card-title">Already have an export?</div>
-                        <div class="ingest-card-desc">If you have a previously exported .txt or .xml file, you can load it here.</div>
+                        <div class="ingest-card-desc">If you have a previously exported .txt, .xml or .json file, you can load it here.</div>
                     </div>
                     <div class="ingest-card-arrow">›</div>
                 </div>
@@ -3418,9 +3418,9 @@
             <div class="txt-drop-zone" id="txtDropZone">
                 <div class="txt-drop-icon">📄</div>
                 <div class="txt-drop-text">Drop your file here or click to browse</div>
-                <div class="txt-drop-hint">Supports .txt and .xml exports</div>
+                <div class="txt-drop-hint">Supports .txt, .xml and .json exports</div>
             </div>
-            <input type="file" id="fileInput" accept=".txt,.xml" />
+            <input type="file" id="fileInput" accept=".txt,.xml,.json" />
             <div class="status" id="txtStatus"></div>
         </div>
     </div>
@@ -3567,6 +3567,7 @@
     <script src="src/adapters/manual-entry-adapter.js"></script>
     <script src="src/adapters/whatsapp-txt-adapter.js"></script>
     <script src="src/adapters/android-sms-xml-adapter.js"></script>
+    <script src="src/adapters/instagram-dm-adapter.js"></script>
     <script src="src/adapters/future-adapter-stubs.js"></script>
     <script src="src/core/project-session.js"></script>
     <script src="src/state/session-serialization.js"></script>
@@ -4025,6 +4026,16 @@
                 if (window.KMEngine && window.KMEngine.androidSmsAdapter
                         && window.KMEngine.androidSmsAdapter.canHandle(text)) {
                     const result = window.KMEngine.androidSmsAdapter.import(text);
+                    window.chatMessagesData = result.memories;
+                    showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
+                    renderConversation(result.memories);
+                    renderImportQualityPanel(result.memories);
+                    return;
+                }
+
+                if (window.KMEngine && window.KMEngine.instagramDmAdapter
+                        && window.KMEngine.instagramDmAdapter.canHandle(text)) {
+                    const result = window.KMEngine.instagramDmAdapter.import(text);
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
