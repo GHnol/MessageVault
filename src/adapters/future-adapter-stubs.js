@@ -21,8 +21,7 @@
     }
 
     var STUBS = [
-        makeStub('facebook-messenger-json-v1',   'facebook-messenger',  'Facebook Messenger JSON Export v1'),
-        makeStub('telegram-json-v1',             'telegram',            'Telegram Desktop JSON Export v1')
+        makeStub('telegram-json-v1', 'telegram', 'Telegram Desktop JSON Export v1')
     ];
 
     for (var i = 0; i < STUBS.length; i++) {
