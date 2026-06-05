@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-05
-**Last mirrored:** RPT-20260605-004 (Package 3N closeout — Android SMS UI Wiring COMPLETE)
-**Active gate:** None — Package 3N COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260605-005 (Package 3O closeout — Instagram DM JSON Adapter COMPLETE)
+**Active gate:** None — Package 3O COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260605-005 | package_closeout | Package 3O — Instagram DM JSON Adapter | feature/instagram-dm-adapter | ebb7a55 / 26f2633 | mirrored | 2026-06-05 |
 | RPT-20260605-004 | package_closeout | Package 3N — Android SMS UI Wiring | feature/android-sms-ui-wiring | 04d30ed / 6d61367 | mirrored | 2026-06-05 |
 | RPT-20260605-003 | package_closeout | Package 3L — WhatsApp Self-Identification | feature/whatsapp-self-id | 7540cc6 / 16d0ca6 | mirrored | 2026-06-05 |
 | RPT-20260605-002 | package_closeout | Package 3K — WhatsApp TXT UI Wiring | feature/whatsapp-txt-ui-wiring | bbd2097 / a048d0d | mirrored | 2026-06-05 |
@@ -58,6 +59,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260605-005 — package_closeout — Package 3O — Instagram DM JSON Adapter
+
+**Created:** 2026-06-05T00:00:00Z | **Branch:** feature/instagram-dm-adapter | **HEAD:** ebb7a55 (impl) / 26f2633 (merge) | **Status:** mirrored
+
+Package 3O — Instagram DM JSON Adapter COMPLETE — implementation `ebb7a55`, merge `26f2633` 2026-06-05. Engine-only delivery (no UI wiring — deferred to a later package). Delivered: (1) `scripts/fixtures/fake-instagram-dm.json` — 10-message fixture; 2 participants (Alice Smith, bob_jones_99); 8 imported / 2 skipped (msg 9 `is_unsent: true`; msg 10 missing `sender_name`); 5 text messages, 1 photo, 1 video, 1 share/type="Share"; HTML entities: `&amp;`, `&#39;`, `&lt;`/`&gt;`; timestamps 1609459200000 + 60000ms intervals. (2) `src/adapters/instagram-dm-adapter.js` — `KMEngine.instagramDmAdapter`; ADAPTER_ID `instagram-dm-json-v1`; PLATFORM_ID `instagram-dm`; ADAPTER_VERSION `1`; `decodeEntities(str)` inline HTML entity decoder (hex → decimal → named entities; `&amp;` last to prevent double-decode); `hasMedia(msg)` checks photos/videos/audio_files/gifs/files/sticker arrays; `canHandle(input)` quick string probes (`"participants"`, `"messages"`, `"timestamp_ms"`) before JSON.parse then structural validation; `normalizeAll(parsedMessages)` skips `is_unsent` with warning, skips missing `sender_name` with warning; media/share → `attachment-placeholder`, `isAttachmentOnly: true`, text `[Attachment]`; text messages → type `message`, `isAttachmentOnly: false`; `senderRole: 'contact'` always (self-ID deferred); ms-epoch → ISO-8601; `import(rawText)` derives participants from first-seen order in memories; registered as `KMEngine.instagramDmAdapter` and `KMEngine.adapters['instagram-dm-json-v1']`. (3) `src/adapters/future-adapter-stubs.js` — removed `makeStub('instagram-dm-json-v1', ...)` line; now only facebook-messenger-json-v1 and telegram-json-v1 stubs remain. (4) `src/core/source-platforms.js` — instagram-dm platform `status: 'stub'` → `status: 'supported'`; notes updated to reflect engine adapter implemented (Package 3O), UI wiring pending. (5) `src/tests/instagram-dm-adapter-tests.mjs` — 87 tests across 15 suites: API shape, canHandle accepts, canHandle rejects, fixture rawCounts, timestamp conversion, entity decoding sender, entity decoding content, senderRole, text normalization, media/attachment, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants. (6) `src/tests/km-engine-tests.mjs` — `load('src/adapters/instagram-dm-adapter.js')` added; `instagram-dm` platform assertion updated `stub` → `supported`; 5 smoke assertions added (adapter exists, registered in KMEngine.adapters, canHandle minimal JSON, import returns correct sourcePlatformId, memories array correct count); 106 → 111 total tests. (7) `docs/qa/test-strategy.md` — instagram-dm-adapter-tests.mjs row added (87 tests); km-engine row 106 → 111; total 2358 → 2450; 18 → 19 suites; pre-commit baseline updated; Package 3O COMPLETE note. (8) `docs/architecture/architecture-roadmap.md` — instagram-dm-adapter.js and instagram-dm-adapter-tests.mjs added to module map and test listing; Package 3O DELIVERED entry with merge hash `26f2633` 2026-06-05.
+
+**Tests:** 2450 Node tests (19 suites), 0 failed (+92 new: 87 instagram-dm-adapter + 5 km-engine smoke). E2E not required (engine-only). Visual regression not required. OS audit 324/0/0. State freshness: 3 FAIL_WRONG_ACTIVE_BRANCH post-merge (expected; resolved by closeout state-sync). project-control-sync-validate 11/11 PASS.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, scripts/e2e-regression-harness.mjs, src/products/*, src/state/*, src/core/normalized-memory.js, src/core/import-adapters.js, src/core/import-quality-report.js untouched; no pagination constants, no Review view, no standalone keepsake flows, no ProductDraft/Preflight/Lifecycle/ProofApproval modules, no readiness gate, no GATE-04 crossing, no checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated; no E2E or visual regression changes.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3O closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260605-004 — package_closeout — Package 3N — Android SMS UI Wiring
 

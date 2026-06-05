@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `implementation-complete` — Package 3O — Instagram DM JSON Adapter. Branch `feature/instagram-dm-adapter`, base `main` at `62c75fd`. Engine-only. All files written, all tests green (87 new + 5 km-engine smoke = 2450 baseline). Awaiting Coordinator commit authorization.
+**Status:** `complete` — Package 3O — Instagram DM JSON Adapter. impl `ebb7a55`, merged `26f2633` to `main` 2026-06-05. Engine-only. No active package. Awaiting Coordinator direction.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,13 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3O — Instagram DM JSON Adapter` |
-| **Active branch** | `feature/instagram-dm-adapter` |
-| **main HEAD** | `62c75fd` — docs: sync operating docs after Package 3N completion |
-| **Last completed pass** | `Package 3N — Android SMS UI Wiring` — impl `04d30ed`, merged `6d61367` 2026-06-05 |
-| **Active package** | `Package 3O — Instagram DM JSON Adapter` — IN PROGRESS |
-| **Last closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
-| **Prior closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
+| **Active pass** | None — awaiting Coordinator direction |
+| **Active branch** | `main` |
+| **main HEAD** | `26f2633` — merge: add Instagram DM JSON adapter (Package 3O) |
+| **Last completed pass** | `Package 3O — Instagram DM JSON Adapter` — impl `ebb7a55`, merged `26f2633` 2026-06-05 |
+| **Active package** | None |
+| **Last closed package** | `Package 3O — Instagram DM JSON Adapter` — FULLY COMPLETE — merged `26f2633` 2026-06-05 |
+| **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -32,9 +32,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — Package 3O — Instagram DM JSON Adapter)
+## Objective (last completed pass — Package 3O — Instagram DM JSON Adapter)
 
-Package 3O — Instagram DM JSON Adapter. **IMPLEMENTATION COMPLETE — awaiting Coordinator commit authorization.**
+Package 3O — Instagram DM JSON Adapter. **COMPLETE — impl `ebb7a55`, merged `26f2633` to `main` 2026-06-05.**
 
 Branch: `feature/instagram-dm-adapter` — base: `main` at `62c75fd`
 
@@ -52,7 +52,7 @@ Files modified:
 
 **Verification results:** 87/87 instagram-dm-adapter-tests.mjs. 111/111 km-engine-tests.mjs. All 19 Node suites green (2450/2450). start-router: NEEDS_COORDINATOR_DECISION (expected — dirty tree). state-freshness-check: 0 FAILs, 2 cosmetic WARN (hash lag). project-control-sync-validate: 11 PASS. os-self-audit: 324 PASS. Hard exclusion diff: clean.
 
-**Next exact action:** Coordinator authorizes commit and merge. Do not commit without explicit Coordinator instruction.
+**Next exact action:** No active package. Await Coordinator authorization for next package. Do not start any development work without explicit Coordinator instruction.
 
 **Hard exclusions verified:**
 - index.html: not touched
@@ -531,7 +531,7 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3N COMPLETE — impl `04d30ed`, merged `6d61367` 2026-06-05. State-sync complete.
+Package 3O COMPLETE — impl `ebb7a55`, merged `26f2633` 2026-06-05. State-sync complete.
 
 Coordinator decides:
 - Authorize next development package, or

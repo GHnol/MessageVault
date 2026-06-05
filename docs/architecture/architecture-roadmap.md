@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3O IN PROGRESS — Instagram DM JSON adapter)
+**Last updated:** 2026-06-05 (Package 3O COMPLETE — Instagram DM JSON adapter)
 **Status:** Active
 
 ---
@@ -125,7 +125,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS — implementation complete, pending commit/merge (Package 3O — branch `feature/instagram-dm-adapter`):
+DELIVERED (Package 3O, merged `26f2633` 2026-06-05):
 - `src/adapters/instagram-dm-adapter.js` — `KMEngine.instagramDmAdapter`; ADAPTER_ID `instagram-dm-json-v1`; Instagram DM single-thread JSON export format; HTML entity decoder (named + decimal + hex character references; `&amp;` last to prevent double-decode); `hasMedia` covers photos/videos/audio_files/gifs/files/sticker; media and share objects → attachment-placeholder (conservative); senderRole always `contact` (self-ID deferred to UI package); millisecond-epoch timestamps → ISO-8601; `importWarnings` for `is_unsent` and missing sender_name; no DOM, no external dependencies; engine-only.
 - `src/adapters/future-adapter-stubs.js` — removed `instagram-dm-json-v1` stub entry; real adapter now owns that ID.
 - `src/core/source-platforms.js` — instagram-dm platform `status: 'stub'` → `'supported'`; notes updated.

@@ -22,7 +22,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3J COMPLETE — merged `f1eca34` 2026-06-05. Coordinator decides next package.**
+**Status: Package 3O COMPLETE — merged `26f2633` 2026-06-05. Coordinator decides next package.**
 
 Package 3J (WhatsApp TXT Adapter) is COMPLETE — merged to main (`f1eca34` 2026-06-05). `KMEngine.whatsappTxtAdapter` — bracket and hyphen WhatsApp export format; canHandle, normalizeAll, import; system-message filtering; media placeholders (`<Media omitted>` etc → `isAttachmentOnly: true`); multi-line continuation; participants in first-seen order; senderRole `contact` for all senders (Me inference deferred); 91 new tests (`whatsapp-txt-adapter-tests.mjs`); 5 km-engine smoke assertions; 2269 Node; whatsapp platform `stub` → `supported`. Engine-only; no index.html wiring.
 

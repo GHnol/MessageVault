@@ -191,7 +191,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3O — Instagram DM JSON Adapter (IN PROGRESS — branch `feature/instagram-dm-adapter`):**
+**Package 3O — Instagram DM JSON Adapter (COMPLETE — merged `26f2633` 2026-06-05):**
 
 Package 3O adds 87 tests in new `instagram-dm-adapter-tests.mjs` (15 suites: API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding sender/content, senderRole always contact, text normalization, media/attachment normalization, NormalizedMemory required fields, importWarnings, no-throw, semantic guards, participants extraction). Adds 5 smoke assertions to `km-engine-tests.mjs` (111 total). New Node baseline: 2450. No E2E required (engine-only; no index.html changes). Visual regression not required. No GATE-04 crossing. instagram-dm platform `supported`. All media types (photos, videos, audio_files, gifs, files, sticker) and shares → attachment-placeholder (conservative). HTML entity decoding for text fields. senderRole always 'contact' (self-ID deferred to UI package). UI wiring is a separate follow-on package.
 

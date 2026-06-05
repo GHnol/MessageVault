@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-05
-**Updated by:** Claude Code (post-Package-3N state-sync)
+**Updated by:** Claude Code (post-Package-3O state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -46,6 +46,7 @@
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
 | Package 3M | Android SMS XML Adapter | COMPLETE — merged to main | `e5bc179` | `1228f41` |
 | Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
+| Package 3O | Instagram DM JSON Adapter | COMPLETE — merged to main | `ebb7a55` | `26f2633` |
 | Operator Reliability Repair | Raw transcript capture protocol, notification diagnostic, skill/command updates | COMPLETE — merged to main | `81b2329` | `c27502c` |
 
 ---
@@ -57,7 +58,7 @@
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 18 suites, **2358 Node tests** — all green
+- `src/tests/`: 19 suites, **2450 Node tests** — all green
   - `android-sms-xml-adapter-tests.mjs`: 84 (Package 3M; 14 suites: API shape, canHandle, SMS type=1/2, senderRole, MMS, fixture rawCounts, participants, NormalizedMemory fields, provenance, importWarnings, semantic guards)
   - `whatsapp-txt-adapter-tests.mjs`: 91 (Package 3J; 14 suites: API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards)
   - `km-engine-tests.mjs`: 106 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J)

@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3O — Instagram DM JSON Adapter — IN PROGRESS on `feature/instagram-dm-adapter`. |
-| Branch | `feature/instagram-dm-adapter` |
-| main HEAD | `62c75fd` — docs: sync operating docs after Package 3N completion |
-| Next action | Run `/start`. Resume Package 3O implementation. Do not commit without Coordinator approval. |
+| Resume into | No active package — Package 3O COMPLETE. Await Coordinator direction on `main`. |
+| Branch | `main` |
+| main HEAD | `26f2633` — merge: add Instagram DM JSON adapter (Package 3O) |
+| Next action | Run `/start`. No active package. Await Coordinator authorization for next package. Do not start development without explicit approval. |
+| Package 3O | COMPLETE — `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 87 new tests + 5 km-engine smoke (2450 Node total / 19 suites); engine-only; instagram-dm platform `supported`; no UI wiring; impl `ebb7a55`, merged `26f2633` 2026-06-05 |
 | Package 3M | COMPLETE — `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS Backup & Restore XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; android-sms platform `supported`; 84 new tests + 5 km-engine smoke (2358 Node total); engine-only; no UI wiring; no E2E; no visual regression; impl `e5bc179`, merged `1228f41` 2026-06-05 |
 | Package 3L | COMPLETE — `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware; Phase 27 E2E (6 tests); 29/29 manual QA; 2269 Node; 57/57 seeded; 95/95 real-files; visual regression PASS; no engine changes; merged `16d0ca6` 2026-06-05 |
 | Package 3K | COMPLETE — `readTxtFile()` WhatsApp detection guard; `whatsapp-txt-adapter.js` script tag; Phase 26 E2E (5 tests); 2269 Node; 57/57 seeded; 89/89 real-files; visual regression PASS; 9/9 manual QA; merged `a048d0d` 2026-06-05 |
