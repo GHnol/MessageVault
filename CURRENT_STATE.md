@@ -21,12 +21,12 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `f1eca34` — merge: add WhatsApp TXT adapter |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `6eef338` — docs: sync operating docs after Package 3J completion |
+| Active branch | `feature/whatsapp-txt-ui-wiring` |
+| Active pass | `Package 3K — WhatsApp TXT UI Wiring` — IN PROGRESS |
 | Last completed pass | `Package 3J — WhatsApp TXT Adapter` — impl `96ea7e3`, merged `f1eca34` 2026-06-05 |
 | Last closed package | `Package 3J — WhatsApp TXT Adapter` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
+| Next authorized target | Complete Package 3K implementation; await Coordinator commit approval |
 | Test baseline | **2269 Node tests** (17 suites); E2E seeded 57/57; E2E real-files 84/84; visual regression PASS (baseline unchanged) |
 | Package 3J | COMPLETE — merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; 91 new tests; whatsapp platform `supported`; engine-only; no index.html wiring |
 | Package 3I | COMPLETE — merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 17/17 browser QA |

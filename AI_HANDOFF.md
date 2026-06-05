@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3J — WhatsApp TXT Adapter. Impl `96ea7e3`, merged `f1eca34` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
+**Status:** `implementation-complete — awaiting Coordinator commit approval` — Package 3K — WhatsApp TXT UI Wiring. Branch `feature/whatsapp-txt-ui-wiring` base `main` @ `6eef338`. All QA passed. Stop before commit.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,17 +18,53 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `f1eca34` — merge: add WhatsApp TXT adapter |
+| **Active pass** | `Package 3K — WhatsApp TXT UI Wiring` |
+| **Active branch** | `feature/whatsapp-txt-ui-wiring` |
+| **main HEAD** | `6eef338` — docs: sync operating docs after Package 3J completion |
 | **Last completed pass** | `Package 3J — WhatsApp TXT Adapter` — impl `96ea7e3`, merged `f1eca34` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3K — WhatsApp TXT UI Wiring` — IN PROGRESS |
 | **Last closed package** | `Package 3J — WhatsApp TXT Adapter` — FULLY COMPLETE — merged `f1eca34` 2026-06-05 |
 | **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (current pass — Package 3K — WhatsApp TXT UI Wiring)
+
+Package 3K — WhatsApp TXT UI Wiring. **IMPLEMENTATION COMPLETE — awaiting Coordinator commit approval.**
+
+Branch: `feature/whatsapp-txt-ui-wiring` — base: `main` at `6eef338`
+
+Delivered (implementation complete; awaiting Coordinator commit approval):
+- `index.html` — `<script src="src/adapters/whatsapp-txt-adapter.js">` tag added in adapter block before `future-adapter-stubs.js`; `readTxtFile()` modified to detect WhatsApp format via `canHandle(text)` guard and route to `adapter.import(text)` before the existing pipe-delimited path; both paths call `renderConversation` and `renderImportQualityPanel`
+- `scripts/e2e-regression-harness.mjs` — `WA_FIXTURE` + `WA_FIXTURE_COUNT = 8` constants; Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state
+- `docs/qa/test-strategy.md` — E2E real-files count 84→89; Phase 26 note; Layer 3 description updated; pre-commit baseline updated
+- `docs/architecture/architecture-roadmap.md` — Package 3J entry updated to DELIVERED; Package 3K IN PROGRESS entry added
+
+**Results:** 2269 Node tests, 0 failed (unchanged). E2E seeded 57/57. E2E real-files 89/89 (+5 Phase 26). Visual regression PASS (baselines unchanged). Manual QA PASS (8 rows, Alice header, 0 me / 8 them bubbles, 1 attachment bubble, panel text "8 messages · Jun 2024 · 2 senders · 1 attachment", TXT regression pass, fresh reload panel hidden).
+
+**Next exact action:** Coordinator approves commit. Proposed commit message:
+```
+feat: wire WhatsApp TXT imports into browser import flow
+```
+
+**Hard exclusions verified:**
+- src/adapters/whatsapp-txt-adapter.js: not touched
+- src/adapters/txt-export-adapter.js: not touched
+- src/core/import-quality-report.js: not touched
+- src/core/normalized-memory.js: not touched
+- src/core/import-adapters.js: not touched
+- src/core/source-platforms.js: not touched
+- src/products/*: not touched
+- src/state/*: not touched
+- parseMessages(), applyReactions(), renderConversation(), renderImportQualityPanel(): not touched
+- Proof approval, ProductDraft, Preflight, Lifecycle: not touched
+- Pagination constants, Review view, standalone keepsake flows: not touched
+- No new dependencies installed
+- No external systems mutated
 
 ---
 

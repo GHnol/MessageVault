@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89).
 **Last updated:** 2026-06-05 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -65,7 +65,7 @@ Or run all suites individually as part of pre-commit verification.
 
 **What:** Headless Chromium running the actual `index.html` against deterministic seed data (`scripts/e2e-test-data.mjs`).
 
-**Coverage:** Phases 1–10 + 20 + 21 + 22 + 23 + 24 of `scripts/e2e-regression-harness.mjs`. **57 tests.** (Phase 25 is in the real-files harness.)
+**Coverage:** Phases 1–10 + 20 + 21 + 22 + 23 + 24 of `scripts/e2e-regression-harness.mjs`. **57 tests.** (Phases 25 and 26 are in the real-files harness.)
 
 **Run:**
 
@@ -87,9 +87,9 @@ cd scripts && npm run e2e:headed
 
 ### Layer 3 — E2E real-files harness
 
-**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 — real .txt import, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
+**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 — real .txt import, WhatsApp .txt import, import quality report, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
 
-**Coverage:** 23 tests (22 always + 1 conditional on local chat.db). Combined seeded + real-files: 64.
+**Coverage:** 32 tests (31 always + 1 conditional on local chat.db). Combined seeded + real-files: **89**.
 
 **Run:**
 
@@ -189,9 +189,13 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
+**Package 3K — WhatsApp TXT UI Wiring (IN PROGRESS — branch `feature/whatsapp-txt-ui-wiring`, 2026-06-05):**
+
+Package 3K adds no new Node unit tests (no new engine module). Adds E2E Phase 26 (5 real-files tests): WhatsApp fixture imports via TXT file input; chat view visible; message count = 8; importQualityPanel visible and non-empty; sourcePlatformId = 'whatsapp'. Node baseline unchanged: 2269. Layer 2 unchanged: 57 seeded. Layer 3: 89 total when running `npm run e2e:real` (+5 Phase 26). Visual regression PASS (baselines unchanged; WhatsApp messages render as 'them' bubbles — same CSS path as any non-Me message). No GATE-04 crossing. Self/sender identification deferred to Package 3L.
+
 **Package 3J — WhatsApp TXT Adapter (COMPLETE — merged `f1eca34` 2026-06-05):**
 
-Package 3J adds 91 tests in new `whatsapp-txt-adapter-tests.mjs` (14 suites: API shape, canHandle bracket, canHandle hyphen, canHandle rejects, fixture import, hyphen import, multi-line continuation, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards). Adds 5 smoke assertions to `km-engine-tests.mjs`. Node baseline: 2269. No E2E required (engine-only; no index.html changes). Visual regression not required. No GATE-04 crossing. Engine adapter only; UI wiring pending.
+Package 3J adds 91 tests in new `whatsapp-txt-adapter-tests.mjs` (14 suites: API shape, canHandle bracket, canHandle hyphen, canHandle rejects, fixture import, hyphen import, multi-line continuation, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards). Adds 5 smoke assertions to `km-engine-tests.mjs`. Node baseline: 2269. No E2E required (engine-only; no index.html changes). Visual regression not required. No GATE-04 crossing. Engine adapter only; UI wiring delivered in Package 3K.
 
 **Package 3I — Import Quality Report (COMPLETE — merged `60cdd31` 2026-06-04):**
 
@@ -213,7 +217,7 @@ Before any commit instruction is acted on, the agent must verify:
 
 1. All 17 Node unit suites green (2269 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (84 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (89 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).
