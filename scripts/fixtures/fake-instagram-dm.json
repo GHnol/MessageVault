@@ -1,0 +1,72 @@
+{
+  "participants": [
+    {"name": "Alice Smith"},
+    {"name": "bob_jones_99"}
+  ],
+  "messages": [
+    {
+      "sender_name": "Alice Smith",
+      "timestamp_ms": 1609459200000,
+      "content": "Hey, how have you been?",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "bob_jones_99",
+      "timestamp_ms": 1609459260000,
+      "content": "Really good! Work &amp; life keeping me busy.",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Alice Smith",
+      "timestamp_ms": 1609459320000,
+      "photos": [{"uri": "messages/inbox/bob_jones_99_12345/photos/photo001.jpg", "creation_timestamp": 1609459319}],
+      "type": "Generic"
+    },
+    {
+      "sender_name": "bob_jones_99",
+      "timestamp_ms": 1609459380000,
+      "content": "That&#39;s a great photo!",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Alice Smith",
+      "timestamp_ms": 1609459440000,
+      "videos": [{"uri": "messages/inbox/bob_jones_99_12345/videos/clip001.mp4", "creation_timestamp": 1609459439, "thumbnail": {"uri": "", "creation_timestamp": 0}}],
+      "type": "Generic"
+    },
+    {
+      "sender_name": "bob_jones_99",
+      "timestamp_ms": 1609459500000,
+      "share": {"link": "https://www.instagram.com/p/FakePostId123/", "share_text": "Shared a post"},
+      "type": "Share"
+    },
+    {
+      "sender_name": "Alice Smith",
+      "timestamp_ms": 1609459560000,
+      "content": "&lt;So excited&gt; to see you!",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "bob_jones_99",
+      "timestamp_ms": 1609459620000,
+      "content": "Me too! See you soon.",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Alice Smith",
+      "timestamp_ms": 1609459680000,
+      "content": "This was unsent.",
+      "is_unsent": true,
+      "type": "Generic"
+    },
+    {
+      "timestamp_ms": 1609459740000,
+      "content": "Missing sender name.",
+      "type": "Generic"
+    }
+  ],
+  "title": "bob_jones_99",
+  "is_still_participant": true,
+  "thread_type": "Regular",
+  "thread_path": "inbox/bob_jones_99_12345678901"
+}

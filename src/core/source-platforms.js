@@ -53,11 +53,11 @@
         {
             id: 'instagram-dm',
             label: 'Instagram Direct Messages',
-            status: 'stub',
+            status: 'supported',
             importModes: ['json-export'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'Instagram data export (JSON). Adapter not yet implemented.'
+            notes: 'Instagram data export (JSON). Engine adapter instagram-dm-json-v1 implemented (Package 3O). UI wiring pending a later package.'
         },
         {
             id: 'facebook-messenger',

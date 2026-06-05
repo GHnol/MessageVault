@@ -21,7 +21,6 @@
     }
 
     var STUBS = [
-        makeStub('instagram-dm-json-v1',         'instagram-dm',        'Instagram DM JSON Export v1'),
         makeStub('facebook-messenger-json-v1',   'facebook-messenger',  'Facebook Messenger JSON Export v1'),
         makeStub('telegram-json-v1',             'telegram',            'Telegram Desktop JSON Export v1')
     ];

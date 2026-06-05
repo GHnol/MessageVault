@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3N — Android SMS UI Wiring. Impl `04d30ed`, merged `6d61367` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
+**Status:** `implementation-complete` — Package 3O — Instagram DM JSON Adapter. Branch `feature/instagram-dm-adapter`, base `main` at `62c75fd`. Engine-only. All files written, all tests green (87 new + 5 km-engine smoke = 2450 baseline). Awaiting Coordinator commit authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `6d61367` — merge: add Android SMS XML import routing (Package 3N) |
+| **Active pass** | `Package 3O — Instagram DM JSON Adapter` |
+| **Active branch** | `feature/instagram-dm-adapter` |
+| **main HEAD** | `62c75fd` — docs: sync operating docs after Package 3N completion |
 | **Last completed pass** | `Package 3N — Android SMS UI Wiring` — impl `04d30ed`, merged `6d61367` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3O — Instagram DM JSON Adapter` — IN PROGRESS |
 | **Last closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Prior closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
@@ -32,31 +32,36 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (current pass — Package 3N — Android SMS UI Wiring)
+## Objective (current pass — Package 3O — Instagram DM JSON Adapter)
 
-Package 3N — Android SMS UI Wiring. **COMPLETE — impl `04d30ed`, merged `6d61367` to `main` 2026-06-05.**
+Package 3O — Instagram DM JSON Adapter. **IMPLEMENTATION COMPLETE — awaiting Coordinator commit authorization.**
 
-Branch: `feature/android-sms-ui-wiring` — base: `main` at `ed7e2c5`
+Branch: `feature/instagram-dm-adapter` — base: `main` at `62c75fd`
 
-Delivered:
-- `index.html` — `<script src="src/adapters/android-sms-xml-adapter.js">` tag (after `whatsapp-txt-adapter.js`, before `future-adapter-stubs.js`); `#fileInput` `accept=".txt,.xml"`; Android SMS routing guard in `readTxtFile()` (after WA guard + picker hide, before pipe-delimited fallback): `canHandle(text)` → `import(text)` → assign `result.memories` to `chatMessagesData` → `renderConversation` + `renderImportQualityPanel` → return; minimal copy updates: drop zone text/hint and landing card description now mention `.xml`
-- `scripts/e2e-regression-harness.mjs` — `ANDROID_FIXTURE`, `ANDROID_FIXTURE_COUNT = 9`, `ANDROID_SELF_COUNT = 4` constants; Phase 28 (6 real-files tests): import via file input, chat view visible, count = 9, IQR panel visible, selfMessageCount = 4 (type=2 auto-maps to self), sourcePlatformId = 'android-sms'; state reset at end so Phase 12 continues from TXT state
-- `docs/qa/test-strategy.md` — E2E real-files 95→101; Phase 28 entry; pre-commit baseline updated (18 suites / 2358 Node)
-- `docs/architecture/architecture-roadmap.md` — Package 3N DELIVERED entry
+Files created:
+- `src/adapters/instagram-dm-adapter.js` — `KMEngine.instagramDmAdapter`; ADAPTER_ID `instagram-dm-json-v1`; Instagram DM single-thread JSON export; HTML entity decoder (`&#x...;`, `&#...;`, `&apos;`, `&quot;`, `&lt;`, `&gt;`, `&amp;` last); `hasMedia` covers photos/videos/audio_files/gifs/files/sticker; media + share → attachment-placeholder; senderRole always `contact`; ms-epoch → ISO-8601; `importWarnings` for is_unsent + missing sender_name
+- `scripts/fixtures/fake-instagram-dm.json` — 10-message fake fixture (Alice Smith + bob_jones_99; 8 imported / 2 skipped; 5 text + 3 attachment; HTML entities in 3 content fields)
+- `src/tests/instagram-dm-adapter-tests.mjs` — 87 tests across 15 suites
 
-**Verification results:** 2358 Node tests (18 suites), 0 failed (unchanged). E2E seeded 57/57 (unchanged). E2E real-files 101/101 (+6 Phase 28). Visual regression PASS (baselines unchanged; Android SMS uses same .me/.them bubble CSS). Manual QA 19/19 PASS. No sender picker needed (type=2 auto-maps to senderRole:self). No engine changes.
+Files modified:
+- `src/adapters/future-adapter-stubs.js` — removed instagram-dm-json-v1 stub entry
+- `src/core/source-platforms.js` — instagram-dm status `'stub'` → `'supported'`; notes updated
+- `src/tests/km-engine-tests.mjs` — loads instagram-dm-adapter.js before stubs; updated instagram-dm assertion to `supported`; +5 smoke assertions (111 total)
+- `docs/qa/test-strategy.md` — 2358 → 2450 baseline; 18 → 19 suites; instagram-dm suite row; Package 3O note
+- `docs/architecture/architecture-roadmap.md` — module map updated; Package 3O DELIVERED entry
 
-**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
+**Verification results:** 87/87 instagram-dm-adapter-tests.mjs. 111/111 km-engine-tests.mjs. All 19 Node suites green (2450/2450). start-router: NEEDS_COORDINATOR_DECISION (expected — dirty tree). state-freshness-check: 0 FAILs, 2 cosmetic WARN (hash lag). project-control-sync-validate: 11 PASS. os-self-audit: 324 PASS. Hard exclusion diff: clean.
+
+**Next exact action:** Coordinator authorizes commit and merge. Do not commit without explicit Coordinator instruction.
 
 **Hard exclusions verified:**
-- src/adapters/android-sms-xml-adapter.js: not touched
+- index.html: not touched
+- scripts/e2e-regression-harness.mjs: not touched
 - src/core/normalized-memory.js: not touched
 - src/core/import-adapters.js: not touched
 - src/core/import-quality-report.js: not touched
-- src/adapters/future-adapter-stubs.js: not touched
 - src/products/*: not touched
 - src/state/*: not touched
-- renderConversation(), parseMessages(), applyReactions(), renderImportQualityPanel(): not touched
 - Pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS: not touched
 - Proof panel, Review view, standalone keepsake flows, draft/preflight/lifecycle: not touched
 - No new dependencies installed
