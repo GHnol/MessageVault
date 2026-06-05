@@ -16,19 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-05` (Package 3J completion state-sync)
+**Last updated:** `2026-06-05` (Package 3K completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `6eef338` — docs: sync operating docs after Package 3J completion |
-| Active branch | `feature/whatsapp-txt-ui-wiring` |
-| Active pass | `Package 3K — WhatsApp TXT UI Wiring` — IN PROGRESS |
-| Last completed pass | `Package 3J — WhatsApp TXT Adapter` — impl `96ea7e3`, merged `f1eca34` 2026-06-05 |
-| Last closed package | `Package 3J — WhatsApp TXT Adapter` — FULLY COMPLETE |
-| Next authorized target | Complete Package 3K implementation; await Coordinator commit approval |
-| Test baseline | **2269 Node tests** (17 suites); E2E seeded 57/57; E2E real-files 84/84; visual regression PASS (baseline unchanged) |
-| Package 3J | COMPLETE — merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; 91 new tests; whatsapp platform `supported`; engine-only; no index.html wiring |
+| main HEAD | `a048d0d` — merge: add WhatsApp TXT import routing (Package 3K) |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `Package 3K — WhatsApp TXT UI Wiring` — impl `bbd2097`, merged `a048d0d` 2026-06-05 |
+| Last closed package | `Package 3K — WhatsApp TXT UI Wiring` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **2269 Node tests** (17 suites); E2E seeded 57/57; E2E real-files 89/89; visual regression PASS (baseline unchanged) |
+| Package 3K | COMPLETE — merged `a048d0d` 2026-06-05; WhatsApp TXT import routing in `readTxtFile()`; script tag for `whatsapp-txt-adapter.js`; Phase 26 E2E (5 tests); 9/9 manual QA; no engine changes |
+| Package 3J | COMPLETE — merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; 91 new tests; whatsapp platform `supported`; engine-only; UI wiring delivered in Package 3K |
 | Package 3I | COMPLETE — merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 17/17 browser QA |
 | Package 5C | COMPLETE — merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 27/27 browser QA |
 | Package 3H | COMPLETE — merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book view entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); no engine changes |

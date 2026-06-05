@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3J in progress — whatsapp-txt-adapter)
+**Last updated:** 2026-06-05 (Package 3K complete — WhatsApp TXT UI wiring)
 **Status:** Active
 
 ---
@@ -107,7 +107,7 @@ DELIVERED (Package 3J, merged `f1eca34` 2026-06-05):
 - `src/tests/whatsapp-txt-adapter-tests.mjs` — 91 tests across 14 suites.
 - `src/tests/km-engine-tests.mjs` — loads `whatsapp-txt-adapter.js` before stubs; updated whatsapp platform assertion to `supported`; added 5 smoke assertions.
 
-IN PROGRESS (Package 3K, 2026-06-05 — branch `feature/whatsapp-txt-ui-wiring`):
+DELIVERED (Package 3K, merged `a048d0d` 2026-06-05):
 - `index.html` — added `<script src="src/adapters/whatsapp-txt-adapter.js">` tag in adapter block; `readTxtFile()` now detects WhatsApp format via `KMEngine.whatsappTxtAdapter.canHandle(text)` and routes to `adapter.import(text)` before falling through to the existing pipe-delimited path; both paths call `renderConversation` and `renderImportQualityPanel`.
 - `scripts/e2e-regression-harness.mjs` — Phase 26 (5 real-files tests): WhatsApp fixture import, chat view, message count = 8, importQualityPanel visible, sourcePlatformId = 'whatsapp'; state reset at end so Phase 12 continues from TXT state.
 - Self/sender identification (senderRole = 'self') deferred to Package 3L.

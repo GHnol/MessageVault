@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `implementation-complete — awaiting Coordinator commit approval` — Package 3K — WhatsApp TXT UI Wiring. Branch `feature/whatsapp-txt-ui-wiring` base `main` @ `6eef338`. All QA passed. Stop before commit.
+**Status:** `complete` — Package 3K — WhatsApp TXT UI Wiring. Impl `bbd2097`, merged `a048d0d` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,12 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3K — WhatsApp TXT UI Wiring` |
-| **Active branch** | `feature/whatsapp-txt-ui-wiring` |
-| **main HEAD** | `6eef338` — docs: sync operating docs after Package 3J completion |
-| **Last completed pass** | `Package 3J — WhatsApp TXT Adapter` — impl `96ea7e3`, merged `f1eca34` 2026-06-05 |
-| **Active package** | `Package 3K — WhatsApp TXT UI Wiring` — IN PROGRESS |
-| **Last closed package** | `Package 3J — WhatsApp TXT Adapter` — FULLY COMPLETE — merged `f1eca34` 2026-06-05 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `a048d0d` — merge: add WhatsApp TXT import routing (Package 3K) |
+| **Last completed pass** | `Package 3K — WhatsApp TXT UI Wiring` — impl `bbd2097`, merged `a048d0d` 2026-06-05 |
+| **Active package** | None |
+| **Last closed package** | `Package 3K — WhatsApp TXT UI Wiring` — FULLY COMPLETE — merged `a048d0d` 2026-06-05 |
 | **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -34,7 +34,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (current pass — Package 3K — WhatsApp TXT UI Wiring)
 
-Package 3K — WhatsApp TXT UI Wiring. **IMPLEMENTATION COMPLETE — awaiting Coordinator commit approval.**
+Package 3K — WhatsApp TXT UI Wiring. **COMPLETE — impl `bbd2097`, merged `a048d0d` to `main` 2026-06-05.**
 
 Branch: `feature/whatsapp-txt-ui-wiring` — base: `main` at `6eef338`
 
@@ -46,10 +46,7 @@ Delivered (implementation complete; awaiting Coordinator commit approval):
 
 **Results:** 2269 Node tests, 0 failed (unchanged). E2E seeded 57/57. E2E real-files 89/89 (+5 Phase 26). Visual regression PASS (baselines unchanged). Manual QA PASS (8 rows, Alice header, 0 me / 8 them bubbles, 1 attachment bubble, panel text "8 messages · Jun 2024 · 2 senders · 1 attachment", TXT regression pass, fresh reload panel hidden).
 
-**Next exact action:** Coordinator approves commit. Proposed commit message:
-```
-feat: wire WhatsApp TXT imports into browser import flow
-```
+**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - src/adapters/whatsapp-txt-adapter.js: not touched

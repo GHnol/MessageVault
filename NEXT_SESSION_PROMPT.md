@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3K — WhatsApp TXT UI Wiring — IN PROGRESS. Branch `feature/whatsapp-txt-ui-wiring`. |
-| Branch | `feature/whatsapp-txt-ui-wiring` |
-| main HEAD | `6eef338` — docs: sync operating docs after Package 3J completion |
-| Next action | Run `/start`. Verify implementation complete; run all QA; await Coordinator commit approval. |
+| Resume into | Package 3K COMPLETE — merged `a048d0d` 2026-06-05. No active package. Coordinator decides next. |
+| Branch | `main` |
+| main HEAD | `a048d0d` — merge: add WhatsApp TXT import routing (Package 3K) |
+| Next action | Run `/start`. Await Coordinator authorization for next package. |
+| Package 3K | COMPLETE — `readTxtFile()` WhatsApp detection guard; `whatsapp-txt-adapter.js` script tag; Phase 26 E2E (5 tests); 2269 Node; 57/57 seeded; 89/89 real-files; visual regression PASS; 9/9 manual QA; merged `a048d0d` 2026-06-05 |
 | Package 3J | COMPLETE — `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; 91 new tests (`whatsapp-txt-adapter-tests.mjs`); 5 km-engine smoke tests; 2269 Node; E2E not required; engine-only; whatsapp platform `supported`; merged `f1eca34` 2026-06-05 |
 | Package 3I | COMPLETE — `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 2173 Node; 57/57 seeded; 84/84 real-files; 17/17 browser QA; merged `60cdd31` 2026-06-04 |
 | Package 5C | COMPLETE — user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA; merged `4733c32` 2026-06-04 |
