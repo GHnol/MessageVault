@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-03 (Package 3G complete)
+**Last updated:** 2026-06-04 (Package 5C implementation complete — pending commit)
 **Status:** Active
 
 ---
@@ -84,6 +84,12 @@ DELIVERED (Package 3H, 2026-06-03):
 - `index.html` `showBookView()` — auto-runs PAGINATION_STABILITY book check on entry for in-progress drafts: advances in-progress → ready-for-preflight → preflight-passed/failed. Uses `ProductPreflight.run('PAGINATION_STABILITY', inputs)` + `createReport([result])` only; `runAll()` not called; 9 vendor-gated checks remain not-applicable.
 - `index.html` `renderBookProofPanel()` — gates "Mark ready for proof review" on all real groups reaching preflight-passed; shows user-facing "Book check complete" / "Book check needs attention" copy (no "preflight" in visible text); no new approve/revoke/request-changes controls.
 - E2E Phase 23 (6 tests): book-check auto-advance, draft status verification, proof panel button gate, idempotency, save/restore, ProofApprovalUX independence.
+
+DELIVERED (Package 5C, 2026-06-04 — pending commit):
+- `src/products/proof-approval-state.js` — added `pending-review→none` (user withdrawal) to allowed transition list; `transition()` handles withdrawal: `submittedAt` reset to `null`, `createdAt` preserved, `updatedAt` updated; no prohibited fields. Local proof state only — does not cross GATE-04.
+- `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)` method (mirrors `submitForReview` in reverse; result envelope); updated `getAllowedUserActions('pending-review')` to return `['withdraw-submission']` instead of `[]`.
+- `index.html` `renderBookProofPanel()` — pending-review branch now includes "Cancel proof review" button (`#bookProofCancelBtn`) and hint text "Removes local proof review marking. No files were sent."; cancel button click handler calls `UX.withdrawSubmission('message-book')` + immediate re-render; added `.book-proof-cancel-btn` CSS (light + dark mode).
+- E2E Phase 24 (4 tests): pending-review DOM state after submit, cancel button presence, withdrawal flow (cancel → panel returns to submit-ready), save/restore with pending-review proof state.
 
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)

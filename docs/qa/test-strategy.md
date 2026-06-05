@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G).
-**Last updated:** 2026-06-03 (America/New_York)
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C).
+**Last updated:** 2026-06-04 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -16,7 +16,7 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 3F — confirmed baseline 2039):**
+**Suites and counts (as of Package 5C — confirmed baseline 2082):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
@@ -30,15 +30,15 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `prototype-preview-registry-tests.mjs` | 215 | Preview registry + resolver (Package 4B) |
 | `product-experience-readiness-tests.mjs` | 337 | Combined readiness resolver across all 4 product layers (Package 4C) |
 | `product-experience-consumer-tests.mjs` | 35 | Null-safe app-side bridge (Package 4D) |
-| `proof-approval-state-tests.mjs` | 137 | Proof approval state model and transitions (Package 5A) |
-| `proof-approval-ux-tests.mjs` | 77 | Proof approval UX layer: initialize, submit, serialize/restore, prohibited fields (Package 5B) |
+| `proof-approval-state-tests.mjs` | 155 | Proof approval state model, transitions, withdrawal (pending-review→none) — Package 5A + 5C |
+| `proof-approval-ux-tests.mjs` | 102 | Proof approval UX: initialize, submit, withdraw, serialize/restore, getAllowedUserActions, prohibited fields — Package 5B + 5C |
 | `product-draft-state-tests.mjs` | 90 | ProductDraft lifecycle state machine, transitions, semantic guards (Package 3E) |
 | `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
 | `product-draft-lifecycle-tests.mjs` | 104 | Lifecycle coordinator API, all lifecycle paths, mutation model, duplicate handling, semantic guards (Package 3F) |
 
-**Total: 2039 tests.** All must remain green before any commit.
+**Total: 2082 tests.** All must remain green before any commit.
 
-Note: 1935 was the Package 3E baseline. Package 3F added `product-draft-lifecycle-tests.mjs` (104 tests), raising the confirmed baseline to 2039.
+Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (+18 proof-approval-state, +25 proof-approval-ux), raising the confirmed baseline to 2082.
 
 **Run:**
 
@@ -63,7 +63,7 @@ Or run all suites individually as part of pre-commit verification.
 
 **What:** Headless Chromium running the actual `index.html` against deterministic seed data (`scripts/e2e-test-data.mjs`).
 
-**Coverage:** Phases 1–10 + 20 + 21 + 22 + 23 of `scripts/e2e-regression-harness.mjs`. **53 tests.**
+**Coverage:** Phases 1–10 + 20 + 21 + 22 + 23 + 24 of `scripts/e2e-regression-harness.mjs`. **57 tests.**
 
 **Run:**
 
@@ -191,15 +191,19 @@ Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regres
 
 Package 3H adds no new Node unit tests (zero engine module changes). E2E Phase 23 adds 6 seeded tests covering draft book-check auto-advance, proof panel gating, idempotency, save/restore, and ProofApprovalUX independence. Phase 22 tests updated to reflect the new expected state (draft reaches `preflight-passed` on book view entry). Visual regression baselines updated for Scenario A (proof panel appearance changes). Layer 2 target: 53 seeded tests. Layer 3 unchanged: 70 real-files tests.
 
+**Package 5C — Proof Panel User Withdrawal and UX Completion (IN PROGRESS — branch `feature/proof-panel-user-withdrawal`, 2026-06-04):**
+
+Package 5C adds 18 tests to `proof-approval-state-tests.mjs` (Suite 4 +1, Suite 5 −1, new Suite 15 withdrawal transition) and 25 tests to `proof-approval-ux-tests.mjs` (Suite 1 +1 API shape, Suite 8 +2 updated pending-review, new Suites 16+16b withdrawSubmission). Node baseline: 2082. E2E Phase 24 adds 4 seeded tests: pending-review DOM state, cancel button existence, withdrawal flow (cancel → submit button restored), save/restore with pending-review proof state. Layer 2 target: 57 seeded tests. Layer 3: 80 total when running `npm run e2e:real` (57 seeded + 23 real-files; verified in Package 5C verification pass). Visual regression PASS (proof panel not in capture zone; baselines unchanged). No GATE-04 boundary crossed. Local proof withdrawal only.
+
 ---
 
 ## Pre-commit baseline
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 15 Node unit suites green (2039 tests).
-2. If `index.html` or `src/` changed: E2E seeded green (53 tests).
-3. If real-file paths changed: E2E real-files green (70 total).
+1. All 15 Node unit suites green (2082 tests).
+2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
+3. If real-file paths changed: E2E real-files green (80 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

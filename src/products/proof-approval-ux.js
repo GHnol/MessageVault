@@ -45,8 +45,20 @@
         return _statusLabels[status] || 'Unknown status';
     }
 
+    function withdrawSubmission(productTypeId) {
+        var current = _states[productTypeId];
+        if (!current) {
+            return { success: false, error: 'not-initialized: ' + productTypeId, state: null };
+        }
+        var result = KMEngine.ProofApprovalState.transition(current, 'none');
+        if (!result.success) return result;
+        _states[productTypeId] = result.state;
+        return { success: true, error: null, state: _states[productTypeId] };
+    }
+
     function getAllowedUserActions(status) {
         if (status === 'none') return ['submit-for-review'];
+        if (status === 'pending-review') return ['withdraw-submission'];
         return [];
     }
 
@@ -80,6 +92,7 @@
         initialize:           initialize,
         getState:             getState,
         submitForReview:      submitForReview,
+        withdrawSubmission:   withdrawSubmission,
         getStatusLabel:       getStatusLabel,
         getAllowedUserActions: getAllowedUserActions,
         serialize:            serialize,

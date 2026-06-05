@@ -13,6 +13,7 @@
 
     var _allowed = [
         ['none',               'pending-review'],
+        ['pending-review',     'none'],
         ['pending-review',     'approved'],
         ['pending-review',     'changes-requested'],
         ['changes-requested',  'pending-review'],
@@ -83,6 +84,8 @@
 
         if (from === 'none' && toStatus === 'pending-review') {
             next.submittedAt = now;
+        } else if (from === 'pending-review' && toStatus === 'none') {
+            next.submittedAt = null;
         } else if (from === 'pending-review' && toStatus === 'approved') {
             next.approvedAt = now;
         } else if (from === 'pending-review' && toStatus === 'changes-requested') {

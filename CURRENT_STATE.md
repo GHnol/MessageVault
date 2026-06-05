@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-03` (Package 3H completion state-sync)
+**Last updated:** `2026-06-04` (Package 5C implementation complete — pending commit authorization)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `69ab20e` — merge: sync operating docs after Package 3H completion |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `25bee3e` — docs: correct active branch after Package 3H state sync |
+| Active branch | `feature/proof-panel-user-withdrawal` |
+| Active pass | `Package 5C — Proof Panel User Withdrawal and UX Completion` — implementation complete 2026-06-04; pending Coordinator commit approval |
 | Last completed pass | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — impl `c0ee68d`, merged `1297f92` 2026-06-03 |
 | Last closed package | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE |
-| Next authorized target | Coordinator decides next package or operating action |
-| Test baseline | **2039 Node tests** (15 suites); E2E seeded 53/53; E2E real-files 76/76; visual regression PASS (baseline unchanged) |
+| Next authorized target | Coordinator approves Package 5C commit; then decides next package |
+| Test baseline | **2082 Node tests** (15 suites, +43 from Package 5C); E2E seeded 57/57 (+4 Phase 24); E2E real-files 76/76; visual regression PASS (baseline unchanged) |
+| Package 5C | IN PROGRESS — `feature/proof-panel-user-withdrawal`; proof panel withdrawal + cancel button + Phase 24 E2E; 2082 Node / 57 E2E seeded — pending commit |
 | Package 3H | COMPLETE — merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book view entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); no engine changes |
 | Package 3G | COMPLETE — merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView wiring; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
 | Package 3F | COMPLETE — merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; engine layer; in-place mutation of `group.productDrafts`; no app code |
