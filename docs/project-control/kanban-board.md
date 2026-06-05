@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-04 (America/New_York — Package 5C completion)
+**Last updated:** 2026-06-04 (America/New_York — Package 3I completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 5C COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3I COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 5C COMPLETE 2026-06-04; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3I COMPLETE 2026-06-04; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3I — Import Quality Report** · Development · Ph3 · implementation `c0c8f7a`, merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 2173 Node; 84/84 real-files; 17/17 browser QA — COMPLETE
 - **Package 5C — Proof Panel User Withdrawal and UX Completion** · Development · Ph12 · implementation `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA — COMPLETE
 - **Package 3H — Draft-Preflight Status Surface and Proof Panel Gate** · Development · Ph12 · implementation `c0ee68d`, merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); 2039 Node tests; E2E 53/53 seeded — COMPLETE
 - **Package 3G — Session UI Wiring for ProductDraft Lifecycle** · Development · Ph12 · implementation `05f4048`, merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E (6 tests); 2039 Node tests; E2E 47/47 seeded — COMPLETE

@@ -1,6 +1,6 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-02
+**Last updated:** 2026-06-04
 **Updated by:** Claude Code (post-Package-3E state-sync)
 **Status:** Active
 
@@ -484,12 +484,31 @@ What this does NOT deliver: approve/request-changes/revoke admin UI, PDF, checko
 
 ---
 
+### Package 3I — Import Quality Report (DEF-12 activated)
+
+**Branch:** `feature/import-quality-report`
+**Status:** COMPLETE — merged to main (feature: `c0c8f7a`, merge: `60cdd31` 2026-06-04)
+
+Delivered:
+- `src/core/import-quality-report.js` — `KMEngine.ImportQualityReport`; `compute(memories)` pure function; returns totalMessages, dateRange, uniqueSenderCount, senderList, selfMessageCount, contactMessageCount, attachmentOnlyCount, messagesWithReactionsCount, totalReactionCount, sourcePlatformId, messagesWithoutTimestamp, messagesWithoutText; no DOM, no side effects, Node-testable; no estimated pages or volumes
+- `src/tests/import-quality-report-tests.mjs` — 91 tests across 12 suites; covers API shape, all metric fields, edge cases, semantic guards
+- `index.html` — script tag for `import-quality-report.js`; `#importQualityPanel` div between search bar and chat messages; CSS for `.import-quality-inner` and `.import-quality-chip` (light + dark mode); `renderImportQualityPanel(memories)` called from `readTxtFile()` and `openConversation()` only (not restore path); exposed on `window.__km`
+- `scripts/e2e-regression-harness.mjs` — Phase 25 (4 tests in real-files block): panel visible, correct count, date range, hidden on fresh load
+
+**Tests: 2173 Node unit tests, 0 failed** | **E2E seeded: 57/57** | **E2E real-files: 84/84** | **Browser QA: 17/17 PASS** | **Visual regression: PASS (baselines unchanged)**
+
+What this does NOT deliver: estimated pages, estimated volumes, media file counts (media[] always empty), proof/draft/readiness scope, GATE-04, checkout, PDF, vendor, manufacturing, admin review flow.
+
+---
+
 ### Coordinator decides next package — (current position)
 
-**Status:** No package authorized. Package 5C COMPLETE — Coordinator decides the next step.
+**Status:** No package authorized. Package 3I COMPLETE — Coordinator decides the next step.
 
 Next package candidates (from repo docs):
-- **Further Phase 12 continuation (below GATE-04)** — e.g. proof panel status display refinements; must stay below GATE-04 (full proof UX requires PDF pipeline + checkout)
+- **WhatsApp adapter (DEF-01)** — engine layer; pipe-delimited .txt format; no external gate; medium effort
+- **Android SMS adapter (DEF-02)** — engine layer; XML backup format; no external gate; medium effort
+- **Further Phase 12 continuation (below GATE-04)** — proof panel status display refinements; must stay below GATE-04
 - **Preflight runners for vendor-gated checks** — engine layer; gated until vendor confirmed
 - **Another authorized direction** — Coordinator decision required
 

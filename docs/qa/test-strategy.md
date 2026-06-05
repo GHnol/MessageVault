@@ -188,7 +188,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3I — Import Quality Report (IN PROGRESS — branch `feature/import-quality-report`, 2026-06-04):**
+**Package 3I — Import Quality Report (COMPLETE — merged `60cdd31` 2026-06-04):**
 
 Package 3I adds 91 tests in new `import-quality-report-tests.mjs` (12 suites: API shape, empty input, totalMessages, dateRange, null/invalid timestamps, uniqueSenderCount/senderList, self/contact split, attachmentOnlyCount, reactions, sourcePlatformId, all-attachment corpus, semantic guards). Node baseline: 2173. E2E Phase 25 adds 4 real-files tests: panel visible after txt import, correct count, date range present, panel hidden on fresh load (in real-files block after Phase 11). Layer 2 unchanged: 57 seeded. Layer 3: 84 total when running `npm run e2e:real` (57 seeded + 23 real-files + 4 Phase 25). Visual regression PASS (panel above page canvas, not in capture zone; baselines unchanged). No GATE-04 crossing. Pure additive import flow enhancement.
 

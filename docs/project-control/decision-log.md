@@ -66,7 +66,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 5C | Open | Coordinator | Package 5C COMPLETE (merged `4733c32` 2026-06-04); user withdrawal (pending-review→none) + cancel button delivered; Packages 5A–5C form the proof approval foundation-to-UX chain; next candidates: further Phase 12 continuation (below GATE-04), preflight runners for 9 vendor-gated checks, or another authorized direction |
+| Next product package after Package 3I | Open | Coordinator | Package 3I COMPLETE (merged `60cdd31` 2026-06-04); import quality report delivered (DEF-12 activated); next candidates: WhatsApp adapter (DEF-01), Android SMS adapter (DEF-02), further Phase 12 continuation (below GATE-04), preflight runners for 9 vendor-gated checks, or another authorized direction |
 
 ## Deferred
 

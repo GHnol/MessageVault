@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-04` (Package 3I implementation complete — pending commit authorization)
+**Last updated:** `2026-06-04` (Package 3I completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `725585c` — merge: sync operating docs after Package 5C completion |
-| Active branch | `feature/import-quality-report` |
-| Active pass | `Package 3I — Import Quality Report` — implementation complete 2026-06-04; pending Coordinator commit approval |
-| Last completed pass | `Package 5C — Proof Panel User Withdrawal and UX Completion` — impl `7b00f31`, merged `4733c32` 2026-06-04 |
-| Last closed package | `Package 5C — Proof Panel User Withdrawal and UX Completion` — FULLY COMPLETE |
-| Next authorized target | Coordinator approves Package 3I commit; then decides next package |
-| Test baseline | **2173 Node tests** (16 suites, +91 from Package 3I); E2E seeded 57/57; E2E real-files 84/84 (+4 Phase 25); visual regression PASS (baseline unchanged) |
-| Package 3I | IN PROGRESS — `feature/import-quality-report`; import quality report panel + engine module + Phase 25 E2E; 2173 Node / 84/84 real-files — pending commit |
+| main HEAD | `60cdd31` — merge: add import quality report after successful message import |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `Package 3I — Import Quality Report` — impl `c0c8f7a`, merged `60cdd31` 2026-06-04 |
+| Last closed package | `Package 3I — Import Quality Report` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **2173 Node tests** (16 suites); E2E seeded 57/57; E2E real-files 84/84; visual regression PASS (baseline unchanged) |
+| Package 3I | COMPLETE — merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel` after txt/chat.db import; Phase 25 E2E (4 tests); 17/17 browser QA |
 | Package 5C | COMPLETE — merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 27/27 browser QA |
 | Package 3H | COMPLETE — merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book view entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); no engine changes |
 | Package 3G | COMPLETE — merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView wiring; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
