@@ -55,6 +55,30 @@
                 color: #8e8e93;
             }
             .import-quality-chip strong { color: #e5e5ea; }
+            .sender-picker-inner {
+                background: #1c1c1e;
+                color: #8e8e93;
+            }
+            .sender-chip {
+                background: #2c2c2e;
+                border-color: #48484a;
+                color: #e5e5ea;
+            }
+            .sender-chip:hover {
+                border-color: #007aff;
+                background: #1a2d45;
+            }
+            .sender-chip.active {
+                background: #007aff;
+                border-color: #007aff;
+                color: #ffffff;
+            }
+            .sender-chip.skip-chip { color: #8e8e93; }
+            .sender-chip.skip-chip.active {
+                background: #636366;
+                border-color: #636366;
+                color: #ffffff;
+            }
         }
 
         body {
@@ -817,6 +841,58 @@
         }
         .import-quality-chip strong {
             color: #1d1d1f;
+        }
+
+        .whatsapp-sender-picker {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 6px 16px 0;
+        }
+        .sender-picker-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 8px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #636366;
+        }
+        .sender-picker-label {
+            white-space: nowrap;
+            margin-right: 4px;
+        }
+        .sender-chip {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #c7c7cc;
+            background: #ffffff;
+            color: #1d1d1f;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            white-space: nowrap;
+        }
+        .sender-chip:hover {
+            border-color: #007aff;
+            background: #f0f7ff;
+        }
+        .sender-chip.active {
+            background: #007aff;
+            border-color: #007aff;
+            color: #ffffff;
+        }
+        .sender-chip.skip-chip {
+            border-style: dashed;
+            color: #636366;
+        }
+        .sender-chip.skip-chip.active {
+            background: #636366;
+            border-color: #636366;
+            color: #ffffff;
         }
 
         .chat-messages {
@@ -3391,6 +3467,7 @@
             <button type="button" class="search-close" id="searchClose">Done</button>
         </div>
         <div class="import-quality-panel" id="importQualityPanel" style="display:none;"></div>
+        <div class="whatsapp-sender-picker" id="whatsappSenderPicker" style="display:none;"></div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="selection-bar" id="selectionBar">
             <span class="selection-count" id="selectionCount"></span>
@@ -3583,8 +3660,9 @@
         const txtBack = document.getElementById('txtBack');
         const txtDropZone = document.getElementById('txtDropZone');
         const fileInput = document.getElementById('fileInput');
-        const txtStatus           = document.getElementById('txtStatus');
-        const importQualityPanel  = document.getElementById('importQualityPanel');
+        const txtStatus             = document.getElementById('txtStatus');
+        const importQualityPanel    = document.getElementById('importQualityPanel');
+        const whatsappSenderPicker  = document.getElementById('whatsappSenderPicker');
 
         // Picker
         const contactList = document.getElementById('contactList');
@@ -3864,6 +3942,61 @@
         }
 
         /* ─────────────────────────────────────────────
+           WhatsApp self-identification sender picker
+        ───────────────────────────────────────────── */
+        function showWhatsAppSenderPicker(memories) {
+            if (!whatsappSenderPicker) return;
+            const seen = {};
+            const senders = [];
+            for (var i = 0; i < memories.length; i++) {
+                var s = memories[i].sender;
+                if (s && !seen[s]) { seen[s] = true; senders.push(s); }
+            }
+            if (senders.length === 0) { whatsappSenderPicker.style.display = 'none'; return; }
+
+            var chips = senders.map(function (name) {
+                return '<button type="button" class="sender-chip" data-sender="' +
+                    name.replace(/"/g, '&quot;') + '">' +
+                    name.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                    '</button>';
+            }).join('');
+            chips += '<button type="button" class="sender-chip skip-chip" data-sender="">Skip</button>';
+
+            whatsappSenderPicker.innerHTML =
+                '<div class="sender-picker-inner">' +
+                '<span class="sender-picker-label">Which sender is you?</span>' +
+                chips +
+                '</div>';
+            whatsappSenderPicker.style.display = '';
+
+            whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var name = btn.getAttribute('data-sender') || null;
+                    applyWhatsAppSelfSender(name);
+                });
+            });
+        }
+
+        function applyWhatsAppSelfSender(senderName) {
+            var data = window.chatMessagesData;
+            if (!Array.isArray(data)) return;
+            for (var i = 0; i < data.length; i++) {
+                data[i].senderRole = (senderName && data[i].sender === senderName) ? 'self' : 'contact';
+            }
+            renderConversation(data);
+            renderImportQualityPanel(data);
+            if (whatsappSenderPicker) {
+                whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
+                    var btnSender = btn.getAttribute('data-sender') || null;
+                    var isActive = (senderName === null)
+                        ? (btnSender === null || btnSender === '')
+                        : btnSender === senderName;
+                    btn.classList.toggle('active', isActive);
+                });
+            }
+        }
+
+        /* ─────────────────────────────────────────────
            .txt flow (PRESERVED — unchanged logic)
         ───────────────────────────────────────────── */
         function readTxtFile(file) {
@@ -3879,7 +4012,13 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    showWhatsAppSenderPicker(result.memories);
                     return;
+                }
+
+                if (whatsappSenderPicker) {
+                    whatsappSenderPicker.style.display = 'none';
+                    whatsappSenderPicker.innerHTML = '';
                 }
 
                 const messages = parseMessages(text);
@@ -4626,7 +4765,7 @@
         function renderConversation(messages) {
             chatMessages.innerHTML = '';
 
-            const other = messages.find(m => m.sender !== 'Me')?.sender || 'Conversation';
+            const other = messages.find(m => !(m.senderRole === 'self' || m.sender === 'Me'))?.sender || 'Conversation';
             chatHeaderName.innerText = other;
             chatHeaderMeta.innerText = `${messages.length.toLocaleString()} messages`;
 
@@ -4668,7 +4807,7 @@
                 }
 
                 const row = document.createElement('div');
-                row.className = `message-row ${m.sender === 'Me' ? 'me' : 'them'} ${groupType} selectable`;
+                row.className = `message-row ${(m.senderRole === 'self' || m.sender === 'Me') ? 'me' : 'them'} ${groupType} selectable`;
                 row.setAttribute('data-index', i);
 
                 const wrap = document.createElement('div');
@@ -8587,6 +8726,10 @@ ${keepsakeFooter}
             // Apply restored state
             window.chatMessagesData = appState.memories;
             keepsakeGroups          = appState.groups;
+            if (whatsappSenderPicker) {
+                whatsappSenderPicker.style.display = 'none';
+                whatsappSenderPicker.innerHTML = '';
+            }
 
             selectedIndices.clear();
             for (const idx of appState.selectedIndices) {
@@ -8715,6 +8858,8 @@ ${keepsakeFooter}
             },
             // Package 3I: import quality report bridge for E2E testability
             renderImportQualityPanel,
+            // Package 3L: WhatsApp self-id bridge for E2E testability
+            applyWhatsAppSelfSender,
         };
 
     </script>

@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95).
 **Last updated:** 2026-06-05 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -87,9 +87,9 @@ cd scripts && npm run e2e:headed
 
 ### Layer 3 — E2E real-files harness
 
-**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 — real .txt import, WhatsApp .txt import, import quality report, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
+**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 + 27 — real .txt import, WhatsApp .txt import, WhatsApp self-identification sender picker, import quality report, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
 
-**Coverage:** 32 tests (31 always + 1 conditional on local chat.db). Combined seeded + real-files: **89**.
+**Coverage:** 38 tests (37 always + 1 conditional on local chat.db). Combined seeded + real-files: **95**.
 
 **Run:**
 
@@ -189,9 +189,13 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3K — WhatsApp TXT UI Wiring (IN PROGRESS — branch `feature/whatsapp-txt-ui-wiring`, 2026-06-05):**
+**Package 3L — WhatsApp Self-Identification (IN PROGRESS — branch `feature/whatsapp-self-id`, 2026-06-05):**
 
-Package 3K adds no new Node unit tests (no new engine module). Adds E2E Phase 26 (5 real-files tests): WhatsApp fixture imports via TXT file input; chat view visible; message count = 8; importQualityPanel visible and non-empty; sourcePlatformId = 'whatsapp'. Node baseline unchanged: 2269. Layer 2 unchanged: 57 seeded. Layer 3: 89 total when running `npm run e2e:real` (+5 Phase 26). Visual regression PASS (baselines unchanged; WhatsApp messages render as 'them' bubbles — same CSS path as any non-Me message). No GATE-04 crossing. Self/sender identification deferred to Package 3L.
+Package 3L adds no new Node unit tests (no new engine module; senderRole is already tested in Suite 7 of `import-quality-report-tests.mjs`). Adds E2E Phase 27 (6 real-files tests): sender picker visible after WhatsApp import; Alice and Bob chips present; selecting Alice yields 4 `.me` rows; selfMessageCount updates to 4; selecting Skip reverts all to `.them`; re-importing non-WA TXT hides picker. Node baseline unchanged: 2269. Layer 2 unchanged: 57 seeded. Layer 3: 95 total when running `npm run e2e:real` (+6 Phase 27). Visual regression PASS expected (sender picker is in the import UI above the chat canvas; baselines unaffected). No GATE-04 crossing. No engine changes.
+
+**Package 3K — WhatsApp TXT UI Wiring (COMPLETE — merged `a048d0d` 2026-06-05):**
+
+Package 3K adds no new Node unit tests (no new engine module). Adds E2E Phase 26 (5 real-files tests): WhatsApp fixture imports via TXT file input; chat view visible; message count = 8; importQualityPanel visible and non-empty; sourcePlatformId = 'whatsapp'. Node baseline unchanged: 2269. Layer 2 unchanged: 57 seeded. Layer 3: 89 total when running `npm run e2e:real` (+5 Phase 26). Visual regression PASS (baselines unchanged; WhatsApp messages render as 'them' bubbles — same CSS path as any non-Me message). No GATE-04 crossing. Self/sender identification delivered in Package 3L.
 
 **Package 3J — WhatsApp TXT Adapter (COMPLETE — merged `f1eca34` 2026-06-05):**
 
@@ -217,7 +221,7 @@ Before any commit instruction is acted on, the agent must verify:
 
 1. All 17 Node unit suites green (2269 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (89 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (95 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

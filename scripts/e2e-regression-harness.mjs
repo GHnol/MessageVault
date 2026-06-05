@@ -57,6 +57,8 @@ const TXT_FIXTURE_COUNT = 5; // matches fake-conversation.txt
 
 const WA_FIXTURE        = path.join(__dir, 'fixtures', 'fake-whatsapp-chat.txt');
 const WA_FIXTURE_COUNT  = 8; // 9 parsed lines minus 1 system-message skip
+const WA_ALICE_COUNT    = 4; // Alice sends 4 of the 8 imported messages
+const WA_BOB_COUNT      = 4; // Bob sends 4 of the 8 imported messages
 
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
@@ -1182,6 +1184,72 @@ async function main() {
             await page.click('#txtUploadCard');
             await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
             await waitForChatView(page);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 27 — WhatsApp self-identification sender picker (Package 3L)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 27 — WhatsApp self-identification sender picker ──\n');
+
+        await harness.run('after WhatsApp import #whatsappSenderPicker is visible and non-empty', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(WA_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('whatsappSenderPicker');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#whatsappSenderPicker should be visible and non-empty after WhatsApp import');
+        });
+
+        await harness.run('sender picker chips include Alice and Bob', async page => {
+            const names = await page.evaluate(() => {
+                const chips = document.querySelectorAll('#whatsappSenderPicker .sender-chip:not(.skip-chip)');
+                return Array.from(chips).map(c => c.textContent.trim());
+            });
+            assert(names.includes('Alice'), `Expected Alice chip, got: ${names.join(', ')}`);
+            assert(names.includes('Bob'),   `Expected Bob chip, got: ${names.join(', ')}`);
+        });
+
+        await harness.run('selecting Alice flips exactly WA_ALICE_COUNT rows to .me', async page => {
+            await page.evaluate(() => window.__km.applyWhatsAppSelfSender('Alice'));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === WA_ALICE_COUNT,
+                `Expected ${WA_ALICE_COUNT} .me rows after selecting Alice, got ${meCount}`);
+        });
+
+        await harness.run('selecting Alice updates selfMessageCount via ImportQualityReport', async page => {
+            const selfCount = await page.evaluate(() => {
+                const IQR = window.KMEngine && window.KMEngine.ImportQualityReport;
+                const data = window.chatMessagesData || [];
+                if (!IQR || !data.length) return -1;
+                return IQR.compute(data).selfMessageCount;
+            });
+            assert(selfCount === WA_ALICE_COUNT,
+                `Expected selfMessageCount ${WA_ALICE_COUNT} after selecting Alice, got ${selfCount}`);
+        });
+
+        await harness.run('selecting Skip reverts all messages to .them', async page => {
+            await page.evaluate(() => window.__km.applyWhatsAppSelfSender(null));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === 0, `Expected 0 .me rows after Skip, got ${meCount}`);
+        });
+
+        await harness.run('re-importing non-WhatsApp TXT hides the sender picker', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('whatsappSenderPicker');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#whatsappSenderPicker should be hidden after non-WhatsApp TXT import');
         });
 
         // ─────────────────────────────────────────────────────────────────────
