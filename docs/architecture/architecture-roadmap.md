@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3M in progress — Android SMS XML adapter)
+**Last updated:** 2026-06-05 (Package 3M complete — Android SMS XML adapter)
 **Status:** Active
 
 ---
@@ -119,7 +119,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3M, branch `feature/android-sms-xml-adapter`):
+DELIVERED (Package 3M, merged `1228f41` 2026-06-05):
 - `src/adapters/android-sms-xml-adapter.js` — `KMEngine.androidSmsAdapter`; ADAPTER_ID `android-sms-xml-v1`; SMS Backup & Restore XML format; regex-based DOM-free parser (works in Node without jsdom); `canHandle` detects `<smses>` root with `<sms\b` or `<mms\b` message elements; `type=1` → senderRole `contact`, `type=2` → senderRole `self`; MMS elements normalized as attachment-placeholder (conservative); millisecond-epoch timestamps converted to ISO-8601; `importWarnings` for missing sender/address; no DOM, no external dependencies; engine-only.
 - `src/adapters/future-adapter-stubs.js` — removed `android-sms-xml-v1` stub entry.
 - `src/core/source-platforms.js` — android-sms platform `status: 'stub'` → `'supported'`; notes updated.

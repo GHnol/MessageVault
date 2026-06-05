@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in_progress` — Package 3M — Android SMS XML Adapter. Branch `feature/android-sms-xml-adapter`. Implementation complete. Awaiting Coordinator commit approval.
+**Status:** `complete` — Package 3M — Android SMS XML Adapter. Impl `e5bc179`, merged `1228f41` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,14 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Package 3M — Android SMS XML Adapter |
-| **Active branch** | `feature/android-sms-xml-adapter` |
-| **Branch base** | `main` at `b28979c` |
-| **main HEAD** | `b28979c` — docs: sync operating docs after Package 3L completion |
-| **Last completed pass** | `Package 3L — WhatsApp Self-Identification` — impl `7540bc6`, merged `16d0ca6` 2026-06-05 |
-| **Active package** | Package 3M — Android SMS XML Adapter — IN PROGRESS |
-| **Last closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
-| **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `1228f41` — merge: add Android SMS XML adapter (Package 3M) |
+| **Last completed pass** | `Package 3M — Android SMS XML Adapter` — impl `e5bc179`, merged `1228f41` 2026-06-05 |
+| **Active package** | None |
+| **Last closed package** | `Package 3M — Android SMS XML Adapter` — FULLY COMPLETE — merged `1228f41` 2026-06-05 |
+| **Prior closed package** | `Package 3L — WhatsApp Self-Identification` — FULLY COMPLETE — merged `16d0ca6` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -35,7 +34,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (current pass — Package 3M — Android SMS XML Adapter)
 
-Package 3M — Android SMS XML Adapter. **IN PROGRESS — branch `feature/android-sms-xml-adapter`. Implementation complete. Awaiting Coordinator commit approval.**
+Package 3M — Android SMS XML Adapter. **COMPLETE — impl `e5bc179`, merged `1228f41` to `main` 2026-06-05.**
 
 Branch: `feature/android-sms-xml-adapter` — base: `main` at `b28979c`
 
@@ -51,7 +50,7 @@ Delivered:
 
 **Verification results:** 84 new tests + 5 km-engine smoke tests = 89 new tests. All 18 test suites green (2358/2358). No E2E required (engine-only; same precedent as Package 3J). No visual regression required. Hard exclusion diff confirmed empty.
 
-**Next exact action:** Coordinator reviews implementation and approves commit. Do not commit without explicit approval. Do not push without explicit instruction.
+**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - index.html: not touched
@@ -495,9 +494,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3M — implementation complete on branch `feature/android-sms-xml-adapter`. Coordinator reviews and approves commit. After commit approval, run pre-commit verification gate (`/precommit`), then commit, then merge, then state-sync.
+Package 3M COMPLETE — impl `e5bc179`, merged `1228f41` 2026-06-05. State-sync complete.
 
-Do not commit without explicit Coordinator approval. Do not push without explicit instruction. No external mutations authorized.
+Coordinator decides:
+- Authorize next development package, or
+- Authorize any other next direction
+
+Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

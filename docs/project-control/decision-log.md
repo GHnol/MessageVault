@@ -66,7 +66,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 3J | Open | Coordinator | Package 3J COMPLETE (merged `f1eca34` 2026-06-05); WhatsApp TXT adapter delivered (DEF-01 activated); next candidates: WhatsApp UI wiring (Package 3K), Android SMS adapter (DEF-02), further Phase 12 continuation (below GATE-04), preflight runners for 9 vendor-gated checks, or another authorized direction |
+| Next product package after Package 3M | Open | Coordinator | Package 3M COMPLETE (merged `1228f41` 2026-06-05); Android SMS adapter delivered (DEF-02 activated); 3J WhatsApp + 3K/3L WA UI + 3M Android SMS all complete; next candidates: Android SMS UI wiring, Instagram DM adapter (DEF-03), Facebook Messenger adapter (DEF-04), Telegram adapter (DEF-05), further Phase 12, or another authorized direction |
 
 ## Deferred
 

@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-05 (America/New_York — Package 3L completion)
+**Last updated:** 2026-06-05 (America/New_York — Package 3M completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3L COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3M COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3L COMPLETE 2026-06-05; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3M COMPLETE 2026-06-05; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3M — Android SMS XML Adapter** · Development / Engine · Ph3 · implementation `e5bc179`, merged `1228f41` 2026-06-05; `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; android-sms platform `supported`; 84 new tests + 5 km-engine smoke; 2358 Node; engine-only; no UI wiring — COMPLETE
 - **Package 3L — WhatsApp Self-Identification** · Development / UI · Ph3 · implementation `7540cc6`, merged `16d0ca6` 2026-06-05; `#whatsappSenderPicker` inline picker; `showWhatsAppSenderPicker` + `applyWhatsAppSelfSender`; `renderConversation` senderRole-aware (backward-compat); Phase 27 E2E (6 tests); 2269 Node; 95/95 real-files; 29/29 manual QA — COMPLETE
 - **Package 3K — WhatsApp TXT UI Wiring** · Development / UI · Ph3 · implementation `bbd2097`, merged `a048d0d` 2026-06-05; `readTxtFile()` WA detection guard; `whatsapp-txt-adapter.js` script tag; Phase 26 E2E (5 tests); 2269 Node; 89/89 real-files; 9/9 manual QA — COMPLETE
 - **Package 3J — WhatsApp TXT Adapter** · Development / Engine · Ph3 · implementation `96ea7e3`, merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen format parsing; system-message filtering; media placeholders; participants; 91 new tests; whatsapp platform `supported`; 2269 Node; engine-only — COMPLETE
