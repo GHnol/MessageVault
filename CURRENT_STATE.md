@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-04` (Package 5C implementation complete — pending commit authorization)
+**Last updated:** `2026-06-04` (Package 5C completion state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `25bee3e` — docs: correct active branch after Package 3H state sync |
-| Active branch | `feature/proof-panel-user-withdrawal` |
-| Active pass | `Package 5C — Proof Panel User Withdrawal and UX Completion` — implementation complete 2026-06-04; pending Coordinator commit approval |
-| Last completed pass | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — impl `c0ee68d`, merged `1297f92` 2026-06-03 |
-| Last closed package | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE |
-| Next authorized target | Coordinator approves Package 5C commit; then decides next package |
-| Test baseline | **2082 Node tests** (15 suites, +43 from Package 5C); E2E seeded 57/57 (+4 Phase 24); E2E real-files 76/76; visual regression PASS (baseline unchanged) |
-| Package 5C | IN PROGRESS — `feature/proof-panel-user-withdrawal`; proof panel withdrawal + cancel button + Phase 24 E2E; 2082 Node / 57 E2E seeded — pending commit |
+| main HEAD | `4733c32` — merge: add proof panel user withdrawal flow |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | `Package 5C — Proof Panel User Withdrawal and UX Completion` — impl `7b00f31`, merged `4733c32` 2026-06-04 |
+| Last closed package | `Package 5C — Proof Panel User Withdrawal and UX Completion` — FULLY COMPLETE |
+| Next authorized target | Coordinator decides next package or operating action |
+| Test baseline | **2082 Node tests** (15 suites); E2E seeded 57/57; E2E real-files 80/80; visual regression PASS (baseline unchanged) |
+| Package 5C | COMPLETE — merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button in proof panel; Phase 24 E2E (4 tests); 27/27 browser QA |
 | Package 3H | COMPLETE — merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check on book view entry; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); no engine changes |
 | Package 3G | COMPLETE — merged `3192a15` 2026-06-03; lifecycle modules in browser; showBookView wiring; enterComposition hook; getGroupDraft helper; Phase 22 E2E (6 tests) |
 | Package 3F | COMPLETE — merged `395629e` 2026-06-03; `KMEngine.ProductDraftLifecycle`; engine layer; in-place mutation of `group.productDrafts`; no app code |

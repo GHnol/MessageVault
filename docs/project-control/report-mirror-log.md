@@ -26,9 +26,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 
 ## Latest state summary
 
-**As of:** 2026-06-03
-**Last mirrored:** RPT-20260603-003 (Package 3H closeout — Draft-Preflight Status Surface and Proof Panel Gate COMPLETE)
-**Active gate:** None — Package 3H COMPLETE; no active package; awaiting Coordinator direction
+**As of:** 2026-06-04
+**Last mirrored:** RPT-20260604-001 (Package 5C closeout — Proof Panel User Withdrawal and UX Completion COMPLETE)
+**Active gate:** None — Package 5C COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260604-001 | package_closeout | Package 5C — Proof Panel User Withdrawal and UX Completion | feature/proof-panel-user-withdrawal | 7b00f31 / 4733c32 | mirrored | 2026-06-04 |
 | RPT-20260603-003 | package_closeout | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | task/package-3h-draft-preflight-proof-panel-gate | c0ee68d / 1297f92 | mirrored | 2026-06-03 |
 | RPT-20260603-002 | package_closeout | Package 3G — Session UI Wiring for ProductDraft Lifecycle | feature/product-draft-lifecycle-session-wiring | 05f4048 / 3192a15 | mirrored | 2026-06-03 |
 | RPT-20260603-001 | package_closeout | Package 3F — ProductDraft Lifecycle Coordinator | feature/product-draft-lifecycle-coordinator | 18f3544 / 395629e | mirrored | 2026-06-03 |
@@ -52,6 +53,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260604-001 — package_closeout — Package 5C — Proof Panel User Withdrawal and UX Completion
+
+**Created:** 2026-06-04T00:00:00Z | **Branch:** feature/proof-panel-user-withdrawal | **HEAD:** 7b00f31 (impl) / 4733c32 (merge) | **Status:** mirrored
+
+Package 5C — Proof Panel User Withdrawal and UX Completion COMPLETE — implementation `7b00f31`, merge `4733c32` 2026-06-04. Delivered: (1) `src/products/proof-approval-state.js` — added `['pending-review', 'none']` to allowed transitions; `transition()` sets `submittedAt=null` on withdrawal; no prohibited fields. (2) `src/products/proof-approval-ux.js` — added `withdrawSubmission(productTypeId)` (result envelope; validates initialized; transitions pending-review→none; updates _states on success); updated `getAllowedUserActions('pending-review')` to return `['withdraw-submission']`. (3) `index.html` `renderBookProofPanel()` — pending-review branch now renders "Cancel proof review" button (`#bookProofCancelBtn`) + hint text "Removes local proof review marking. No files were sent."; cancel click calls `UX.withdrawSubmission('message-book')` + immediate re-render; CSS `.book-proof-cancel-btn` added (light + dark mode). (4) Node test updates: proof-approval-state Suite 4 +1, Suite 5 −1, new Suite 15 (+18 assertions); proof-approval-ux Suite 1 +1, Suite 8 +2, new Suites 16 + 16b (+25 assertions). (5) E2E Phase 24 (4 tests): pending-review DOM state, cancel button, withdrawal flow, save/restore with pending-review proof state. (6) State + project-control + backlog + report-mirror docs updated.
+
+**Tests:** 2082 Node tests, 0 failed. E2E seeded 57/57. E2E real-files 80/80. Browser/manual QA 27/27 PASS. Visual regression PASS (proof panel not in capture zone; baselines unchanged). OS audit 324/0/0. Hard exclusion diff: empty.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — ProductDraftState, ProductPreflight, ProductDraftLifecycle, product-experience-readiness.js, product-render-spec.js, project-persistence.js, project-session-restore.js, public/**, amplify/**, root package.json, scripts/package.json, scripts/package-lock.json untouched; proofSupported stays false; no readiness gate flipped; no GATE-04 crossing; no approve/revoke/request-changes/admin UI; no checkout/PDF/digital facsimile/vendor/manufacturing; no credentials/tokens/raw-transcripts committed; local-artifacts/ preserved and locally ignored only.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 5C closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260603-003 — package_closeout — Package 3H — Draft-Preflight Status Surface and Proof Panel Gate
 

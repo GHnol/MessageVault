@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-06-03
-**Updated by:** Claude Code (post-Package-3H state-sync)
+**Last updated:** 2026-06-04
+**Updated by:** Claude Code (post-Package-5C state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -36,6 +36,7 @@
 | Package 3F | ProductDraft Lifecycle Coordinator | COMPLETE — merged to main | `18f3544` | `395629e` |
 | Package 3G | Session UI Wiring for ProductDraft Lifecycle | COMPLETE — merged to main | `05f4048` | `3192a15` |
 | Package 3H | Draft-Preflight Status Surface and Proof Panel Gate | COMPLETE — merged to main | `c0ee68d` | `1297f92` |
+| Package 5C | Proof Panel User Withdrawal and UX Completion | COMPLETE — merged to main | `7b00f31` | `4733c32` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
 | AI Project OS v1.7 (all 6 gates) | Zero-Fault Hardening: validators, start router, report mirroring, external sync, docs-watch, bootstrap | COMPLETE — all merged to main 2026-06-01 | `3c641a9`→`f30ea62` | — |
@@ -45,11 +46,11 @@
 
 ## App code state
 
-- App code last changed: Package 3H (`c0ee68d`) — `showBookView()` auto-runs PAGINATION_STABILITY book check for in-progress drafts; `renderBookProofPanel()` gated on all real groups reaching preflight-passed. Phase 22 E2E tests updated; Phase 23 added (6 tests). No engine module changes. (Package 3G loaded lifecycle modules in browser runtime. Package 5B added `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring.)
-- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules, `showBookView()` draft init loop, `enterComposition()` hook, `getGroupDraft()` on `__km`).
+- App code last changed: Package 5C (`7b00f31`) — `renderBookProofPanel()` pending-review branch: "Cancel proof review" button (`#bookProofCancelBtn`) + hint text; cancel calls `ProofApprovalUX.withdrawSubmission()`; CSS `.book-proof-cancel-btn` (light + dark mode). (Package 3H gated proof panel on book check. Package 3G loaded lifecycle modules. Package 5B added `#bookProofPanel`, `renderBookProofPanel()`, save/restore wiring.)
+- `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules, `showBookView()` draft init loop, `enterComposition()` hook, `getGroupDraft()` on `__km`; Package 5C: cancel button + CSS in `renderBookProofPanel()`).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
-- `src/products/`: 16 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight, product-draft-lifecycle)
-- `src/tests/`: 15 suites, **2039 Node tests** — all green
+- `src/products/`: 16 modules (statuses, catalog, eligibility, bridge, render-spec, render-spec-resolver, preview-registry, preview-resolver, experience-readiness, experience-consumer, proof-approval-state, proof-approval-ux, product-draft-state, product-preflight, product-draft-lifecycle). Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
+- `src/tests/`: 15 suites, **2082 Node tests** — all green
   - `km-engine-tests.mjs`: 96
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
@@ -60,12 +61,12 @@
   - `prototype-preview-registry-tests.mjs`: 215 (Package 4B)
   - `product-experience-readiness-tests.mjs`: 337 (Package 4C)
   - `product-experience-consumer-tests.mjs`: 35 (Package 4D)
-  - `proof-approval-state-tests.mjs`: 137 (Package 5A)
-  - `proof-approval-ux-tests.mjs`: 77 (Package 5B)
+  - `proof-approval-state-tests.mjs`: 155 (Package 5A + 5C; +18 withdrawal tests)
+  - `proof-approval-ux-tests.mjs`: 102 (Package 5B + 5C; +25 withdrawal tests)
   - `product-draft-state-tests.mjs`: 90 (Package 3E)
   - `product-preflight-tests.mjs`: 119 (Package 3E)
   - `product-draft-lifecycle-tests.mjs`: 104 (Package 3F)
-- `scripts/e2e-regression-harness.mjs`: 47-test seeded Playwright harness (phases 1–10 + 20 + 21 + 22, Packages 3B + 4D + 4E + 3G) + 23-test real-file coverage (phases 11–19, Package 3C) — 70 tests total
+- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24, Packages 3B + 4D + 4E + 3G + 3H + 5C) + 23-test real-file coverage (phases 11–19, Package 3C) — 80 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -74,14 +75,16 @@
 
 ---
 
-## Git state (as of post-Package-3E state-sync)
+## Git state (as of post-Package-5C state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `4390038` — merge: add ProductDraft state model and Preflight Runner foundation |
-| Active branch | `docs/sync-after-package-3e-product-draft-preflight` (state-sync in progress) |
-| Working tree | State-sync edits in progress |
-| Pushed to remote | main is current through Package 3E merge; this sync branch pending merge |
+| main HEAD | `4733c32` — merge: add proof panel user withdrawal flow |
+| Active branch | `main` |
+| Working tree | Clean |
+| Pushed to remote | main is current through Package 5C merge |
+
+**Package 5C (`7b00f31` / `4733c32`):** Proof Panel User Withdrawal and UX Completion — `ProofApprovalState` extended with `pending-review→none` transition (submittedAt reset to null); `ProofApprovalUX.withdrawSubmission()` added; `getAllowedUserActions('pending-review')` updated to return `['withdraw-submission']`; `renderBookProofPanel()` pending-review branch adds "Cancel proof review" button + "Removes local proof review marking. No files were sent." hint text; Phase 24 E2E (4 tests); 2082 Node tests; E2E 57/57 seeded + 80/80 real-files; browser QA 27/27 PASS. No GATE-04 crossing; no admin transitions; no PDF/checkout/vendor/manufacturing scope; proofSupported unchanged.
 
 **Package 3E (`dd4f641` / `4390038`):** ProductDraft and Preflight Runner Foundation — `src/products/product-draft-state.js` (`KMEngine.ProductDraftState`: 5-status lifecycle, create/advance/canAdvance/isValidStatus, immutable, JSON-safe) + `src/products/product-preflight.js` (`KMEngine.ProductPreflight`: 10-check registry mirror, PAGINATION_STABILITY runner, 9 gated checks not-applicable, aggregate overallStatus passed/failed/incomplete/skipped, **no manufacturing readiness API**). `project-persistence.js` + `project-session-restore.js` modified (productDrafts validation, group serialization, restore normalization). 90 + 119 + 22 new tests; total baseline 1935. E2E 41/41 + 64/64. Visual regression PASS. No `index.html`, no proof approval modules, no readiness gates touched.
 
