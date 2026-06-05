@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3O — Instagram DM JSON Adapter. impl `ebb7a55`, merged `26f2633` to `main` 2026-06-05. Engine-only. No active package. Awaiting Coordinator direction.
+**Status:** `in-progress` — Package 3P — Instagram DM JSON UI Wiring. Branch `feature/instagram-dm-ui-wiring`, base `main` at `157927a`. UI wiring only; self-identification deferred to Package 3Q.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,17 +18,37 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `26f2633` — merge: add Instagram DM JSON adapter (Package 3O) |
+| **Active pass** | `Package 3P — Instagram DM JSON UI Wiring` |
+| **Active branch** | `feature/instagram-dm-ui-wiring` |
+| **main HEAD** | `157927a` — docs: sync operating docs after Package 3O completion |
 | **Last completed pass** | `Package 3O — Instagram DM JSON Adapter` — impl `ebb7a55`, merged `26f2633` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3P — Instagram DM JSON UI Wiring` — IN PROGRESS |
 | **Last closed package** | `Package 3O — Instagram DM JSON Adapter` — FULLY COMPLETE — merged `26f2633` 2026-06-05 |
 | **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3P — Instagram DM JSON UI Wiring)
+
+Package 3P — Instagram DM JSON UI Wiring. **IN PROGRESS.**
+
+Branch: `feature/instagram-dm-ui-wiring` — base: `main` at `157927a`
+
+Scope:
+- `index.html`: script tag for `instagram-dm-adapter.js`; `accept=".txt,.xml,.json"` on `#fileInput`; drop hint + ingest card copy update; Instagram DM routing guard in `readTxtFile()`
+- `scripts/e2e-regression-harness.mjs`: `INSTAGRAM_FIXTURE` + `INSTAGRAM_FIXTURE_COUNT=8` constants; Phase 29 (5 tests)
+- `docs/qa/test-strategy.md`: E2E real-files baseline 101 → 106
+- `docs/architecture/architecture-roadmap.md`: module map + Package 3P entry
+- `src/core/source-platforms.js`: instagram-dm notes update
+- State docs (this file, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`)
+
+Hard exclusions: `instagram-dm-adapter.js`, `normalized-memory.js`, `import-adapters.js`, `import-quality-report.js`, `src/products/*`, `src/state/*`, proof/draft/lifecycle/readiness/checkout/PDF/vendor/manufacturing/GATE-04/Review view/standalone keepsake flows/pagination constants. No sender picker. No `showWhatsAppSenderPicker()` call.
+
+**Next exact action:** Implement changes. Run verification. Stop before commit.
 
 ---
 
