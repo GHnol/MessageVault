@@ -26,9 +26,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 
 ## Latest state summary
 
-**As of:** 2026-06-04
-**Last mirrored:** RPT-20260604-002 (Package 3I closeout — Import Quality Report COMPLETE)
-**Active gate:** None — Package 3I COMPLETE; no active package; awaiting Coordinator direction
+**As of:** 2026-06-05
+**Last mirrored:** RPT-20260605-001 (Package 3J closeout — WhatsApp TXT Adapter COMPLETE)
+**Active gate:** None — Package 3J COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260605-001 | package_closeout | Package 3J — WhatsApp TXT Adapter | feature/whatsapp-txt-adapter | 96ea7e3 / f1eca34 | mirrored | 2026-06-05 |
 | RPT-20260604-002 | package_closeout | Package 3I — Import Quality Report | feature/import-quality-report | c0c8f7a / 60cdd31 | mirrored | 2026-06-04 |
 | RPT-20260604-001 | package_closeout | Package 5C — Proof Panel User Withdrawal and UX Completion | feature/proof-panel-user-withdrawal | 7b00f31 / 4733c32 | mirrored | 2026-06-04 |
 | RPT-20260603-003 | package_closeout | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | task/package-3h-draft-preflight-proof-panel-gate | c0ee68d / 1297f92 | mirrored | 2026-06-03 |
@@ -54,6 +55,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260605-001 — package_closeout — Package 3J — WhatsApp TXT Adapter
+
+**Created:** 2026-06-05T00:00:00Z | **Branch:** feature/whatsapp-txt-adapter | **HEAD:** 96ea7e3 (impl) / f1eca34 (merge) | **Status:** mirrored
+
+Package 3J — WhatsApp TXT Adapter COMPLETE — implementation `96ea7e3`, merge `f1eca34` 2026-06-05. DEF-01 (WhatsApp adapter) from deferred-gated-ideas-register is now activated and delivered. Delivered: (1) `scripts/fixtures/fake-whatsapp-chat.txt` — fake bracket-format WhatsApp fixture: 1 system notice + 8 messages (1 media, 1 multi-line). (2) `src/adapters/whatsapp-txt-adapter.js` — `KMEngine.whatsappTxtAdapter`; ADAPTER_ID `whatsapp-txt-v1`; `canHandle(input)` detects bracket `[M/D/YY, H:MM:SS AM] Sender: text` and hyphen `M/D/YY, H:MM AM - Sender: text` formats; `normalizeAll(parsedMessages)` — skips system messages (no colon after timestamp) with warning; converts `<Media omitted>` / `image omitted` / `video omitted` / `audio omitted` / `sticker omitted` / `GIF omitted` to `isAttachmentOnly: true`, text `[Attachment]`, type `attachment-placeholder`; senderRole `contact` for all senders (Me inference deferred); provenance populated; multi-line continuation by appending non-timestamp lines with `\n`; graceful timestamp fallback; registered as `KMEngine.whatsappTxtAdapter` and `KMEngine.adapters['whatsapp-txt-v1']`. (3) `src/adapters/future-adapter-stubs.js` — removed `whatsapp-txt-v1` stub entry. (4) `src/core/source-platforms.js` — WhatsApp platform `stub` → `supported`; notes updated to reflect adapter + pending UI wiring. (5) `src/tests/whatsapp-txt-adapter-tests.mjs` — 91 tests across 14 suites; fixture-driven. (6) `src/tests/km-engine-tests.mjs` — loads real adapter before stubs; updated platform assertion; +5 smoke tests.
+
+**Tests:** 2269 Node tests, 0 failed. E2E not required (engine-only). Visual regression not required. OS audit 324/0/0. State freshness WARN-only (cosmetic hash lag). project-control sync validate 11/11.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, scripts/e2e-regression-harness.mjs, src/products/*, src/state/*, src/core/normalized-memory.js, src/core/import-adapters.js, src/core/project-session.js, public/**, amplify/**, root package.json, scripts/package.json untouched; no proof panel, ProductDraft, ProductPreflight, ProductDraftLifecycle, product readiness, render spec, checkout, PDF, vendor, manufacturing, GATE-04, Review view, or standalone keepsake flows touched; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3J closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260604-002 — package_closeout — Package 3I — Import Quality Report
 

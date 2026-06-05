@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-04 (America/New_York)
+**Last updated:** 2026-06-05 (America/New_York)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -31,13 +31,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 7 | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | P1 | **Done** | impl `c0ee68d`, merged `1297f92` 2026-06-03; PAGINATION_STABILITY auto-check; proof panel gated on preflight-passed; Phase 23 E2E (6 tests); 53/53 seeded ✓ |
 | 8 | Package 5C — Proof Panel User Withdrawal and UX Completion | P1 | **Done** | impl `7b00f31`, merged `4733c32` 2026-06-04; withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA ✓ |
 | 9 | Package 3I — Import Quality Report | P2 | **Done** | impl `c0c8f7a`, merged `60cdd31` 2026-06-04; `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel`; Phase 25 E2E (4 tests); 2173 Node; 84/84 real-files; 17/17 browser QA ✓ |
-| 10 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3I COMPLETE 2026-06-04 |
+| 10 | Package 3J — WhatsApp TXT Adapter | P2 | **Done** | impl `96ea7e3`, merged `f1eca34` 2026-06-05; `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; 91 new tests; whatsapp platform `supported`; engine-only; 2269 Node ✓ |
+| 11 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3J COMPLETE 2026-06-05 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3I COMPLETE 2026-06-04; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3J COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
 
 ---
 

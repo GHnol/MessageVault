@@ -1,6 +1,6 @@
 # KeepMees Backlog
 
-**Last updated:** 2026-06-04 (America/New_York — Package 3I)
+**Last updated:** 2026-06-05 (America/New_York — Package 3J)
 **Owner:** Coordinator / Project Control
 
 **Status values:** Inbox · Backlog · Ready · In Progress · Waiting / Blocked · Review · Approved · Done · Deferred · Killed
@@ -44,6 +44,7 @@
 | Package 3G — Session UI Wiring for ProductDraft Lifecycle | P2 | Done | 12 | Package 3F complete | lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E; merged `3192a15` 2026-06-03 | N | Y | N |
 | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | P2 | Done | 12 | Package 3G complete | PAGINATION_STABILITY auto-check; proof panel gated on preflight-passed; Phase 23 E2E; merged `1297f92` 2026-06-03 | N | Y | N |
 | Package 5C — Proof Panel User Withdrawal and UX Completion | P2 | Done | 12 | Package 5B + 3H complete | withdrawal (pending-review→none); cancel button; Phase 24 E2E; 2082 Node; 80/80 real-files; 27/27 browser QA; merged `4733c32` 2026-06-04 | N | Y | N |
+| Package 3J — WhatsApp TXT Adapter | P2 | Done | 3 | none | `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; 91 new tests; whatsapp platform `supported`; 2269 Node; engine-only; merged `f1eca34` 2026-06-05 | N | Y | N |
 | Package 3I — Import Quality Report | P2 | Done | 3 | none | `KMEngine.ImportQualityReport.compute()`; `#importQualityPanel`; Phase 25 E2E; 2173 Node; 84/84 real-files; 17/17 browser QA; merged `60cdd31` 2026-06-04 | N | Y | N |
 | Message Book composition continuation backlog | P2 | Backlog | 5 | — | ProductDraft + lifecycle coordinator + session wiring delivered (3E + 3F + 3G); remaining: preflight runners for gated checks | N | Y | N |
 | Maintain E2E + unit baselines green | P1 | Ready | 0 | — | All suites green before any commit | N | Y | N |

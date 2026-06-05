@@ -189,7 +189,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3J — WhatsApp TXT Adapter (IN PROGRESS — branch `feature/whatsapp-txt-adapter`, 2026-06-05):**
+**Package 3J — WhatsApp TXT Adapter (COMPLETE — merged `f1eca34` 2026-06-05):**
 
 Package 3J adds 91 tests in new `whatsapp-txt-adapter-tests.mjs` (14 suites: API shape, canHandle bracket, canHandle hyphen, canHandle rejects, fixture import, hyphen import, multi-line continuation, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards). Adds 5 smoke assertions to `km-engine-tests.mjs`. Node baseline: 2269. No E2E required (engine-only; no index.html changes). Visual regression not required. No GATE-04 crossing. Engine adapter only; UI wiring pending.
 

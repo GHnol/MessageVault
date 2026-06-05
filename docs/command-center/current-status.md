@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-06-04
-**Updated by:** Claude Code (post-Package-3I state-sync)
+**Last updated:** 2026-06-05
+**Updated by:** Claude Code (post-Package-3J state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -37,6 +37,7 @@
 | Package 3G | Session UI Wiring for ProductDraft Lifecycle | COMPLETE — merged to main | `05f4048` | `3192a15` |
 | Package 3H | Draft-Preflight Status Surface and Proof Panel Gate | COMPLETE — merged to main | `c0ee68d` | `1297f92` |
 | Package 5C | Proof Panel User Withdrawal and UX Completion | COMPLETE — merged to main | `7b00f31` | `4733c32` |
+| Package 3J | WhatsApp TXT Adapter | COMPLETE — merged to main | `96ea7e3` | `f1eca34` |
 | Package 3I | Import Quality Report | COMPLETE — merged to main | `c0c8f7a` | `60cdd31` |
 | AI OS Usability Patch | AI Project OS Usability Patch — Short Command Interface | COMPLETE — merged to main | `f84e759` | `cb920be` |
 | AI OS Framework Groundwork | AI Project OS Framework Groundwork Pass — skills canonical, sync contract, audit, wizard | COMPLETE — merged to main | `219f0b3` | `cc7139a` |
@@ -47,13 +48,14 @@
 
 ## App code state
 
-- App code last changed: Package 3I (`c0c8f7a`) — `src/core/import-quality-report.js` (new engine module); `index.html` `#importQualityPanel` + `renderImportQualityPanel()` + script tag + CSS; called from `readTxtFile()` and `openConversation()` only. (Package 5C added cancel button in proof panel. Package 3H gated proof panel on book check. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3I (`c0c8f7a`) — `src/core/import-quality-report.js` (new engine module); `index.html` `#importQualityPanel` + `renderImportQualityPanel()` + script tag + CSS; called from `readTxtFile()` and `openConversation()` only. (Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only, no index.html changes. Package 5C added cancel button in proof panel. Package 3H gated proof panel on book check. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 16 suites, **2173 Node tests** — all green
-  - `km-engine-tests.mjs`: 96
+- `src/tests/`: 17 suites, **2269 Node tests** — all green
+  - `whatsapp-txt-adapter-tests.mjs`: 91 (Package 3J; 14 suites: API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards)
+  - `km-engine-tests.mjs`: 101 (+5 whatsapp smoke assertions — Package 3J)
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
@@ -69,6 +71,10 @@
   - `product-preflight-tests.mjs`: 119 (Package 3E)
   - `product-draft-lifecycle-tests.mjs`: 104 (Package 3F)
   - `import-quality-report-tests.mjs`: 91 (Package 3I; 12 suites: API shape, all metric fields, edge cases, semantic guards)
+- `src/adapters/whatsapp-txt-adapter.js`: new (Package 3J); `KMEngine.whatsappTxtAdapter`; bracket + hyphen format; canHandle/normalizeAll/import; ADAPTER_ID `whatsapp-txt-v1`
+- `src/core/source-platforms.js`: modified (Package 3J); WhatsApp platform `stub` → `supported`
+- `src/adapters/future-adapter-stubs.js`: modified (Package 3J); removed `whatsapp-txt-v1` stub
+- `scripts/fixtures/fake-whatsapp-chat.txt`: new (Package 3J); fake bracket-format WhatsApp fixture
 - `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 27-test real-file coverage (phases 11–19 + Phase 25, Packages 3C + 3I) — 84 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
@@ -82,10 +88,10 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `60cdd31` — merge: add import quality report after successful message import |
+| main HEAD | `f1eca34` — merge: add WhatsApp TXT adapter |
 | Active branch | `main` |
-| Working tree | Clean |
-| Pushed to remote | main is current through Package 3I merge |
+| Working tree | Clean (pending state-sync commit) |
+| Pushed to remote | main is current through Package 3J merge |
 
 **Package 3I (`c0c8f7a` / `60cdd31`):** Import Quality Report — `src/core/import-quality-report.js` (`KMEngine.ImportQualityReport`; `compute(memories)` pure function; returns totalMessages, dateRange, senderList, attachmentOnlyCount, totalReactionCount, etc.); `#importQualityPanel` added to `#chatView`; `renderImportQualityPanel()` called after `readTxtFile()` and `openConversation()` only (not restore path); Phase 25 E2E (4 tests); 91 Node tests; 2173 total Node; 57/57 seeded + 84/84 real-files; browser QA 17/17 PASS. No GATE-04 crossing; no proof/draft/readiness scope; no estimated pages/volumes; restore path unchanged.
 
@@ -124,7 +130,7 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3E COMPLETE (merged `4390038` 2026-06-02); candidates in `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3J COMPLETE (merged `f1eca34` 2026-06-05); candidates in `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |

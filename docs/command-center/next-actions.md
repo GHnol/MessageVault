@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-06-04
-**Updated by:** Claude Code (post-Package-3I state-sync)
+**Last updated:** 2026-06-05
+**Updated by:** Claude Code (post-Package-3J state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3I COMPLETE — merged `60cdd31` 2026-06-04. Coordinator decides next package.**
+**Status: Package 3J COMPLETE — merged `f1eca34` 2026-06-05. Coordinator decides next package.**
+
+Package 3J (WhatsApp TXT Adapter) is COMPLETE — merged to main (`f1eca34` 2026-06-05). `KMEngine.whatsappTxtAdapter` — bracket and hyphen WhatsApp export format; canHandle, normalizeAll, import; system-message filtering; media placeholders (`<Media omitted>` etc → `isAttachmentOnly: true`); multi-line continuation; participants in first-seen order; senderRole `contact` for all senders (Me inference deferred); 91 new tests (`whatsapp-txt-adapter-tests.mjs`); 5 km-engine smoke assertions; 2269 Node; whatsapp platform `stub` → `supported`. Engine-only; no index.html wiring.
 
 Package 3I (Import Quality Report) is COMPLETE — merged to main (`60cdd31` 2026-06-04). `KMEngine.ImportQualityReport.compute()` engine module; `#importQualityPanel` shows message count, date span, sender count, attachments, reactions after txt and chat.db imports; Phase 25 E2E (4 tests); 2173 Node; 84/84 real-files; 17/17 browser QA. DEF-12 from deferred-gated-ideas-register is now activated and COMPLETE.
 Package 5C (Proof Panel User Withdrawal and UX Completion) is COMPLETE — merged to main (`4733c32` 2026-06-04). `renderBookProofPanel()` pending-review branch now includes "Cancel proof review" button + "Removes local proof review marking. No files were sent." hint. Cancel calls `ProofApprovalUX.withdrawSubmission()` (pending-review→none). `ProofApprovalState` extended with pending-review→none transition. Phase 24 E2E (4 tests); 57 seeded / 80 real-files total. 27/27 browser QA PASS. GATE-04, checkout, PDF, vendor, manufacturing, admin, and readiness gate exclusions confirmed.
@@ -43,7 +45,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3I is now COMPLETE.** No development package has been authorized after Package 3I. The next Coordinator step is to decide the next package.
+**Package 3J is now COMPLETE.** No development package has been authorized after Package 3J. The next Coordinator step is to decide the next package.
 
 ---
 

@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3J — WhatsApp TXT Adapter. Branch `feature/whatsapp-txt-adapter`. Engine implementation complete; docs updated. Awaiting Coordinator commit approval.
+**Status:** `complete` — Package 3J — WhatsApp TXT Adapter. Impl `96ea7e3`, merged `f1eca34` to `main` 2026-06-05. State-sync complete. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
 
@@ -18,14 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3J — WhatsApp TXT Adapter` |
-| **Active branch** | `feature/whatsapp-txt-adapter` |
-| **Branch base** | `main` at `037053e` |
-| **main HEAD** | `037053e` — merge: sync operating docs after Package 3I completion |
-| **Last completed pass** | `Package 3I — Import Quality Report` — impl `c0c8f7a`, merged `60cdd31` 2026-06-04 |
-| **Active package** | `Package 3J — WhatsApp TXT Adapter` — IN PROGRESS |
-| **Last closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
-| **Prior closed package** | `Package 3H — Draft-Preflight Status Surface and Proof Panel Gate` — FULLY COMPLETE — merged `1297f92` 2026-06-03 |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **main HEAD** | `f1eca34` — merge: add WhatsApp TXT adapter |
+| **Last completed pass** | `Package 3J — WhatsApp TXT Adapter` — impl `96ea7e3`, merged `f1eca34` 2026-06-05 |
+| **Active package** | None |
+| **Last closed package** | `Package 3J — WhatsApp TXT Adapter` — FULLY COMPLETE — merged `f1eca34` 2026-06-05 |
+| **Prior closed package** | `Package 3I — Import Quality Report` — FULLY COMPLETE — merged `60cdd31` 2026-06-04 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -33,11 +32,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active — Package 3J — WhatsApp TXT Adapter)
+## Objective (last completed pass — Package 3J — WhatsApp TXT Adapter)
 
-Package 3J — WhatsApp TXT Adapter. **IN PROGRESS — branch `feature/whatsapp-txt-adapter`, base `main` at `037053e`.**
+Package 3J — WhatsApp TXT Adapter. **COMPLETE — impl `96ea7e3`, merged `f1eca34` to `main` 2026-06-05.**
 
-Branch: `feature/whatsapp-txt-adapter`
+Branch: `feature/whatsapp-txt-adapter` — base: `main` at `037053e`
 
 Delivered (implementation complete; awaiting Coordinator commit approval):
 - `scripts/fixtures/fake-whatsapp-chat.txt` — fake-data bracket-format WhatsApp fixture: 1 system notice + 8 messages (1 media, 1 multi-line)
@@ -51,7 +50,7 @@ Delivered (implementation complete; awaiting Coordinator commit approval):
 
 **Results:** 2269 Node tests, 0 failed. E2E not required (engine-only). Visual regression not required. Hard exclusion diff: empty (verified).
 
-**Next exact action:** Coordinator reviews Package 3J implementation report. If approved, commit per recommended message. Do not commit without explicit Coordinator authorization.
+**Next exact action:** Coordinator decides next package or operating action. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - index.html: not touched
@@ -419,13 +418,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3J implementation complete — awaiting Coordinator commit approval.
+Package 3J COMPLETE — merged `f1eca34` 2026-06-05. State-sync complete.
 
 Coordinator decides:
-- Approve commit per recommended message (feat: add WhatsApp TXT adapter), or
-- Authorize next package after commit + merge
+- Authorize next development package, or
+- Authorize any other next direction
 
-Do not commit without explicit Coordinator approval. Do not push without explicit instruction. No external mutations authorized.
+Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-04
-**Updated by:** Claude Code (post-Package-3E state-sync)
+**Last updated:** 2026-06-05
+**Updated by:** Claude Code (post-Package-3J state-sync)
 **Status:** Active
 
 ---
@@ -501,12 +501,31 @@ What this does NOT deliver: estimated pages, estimated volumes, media file count
 
 ---
 
+### Package 3J — WhatsApp TXT Adapter
+
+**Branch:** `feature/whatsapp-txt-adapter`
+**Status:** COMPLETE — merged to main (feature: `96ea7e3`, merge: `f1eca34` 2026-06-05)
+
+Delivered:
+- `scripts/fixtures/fake-whatsapp-chat.txt` — fake bracket-format WhatsApp fixture (9 parsed messages: 1 system, 8 regular including 1 media, 1 multi-line)
+- `src/adapters/whatsapp-txt-adapter.js` — `KMEngine.whatsappTxtAdapter`; ADAPTER_ID `whatsapp-txt-v1`; bracket format `[M/D/YY, H:MM:SS AM] Sender: text` and hyphen format `M/D/YY, H:MM AM - Sender: text`; canHandle/normalizeAll/import; multi-line continuation; system-message skipping + warning; media placeholders (`<Media omitted>` etc → `isAttachmentOnly: true`, text `[Attachment]`, type `attachment-placeholder`); senderRole `contact` for all senders; provenance populated; graceful timestamp fallback; engine-only
+- `src/adapters/future-adapter-stubs.js` — removed `whatsapp-txt-v1` stub entry
+- `src/core/source-platforms.js` — WhatsApp platform `stub` → `supported`
+- `src/tests/whatsapp-txt-adapter-tests.mjs` — 91 tests across 14 suites (API shape, canHandle bracket/hyphen/rejects, bracket parsing, hyphen parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards)
+- `src/tests/km-engine-tests.mjs` — loads real adapter before stubs; updated whatsapp assertion to `supported`; +5 smoke assertions
+
+**Tests: 2269 Node unit tests, 0 failed** | **E2E: not required (engine-only)** | **Visual regression: not required** | **Hard exclusions: confirmed empty**
+
+What this does NOT deliver: Me/self sender inference (deferred to Package 3K or UI wiring), WhatsApp UI wiring in index.html, E2E harness changes, proof/draft/readiness scope, GATE-04, checkout, PDF, vendor, manufacturing.
+
+---
+
 ### Coordinator decides next package — (current position)
 
-**Status:** No package authorized. Package 3I COMPLETE — Coordinator decides the next step.
+**Status:** No package authorized. Package 3J COMPLETE — Coordinator decides the next step.
 
 Next package candidates (from repo docs):
-- **WhatsApp adapter (DEF-01)** — engine layer; pipe-delimited .txt format; no external gate; medium effort
+- **WhatsApp UI wiring (Package 3K)** — wire whatsapp-txt-adapter into index.html readTxtFile flow; add Me/self sender inference
 - **Android SMS adapter (DEF-02)** — engine layer; XML backup format; no external gate; medium effort
 - **Further Phase 12 continuation (below GATE-04)** — proof panel status display refinements; must stay below GATE-04
 - **Preflight runners for vendor-gated checks** — engine layer; gated until vendor confirmed

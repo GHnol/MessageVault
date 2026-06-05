@@ -1,7 +1,7 @@
 # Coordinator Dashboard — KeepMees / MessageVault
 
-**Last updated:** 2026-06-04
-**Updated by:** Claude Code (post-Package-3I state-sync)
+**Last updated:** 2026-06-05
+**Updated by:** Claude Code (post-Package-3J state-sync)
 **For:** Coordinator (ChatGPT Chat 01)
 
 > This dashboard gives Coordinator the high-level view of all streams, decisions, gates, and risks. For detail, follow the links to Package 2.5A source-of-truth docs.
@@ -69,13 +69,14 @@ Full detail: `docs/strategy/product-format-bank.md` | `docs/ops/vendor-manufactu
 | Package 3G — Session UI Wiring for ProductDraft Lifecycle | COMPLETE | `05f4048` / `3192a15` |
 | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | COMPLETE | `c0ee68d` / `1297f92` |
 | Package 5C — Proof Panel User Withdrawal and UX Completion | COMPLETE | `7b00f31` / `4733c32` |
+| Package 3J — WhatsApp TXT Adapter | COMPLETE | `96ea7e3` / `f1eca34` |
 | Package 3I — Import Quality Report (DEF-12) | COMPLETE | `c0c8f7a` / `60cdd31` |
 | AI OS Usability Patch — Short Command Interface | COMPLETE | `f84e759` / `cb920be` |
 | AI OS Framework Groundwork — skills canonical, sync contract, audit | COMPLETE | `219f0b3` / `cc7139a` |
 | AI Project OS v1.7 (Gates 1–6) | COMPLETE | `3c641a9`→`f30ea62` 2026-06-01 |
 | Operator Reliability Repair | COMPLETE | `81b2329` / `c27502c` 2026-06-02 |
 
-Tests: **2039 Node tests passing, 0 failures + 47 seeded E2E + 70 real-files E2E browser tests + visual regression check**. `index.html` app behavior last changed: Package 3G (`05f4048`) — lifecycle modules loaded; `showBookView()` draft init; `enterComposition()` forward-compat hook; `getGroupDraft()` test helper. No rendering, proof panel, readiness gate, or eligibility logic changed. Package 5B (`fb62b5c`) last added proof panel UI (`#bookProofPanel`, CSS, `renderBookProofPanel()`). Package 3F added engine layer only; Package 3G wired it into the browser session. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
+Tests: **2269 Node tests passing, 0 failures + 57 seeded E2E + 84 real-files E2E browser tests + visual regression check**. `index.html` app behavior last changed: Package 3I (`c0c8f7a`) — `#importQualityPanel` + `renderImportQualityPanel()`. Package 3J (`96ea7e3`) was engine-only — `src/adapters/whatsapp-txt-adapter.js` added; no `index.html` changes. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules. No app/product/vendor/design/manufacturing decisions reopened. No next package authorized.
 
 ---
 
@@ -256,10 +257,13 @@ Package 3H (COMPLETE — `1297f92` 2026-06-03)
     → renderBookProofPanel() gated on all real groups reaching preflight-passed; user-facing copy uses "book check" (no "preflight")
     → Phase 23 E2E (6 tests); 2039 Node tests; 53 seeded; no engine changes; visual regression PASS
 
+Package 3J (COMPLETE — `f1eca34` 2026-06-05)
+    → WhatsApp TXT Adapter — `KMEngine.whatsappTxtAdapter`; bracket + hyphen formats; engine-only
+    → whatsapp platform now `supported`; UI wiring pending
+
 Coordinator decides next package ← current position
-    → Candidates: preflight runners for 9 vendor-gated checks (gated until vendor confirmed)
-    → OR: further scoped Phase 12 continuation
-    → "Package 5C" is NOT defined — do not start without explicit Coordinator scoping
+    → Candidates: WhatsApp UI wiring (Package 3K), Android SMS adapter, other adapters, Phase 12 continuation
+    → Preflight runners for 9 vendor-gated checks (gated until vendor confirmed)
 
 Designer confirmed (budget resolved)
     → Figma execution begins
@@ -273,7 +277,7 @@ Designer confirmed (budget resolved)
 
 | Decision | Decision type | Urgency |
 |---|---|---|
-| Decide next package after Package 3E | Roadmap decision | High — Package 3E complete; candidates in `decision-log.md` |
+| Decide next package after Package 3J | Roadmap decision | High — Package 3J complete 2026-06-05; candidates in `decision-log.md` |
 | Founder adoption of `.ics` / ClickUp CSV / TickTick CSV imports | Tool adoption | Optional |
 | `scripts/node_modules` tracked-history cleanup | Repo hygiene decision | Low — backlog |
 | GitHub Projects board setup | Tool adoption | Medium |
