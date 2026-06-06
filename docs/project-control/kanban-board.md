@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-06 (America/New_York — Package 3S completion)
+**Last updated:** 2026-06-06 (America/New_York — Package 3T completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3S COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3T COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3S COMPLETE 2026-06-06; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3T COMPLETE 2026-06-06; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,7 +44,8 @@
 - _(empty)_
 
 ### Done
-- **Package 3S — Facebook Messenger JSON UI Wiring** · Development / UI · Ph3 · implementation `27b3521`, merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); 2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T) — COMPLETE
+- **Package 3T — Facebook Messenger Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` inline picker; `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes — COMPLETE
+- **Package 3S — Facebook Messenger JSON UI Wiring** · Development / UI · Ph3 · implementation `27b3521`, merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); 2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (delivered in Package 3T) — COMPLETE
 - **Package 3R — Facebook Messenger JSON Adapter** · Development / Engine · Ph3 · implementation `f63123d`, merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; facebook-messenger platform `supported`; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node; engine-only; no UI wiring — COMPLETE
 - **Package 3Q — Instagram DM Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `8ca92c4`, merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; picker hides on all non-Instagram paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 112/112 real-files; 21/21 manual QA; no engine/adapter changes — COMPLETE
 - **Package 3P — Instagram DM JSON UI Wiring** · Development / UI · Ph3 · implementation `fa6f6f2`, merged `d99fb84` 2026-06-05; `readTxtFile()` Instagram DM routing guard; `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker (self-ID → Package 3Q) — COMPLETE

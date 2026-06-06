@@ -192,7 +192,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3T — Facebook Messenger Self-Identification Sender Picker (IN PROGRESS — branch `feature/facebook-messenger-self-id`, 2026-06-06):**
+**Package 3T — Facebook Messenger Self-Identification Sender Picker (COMPLETE — merged `8b11f18` 2026-06-06):**
 
 Package 3T adds no new Node unit tests (no new engine module; senderRole already tested via `import-quality-report-tests.mjs`). Adds E2E Phase 32 (6 real-files tests): sender picker visible after Facebook Messenger import; Alice Johnson and charlie_b_99 chips present; selecting Alice Johnson → 4 `.me` rows; selfMessageCount = 4; selecting Skip → 0 `.me`; non-Facebook TXT reimport hides picker. Node baseline unchanged: 2554 / 20 suites. Layer 2 unchanged: 57 seeded. Layer 3: 123 total when running `npm run e2e:real` (+6 Phase 32). Visual regression PASS expected (sender picker above page canvas capture zone; baselines unaffected). No engine changes. No adapter changes. `#facebookSenderPicker` added to `index.html`; `showFacebookSenderPicker` + `applyFacebookSelfSender` added; `window.__km.applyFacebookSelfSender` exposed.
 

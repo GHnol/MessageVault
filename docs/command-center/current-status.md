@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05
-**Updated by:** Claude Code (post-Package-3P state-sync)
+**Last updated:** 2026-06-06
+**Updated by:** Claude Code (post-Package-3T state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -48,13 +48,17 @@
 | Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
 | Package 3O | Instagram DM JSON Adapter | COMPLETE — merged to main | `ebb7a55` | `26f2633` |
 | Package 3P | Instagram DM JSON UI Wiring | COMPLETE — merged to main | `fa6f6f2` | `d99fb84` |
+| Package 3T | Facebook Messenger Self-Identification Sender Picker | COMPLETE — merged to main | `b01fbff` | `8b11f18` |
+| Package 3S | Facebook Messenger JSON UI Wiring | COMPLETE — merged to main | `27b3521` | `e326fba` |
+| Package 3R | Facebook Messenger JSON Adapter | COMPLETE — merged to main | `f63123d` | `b6c85e9` |
+| Package 3Q | Instagram DM Self-Identification Sender Picker | COMPLETE — merged to main | `8ca92c4` | `ff1c3ed` |
 | Operator Reliability Repair | Raw transcript capture protocol, notification diagnostic, skill/command updates | COMPLETE — merged to main | `81b2329` | `c27502c` |
 
 ---
 
 ## App code state
 
-- App code last changed: Package 3P (`fa6f6f2`) — `index.html` Instagram DM routing guard in `readTxtFile()` (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy and drop hint updated for .json. (Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard in `readTxtFile()`. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3T (`b01fbff`) — `index.html` `#facebookSenderPicker` div, `const facebookSenderPicker`, `showFacebookSenderPicker`, `applyFacebookSelfSender`, picker hide wires (WA branch / non-WA reset / restore path), `showFacebookSenderPicker` call in FB branch, `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests). (Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
@@ -83,7 +87,7 @@
 - `src/core/source-platforms.js`: modified (Package 3J); WhatsApp platform `stub` → `supported`
 - `src/adapters/future-adapter-stubs.js`: modified (Package 3J); removed `whatsapp-txt-v1` stub
 - `scripts/fixtures/fake-whatsapp-chat.txt`: new (Package 3J); fake bracket-format WhatsApp fixture
-- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 49-test real-file coverage (phases 11–19 + Phases 25–29, Packages 3C + 3I + 3K + 3L + 3N + 3P) — 106 total
+- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 66-test real-file coverage (phases 11–19 + Phases 25–32, Packages 3C + 3I + 3K + 3L + 3N + 3P + 3Q + 3S + 3T) — 123 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -92,14 +96,14 @@
 
 ---
 
-## Git state (as of post-Package-3P state-sync)
+## Git state (as of post-Package-3T state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `d99fb84` — merge: add Instagram DM JSON import routing (Package 3P) |
+| main HEAD | `8b11f18` — merge: add Facebook Messenger self-identification sender picker (Package 3T) |
 | Active branch | `main` |
 | Working tree | Clean (pending state-sync commit) |
-| Pushed to remote | main is current through Package 3O merge; Package 3P push pending |
+| Pushed to remote | main is current through Package 3S merge; Package 3T push pending |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -144,13 +148,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3L COMPLETE (merged `16d0ca6` 2026-06-05); candidates in `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3T COMPLETE (merged `8b11f18` 2026-06-06); candidates in `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> No active package. Package 3E COMPLETE (merged `4390038` 2026-06-02). `KMEngine.ProductDraftState` and `KMEngine.ProductPreflight` now active (engine layer; no manufacturing readiness API; PAGINATION_STABILITY is the only runnable preflight check, aggregate status incomplete while gated checks are not-applicable). Next package candidates: scoped Phase 12 continuation, preflight runners for vendor-gated checks, or another authorized direction. "Package 5C" is not defined in the repo — do not start without explicit scoping and Coordinator authorization.
+> No active package. Package 3T COMPLETE (merged `8b11f18` 2026-06-06). Facebook Messenger self-identification sender picker delivered — `#facebookSenderPicker`; `showFacebookSenderPicker` + `applyFacebookSelfSender`; Phase 32 E2E (6 tests); 2554 Node; 123/123 real-files; visual regression PASS. Next package candidates: Telegram adapter (DEF-05), further Phase 12, or another authorized direction. Do not start any package without explicit Coordinator authorization.
 
 ---
 

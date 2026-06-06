@@ -26,9 +26,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 
 ## Latest state summary
 
-**As of:** 2026-06-05
-**Last mirrored:** RPT-20260605-005 (Package 3O closeout — Instagram DM JSON Adapter COMPLETE)
-**Active gate:** None — Package 3O COMPLETE; no active package; awaiting Coordinator direction
+**As of:** 2026-06-06
+**Last mirrored:** RPT-20260606-001 (Package 3T closeout — Facebook Messenger Self-Identification Sender Picker COMPLETE)
+**Active gate:** None — Package 3T COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260606-001 | package_closeout | Package 3T — Facebook Messenger Self-Identification Sender Picker | feature/facebook-messenger-self-id | b01fbff / 8b11f18 | mirrored | 2026-06-06 |
 | RPT-20260605-005 | package_closeout | Package 3O — Instagram DM JSON Adapter | feature/instagram-dm-adapter | ebb7a55 / 26f2633 | mirrored | 2026-06-05 |
 | RPT-20260605-004 | package_closeout | Package 3N — Android SMS UI Wiring | feature/android-sms-ui-wiring | 04d30ed / 6d61367 | mirrored | 2026-06-05 |
 | RPT-20260605-003 | package_closeout | Package 3L — WhatsApp Self-Identification | feature/whatsapp-self-id | 7540cc6 / 16d0ca6 | mirrored | 2026-06-05 |
@@ -59,6 +60,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260606-001 — package_closeout — Package 3T — Facebook Messenger Self-Identification Sender Picker
+
+**Created:** 2026-06-06T00:00:00Z | **Branch:** feature/facebook-messenger-self-id | **HEAD:** b01fbff (impl) / 8b11f18 (merge) | **Status:** mirrored
+
+Package 3T — Facebook Messenger Self-Identification Sender Picker COMPLETE — implementation `b01fbff`, merge `8b11f18` 2026-06-06. Mirrors Package 3Q (Instagram DM) and Package 3L (WhatsApp) sender picker pattern. Delivered: (1) `index.html` — `<div class="whatsapp-sender-picker" id="facebookSenderPicker" style="display:none;">` after `#instagramSenderPicker`; `const facebookSenderPicker` binding; `showFacebookSenderPicker(memories)` function (extracts unique senders in first-seen order, renders label + chips + Skip chip, attaches click handlers; sender names escaped with `replace(/"/g, '&quot;')` for data-sender attribute and `replace(/</g, '&lt;').replace(/>/g, '&gt;')` for visible text); `applyFacebookSelfSender(senderName)` function (mutates `chatMessagesData[i].senderRole` in-place, calls `renderConversation` + `renderImportQualityPanel`, updates `.active` chip state); Facebook picker hide in WA branch (alongside IG hide); Facebook picker hide in non-WA reset block (alongside WA + IG hides); `showFacebookSenderPicker(result.memories)` call in FB routing guard branch; Facebook picker hide in restore path; `applyFacebookSelfSender` exposed on `window.__km`. (2) `scripts/e2e-regression-harness.mjs` — `FB_ALICE_COUNT = 4` and `FB_CHARLIE_COUNT = 4` constants after `FB_FIXTURE_COUNT`; Phase 32 block (6 real-files tests): picker visible after Facebook Messenger import; Alice Johnson and charlie_b_99 chips present; Alice Johnson → 4 `.me` rows; selfMessageCount = 4 via ImportQualityReport; Skip → 0 `.me`; non-Facebook TXT reimport hides `#facebookSenderPicker` + resets state for Phase 12. (3) `docs/qa/test-strategy.md` — status line (Phase 32 added; real-files total 117→123); Layer 3 coverage 60→66 / 117→123; pre-commit baseline 117→123; Phase 30 omission corrected; Package 3T COMPLETE. (4) `docs/architecture/architecture-roadmap.md` — architecture section updated to post-Package 3T; Facebook Messenger sender picker in architecture tree; Package 3T DELIVERED entry. (5) `src/core/source-platforms.js` — facebook-messenger notes updated: "Sender picker delivered (Package 3T)".
+
+**Tests:** 2554 Node tests (20 suites), 0 failed (unchanged). E2E seeded 57/57 (unchanged). E2E real-files 123/123 (+6 Phase 32). Visual regression PASS (4/4 pages, baselines unchanged; sender picker above capture zone). OS audit 324/0/0. State freshness: 3 FAIL_WRONG_ACTIVE_BRANCH post-merge (expected; resolved by closeout state-sync). project-control-sync-validate 11/0/0.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — `src/adapters/facebook-messenger-adapter.js`, `src/core/normalized-memory.js`, `src/core/import-adapters.js`, `src/core/import-quality-report.js`, `src/products/*`, `src/state/*`, `scripts/fixtures/fake-facebook-messenger.json` untouched; no pagination constants, no Review view, no standalone keepsake flows, no ProductDraft/Preflight/Lifecycle/ProofApproval modules, no readiness gate, no GATE-04 crossing, no checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3T closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260605-005 — package_closeout — Package 3O — Instagram DM JSON Adapter
 

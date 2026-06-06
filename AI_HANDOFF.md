@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3T — Facebook Messenger Self-Identification Sender Picker. Branch `feature/facebook-messenger-self-id`. Implementation complete; verification in progress. Stop before commit.
+**Status:** `closed` — no active package. Package 3T COMPLETE — impl `b01fbff`, merged `8b11f18` 2026-06-06. Await Coordinator.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,12 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — IN PROGRESS |
-| **Active branch** | `feature/facebook-messenger-self-id` |
-| **main HEAD** | `5501d84` — docs: sync operating docs after Package 3S completion |
-| **Last completed pass** | `Package 3S — Facebook Messenger JSON UI Wiring` — impl `27b3521`, merged `e326fba` 2026-06-06 |
-| **Active package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` |
-| **Last closed package** | `Package 3S — Facebook Messenger JSON UI Wiring` — FULLY COMPLETE — merged `e326fba` 2026-06-06 |
+| **Active pass** | `None` |
+| **Active branch** | `main` |
+| **main HEAD** | `8b11f18` — merge: add Facebook Messenger self-identification sender picker (Package 3T) |
+| **Last completed pass** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — impl `b01fbff`, merged `8b11f18` 2026-06-06 |
+| **Active package** | `None` |
+| **Last closed package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — FULLY COMPLETE — merged `8b11f18` 2026-06-06 |
 | **Prior closed package** | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE — merged `b6c85e9` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -32,23 +32,35 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3T — Facebook Messenger Self-Identification Sender Picker)
+## Objective (last completed pass — Package 3T — Facebook Messenger Self-Identification Sender Picker)
 
-Package 3T — Facebook Messenger Self-Identification Sender Picker. **IN PROGRESS — branch `feature/facebook-messenger-self-id`, base `5501d84` on `main`, 2026-06-06.**
+Package 3T — Facebook Messenger Self-Identification Sender Picker. **COMPLETE — impl `b01fbff`, merged `8b11f18` to `main` 2026-06-06.**
 
-Files modified so far:
+Branch: `feature/facebook-messenger-self-id` — base: `main` at `5501d84`
+
+Files modified:
 - `index.html` — `<div id="facebookSenderPicker">` after `#instagramSenderPicker`; `const facebookSenderPicker` binding; `showFacebookSenderPicker(memories)` function; `applyFacebookSelfSender(senderName)` function (mirrors Instagram DM picker pattern; uses `replace(/"/g, '&quot;')` + `replace(/</g, '&lt;').replace(/>/g, '&gt;')` escaping for sender names in innerHTML); Facebook picker hide in WA branch (alongside IG hide); Facebook picker hide in non-WA reset block (alongside WA + IG hides); `showFacebookSenderPicker(result.memories)` call in FB routing guard branch; Facebook picker hide in restore path; `applyFacebookSelfSender` exposed on `window.__km`
 - `scripts/e2e-regression-harness.mjs` — `FB_ALICE_COUNT = 4` and `FB_CHARLIE_COUNT = 4` constants after `FB_FIXTURE_COUNT`; Phase 32 (6 real-files tests): picker visible → Alice Johnson + charlie_b_99 chips → Alice Johnson → 4 `.me` → selfMessageCount=4 → Skip → 0 `.me` → non-FB TXT reimport hides picker + resets state for Phase 12
-- `docs/qa/test-strategy.md` — status line updated (Phase 32 added; real-files total 117→123); Layer 3 What fixed (Phase 30 omission corrected; Phase 32 added; Instagram DM + Facebook Messenger picker descriptions added); Layer 3 Coverage 60→66 / 117→123; pre-commit baseline 117→123; Package 3T IN PROGRESS note added
-- `docs/architecture/architecture-roadmap.md` — header updated; Facebook Messenger sender picker line added to architecture tree; Package 3T IN PROGRESS entry added; facebook-messenger notes left as-is (adapter unchanged)
+- `docs/qa/test-strategy.md` — status line updated (Phase 32 added; real-files total 117→123); Layer 3 What fixed (Phase 30 omission corrected; Phase 32 added; Instagram DM + Facebook Messenger picker descriptions added); Layer 3 Coverage 60→66 / 117→123; pre-commit baseline 117→123; Package 3T COMPLETE note
+- `docs/architecture/architecture-roadmap.md` — header updated; Facebook Messenger sender picker line added to architecture tree; Package 3T DELIVERED entry; architecture section updated to post-Package 3T
 - `src/core/source-platforms.js` — facebook-messenger notes: "Self-identification deferred to Package 3T" → "Sender picker delivered (Package 3T)"
-- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state updated to Package 3T in-progress
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state updated to Package 3T COMPLETE
 
-**Verification status:** Implementation complete. All verification runs pending. Stop before commit.
+**Verification results:** 2554/2554 Node (20 suites, 0 failed). E2E seeded 57/57 (unchanged). E2E real-files 123/123 (+6 Phase 32). Visual regression PASS (4/4 pages, baselines unchanged). Hard-exclusion diff: clean (8 authorized files only). OS audit: 324/0/0. project-control-sync-validate: 11/0/0. state-freshness: WARN only (cosmetic hash lag — expected mid-package; corrected in closeout state-sync).
 
-**Next exact action:** Run verification suite: Node tests (2554/2554), E2E seeded (57/57), E2E real-files (123/123 including Phase 32 6/6), visual regression --check PASS. Then report to Coordinator before commit.
+**Manual QA (via Playwright E2E + code inspection):**
+- FB fixture imports as 8 rows: ✓ Phase 32 test 1 + 3 (picker visible, 4 `.me` on Alice selection)
+- Alice Johnson + charlie_b_99 chips present: ✓ Phase 32 test 2
+- Selecting Alice Johnson → 4 `.me`: ✓ Phase 32 test 3
+- selfMessageCount = 4 via ImportQualityReport: ✓ Phase 32 test 4
+- Skip → 0 `.me`: ✓ Phase 32 test 5
+- Non-FB TXT reimport hides picker: ✓ Phase 32 test 6
+- WA and IG pickers hidden after FB import: ✓ by code — non-WA reset block runs before FB routing guard; FB branch calls showFacebookSenderPicker only
+- Zero console errors: ✓ Phase 32 passes headless Chromium without any surfaced JS errors
 
-**Hard exclusions verified (so far):**
+**Next exact action:** No active package. Await Coordinator authorization for next package. Do not start any development work without explicit Coordinator instruction.
+
+**Hard exclusions verified:**
 - `src/adapters/facebook-messenger-adapter.js`: not touched
 - `src/core/normalized-memory.js`: not touched
 - `src/core/import-adapters.js`: not touched
@@ -706,7 +718,7 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3S COMPLETE — impl `27b3521`, merged `e326fba` 2026-06-06. State-sync complete.
+Package 3T COMPLETE — impl `b01fbff`, merged `8b11f18` 2026-06-06. State-sync complete.
 
 Coordinator decides:
 - Authorize next development package, or
