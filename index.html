@@ -3569,6 +3569,7 @@
     <script src="src/adapters/whatsapp-txt-adapter.js"></script>
     <script src="src/adapters/android-sms-xml-adapter.js"></script>
     <script src="src/adapters/instagram-dm-adapter.js"></script>
+    <script src="src/adapters/facebook-messenger-adapter.js"></script>
     <script src="src/adapters/future-adapter-stubs.js"></script>
     <script src="src/core/project-session.js"></script>
     <script src="src/state/session-serialization.js"></script>
@@ -4091,6 +4092,16 @@
                 if (window.KMEngine && window.KMEngine.androidSmsAdapter
                         && window.KMEngine.androidSmsAdapter.canHandle(text)) {
                     const result = window.KMEngine.androidSmsAdapter.import(text);
+                    window.chatMessagesData = result.memories;
+                    showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
+                    renderConversation(result.memories);
+                    renderImportQualityPanel(result.memories);
+                    return;
+                }
+
+                if (window.KMEngine && window.KMEngine.facebookMessengerAdapter
+                        && window.KMEngine.facebookMessengerAdapter.canHandle(text)) {
+                    const result = window.KMEngine.facebookMessengerAdapter.import(text);
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);

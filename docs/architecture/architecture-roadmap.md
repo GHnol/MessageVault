@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05 (Package 3R IN PROGRESS — Facebook Messenger JSON adapter)
+**Last updated:** 2026-06-06 (Package 3S — Facebook Messenger JSON UI Wiring)
 **Status:** Active
 
 ---
@@ -31,7 +31,7 @@ src/
     android-sms-xml-adapter.js     — KMEngine.androidSmsAdapter; SMS Backup & Restore XML; type=1/2 senderRole; MMS attachment placeholder; regex-based DOM-free parser; ADAPTER_ID android-sms-xml-v1 — Package 3M
     instagram-dm-adapter.js        — KMEngine.instagramDmAdapter; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID instagram-dm-json-v1; browser-loaded (Package 3P) — Package 3O/3P
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
-    facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; engine-only — Package 3R
+    facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     future-adapter-stubs.js
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -128,12 +128,17 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-DELIVERED (Package 3R, IN PROGRESS — branch `feature/facebook-messenger-adapter`):
+DELIVERED (Package 3S — Facebook Messenger JSON UI Wiring):
+- `index.html` — `<script src="src/adapters/facebook-messenger-adapter.js">` tag (after instagram-dm-adapter.js, before future-adapter-stubs.js); Facebook Messenger routing guard in `readTxtFile()` (after Android SMS guard, before Instagram DM guard — order is required: FB must precede IG because Facebook files satisfy Instagram's canHandle; magic_words discriminator in FB's canHandle uniquely excludes Instagram files); no sender picker (self-ID deferred to Package 3T); `#fileInput` accept unchanged (`.txt,.xml,.json` already covers .json); no engine changes.
+- `scripts/e2e-regression-harness.mjs` — `FB_FIXTURE` + `FB_FIXTURE_COUNT = 8` constants; Phase 31 (5 real-files tests): import → count=8 → IQR panel → sourcePlatformId='facebook-messenger' → TXT reset.
+- `src/core/source-platforms.js` — facebook-messenger notes updated: UI wiring delivered (Package 3S); self-identification deferred to Package 3T.
+
+DELIVERED (Package 3R, merged `b6c85e9` 2026-06-05):
 - `src/adapters/facebook-messenger-adapter.js` — `KMEngine.facebookMessengerAdapter`; ADAPTER_ID `facebook-messenger-json-v1`; Facebook Messenger JSON export; `magic_words` discriminator distinguishes from Instagram DM; HTML entity decoding; media+share → attachment-placeholder (conservative); senderRole always `contact` (self-ID deferred to UI package); ms-epoch timestamps → ISO-8601; `importWarnings` for `is_unsent` and missing sender_name; no DOM, no external dependencies; engine-only.
 - `src/adapters/future-adapter-stubs.js` — removed `facebook-messenger-json-v1` stub entry; real adapter now owns that ID.
 - `src/core/source-platforms.js` — facebook-messenger platform `status: 'stub'` → `'supported'`; notes updated.
-- `scripts/fixtures/fake-facebook-messenger.json` — 10-message fake fixture (2 participants: Alice Johnson + charlie_b_99; 8 imported / 2 skipped; text/photo/video/audio/share/sticker; HTML entities; reactions field present; magic_words: []).
-- `src/tests/facebook-messenger-adapter-tests.mjs` — 103 tests across 17 suites.
+- `scripts/fixtures/fake-facebook-messenger.json` — 10-message fake fixture (2 participants: Alice Johnson + charlie_b_99; 8 imported / 2 skipped; 3 text + 5 attachment-placeholders; HTML entities; reactions field present; magic_words: []).
+- `src/tests/facebook-messenger-adapter-tests.mjs` — 98 tests across 17 suites.
 - `src/tests/km-engine-tests.mjs` — loads `facebook-messenger-adapter.js` before stubs; updated facebook-messenger platform assertion to `supported`; +5 smoke assertions (117 total).
 
 DELIVERED (Package 3Q, merged `ff1c3ed` 2026-06-05):
