@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active package — await Coordinator authorization for next package |
-| Branch | `main` |
+| Resume into | Package 3U — Telegram JSON Adapter — IN PROGRESS; implementation complete; awaiting commit instruction |
+| Branch | `feature/telegram-json-adapter` |
 | main HEAD | `8b11f18` — merge: add Facebook Messenger self-identification sender picker (Package 3T) |
-| Next action | Run `/start`. No active package. Read `AI_HANDOFF.md`. Await Coordinator authorization before starting any development work. |
+| Next action | Run `/start`. Read `AI_HANDOFF.md`. Confirm branch `feature/telegram-json-adapter`. Verify 2650/2650 Node tests green. Await Coordinator commit instruction. Do not commit or push without explicit instruction. |
+| Package 3U | IN PROGRESS — `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array entities; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; senderRole always contact; 91 new tests (telegram-adapter-tests.mjs) + 5 km-engine smoke; 2650 Node / 21 suites; engine-only; telegram platform `supported`; STUBS array now empty; no index.html |
 | Package 3T | COMPLETE — impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender` + picker hide wires + `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests); 2554/2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS |
 | Package 3S | COMPLETE — `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order); Phase 31 E2E (5 tests); 2554/2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T); no engine changes; impl `27b3521`, merged `e326fba` 2026-06-06 |
 | Package 3R | COMPLETE — `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d`, merged `b6c85e9` 2026-06-05 |
