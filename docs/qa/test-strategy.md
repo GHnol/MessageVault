@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117; E2E Phase 32 added in Package 3T — real-files total 123).
 **Last updated:** 2026-06-06 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -90,9 +90,9 @@ cd scripts && npm run e2e:headed
 
 ### Layer 3 — E2E real-files harness
 
-**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 + 27 + 28 + 29 + 31 — real .txt import, WhatsApp .txt import, WhatsApp self-identification sender picker, import quality report, Android SMS XML import, Instagram DM JSON import, Facebook Messenger JSON import, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
+**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 + 27 + 28 + 29 + 30 + 31 + 32 — real .txt import, WhatsApp .txt import, WhatsApp self-identification sender picker, import quality report, Android SMS XML import, Instagram DM JSON import, Instagram DM self-identification sender picker, Facebook Messenger JSON import, Facebook Messenger self-identification sender picker, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
 
-**Coverage:** 60 tests (59 always + 1 conditional on local chat.db). Combined seeded + real-files: **117**.
+**Coverage:** 66 tests (65 always + 1 conditional on local chat.db). Combined seeded + real-files: **123**.
 
 **Run:**
 
@@ -192,6 +192,10 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
+**Package 3T — Facebook Messenger Self-Identification Sender Picker (IN PROGRESS — branch `feature/facebook-messenger-self-id`, 2026-06-06):**
+
+Package 3T adds no new Node unit tests (no new engine module; senderRole already tested via `import-quality-report-tests.mjs`). Adds E2E Phase 32 (6 real-files tests): sender picker visible after Facebook Messenger import; Alice Johnson and charlie_b_99 chips present; selecting Alice Johnson → 4 `.me` rows; selfMessageCount = 4; selecting Skip → 0 `.me`; non-Facebook TXT reimport hides picker. Node baseline unchanged: 2554 / 20 suites. Layer 2 unchanged: 57 seeded. Layer 3: 123 total when running `npm run e2e:real` (+6 Phase 32). Visual regression PASS expected (sender picker above page canvas capture zone; baselines unaffected). No engine changes. No adapter changes. `#facebookSenderPicker` added to `index.html`; `showFacebookSenderPicker` + `applyFacebookSelfSender` added; `window.__km.applyFacebookSelfSender` exposed.
+
 **Package 3S — Facebook Messenger JSON UI Wiring (COMPLETE — merged to main, Package 3S):**
 
 Package 3S adds no new Node unit tests (no new engine module; adapter fully tested in Package 3R). Adds E2E Phase 31 (5 real-files tests): Facebook Messenger JSON fixture imports via file input; chat view visible; count = 8 (10 messages − 1 is_unsent skip − 1 missing-sender skip); importQualityPanel visible and non-empty; sourcePlatformId = 'facebook-messenger'; TXT re-import resets state for later phases. Node baseline unchanged: 2554 / 20 suites. Layer 2 unchanged: 57 seeded. Layer 3: 117 total when running `npm run e2e:real` (+5 Phase 31). Visual regression PASS (baselines unchanged; import panel above page canvas capture zone). No sender picker (Facebook self-ID deferred to Package 3T). No engine changes. `#fileInput` accept already included `.json` — no change needed. Script tag added for `facebook-messenger-adapter.js`. Facebook routing guard inserted after Android SMS and before Instagram DM in `readTxtFile()` — Facebook must precede Instagram because Facebook files satisfy Instagram's canHandle (both are Meta JSON with participants/messages/timestamp_ms); the magic_words discriminator in Facebook's canHandle uniquely excludes Instagram files.
@@ -244,7 +248,7 @@ Before any commit instruction is acted on, the agent must verify:
 
 1. All 20 Node unit suites green (2554 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (117 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (123 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

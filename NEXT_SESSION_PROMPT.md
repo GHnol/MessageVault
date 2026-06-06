@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active package — Package 3S COMPLETE. Await Coordinator direction on `main`. |
-| Branch | `main` |
-| main HEAD | `e326fba` — merge: add Facebook Messenger JSON import routing (Package 3S) |
-| Next action | Run `/start`. No active package. Await Coordinator authorization for next package. Do not start development without explicit approval. |
+| Resume into | Package 3T — Facebook Messenger Self-Identification Sender Picker — IN PROGRESS on `feature/facebook-messenger-self-id` |
+| Branch | `feature/facebook-messenger-self-id` |
+| main HEAD | `5501d84` — docs: sync operating docs after Package 3S completion |
+| Next action | Run `/start`. Resume Package 3T implementation. Read `AI_HANDOFF.md` for exact scope, authorized files, and next action. |
+| Package 3T | IN PROGRESS — `#facebookSenderPicker` div + JS functions + routing wires in `index.html`; Phase 32 E2E (6 tests) in `scripts/e2e-regression-harness.mjs`; doc updates in progress; no engine/adapter/persistence changes; base `5501d84` on `main` |
 | Package 3S | COMPLETE — `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order); Phase 31 E2E (5 tests); 2554/2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T); no engine changes; impl `27b3521`, merged `e326fba` 2026-06-06 |
 | Package 3R | COMPLETE — `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d`, merged `b6c85e9` 2026-06-05 |
 | Package 3Q | COMPLETE — `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; picker hides on all non-Instagram paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 112/112 real-files; 21/21 manual QA; no engine/adapter/persistence changes; impl `8ca92c4`, merged `ff1c3ed` 2026-06-05 |

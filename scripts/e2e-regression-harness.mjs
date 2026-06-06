@@ -71,6 +71,8 @@ const IG_BOB_COUNT            = 4;  // bob_jones_99 sends 4 of the 8 imported me
 
 const FB_FIXTURE       = path.join(__dir, 'fixtures', 'fake-facebook-messenger.json');
 const FB_FIXTURE_COUNT = 8;  // 10 messages - 1 is_unsent skip - 1 missing-sender skip
+const FB_ALICE_COUNT   = 4;  // Alice Johnson sends 4 of the 8 imported messages
+const FB_CHARLIE_COUNT = 4;  // charlie_b_99 sends 4 of the 8 imported messages
 
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
@@ -1489,6 +1491,72 @@ async function main() {
             await page.click('#txtUploadCard');
             await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
             await waitForChatView(page);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 32 — Facebook Messenger self-identification sender picker (Package 3T)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 32 — Facebook Messenger self-identification sender picker ──\n');
+
+        await harness.run('after Facebook Messenger import #facebookSenderPicker is visible and non-empty', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(FB_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('facebookSenderPicker');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#facebookSenderPicker should be visible and non-empty after Facebook Messenger import');
+        });
+
+        await harness.run('sender picker chips include Alice Johnson and charlie_b_99', async page => {
+            const names = await page.evaluate(() => {
+                const chips = document.querySelectorAll('#facebookSenderPicker .sender-chip:not(.skip-chip)');
+                return Array.from(chips).map(c => c.textContent.trim());
+            });
+            assert(names.includes('Alice Johnson'), `Expected Alice Johnson chip, got: ${names.join(', ')}`);
+            assert(names.includes('charlie_b_99'),  `Expected charlie_b_99 chip, got: ${names.join(', ')}`);
+        });
+
+        await harness.run('selecting Alice Johnson flips exactly FB_ALICE_COUNT rows to .me', async page => {
+            await page.evaluate(() => window.__km.applyFacebookSelfSender('Alice Johnson'));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === FB_ALICE_COUNT,
+                `Expected ${FB_ALICE_COUNT} .me rows after selecting Alice Johnson, got ${meCount}`);
+        });
+
+        await harness.run('selecting Alice Johnson updates selfMessageCount via ImportQualityReport', async page => {
+            const selfCount = await page.evaluate(() => {
+                const IQR = window.KMEngine && window.KMEngine.ImportQualityReport;
+                const data = window.chatMessagesData || [];
+                if (!IQR || !data.length) return -1;
+                return IQR.compute(data).selfMessageCount;
+            });
+            assert(selfCount === FB_ALICE_COUNT,
+                `Expected selfMessageCount ${FB_ALICE_COUNT} after selecting Alice Johnson, got ${selfCount}`);
+        });
+
+        await harness.run('selecting Skip reverts all Facebook Messenger messages to .them', async page => {
+            await page.evaluate(() => window.__km.applyFacebookSelfSender(null));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === 0, `Expected 0 .me rows after Skip, got ${meCount}`);
+        });
+
+        await harness.run('non-Facebook TXT reimport hides #facebookSenderPicker; reset state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('facebookSenderPicker');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#facebookSenderPicker should be hidden after non-Facebook TXT import');
         });
 
         // ─────────────────────────────────────────────────────────────────────

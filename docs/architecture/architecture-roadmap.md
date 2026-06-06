@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06 (Package 3S — Facebook Messenger JSON UI Wiring)
+**Last updated:** 2026-06-06 (Package 3T — Facebook Messenger Self-Identification Sender Picker)
 **Status:** Active
 
 ---
@@ -31,6 +31,7 @@ src/
     android-sms-xml-adapter.js     — KMEngine.androidSmsAdapter; SMS Backup & Restore XML; type=1/2 senderRole; MMS attachment placeholder; regex-based DOM-free parser; ADAPTER_ID android-sms-xml-v1 — Package 3M
     instagram-dm-adapter.js        — KMEngine.instagramDmAdapter; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID instagram-dm-json-v1; browser-loaded (Package 3P) — Package 3O/3P
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
+index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     future-adapter-stubs.js
   state/
@@ -127,6 +128,11 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3T — Facebook Messenger Self-Identification Sender Picker):
+- `index.html` — `<div id="facebookSenderPicker">` after `#instagramSenderPicker`; `const facebookSenderPicker` binding; `showFacebookSenderPicker(memories)` function; `applyFacebookSelfSender(senderName)` function; Facebook picker hide in WA branch + non-WA guard block + Facebook branch call + restore path; `window.__km.applyFacebookSelfSender` exposed for E2E testability.
+- `scripts/e2e-regression-harness.mjs` — `FB_ALICE_COUNT = 4` and `FB_CHARLIE_COUNT = 4` constants; Phase 32 (6 real-files tests): picker visible; Alice Johnson + charlie_b_99 chips; Alice Johnson → 4 `.me`; selfMessageCount = 4; Skip → 0 `.me`; non-Facebook reimport hides picker.
+- No adapter changes. No engine changes. No persistence schema changes.
 
 DELIVERED (Package 3S — Facebook Messenger JSON UI Wiring):
 - `index.html` — `<script src="src/adapters/facebook-messenger-adapter.js">` tag (after instagram-dm-adapter.js, before future-adapter-stubs.js); Facebook Messenger routing guard in `readTxtFile()` (after Android SMS guard, before Instagram DM guard — order is required: FB must precede IG because Facebook files satisfy Instagram's canHandle; magic_words discriminator in FB's canHandle uniquely excludes Instagram files); no sender picker (self-ID deferred to Package 3T); `#fileInput` accept unchanged (`.txt,.xml,.json` already covers .json); no engine changes.
