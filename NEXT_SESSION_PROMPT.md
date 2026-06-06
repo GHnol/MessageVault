@@ -47,12 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3S — Facebook Messenger JSON UI Wiring — implementation complete; awaiting Coordinator commit authorization. |
-| Branch | `feature/facebook-messenger-ui-wiring` |
-| Branch base | `main` at `39c4674` |
-| main HEAD | `39c4674` — docs: sync operating docs after Package 3R completion |
-| Next action | Run `/start`. Read `AI_HANDOFF.md`. Await Coordinator commit authorization for Package 3S. Do not commit or push without explicit instruction. |
-| Package 3S | IN PROGRESS — `facebook-messenger-adapter.js` script tag + FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM); Phase 31 E2E (5/5); 2554/2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T); no engine changes; awaiting commit |
+| Resume into | No active package — Package 3S COMPLETE. Await Coordinator direction on `main`. |
+| Branch | `main` |
+| main HEAD | `e326fba` — merge: add Facebook Messenger JSON import routing (Package 3S) |
+| Next action | Run `/start`. No active package. Await Coordinator authorization for next package. Do not start development without explicit approval. |
+| Package 3S | COMPLETE — `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order); Phase 31 E2E (5 tests); 2554/2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T); no engine changes; impl `27b3521`, merged `e326fba` 2026-06-06 |
 | Package 3R | COMPLETE — `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d`, merged `b6c85e9` 2026-06-05 |
 | Package 3Q | COMPLETE — `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; picker hides on all non-Instagram paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 112/112 real-files; 21/21 manual QA; no engine/adapter/persistence changes; impl `8ca92c4`, merged `ff1c3ed` 2026-06-05 |
 | Package 3P | COMPLETE — Instagram DM JSON routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker (delivered in Package 3Q); impl `fa6f6f2`, merged `d99fb84` 2026-06-05 |

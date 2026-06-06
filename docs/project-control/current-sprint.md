@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-05 (America/New_York — Package 3R completion)
+**Last updated:** 2026-06-06 (America/New_York — Package 3S completion)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -40,13 +40,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 16 | Package 3P — Instagram DM JSON UI Wiring | P2 | **Done** | impl `fa6f6f2`, merged `d99fb84` 2026-06-05; `readTxtFile()` Instagram DM routing guard; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; Phase 29 E2E (5 tests); 106/106 real-files; 10/10 manual QA; no engine changes; no sender picker ✓ |
 | 17 | Package 3Q — Instagram DM Self-Identification Sender Picker | P2 | **Done** | impl `8ca92c4`, merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker`; `showInstagramSenderPicker` + `applyInstagramSelfSender`; Phase 30 E2E (6 tests); 2450 Node; 112/112 real-files; 21/21 manual QA; no engine changes ✓ |
 | 18 | Package 3R — Facebook Messenger JSON Adapter | P2 | **Done** | impl `f63123d`, merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator; 98 new tests (17 suites) + 6 km-engine additions; facebook-messenger platform `supported`; 2554 Node; engine-only; no E2E ✓ |
-| 19 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3R COMPLETE 2026-06-05 |
+| 19 | Package 3S — Facebook Messenger JSON UI Wiring | P2 | **Done** | impl `27b3521`, merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); 2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T) ✓ |
+| 20 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3S COMPLETE 2026-06-06 |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3R COMPLETE 2026-06-05; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3S COMPLETE 2026-06-06; all further development work halted pending Coordinator decision.
 
 ---
 

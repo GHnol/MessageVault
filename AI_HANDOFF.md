@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3S — Facebook Messenger JSON UI Wiring. Implementation complete. Awaiting Coordinator commit authorization.
+**Status:** `complete` — Package 3S — Facebook Messenger JSON UI Wiring. impl `27b3521`, merged `e326fba` to `main` 2026-06-06. No active package. Awaiting Coordinator direction.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,14 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3S — Facebook Messenger JSON UI Wiring` |
-| **Active branch** | `feature/facebook-messenger-ui-wiring` |
-| **Branch base** | `main` at `39c4674` |
-| **main HEAD** | `39c4674` — docs: sync operating docs after Package 3R completion |
-| **Last completed pass** | `Package 3R — Facebook Messenger JSON Adapter` — impl `f63123d`, merged `b6c85e9` 2026-06-05 |
-| **Active package** | `Package 3S — Facebook Messenger JSON UI Wiring` — implementation complete; awaiting commit |
-| **Last closed package** | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE — merged `b6c85e9` 2026-06-05 |
-| **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
+| **Active pass** | None — awaiting Coordinator direction |
+| **Active branch** | `main` |
+| **main HEAD** | `e326fba` — merge: add Facebook Messenger JSON import routing (Package 3S) |
+| **Last completed pass** | `Package 3S — Facebook Messenger JSON UI Wiring` — impl `27b3521`, merged `e326fba` 2026-06-06 |
+| **Active package** | None |
+| **Last closed package** | `Package 3S — Facebook Messenger JSON UI Wiring` — FULLY COMPLETE — merged `e326fba` 2026-06-06 |
+| **Prior closed package** | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE — merged `b6c85e9` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -35,7 +34,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Objective (active pass — Package 3S — Facebook Messenger JSON UI Wiring)
 
-Package 3S — Facebook Messenger JSON UI Wiring. **Implementation complete — awaiting Coordinator commit authorization.**
+Package 3S — Facebook Messenger JSON UI Wiring. **COMPLETE — impl `27b3521`, merged `e326fba` to `main` 2026-06-06.**
 
 Branch: `feature/facebook-messenger-ui-wiring` — base: `main` at `39c4674`
 
@@ -58,7 +57,7 @@ Files modified:
 - Instagram fixture still routes to instagram-dm: ✓ Phases 29/30 both pass (117/117 total including these)
 - Zero console errors: ✓ Phase 31 passes headless Chromium without any surfaced JS errors
 
-**Next exact action:** Await Coordinator commit authorization. Do not commit or push without explicit instruction.
+**Next exact action:** No active package. Await Coordinator authorization for next package. Do not start any development work without explicit Coordinator instruction.
 
 **Hard exclusions verified:**
 - `src/adapters/facebook-messenger-adapter.js`: not touched
@@ -676,9 +675,13 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3S implementation complete. All verification passed (2554/2554 Node, 57/57 seeded, 117/117 real-files, visual regression PASS, hard-exclusion diff clean). Awaiting Coordinator commit authorization.
+Package 3S COMPLETE — impl `27b3521`, merged `e326fba` 2026-06-06. State-sync complete.
 
-After commit: merge to main, run closeout skill, update state docs to Package 3S COMPLETE.
+Coordinator decides:
+- Authorize next development package, or
+- Authorize any other next direction
+
+Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
 
 ---
 

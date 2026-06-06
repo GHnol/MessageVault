@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-06` (Package 3S implementation complete — awaiting commit)
+**Last updated:** `2026-06-06` (Package 3S COMPLETE — state-sync)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `39c4674` — docs: sync operating docs after Package 3R completion |
-| Active branch | `feature/facebook-messenger-ui-wiring` |
-| Active pass | `Package 3S — Facebook Messenger JSON UI Wiring` — implementation complete; awaiting Coordinator commit authorization |
-| Last completed pass | `Package 3R — Facebook Messenger JSON Adapter` — impl `f63123d`, merged `b6c85e9` 2026-06-05 |
-| Last closed package | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE |
-| Next authorized target | Coordinator commit authorization for Package 3S |
-| Test baseline | **2554 Node tests** (20 suites); E2E seeded 57/57; E2E real-files 117/117 (Phase 31 added); visual regression PASS (baseline unchanged) |
-| Package 3S | IN PROGRESS — branch `feature/facebook-messenger-ui-wiring`; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order); Phase 31 E2E (5 tests); no sender picker (deferred to 3T); no engine changes; implementation complete; awaiting commit |
+| main HEAD | `e326fba` — merge: add Facebook Messenger JSON import routing (Package 3S) |
+| Active branch | `main` |
+| Active pass | None — awaiting Coordinator direction |
+| Last completed pass | `Package 3S — Facebook Messenger JSON UI Wiring` — impl `27b3521`, merged `e326fba` 2026-06-06 |
+| Last closed package | `Package 3S — Facebook Messenger JSON UI Wiring` — FULLY COMPLETE |
+| Next authorized target | Await Coordinator decision on next package |
+| Test baseline | **2554 Node tests** (20 suites); E2E seeded 57/57; E2E real-files 117/117; visual regression PASS (baseline unchanged) |
+| Package 3S | COMPLETE — merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); no sender picker (deferred to 3T); no engine changes; impl `27b3521` |
 | Package 3R | COMPLETE — merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node total / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d` |
 | Package 3Q | COMPLETE — merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; Instagram picker hide in all non-Instagram import paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 21/21 manual QA; no engine changes; no adapter changes; no persistence schema changes |
 | Package 3P | COMPLETE — merged `d99fb84` 2026-06-05; Instagram DM JSON import routing in `readTxtFile()`; `instagram-dm-adapter.js` script tag; `accept=".txt,.xml,.json"`; drop hint + ingest card copy updated; Phase 29 E2E (5 tests); 10/10 manual QA; no engine changes; no sender picker (self-ID delivered in Package 3Q) |
