@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3S — Facebook Messenger JSON UI Wiring. impl `27b3521`, merged `e326fba` to `main` 2026-06-06. No active package. Awaiting Coordinator direction.
+**Status:** `in-progress` — Package 3T — Facebook Messenger Self-Identification Sender Picker. Branch `feature/facebook-messenger-self-id`. Implementation complete; verification in progress. Stop before commit.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `e326fba` — merge: add Facebook Messenger JSON import routing (Package 3S) |
+| **Active pass** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — IN PROGRESS |
+| **Active branch** | `feature/facebook-messenger-self-id` |
+| **main HEAD** | `5501d84` — docs: sync operating docs after Package 3S completion |
 | **Last completed pass** | `Package 3S — Facebook Messenger JSON UI Wiring` — impl `27b3521`, merged `e326fba` 2026-06-06 |
-| **Active package** | None |
+| **Active package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` |
 | **Last closed package** | `Package 3S — Facebook Messenger JSON UI Wiring` — FULLY COMPLETE — merged `e326fba` 2026-06-06 |
 | **Prior closed package** | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE — merged `b6c85e9` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
@@ -32,7 +32,38 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3S — Facebook Messenger JSON UI Wiring)
+## Objective (active pass — Package 3T — Facebook Messenger Self-Identification Sender Picker)
+
+Package 3T — Facebook Messenger Self-Identification Sender Picker. **IN PROGRESS — branch `feature/facebook-messenger-self-id`, base `5501d84` on `main`, 2026-06-06.**
+
+Files modified so far:
+- `index.html` — `<div id="facebookSenderPicker">` after `#instagramSenderPicker`; `const facebookSenderPicker` binding; `showFacebookSenderPicker(memories)` function; `applyFacebookSelfSender(senderName)` function (mirrors Instagram DM picker pattern; uses `replace(/"/g, '&quot;')` + `replace(/</g, '&lt;').replace(/>/g, '&gt;')` escaping for sender names in innerHTML); Facebook picker hide in WA branch (alongside IG hide); Facebook picker hide in non-WA reset block (alongside WA + IG hides); `showFacebookSenderPicker(result.memories)` call in FB routing guard branch; Facebook picker hide in restore path; `applyFacebookSelfSender` exposed on `window.__km`
+- `scripts/e2e-regression-harness.mjs` — `FB_ALICE_COUNT = 4` and `FB_CHARLIE_COUNT = 4` constants after `FB_FIXTURE_COUNT`; Phase 32 (6 real-files tests): picker visible → Alice Johnson + charlie_b_99 chips → Alice Johnson → 4 `.me` → selfMessageCount=4 → Skip → 0 `.me` → non-FB TXT reimport hides picker + resets state for Phase 12
+- `docs/qa/test-strategy.md` — status line updated (Phase 32 added; real-files total 117→123); Layer 3 What fixed (Phase 30 omission corrected; Phase 32 added; Instagram DM + Facebook Messenger picker descriptions added); Layer 3 Coverage 60→66 / 117→123; pre-commit baseline 117→123; Package 3T IN PROGRESS note added
+- `docs/architecture/architecture-roadmap.md` — header updated; Facebook Messenger sender picker line added to architecture tree; Package 3T IN PROGRESS entry added; facebook-messenger notes left as-is (adapter unchanged)
+- `src/core/source-platforms.js` — facebook-messenger notes: "Self-identification deferred to Package 3T" → "Sender picker delivered (Package 3T)"
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state updated to Package 3T in-progress
+
+**Verification status:** Implementation complete. All verification runs pending. Stop before commit.
+
+**Next exact action:** Run verification suite: Node tests (2554/2554), E2E seeded (57/57), E2E real-files (123/123 including Phase 32 6/6), visual regression --check PASS. Then report to Coordinator before commit.
+
+**Hard exclusions verified (so far):**
+- `src/adapters/facebook-messenger-adapter.js`: not touched
+- `src/core/normalized-memory.js`: not touched
+- `src/core/import-adapters.js`: not touched
+- `src/core/import-quality-report.js`: not touched
+- `src/products/*`: not touched
+- `src/state/*`: not touched
+- `scripts/fixtures/fake-facebook-messenger.json`: not touched
+- Pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS: not touched
+- Proof panel, Review view, standalone keepsake flows, draft/preflight/lifecycle: not touched
+- No new dependencies installed
+- No external systems mutated
+
+---
+
+## Objective (last completed pass — Package 3S — Facebook Messenger JSON UI Wiring)
 
 Package 3S — Facebook Messenger JSON UI Wiring. **COMPLETE — impl `27b3521`, merged `e326fba` to `main` 2026-06-06.**
 

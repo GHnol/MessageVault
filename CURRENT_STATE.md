@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-06` (Package 3S COMPLETE — state-sync)
+**Last updated:** `2026-06-06` (Package 3T IN PROGRESS — branch created)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `e326fba` — merge: add Facebook Messenger JSON import routing (Package 3S) |
-| Active branch | `main` |
-| Active pass | None — awaiting Coordinator direction |
+| main HEAD | `5501d84` — docs: sync operating docs after Package 3S completion |
+| Active branch | `feature/facebook-messenger-self-id` |
+| Active pass | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — IN PROGRESS |
 | Last completed pass | `Package 3S — Facebook Messenger JSON UI Wiring` — impl `27b3521`, merged `e326fba` 2026-06-06 |
 | Last closed package | `Package 3S — Facebook Messenger JSON UI Wiring` — FULLY COMPLETE |
-| Next authorized target | Await Coordinator decision on next package |
-| Test baseline | **2554 Node tests** (20 suites); E2E seeded 57/57; E2E real-files 117/117; visual regression PASS (baseline unchanged) |
+| Next authorized target | Complete Package 3T — verification and commit pending Coordinator |
+| Test baseline | **2554 Node tests** (20 suites); E2E seeded 57/57; E2E real-files 117/117 (target 123/123 after Phase 32); visual regression PASS (baseline unchanged) |
+| Package 3T | IN PROGRESS — `#facebookSenderPicker` div + `const facebookSenderPicker` binding + `showFacebookSenderPicker` + `applyFacebookSelfSender` + picker hide wires in WA branch / non-WA reset / FB branch / restore path + `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests); `FB_ALICE_COUNT=4` + `FB_CHARLIE_COUNT=4`; doc updates; no engine/adapter/persistence changes; branch `feature/facebook-messenger-self-id` base `5501d84` |
 | Package 3S | COMPLETE — merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); no sender picker (deferred to 3T); no engine changes; impl `27b3521` |
 | Package 3R | COMPLETE — merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node total / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d` |
 | Package 3Q | COMPLETE — merged `ff1c3ed` 2026-06-05; `#instagramSenderPicker` inline picker; `showInstagramSenderPicker` + `applyInstagramSelfSender`; Instagram picker hide in all non-Instagram import paths + restore; `window.__km.applyInstagramSelfSender` exposed; Phase 30 E2E (6 tests); 21/21 manual QA; no engine changes; no adapter changes; no persistence schema changes |
