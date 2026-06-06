@@ -1,0 +1,105 @@
+{
+  "name": "Test Chat",
+  "type": "personal_chat",
+  "id": 999,
+  "messages": [
+    {
+      "id": 1001,
+      "type": "message",
+      "date": "2021-06-01T09:00:00",
+      "date_unixtime": "1622538000",
+      "from": "Alice Smith",
+      "from_id": "user111",
+      "text": "Hey, how are you?"
+    },
+    {
+      "id": 1002,
+      "type": "message",
+      "date": "2021-06-01T09:01:00",
+      "date_unixtime": "1622538060",
+      "from": "bob_jones_99",
+      "from_id": "user222",
+      "text": "Doing great!"
+    },
+    {
+      "id": 1003,
+      "type": "message",
+      "date": "2021-06-01T09:02:00",
+      "date_unixtime": "1622538120",
+      "from": "Alice Smith",
+      "from_id": "user111",
+      "text": [
+        "Check out ",
+        { "type": "bold", "text": "this link" },
+        " when you can!"
+      ]
+    },
+    {
+      "id": 1004,
+      "type": "message",
+      "date": "2021-06-01T09:03:00",
+      "date_unixtime": "1622538180",
+      "from": "bob_jones_99",
+      "from_id": "user222",
+      "photo": "photos/photo.jpg",
+      "text": ""
+    },
+    {
+      "id": 1005,
+      "type": "message",
+      "date": "2021-06-01T09:04:00",
+      "date_unixtime": "1622538240",
+      "from": "Alice Smith",
+      "from_id": "user111",
+      "file": "files/voice_message.ogg",
+      "media_type": "voice_message",
+      "text": ""
+    },
+    {
+      "id": 1006,
+      "type": "service",
+      "date": "2021-06-01T09:05:00",
+      "date_unixtime": "1622538300",
+      "actor": "Alice Smith",
+      "actor_id": "user111",
+      "action": "phone_call",
+      "text": ""
+    },
+    {
+      "id": 1007,
+      "type": "message",
+      "date": "2021-06-01T09:06:00",
+      "date_unixtime": "1622538360",
+      "from": null,
+      "from_id": "user0",
+      "text": "This message has a null sender"
+    },
+    {
+      "id": 1008,
+      "type": "message",
+      "date": "2021-06-01T09:07:00",
+      "date_unixtime": "1622538420",
+      "from": "bob_jones_99",
+      "from_id": "user222",
+      "text": []
+    },
+    {
+      "id": 1009,
+      "type": "message",
+      "date": "2021-06-01T09:08:00",
+      "date_unixtime": "1622538480",
+      "from": "Alice Smith",
+      "from_id": "user111",
+      "text": "See you tomorrow!"
+    },
+    {
+      "id": 1010,
+      "type": "message",
+      "date": "2021-06-01T09:09:00",
+      "date_unixtime": "1622538540",
+      "from": "bob_jones_99",
+      "from_id": "user222",
+      "text": "Sounds good, take care!"
+    }
+  ]
+}

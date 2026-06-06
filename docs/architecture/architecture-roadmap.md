@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06 (Package 3T — Facebook Messenger Self-Identification Sender Picker)
+**Last updated:** 2026-06-06 (Package 3U — Telegram JSON Adapter)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3T)
+## Current architecture (post-Package 3T; Package 3U in progress)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -21,7 +21,7 @@ src/
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
-    source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm + facebook-messenger now 'supported' — Packages 3J + 3M + 3O + 3R)
+    source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm + facebook-messenger + telegram now 'supported' — Packages 3J + 3M + 3O + 3R + 3U)
     keepsake-group.js         — KeepsakeGroup model
   adapters/
     imessage-chatdb-adapter.js
@@ -33,7 +33,8 @@ src/
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
-    future-adapter-stubs.js
+    telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; engine-only (UI wiring Package 3V) — Package 3U
+    future-adapter-stubs.js        — STUBS array is now empty (all client-side adapters promoted to real implementations)
   state/
     session-serialization.js  — serialize/restore ProjectSession
   products/
@@ -73,6 +74,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     android-sms-xml-adapter-tests.mjs       — 84 tests; API shape, canHandle accepts/rejects, SMS type=1/2 parsing, senderRole, MMS attachment placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards — Package 3M
     facebook-messenger-adapter-tests.mjs   — 103 tests; API shape, canHandle (accepts/rejects/magic_words discriminator), fixture rawCounts, timestamp conversion, HTML entity decoding, senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards — Package 3R
     instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
+    telegram-adapter-tests.mjs              — 91 tests; API shape, canHandle (accepts/rejects IG/FB/non-Telegram/from_id discriminator), fixture rawCounts, timestamp (Unix seconds → ISO), sender extraction, text plain/array-entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory fields, importWarnings, no-throw, participants — Package 3U
 ```
 
 All modules expose into `window.KMEngine`. No build step.
@@ -128,6 +130,14 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3U — Telegram JSON Adapter — implementation complete, pending commit/merge, branch `feature/telegram-json-adapter`):
+- `src/adapters/telegram-adapter.js` — `KMEngine.telegramAdapter`; ADAPTER_ID `telegram-json-v1`; Telegram Desktop JSON export; `canHandle` uses `from_id` + `date_unixtime` as positive discriminators and `participants` + `magic_words` absence as negative discriminators; `extractText(text)` handles string or array-of-entities; `hasMedia(msg)` checks `photo` (string), `file` (string), `media_type` non-null; date_unixtime is Unix SECONDS string → `parseInt * 1000` → ISO-8601; no HTML entity decoding (Telegram uses plain Unicode); senderRole always `contact`; non-message entries (service type, null from) produce importWarnings; registered as `KMEngine.telegramAdapter` and `KMEngine.adapters['telegram-json-v1']`; engine-only (UI wiring Package 3V; self-ID picker Package 3W).
+- `scripts/fixtures/fake-telegram-export.json` — 10-message fixture (Alice Smith + bob_jones_99; 8 imported / 2 skipped: service-type + null-from; includes text-array entities, photo attachment, file+media_type attachment, empty text array).
+- `src/tests/telegram-adapter-tests.mjs` — 91 tests across 17 suites.
+- `src/adapters/future-adapter-stubs.js` — STUBS array now empty; all client-side adapters have real implementations.
+- `src/core/source-platforms.js` — telegram status `'stub'` → `'supported'`; notes updated.
+- `src/tests/km-engine-tests.mjs` — loads `telegram-adapter.js`; telegram platform assertion updated to `supported`; `telegramAdapter — smoke` suite added (+5 → 122 total).
 
 DELIVERED (Package 3T — Facebook Messenger Self-Identification Sender Picker, merged `8b11f18` 2026-06-06):
 - `index.html` — `<div id="facebookSenderPicker">` after `#instagramSenderPicker`; `const facebookSenderPicker` binding; `showFacebookSenderPicker(memories)` function; `applyFacebookSelfSender(senderName)` function; Facebook picker hide in WA branch + non-WA guard block + Facebook branch call + restore path; `window.__km.applyFacebookSelfSender` exposed for E2E testability.

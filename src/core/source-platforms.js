@@ -71,11 +71,11 @@
         {
             id: 'telegram',
             label: 'Telegram',
-            status: 'stub',
+            status: 'supported',
             importModes: ['json-export'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'Telegram desktop JSON export. Adapter not yet implemented.'
+            notes: 'Telegram Desktop JSON export. Adapter telegram-json-v1 delivered (Package 3U). UI wiring pending (Package 3V). Sender picker pending (Package 3W).'
         },
         // ── Deferred ─────────────────────────────────────────────────────────────
         {

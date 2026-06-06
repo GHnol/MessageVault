@@ -20,9 +20,7 @@
         };
     }
 
-    var STUBS = [
-        makeStub('telegram-json-v1', 'telegram', 'Telegram Desktop JSON Export v1')
-    ];
+    var STUBS = [];
 
     for (var i = 0; i < STUBS.length; i++) {
         KMEngine.futureAdapters[STUBS[i].id] = STUBS[i];
