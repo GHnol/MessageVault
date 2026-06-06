@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `complete` — Package 3R — Facebook Messenger JSON Adapter. impl `f63123d`, merged `b6c85e9` to `main` 2026-06-05. No active package. Awaiting Coordinator direction.
+**Status:** `in-progress` — Package 3S — Facebook Messenger JSON UI Wiring. Implementation complete. Awaiting Coordinator commit authorization.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-05`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
 ---
 
@@ -18,17 +18,60 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — awaiting Coordinator direction |
-| **Active branch** | `main` |
-| **main HEAD** | `b6c85e9` — merge: add Facebook Messenger JSON adapter (Package 3R) |
+| **Active pass** | `Package 3S — Facebook Messenger JSON UI Wiring` |
+| **Active branch** | `feature/facebook-messenger-ui-wiring` |
+| **Branch base** | `main` at `39c4674` |
+| **main HEAD** | `39c4674` — docs: sync operating docs after Package 3R completion |
 | **Last completed pass** | `Package 3R — Facebook Messenger JSON Adapter` — impl `f63123d`, merged `b6c85e9` 2026-06-05 |
-| **Active package** | None |
+| **Active package** | `Package 3S — Facebook Messenger JSON UI Wiring` — implementation complete; awaiting commit |
 | **Last closed package** | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE — merged `b6c85e9` 2026-06-05 |
 | **Prior closed package** | `Package 3N — Android SMS UI Wiring` — FULLY COMPLETE — merged `6d61367` 2026-06-05 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3S — Facebook Messenger JSON UI Wiring)
+
+Package 3S — Facebook Messenger JSON UI Wiring. **Implementation complete — awaiting Coordinator commit authorization.**
+
+Branch: `feature/facebook-messenger-ui-wiring` — base: `main` at `39c4674`
+
+Files modified:
+- `index.html` — `<script src="src/adapters/facebook-messenger-adapter.js">` tag (after instagram-dm-adapter.js, before future-adapter-stubs.js); Facebook Messenger routing guard in `readTxtFile()` (after Android SMS guard, before Instagram DM guard — FB must precede IG: Facebook files satisfy Instagram's canHandle; magic_words discriminator in FB's canHandle uniquely excludes Instagram files); no sender picker (self-ID deferred to Package 3T); no accept change (`.txt,.xml,.json` already covers .json); no engine changes
+- `scripts/e2e-regression-harness.mjs` — `FB_FIXTURE` + `FB_FIXTURE_COUNT = 8` constants; Phase 31 (5 real-files tests): import → count=8 → IQR panel → sourcePlatformId='facebook-messenger' → TXT reset
+- `docs/qa/test-strategy.md` — status line updated (Phase 31 added; real-files total 112→117); Layer 3 coverage updated (60 tests / 117 combined); pre-commit baseline updated (117); Package 3S note added
+- `docs/architecture/architecture-roadmap.md` — header updated; Package 3S delivered entry; facebook-messenger-adapter.js marked browser-loaded; Package 3R fixture description corrected (3 text + 5 attachments, not 5+3)
+- `src/core/source-platforms.js` — facebook-messenger notes: UI wiring delivered (Package 3S); self-identification deferred to Package 3T
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state updated to Package 3S in-progress
+
+**Verification results:** 2554/2554 Node (20 suites, 0 failed). 57/57 E2E seeded. 117/117 E2E real-files (Phase 31: 5/5). Visual regression PASS (4/4 pages, baselines unchanged). Hard-exclusion diff: clean (5 authorized files only). OS audit: 324/0/0. project-control-sync-validate: 11/0/0. state-freshness: WARN only (cosmetic hash lag — expected mid-package; operational fields corrected in this update).
+
+**Manual QA (via Playwright E2E + code inspection):**
+- Facebook fixture imports as 8 rows: ✓ Phase 31 test 3 (DOM rows + chatMessagesData both === 8)
+- sourcePlatformId is 'facebook-messenger': ✓ Phase 31 test 4
+- Import Quality Report visible: ✓ Phase 31 test 4
+- WA and IG pickers hidden after FB import: ✓ by code — picker reset block (hides both) runs before FB routing guard; FB branch calls no picker
+- TXT re-import still works: ✓ Phase 31 test 5 resets to TXT; Phase 12 continues from TXT state (selects + renders correctly)
+- Instagram fixture still routes to instagram-dm: ✓ Phases 29/30 both pass (117/117 total including these)
+- Zero console errors: ✓ Phase 31 passes headless Chromium without any surfaced JS errors
+
+**Next exact action:** Await Coordinator commit authorization. Do not commit or push without explicit instruction.
+
+**Hard exclusions verified:**
+- `src/adapters/facebook-messenger-adapter.js`: not touched
+- `src/adapters/instagram-dm-adapter.js`: not touched
+- `src/core/normalized-memory.js`: not touched
+- `src/core/import-adapters.js`: not touched
+- `src/core/import-quality-report.js`: not touched
+- `src/products/*`: not touched
+- `src/state/*`: not touched
+- Pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS: not touched
+- Proof panel, Review view, standalone keepsake flows, draft/preflight/lifecycle: not touched
+- No new dependencies installed
+- No external systems mutated
 
 ---
 
@@ -633,13 +676,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3R COMPLETE — impl `f63123d`, merged `b6c85e9` 2026-06-05. State-sync complete.
+Package 3S implementation complete. All verification passed (2554/2554 Node, 57/57 seeded, 117/117 real-files, visual regression PASS, hard-exclusion diff clean). Awaiting Coordinator commit authorization.
 
-Coordinator decides:
-- Authorize next development package, or
-- Authorize any other next direction
-
-Do not start any new package without explicit Coordinator authorization. Do not push without explicit instruction. No external mutations authorized.
+After commit: merge to main, run closeout skill, update state docs to Package 3S COMPLETE.
 
 ---
 

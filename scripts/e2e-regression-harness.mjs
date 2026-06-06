@@ -69,6 +69,9 @@ const INSTAGRAM_FIXTURE_COUNT = 8;  // 10 messages - 1 is_unsent skip - 1 missin
 const IG_ALICE_COUNT          = 4;  // Alice Smith sends 4 of the 8 imported messages
 const IG_BOB_COUNT            = 4;  // bob_jones_99 sends 4 of the 8 imported messages
 
+const FB_FIXTURE       = path.join(__dir, 'fixtures', 'fake-facebook-messenger.json');
+const FB_FIXTURE_COUNT = 8;  // 10 messages - 1 is_unsent skip - 1 missing-sender skip
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1436,6 +1439,56 @@ async function main() {
                 return el.style.display === 'none' || el.innerHTML.trim().length === 0;
             });
             assert(hidden, '#instagramSenderPicker should be hidden after non-Instagram file import');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 31 — Facebook Messenger JSON import (Package 3S)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 31 — Facebook Messenger JSON import ──\n');
+
+        await harness.run('Facebook Messenger JSON fixture imports through existing file input', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(FB_FIXTURE);
+            await waitForChatView(page);
+        });
+
+        await harness.run('chat view is visible after Facebook Messenger import', async page => {
+            await assertVisible(page, '#chatView', 'Chat view after Facebook Messenger import');
+        });
+
+        await harness.run('rendered message count equals FB_FIXTURE_COUNT', async page => {
+            const rows = await page.locator('.message-row.selectable').count();
+            assert(rows === FB_FIXTURE_COUNT,
+                `Expected ${FB_FIXTURE_COUNT} DOM rows after Facebook Messenger import, got ${rows}`);
+            const dataCount = await page.evaluate(() => (window.chatMessagesData || []).length);
+            assert(dataCount === FB_FIXTURE_COUNT,
+                `Expected ${FB_FIXTURE_COUNT} in chatMessagesData after Facebook Messenger import, got ${dataCount}`);
+        });
+
+        await harness.run('#importQualityPanel is visible and non-empty after Facebook Messenger import', async page => {
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.textContent.trim().length > 0;
+            });
+            assert(visible, '#importQualityPanel should be visible and non-empty after Facebook Messenger import');
+        });
+
+        await harness.run('chatMessagesData sourcePlatformId is facebook-messenger; reset state for later phases', async page => {
+            const platformId = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length > 0 ? data[0].sourcePlatformId : null;
+            });
+            assert(platformId === 'facebook-messenger',
+                `Expected sourcePlatformId 'facebook-messenger', got '${platformId}'`);
+            // Re-import TXT fixture so Phase 12 can continue from the expected state.
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
         });
 
         // ─────────────────────────────────────────────────────────────────────

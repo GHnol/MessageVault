@@ -66,7 +66,7 @@
             importModes: ['json-export'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'Facebook data export (JSON). Engine adapter facebook-messenger-json-v1 implemented (Package 3R). UI wiring pending a later package.'
+            notes: 'Facebook data export (JSON). Engine adapter facebook-messenger-json-v1 implemented (Package 3R). UI wiring delivered (Package 3S). Self-identification deferred to Package 3T.'
         },
         {
             id: 'telegram',
