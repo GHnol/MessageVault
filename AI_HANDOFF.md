@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `active` — Package 3U in progress. Branch `feature/telegram-json-adapter`. Implementation complete; pre-commit verification in progress.
+**Status:** `closed` — Package 3U COMPLETE. Branch `main`. Merge commit `3f4e0c4` 2026-06-06. No active package; awaiting Coordinator direction.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,13 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3U — Telegram JSON Adapter` |
-| **Active branch** | `feature/telegram-json-adapter` |
-| **main HEAD** | `8b11f18` — merge: add Facebook Messenger self-identification sender picker (Package 3T) |
-| **Last completed pass** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — impl `b01fbff`, merged `8b11f18` 2026-06-06 |
-| **Active package** | `Package 3U — Telegram JSON Adapter` — IN PROGRESS — implementation complete; stop-before-commit per scope |
-| **Last closed package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — FULLY COMPLETE — merged `8b11f18` 2026-06-06 |
-| **Prior closed package** | `Package 3R — Facebook Messenger JSON Adapter` — FULLY COMPLETE — merged `b6c85e9` 2026-06-05 |
+| **Active pass** | none |
+| **Active branch** | `main` |
+| **main HEAD** | `3f4e0c4` — merge: add Telegram JSON adapter (Package 3U) |
+| **Last completed pass** | `Package 3U — Telegram JSON Adapter` — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
+| **Active package** | none — Package 3U COMPLETE; awaiting Coordinator direction |
+| **Last closed package** | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
+| **Prior closed package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — FULLY COMPLETE — merged `8b11f18` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -32,11 +32,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3U — Telegram JSON Adapter)
+## Objective (last completed pass — Package 3U — Telegram JSON Adapter)
 
-Package 3U — Telegram JSON Adapter. **IN PROGRESS — implementation complete; stop-before-commit per scope.**
+Package 3U — Telegram JSON Adapter. **COMPLETE — impl `45d0d24`, merged `3f4e0c4` to `main` 2026-06-06.**
 
-Branch: `feature/telegram-json-adapter` — base: `main` at `abfad15`
+Branch: `feature/telegram-json-adapter` — impl commit `45d0d24`, merged to `main` at `3f4e0c4` 2026-06-06.
 
 Files created:
 - `src/adapters/telegram-adapter.js` — `KMEngine.telegramAdapter`; ADAPTER_ID `telegram-json-v1`; PLATFORM_ID `telegram`; ADAPTER_VERSION `1`; `canHandle` uses `from_id` + `date_unixtime` positive discriminators + `participants` + `magic_words` negative discriminators; `extractText(text)` handles string or array-of-{type,text} objects; `hasMedia(msg)` checks `photo` string / `file` string / `media_type` non-null; date_unixtime is Unix SECONDS string → parseInt * 1000 → ISO-8601 (isNaN guard); no HTML entity decoding (Telegram plain Unicode); senderRole always `contact`; non-message type → warning; null/empty `from` → warning; registered as both `KMEngine.telegramAdapter` and `KMEngine.adapters['telegram-json-v1']`
@@ -52,7 +52,7 @@ Files modified:
 
 **Verification results (pre-commit):** 91/91 telegram-adapter-tests.mjs. 122/122 km-engine-tests.mjs. All 21 Node suites green (2650/2650). E2E not required (engine-only; no index.html changes). Visual regression not required. Hard-exclusion diff: authorized files only (no index.html, no e2e harness, no normalized-memory.js, no import-adapters.js, no import-quality-report.js, no products/*, no state/*).
 
-**Next exact action:** Provide full implementation report to Coordinator. Await explicit commit instruction. Do not commit or push without explicit Coordinator instruction.
+**Next exact action:** No active package. Package 3U COMPLETE. Await Coordinator direction for next package. Do not start any package without explicit Coordinator authorization.
 
 **Hard exclusions verified:**
 - `index.html`: not touched
@@ -755,9 +755,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-Package 3U implementation complete. Awaiting Coordinator commit instruction.
+No active package. Package 3U COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06.
 
-Next session: read this file, verify branch `feature/telegram-json-adapter`, confirm 2650/2650 Node tests, then await Coordinator commit/push instruction.
+Next session: read this file, verify main at `3f4e0c4`, confirm 2650/2650 Node tests, await Coordinator direction for next package. Do not start any package without explicit Coordinator authorization.
 
 Do not commit or push without explicit Coordinator authorization. No external mutations authorized.
 

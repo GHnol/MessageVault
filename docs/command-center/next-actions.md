@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3T COMPLETE — merged `8b11f18` 2026-06-06. Coordinator decides next package.**
+**Status: Package 3U COMPLETE — merged `3f4e0c4` 2026-06-06. Coordinator decides next package.**
+
+Package 3U (Telegram JSON Adapter) is COMPLETE — merged to main (`3f4e0c4` 2026-06-06). `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; date_unixtime Unix seconds → ISO-8601; no HTML entity decoding; senderRole always contact; engine-only; 91 new tests (telegram-adapter-tests.mjs) + 5 km-engine smoke; 2650 Node / 21 suites; STUBS array now empty; UI wiring deferred to Package 3V; self-ID picker deferred to Package 3W.
 
 Package 3T (Facebook Messenger Self-Identification Sender Picker) is COMPLETE — merged to main (`8b11f18` 2026-06-06). `#facebookSenderPicker` inline picker; `showFacebookSenderPicker` + `applyFacebookSelfSender`; sender names HTML-escaped in innerHTML; picker hides on all non-Facebook import paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter/persistence changes. Mirrors Instagram DM picker (Package 3Q) and WhatsApp picker (Package 3L) patterns.
 
@@ -45,7 +47,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3T is now COMPLETE.** No development package has been authorized after Package 3T. The next Coordinator step is to decide the next package.
+**Package 3U is now COMPLETE.** No development package has been authorized after Package 3U. The next Coordinator step is to decide the next package (candidates: Package 3V — Telegram UI wiring, Package 3W — Telegram self-ID picker, or another authorized direction).
 
 ---
 

@@ -66,7 +66,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 3T | Open | Coordinator | Package 3T COMPLETE (merged `8b11f18` 2026-06-06); Facebook Messenger self-identification sender picker delivered; 3J–3T all complete (WhatsApp + Android SMS + Instagram DM + Facebook Messenger adapter + UI wiring + self-ID pickers); next candidates: Telegram adapter (DEF-05), further Phase 12, or another authorized direction |
+| Next product package after Package 3U | Open | Coordinator | Package 3U COMPLETE (merged `3f4e0c4` 2026-06-06); Telegram JSON adapter delivered (engine-only); 3J–3U all complete; UI wiring deferred to Package 3V; self-ID picker deferred to Package 3W; next candidates: Package 3V (Telegram UI wiring), Package 3W (Telegram self-ID picker), further Phase 12, or another authorized direction |
 
 ## Deferred
 

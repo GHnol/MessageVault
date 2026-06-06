@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3T; Package 3U in progress)
+## Current architecture (post-Package 3U)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -131,7 +131,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3U — Telegram JSON Adapter — implementation complete, pending commit/merge, branch `feature/telegram-json-adapter`):
+DELIVERED (Package 3U — Telegram JSON Adapter, merged `3f4e0c4` 2026-06-06):
 - `src/adapters/telegram-adapter.js` — `KMEngine.telegramAdapter`; ADAPTER_ID `telegram-json-v1`; Telegram Desktop JSON export; `canHandle` uses `from_id` + `date_unixtime` as positive discriminators and `participants` + `magic_words` absence as negative discriminators; `extractText(text)` handles string or array-of-entities; `hasMedia(msg)` checks `photo` (string), `file` (string), `media_type` non-null; date_unixtime is Unix SECONDS string → `parseInt * 1000` → ISO-8601; no HTML entity decoding (Telegram uses plain Unicode); senderRole always `contact`; non-message entries (service type, null from) produce importWarnings; registered as `KMEngine.telegramAdapter` and `KMEngine.adapters['telegram-json-v1']`; engine-only (UI wiring Package 3V; self-ID picker Package 3W).
 - `scripts/fixtures/fake-telegram-export.json` — 10-message fixture (Alice Smith + bob_jones_99; 8 imported / 2 skipped: service-type + null-from; includes text-array entities, photo attachment, file+media_type attachment, empty text array).
 - `src/tests/telegram-adapter-tests.mjs` — 91 tests across 17 suites.

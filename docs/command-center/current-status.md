@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-06
-**Updated by:** Claude Code (post-Package-3T state-sync)
+**Updated by:** Claude Code (post-Package-3U state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -48,6 +48,7 @@
 | Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
 | Package 3O | Instagram DM JSON Adapter | COMPLETE — merged to main | `ebb7a55` | `26f2633` |
 | Package 3P | Instagram DM JSON UI Wiring | COMPLETE — merged to main | `fa6f6f2` | `d99fb84` |
+| Package 3U | Telegram JSON Adapter | COMPLETE — merged to main | `45d0d24` | `3f4e0c4` |
 | Package 3T | Facebook Messenger Self-Identification Sender Picker | COMPLETE — merged to main | `b01fbff` | `8b11f18` |
 | Package 3S | Facebook Messenger JSON UI Wiring | COMPLETE — merged to main | `27b3521` | `e326fba` |
 | Package 3R | Facebook Messenger JSON Adapter | COMPLETE — merged to main | `f63123d` | `b6c85e9` |
@@ -63,10 +64,12 @@
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 19 suites, **2450 Node tests** — all green
+- `src/tests/`: 21 suites, **2650 Node tests** — all green
+  - `telegram-adapter-tests.mjs`: 91 (Package 3U; 17 suites: API shape, canHandle accepts/rejects, from_id discriminator, fixture rawCounts, timestamp Unix seconds → ISO, text plain/array-entity, media/attachment, senderRole, NormalizedMemory fields, importWarnings, no-throw, participants)
+  - `facebook-messenger-adapter-tests.mjs`: 98 (Package 3R; 17 suites)
   - `android-sms-xml-adapter-tests.mjs`: 84 (Package 3M; 14 suites: API shape, canHandle, SMS type=1/2, senderRole, MMS, fixture rawCounts, participants, NormalizedMemory fields, provenance, importWarnings, semantic guards)
   - `whatsapp-txt-adapter-tests.mjs`: 91 (Package 3J; 14 suites: API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards)
-  - `km-engine-tests.mjs`: 106 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J)
+  - `km-engine-tests.mjs`: 122 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J; +5 instagram-dm smoke — Package 3O; +6 facebook-messenger additions — Package 3R; +5 telegram smoke — Package 3U)
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76

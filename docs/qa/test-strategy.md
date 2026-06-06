@@ -193,7 +193,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3U — Telegram JSON Adapter (COMPLETE — branch `feature/telegram-json-adapter`):**
+**Package 3U — Telegram JSON Adapter (COMPLETE — merged `3f4e0c4` 2026-06-06):**
 
 Package 3U adds 91 tests in new `telegram-adapter-tests.mjs` (17 suites: API shape + KMEngine.adapters registration, canHandle accepts, canHandle rejects Instagram DM, canHandle rejects Facebook Messenger, canHandle rejects non-Telegram, from_id discriminator, fixture rawCounts, timestamp parsing Unix-seconds → ISO, sender extraction, text plain string, text array entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory required fields, importWarnings, no-throw robustness, participants). Adds 5 smoke assertions to `km-engine-tests.mjs` (→122 total). New Node baseline: **2650 / 21 suites**. No E2E required (engine-only; no index.html changes). Visual regression not required. Telegram platform `supported`. No HTML entity decoding (Telegram uses plain Unicode). Text field is either a string or array of entities — `extractText()` helper handles both. date_unixtime is Unix SECONDS string, not milliseconds. senderRole always 'contact'. All non-message entries (service type, null from) → importWarnings. UI wiring is Package 3V; self-identification picker is Package 3W.
 

@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-06
-**Last mirrored:** RPT-20260606-001 (Package 3T closeout — Facebook Messenger Self-Identification Sender Picker COMPLETE)
-**Active gate:** None — Package 3T COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260606-002 (Package 3U closeout — Telegram JSON Adapter COMPLETE)
+**Active gate:** None — Package 3U COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260606-002 | package_closeout | Package 3U — Telegram JSON Adapter | feature/telegram-json-adapter | 45d0d24 / 3f4e0c4 | mirrored | 2026-06-06 |
 | RPT-20260606-001 | package_closeout | Package 3T — Facebook Messenger Self-Identification Sender Picker | feature/facebook-messenger-self-id | b01fbff / 8b11f18 | mirrored | 2026-06-06 |
 | RPT-20260605-005 | package_closeout | Package 3O — Instagram DM JSON Adapter | feature/instagram-dm-adapter | ebb7a55 / 26f2633 | mirrored | 2026-06-05 |
 | RPT-20260605-004 | package_closeout | Package 3N — Android SMS UI Wiring | feature/android-sms-ui-wiring | 04d30ed / 6d61367 | mirrored | 2026-06-05 |
@@ -60,6 +61,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260606-002 — package_closeout — Package 3U — Telegram JSON Adapter
+
+**Created:** 2026-06-06T00:00:00Z | **Branch:** feature/telegram-json-adapter | **HEAD:** 45d0d24 (impl) / 3f4e0c4 (merge) | **Status:** mirrored
+
+Package 3U — Telegram JSON Adapter COMPLETE — implementation `45d0d24`, merge `3f4e0c4` 2026-06-06. Engine-only delivery (no UI wiring — deferred to Package 3V; self-ID picker deferred to Package 3W). Delivered: (1) `src/adapters/telegram-adapter.js` — `KMEngine.telegramAdapter`; ADAPTER_ID `telegram-json-v1`; PLATFORM_ID `telegram`; ADAPTER_VERSION `1`; `canHandle` uses `from_id` + `date_unixtime` as positive discriminators, `participants` + `magic_words` absence as negative discriminators; `extractText(text)` handles string or array-of-{type,text} entities; `hasMedia(msg)` checks `photo` (string), `file` (string), `media_type` non-null; date_unixtime is Unix SECONDS string → `parseInt * 1000` → ISO-8601 (isNaN guard); no HTML entity decoding (Telegram uses plain Unicode); senderRole always `contact`; non-message entries (service type, null from) → importWarnings; registered as `KMEngine.telegramAdapter` and `KMEngine.adapters['telegram-json-v1']`. (2) `scripts/fixtures/fake-telegram-export.json` — 10-message fixture (Alice Smith + bob_jones_99; 8 imported / 2 skipped: service-type + null-from; text-array entities, photo attachment, file+media_type attachment, empty text array). (3) `src/tests/telegram-adapter-tests.mjs` — 91 tests across 17 suites. (4) `src/adapters/future-adapter-stubs.js` — STUBS array now empty; all client-side adapters have real implementations. (5) `src/core/source-platforms.js` — telegram status `stub` → `supported`; notes updated. (6) `src/tests/km-engine-tests.mjs` — loads `telegram-adapter.js`; telegram platform assertion updated to `supported`; `telegramAdapter — smoke` suite added (+5 → 122 total). (7) `docs/qa/test-strategy.md` — baseline 2554 → 2650; 20 → 21 suites; telegram-adapter-tests.mjs row; Package 3U note. (8) `docs/architecture/architecture-roadmap.md` — architecture section updated to post-Package 3U; telegram-adapter.js in module map; Package 3U DELIVERED entry.
+
+**Tests:** 2650 Node tests (21 suites), 0 failed (+96 new: 91 telegram-adapter + 5 km-engine smoke). E2E not required (engine-only; no index.html changes). Visual regression not required. OS audit: 324/0/0. State freshness: WARN only (cosmetic hash lag — post-merge; corrected in closeout state-sync). project-control-sync-validate: expected pass.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, scripts/e2e-regression-harness.mjs, src/core/normalized-memory.js, src/core/import-adapters.js, src/core/import-quality-report.js, src/products/*, src/state/*, existing adapter files untouched; no pagination constants, no Review view, no standalone keepsake flows, no ProductDraft/Preflight/Lifecycle/ProofApproval modules, no readiness gate, no GATE-04 crossing, no checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3U closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260606-001 — package_closeout — Package 3T — Facebook Messenger Self-Identification Sender Picker
 
