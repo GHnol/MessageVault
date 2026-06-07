@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — DELIVERED)
+**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — IN PROGRESS; branch `feature/conversation-statistics`)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3X)
+## Current architecture (post-Package 3X; Package 3Y IN PROGRESS)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -20,6 +20,7 @@ src/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 5 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X
+    conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y IN PROGRESS
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
     source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm + facebook-messenger + telegram now 'supported' — Packages 3J + 3M + 3O + 3R + 3U)
@@ -35,6 +36,7 @@ index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSe
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
 index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
+index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y IN PROGRESS
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; browser-loaded (Package 3V) — Package 3U/3V
     future-adapter-stubs.js        — STUBS array is now empty (all client-side adapters promoted to real implementations)
