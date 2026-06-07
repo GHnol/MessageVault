@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Post-Package-3Z Tower Catch-Up operating pass — in progress on `docs/post-3z-tower-catchup`)
+**Last updated:** `2026-06-07` (Post-Package-3Z Tower Catch-Up operating pass COMPLETE — docs `341d714`, merged `058af68` to main 2026-06-07)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `b5ac11e` — docs: sync operating docs after Package 3Z completion |
-| Active branch | `docs/post-3z-tower-catchup` (Tower catch-up pass in progress) |
-| Active pass | Post-Package-3Z Tower Catch-Up operating pass — docs-only; pending Coordinator commit authorization |
-| Last completed pass | Package 3Z — Extended Content Quality Checks — impl `4902d50`, merged `ff79f9e` 2026-06-07 |
+| main HEAD | `058af68` — docs: close post-Package-3Z Tower catch-up |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | Post-Package-3Z Tower Catch-Up operating pass — docs `341d714`, merged `058af68` 2026-06-07 |
 | Last closed package | `Package 3Z — Extended Content Quality Checks` — FULLY COMPLETE |
-| Active package | None — awaiting Coordinator authorization for Package 3AA after Tower catch-up merged |
+| Active package | None — awaiting Coordinator authorization for Package 3AA |
 | Test baseline | **2962 Node tests** (23 suites); E2E seeded 57/57; E2E real-files 153/153 (Phase 37: 7/7); visual regression PASS (baseline unchanged — no index.html changes) |
 | Package 3Z | COMPLETE — impl `4902d50`, merged `ff79f9e` 2026-06-07; extends `KMEngine.ContentQualityChecks.compute()` with 4 new WARN checks: HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; Suite 3 enlarged + Suites 16–19 added (184 tests / 19 suites); 4 km-engine smoke (→138); Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962/2962 Node; no index.html changes |
 | Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; returns busiestDay/busiestDayCount/longestStreakDays/avgMessagesPerDay/totalDays/perSenderStats; zero-state for empty/invalid; perSenderStats includes senderRole:self; `#conversationStatsPanel` indigo panel; `renderConversationStatsPanel(memories)` at 11 call sites; `window.__km.renderConversationStatsPanel`; 112 new tests (`conversation-stats-tests.mjs`, 14 suites) + 6 km-engine smoke (→134); Phase 36 E2E (6 tests, 6/6 PASS); `CST_FIXTURE_COUNT=8`; 2908/2908 Node; 57/57 seeded; 146/146 real-files |

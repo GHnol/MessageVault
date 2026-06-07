@@ -110,9 +110,9 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `b5ac11e` — docs: sync operating docs after Package 3Z completion |
-| Active branch | `docs/post-3z-tower-catchup` (Tower catch-up pass in progress) |
-| Working tree | In progress — Tower catch-up edits |
+| main HEAD | `058af68` — docs: close post-Package-3Z Tower catch-up |
+| Active branch | `main` |
+| Working tree | Clean |
 | Pushed to remote | main is current through Package 3Z merge (`ff79f9e`) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
