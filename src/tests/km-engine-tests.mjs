@@ -42,6 +42,7 @@ load('src/adapters/future-adapter-stubs.js');
 load('src/core/project-session.js');
 load('src/state/session-serialization.js');
 load('src/core/content-quality-checks.js');
+load('src/core/conversation-stats.js');
 
 const { KMEngine } = ctx.window;
 
@@ -363,6 +364,21 @@ const cqcUrl = KMEngine.ContentQualityChecks.compute([{
 assert(Array.isArray(cqcUrl) && cqcUrl.length > 0,                  'URL memory produces at least one issue');
 assert(cqcUrl[0].type === 'RAW_URL_IN_CONTENT',                     'RAW_URL_IN_CONTENT is first issue for URL-only corpus');
 assert(cqcUrl[0].severity === 'WARN',                               'issue severity is WARN');
+
+// ── CONVERSATION STATS — smoke ────────────────────────────────────────────────
+
+suite('ConversationStats — smoke');
+assert(KMEngine.ConversationStats !== undefined,                       'ConversationStats exists on KMEngine');
+assert(typeof KMEngine.ConversationStats.compute === 'function',       'compute is a function');
+const cstEmpty = KMEngine.ConversationStats.compute([]);
+assert(typeof cstEmpty === 'object' && cstEmpty !== null,              'compute([]) returns an object');
+assert(cstEmpty.busiestDay === null && cstEmpty.perSenderStats.length === 0, 'compute([]) returns zero-state');
+const cstCorpus = KMEngine.ConversationStats.compute([{
+    sender: 'Alice', senderRole: 'contact', timestamp: '2024-01-15T10:00:00.000Z',
+    type: 'message', isAttachmentOnly: false
+}]);
+assert(typeof cstCorpus.busiestDay === 'string',                       'non-empty corpus returns string busiestDay');
+assert(Array.isArray(cstCorpus.perSenderStats),                        'non-empty corpus returns perSenderStats array');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 

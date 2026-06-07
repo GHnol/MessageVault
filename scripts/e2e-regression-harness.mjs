@@ -82,6 +82,9 @@ const TELEGRAM_FIXTURE_COUNT = 8;  // 10 entries - 1 service-type skip - 1 null-
 const CQC_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cqc-checks.txt');
 const CQC_FIXTURE_COUNT = 5;  // 5 messages: triggers PHONE_NUMBER, RAW_URL, DUPLICATE
 
+const CST_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cst-stats.txt');
+const CST_FIXTURE_COUNT = 8;  // 8 messages across 4 days (Jan14–Jan18)
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1752,6 +1755,77 @@ async function main() {
                 return el.style.display === 'none' || el.innerHTML.trim().length === 0;
             });
             assert(hidden, '#contentQualityPanel should be hidden after clean-corpus TXT import');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 36 — Conversation Statistics panel (Package 3Y)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 36 — Conversation Statistics panel ──\n');
+
+        await harness.run('before CST import #conversationStatsPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('conversationStatsPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#conversationStatsPanel should be hidden before any import');
+        });
+
+        await harness.run('after CST fixture import #conversationStatsPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(CST_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('conversationStatsPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#conversationStatsPanel should be visible and non-empty after CST fixture import');
+        });
+
+        await harness.run('CST fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === CST_FIXTURE_COUNT,
+                `Expected ${CST_FIXTURE_COUNT} messages from CST fixture, got ${count}`);
+        });
+
+        await harness.run('CST panel shows busiest day chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('conversationStatsPanel');
+                return el ? el.textContent : '';
+            });
+            const hasMonth = /Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/i.test(panelText);
+            assert(hasMonth,
+                `Expected month name in CST panel busiest-day chip, got: "${panelText}"`);
+        });
+
+        await harness.run('CST panel shows top sender chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('conversationStatsPanel');
+                return el ? el.textContent : '';
+            });
+            const hasSender = /Alice|Bob|sent the most/i.test(panelText);
+            assert(hasSender,
+                `Expected sender name in CST panel top-sender chip, got: "${panelText}"`);
+        });
+
+        await harness.run('non-CST TXT reimport; reset state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${count}`);
         });
 
         // ─────────────────────────────────────────────────────────────────────

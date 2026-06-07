@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 3X — Pre-print Content Quality Checks COMPLETE. impl `e424825`, merged `7bdcdb5` to main 2026-06-07. No active package.
+**Status:** `in-progress` — Package 3Y — Conversation Statistics Engine. Branch `feature/conversation-statistics`. All 8 implementation files created/modified. State docs updated. Pending: test runs and pre-commit report.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
@@ -18,17 +18,45 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — Package 3X COMPLETE; merged `7bdcdb5` 2026-06-07 |
-| **Active branch** | `main` |
-| **main HEAD** | `7bdcdb5` — merge: add pre-print content quality checks (Package 3X) |
+| **Active pass** | Package 3Y — Conversation Statistics Engine — IN PROGRESS |
+| **Active branch** | `feature/conversation-statistics` (from `main` at `5c1119f`) |
+| **main HEAD** | `5c1119f` — docs: sync operating docs after Package 3X completion |
 | **Last completed pass** | Package 3X — Pre-print Content Quality Checks — impl `e424825`, merged `7bdcdb5` 2026-06-07 |
-| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Active package** | `Package 3Y — Conversation Statistics Engine` — IN PROGRESS |
 | **Last closed package** | `Package 3X — Pre-print Content Quality Checks` — FULLY COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3Y — Conversation Statistics Engine)
+
+Branch: `feature/conversation-statistics` from `main` at `5c1119f`. Authorized by Coordinator 2026-06-07. **IN PROGRESS — stop before commit; produce pre-commit implementation report.**
+
+**Objective:** Add `KMEngine.ConversationStats.compute(memories)` pure IIFE engine module, Node tests, km-engine smoke, `#conversationStatsPanel` UI surface (indigo tone), E2E Phase 36, and docs updates.
+
+**Coordinator decisions:**
+- `perSenderStats` includes all senders including `senderRole:self`
+- Empty/invalid input returns zero-state object (not null)
+- Excludes: words shared, top emojis, estimated page counts, volume/page counts, book composition statistics
+
+**Authorized files (11):**
+- `src/core/conversation-stats.js` — CREATED (IIFE engine module, `KMEngine.ConversationStats.compute()`)
+- `scripts/fixtures/fake-cst-stats.txt` — CREATED (8-message WhatsApp bracket fixture; Alice(5)+Bob(3); Jan14-18; busiestDay=Jan15; longestStreak=3; totalDays=5)
+- `src/tests/conversation-stats-tests.mjs` — CREATED (~112 tests, 14 suites)
+- `src/tests/km-engine-tests.mjs` — MODIFIED (load + `ConversationStats — smoke` suite; 128 → 134)
+- `index.html` — MODIFIED (CSS + dark mode CSS; script tag; `#conversationStatsPanel` div; `const conversationStatsPanel` binding; `renderConversationStatsPanel(memories)` function; 11 call sites; `window.__km.renderConversationStatsPanel`)
+- `scripts/e2e-regression-harness.mjs` — MODIFIED (CST_FIXTURE + CST_FIXTURE_COUNT=8 constants; Phase 36 block 6 tests)
+- `docs/qa/test-strategy.md` — MODIFIED (IN PROGRESS notes; suite table; count updates 2790→~2908)
+- `docs/architecture/architecture-roadmap.md` — MODIFIED (IN PROGRESS notes; module map; index.html section)
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs (this update)
+
+**What is done:** All 8 implementation files created/modified. State docs updated.
+**What remains:** Run all Node unit suites (~2908 expected); run seeded E2E (57/57 expected); run real-files E2E (~146/146 expected, Phase 36: 6/6); run visual regression (PASS expected); run OS audit (324/0/0 expected); run state-freshness check; verify hard-exclusion diff; produce pre-commit report; STOP before commit.
+**Next exact action:** Run `node src/tests/conversation-stats-tests.mjs` and `node src/tests/km-engine-tests.mjs`, then all other suites, then E2E, then produce pre-commit report.
 
 ---
 
@@ -854,9 +882,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-No active pass or package. `Weekly Sync / Project Control Tower Catch-Up after Package 3W` COMPLETE — docs `056cdd9`, merged `24810bf` 2026-06-07.
+Package 3Y IN PROGRESS on branch `feature/conversation-statistics`. All 8 implementation files in place.
 
-Next session: read this file, verify main at `24810bf`, confirm 2650/2650 Node tests and 134/134 real-files E2E. Await Coordinator authorization for Package 3X (DEF-15 non-vendor subset — Pre-print Content Quality Checks) or next direction. Do not start any package without explicit Coordinator authorization.
+Next session: read this file, verify branch `feature/conversation-statistics` from `main` at `5c1119f`. Run all Node unit suites (~2908 expected), seeded E2E (57/57), real-files E2E (~146/146, Phase 36: 6/6), visual regression, OS audit (324/0/0), state-freshness check, hard-exclusion diff. Produce pre-commit report. STOP before commit — await Coordinator authorization.
 
 Do not commit or push without explicit Coordinator authorization. No external mutations authorized.
 
