@@ -75,7 +75,7 @@
             importModes: ['json-export'],
             fidelityLevel: 'medium',
             publicClaimStatus: false,
-            notes: 'Telegram Desktop JSON export. Adapter telegram-json-v1 delivered (Package 3U). UI wiring delivered (Package 3V). Sender picker pending (Package 3W).'
+            notes: 'Telegram Desktop JSON export. Adapter telegram-json-v1 delivered (Package 3U). UI wiring delivered (Package 3V). Sender picker delivered (Package 3W).'
         },
         // ── Deferred ─────────────────────────────────────────────────────────────
         {

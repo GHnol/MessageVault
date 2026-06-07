@@ -73,6 +73,8 @@ const FB_FIXTURE       = path.join(__dir, 'fixtures', 'fake-facebook-messenger.j
 const FB_FIXTURE_COUNT = 8;  // 10 messages - 1 is_unsent skip - 1 missing-sender skip
 const FB_ALICE_COUNT   = 4;  // Alice Johnson sends 4 of the 8 imported messages
 const FB_CHARLIE_COUNT = 4;  // charlie_b_99 sends 4 of the 8 imported messages
+const TG_ALICE_COUNT   = 4;  // Alice Smith sends 4 of the 8 imported messages
+const TG_BOB_COUNT     = 4;  // bob_jones_99 sends 4 of the 8 imported messages
 
 const TELEGRAM_FIXTURE       = path.join(__dir, 'fixtures', 'fake-telegram-export.json');
 const TELEGRAM_FIXTURE_COUNT = 8;  // 10 entries - 1 service-type skip - 1 null-from skip
@@ -1609,6 +1611,72 @@ async function main() {
             await page.click('#txtUploadCard');
             await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
             await waitForChatView(page);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 34 — Telegram self-identification sender picker (Package 3W)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 34 — Telegram self-identification sender picker ──\n');
+
+        await harness.run('after Telegram import #telegramSenderPicker is visible and non-empty', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TELEGRAM_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('telegramSenderPicker');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#telegramSenderPicker should be visible and non-empty after Telegram import');
+        });
+
+        await harness.run('sender picker chips include Alice Smith and bob_jones_99', async page => {
+            const names = await page.evaluate(() => {
+                const chips = document.querySelectorAll('#telegramSenderPicker .sender-chip:not(.skip-chip)');
+                return Array.from(chips).map(c => c.textContent.trim());
+            });
+            assert(names.includes('Alice Smith'),  `Expected Alice Smith chip, got: ${names.join(', ')}`);
+            assert(names.includes('bob_jones_99'), `Expected bob_jones_99 chip, got: ${names.join(', ')}`);
+        });
+
+        await harness.run('selecting Alice Smith flips exactly TG_ALICE_COUNT rows to .me', async page => {
+            await page.evaluate(() => window.__km.applyTelegramSelfSender('Alice Smith'));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === TG_ALICE_COUNT,
+                `Expected ${TG_ALICE_COUNT} .me rows after selecting Alice Smith, got ${meCount}`);
+        });
+
+        await harness.run('selecting Alice Smith updates selfMessageCount via ImportQualityReport', async page => {
+            const selfCount = await page.evaluate(() => {
+                const IQR = window.KMEngine && window.KMEngine.ImportQualityReport;
+                const data = window.chatMessagesData || [];
+                if (!IQR || !data.length) return -1;
+                return IQR.compute(data).selfMessageCount;
+            });
+            assert(selfCount === TG_ALICE_COUNT,
+                `Expected selfMessageCount ${TG_ALICE_COUNT} after selecting Alice Smith, got ${selfCount}`);
+        });
+
+        await harness.run('selecting Skip reverts all Telegram messages to .them', async page => {
+            await page.evaluate(() => window.__km.applyTelegramSelfSender(null));
+            const meCount = await page.locator('.message-row.me').count();
+            assert(meCount === 0, `Expected 0 .me rows after Skip, got ${meCount}`);
+        });
+
+        await harness.run('non-Telegram TXT reimport hides #telegramSenderPicker; reset state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('telegramSenderPicker');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#telegramSenderPicker should be hidden after non-Telegram TXT import');
         });
 
         // ─────────────────────────────────────────────────────────────────────
