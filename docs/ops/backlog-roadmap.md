@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (post-Package-3W tower catch-up)
+**Updated by:** Claude Code (post-Package-3AA tower catch-up)
 **Status:** Active
 
 ---
@@ -520,19 +520,20 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 
 ---
 
-### Current position — import analytics layer COMPLETE through Package 3Z
+### Current position — import analytics layer COMPLETE through Package 3AA
 
-**Status:** No package authorized. Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07) — import analytics layer fully delivered. Coordinator decides next development package.
+**Status:** No package authorized. Package 3AA COMPLETE (merged `29c4491` 2026-06-07) — Emoji Analysis Engine delivered. Coordinator decides next development package.
 
 **Import analytics layer delivery summary:**
 - Package 3I — Import Quality Report (`KMEngine.ImportQualityReport.compute()`, `#importQualityPanel`) ✓
 - Package 3X — Pre-print Content Quality Checks: 5 WARN checks; `KMEngine.ContentQualityChecks.compute()`, `#contentQualityPanel` ✓
 - Package 3Y — Conversation Statistics Engine: `KMEngine.ConversationStats.compute()`, `#conversationStatsPanel` ✓
 - Package 3Z — Extended CQC: +4 WARN checks → 9 total in `KMEngine.ContentQualityChecks.compute()` ✓
+- Package 3AA — Emoji Analysis Engine: `KMEngine.EmojiAnalysis.compute()`, `#emojiAnalysisPanel`; topEmojis (MAX_TOP=5), totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender; partially activates DEF-14 ✓
 - **Client-side adapter series also complete (Packages 3J–3W):** `future-adapter-stubs.js` STUBS array now empty
 
-**Next authorized candidate (awaiting Coordinator authorization):**
-- **Package 3AA — Emoji Analysis Engine** — new `src/core/emoji-analysis.js` IIFE engine module; `KMEngine.EmojiAnalysis.compute(memories)`; returns `{topEmojis, totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender}`; new `#emojiAnalysisPanel` in `index.html`; no external gate; partially activates DEF-14; medium effort; follows established compute(memories) IIFE pattern
+**Next recommended candidate (awaiting Coordinator authorization):**
+- **Package 3AB — Word Count / Language Analysis Engine** — new `src/core/word-analysis.js` IIFE engine module; `KMEngine.WordAnalysis.compute(memories)`; returns `{totalWords, avgWordsPerMessage, topWords, topWordSender}`; new `#wordAnalysisPanel` in `index.html`; no external gate; completes DEF-14 "words shared" data point; medium effort; follows established compute(memories) IIFE pattern
 
 **Candidates still blocked (do not start):**
 - Phase 12 continuation / GATE-04 — blocked: PDF pipeline + vendor + checkout
