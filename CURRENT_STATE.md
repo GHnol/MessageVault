@@ -16,15 +16,15 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Operating pass: Weekly Sync / Project Control Tower Catch-Up after Package 3W — IN PROGRESS on `docs/post-3w-tower-catchup`)
+**Last updated:** `2026-06-07` (Post-merge state-sync: Weekly Sync / Project Control Tower Catch-Up after Package 3W — COMPLETE; merged `24810bf`)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `2bf1900` — merge: add Telegram self-identification sender picker (Package 3W) |
-| Active branch | `docs/post-3w-tower-catchup` (from `main` at `e8454fa`) |
-| Active pass | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs-only — IN PROGRESS |
-| Last completed pass | `Package 3W — Telegram Self-Identification Sender Picker` — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
+| main HEAD | `24810bf` — merge: sync project tower after source adapter series completion |
+| Active branch | `main` |
+| Active pass | None — `Weekly Sync / Project Control Tower Catch-Up after Package 3W` COMPLETE; merged `24810bf` 2026-06-07 |
+| Last completed pass | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs `056cdd9`, merged `24810bf` 2026-06-07 |
 | Last closed package | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE |
 | Next authorized target | Package 3X (DEF-15 non-vendor subset — Pre-print Content Quality Checks) — awaiting Coordinator authorization |
 | Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 134/134 (+6 Phase 34); visual regression PASS (baseline unchanged) |

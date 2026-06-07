@@ -27,9 +27,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-07
-**Last mirrored:** RPT-20260607-001 (Weekly Sync / Project Control Tower Catch-Up after Package 3W — in progress on `docs/post-3w-tower-catchup`)
-**Active gate:** None — Package 3W COMPLETE; docs-only tower catch-up pass in progress; awaiting commit authorization
-**Next expected mirror:** Commit closeout for `docs/post-3w-tower-catchup` pass; then Package 3X package closeout when authorized
+**Last mirrored:** RPT-20260607-001 (Weekly Sync / Project Control Tower Catch-Up after Package 3W — docs `056cdd9`, merged `24810bf` 2026-06-07)
+**Active gate:** None — tower catch-up COMPLETE; awaiting Coordinator authorization for next development package (Package 3X named as candidate)
+**Next expected mirror:** Package 3X package closeout when authorized
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,7 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
-| RPT-20260607-001 | weekly_sync | Weekly Sync / Project Control Tower Catch-Up after Package 3W | docs/post-3w-tower-catchup | (pending commit) | in-progress | 2026-06-07 |
+| RPT-20260607-001 | weekly_sync | Weekly Sync / Project Control Tower Catch-Up after Package 3W | docs/post-3w-tower-catchup | 056cdd9 / 24810bf | mirrored | 2026-06-07 |
 | RPT-20260606-004 | package_closeout | Package 3W — Telegram Self-Identification Sender Picker | feature/telegram-self-id | a60c6e3 / 2bf1900 | mirrored | 2026-06-06 |
 | RPT-20260606-003 | package_closeout | Package 3V — Telegram JSON UI Wiring | feature/telegram-json-ui-wiring | 2b232f8 / 40a6a78 | mirrored | 2026-06-06 |
 | RPT-20260606-002 | package_closeout | Package 3U — Telegram JSON Adapter | feature/telegram-json-adapter | 45d0d24 / 3f4e0c4 | mirrored | 2026-06-06 |

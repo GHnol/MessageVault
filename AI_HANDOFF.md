@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `open` — Operating pass `docs/post-3w-tower-catchup` IN PROGRESS. Docs-only tower catch-up after source adapter series completion. No app code. Pre-commit stop — awaiting Coordinator commit authorization.
+**Status:** `closed` — Operating pass `Weekly Sync / Project Control Tower Catch-Up after Package 3W` COMPLETE. Docs-only tower catch-up after source adapter series completion. Merged `24810bf` to main 2026-06-07. Awaiting Coordinator authorization for next development package.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs-only operating pass — IN PROGRESS |
-| **Active branch** | `docs/post-3w-tower-catchup` (from `main` at `e8454fa`) |
-| **main HEAD** | `2bf1900` — merge: add Telegram self-identification sender picker (Package 3W) |
-| **Last completed pass** | `Package 3W — Telegram Self-Identification Sender Picker` — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
+| **Active pass** | None — `Weekly Sync / Project Control Tower Catch-Up after Package 3W` COMPLETE; docs `056cdd9`, merged `24810bf` 2026-06-07 |
+| **Active branch** | `main` |
+| **main HEAD** | `24810bf` — merge: sync project tower after source adapter series completion |
+| **Last completed pass** | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs `056cdd9`, merged `24810bf` 2026-06-07 |
 | **Active package** | None — awaiting Coordinator authorization for next development package (Package 3X named as candidate) |
 | **Last closed package** | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
@@ -32,32 +32,28 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Weekly Sync / Project Control Tower Catch-Up after Package 3W)
+## Objective (last completed pass — Weekly Sync / Project Control Tower Catch-Up after Package 3W)
 
-Docs-only operating pass on branch `docs/post-3w-tower-catchup` (from `main` at `e8454fa`). Authorized by Coordinator after Package 3W planning investigation.
+Docs-only operating pass on branch `docs/post-3w-tower-catchup` (from `main` at `e8454fa`). Authorized by Coordinator after Package 3W planning investigation. **COMPLETE — docs `056cdd9`, merged `24810bf` to main 2026-06-07.**
 
 **Objective:** Clean up stale project-control, command-center, architecture, backlog, and decision docs now that the client-side source adapter series is complete through Package 3W. Do not implement Package 3X. No app code.
 
-**What is done (13 files edited):**
+**What was done (15 files edited, committed, and merged):**
 - `docs/project-control/decision-log.md` — stale "after Package 3U" → "after Package 3W"; Package 3X named as next candidate
 - `docs/ops/deferred-gated-ideas-register.md` — DEF-01–DEF-05 and DEF-12 marked DELIVERED; DEF-15 updated with Package 3X note
 - `docs/ops/backlog-roadmap.md` — stale "Package 3J COMPLETE" section replaced with full adapter series summary; Package 3X named as next candidate
-- `docs/project-control/current-sprint.md` — task 22 updated for Package 3X; task 25 added (operating pass In Progress)
-- `docs/project-control/kanban-board.md` — operating pass in In Progress; Package 3X in Backlog
+- `docs/project-control/current-sprint.md` — task 22 updated for Package 3X; task 25 added (operating pass Done)
+- `docs/project-control/kanban-board.md` — operating pass moved to Done; Package 3X in Backlog
 - `docs/project-control/backlog.md` — last-updated date corrected; Package 3X row added to Coordinator lane
 - `docs/project-control/master-roadmap.md` — Package 2.8 IN PROGRESS→DONE; all adapter packages added to history table; Phase 3 "Completed work" updated; Phase 12 updated
 - `docs/architecture/architecture-roadmap.md` — Package 3X planning note added to "Still expected" section
 - `docs/qa/test-strategy.md` — Package 3X planning note added; last-updated date corrected
 - `docs/command-center/current-status.md` — last-updated date; Package 3X named in pending decisions
 - `docs/command-center/next-actions.md` — Package 3X added as top next-package candidate; action #1 updated
-- `docs/project-control/report-mirror-log.md` — RPT-20260607-001 entry added (this operating pass)
-- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs updated to reflect operating pass active
+- `docs/project-control/report-mirror-log.md` — RPT-20260607-001 entry added (mirrored)
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs closed out to main
 
-**What remains:** Run verification scripts; produce pre-commit report; stop. No commit without Coordinator authorization.
-
-**Authorized files only (no index.html, no src/*, no scripts/e2e-regression-harness.mjs, no scripts/fixtures/*, no tests, no adapters, no product-preflight.js, no product/state/proof/PDF/checkout/vendor/manufacturing/pagination/dependency files).**
-
-**Recommended commit message:** `docs: sync project tower after source adapter series completion`
+**Hard exclusions confirmed:** no index.html, no src/*, no scripts/e2e-regression-harness.mjs, no scripts/fixtures/*, no tests, no adapters, no product/state/proof/PDF/checkout/vendor/manufacturing/pagination/dependency files.
 
 ---
 
@@ -835,9 +831,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-No active package. Package 3W COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06.
+No active pass or package. `Weekly Sync / Project Control Tower Catch-Up after Package 3W` COMPLETE — docs `056cdd9`, merged `24810bf` 2026-06-07.
 
-Next session: read this file, verify main at `2bf1900`, confirm 2650/2650 Node tests and 134/134 real-files E2E, await Coordinator direction for next package. Do not start any package without explicit Coordinator authorization.
+Next session: read this file, verify main at `24810bf`, confirm 2650/2650 Node tests and 134/134 real-files E2E. Await Coordinator authorization for Package 3X (DEF-15 non-vendor subset — Pre-print Content Quality Checks) or next direction. Do not start any package without explicit Coordinator authorization.
 
 Do not commit or push without explicit Coordinator authorization. No external mutations authorized.
 
