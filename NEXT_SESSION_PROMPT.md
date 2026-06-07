@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. **No active package. Package 3AA — Emoji Analysis Engine — COMPLETE.** Branch: `main` (HEAD `48363b9`). Await Coordinator authorization for the next development package. Do not start any package without explicit authorization. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **Post-Package-3AA Tower Catch-Up — docs-only operating pass in progress on branch `docs/post-3aa-tower-catchup`.** Package 3AA — Emoji Analysis Engine — COMPLETE (impl `0e15cfb`, merged `29c4491` 2026-06-07). No active development package. Do not start any development package without explicit Coordinator authorization. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,9 +47,9 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active package. Package 3AA — Emoji Analysis Engine — COMPLETE. Branch `main`. Await Coordinator authorization for the next development package. |
-| Branch | `main` (HEAD: `48363b9` — docs: sync operating docs after Package 3AA completion) |
-| Next action | Run `/start`. Confirm branch `main`. Read `AI_HANDOFF.md` for exact state. Do NOT start any package without Coordinator authorization. Do NOT commit or push without explicit instruction. |
+| Resume into | Post-Package-3AA Tower Catch-Up (docs-only operating pass) in progress on branch `docs/post-3aa-tower-catchup`. Package 3AA COMPLETE. No active development package. Await Coordinator authorization for next development package (recommended: Package 3AB — Word Count / Language Analysis Engine). |
+| Branch | `docs/post-3aa-tower-catchup` (base: `main` HEAD `71bbfec`) |
+| Next action | Run `/start`. Confirm branch `docs/post-3aa-tower-catchup`. Check whether Tower catch-up pass has been committed and merged. If committed and merged: confirm `main` is clean, then await Coordinator authorization for Package 3AB. Do NOT start any development package without Coordinator authorization. Do NOT commit or push without explicit instruction. |
 | Package 3AA | COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07; `src/core/emoji-analysis.js` NEW; `scripts/fixtures/fake-emoji-conversation.txt` NEW; `src/tests/emoji-analysis-tests.mjs` NEW (100 tests / 15 suites); `src/tests/km-engine-tests.mjs` +6 → 144; `index.html` CSS+script+div+binding+renderEmojiAnalysisPanel+11 call sites+__km; `scripts/e2e-regression-harness.mjs` Phase 38 (6 tests); 3068 Node / 24 suites; 159 real-files |
 | Package 3Z | COMPLETE — impl `4902d50`, merged `ff79f9e` 2026-06-07; 4 new WARN checks: HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; content-quality-checks.js now 9 WARN checks total; 184 CQC tests / 19 suites; 138 km-engine smoke; Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962 Node / 23 suites; 57/57 seeded; 153/153 real-files; no index.html changes |
 | Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; `#conversationStatsPanel`; Phase 36 E2E (6 tests); 2908 Node / 23 suites; 57/57 seeded; 146/146 real-files; visual regression PASS |
