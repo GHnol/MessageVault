@@ -88,6 +88,9 @@ const CQC_EXTENDED_FIXTURE_COUNT = 6;  // 6 messages: triggers SHORT_CONVERSATIO
 const CST_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cst-stats.txt');
 const CST_FIXTURE_COUNT = 8;  // 8 messages across 4 days (Jan14–Jan18)
 
+const EA_FIXTURE        = path.join(__dir, 'fixtures', 'fake-emoji-conversation.txt');
+const EA_FIXTURE_COUNT  = 10; // 10 messages: Alice (6, emoji-heavy), Bob (2), Carol (2)
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1903,7 +1906,78 @@ async function main() {
                 `Expected SINGLE_SENDER_DOMINANT, got: ${issues.join(', ')}`);
         });
 
-        await harness.run('non-extended-CQC TXT reimport; reset state for Phase 12', async page => {
+        await harness.run('non-extended-CQC TXT reimport; reset state for Phase 38', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 38 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 38 — Emoji Analysis panel (Package 3AA)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 38 — Emoji Analysis panel ──\n');
+
+        await harness.run('before EA import #emojiAnalysisPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('emojiAnalysisPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#emojiAnalysisPanel should be hidden before any import');
+        });
+
+        await harness.run('after EA fixture import #emojiAnalysisPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(EA_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('emojiAnalysisPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#emojiAnalysisPanel should be visible and non-empty after EA fixture import');
+        });
+
+        await harness.run('EA fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === EA_FIXTURE_COUNT,
+                `Expected ${EA_FIXTURE_COUNT} messages from EA fixture, got ${count}`);
+        });
+
+        await harness.run('EA panel shows top emoji chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('emojiAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasEmoji = /×\s*\d/.test(panelText);
+            assert(hasEmoji,
+                `Expected "× N" pattern for top emoji chip in EA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('EA panel shows most-emojified sender chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('emojiAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasSender = /sent the most emoji/i.test(panelText);
+            assert(hasSender,
+                `Expected "sent the most emoji" in EA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('non-EA TXT reimport hides panel and resets state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');

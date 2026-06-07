@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3Z — Extended Content Quality Checks — COMPLETE; impl `4902d50`, merged `ff79f9e`)
+**Last updated:** 2026-06-07 (Package 3AA — Emoji Analysis Engine — IN PROGRESS; branch `feature/emoji-analysis-engine`)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3Z)
+## Current architecture (post-Package 3AA)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -20,6 +20,7 @@ src/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 9 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X; HIGH_ATTACHMENT_RATIO (>80%), VERY_LONG_CONTENT (text.length>1000), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 sender) — Package 3Z
+    emoji-analysis.js          — KMEngine.EmojiAnalysis; compute(memories) pure function; returns { topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }; MAX_TOP=5; handles ZWJ sequences, skin-tone modifiers, keycap sequences, flag sequences; zero-state for empty/invalid; tie-break by count desc then emoji string asc; mostEmojifiedSender tie-break count desc then name asc — Package 3AA
     conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
@@ -36,6 +37,7 @@ index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSe
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
 index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
+index.html (emoji analysis panel) — #emojiAnalysisPanel; renderEmojiAnalysisPanel(memories); teal tone (light #e0f7fa/#006064, dark #001c1e/#80cbc4); chips: topEmojis (emoji × count), mostEmojifiedSender, totalEmojiCount; called at all 11 import/open sites; window.__km.renderEmojiAnalysisPanel — Package 3AA
 index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; browser-loaded (Package 3V) — Package 3U/3V
@@ -80,6 +82,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     facebook-messenger-adapter-tests.mjs   — 103 tests; API shape, canHandle (accepts/rejects/magic_words discriminator), fixture rawCounts, timestamp conversion, HTML entity decoding, senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards — Package 3R
     instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
     telegram-adapter-tests.mjs              — 91 tests; API shape, canHandle (accepts/rejects IG/FB/non-Telegram/from_id discriminator), fixture rawCounts, timestamp (Unix seconds → ISO), sender extraction, text plain/array-entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory fields, importWarnings, no-throw, participants — Package 3U
+    emoji-analysis-tests.mjs               — 100 tests; API shape, empty/null/invalid zero-state, emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards — Package 3AA
 ```
 
 All modules expose into `window.KMEngine`. No build step.
@@ -135,6 +138,16 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3AA — Emoji Analysis Engine, branch `feature/emoji-analysis-engine`, base `f54e56b`):
+- `src/core/emoji-analysis.js` — `KMEngine.EmojiAnalysis`; IIFE module; `compute(memories)` returns `{ topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }`; MAX_TOP=5; `extractEmojis(text)` uses `new RegExp(...)` with `gu` flag; handles `\p{Emoji_Modifier_Base}\p{Emoji_Modifier}` (skin tone), `\p{Extended_Pictographic}️?` + ZWJ chains, `[#*0-9]️?⃣` (keycaps), `\p{Regional_Indicator}\p{Regional_Indicator}` (flags); try/catch wrapper; pure, no DOM, no side effects.
+- `scripts/fixtures/fake-emoji-conversation.txt` — 10-message WhatsApp bracket fixture; 3 senders: Alice (6 messages, 11 emoji), Bob (2, 1 emoji), Carol (2, 1 emoji); totalEmojiCount=13, uniqueEmojiCount=7; topEmojis=[🎉×3,😊×3,💕×2,🔥×2,🌟×1].
+- `src/tests/emoji-analysis-tests.mjs` — 100 tests across 15 suites.
+- `src/tests/km-engine-tests.mjs` — loads `emoji-analysis.js`; `EmojiAnalysis — smoke` suite added (+6 → 144 total).
+- `index.html` — CSS for `.emoji-analysis-panel` + `.emoji-analysis-inner` + `.emoji-analysis-chip` (teal tone: light `#e0f7fa`/dark `#001c1e`); dark mode overrides; `<script src="src/core/emoji-analysis.js">` tag after conversation-stats.js; `<div id="emojiAnalysisPanel">` after `#conversationStatsPanel`; `const emojiAnalysisPanel` binding; `renderEmojiAnalysisPanel(memories)` function; calls at all 11 import/open sites; `window.__km.renderEmojiAnalysisPanel` exposed.
+- `scripts/e2e-regression-harness.mjs` — `EA_FIXTURE` + `EA_FIXTURE_COUNT = 10` constants; Phase 38 (6 real-files tests): hidden before import → visible after EA import → count=10 → `× N` top emoji chip → "sent the most emoji" sender chip → TXT reimport resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 38 note; real-files baseline 153 → 159; Node baseline 2962 → 3068 (24 suites).
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3AA entry.
 
 DELIVERED (Package 3Z — Extended Content Quality Checks, impl `4902d50`, merged `ff79f9e` 2026-06-07):
 - `src/core/content-quality-checks.js` — 4 new WARN checks appended to existing `compute()`: HIGH_ATTACHMENT_RATIO (attachCount/total > 0.80; excludes zero-attach corpora), VERY_LONG_CONTENT (text.length > 1000; skips isAttachmentOnly + type=attachment-placeholder), SHORT_CONVERSATION (memories.length < 10), SINGLE_SENDER_DOMINANT (nonSystemCount > 0 && uniqueNonSystemSenders.length === 1). Uses existing MAX_EXAMPLES=3 pattern. issue-object shape unchanged. 9 WARN checks total.

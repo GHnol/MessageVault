@@ -43,6 +43,7 @@ load('src/core/project-session.js');
 load('src/state/session-serialization.js');
 load('src/core/content-quality-checks.js');
 load('src/core/conversation-stats.js');
+load('src/core/emoji-analysis.js');
 
 const { KMEngine } = ctx.window;
 
@@ -405,6 +406,20 @@ const cstCorpus = KMEngine.ConversationStats.compute([{
 }]);
 assert(typeof cstCorpus.busiestDay === 'string',                       'non-empty corpus returns string busiestDay');
 assert(Array.isArray(cstCorpus.perSenderStats),                        'non-empty corpus returns perSenderStats array');
+
+// ── EMOJI ANALYSIS — smoke ────────────────────────────────────────────────────
+
+suite('EmojiAnalysis — smoke');
+assert(KMEngine.EmojiAnalysis !== undefined,                           'EmojiAnalysis exists on KMEngine');
+assert(typeof KMEngine.EmojiAnalysis.compute === 'function',           'compute is a function');
+const eaEmpty = KMEngine.EmojiAnalysis.compute([]);
+assert(typeof eaEmpty === 'object' && eaEmpty !== null,                'compute([]) returns an object');
+assert(eaEmpty.totalEmojiCount === 0 && eaEmpty.topEmojis.length === 0, 'compute([]) returns zero-state');
+assert(eaEmpty.mostEmojifiedSender === null,                           'compute([]) mostEmojifiedSender === null');
+const eaCorpus = KMEngine.EmojiAnalysis.compute([{
+    sender: 'Alice', text: 'Hello 😊', type: 'message', isAttachmentOnly: false
+}]);
+assert(eaCorpus.totalEmojiCount === 1,                                 'non-empty corpus returns totalEmojiCount 1');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
