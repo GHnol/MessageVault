@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
 **Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117; E2E Phase 32 added in Package 3T — real-files total 123; updated to 2650 baseline in Package 3U — telegram-adapter-tests.mjs added; E2E Phase 33 added in Package 3V — real-files total 128; E2E Phase 34 added in Package 3W — real-files total 134; updated to 2790 baseline in Package 3X — content-quality-checks-tests.mjs added; E2E Phase 35 added in Package 3X — real-files total 140).
-**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — IN PROGRESS)
+**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — COMPLETE; impl `e424825`, merged `7bdcdb5`)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -194,7 +194,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3X — Pre-print Content Quality Checks (IN PROGRESS — branch `feature/preprint-content-quality-checks`):**
+**Package 3X — Pre-print Content Quality Checks (COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07):**
 
 Package 3X (DEF-15 non-vendor subset) adds `src/core/content-quality-checks.js` (`KMEngine.ContentQualityChecks.compute()`) and `#contentQualityPanel` UI surface (amber/warning tone). Five advisory checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — all severity WARN. New `content-quality-checks-tests.mjs` suite (134 tests, 15 suites). `km-engine-tests.mjs` adds 6 ContentQualityChecks smoke assertions (→128 total). New Node baseline: **2790 / 22 suites**. E2E Phase 35 adds 6 real-files tests: panel hidden before import, visible after CQC fixture import, correct message count, RAW_URL warning present, PHONE_NUMBER or DUPLICATE present, clean TXT reimport hides panel. Layer 3: 140 total. Fixture: `scripts/fixtures/fake-cqc-checks.txt` (5 messages — WhatsApp bracket format). No vendor/manufacturing inputs. Follows Package 3I (ImportQualityReport) pattern.
 

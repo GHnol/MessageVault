@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up operating pass)
+**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — COMPLETE)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -14,7 +14,6 @@
 - _(empty — new ideas land here first)_
 
 ### Backlog
-- **Package 3X — Pre-print Content Quality Checks (DEF-15, non-vendor subset)** · Development · P2 · Ph3 · Engine + UI · deps: Coordinator authorization · notes: new `content-quality-checks.js` engine module; `#contentQualityPanel`; no vendor/manufacturing inputs; no GATE-04 crossing
 - **Prepare next product package prompt** · Development · P1 · Ph12 · Claude · src `current-sprint.md` · deps: next package authorized · notes: no checkout/PDF/renderer without authorization
 - **Define preview-fidelity verification approach** · Preview/Print · P2 · Ph6 · Dev · src `master-roadmap.md` · success: approach doc · deps: Phase 5 · notes: no redesign
 - **Message Book composition continuation** · Message Book · P2 · Ph5 · Dev · src `docs/ops/backlog-roadmap.md` · success: ProductDraft/preflight scoped
@@ -33,7 +32,7 @@
 - _(empty — no active development pass or package)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3W COMPLETE 2026-06-06; source adapter series complete; next candidate: Package 3X (DEF-15 content quality checks, non-vendor subset) — awaiting Coordinator authorization
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3X COMPLETE 2026-06-07 (impl `e424825`, merged `7bdcdb5`); next candidate: TBD — awaiting Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -45,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3X — Pre-print Content Quality Checks** · Development / Engine+UI · Ph3 · implementation `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks.compute()`; 5 WARN advisory checks; `#contentQualityPanel` amber panel; `renderContentQualityPanel(memories)` at 10 call sites; `window.__km.renderContentQualityPanel`; 134 new tests (`content-quality-checks-tests.mjs`, 15 suites) + 6 km-engine smoke (2790 Node / 22 suites); Phase 35 E2E (6 tests); 140/140 real-files; no vendor/manufacturing scope — COMPLETE
 - **Post-Package-3W Tower Catch-Up operating pass** · Docs-only · docs `056cdd9`, merged `24810bf` 2026-06-07; corrected stale deferred-gated-ideas (DEF-01–05, DEF-12), decision-log, backlog-roadmap, current-sprint, next-actions, architecture-roadmap after client-side source adapter series completion — COMPLETE
 - **Package 3W — Telegram Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` inline picker; `showTelegramSenderPicker` + `applyTelegramSelfSender`; picker hides on all non-Telegram paths + restore; `window.__km.applyTelegramSelfSender` exposed; Phase 34 E2E (6 tests); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS; no engine/adapter changes — COMPLETE
 - **Package 3V — Telegram JSON UI Wiring** · Development / UI · Ph3 · implementation `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; collision-safe (from_id + date_unixtime discriminators); no sender picker (deferred to 3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS — COMPLETE

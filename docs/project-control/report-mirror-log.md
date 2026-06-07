@@ -27,9 +27,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-07
-**Last mirrored:** RPT-20260607-001 (Weekly Sync / Project Control Tower Catch-Up after Package 3W — docs `056cdd9`, merged `24810bf` 2026-06-07)
-**Active gate:** None — tower catch-up COMPLETE; awaiting Coordinator authorization for next development package (Package 3X named as candidate)
-**Next expected mirror:** Package 3X package closeout when authorized
+**Last mirrored:** RPT-20260607-002 (Package 3X — Pre-print Content Quality Checks — impl `e424825`, merged `7bdcdb5` 2026-06-07)
+**Active gate:** None — Package 3X COMPLETE; awaiting Coordinator authorization for next development package
+**Next expected mirror:** Next authorized development package closeout
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260607-002 | package_closeout | Package 3X — Pre-print Content Quality Checks | feature/preprint-content-quality-checks | e424825 / 7bdcdb5 | mirrored | 2026-06-07 |
 | RPT-20260607-001 | weekly_sync | Weekly Sync / Project Control Tower Catch-Up after Package 3W | docs/post-3w-tower-catchup | 056cdd9 / 24810bf | mirrored | 2026-06-07 |
 | RPT-20260606-004 | package_closeout | Package 3W — Telegram Self-Identification Sender Picker | feature/telegram-self-id | a60c6e3 / 2bf1900 | mirrored | 2026-06-06 |
 | RPT-20260606-003 | package_closeout | Package 3V — Telegram JSON UI Wiring | feature/telegram-json-ui-wiring | 2b232f8 / 40a6a78 | mirrored | 2026-06-06 |

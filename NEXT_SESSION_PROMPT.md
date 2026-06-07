@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. **Package 3X — Pre-print Content Quality Checks is IN PROGRESS** on branch `feature/preprint-content-quality-checks` (from `main` at `92054fe`). All implementation files are written. The next step is to run the full verification gate, produce the pre-commit report, and STOP before committing. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **No active pass or package.** Branch: `main`. main HEAD: `7bdcdb5`. Package 3X — Pre-print Content Quality Checks is COMPLETE (impl `e424825`, merged `7bdcdb5` 2026-06-07). Awaiting Coordinator authorization for next development package. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,9 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3X — Pre-print Content Quality Checks — IN PROGRESS |
-| Branch | `feature/preprint-content-quality-checks` |
-| Next action | Run `/start`. Confirm branch `feature/preprint-content-quality-checks`. All implementation files done. Run full verification gate: Node 2790 tests, seeded E2E 57, real-files E2E 140 (Phase 35), OS audit, state-freshness, project-control-sync-validate, project-control-sync-dry-run. Produce pre-commit report. STOP before commit — await Coordinator authorization. |
+| Resume into | No active pass — awaiting Coordinator authorization for next development package |
+| Branch | `main` |
+| Next action | Run `/start`. Confirm branch `main` at `7bdcdb5`. Await Coordinator authorization for next development package. Do not start any package without explicit Coordinator authorization. |
+| Package 3X | COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks`; `#contentQualityPanel`; Phase 35 E2E (6 tests); 2790 Node / 22 suites; 57/57 seeded; 140/140 real-files; visual regression PASS |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` + `showTelegramSenderPicker` + `applyTelegramSelfSender` + hide wires + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
 | Package 3U | COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06; engine-only; telegram-json-v1; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W; STUBS array now empty |

@@ -66,7 +66,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next development package after Package 3W | Open | Coordinator | Package 3W COMPLETE (merged `2bf1900` 2026-06-06); client-side source adapter series COMPLETE (WhatsApp 3J/3K/3L, Android SMS 3M/3N, Instagram DM 3O/3P/3Q, Facebook Messenger 3R/3S/3T, Telegram 3U/3V/3W); future-adapter-stubs.js STUBS array empty; next authorized candidate: Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset); vendor/manufacturing/PDF/checkout/GATE-04 work remains blocked |
+| Next development package after Package 3W | Decided | Coordinator | Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset) authorized and COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks.compute()` + `#contentQualityPanel`; 134 tests; 2790 Node / 22 suites; next package pending Coordinator authorization |
 
 ## Deferred
 

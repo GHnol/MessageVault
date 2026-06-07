@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — IN PROGRESS)
+**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — DELIVERED)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3X / IN PROGRESS)
+## Current architecture (post-Package 3X)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -134,7 +134,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3X — Pre-print Content Quality Checks — branch `feature/preprint-content-quality-checks`):
+DELIVERED (Package 3X — Pre-print Content Quality Checks, impl `e424825`, merged `7bdcdb5` 2026-06-07):
 - `src/core/content-quality-checks.js` — `KMEngine.ContentQualityChecks`; IIFE module; `compute(memories)` returns array of `{ type, severity, count, examples, message }` issue objects; 5 advisory WARN checks; MAX_EXAMPLES=3; URL_RE case-insensitive; returns `[]` for empty/invalid input; no vendor or manufacturing inputs; follows Package 3I pattern.
 - `scripts/fixtures/fake-cqc-checks.txt` — 5-message WhatsApp bracket format fixture; triggers PHONE_NUMBER_AS_SENDER_NAME (`+14155551234`), RAW_URL_IN_CONTENT (`https://example.com/promo`), DUPLICATE_MESSAGE (Alice × 2).
 - `src/tests/content-quality-checks-tests.mjs` — 134 tests across 15 suites.

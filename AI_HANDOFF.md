@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `open` — Package 3X — Pre-print Content Quality Checks — IN PROGRESS on branch `feature/preprint-content-quality-checks`.
+**Status:** `closed` — Package 3X — Pre-print Content Quality Checks COMPLETE. impl `e424825`, merged `7bdcdb5` to main 2026-06-07. No active package.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
@@ -18,12 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Package 3X — Pre-print Content Quality Checks — IN PROGRESS |
-| **Active branch** | `feature/preprint-content-quality-checks` (from `main` at `92054fe`) |
-| **main HEAD** | `92054fe` — docs: close tower catch-up after source adapter series completion |
-| **Last completed pass** | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs `056cdd9`, merged `24810bf`; post-merge state-sync `92054fe` 2026-06-07 |
-| **Active package** | Package 3X — Pre-print Content Quality Checks — IN PROGRESS |
-| **Last closed package** | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
+| **Active pass** | None — Package 3X COMPLETE; merged `7bdcdb5` 2026-06-07 |
+| **Active branch** | `main` |
+| **main HEAD** | `7bdcdb5` — merge: add pre-print content quality checks (Package 3X) |
+| **Last completed pass** | Package 3X — Pre-print Content Quality Checks — impl `e424825`, merged `7bdcdb5` 2026-06-07 |
+| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Last closed package** | `Package 3X — Pre-print Content Quality Checks` — FULLY COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
@@ -32,28 +32,26 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3X — Pre-print Content Quality Checks)
+## Objective (last completed pass — Package 3X — Pre-print Content Quality Checks)
 
-Branch: `feature/preprint-content-quality-checks` from `main` at `92054fe`. Authorized by Coordinator 2026-06-07.
+Branch: `feature/preprint-content-quality-checks` from `main` at `92054fe`. Authorized by Coordinator 2026-06-07. **COMPLETE — impl `e424825`, merged `7bdcdb5` to main 2026-06-07.**
 
 **Objective:** Add `KMEngine.ContentQualityChecks.compute(memories)` engine module, Node tests, km-engine smoke, `#contentQualityPanel` UI surface (amber tone), E2E Phase 35, and docs updates. Advisory-only; no vendor/manufacturing scope.
 
-**What is done:**
-- `src/core/content-quality-checks.js` — complete IIFE engine module; 5 WARN checks; URL_RE case-insensitive; returns `[]` for empty/invalid input
+**What was done (11 files):**
+- `src/core/content-quality-checks.js` — IIFE engine module; 5 WARN checks; URL_RE case-insensitive; returns `[]` for empty/invalid input
 - `scripts/fixtures/fake-cqc-checks.txt` — 5-message WhatsApp bracket fixture (PHONE_NUMBER, RAW_URL, DUPLICATE)
 - `src/tests/content-quality-checks-tests.mjs` — 134 tests / 15 suites — 134/0 PASS
 - `src/tests/km-engine-tests.mjs` — loads content-quality-checks.js; ContentQualityChecks smoke suite (+6 → 128 total) — 128/0 PASS
 - `index.html` — CSS + dark mode; script tag; `#contentQualityPanel` div; `const contentQualityPanel` binding; `renderContentQualityPanel(memories)` function; called at all 10 same sites as `renderImportQualityPanel`; `window.__km.renderContentQualityPanel` exposed
 - `scripts/e2e-regression-harness.mjs` — `CQC_FIXTURE` + `CQC_FIXTURE_COUNT = 5` constants; Phase 35 (6 real-files tests)
-- `docs/qa/test-strategy.md` — Package 3X entry updated; Node baseline 2650 → 2790; suites 21 → 22; E2E Layer 3 134 → 140; pre-commit counts updated
-- `docs/architecture/architecture-roadmap.md` — header updated; content-quality-checks.js in module map; Package 3X IN PROGRESS entry; "Still expected" planning note removed
-- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs updated to Package 3X IN PROGRESS
+- `docs/qa/test-strategy.md` — Node baseline 2650 → 2790; suites 21 → 22; E2E Layer 3 134 → 140
+- `docs/architecture/architecture-roadmap.md` — module map updated; Package 3X entry
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs
 
-**What remains:** Full verification gate (Node 2790, seeded E2E 57, real-files E2E 140, OS audit, state-freshness, project-control-sync-validate, project-control-sync-dry-run), pre-commit report, then STOP and await commit authorization.
+**Verification gate:** 2790/2790 Node (22 suites, 0 failed); 57/57 seeded E2E; 140/140 real-files E2E (Phase 35: 6/6); OS audit 324/0/0; state-freshness 20 PASS / 2 WARN (cosmetic hash lag only) / 0 FAIL. All green.
 
-**Hard exclusions (from Coordinator):** src/products/*, src/state/*, src/core/normalized-memory.js, src/core/import-adapters.js, src/core/import-quality-report.js, adapters, pagination constants, proof/Review/keepsake/checkout/PDF/vendor/manufacturing/GATE-04 scope. No new npm dependencies. No external system mutations.
-
-**Next exact action:** Run verification gate — `node src/tests/content-quality-checks-tests.mjs`, `node src/tests/km-engine-tests.mjs`, `node scripts/e2e-regression-harness.mjs` (seeded), `node scripts/e2e-regression-harness.mjs --real-files`, OS audit, state-freshness, project-control-sync-validate, dry-run. Then produce pre-commit report and STOP for Coordinator commit authorization.
+**Next exact action:** No active package. Await Coordinator authorization for next development package. Do not start any package without explicit Coordinator authorization.
 
 ---
 

@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (post-Package-3W tower catch-up; Package 3X named as next candidate; adapter series marked complete)
+**Updated by:** Claude Code (post-Package-3X state-sync; Package 3X COMPLETE; next package TBD)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — **Package 3X (DEF-15 non-vendor subset: Pre-print Content Quality Checks)** is next recommended candidate; source adapter series (3J–3W) complete; all DEF stubs delivered; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3X COMPLETE (merged `7bdcdb5` 2026-06-07); next candidate TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3W COMPLETE — merged `2bf1900` 2026-06-06. Coordinator decides next package.**
+**Status: Package 3X COMPLETE — merged `7bdcdb5` 2026-06-07. Coordinator decides next package.**
+
+Package 3X (Pre-print Content Quality Checks) is COMPLETE — merged to main (`7bdcdb5` 2026-06-07). `KMEngine.ContentQualityChecks.compute(memories)` engine module added (`src/core/content-quality-checks.js`); 5 advisory WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT; `#contentQualityPanel` wired in `index.html` with amber CSS scheme; `renderContentQualityPanel(memories)` called at 10 import/open sites; `window.__km.renderContentQualityPanel` exposed for E2E testability; Phase 35 E2E (6 tests); 2790 Node (22 suites); 57/57 seeded; 140/140 real-files; OS audit 324/0/0.
 
 Package 3W (Telegram Self-Identification Sender Picker) is COMPLETE — merged to main (`2bf1900` 2026-06-06). `#telegramSenderPicker` inline picker added to `index.html`; `showTelegramSenderPicker` + `applyTelegramSelfSender` functions delivered; picker hides on all non-Telegram import paths + restore; `window.__km.applyTelegramSelfSender` exposed for E2E testability; Phase 34 E2E (6 tests); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS. Mirrors Package 3Q (Instagram DM) and Package 3T (Facebook Messenger) sender picker patterns.
 
@@ -48,11 +50,10 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 
 | Candidate | Type | External gate? | Risk |
 |---|---|---|---|
-| **Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset)** | Engine + UI | **None** — content-quality subset has no vendor/manufacturing dependency | Low; new module; follows Package 3I pattern |
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3W is now COMPLETE.** No development package has been authorized after Package 3W. The next Coordinator step is to decide the next package.
+**Package 3X is now COMPLETE.** No development package has been authorized after Package 3X. The next Coordinator step is to decide the next package.
 
 ---
 
