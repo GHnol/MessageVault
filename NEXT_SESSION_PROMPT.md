@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. No active package. Branch: `main`. Package 3V (Telegram JSON UI Wiring) is COMPLETE — merged `40a6a78` 2026-06-06. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current package, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **Package 3W (Telegram Self-Identification Sender Picker) is IN PROGRESS.** Branch: `feature/telegram-self-id`. Implementation is complete and verified — awaiting Coordinator commit approval. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current package, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,10 +47,11 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active package — await Coordinator authorization for Package 3W (Telegram self-identification sender picker) |
-| Branch | `main` |
-| main HEAD | `40a6a78` — merge: add Telegram JSON UI wiring (Package 3V) |
-| Next action | Run `/start`. Read `AI_HANDOFF.md`. Confirm branch `main` at `40a6a78`. Await Coordinator direction for Package 3W or next authorized package. |
+| Resume into | Package 3W — Telegram Self-Identification Sender Picker — implementation complete; awaiting Coordinator commit approval |
+| Branch | `feature/telegram-self-id` |
+| Branch base | `main` at `e8a6fe4` |
+| Next action | Run `/start`. Confirm branch `feature/telegram-self-id`. Verify 2650/2650 Node, 57/57 seeded, 134/134 real-files. Await Coordinator commit approval. Do not commit without explicit authorization. |
+| Package 3W | IN PROGRESS — `feature/telegram-self-id`; `#telegramSenderPicker` + `showTelegramSenderPicker` + `applyTelegramSelfSender` + hide wires + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS; OS audit 324/0/0 |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
 | Package 3U | COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06; engine-only; telegram-json-v1; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W; STUBS array now empty |
 | Package 3T | COMPLETE — impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender` + picker hide wires + `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests); 2554/2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS |

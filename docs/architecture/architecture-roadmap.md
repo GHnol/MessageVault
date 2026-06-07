@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06 (Package 3V — Telegram JSON UI Wiring)
+**Last updated:** 2026-06-06 (Package 3W — Telegram Self-Identification Sender Picker — IN PROGRESS)
 **Status:** Active
 
 ---
@@ -130,6 +130,13 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3W — Telegram Self-Identification Sender Picker):
+- `index.html` — `<div id="telegramSenderPicker">` (after `#facebookSenderPicker`); `const telegramSenderPicker` binding; `showTelegramSenderPicker(memories)` + `applyTelegramSelfSender(senderName)` (mirror FB pattern); Telegram picker hide in WA branch, non-WA reset block, and restore path; `showTelegramSenderPicker(result.memories)` call in Telegram routing branch; `window.__km.applyTelegramSelfSender` exposed.
+- `scripts/e2e-regression-harness.mjs` — `TG_ALICE_COUNT = 4` + `TG_BOB_COUNT = 4`; Phase 34 (6 real-files tests): picker visible → Alice Smith + bob_jones_99 chips → Alice Smith → 4 `.me` → selfMessageCount = 4 → Skip → 0 `.me` → non-Telegram TXT reimport hides picker + resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 34 note; real-files baseline 128 → 134.
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3W entry.
+- `src/core/source-platforms.js` — Telegram notes: sender picker delivered (Package 3W).
 
 DELIVERED (Package 3V — Telegram JSON UI Wiring, merged `40a6a78` 2026-06-06):
 - `index.html` — `<script src="src/adapters/telegram-adapter.js">` tag (after `facebook-messenger-adapter.js`, before `future-adapter-stubs.js`); Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback — collision-safe (from_id + date_unixtime discriminators unique to Telegram; participants negative guard prevents IG/FB false positives); no sender picker (deferred to Package 3W); no accept change (`#fileInput` already accepts `.json`); no picker div; no `__km` bridge addition.

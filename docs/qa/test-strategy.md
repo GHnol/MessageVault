@@ -1,6 +1,6 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117; E2E Phase 32 added in Package 3T — real-files total 123; updated to 2650 baseline in Package 3U — telegram-adapter-tests.mjs added; E2E Phase 33 added in Package 3V — real-files total 128).
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117; E2E Phase 32 added in Package 3T — real-files total 123; updated to 2650 baseline in Package 3U — telegram-adapter-tests.mjs added; E2E Phase 33 added in Package 3V — real-files total 128; E2E Phase 34 added in Package 3W — real-files total 134).
 **Last updated:** 2026-06-06 (America/New_York)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
@@ -91,9 +91,9 @@ cd scripts && npm run e2e:headed
 
 ### Layer 3 — E2E real-files harness
 
-**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 + 27 + 28 + 29 + 30 + 31 + 32 + 33 — real .txt import, WhatsApp .txt import, WhatsApp self-identification sender picker, import quality report, Android SMS XML import, Instagram DM JSON import, Instagram DM self-identification sender picker, Facebook Messenger JSON import, Facebook Messenger self-identification sender picker, Telegram Desktop JSON import, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
+**What:** Same harness, with the `--real-files` flag. Tests phases 11–19 + 25 + 26 + 27 + 28 + 29 + 30 + 31 + 32 + 33 + 34 — real .txt import, WhatsApp .txt import, WhatsApp self-identification sender picker, import quality report, Android SMS XML import, Instagram DM JSON import, Instagram DM self-identification sender picker, Facebook Messenger JSON import, Facebook Messenger self-identification sender picker, Telegram Desktop JSON import, Telegram Desktop JSON self-identification sender picker, actual browser download, actual file upload/restore, standalone keepsake type chooser, stable error text, optional chat.db smoke, capture harness subprocess.
 
-**Coverage:** 71 tests (70 always + 1 conditional on local chat.db). Combined seeded + real-files: **128**.
+**Coverage:** 77 tests (76 always + 1 conditional on local chat.db). Combined seeded + real-files: **134**.
 
 **Run:**
 
@@ -193,6 +193,10 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
+**Package 3W — Telegram Self-Identification Sender Picker (IN PROGRESS):**
+
+Package 3W adds no new Node unit tests (no new engine module; senderRole already tested via `import-quality-report-tests.mjs`). Adds E2E Phase 34 (6 real-files tests): sender picker visible after Telegram import; Alice Smith and bob_jones_99 chips present; selecting Alice Smith → 4 `.me` rows; selfMessageCount = 4; selecting Skip → 0 `.me`; non-Telegram TXT reimport hides picker. Node baseline unchanged: 2650 / 21 suites. Layer 2 unchanged: 57 seeded. Layer 3: 134 total when running `npm run e2e:real` (+6 Phase 34). Visual regression PASS expected (sender picker above page canvas capture zone; baselines unaffected). No engine changes. No adapter changes. `#telegramSenderPicker` added to `index.html`; `showTelegramSenderPicker` + `applyTelegramSelfSender` added; `window.__km.applyTelegramSelfSender` exposed.
+
 **Package 3V — Telegram JSON UI Wiring (COMPLETE — merged `40a6a78` 2026-06-06):**
 
 Package 3V adds no new Node unit tests (no new engine module; adapter fully tested in Package 3U). Adds E2E Phase 33 (5 real-files tests): Telegram JSON fixture imports via file input; chat view visible; count = 8 (10 entries − 1 service-type skip − 1 null-from skip); importQualityPanel visible and non-empty; sourcePlatformId = 'telegram'; TXT re-import resets state for later phases. Node baseline unchanged: 2650 / 21 suites. Layer 2 unchanged: 57 seeded. Layer 3: 128 total when running `npm run e2e:real` (+5 Phase 33). Visual regression PASS (baselines unchanged; import panel above page canvas capture zone). No sender picker (Telegram self-ID deferred to Package 3W). No engine changes. `#fileInput` accept already includes `.json` — no change needed. Script tag added for `telegram-adapter.js` (after `facebook-messenger-adapter.js`, before `future-adapter-stubs.js`). Telegram routing guard inserted after Instagram DM and before legacy TXT fallback in `readTxtFile()` — collision-safe: `from_id` + `date_unixtime` discriminators are unique to Telegram; `participants` negative guard prevents IG/FB false positives.
@@ -257,7 +261,7 @@ Before any commit instruction is acted on, the agent must verify:
 
 1. All 21 Node unit suites green (2650 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (128 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (134 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

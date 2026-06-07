@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 3V COMPLETE. Branch `main`. Final merge: `40a6a78` 2026-06-06.
+**Status:** `in progress` — Package 3W active. Branch `feature/telegram-self-id`. Base: `main` at `e8a6fe4`.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,17 +18,40 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | none — Package 3V COMPLETE |
-| **Active branch** | `main` |
+| **Active pass** | `Package 3W — Telegram Self-Identification Sender Picker` — IN PROGRESS |
+| **Active branch** | `feature/telegram-self-id` |
+| **Branch base** | `main` at `e8a6fe4` |
 | **main HEAD** | `40a6a78` — merge: add Telegram JSON UI wiring (Package 3V) |
 | **Last completed pass** | `Package 3V — Telegram JSON UI Wiring` — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
-| **Active package** | none — awaiting Coordinator authorization for Package 3W |
+| **Active package** | `Package 3W — Telegram Self-Identification Sender Picker` — implementation complete; awaiting Coordinator commit approval |
 | **Last closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | **Prior closed package** | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3W — Telegram Self-Identification Sender Picker)
+
+Package 3W — Telegram Self-Identification Sender Picker. **IN PROGRESS — implementation complete on `feature/telegram-self-id`; awaiting Coordinator commit approval.**
+
+Branch: `feature/telegram-self-id` — base: `main` at `e8a6fe4`
+
+Authorized files:
+- `index.html` — `<div id="telegramSenderPicker">`; `const telegramSenderPicker` binding; `showTelegramSenderPicker(memories)` + `applyTelegramSelfSender(senderName)` (mirror FB pattern); Telegram picker hide in WA branch, non-WA reset block, and restore path; `showTelegramSenderPicker(result.memories)` call in Telegram routing branch; `window.__km.applyTelegramSelfSender` exposed
+- `scripts/e2e-regression-harness.mjs` — `TG_ALICE_COUNT = 4` + `TG_BOB_COUNT = 4`; Phase 34 (6 real-files tests)
+- `docs/qa/test-strategy.md` — Phase 34 note; real-files baseline 128 → 134; Layer 3 coverage updated
+- `docs/architecture/architecture-roadmap.md` — header updated; Package 3W IN PROGRESS entry
+- `src/core/source-platforms.js` — telegram notes: sender picker delivered (Package 3W)
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs
+
+Hard exclusions: `src/adapters/telegram-adapter.js`, `src/core/normalized-memory.js`, `src/core/import-adapters.js`, `src/core/import-quality-report.js`, `src/products/*`, `src/state/*`, `scripts/fixtures/fake-telegram-export.json`, pagination constants, proof/Review/keepsake/draft/lifecycle scope, external systems.
+
+**What is done:** Branch `feature/telegram-self-id` created. All 8 authorized files edited. Full verification gate passed: 2650/2650 Node (21 suites, 0 failed), 57/57 seeded E2E, 134/134 real-files E2E (Phase 34: 6/6), visual regression PASS (4/4 pages). Hard exclusions confirmed clean (8 authorized files only). OS audit 324/0/0.
+**What remains:** Coordinator approval to commit and merge.
+**Next exact action:** Await Coordinator commit approval. Do not commit without explicit authorization.
 
 ---
 

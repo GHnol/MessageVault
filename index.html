@@ -3470,6 +3470,7 @@
         <div class="whatsapp-sender-picker" id="whatsappSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="instagramSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="facebookSenderPicker" style="display:none;"></div>
+        <div class="whatsapp-sender-picker" id="telegramSenderPicker" style="display:none;"></div>
         <div class="chat-messages" id="chatMessages"></div>
         <div class="selection-bar" id="selectionBar">
             <span class="selection-count" id="selectionCount"></span>
@@ -3671,6 +3672,7 @@
         const whatsappSenderPicker  = document.getElementById('whatsappSenderPicker');
         const instagramSenderPicker = document.getElementById('instagramSenderPicker');
         const facebookSenderPicker  = document.getElementById('facebookSenderPicker');
+        const telegramSenderPicker  = document.getElementById('telegramSenderPicker');
 
         // Picker
         const contactList = document.getElementById('contactList');
@@ -4114,6 +4116,58 @@
             }
         }
 
+        function showTelegramSenderPicker(memories) {
+            if (!telegramSenderPicker) return;
+            const seen = {};
+            const senders = [];
+            for (var i = 0; i < memories.length; i++) {
+                var s = memories[i].sender;
+                if (s && !seen[s]) { seen[s] = true; senders.push(s); }
+            }
+            if (senders.length === 0) { telegramSenderPicker.style.display = 'none'; return; }
+
+            var chips = senders.map(function (name) {
+                return '<button type="button" class="sender-chip" data-sender="' +
+                    name.replace(/"/g, '&quot;') + '">' +
+                    name.replace(/</g, '&lt;').replace(/>/g, '&gt;') +
+                    '</button>';
+            }).join('');
+            chips += '<button type="button" class="sender-chip skip-chip" data-sender="">Skip</button>';
+
+            telegramSenderPicker.innerHTML =
+                '<div class="sender-picker-inner">' +
+                '<span class="sender-picker-label">Which sender is you?</span>' +
+                chips +
+                '</div>';
+            telegramSenderPicker.style.display = '';
+
+            telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var name = btn.getAttribute('data-sender') || null;
+                    applyTelegramSelfSender(name);
+                });
+            });
+        }
+
+        function applyTelegramSelfSender(senderName) {
+            var data = window.chatMessagesData;
+            if (!Array.isArray(data)) return;
+            for (var i = 0; i < data.length; i++) {
+                data[i].senderRole = (senderName && data[i].sender === senderName) ? 'self' : 'contact';
+            }
+            renderConversation(data);
+            renderImportQualityPanel(data);
+            if (telegramSenderPicker) {
+                telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
+                    var btnSender = btn.getAttribute('data-sender') || null;
+                    var isActive = (senderName === null)
+                        ? (btnSender === null || btnSender === '')
+                        : btnSender === senderName;
+                    btn.classList.toggle('active', isActive);
+                });
+            }
+        }
+
         /* ─────────────────────────────────────────────
            .txt flow (PRESERVED — unchanged logic)
         ───────────────────────────────────────────── */
@@ -4139,6 +4193,10 @@
                         facebookSenderPicker.style.display = 'none';
                         facebookSenderPicker.innerHTML = '';
                     }
+                    if (telegramSenderPicker) {
+                        telegramSenderPicker.style.display = 'none';
+                        telegramSenderPicker.innerHTML = '';
+                    }
                     return;
                 }
 
@@ -4153,6 +4211,10 @@
                 if (facebookSenderPicker) {
                     facebookSenderPicker.style.display = 'none';
                     facebookSenderPicker.innerHTML = '';
+                }
+                if (telegramSenderPicker) {
+                    telegramSenderPicker.style.display = 'none';
+                    telegramSenderPicker.innerHTML = '';
                 }
 
                 if (window.KMEngine && window.KMEngine.androidSmsAdapter
@@ -4194,6 +4256,7 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    showTelegramSenderPicker(result.memories);
                     return;
                 }
 
@@ -8914,6 +8977,10 @@ ${keepsakeFooter}
                 facebookSenderPicker.style.display = 'none';
                 facebookSenderPicker.innerHTML = '';
             }
+            if (telegramSenderPicker) {
+                telegramSenderPicker.style.display = 'none';
+                telegramSenderPicker.innerHTML = '';
+            }
 
             selectedIndices.clear();
             for (const idx of appState.selectedIndices) {
@@ -9048,6 +9115,8 @@ ${keepsakeFooter}
             applyInstagramSelfSender,
             // Package 3T: Facebook Messenger self-id bridge for E2E testability
             applyFacebookSelfSender,
+            // Package 3W: Telegram self-id bridge for E2E testability
+            applyTelegramSelfSender,
         };
 
     </script>

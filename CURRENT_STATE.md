@@ -16,18 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-06` (Package 3V — Telegram JSON UI Wiring — COMPLETE)
+**Last updated:** `2026-06-06` (Package 3W — Telegram Self-Identification Sender Picker — IN PROGRESS)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
 | main HEAD | `40a6a78` — merge: add Telegram JSON UI wiring (Package 3V) |
-| Active branch | `main` |
-| Active pass | none — Package 3V COMPLETE — merged `40a6a78` 2026-06-06 |
+| Active branch | `feature/telegram-self-id` |
+| Branch base | `main` at `e8a6fe4` |
+| Active pass | `Package 3W — Telegram Self-Identification Sender Picker` — implementation complete; awaiting commit approval |
 | Last completed pass | `Package 3V — Telegram JSON UI Wiring` — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | Last closed package | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE |
-| Next authorized target | Await Coordinator authorization for Package 3W (Telegram self-identification sender picker) |
-| Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 128/128 (+5 Phase 33); visual regression PASS (baseline unchanged) |
+| Next authorized target | Coordinator commit approval for Package 3W |
+| Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 134/134 (+6 Phase 34); visual regression PASS (baseline unchanged) |
+| Package 3W | IN PROGRESS — `feature/telegram-self-id`; `#telegramSenderPicker` div + `const telegramSenderPicker` binding + `showTelegramSenderPicker` + `applyTelegramSelfSender` + picker hide wires in WA branch / non-WA reset / Telegram branch / restore path + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6 PASS); `TG_ALICE_COUNT=4` + `TG_BOB_COUNT=4`; 2650/2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime discriminators); no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
 | Package 3U | COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; senderRole always contact; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); engine-only; telegram platform `supported`; STUBS array now empty; no index.html; UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W |
 | Package 3T | COMPLETE — impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` div + `const facebookSenderPicker` binding + `showFacebookSenderPicker` + `applyFacebookSelfSender` + picker hide wires in WA branch / non-WA reset / FB branch / restore path + `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests, 6/6 PASS); `FB_ALICE_COUNT=4` + `FB_CHARLIE_COUNT=4`; 2554/2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS |
