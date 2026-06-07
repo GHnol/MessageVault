@@ -16,18 +16,18 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Post-merge state-sync: Weekly Sync / Project Control Tower Catch-Up after Package 3W — COMPLETE; merged `24810bf`)
+**Last updated:** `2026-06-07` (Package 3X — Pre-print Content Quality Checks — IN PROGRESS on branch `feature/preprint-content-quality-checks`)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `24810bf` — merge: sync project tower after source adapter series completion |
-| Active branch | `main` |
-| Active pass | None — `Weekly Sync / Project Control Tower Catch-Up after Package 3W` COMPLETE; merged `24810bf` 2026-06-07 |
-| Last completed pass | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs `056cdd9`, merged `24810bf` 2026-06-07 |
+| main HEAD | `92054fe` — docs: close tower catch-up after source adapter series completion |
+| Active branch | `feature/preprint-content-quality-checks` |
+| Active pass | Package 3X — Pre-print Content Quality Checks — IN PROGRESS |
+| Last completed pass | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs `056cdd9`, merged `24810bf`; state-sync `92054fe` 2026-06-07 |
 | Last closed package | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE |
-| Next authorized target | Package 3X (DEF-15 non-vendor subset — Pre-print Content Quality Checks) — awaiting Coordinator authorization |
-| Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 134/134 (+6 Phase 34); visual regression PASS (baseline unchanged) |
+| Active package | Package 3X — Pre-print Content Quality Checks — IN PROGRESS; all implementation files written; verification gate pending |
+| Test baseline | **2790 Node tests** (22 suites); E2E seeded 57/57; E2E real-files 140/140 (+6 Phase 35 — pending verification); visual regression PASS (baseline unchanged) |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` div + `const telegramSenderPicker` binding + `showTelegramSenderPicker` + `applyTelegramSelfSender` + picker hide wires in WA branch / non-WA reset / Telegram branch / restore path + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6 PASS); `TG_ALICE_COUNT=4` + `TG_BOB_COUNT=4`; 2650/2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime discriminators); no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
 | Package 3U | COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; senderRole always contact; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); engine-only; telegram platform `supported`; STUBS array now empty; no index.html; UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W |

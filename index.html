@@ -55,6 +55,11 @@
                 color: #8e8e93;
             }
             .import-quality-chip strong { color: #e5e5ea; }
+            .content-quality-inner {
+                background: #1c1400;
+                color: #c89a00;
+            }
+            .content-quality-chip strong { color: #f5c842; }
             .sender-picker-inner {
                 background: #1c1c1e;
                 color: #8e8e93;
@@ -841,6 +846,29 @@
         }
         .import-quality-chip strong {
             color: #1d1d1f;
+        }
+
+        .content-quality-panel {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 6px 16px 0;
+        }
+        .content-quality-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #7c5800;
+        }
+        .content-quality-chip {
+            white-space: nowrap;
+        }
+        .content-quality-chip strong {
+            color: #5a3e00;
         }
 
         .whatsapp-sender-picker {
@@ -3467,6 +3495,7 @@
             <button type="button" class="search-close" id="searchClose">Done</button>
         </div>
         <div class="import-quality-panel" id="importQualityPanel" style="display:none;"></div>
+        <div class="content-quality-panel" id="contentQualityPanel" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="whatsappSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="instagramSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="facebookSenderPicker" style="display:none;"></div>
@@ -3565,6 +3594,7 @@
     <script src="src/core/normalized-memory.js"></script>
     <script src="src/core/import-adapters.js"></script>
     <script src="src/core/import-quality-report.js"></script>
+    <script src="src/core/content-quality-checks.js"></script>
     <script src="src/adapters/txt-export-adapter.js"></script>
     <script src="src/adapters/imessage-chatdb-adapter.js"></script>
     <script src="src/adapters/manual-entry-adapter.js"></script>
@@ -3669,6 +3699,7 @@
         const fileInput = document.getElementById('fileInput');
         const txtStatus             = document.getElementById('txtStatus');
         const importQualityPanel    = document.getElementById('importQualityPanel');
+        const contentQualityPanel   = document.getElementById('contentQualityPanel');
         const whatsappSenderPicker  = document.getElementById('whatsappSenderPicker');
         const instagramSenderPicker = document.getElementById('instagramSenderPicker');
         const facebookSenderPicker  = document.getElementById('facebookSenderPicker');
@@ -3951,6 +3982,31 @@
             importQualityPanel.style.display = '';
         }
 
+        function renderContentQualityPanel(memories) {
+            if (!contentQualityPanel) return;
+            const CQC = window.KMEngine && window.KMEngine.ContentQualityChecks;
+            if (!CQC || !Array.isArray(memories) || memories.length === 0) {
+                contentQualityPanel.style.display = 'none';
+                contentQualityPanel.innerHTML = '';
+                return;
+            }
+            const issues = CQC.compute(memories);
+            if (issues.length === 0) {
+                contentQualityPanel.style.display = 'none';
+                contentQualityPanel.innerHTML = '';
+                return;
+            }
+
+            var chips = issues.map(function (issue) {
+                return '<span class="content-quality-chip"><strong>' +
+                    escapeHTML(issue.message) + '</strong></span>';
+            });
+
+            contentQualityPanel.innerHTML =
+                '<div class="content-quality-inner">' + chips.join(' &nbsp;·&nbsp; ') + '</div>';
+            contentQualityPanel.style.display = '';
+        }
+
         /* ─────────────────────────────────────────────
            WhatsApp self-identification sender picker
         ───────────────────────────────────────────── */
@@ -3995,6 +4051,7 @@
             }
             renderConversation(data);
             renderImportQualityPanel(data);
+            renderContentQualityPanel(data);
             if (whatsappSenderPicker) {
                 whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4050,6 +4107,7 @@
             }
             renderConversation(data);
             renderImportQualityPanel(data);
+            renderContentQualityPanel(data);
             if (instagramSenderPicker) {
                 instagramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4105,6 +4163,7 @@
             }
             renderConversation(data);
             renderImportQualityPanel(data);
+            renderContentQualityPanel(data);
             if (facebookSenderPicker) {
                 facebookSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4157,6 +4216,7 @@
             }
             renderConversation(data);
             renderImportQualityPanel(data);
+            renderContentQualityPanel(data);
             if (telegramSenderPicker) {
                 telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4184,6 +4244,7 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    renderContentQualityPanel(result.memories);
                     showWhatsAppSenderPicker(result.memories);
                     if (instagramSenderPicker) {
                         instagramSenderPicker.style.display = 'none';
@@ -4224,6 +4285,7 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    renderContentQualityPanel(result.memories);
                     return;
                 }
 
@@ -4234,6 +4296,7 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    renderContentQualityPanel(result.memories);
                     showFacebookSenderPicker(result.memories);
                     return;
                 }
@@ -4245,6 +4308,7 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    renderContentQualityPanel(result.memories);
                     showInstagramSenderPicker(result.memories);
                     return;
                 }
@@ -4256,6 +4320,7 @@
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
                     renderImportQualityPanel(result.memories);
+                    renderContentQualityPanel(result.memories);
                     showTelegramSenderPicker(result.memories);
                     return;
                 }
@@ -4269,6 +4334,7 @@
                 showStatusIn(txtStatus, `Found ${normalizedMessages.length.toLocaleString()} messages — processed locally`);
                 renderConversation(normalizedMessages);
                 renderImportQualityPanel(window.chatMessagesData);
+                renderContentQualityPanel(window.chatMessagesData);
             };
 
             reader.readAsText(file);
@@ -4704,6 +4770,7 @@
                     showView(chatView);
                     renderConversation(messages);
                     renderImportQualityPanel(window.chatMessagesData);
+                    renderContentQualityPanel(window.chatMessagesData);
                     hideLoading();
                 } catch (err) {
                     hideLoading();
@@ -9109,6 +9176,8 @@ ${keepsakeFooter}
             },
             // Package 3I: import quality report bridge for E2E testability
             renderImportQualityPanel,
+            // Package 3X: content quality checks bridge for E2E testability
+            renderContentQualityPanel,
             // Package 3L: WhatsApp self-id bridge for E2E testability
             applyWhatsAppSelfSender,
             // Package 3Q: Instagram DM self-id bridge for E2E testability

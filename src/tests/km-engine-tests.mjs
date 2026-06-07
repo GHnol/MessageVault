@@ -41,6 +41,7 @@ load('src/adapters/telegram-adapter.js');
 load('src/adapters/future-adapter-stubs.js');
 load('src/core/project-session.js');
 load('src/state/session-serialization.js');
+load('src/core/content-quality-checks.js');
 
 const { KMEngine } = ctx.window;
 
@@ -347,6 +348,21 @@ const badRestore = KMEngine.SessionSerialization.restore('not-valid-json');
 assert(badRestore.success === false, 'bad JSON returns failure result');
 assert(badRestore.error !== null,    'error message present for bad JSON');
 assert(badRestore.session === null,  'session is null on failure');
+
+// ── CONTENT QUALITY CHECKS — smoke ───────────────────────────────────────────
+
+suite('ContentQualityChecks — smoke');
+assert(KMEngine.ContentQualityChecks !== undefined,                  'ContentQualityChecks exists on KMEngine');
+assert(typeof KMEngine.ContentQualityChecks.compute === 'function',  'compute is a function');
+const cqcEmpty = KMEngine.ContentQualityChecks.compute([]);
+assert(Array.isArray(cqcEmpty) && cqcEmpty.length === 0,             'compute([]) returns empty array');
+const cqcUrl = KMEngine.ContentQualityChecks.compute([{
+    sender: 'Alice', senderRole: 'contact', text: 'Check https://example.com',
+    type: 'message', isAttachmentOnly: false
+}]);
+assert(Array.isArray(cqcUrl) && cqcUrl.length > 0,                  'URL memory produces at least one issue');
+assert(cqcUrl[0].type === 'RAW_URL_IN_CONTENT',                     'RAW_URL_IN_CONTENT is first issue for URL-only corpus');
+assert(cqcUrl[0].severity === 'WARN',                               'issue severity is WARN');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
