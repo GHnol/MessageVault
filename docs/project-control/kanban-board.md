@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-06 (America/New_York — Package 3W completion)
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up operating pass)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -14,6 +14,7 @@
 - _(empty — new ideas land here first)_
 
 ### Backlog
+- **Package 3X — Pre-print Content Quality Checks (DEF-15, non-vendor subset)** · Development · P2 · Ph3 · Engine + UI · deps: Coordinator authorization · notes: new `content-quality-checks.js` engine module; `#contentQualityPanel`; no vendor/manufacturing inputs; no GATE-04 crossing
 - **Prepare next product package prompt** · Development · P1 · Ph12 · Claude · src `current-sprint.md` · deps: next package authorized · notes: no checkout/PDF/renderer without authorization
 - **Define preview-fidelity verification approach** · Preview/Print · P2 · Ph6 · Dev · src `master-roadmap.md` · success: approach doc · deps: Phase 5 · notes: no redesign
 - **Message Book composition continuation** · Message Book · P2 · Ph5 · Dev · src `docs/ops/backlog-roadmap.md` · success: ProductDraft/preflight scoped
@@ -29,10 +30,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3W COMPLETE; awaiting Coordinator direction)_
+- **Post-Package-3W Tower Catch-Up operating pass** · Docs-only · branch `docs/post-3w-tower-catchup` · correct stale deferred-gated-ideas (DEF-01–05, DEF-12), decision-log, backlog-roadmap, current-sprint, next-actions, architecture-roadmap after client-side source adapter series completion
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3W COMPLETE 2026-06-06; next package pending Coordinator authorization
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3W COMPLETE 2026-06-06; source adapter series complete; next candidate: Package 3X (DEF-15 content quality checks, non-vendor subset) — awaiting Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9

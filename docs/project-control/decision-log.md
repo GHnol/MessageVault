@@ -1,6 +1,6 @@
 # KeepMees Decision Log
 
-**Last updated:** 2026-06-06 (America/New_York)
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up)
 **Owner:** Coordinator / Project Control
 **Relationship:** This is the Project Control view of decisions. The authoritative record is `docs/ops/decision-register.md` (DEC-* IDs). If they differ, the decision register wins and this view is corrected.
 
@@ -66,7 +66,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | TickTick adoption timing | Open | Founder | Optional |
 | Clean tracked `scripts/node_modules` history | Open | Coordinator | Hygiene only; separate decision |
 | Framework/refactor timing | Open | Development | Deferred; re-evaluate post render/proof |
-| Next product package after Package 3U | Open | Coordinator | Package 3U COMPLETE (merged `3f4e0c4` 2026-06-06); Telegram JSON adapter delivered (engine-only); 3J–3U all complete; UI wiring deferred to Package 3V; self-ID picker deferred to Package 3W; next candidates: Package 3V (Telegram UI wiring), Package 3W (Telegram self-ID picker), further Phase 12, or another authorized direction |
+| Next development package after Package 3W | Open | Coordinator | Package 3W COMPLETE (merged `2bf1900` 2026-06-06); client-side source adapter series COMPLETE (WhatsApp 3J/3K/3L, Android SMS 3M/3N, Instagram DM 3O/3P/3Q, Facebook Messenger 3R/3S/3T, Telegram 3U/3V/3W); future-adapter-stubs.js STUBS array empty; next authorized candidate: Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset); vendor/manufacturing/PDF/checkout/GATE-04 work remains blocked |
 
 ## Deferred
 

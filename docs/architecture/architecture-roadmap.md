@@ -203,6 +203,10 @@ Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)
 - `src/tests/` — additional test files per new module
 
+NEXT AUTHORIZED CANDIDATE (Package 3X — awaiting Coordinator authorization):
+- `src/core/content-quality-checks.js` — `KMEngine.ContentQualityChecks`; pre-print content quality checks (non-vendor subset); checks for raw long links, duplicate messages, phone-number-as-name, system messages in output, empty messages; pure function, Node-testable; follows Package 3I (ImportQualityReport) pattern; no vendor/manufacturing inputs required
+- `index.html` — `#contentQualityPanel` UI surface; follows `#importQualityPanel` pattern
+
 ---
 
 ## Architectural inflection points

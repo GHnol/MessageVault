@@ -1,6 +1,6 @@
 # KeepMees Master Roadmap
 
-**Last updated:** 2026-05-17 (America/New_York)
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up; source adapter series marked complete)
 **Owner:** Coordinator / Project Control
 **Source of truth:** this file summarizes `docs/strategy/`, `docs/ops/decision-register.md`, `docs/ops/backlog-roadmap.md`, `docs/command-center/current-status.md`. If they conflict, those win and this is corrected.
 
@@ -20,7 +20,8 @@ Significant foundation work is already done. Completed packages map to phases as
 | Package 2.5B — AI Mastery automation artifacts | Phase 0 | DONE |
 | Package 2.6 / 2.6.1 — Operator Inbox + processor (+fix) | Phase 0 | DONE |
 | Package 2.7 — AI Development Operating System Upgrade | Phase 0 | DONE |
-| Package 2.8 — Project Control Tower (this) | Phase 0 | IN PROGRESS |
+| Package 2.8 — Project Control Tower | Phase 0 | DONE |
+| Package 2.9 — AI Project OS Auto-Management Upgrade | Phase 0 | DONE |
 | Package 3A — Local project session save/resume | Phase 3, Phase 5 | DONE |
 | Package 3B — Automated E2E regression harness | Phase 0 (QA infra) | DONE |
 | Package 3C — Real file import/download/full-path E2E | Phase 0 (QA infra), Phase 3 | DONE |
@@ -30,6 +31,30 @@ Significant foundation work is already done. Completed packages map to phases as
 | Package 4D — ProductExperienceConsumer bridge | Phase 4, Phase 6 | DONE |
 | Package 4E — Product format availability surface | Phase 1, Phase 4 | DONE |
 | Package 4E.1 — E2E startup timing reliability patch | Phase 0 (QA infra) | DONE |
+| Package 5A — Message Book Proof Approval State Foundation | Phase 12 | DONE |
+| Package 5B — Message Book Proof Approval UX Foundation | Phase 12 | DONE |
+| Package 3D — Visual Regression Baseline Harness | Phase 0 (QA infra) | DONE |
+| Package 3E — ProductDraft and Preflight Runner Foundation | Phase 12 | DONE |
+| Package 3F — ProductDraft Lifecycle Coordinator | Phase 12 | DONE |
+| Package 3G — Session UI Wiring for ProductDraft Lifecycle | Phase 12 | DONE |
+| Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | Phase 12 | DONE |
+| Package 5C — Proof Panel User Withdrawal and UX Completion | Phase 12 | DONE |
+| Package 3I — Import Quality Report | Phase 3 | DONE |
+| **Client-side source adapter series — ALL COMPLETE (Packages 3J–3W)** | **Phase 3** | **DONE** |
+| Package 3J — WhatsApp TXT Adapter | Phase 3 | DONE |
+| Package 3K — WhatsApp TXT UI Wiring | Phase 3 | DONE |
+| Package 3L — WhatsApp Self-Identification Sender Picker | Phase 3 | DONE |
+| Package 3M — Android SMS XML Adapter | Phase 3 | DONE |
+| Package 3N — Android SMS UI Wiring | Phase 3 | DONE |
+| Package 3O — Instagram DM JSON Adapter | Phase 3 | DONE |
+| Package 3P — Instagram DM JSON UI Wiring | Phase 3 | DONE |
+| Package 3Q — Instagram DM Self-Identification Sender Picker | Phase 3 | DONE |
+| Package 3R — Facebook Messenger JSON Adapter | Phase 3 | DONE |
+| Package 3S — Facebook Messenger JSON UI Wiring | Phase 3 | DONE |
+| Package 3T — Facebook Messenger Self-Identification Sender Picker | Phase 3 | DONE |
+| Package 3U — Telegram JSON Adapter | Phase 3 | DONE |
+| Package 3V — Telegram JSON UI Wiring | Phase 3 | DONE |
+| Package 3W — Telegram Self-Identification Sender Picker | Phase 3 | DONE |
 
 Phase names below do **not** imply zero progress — read the "completed work" line in each phase.
 
@@ -80,16 +105,16 @@ Phase names below do **not** imply zero progress — read the "completed work" l
 ## Phase 3 — Source Intake and Message Selection Flow
 
 - **Purpose:** Import real conversations and select meaningful messages.
-- **Start / End:** Package 1 → DONE (E2E covered). **Confidence: High**
+- **Start / End:** Package 1 → **COMPLETE through Package 3W** (all client-side source adapters delivered; E2E phases 11–19 + 25–34 covered). **Confidence: High**
 - **Entry:** Adapter registry.
-- **Exit:** iMessage chat.db / .txt / manual entry import; selection → review flow; real-file E2E green.
-- **Deliverables:** adapters, NormalizedMemory, selection UI, E2E phases 11–19.
-- **Completed work:** Packages 1, 3A, 3C.
+- **Exit:** iMessage chat.db / .txt / manual entry import; WhatsApp, Android SMS, Instagram DM, Facebook Messenger, Telegram JSON imports; self-ID sender pickers; selection → review flow; real-file E2E green.
+- **Deliverables:** adapters, NormalizedMemory, selection UI, Import Quality Report, sender pickers, E2E phases 11–19 + 25–34.
+- **Completed work:** Packages 1, 3A, 3C, 3I, 3J, 3K, 3L, 3M, 3N, 3O, 3P, 3Q, 3R, 3S, 3T, 3U, 3V, 3W. All 5 client-side platform adapters delivered and `supported`. `future-adapter-stubs.js` STUBS array now empty.
 - **Dependencies:** none external.
 - **Risks:** future macOS/iOS chat.db schema change (RISK in `docs/ops/risk-register.md`).
 - **Owner lane:** Development.
-- **Success criteria:** Real .txt and chat.db import without crash; selection persists.
-- **Next review:** Weekly Development Review.
+- **Success criteria:** Real .txt, .xml, .json, and chat.db import without crash; selection persists; sender identification working for all ambiguous-sender platforms.
+- **Next review:** Weekly Development Review. Package 3X (DEF-15 content quality checks, non-vendor subset) is next authorized candidate.
 
 ## Phase 4 — Keepsake Grouping and Product Eligibility
 
@@ -205,16 +230,16 @@ Phase names below do **not** imply zero progress — read the "completed work" l
 
 ## Phase 12 — Beta Proof Review
 
-- **Purpose:** In-app proof approval state + explicit customer accept (DEC-P-09). **Package 5A is the foundation here.**
-- **Start / End:** Package 5A starts only after Tower approved → near-term-after-Tower, **Confidence: Medium** for the 5A foundation; full beta **Low**.
+- **Purpose:** In-app proof approval state + explicit customer accept (DEC-P-09).
+- **Start / End:** Package 5A→5C + 3E–3H foundation layers COMPLETE. Full beta still gated by GATE-04 (PDF pipeline + checkout). **Confidence: High** (foundation), **Low** (full beta — gated)
 - **Entry:** Foundation Operating System Gate passed (Tower approved); Phase 5/6 sufficient.
-- **Exit:** Proof approval state model + recorded explicit approval.
-- **Deliverables:** Package 5A (Message Book Proof Approval State Foundation), then proof approval UX.
-- **Completed work:** none (paused).
-- **Dependencies:** Tower approval; composition engine.
+- **Exit:** Proof approval state model + recorded explicit approval. Full proof UX (facsimile) gated by GATE-04.
+- **Deliverables:** Package 5A (proof state model) ✓, Package 5B (proof approval UX foundation) ✓, Package 5C (user withdrawal) ✓, Packages 3E–3H (ProductDraft + preflight + lifecycle + UI wiring) ✓. Remaining: preflight runners for 9 vendor/manufacturing-gated checks (gated until vendor confirmed).
+- **Completed work:** Packages 5A, 5B, 5C, 3E, 3F, 3G, 3H — all merged to main.
+- **Dependencies:** Tower approval ✓; composition engine ✓; vendor (for GATE-04 crossing).
 - **Risks:** scope creep into checkout/PDF.
 - **Owner lane:** Message Book / Development.
-- **Success criteria:** Proof state foundation only; no checkout/PDF/preview renderer scope.
+- **Success criteria:** Proof state foundation only below GATE-04; no checkout/PDF/preview renderer scope without explicit authorization.
 - **Next review:** Beta / Proof Review Gate.
 
 ## Phase 13 — Launch Readiness

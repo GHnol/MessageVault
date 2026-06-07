@@ -1,6 +1,6 @@
 # KeepMees Backlog
 
-**Last updated:** 2026-06-06 (America/New_York — Package 3W)
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up)
 **Owner:** Coordinator / Project Control
 
 **Status values:** Inbox · Backlog · Ready · In Progress · Waiting / Blocked · Review · Approved · Done · Deferred · Killed
@@ -20,6 +20,7 @@
 | Activate weekly Coordinator sync ritual | P1 | Ready | 0 | Tower merged | First weekly log entry written | Y | Y | Y |
 | Authorize Package 5A after Tower | P1 | Done | 12 | Tower merged | 5A explicitly authorized | Y | Y | N |
 | Authorize Package 5B product work | P1 | Done | 12 | v1.7 complete | Package 5B authorized and COMPLETE — merged `dc4f86b` 2026-06-02 | Y | Y | N |
+| Authorize Package 3X — Pre-print Content Quality Checks | P2 | Ready | 3 | source adapter series complete | Package 3X authorized; DEF-15 non-vendor subset; content-quality-checks.js engine module + contentQualityPanel UI surface | N | Y | N |
 | Decide ClickUp/TickTick/Calendar adoption | P2 | Backlog | 0 | — | Founder choice recorded | Y | N | N |
 | Decide scripts/node_modules history cleanup | P3 | Deferred | 0 | — | Decision recorded in decision-log | N | Y | N |
 

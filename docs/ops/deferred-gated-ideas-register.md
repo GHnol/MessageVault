@@ -1,6 +1,6 @@
 # Deferred and Gated Ideas Register — KeepMees / MessageVault
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up; DEF-01–DEF-05 and DEF-12 marked DELIVERED)
 **Status:** Active
 
 ---
@@ -52,46 +52,46 @@
 
 ### DEF-01 — WhatsApp adapter
 
-**Status:** Deferred (stub exists at `src/adapters/future-adapter-stubs.js`)
-**Description:** Parse WhatsApp `.txt` chat export. Pipe-delimited or WhatsApp-formatted text file.
-**Effort:** Medium. Format is known; adapter framework is in place.
-**Activate when:** prioritized by Coordinator. No external gate.
+**Status:** DELIVERED — Package 3J (engine adapter `whatsapp-txt-v1`), Package 3K (UI wiring), Package 3L (self-ID sender picker). Merged to main 2026-06-05.
+**Description:** Parse WhatsApp `.txt` chat export. Bracket format `[M/D/YY, H:MM:SS AM] Sender: text` and hyphen format `M/D/YY, H:MM AM - Sender: text`.
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 
 ### DEF-02 — Android SMS adapter
 
-**Status:** Deferred (stub exists)
-**Description:** Parse SMS Backup & Restore XML backup format.
-**Effort:** Medium.
-**Activate when:** prioritized by Coordinator.
+**Status:** DELIVERED — Package 3M (engine adapter `android-sms-xml-v1`), Package 3N (UI wiring). Merged to main 2026-06-05. Self-ID via `type=2` auto-mapping — no picker needed.
+**Description:** Parse SMS Backup & Restore XML backup format. DOM-free regex parser; type=1→contact, type=2→self; MMS attachment-placeholder.
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 
 ### DEF-03 — Instagram DM adapter
 
-**Status:** Deferred (stub exists)
-**Description:** Parse Instagram data export JSON.
-**Effort:** Medium. Requires investigation of Instagram export format.
-**Activate when:** prioritized by Coordinator.
+**Status:** DELIVERED — Package 3O (engine adapter `instagram-dm-json-v1`), Package 3P (UI wiring), Package 3Q (self-ID sender picker). Merged to main 2026-06-05. HTML entity decoding; media+share → attachment-placeholder.
+**Description:** Parse Instagram data export JSON (single-thread format).
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 
 ### DEF-04 — Facebook Messenger adapter
 
-**Status:** Deferred (stub exists)
+**Status:** DELIVERED — Package 3R (engine adapter `facebook-messenger-json-v1`), Package 3S (UI wiring), Package 3T (self-ID sender picker). Merged to main 2026-06-05/06. `magic_words` discriminator distinguishes from Instagram DM; HTML entity decoding; media+share → attachment-placeholder.
 **Description:** Parse Facebook data export JSON.
-**Effort:** Medium.
-**Activate when:** prioritized by Coordinator.
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 
 ### DEF-05 — Telegram adapter
 
-**Status:** Deferred (stub exists)
-**Description:** Parse Telegram desktop JSON export.
-**Effort:** Medium.
-**Activate when:** prioritized by Coordinator.
+**Status:** DELIVERED — Package 3U (engine adapter `telegram-json-v1`), Package 3V (UI wiring), Package 3W (self-ID sender picker). Merged to main 2026-06-06. `from_id` + `date_unixtime` discriminators; extractText() for string/array-of-entities; date_unixtime Unix seconds → ISO-8601; plain Unicode (no HTML entity decoding needed).
+**Description:** Parse Telegram Desktop JSON export.
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 
@@ -162,12 +162,10 @@
 
 ### DEF-12 — Import Quality Report
 
-**Status:** Deferred
-**Description:** After import, show a quality report: messages found, date range, sender count, media found (photos/video/audio), missing media, unsupported items, replies detected, reactions detected, estimated pages, estimated volumes.
-**Effort:** Medium. Most data is already available after parsing.
-**Priority:** HIGH — reduces user anxiety and establishes trust before book creation begins.
-**Competitive context:** MyForeverBooks does not have this as a product feature. KeepMees should build it into the core import flow.
-**Activate when:** import flow is being refined; this is a near-term priority.
+**Status:** DELIVERED — Package 3I (merged `60cdd31` 2026-06-04). `KMEngine.ImportQualityReport.compute()` pure function; `#importQualityPanel` surfaces totalMessages, dateRange, uniqueSenderCount, senderList, selfMessageCount, contactMessageCount, attachmentOnlyCount, totalReactionCount, sourcePlatformId after every import. Estimated pages/volumes not included (scoped out per package instruction).
+**Description:** After import, show a quality report: messages found, date range, sender count, self/contact split, attachments, reactions.
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 
@@ -195,10 +193,10 @@
 
 ### DEF-15 — Pre-print Review Assistant (cleanup checks)
 
-**Status:** Deferred
-**Description:** A polished cleanup check system before proof generation. Checks for: raw long links, duplicate messages, duplicate images, broken attachments, missing media, phone numbers as names, system messages, reaction fallback text, empty messages, very low-resolution images, unchanged placeholder cover text, blank cover slots, unsafe page count, unreviewed proof.
-**Effort:** Medium. The preflight check registry schema exists (`BOOK_PREFLIGHT_CHECK_REGISTRY`); runners need to be implemented.
-**Activate when:** preflight runner is authorized as a package.
+**Status:** Deferred — next authorized candidate: Package 3X (content-quality checks, non-vendor subset). Awaiting Coordinator authorization.
+**Description:** A polished cleanup check system before proof generation. Checks for: raw long links, duplicate messages, phone numbers as names, system messages in output, empty messages (content-quality subset, no vendor/manufacturing inputs required). Vendor-gated manufacturing checks (bleed, trim, cover dimensions) remain gated until vendor confirmed.
+**Effort:** Medium. New `src/core/content-quality-checks.js` engine module; `#contentQualityPanel` UI surface. Follows Package 3I (Import Quality Report) pattern. Vendor-gated manufacturing checks are NOT in Package 3X scope.
+**Activate when:** Coordinator authorizes Package 3X. No external gate for the content-quality subset.
 
 ---
 

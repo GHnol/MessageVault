@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-06` (Package 3W — Telegram Self-Identification Sender Picker — COMPLETE)
+**Last updated:** `2026-06-07` (Operating pass: Weekly Sync / Project Control Tower Catch-Up after Package 3W — IN PROGRESS on `docs/post-3w-tower-catchup`)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
 | main HEAD | `2bf1900` — merge: add Telegram self-identification sender picker (Package 3W) |
-| Active branch | `main` |
-| Active pass | None — Package 3W COMPLETE, merged `2bf1900` 2026-06-06 |
+| Active branch | `docs/post-3w-tower-catchup` (from `main` at `e8454fa`) |
+| Active pass | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs-only — IN PROGRESS |
 | Last completed pass | `Package 3W — Telegram Self-Identification Sender Picker` — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
 | Last closed package | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE |
-| Next authorized target | Await Coordinator authorization for next development package |
+| Next authorized target | Package 3X (DEF-15 non-vendor subset — Pre-print Content Quality Checks) — awaiting Coordinator authorization |
 | Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 134/134 (+6 Phase 34); visual regression PASS (baseline unchanged) |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` div + `const telegramSenderPicker` binding + `showTelegramSenderPicker` + `applyTelegramSelfSender` + picker hide wires in WA branch / non-WA reset / Telegram branch / restore path + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6 PASS); `TG_ALICE_COUNT=4` + `TG_BOB_COUNT=4`; 2650/2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime discriminators); no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
