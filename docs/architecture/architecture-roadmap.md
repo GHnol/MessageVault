@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3Y)
+## Current architecture (post-Package 3Z)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering

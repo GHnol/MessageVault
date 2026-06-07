@@ -520,20 +520,19 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 
 ---
 
-### Current position — client-side source adapter series COMPLETE
+### Current position — import analytics layer COMPLETE through Package 3Z
 
-**Status:** No package authorized. Package 3W COMPLETE (merged `2bf1900` 2026-06-06) — client-side source adapter series fully delivered. Coordinator decides next development package.
+**Status:** No package authorized. Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07) — import analytics layer fully delivered. Coordinator decides next development package.
 
-**Client-side adapter series delivery summary:**
-- Package 3J/3K/3L — WhatsApp TXT adapter + UI wiring + self-ID picker ✓
-- Package 3M/3N — Android SMS XML adapter + UI wiring (self-ID via type=2 auto-map) ✓
-- Package 3O/3P/3Q — Instagram DM JSON adapter + UI wiring + self-ID picker ✓
-- Package 3R/3S/3T — Facebook Messenger JSON adapter + UI wiring + self-ID picker ✓
-- Package 3U/3V/3W — Telegram JSON adapter + UI wiring + self-ID picker ✓
-- `future-adapter-stubs.js` STUBS array: **empty** — all stubs promoted to real implementations
+**Import analytics layer delivery summary:**
+- Package 3I — Import Quality Report (`KMEngine.ImportQualityReport.compute()`, `#importQualityPanel`) ✓
+- Package 3X — Pre-print Content Quality Checks: 5 WARN checks; `KMEngine.ContentQualityChecks.compute()`, `#contentQualityPanel` ✓
+- Package 3Y — Conversation Statistics Engine: `KMEngine.ConversationStats.compute()`, `#conversationStatsPanel` ✓
+- Package 3Z — Extended CQC: +4 WARN checks → 9 total in `KMEngine.ContentQualityChecks.compute()` ✓
+- **Client-side adapter series also complete (Packages 3J–3W):** `future-adapter-stubs.js` STUBS array now empty
 
 **Next authorized candidate (awaiting Coordinator authorization):**
-- **Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset)** — new `src/core/content-quality-checks.js` engine module; `#contentQualityPanel` UI surface; client-side content checks (phone-number sender names, raw URLs, empty messages, duplicates, system messages); no vendor/manufacturing inputs required; medium effort; no external gate
+- **Package 3AA — Emoji Analysis Engine** — new `src/core/emoji-analysis.js` IIFE engine module; `KMEngine.EmojiAnalysis.compute(memories)`; returns `{topEmojis, totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender}`; new `#emojiAnalysisPanel` in `index.html`; no external gate; partially activates DEF-14; medium effort; follows established compute(memories) IIFE pattern
 
 **Candidates still blocked (do not start):**
 - Phase 12 continuation / GATE-04 — blocked: PDF pipeline + vendor + checkout

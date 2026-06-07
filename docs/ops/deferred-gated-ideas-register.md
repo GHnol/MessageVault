@@ -193,10 +193,10 @@
 
 ### DEF-15 — Pre-print Review Assistant (cleanup checks)
 
-**Status:** Deferred — next authorized candidate: Package 3X (content-quality checks, non-vendor subset). Awaiting Coordinator authorization.
+**Status:** DELIVERED — Package 3X (5 WARN checks, merged `7bdcdb5` 2026-06-07) + Package 3Z (4 additional WARN checks, merged `ff79f9e` 2026-06-07). `KMEngine.ContentQualityChecks.compute()` now has 9 total WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT (Package 3X); HIGH_ATTACHMENT_RATIO (>80% attachment-only), VERY_LONG_CONTENT (text.length>1000), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 unique sender) (Package 3Z). Vendor-gated manufacturing checks (bleed, trim, cover dimensions) remain gated until vendor confirmed.
 **Description:** A polished cleanup check system before proof generation. Checks for: raw long links, duplicate messages, phone numbers as names, system messages in output, empty messages (content-quality subset, no vendor/manufacturing inputs required). Vendor-gated manufacturing checks (bleed, trim, cover dimensions) remain gated until vendor confirmed.
-**Effort:** Medium. New `src/core/content-quality-checks.js` engine module; `#contentQualityPanel` UI surface. Follows Package 3I (Import Quality Report) pattern. Vendor-gated manufacturing checks are NOT in Package 3X scope.
-**Activate when:** Coordinator authorizes Package 3X. No external gate for the content-quality subset.
+**Effort:** Delivered.
+**Activate when:** N/A — delivered.
 
 ---
 

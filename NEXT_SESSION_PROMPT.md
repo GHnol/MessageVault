@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. **No active pass or package.** Branch: `main`. main HEAD: `ff79f9e`. Package 3Z — Extended Content Quality Checks is COMPLETE (impl `4902d50`, merged `ff79f9e` 2026-06-07). Awaiting Coordinator authorization for next development package. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **Active pass: Post-Package-3Z Tower Catch-Up operating pass.** Branch: `docs/post-3z-tower-catchup`. main HEAD: `b5ac11e`. Package 3Z — Extended Content Quality Checks is COMPLETE (impl `4902d50`, merged `ff79f9e` 2026-06-07). Tower catch-up pass is docs-only on `docs/post-3z-tower-catchup` — 14 authorized files being updated; no commit yet; awaiting Coordinator authorization. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,9 +47,9 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active pass — awaiting Coordinator authorization for next development package |
-| Branch | `main` |
-| Next action | Run `/start`. Confirm branch `main` at `ff79f9e`. Await Coordinator authorization for next development package. Do not start any package without explicit Coordinator authorization. |
+| Resume into | Post-Package-3Z Tower Catch-Up operating pass — docs-only on `docs/post-3z-tower-catchup`; pending Coordinator commit authorization |
+| Branch | `docs/post-3z-tower-catchup` |
+| Next action | Run `/start`. Confirm branch `docs/post-3z-tower-catchup` at `b5ac11e` (main). Tower catch-up pass — read `AI_HANDOFF.md` to confirm all 14 files edited; run 6 validators; report 7 items to Coordinator; do not commit without explicit Coordinator authorization. |
 | Package 3Z | COMPLETE — impl `4902d50`, merged `ff79f9e` 2026-06-07; 4 new WARN checks: HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; content-quality-checks.js now 9 WARN checks total; 184 CQC tests / 19 suites; 138 km-engine smoke; Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962 Node / 23 suites; 57/57 seeded; 153/153 real-files; no index.html changes |
 | Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; `#conversationStatsPanel`; Phase 36 E2E (6 tests); 2908 Node / 23 suites; 57/57 seeded; 146/146 real-files; visual regression PASS |
 | Package 3X | COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks`; `#contentQualityPanel`; Phase 35 E2E (6 tests); 2790 Node / 22 suites; 57/57 seeded; 140/140 real-files; visual regression PASS |
