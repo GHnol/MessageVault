@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-05
-**Updated by:** Claude Code (post-Package-3J state-sync)
+**Last updated:** 2026-06-07
+**Updated by:** Claude Code (post-Package-3W tower catch-up)
 **Status:** Active
 
 ---
@@ -520,16 +520,24 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 
 ---
 
-### Coordinator decides next package — (current position)
+### Current position — client-side source adapter series COMPLETE
 
-**Status:** No package authorized. Package 3J COMPLETE — Coordinator decides the next step.
+**Status:** No package authorized. Package 3W COMPLETE (merged `2bf1900` 2026-06-06) — client-side source adapter series fully delivered. Coordinator decides next development package.
 
-Next package candidates (from repo docs):
-- **WhatsApp UI wiring (Package 3K)** — wire whatsapp-txt-adapter into index.html readTxtFile flow; add Me/self sender inference
-- **Android SMS adapter (DEF-02)** — engine layer; XML backup format; no external gate; medium effort
-- **Further Phase 12 continuation (below GATE-04)** — proof panel status display refinements; must stay below GATE-04
-- **Preflight runners for vendor-gated checks** — engine layer; gated until vendor confirmed
-- **Another authorized direction** — Coordinator decision required
+**Client-side adapter series delivery summary:**
+- Package 3J/3K/3L — WhatsApp TXT adapter + UI wiring + self-ID picker ✓
+- Package 3M/3N — Android SMS XML adapter + UI wiring (self-ID via type=2 auto-map) ✓
+- Package 3O/3P/3Q — Instagram DM JSON adapter + UI wiring + self-ID picker ✓
+- Package 3R/3S/3T — Facebook Messenger JSON adapter + UI wiring + self-ID picker ✓
+- Package 3U/3V/3W — Telegram JSON adapter + UI wiring + self-ID picker ✓
+- `future-adapter-stubs.js` STUBS array: **empty** — all stubs promoted to real implementations
+
+**Next authorized candidate (awaiting Coordinator authorization):**
+- **Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset)** — new `src/core/content-quality-checks.js` engine module; `#contentQualityPanel` UI surface; client-side content checks (phone-number sender names, raw URLs, empty messages, duplicates, system messages); no vendor/manufacturing inputs required; medium effort; no external gate
+
+**Candidates still blocked (do not start):**
+- Phase 12 continuation / GATE-04 — blocked: PDF pipeline + vendor + checkout
+- Preflight runners for 9 vendor-gated checks — blocked: vendor confirmation required
 
 ---
 

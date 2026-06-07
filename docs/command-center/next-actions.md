@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06
-**Updated by:** Claude Code (post-Package-3W state-sync)
+**Last updated:** 2026-06-07
+**Updated by:** Claude Code (post-Package-3W tower catch-up; Package 3X named as next candidate; adapter series marked complete)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Decide next development package — Package 3I complete (DEF-12 activated); candidates: WhatsApp adapter (DEF-01), Android SMS adapter (DEF-02), further Phase 12 continuation (below GATE-04), preflight runners for 9 vendor-gated checks, or another authorized direction | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — **Package 3X (DEF-15 non-vendor subset: Pre-print Content Quality Checks)** is next recommended candidate; source adapter series (3J–3W) complete; all DEF stubs delivered; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -48,6 +48,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 
 | Candidate | Type | External gate? | Risk |
 |---|---|---|---|
+| **Package 3X — Pre-print Content Quality Checks (DEF-15 non-vendor subset)** | Engine + UI | **None** — content-quality subset has no vendor/manufacturing dependency | Low; new module; follows Package 3I pattern |
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 

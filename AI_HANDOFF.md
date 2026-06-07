@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 3W COMPLETE. Branch `main`. Final merge: `2bf1900` 2026-06-06.
+**Status:** `open` — Operating pass `docs/post-3w-tower-catchup` IN PROGRESS. Docs-only tower catch-up after source adapter series completion. No app code. Pre-commit stop — awaiting Coordinator commit authorization.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
 ---
 
@@ -18,17 +18,46 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — Package 3W COMPLETE, merged `main` 2026-06-06 |
-| **Active branch** | `main` |
+| **Active pass** | `Weekly Sync / Project Control Tower Catch-Up after Package 3W` — docs-only operating pass — IN PROGRESS |
+| **Active branch** | `docs/post-3w-tower-catchup` (from `main` at `e8454fa`) |
 | **main HEAD** | `2bf1900` — merge: add Telegram self-identification sender picker (Package 3W) |
 | **Last completed pass** | `Package 3W — Telegram Self-Identification Sender Picker` — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
-| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Active package** | None — awaiting Coordinator authorization for next development package (Package 3X named as candidate) |
 | **Last closed package** | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Weekly Sync / Project Control Tower Catch-Up after Package 3W)
+
+Docs-only operating pass on branch `docs/post-3w-tower-catchup` (from `main` at `e8454fa`). Authorized by Coordinator after Package 3W planning investigation.
+
+**Objective:** Clean up stale project-control, command-center, architecture, backlog, and decision docs now that the client-side source adapter series is complete through Package 3W. Do not implement Package 3X. No app code.
+
+**What is done (13 files edited):**
+- `docs/project-control/decision-log.md` — stale "after Package 3U" → "after Package 3W"; Package 3X named as next candidate
+- `docs/ops/deferred-gated-ideas-register.md` — DEF-01–DEF-05 and DEF-12 marked DELIVERED; DEF-15 updated with Package 3X note
+- `docs/ops/backlog-roadmap.md` — stale "Package 3J COMPLETE" section replaced with full adapter series summary; Package 3X named as next candidate
+- `docs/project-control/current-sprint.md` — task 22 updated for Package 3X; task 25 added (operating pass In Progress)
+- `docs/project-control/kanban-board.md` — operating pass in In Progress; Package 3X in Backlog
+- `docs/project-control/backlog.md` — last-updated date corrected; Package 3X row added to Coordinator lane
+- `docs/project-control/master-roadmap.md` — Package 2.8 IN PROGRESS→DONE; all adapter packages added to history table; Phase 3 "Completed work" updated; Phase 12 updated
+- `docs/architecture/architecture-roadmap.md` — Package 3X planning note added to "Still expected" section
+- `docs/qa/test-strategy.md` — Package 3X planning note added; last-updated date corrected
+- `docs/command-center/current-status.md` — last-updated date; Package 3X named in pending decisions
+- `docs/command-center/next-actions.md` — Package 3X added as top next-package candidate; action #1 updated
+- `docs/project-control/report-mirror-log.md` — RPT-20260607-001 entry added (this operating pass)
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs updated to reflect operating pass active
+
+**What remains:** Run verification scripts; produce pre-commit report; stop. No commit without Coordinator authorization.
+
+**Authorized files only (no index.html, no src/*, no scripts/e2e-regression-harness.mjs, no scripts/fixtures/*, no tests, no adapters, no product-preflight.js, no product/state/proof/PDF/checkout/vendor/manufacturing/pagination/dependency files).**
+
+**Recommended commit message:** `docs: sync project tower after source adapter series completion`
 
 ---
 
