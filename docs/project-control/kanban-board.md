@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — COMPLETE; merged `e0539d2`)
+**Last updated:** 2026-06-07 (Package 3Z — Extended Content Quality Checks — COMPLETE; merged `ff79f9e`)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -32,7 +32,7 @@
 - _(empty — no active development pass or package)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3Y COMPLETE 2026-06-07 (impl `ca8d520`, merged `e0539d2`); next candidate: TBD — awaiting Coordinator authorization
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3Z COMPLETE 2026-06-07 (impl `4902d50`, merged `ff79f9e`); next candidate: TBD — awaiting Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3Z — Extended Content Quality Checks** · Development / Engine · Ph3 · implementation `4902d50`, merged `ff79f9e` 2026-06-07; 4 new WARN checks appended to `KMEngine.ContentQualityChecks.compute()`: HIGH_ATTACHMENT_RATIO (>80% attachment-only), VERY_LONG_CONTENT (text.length>1000, skip attachment-only), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 unique sender); `content-quality-checks.js` now 9 WARN checks total; Suite 3 enlarged (≥10 messages); Suites 16–19 added (184 total / 19 suites); 4 km-engine smoke (138 total); Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962 Node / 23 suites; 57/57 seeded; 153/153 real-files; no index.html changes — COMPLETE
 - **Package 3Y — Conversation Statistics Engine** · Development / Engine+UI · Ph3 · implementation `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; returns busiestDay/busiestDayCount/longestStreakDays/avgMessagesPerDay/totalDays/perSenderStats; `#conversationStatsPanel` indigo panel; `renderConversationStatsPanel(memories)` at 11 call sites; `window.__km.renderConversationStatsPanel`; 112 new tests (`conversation-stats-tests.mjs`, 14 suites) + 6 km-engine smoke (2908 Node / 23 suites); Phase 36 E2E (6 tests); 146/146 real-files; no vendor/manufacturing scope — COMPLETE
 - **Package 3X — Pre-print Content Quality Checks** · Development / Engine+UI · Ph3 · implementation `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks.compute()`; 5 WARN advisory checks; `#contentQualityPanel` amber panel; `renderContentQualityPanel(memories)` at 10 call sites; `window.__km.renderContentQualityPanel`; 134 new tests (`content-quality-checks-tests.mjs`, 15 suites) + 6 km-engine smoke (2790 Node / 22 suites); Phase 35 E2E (6 tests); 140/140 real-files; no vendor/manufacturing scope — COMPLETE
 - **Post-Package-3W Tower Catch-Up operating pass** · Docs-only · docs `056cdd9`, merged `24810bf` 2026-06-07; corrected stale deferred-gated-ideas (DEF-01–05, DEF-12), decision-log, backlog-roadmap, current-sprint, next-actions, architecture-roadmap after client-side source adapter series completion — COMPLETE

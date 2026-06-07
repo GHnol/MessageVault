@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (post-Package-3Y state-sync; Package 3Y COMPLETE; next package TBD)
+**Updated by:** Claude Code (post-Package-3Z state-sync; Package 3Z COMPLETE; next package TBD)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3Y COMPLETE (merged `e0539d2` 2026-06-07); next candidate TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07); next candidate TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3Y COMPLETE — merged `e0539d2` 2026-06-07. Coordinator decides next package.**
+**Status: Package 3Z COMPLETE — merged `ff79f9e` 2026-06-07. Coordinator decides next package.**
+
+Package 3Z (Extended Content Quality Checks) is COMPLETE — merged to main (`ff79f9e` 2026-06-07). `KMEngine.ContentQualityChecks.compute(memories)` extended with 4 new WARN checks: HIGH_ATTACHMENT_RATIO (>80% attachment-only), VERY_LONG_CONTENT (text.length>1000, skip attachment-only), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 unique sender); `content-quality-checks.js` now 9 WARN checks total; Suite 3 enlarged + Suites 16–19 added (134→184 CQC tests); 4 km-engine smoke added (134→138); Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962 Node (23 suites); 57/57 seeded; 153/153 real-files; no index.html changes; OS audit 324/0/0.
 
 Package 3Y (Conversation Statistics Engine) is COMPLETE — merged to main (`e0539d2` 2026-06-07). `KMEngine.ConversationStats.compute(memories)` engine module added (`src/core/conversation-stats.js`); returns busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats; zero-state for empty/invalid; perSenderStats includes all senders including senderRole:self; `#conversationStatsPanel` wired in `index.html` with indigo CSS scheme; `renderConversationStatsPanel(memories)` called at 11 import/open sites; `window.__km.renderConversationStatsPanel` exposed for E2E testability; Phase 36 E2E (6 tests); 2908 Node (23 suites); 57/57 seeded; 146/146 real-files; OS audit 324/0/0.
 
@@ -55,7 +57,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3X is now COMPLETE.** No development package has been authorized after Package 3X. The next Coordinator step is to decide the next package.
+**Package 3Z is now COMPLETE.** No development package has been authorized after Package 3Z. The next Coordinator step is to decide the next package.
 
 ---
 

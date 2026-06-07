@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — COMPLETE; merged `e0539d2`)
+**Last updated:** 2026-06-07 (Package 3Z — Extended Content Quality Checks — COMPLETE; merged `ff79f9e`)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -43,7 +43,8 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 19 | Package 3S — Facebook Messenger JSON UI Wiring | P2 | **Done** | impl `27b3521`, merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); 2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T) ✓ |
 | 20 | Package 3T — Facebook Messenger Self-Identification Sender Picker | P2 | **Done** | impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes ✓ |
 | 21 | Package 3U — Telegram JSON Adapter | P2 | **Done** | impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites) ✓ |
-| 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3Y COMPLETE 2026-06-07 (impl `ca8d520`, merged `e0539d2`); next candidate: TBD — awaiting Coordinator authorization |
+| 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3Z COMPLETE 2026-06-07 (impl `4902d50`, merged `ff79f9e`); next candidate: TBD — awaiting Coordinator authorization |
+| 28 | Package 3Z — Extended Content Quality Checks | P2 | **Done** | impl `4902d50`, merged `ff79f9e` 2026-06-07; 4 new WARN checks (HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT); `content-quality-checks.js` now 9 WARN checks total; 184 CQC tests (19 suites) + 4 km-engine smoke (138 total); Phase 37 E2E (7 tests); 57/57 seeded; 153/153 real-files; 2962 Node / 23 suites; `scripts/fixtures/fake-cqc-extended.txt` fixture; no index.html changes ✓ |
 | 25 | Post-Package-3W Tower Catch-Up operating pass | P1 | **Done** | docs `056cdd9`, merged `24810bf` 2026-06-07; corrected stale tower docs after source adapter series completion; DEF-01–05, DEF-12 marked DELIVERED; decision-log, backlog, next-actions, architecture, sprint all updated ✓ |
 | 26 | Package 3X — Pre-print Content Quality Checks | P2 | **Done** | impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks`; 5 WARN checks; `#contentQualityPanel` amber panel; 134 new tests + 6 km-engine smoke (2790 Node / 22 suites); Phase 35 E2E (6 tests); 57/57 seeded; 140/140 real-files ✓ |
 | 27 | Package 3Y — Conversation Statistics Engine | P2 | **Done** | impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; busiestDay/longestStreak/avgMsgs/totalDays/perSenderStats; `#conversationStatsPanel` indigo panel; 112 new tests + 6 km-engine smoke (2908 Node / 23 suites); Phase 36 E2E (6 tests); 57/57 seeded; 146/146 real-files ✓ |
@@ -54,7 +55,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 
 ## Blocked tasks
 
-- **Coordinator authorize next development package** — P0 — Package 3Y COMPLETE 2026-06-07 (impl `ca8d520`, merged `e0539d2`); next candidate: TBD — all development work halted pending Coordinator authorization.
+- **Coordinator authorize next development package** — P0 — Package 3Z COMPLETE 2026-06-07 (impl `4902d50`, merged `ff79f9e`); next candidate: TBD — all development work halted pending Coordinator authorization.
 
 ---
 

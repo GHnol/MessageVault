@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3Z — Extended Content Quality Checks — IN PROGRESS; branch `feature/extended-content-quality-checks`)
+**Last updated:** 2026-06-07 (Package 3Z — Extended Content Quality Checks — COMPLETE; impl `4902d50`, merged `ff79f9e`)
 **Status:** Active
 
 ---
@@ -136,13 +136,13 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3Z — Extended Content Quality Checks, branch `feature/extended-content-quality-checks`):
-- `src/core/content-quality-checks.js` — 4 new WARN checks appended to existing `compute()`: HIGH_ATTACHMENT_RATIO (attachCount/total > 0.80; excludes zero-attach corpora), VERY_LONG_CONTENT (text.length > 1000; skips isAttachmentOnly + type=attachment-placeholder), SHORT_CONVERSATION (memories.length < 10), SINGLE_SENDER_DOMINANT (nonSystemCount > 0 && uniqueNonSystemSenders.length === 1). Uses existing MAX_EXAMPLES=3 pattern. issue-object shape unchanged.
+DELIVERED (Package 3Z — Extended Content Quality Checks, impl `4902d50`, merged `ff79f9e` 2026-06-07):
+- `src/core/content-quality-checks.js` — 4 new WARN checks appended to existing `compute()`: HIGH_ATTACHMENT_RATIO (attachCount/total > 0.80; excludes zero-attach corpora), VERY_LONG_CONTENT (text.length > 1000; skips isAttachmentOnly + type=attachment-placeholder), SHORT_CONVERSATION (memories.length < 10), SINGLE_SENDER_DOMINANT (nonSystemCount > 0 && uniqueNonSystemSenders.length === 1). Uses existing MAX_EXAMPLES=3 pattern. issue-object shape unchanged. 9 WARN checks total.
 - `scripts/fixtures/fake-cqc-extended.txt` — 6-message WhatsApp bracket fixture; all from Alice Smith; 1st message text=1007 chars (VERY_LONG_CONTENT); messages 2–6 `<Media omitted>` (5/6=83% → HIGH_ATTACHMENT_RATIO); 6<10 (SHORT_CONVERSATION); all 6 from Alice (SINGLE_SENDER_DOMINANT).
 - `src/tests/content-quality-checks-tests.mjs` — Suite 3 enlarged to 11 messages (≥10; fixes SHORT_CONVERSATION threshold conflict); Suites 16–19 added (HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT); 184 tests / 19 suites.
 - `src/tests/km-engine-tests.mjs` — 4 smoke assertions for new check types (→138 total).
-- `scripts/e2e-regression-harness.mjs` — `CQC_EXTENDED_FIXTURE` + `CQC_EXTENDED_FIXTURE_COUNT = 6` constants; Phase 37 (7 real-files tests): visible after extended fixture → count=6 → SHORT_CONVERSATION → HIGH_ATTACHMENT_RATIO → VERY_LONG_CONTENT → SINGLE_SENDER_DOMINANT → TXT reimport resets state for Phase 12.
-- `docs/qa/test-strategy.md` — pre-commit baseline 2908→2962 / 22→23 suites corrected; real-files 140→152; Package 3Z and Phase 37 notes.
+- `scripts/e2e-regression-harness.mjs` — `CQC_EXTENDED_FIXTURE` + `CQC_EXTENDED_FIXTURE_COUNT = 6` constants; Phase 37 (7 real-files tests): visible after extended fixture → count=6 → SHORT_CONVERSATION → HIGH_ATTACHMENT_RATIO → VERY_LONG_CONTENT → SINGLE_SENDER_DOMINANT → TXT reimport resets state for Phase 12. Phase 35 test 6 updated from panel-visibility to count assertion.
+- `docs/qa/test-strategy.md` — pre-commit baseline 2908→2962 / 23 suites; real-files 146→153; Package 3Z and Phase 37 notes.
 - `docs/architecture/architecture-roadmap.md` — this file; Package 3Z entry.
 
 DELIVERED (Package 3Y — Conversation Statistics Engine, impl `ca8d520`, merged `e0539d2` 2026-06-07):

@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-07
-**Last mirrored:** RPT-20260607-003 (Package 3Y — Conversation Statistics Engine — impl `ca8d520`, merged `e0539d2` 2026-06-07)
-**Active gate:** None — Package 3Y COMPLETE; awaiting Coordinator authorization for next development package
+**Last mirrored:** RPT-20260607-004 (Package 3Z — Extended Content Quality Checks — impl `4902d50`, merged `ff79f9e` 2026-06-07)
+**Active gate:** None — Package 3Z COMPLETE; awaiting Coordinator authorization for next development package
 **Next expected mirror:** Next authorized development package closeout
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260607-004 | package_closeout | Package 3Z — Extended Content Quality Checks | feature/extended-content-quality-checks | 4902d50 / ff79f9e | mirrored | 2026-06-07 |
 | RPT-20260607-003 | package_closeout | Package 3Y — Conversation Statistics Engine | feature/conversation-statistics | ca8d520 / e0539d2 | mirrored | 2026-06-07 |
 | RPT-20260607-002 | package_closeout | Package 3X — Pre-print Content Quality Checks | feature/preprint-content-quality-checks | e424825 / 7bdcdb5 | mirrored | 2026-06-07 |
 | RPT-20260607-001 | weekly_sync | Weekly Sync / Project Control Tower Catch-Up after Package 3W | docs/post-3w-tower-catchup | 056cdd9 / 24810bf | mirrored | 2026-06-07 |
@@ -66,6 +67,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260607-004 — package_closeout — Package 3Z — Extended Content Quality Checks
+
+**Created:** 2026-06-07T00:00:00Z | **Branch:** feature/extended-content-quality-checks | **HEAD:** 4902d50 (impl) / ff79f9e (merge) | **Status:** mirrored
+
+Package 3Z — Extended Content Quality Checks COMPLETE — implementation `4902d50`, merge `ff79f9e` 2026-06-07. Extends `KMEngine.ContentQualityChecks.compute()` with 4 new WARN checks; no new panel, no new CSS, no index.html structural changes — reuses existing `#contentQualityPanel` render path. Delivered: (1) `src/core/content-quality-checks.js` — 4 new WARN checks appended before `return issues;`: HIGH_ATTACHMENT_RATIO (attachCount/total > 0.80; excludes zero-attach corpora; examples up to MAX_EXAMPLES=3), VERY_LONG_CONTENT (text.length > 1000; skips isAttachmentOnly + type=attachment-placeholder; examples truncated to 47 chars + ellipsis), SHORT_CONVERSATION (memories.length < 10; empty examples array), SINGLE_SENDER_DOMINANT (nonSystemCount > 0 && uniqueNonSystemSenders.length === 1; excludes senderRole=system); issue-object shape unchanged ({type, severity, count, examples, message}); 9 WARN checks total. (2) `scripts/fixtures/fake-cqc-extended.txt` — 6-message WhatsApp bracket fixture; all from Alice Smith; message 1 = 1007-char text (VERY_LONG_CONTENT); messages 2–6 = `<Media omitted>` (5/6=83% > 80% → HIGH_ATTACHMENT_RATIO); 6<10 (SHORT_CONVERSATION); all from Alice Smith (SINGLE_SENDER_DOMINANT). (3) `src/tests/content-quality-checks-tests.mjs` — Suite 3 enlarged to 11 messages (10 text Alice/Bob + 1 attachment Alice; avoids SHORT_CONVERSATION threshold conflict); Suites 16–19 added (HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT — 50 new tests); 184 total / 19 suites. (4) `src/tests/km-engine-tests.mjs` — 4 smoke assertions for new check types (HIGH_ATTACHMENT_RATIO/VERY_LONG_CONTENT/SHORT_CONVERSATION/SINGLE_SENDER_DOMINANT present in compute() output on extended fixture); 138 total. (5) `scripts/e2e-regression-harness.mjs` — `CQC_EXTENDED_FIXTURE` + `CQC_EXTENDED_FIXTURE_COUNT = 6` constants; Phase 37 block (7 real-files tests): panel visible after extended fixture import; count = 6 (CQC_EXTENDED_FIXTURE_COUNT); SHORT_CONVERSATION issue in rendered output; HIGH_ATTACHMENT_RATIO issue present; VERY_LONG_CONTENT issue present; SINGLE_SENDER_DOMINANT issue present; 7th test reloads TXT fixture and asserts count = TXT_FIXTURE_COUNT to reset state for Phase 12. Phase 35 test 6 changed from panel-visibility assertion to count assertion (TXT_FIXTURE now triggers SHORT_CONVERSATION). (6) State and project-control docs updated per post-merge state-sync.
+
+**Tests:** 2962 Node tests (23 suites), 0 failed (+54 new: 50 CQC + 4 km-engine smoke). E2E seeded 57/57 (unchanged). E2E real-files 153/153 (+7 Phase 37). Visual regression PASS (no index.html rendering changes; baselines unaffected). OS audit 324/0/0. State freshness: WARN only (cosmetic hash lag post-commit — expected). project-control-sync-validate: 11/11.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html structural changes: none (only existing `#contentQualityPanel` render path reused); no new CSS classes; no new panels; no BOOK_PAGINATION_VERSION, no BOOK_PRODUCTION_DEPS, no BOOK_PARITY, no pagination constants; no Review view, no standalone keepsake flows, no proof/draft/preflight/lifecycle/readiness/checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3Z closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260606-004 — package_closeout — Package 3W — Telegram Self-Identification Sender Picker
 

@@ -1,6 +1,6 @@
 # KeepMees Backlog
 
-**Last updated:** 2026-06-07 (America/New_York — Package 3Y COMPLETE)
+**Last updated:** 2026-06-07 (America/New_York — Package 3Z COMPLETE)
 **Owner:** Coordinator / Project Control
 
 **Status values:** Inbox · Backlog · Ready · In Progress · Waiting / Blocked · Review · Approved · Done · Deferred · Killed
@@ -20,6 +20,7 @@
 | Activate weekly Coordinator sync ritual | P1 | Ready | 0 | Tower merged | First weekly log entry written | Y | Y | Y |
 | Authorize Package 5A after Tower | P1 | Done | 12 | Tower merged | 5A explicitly authorized | Y | Y | N |
 | Authorize Package 5B product work | P1 | Done | 12 | v1.7 complete | Package 5B authorized and COMPLETE — merged `dc4f86b` 2026-06-02 | Y | Y | N |
+| Authorize Package 3Z — Extended Content Quality Checks | P2 | Done | 3 | Package 3Y complete | Package 3Z authorized and COMPLETE — impl `4902d50`, merged `ff79f9e` 2026-06-07; 4 new WARN checks (HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT); content-quality-checks.js 9 WARN checks total; 184 CQC tests; 2962 Node / 23 suites | N | Y | N |
 | Authorize Package 3Y — Conversation Statistics Engine | P2 | Done | 3 | Package 3X complete | Package 3Y authorized and COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; conversation-stats.js engine module + #conversationStatsPanel UI surface; 112 tests; 2908 Node / 23 suites | N | Y | N |
 | Authorize Package 3X — Pre-print Content Quality Checks | P2 | Done | 3 | source adapter series complete | Package 3X authorized and COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; content-quality-checks.js engine module + #contentQualityPanel UI surface; 134 tests; 2790 Node / 22 suites | N | Y | N |
 | Decide ClickUp/TickTick/Calendar adoption | P2 | Backlog | 0 | — | Founder choice recorded | Y | N | N |
