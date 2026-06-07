@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06 (Package 3U — Telegram JSON Adapter)
+**Last updated:** 2026-06-06 (Package 3V — Telegram JSON UI Wiring)
 **Status:** Active
 
 ---
@@ -33,7 +33,7 @@ src/
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
-    telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; engine-only (UI wiring Package 3V) — Package 3U
+    telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; browser-loaded (Package 3V) — Package 3U/3V
     future-adapter-stubs.js        — STUBS array is now empty (all client-side adapters promoted to real implementations)
   state/
     session-serialization.js  — serialize/restore ProjectSession
@@ -130,6 +130,13 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3V — Telegram JSON UI Wiring, implementation complete on feature/telegram-json-ui-wiring — pending commit and merge):
+- `index.html` — `<script src="src/adapters/telegram-adapter.js">` tag (after `facebook-messenger-adapter.js`, before `future-adapter-stubs.js`); Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback — collision-safe (from_id + date_unixtime discriminators unique to Telegram; participants negative guard prevents IG/FB false positives); no sender picker (deferred to Package 3W); no accept change (`#fileInput` already accepts `.json`); no picker div; no `__km` bridge addition.
+- `scripts/e2e-regression-harness.mjs` — `TELEGRAM_FIXTURE` + `TELEGRAM_FIXTURE_COUNT = 8` constants; Phase 33 (5 real-files tests): import → count = 8 → importQualityPanel → sourcePlatformId = 'telegram' → TXT reset.
+- `docs/qa/test-strategy.md` — Phase 33 note; real-files baseline 123 → 128.
+- `docs/architecture/architecture-roadmap.md` — this file; telegram-adapter.js marked browser-loaded.
+- `src/core/source-platforms.js` — Telegram notes: UI wiring delivered (Package 3V); sender picker pending (Package 3W).
 
 DELIVERED (Package 3U — Telegram JSON Adapter, merged `3f4e0c4` 2026-06-06):
 - `src/adapters/telegram-adapter.js` — `KMEngine.telegramAdapter`; ADAPTER_ID `telegram-json-v1`; Telegram Desktop JSON export; `canHandle` uses `from_id` + `date_unixtime` as positive discriminators and `participants` + `magic_words` absence as negative discriminators; `extractText(text)` handles string or array-of-entities; `hasMedia(msg)` checks `photo` (string), `file` (string), `media_type` non-null; date_unixtime is Unix SECONDS string → `parseInt * 1000` → ISO-8601; no HTML entity decoding (Telegram uses plain Unicode); senderRole always `contact`; non-message entries (service type, null from) produce importWarnings; registered as `KMEngine.telegramAdapter` and `KMEngine.adapters['telegram-json-v1']`; engine-only (UI wiring Package 3V; self-ID picker Package 3W).

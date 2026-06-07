@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 3U COMPLETE. Branch `main`. Merge commit `3f4e0c4` 2026-06-06. No active package; awaiting Coordinator direction.
+**Status:** `in-progress` — Package 3V — Telegram JSON UI Wiring. Branch `feature/telegram-json-ui-wiring`. Base: `main` at `a33e7ad`.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,17 +18,46 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | none |
-| **Active branch** | `main` |
-| **main HEAD** | `3f4e0c4` — merge: add Telegram JSON adapter (Package 3U) |
+| **Active pass** | `Package 3V — Telegram JSON UI Wiring` |
+| **Active branch** | `feature/telegram-json-ui-wiring` |
+| **main HEAD** | `a33e7ad` — docs: sync operating docs after Package 3U completion |
 | **Last completed pass** | `Package 3U — Telegram JSON Adapter` — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
-| **Active package** | none — Package 3U COMPLETE; awaiting Coordinator direction |
+| **Active package** | `Package 3V — Telegram JSON UI Wiring` — IN PROGRESS |
 | **Last closed package** | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
 | **Prior closed package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — FULLY COMPLETE — merged `8b11f18` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3V — Telegram JSON UI Wiring)
+
+Package 3V — Telegram JSON UI Wiring. **IN PROGRESS — branch `feature/telegram-json-ui-wiring`, base `main` at `a33e7ad`.**
+
+Objective: Wire `KMEngine.telegramAdapter` into the browser import flow so users can import Telegram Desktop JSON exports through the existing file upload and drag-and-drop flow.
+
+Authorized files:
+- `index.html` — add `telegram-adapter.js` script tag; add Telegram routing guard in `readTxtFile()` after Instagram DM guard, before TXT fallback
+- `scripts/e2e-regression-harness.mjs` — add `TELEGRAM_FIXTURE` + `TELEGRAM_FIXTURE_COUNT = 8` constants; add Phase 33 (5 tests)
+- `docs/qa/test-strategy.md` — update real-files baseline 123 → 128; add Phase 33 note
+- `docs/architecture/architecture-roadmap.md` — mark telegram-adapter.js browser-loaded; add Package 3V entry
+- `src/core/source-platforms.js` — update Telegram notes: UI wiring delivered 3V, sender picker pending 3W
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs
+
+Hard exclusions: `src/adapters/telegram-adapter.js`, `src/core/normalized-memory.js`, `src/core/import-adapters.js`, `src/core/import-quality-report.js`, `src/products/*`, `src/state/*`, package files, pagination constants, proof panel, Review view, keepsake flows.
+
+No sender picker in Package 3V. No Telegram picker div. No `__km` bridge addition for Telegram. Sender self-identification deferred to Package 3W.
+
+Routing order in `readTxtFile()` after 3V:
+1. WhatsApp TXT → 2. non-WA picker reset → 3. Android SMS XML → 4. Facebook Messenger JSON → 5. Instagram DM JSON → 6. Telegram JSON → 7. legacy TXT fallback
+
+Expected counts after 3V: Node 2650/21 suites (unchanged), seeded E2E 57 (unchanged), real-files E2E 128/128 (+5 Phase 33).
+
+**What is done:** Branch created. State docs updated. All 8 authorized files edited. Full verification gate passed: 2650/2650 Node (21 suites, 0 failed), 57/57 seeded E2E, 128/128 real-files E2E (Phase 33: 5/5), visual regression PASS (4/4 pages). Hard exclusions confirmed clean (8 authorized files only). Start-router NEEDS_COORDINATOR_DECISION (expected mid-package). State-freshness 0 FAILs, 2 cosmetic WARN (hash lag). Project-control-sync-validate 11/0/0. OS-self-audit 324/0/0.
+**What remains:** Coordinator commit approval → commit → merge → closeout.
+**Next exact action:** Stop and report to Coordinator. Await commit instruction. Do not commit without explicit authorization.
 
 ---
 

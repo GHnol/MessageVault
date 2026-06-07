@@ -74,6 +74,9 @@ const FB_FIXTURE_COUNT = 8;  // 10 messages - 1 is_unsent skip - 1 missing-sende
 const FB_ALICE_COUNT   = 4;  // Alice Johnson sends 4 of the 8 imported messages
 const FB_CHARLIE_COUNT = 4;  // charlie_b_99 sends 4 of the 8 imported messages
 
+const TELEGRAM_FIXTURE       = path.join(__dir, 'fixtures', 'fake-telegram-export.json');
+const TELEGRAM_FIXTURE_COUNT = 8;  // 10 entries - 1 service-type skip - 1 null-from skip
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1557,6 +1560,55 @@ async function main() {
                 return el.style.display === 'none' || el.innerHTML.trim().length === 0;
             });
             assert(hidden, '#facebookSenderPicker should be hidden after non-Facebook TXT import');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 33 — Telegram JSON file import (Package 3V)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 33 — Telegram JSON file import ──\n');
+
+        await harness.run('Telegram JSON fixture imports through existing file input', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TELEGRAM_FIXTURE);
+            await waitForChatView(page);
+        });
+
+        await harness.run('chat view is visible after Telegram import', async page => {
+            await assertVisible(page, '#chatView', 'Chat view after Telegram import');
+        });
+
+        await harness.run('rendered message count equals TELEGRAM_FIXTURE_COUNT', async page => {
+            const rows = await page.locator('.message-row.selectable').count();
+            assert(rows === TELEGRAM_FIXTURE_COUNT,
+                `Expected ${TELEGRAM_FIXTURE_COUNT} DOM rows after Telegram import, got ${rows}`);
+            const dataCount = await page.evaluate(() => (window.chatMessagesData || []).length);
+            assert(dataCount === TELEGRAM_FIXTURE_COUNT,
+                `Expected ${TELEGRAM_FIXTURE_COUNT} in chatMessagesData after Telegram import, got ${dataCount}`);
+        });
+
+        await harness.run('#importQualityPanel is visible and non-empty after Telegram import', async page => {
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('importQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.textContent.trim().length > 0;
+            });
+            assert(visible, '#importQualityPanel should be visible and non-empty after Telegram import');
+        });
+
+        await harness.run('chatMessagesData sourcePlatformId is telegram; reset state for later phases', async page => {
+            const platformId = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length > 0 ? data[0].sourcePlatformId : null;
+            });
+            assert(platformId === 'telegram',
+                `Expected sourcePlatformId 'telegram', got '${platformId}'`);
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
         });
 
         // ─────────────────────────────────────────────────────────────────────
