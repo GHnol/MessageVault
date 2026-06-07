@@ -1,6 +1,6 @@
 # KeepMees Master Roadmap
 
-**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up; source adapter series marked complete)
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3Z Tower catch-up; import analytics layer complete through IQR, CQC, ConversationStats, ExtendedCQC)
 **Owner:** Coordinator / Project Control
 **Source of truth:** this file summarizes `docs/strategy/`, `docs/ops/decision-register.md`, `docs/ops/backlog-roadmap.md`, `docs/command-center/current-status.md`. If they conflict, those win and this is corrected.
 
@@ -55,6 +55,10 @@ Significant foundation work is already done. Completed packages map to phases as
 | Package 3U — Telegram JSON Adapter | Phase 3 | DONE |
 | Package 3V — Telegram JSON UI Wiring | Phase 3 | DONE |
 | Package 3W — Telegram Self-Identification Sender Picker | Phase 3 | DONE |
+| **Import analytics layer — ALL COMPLETE (Packages 3I, 3X, 3Y, 3Z)** | **Phase 3** | **DONE** |
+| Package 3X — Pre-print Content Quality Checks (5 WARN checks) | Phase 3 | DONE |
+| Package 3Y — Conversation Statistics Engine | Phase 3 | DONE |
+| Package 3Z — Extended Content Quality Checks (+4 WARN checks, 9 total) | Phase 3 | DONE |
 
 Phase names below do **not** imply zero progress — read the "completed work" line in each phase.
 
@@ -105,16 +109,16 @@ Phase names below do **not** imply zero progress — read the "completed work" l
 ## Phase 3 — Source Intake and Message Selection Flow
 
 - **Purpose:** Import real conversations and select meaningful messages.
-- **Start / End:** Package 1 → **COMPLETE through Package 3W** (all client-side source adapters delivered; E2E phases 11–19 + 25–34 covered). **Confidence: High**
+- **Start / End:** Package 1 → **COMPLETE through Package 3Z** (all client-side source adapters delivered; import analytics layer IQR → CQC → ConversationStats → ExtendedCQC complete; E2E phases 11–19 + 25–37 covered). **Confidence: High**
 - **Entry:** Adapter registry.
-- **Exit:** iMessage chat.db / .txt / manual entry import; WhatsApp, Android SMS, Instagram DM, Facebook Messenger, Telegram JSON imports; self-ID sender pickers; selection → review flow; real-file E2E green.
-- **Deliverables:** adapters, NormalizedMemory, selection UI, Import Quality Report, sender pickers, E2E phases 11–19 + 25–34.
-- **Completed work:** Packages 1, 3A, 3C, 3I, 3J, 3K, 3L, 3M, 3N, 3O, 3P, 3Q, 3R, 3S, 3T, 3U, 3V, 3W. All 5 client-side platform adapters delivered and `supported`. `future-adapter-stubs.js` STUBS array now empty.
+- **Exit:** iMessage chat.db / .txt / manual entry import; WhatsApp, Android SMS, Instagram DM, Facebook Messenger, Telegram JSON imports; self-ID sender pickers; import quality report; content quality checks (9 WARN); conversation stats; selection → review flow; real-file E2E green.
+- **Deliverables:** adapters, NormalizedMemory, selection UI, Import Quality Report, Content Quality Checks, Conversation Stats, sender pickers, E2E phases 11–19 + 25–37.
+- **Completed work:** Packages 1, 3A, 3C, 3I, 3J, 3K, 3L, 3M, 3N, 3O, 3P, 3Q, 3R, 3S, 3T, 3U, 3V, 3W, 3X, 3Y, 3Z. All 5 client-side platform adapters delivered and `supported`. `future-adapter-stubs.js` STUBS array now empty. Import analytics layer (IQR + CQC 9 checks + ConversationStats) complete.
 - **Dependencies:** none external.
 - **Risks:** future macOS/iOS chat.db schema change (RISK in `docs/ops/risk-register.md`).
 - **Owner lane:** Development.
 - **Success criteria:** Real .txt, .xml, .json, and chat.db import without crash; selection persists; sender identification working for all ambiguous-sender platforms.
-- **Next review:** Weekly Development Review. Package 3X (DEF-15 content quality checks, non-vendor subset) is next authorized candidate.
+- **Next review:** Weekly Development Review. Import analytics layer complete through Package 3Z. Next candidate: **Package 3AA — Emoji Analysis Engine** (no external gate; partially activates DEF-14; awaiting Coordinator authorization).
 
 ## Phase 4 — Keepsake Grouping and Product Eligibility
 

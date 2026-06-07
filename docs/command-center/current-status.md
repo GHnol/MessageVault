@@ -110,10 +110,10 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `ff79f9e` — merge: add extended content quality checks (Package 3Z) |
-| Active branch | `main` |
-| Working tree | Clean |
-| Pushed to remote | main is current through Package 3Z merge |
+| main HEAD | `b5ac11e` — docs: sync operating docs after Package 3Z completion |
+| Active branch | `docs/post-3z-tower-catchup` (Tower catch-up pass in progress) |
+| Working tree | In progress — Tower catch-up edits |
+| Pushed to remote | main is current through Package 3Z merge (`ff79f9e`) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -158,7 +158,7 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07); next candidate TBD; see `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07); post-3Z Tower catch-up in progress; next candidate: Package 3AA — Emoji Analysis Engine (no external gate; partially activates DEF-14); see `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
