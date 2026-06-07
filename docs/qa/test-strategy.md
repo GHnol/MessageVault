@@ -195,7 +195,11 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3Y — Conversation Statistics Engine (IN PROGRESS — branch `feature/conversation-statistics`):**
+**Package 3Z — Extended Content Quality Checks (IN PROGRESS — branch `feature/extended-content-quality-checks`):**
+
+Package 3Z extends `src/core/content-quality-checks.js` (`KMEngine.ContentQualityChecks.compute()`) with 4 new advisory WARN checks: HIGH_ATTACHMENT_RATIO (>80% of messages are attachment-only), VERY_LONG_CONTENT (text.length > 1000, skips attachment-only), SHORT_CONVERSATION (<10 total messages), SINGLE_SENDER_DOMINANT (all non-system messages from 1 unique sender). No new panel, no new CSS, no `index.html` structural work — reuses existing `#contentQualityPanel` render path. `content-quality-checks-tests.mjs` expanded: Suite 3 enlarged to ≥10 messages; Suites 16–19 added (50 new tests → 184 total, 19 suites). `km-engine-tests.mjs` adds 4 smoke assertions for the 4 new check types (→138 total). New Node baseline: **2962 / 23 suites** (+54: 50 CQC + 4 km-engine smoke). `scripts/fixtures/fake-cqc-extended.txt` — 6-message WhatsApp bracket fixture; all from Alice Smith; 1 message with >1000 char text + 5 `<Media omitted>` — triggers all 4 new checks. `CQC_EXTENDED_FIXTURE_COUNT = 6`. E2E Phase 37 adds 7 real-files tests: panel visible after extended fixture import; correct message count; SHORT_CONVERSATION issue; HIGH_ATTACHMENT_RATIO issue; VERY_LONG_CONTENT issue; SINGLE_SENDER_DOMINANT issue; TXT reimport resets state for Phase 12. Layer 3: 153 total (+7 Phase 37). No `index.html` changes. No new CSS.
+
+**Package 3Y — Conversation Statistics Engine (COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07):**
 
 Package 3Y adds `src/core/conversation-stats.js` (`KMEngine.ConversationStats.compute()`) and `#conversationStatsPanel` UI surface (indigo tone). Stats: busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats (all senders including senderRole:self). New `conversation-stats-tests.mjs` suite (~112 tests, 14 suites). `km-engine-tests.mjs` adds 6 ConversationStats smoke assertions (→134 total). Expected Node baseline: **~2908 / 23 suites**. E2E Phase 36 adds 6 real-files tests: panel hidden before import, visible after CST fixture import, correct message count, busiest day chip present, top sender chip present, TXT reimport resets state for Phase 12. Layer 3: ~146 total. Fixture: `scripts/fixtures/fake-cst-stats.txt` (8 messages — WhatsApp bracket format, 4 days). Not DEF-14 activation — this is import-panel stats only. Hard exclusions: no words shared, no top emojis, no estimated page counts, no book composition stats.
 
@@ -269,9 +273,9 @@ Package 5C adds 18 tests to `proof-approval-state-tests.mjs` (Suite 4 +1, Suite 
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 22 Node unit suites green (2790 tests).
+1. All 23 Node unit suites green (2962 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (140 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (153 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

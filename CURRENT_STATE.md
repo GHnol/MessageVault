@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Package 3Y — Conversation Statistics Engine — COMPLETE; impl `ca8d520`, merged `e0539d2`)
+**Last updated:** `2026-06-07` (Package 3Z — Extended Content Quality Checks — IN PROGRESS; branch `feature/extended-content-quality-checks`)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
 | main HEAD | `e0539d2` — merge: add conversation statistics engine (Package 3Y) |
-| Active branch | `main` |
-| Active pass | None — Package 3Y COMPLETE; merged `e0539d2` 2026-06-07 |
+| Active branch | `feature/extended-content-quality-checks` |
+| Active pass | Package 3Z — Extended Content Quality Checks — implementation complete; awaiting Coordinator commit authorization |
 | Last completed pass | Package 3Y — Conversation Statistics Engine — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
 | Last closed package | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE |
-| Active package | None — awaiting Coordinator authorization for next development package |
-| Test baseline | **2908 Node tests** (23 suites); E2E seeded 57/57; E2E real-files 146/146 (+6 Phase 36); visual regression PASS (baseline unchanged) |
+| Active package | `Package 3Z — Extended Content Quality Checks` — implementation complete; pre-commit report pending |
+| Test baseline | **2962 Node tests** (23 suites); E2E seeded 57/57; E2E real-files 153/153 (+7 Phase 37 pending E2E run); visual regression PASS (baseline unchanged — no index.html changes) |
+| Package 3Z | IN PROGRESS — branch `feature/extended-content-quality-checks`; extends `KMEngine.ContentQualityChecks.compute()` with 4 new WARN checks: HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; Suite 3 enlarged + Suites 16–19 added (184 tests / 19 suites); 4 km-engine smoke (→138); Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962/2962 Node; no index.html changes |
 | Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; returns busiestDay/busiestDayCount/longestStreakDays/avgMessagesPerDay/totalDays/perSenderStats; zero-state for empty/invalid; perSenderStats includes senderRole:self; `#conversationStatsPanel` indigo panel; `renderConversationStatsPanel(memories)` at 11 call sites; `window.__km.renderConversationStatsPanel`; 112 new tests (`conversation-stats-tests.mjs`, 14 suites) + 6 km-engine smoke (→134); Phase 36 E2E (6 tests, 6/6 PASS); `CST_FIXTURE_COUNT=8`; 2908/2908 Node; 57/57 seeded; 146/146 real-files |
 | Package 3X | COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks.compute()`; 5 WARN checks (PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE, SYSTEM_MESSAGE_IN_OUTPUT); `#contentQualityPanel` amber panel; `renderContentQualityPanel(memories)` at 10 call sites; `window.__km.renderContentQualityPanel`; 134 new tests (`content-quality-checks-tests.mjs`) + 6 km-engine smoke (→128); Phase 35 E2E (6 tests, 6/6 PASS); `CQC_FIXTURE_COUNT=5`; 2790/2790 Node; 57/57 seeded; 140/140 real-files |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` div + `const telegramSenderPicker` binding + `showTelegramSenderPicker` + `applyTelegramSelfSender` + picker hide wires in WA branch / non-WA reset / Telegram branch / restore path + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6 PASS); `TG_ALICE_COUNT=4` + `TG_BOB_COUNT=4`; 2650/2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |

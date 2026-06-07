@@ -364,6 +364,32 @@ const cqcUrl = KMEngine.ContentQualityChecks.compute([{
 assert(Array.isArray(cqcUrl) && cqcUrl.length > 0,                  'URL memory produces at least one issue');
 assert(cqcUrl[0].type === 'RAW_URL_IN_CONTENT',                     'RAW_URL_IN_CONTENT is first issue for URL-only corpus');
 assert(cqcUrl[0].severity === 'WARN',                               'issue severity is WARN');
+const cqcAttach = KMEngine.ContentQualityChecks.compute([
+    { sender: 'A', senderRole: 'contact', text: '', type: 'attachment-placeholder', isAttachmentOnly: true },
+    { sender: 'A', senderRole: 'contact', text: '', type: 'attachment-placeholder', isAttachmentOnly: true },
+    { sender: 'A', senderRole: 'contact', text: '', type: 'attachment-placeholder', isAttachmentOnly: true },
+    { sender: 'A', senderRole: 'contact', text: '', type: 'attachment-placeholder', isAttachmentOnly: true },
+    { sender: 'A', senderRole: 'contact', text: '', type: 'attachment-placeholder', isAttachmentOnly: true },
+    { sender: 'B', senderRole: 'contact', text: 'Hello', type: 'message', isAttachmentOnly: false }
+]);
+assert(cqcAttach.some(function (i) { return i.type === 'HIGH_ATTACHMENT_RATIO'; }),
+    'HIGH_ATTACHMENT_RATIO detected for >80% attachment corpus');
+const cqcLong = KMEngine.ContentQualityChecks.compute([{
+    sender: 'A', senderRole: 'contact', text: 'x'.repeat(1001), type: 'message', isAttachmentOnly: false
+}]);
+assert(cqcLong.some(function (i) { return i.type === 'VERY_LONG_CONTENT'; }),
+    'VERY_LONG_CONTENT detected for text > 1000 chars');
+const cqcShort = KMEngine.ContentQualityChecks.compute([{
+    sender: 'A', senderRole: 'contact', text: 'Hi', type: 'message', isAttachmentOnly: false
+}]);
+assert(cqcShort.some(function (i) { return i.type === 'SHORT_CONVERSATION'; }),
+    'SHORT_CONVERSATION detected for corpus < 10 messages');
+const cqcDomSender = KMEngine.ContentQualityChecks.compute([
+    { sender: 'Alice', senderRole: 'contact', text: 'A', type: 'message', isAttachmentOnly: false },
+    { sender: 'Alice', senderRole: 'contact', text: 'B', type: 'message', isAttachmentOnly: false }
+]);
+assert(cqcDomSender.some(function (i) { return i.type === 'SINGLE_SENDER_DOMINANT'; }),
+    'SINGLE_SENDER_DOMINANT detected when all non-system messages from one sender');
 
 // ── CONVERSATION STATS — smoke ────────────────────────────────────────────────
 

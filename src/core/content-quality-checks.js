@@ -144,6 +144,89 @@
             });
         }
 
+        // HIGH_ATTACHMENT_RATIO — >80% of messages are attachment-only
+        var attachCount = 0;
+        var attachExamples = [];
+        for (var i = 0; i < memories.length; i++) {
+            var m = memories[i];
+            if (!m || typeof m !== 'object') continue;
+            if (m.isAttachmentOnly || m.type === 'attachment-placeholder') {
+                attachCount++;
+                if (attachExamples.length < MAX_EXAMPLES) {
+                    var s = typeof m.sender === 'string' && m.sender ? m.sender : '(unknown)';
+                    attachExamples.push(s);
+                }
+            }
+        }
+        if (attachCount > 0 && attachCount / memories.length > 0.8) {
+            var attachPct = Math.round(attachCount / memories.length * 100);
+            issues.push({
+                type:     'HIGH_ATTACHMENT_RATIO',
+                severity: 'WARN',
+                count:    attachCount,
+                examples: attachExamples,
+                message:  attachCount + ' of ' + memories.length + ' messages are attachment-only (' + attachPct + '%)'
+            });
+        }
+
+        // VERY_LONG_CONTENT — text.length > 1000, skip attachment-only
+        var longCount = 0;
+        var longExamples = [];
+        for (var i = 0; i < memories.length; i++) {
+            var m = memories[i];
+            if (!m || typeof m !== 'object') continue;
+            if (m.isAttachmentOnly || m.type === 'attachment-placeholder') continue;
+            var text = typeof m.text === 'string' ? m.text : '';
+            if (text.length > 1000) {
+                longCount++;
+                if (longExamples.length < MAX_EXAMPLES) {
+                    longExamples.push(text.substring(0, 47) + '…');
+                }
+            }
+        }
+        if (longCount > 0) {
+            issues.push({
+                type:     'VERY_LONG_CONTENT',
+                severity: 'WARN',
+                count:    longCount,
+                examples: longExamples,
+                message:  longCount + ' message' + (longCount === 1 ? '' : 's') + ' with text longer than 1 000 characters'
+            });
+        }
+
+        // SHORT_CONVERSATION — fewer than 10 total messages
+        if (memories.length < 10) {
+            issues.push({
+                type:     'SHORT_CONVERSATION',
+                severity: 'WARN',
+                count:    memories.length,
+                examples: [],
+                message:  memories.length + ' message' + (memories.length === 1 ? '' : 's') + ' in corpus — fewer than 10'
+            });
+        }
+
+        // SINGLE_SENDER_DOMINANT — all non-system messages from exactly 1 unique sender
+        var nonSystemSenders = {};
+        var nonSystemCount = 0;
+        for (var i = 0; i < memories.length; i++) {
+            var m = memories[i];
+            if (!m || typeof m !== 'object') continue;
+            if (m.senderRole === 'system') continue;
+            nonSystemCount++;
+            var sender = typeof m.sender === 'string' ? m.sender : '';
+            nonSystemSenders[sender] = true;
+        }
+        var senderKeys = Object.keys(nonSystemSenders);
+        if (nonSystemCount > 0 && senderKeys.length === 1) {
+            issues.push({
+                type:     'SINGLE_SENDER_DOMINANT',
+                severity: 'WARN',
+                count:    nonSystemCount,
+                examples: [senderKeys[0]],
+                message:  'All messages are from 1 sender (' + senderKeys[0] + ')'
+            });
+        }
+
         return issues;
     }
 

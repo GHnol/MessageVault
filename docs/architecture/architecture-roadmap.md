@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — COMPLETE; impl `ca8d520`, merged `e0539d2`)
+**Last updated:** 2026-06-07 (Package 3Z — Extended Content Quality Checks — IN PROGRESS; branch `feature/extended-content-quality-checks`)
 **Status:** Active
 
 ---
@@ -19,7 +19,7 @@ src/
   core/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
-    content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 5 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X
+    content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 9 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X; HIGH_ATTACHMENT_RATIO (>80%), VERY_LONG_CONTENT (text.length>1000), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 sender) — Package 3Z
     conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
@@ -135,6 +135,15 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3Z — Extended Content Quality Checks, branch `feature/extended-content-quality-checks`):
+- `src/core/content-quality-checks.js` — 4 new WARN checks appended to existing `compute()`: HIGH_ATTACHMENT_RATIO (attachCount/total > 0.80; excludes zero-attach corpora), VERY_LONG_CONTENT (text.length > 1000; skips isAttachmentOnly + type=attachment-placeholder), SHORT_CONVERSATION (memories.length < 10), SINGLE_SENDER_DOMINANT (nonSystemCount > 0 && uniqueNonSystemSenders.length === 1). Uses existing MAX_EXAMPLES=3 pattern. issue-object shape unchanged.
+- `scripts/fixtures/fake-cqc-extended.txt` — 6-message WhatsApp bracket fixture; all from Alice Smith; 1st message text=1007 chars (VERY_LONG_CONTENT); messages 2–6 `<Media omitted>` (5/6=83% → HIGH_ATTACHMENT_RATIO); 6<10 (SHORT_CONVERSATION); all 6 from Alice (SINGLE_SENDER_DOMINANT).
+- `src/tests/content-quality-checks-tests.mjs` — Suite 3 enlarged to 11 messages (≥10; fixes SHORT_CONVERSATION threshold conflict); Suites 16–19 added (HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT); 184 tests / 19 suites.
+- `src/tests/km-engine-tests.mjs` — 4 smoke assertions for new check types (→138 total).
+- `scripts/e2e-regression-harness.mjs` — `CQC_EXTENDED_FIXTURE` + `CQC_EXTENDED_FIXTURE_COUNT = 6` constants; Phase 37 (7 real-files tests): visible after extended fixture → count=6 → SHORT_CONVERSATION → HIGH_ATTACHMENT_RATIO → VERY_LONG_CONTENT → SINGLE_SENDER_DOMINANT → TXT reimport resets state for Phase 12.
+- `docs/qa/test-strategy.md` — pre-commit baseline 2908→2962 / 22→23 suites corrected; real-files 140→152; Package 3Z and Phase 37 notes.
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3Z entry.
 
 DELIVERED (Package 3Y — Conversation Statistics Engine, impl `ca8d520`, merged `e0539d2` 2026-06-07):
 - `src/core/conversation-stats.js` — `KMEngine.ConversationStats`; IIFE module; `compute(memories)` returns `{ busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }`; zero-state for empty/invalid input; timezone-safe `parseDay()` using `Date.UTC`; busiestDay tie-break: earliest date wins; totalDays = inclusive calendar span; longestStreak counts consecutive unique days; avgMessagesPerDay = timestamped count / totalDays (1 decimal); perSenderStats includes all senders including `senderRole:self`, sorted count desc / name asc; pct = 1 decimal; no DOM, no side effects.
