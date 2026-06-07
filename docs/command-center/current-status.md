@@ -112,10 +112,10 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `29c4491` — feat: add EmojiAnalysis engine + #emojiAnalysisPanel (Package 3AA) (state-sync commit pending) |
+| main HEAD | `48363b9` — docs: sync operating docs after Package 3AA completion |
 | Active branch | `main` |
-| Working tree | Clean (state-sync docs edits in progress) |
-| Pushed to remote | main pushed through Package 3AA state-sync |
+| Working tree | Clean |
+| Pushed to remote | main pushed through `48363b9` (Package 3AA state-sync) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
