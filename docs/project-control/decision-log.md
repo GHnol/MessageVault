@@ -1,6 +1,6 @@
 # KeepMees Decision Log
 
-**Last updated:** 2026-06-02 (America/New_York)
+**Last updated:** 2026-06-06 (America/New_York)
 **Owner:** Coordinator / Project Control
 **Relationship:** This is the Project Control view of decisions. The authoritative record is `docs/ops/decision-register.md` (DEC-* IDs). If they differ, the decision register wins and this view is corrected.
 

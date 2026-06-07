@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-06
-**Last mirrored:** RPT-20260606-003 (Package 3V closeout — Telegram JSON UI Wiring COMPLETE)
-**Active gate:** None — Package 3V COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260606-004 (Package 3W closeout — Telegram Self-Identification Sender Picker COMPLETE)
+**Active gate:** None — Package 3W COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260606-004 | package_closeout | Package 3W — Telegram Self-Identification Sender Picker | feature/telegram-self-id | a60c6e3 / 2bf1900 | mirrored | 2026-06-06 |
 | RPT-20260606-003 | package_closeout | Package 3V — Telegram JSON UI Wiring | feature/telegram-json-ui-wiring | 2b232f8 / 40a6a78 | mirrored | 2026-06-06 |
 | RPT-20260606-002 | package_closeout | Package 3U — Telegram JSON Adapter | feature/telegram-json-adapter | 45d0d24 / 3f4e0c4 | mirrored | 2026-06-06 |
 | RPT-20260606-001 | package_closeout | Package 3T — Facebook Messenger Self-Identification Sender Picker | feature/facebook-messenger-self-id | b01fbff / 8b11f18 | mirrored | 2026-06-06 |
@@ -62,6 +63,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260606-004 — package_closeout — Package 3W — Telegram Self-Identification Sender Picker
+
+**Created:** 2026-06-06T00:00:00Z | **Branch:** feature/telegram-self-id | **HEAD:** a60c6e3 (impl) / 2bf1900 (merge) | **Status:** mirrored
+
+Package 3W — Telegram Self-Identification Sender Picker COMPLETE — implementation `a60c6e3`, merge `2bf1900` 2026-06-06. Mirrors Package 3Q (Instagram DM) and Package 3T (Facebook Messenger) sender picker pattern. Delivered: (1) `index.html` — `<div class="whatsapp-sender-picker" id="telegramSenderPicker" style="display:none;">` after `#facebookSenderPicker`; `const telegramSenderPicker` binding; `showTelegramSenderPicker(memories)` function; `applyTelegramSelfSender(senderName)` function; Telegram picker hide in WA branch + non-WA reset block + Telegram routing branch call + restore path; `window.__km.applyTelegramSelfSender` exposed for E2E testability. (2) `scripts/e2e-regression-harness.mjs` — `TG_ALICE_COUNT = 4` and `TG_BOB_COUNT = 4` constants; Phase 34 block (6 real-files tests): picker visible after Telegram import; Alice Smith + bob_jones_99 chips present; Alice Smith → 4 `.me` rows; selfMessageCount = 4 via ImportQualityReport; Skip → 0 `.me`; non-Telegram TXT reimport hides `#telegramSenderPicker` + resets state for Phase 12. (3) `docs/qa/test-strategy.md` — status line (Phase 34 added; real-files total 128→134); Layer 3 coverage updated; pre-commit baseline updated; Package 3W COMPLETE note. (4) `docs/architecture/architecture-roadmap.md` — architecture section updated to post-Package 3W; Telegram sender picker in architecture tree; Package 3W DELIVERED entry. (5) `src/core/source-platforms.js` — telegram notes updated: "Sender picker delivered (Package 3W)".
+
+**Tests:** 2650 Node tests (21 suites), 0 failed (unchanged). E2E seeded 57/57 (unchanged). E2E real-files 134/134 (+6 Phase 34). Visual regression PASS (4/4 pages, baselines unchanged; sender picker above capture zone). OS audit 324/0/0.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — `src/adapters/telegram-adapter.js`, `src/core/normalized-memory.js`, `src/core/import-adapters.js`, `src/core/import-quality-report.js`, `src/products/*`, `src/state/*`, `scripts/fixtures/fake-telegram-export.json` untouched; no pagination constants, no BOOK_PAGINATION_VERSION, no BOOK_PRODUCTION_DEPS, no BOOK_PARITY; no Review view, no standalone keepsake flows, no proof/draft/preflight/lifecycle/readiness/checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3W closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260606-003 — package_closeout — Package 3V — Telegram JSON UI Wiring
 

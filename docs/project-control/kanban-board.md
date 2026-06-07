@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-06 (America/New_York — Package 3V completion)
+**Last updated:** 2026-06-06 (America/New_York — Package 3W completion)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — Package 3V COMPLETE; awaiting Coordinator direction)_
+- _(empty — Package 3W COMPLETE; awaiting Coordinator direction)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3V COMPLETE 2026-06-06; next package pending Coordinator authorization
+- **Coordinator authorize next product package** · Coordinator · P1 · Ph12 · Package 3W COMPLETE 2026-06-06; next package pending Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3W — Telegram Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` inline picker; `showTelegramSenderPicker` + `applyTelegramSelfSender`; picker hides on all non-Telegram paths + restore; `window.__km.applyTelegramSelfSender` exposed; Phase 34 E2E (6 tests); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS; no engine/adapter changes — COMPLETE
 - **Package 3V — Telegram JSON UI Wiring** · Development / UI · Ph3 · implementation `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; collision-safe (from_id + date_unixtime discriminators); no sender picker (deferred to 3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS — COMPLETE
 - **Package 3U — Telegram JSON Adapter** · Development / Engine · Ph3 · implementation `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); UI wiring deferred to Package 3V; self-ID picker deferred to Package 3W — COMPLETE
 - **Package 3T — Facebook Messenger Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` inline picker; `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes — COMPLETE

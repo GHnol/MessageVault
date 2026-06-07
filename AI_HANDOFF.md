@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in progress` — Package 3W active. Branch `feature/telegram-self-id`. Base: `main` at `e8a6fe4`.
+**Status:** `closed` — Package 3W COMPLETE. Branch `main`. Final merge: `2bf1900` 2026-06-06.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,14 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3W — Telegram Self-Identification Sender Picker` — IN PROGRESS |
-| **Active branch** | `feature/telegram-self-id` |
-| **Branch base** | `main` at `e8a6fe4` |
-| **main HEAD** | `40a6a78` — merge: add Telegram JSON UI wiring (Package 3V) |
-| **Last completed pass** | `Package 3V — Telegram JSON UI Wiring` — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
-| **Active package** | `Package 3W — Telegram Self-Identification Sender Picker` — implementation complete; awaiting Coordinator commit approval |
-| **Last closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
-| **Prior closed package** | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
+| **Active pass** | None — Package 3W COMPLETE, merged `main` 2026-06-06 |
+| **Active branch** | `main` |
+| **main HEAD** | `2bf1900` — merge: add Telegram self-identification sender picker (Package 3W) |
+| **Last completed pass** | `Package 3W — Telegram Self-Identification Sender Picker` — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
+| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Last closed package** | `Package 3W — Telegram Self-Identification Sender Picker` — FULLY COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06 |
+| **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -33,9 +32,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3W — Telegram Self-Identification Sender Picker)
+## Objective (last completed pass — Package 3W — Telegram Self-Identification Sender Picker)
 
-Package 3W — Telegram Self-Identification Sender Picker. **IN PROGRESS — implementation complete on `feature/telegram-self-id`; awaiting Coordinator commit approval.**
+Package 3W — Telegram Self-Identification Sender Picker. **COMPLETE — impl `a60c6e3`, merged `2bf1900` to `main` 2026-06-06.**
 
 Branch: `feature/telegram-self-id` — base: `main` at `e8a6fe4`
 
@@ -49,9 +48,9 @@ Authorized files:
 
 Hard exclusions: `src/adapters/telegram-adapter.js`, `src/core/normalized-memory.js`, `src/core/import-adapters.js`, `src/core/import-quality-report.js`, `src/products/*`, `src/state/*`, `scripts/fixtures/fake-telegram-export.json`, pagination constants, proof/Review/keepsake/draft/lifecycle scope, external systems.
 
-**What is done:** Branch `feature/telegram-self-id` created. All 8 authorized files edited. Full verification gate passed: 2650/2650 Node (21 suites, 0 failed), 57/57 seeded E2E, 134/134 real-files E2E (Phase 34: 6/6), visual regression PASS (4/4 pages). Hard exclusions confirmed clean (8 authorized files only). OS audit 324/0/0.
-**What remains:** Coordinator approval to commit and merge.
-**Next exact action:** Await Coordinator commit approval. Do not commit without explicit authorization.
+**What is done:** Branch `feature/telegram-self-id` created. All 8 authorized files edited. Full verification gate passed: 2650/2650 Node (21 suites, 0 failed), 57/57 seeded E2E, 134/134 real-files E2E (Phase 34: 6/6), visual regression PASS (4/4 pages). Hard exclusions confirmed clean (8 authorized files only). OS audit 324/0/0. Committed `a60c6e3`. Merged `2bf1900` to main 2026-06-06. Post-merge state-sync complete.
+**What remains:** Nothing — Package 3W COMPLETE.
+**Next exact action:** No active package. Package 3W COMPLETE. Await Coordinator authorization for next package. Do not start any package without explicit Coordinator authorization.
 
 ---
 
@@ -807,9 +806,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-No active package. Package 3V COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06.
+No active package. Package 3W COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06.
 
-Next session: read this file, verify main at `40a6a78`, confirm 2650/2650 Node tests and 128/128 real-files E2E, await Coordinator direction for Package 3W or next package. Do not start any package without explicit Coordinator authorization.
+Next session: read this file, verify main at `2bf1900`, confirm 2650/2650 Node tests and 134/134 real-files E2E, await Coordinator direction for next package. Do not start any package without explicit Coordinator authorization.
 
 Do not commit or push without explicit Coordinator authorization. No external mutations authorized.
 

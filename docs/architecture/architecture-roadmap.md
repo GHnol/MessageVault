@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06 (Package 3W — Telegram Self-Identification Sender Picker — IN PROGRESS)
+**Last updated:** 2026-06-06 (Package 3W — Telegram Self-Identification Sender Picker — DELIVERED)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3U)
+## Current architecture (post-Package 3W)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -32,6 +32,7 @@ src/
     instagram-dm-adapter.js        — KMEngine.instagramDmAdapter; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID instagram-dm-json-v1; browser-loaded (Package 3P) — Package 3O/3P
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
+index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; browser-loaded (Package 3V) — Package 3U/3V
     future-adapter-stubs.js        — STUBS array is now empty (all client-side adapters promoted to real implementations)
@@ -131,7 +132,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3W — Telegram Self-Identification Sender Picker):
+DELIVERED (Package 3W — Telegram Self-Identification Sender Picker, merged `2bf1900` 2026-06-06):
 - `index.html` — `<div id="telegramSenderPicker">` (after `#facebookSenderPicker`); `const telegramSenderPicker` binding; `showTelegramSenderPicker(memories)` + `applyTelegramSelfSender(senderName)` (mirror FB pattern); Telegram picker hide in WA branch, non-WA reset block, and restore path; `showTelegramSenderPicker(result.memories)` call in Telegram routing branch; `window.__km.applyTelegramSelfSender` exposed.
 - `scripts/e2e-regression-harness.mjs` — `TG_ALICE_COUNT = 4` + `TG_BOB_COUNT = 4`; Phase 34 (6 real-files tests): picker visible → Alice Smith + bob_jones_99 chips → Alice Smith → 4 `.me` → selfMessageCount = 4 → Skip → 0 `.me` → non-Telegram TXT reimport hides picker + resets state for Phase 12.
 - `docs/qa/test-strategy.md` — Phase 34 note; real-files baseline 128 → 134.

@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-06
-**Updated by:** Claude Code (post-Package-3V state-sync)
+**Updated by:** Claude Code (post-Package-3W state-sync)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -22,9 +22,11 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3V COMPLETE — merged `40a6a78` 2026-06-06. Coordinator decides next package.**
+**Status: Package 3W COMPLETE — merged `2bf1900` 2026-06-06. Coordinator decides next package.**
 
-Package 3V (Telegram JSON UI Wiring) is COMPLETE — merged to main (`40a6a78` 2026-06-06). `telegram-adapter.js` script tag added to `index.html`; Telegram routing guard inserted in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime positive discriminators; participants + magic_words negative discriminators); no sender picker (deferred to Package 3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS. Routing order now: WhatsApp TXT → Android SMS XML → Facebook Messenger JSON → Instagram DM JSON → Telegram JSON → legacy TXT fallback.
+Package 3W (Telegram Self-Identification Sender Picker) is COMPLETE — merged to main (`2bf1900` 2026-06-06). `#telegramSenderPicker` inline picker added to `index.html`; `showTelegramSenderPicker` + `applyTelegramSelfSender` functions delivered; picker hides on all non-Telegram import paths + restore; `window.__km.applyTelegramSelfSender` exposed for E2E testability; Phase 34 E2E (6 tests); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS. Mirrors Package 3Q (Instagram DM) and Package 3T (Facebook Messenger) sender picker patterns.
+
+Package 3V (Telegram JSON UI Wiring) is COMPLETE — merged to main (`40a6a78` 2026-06-06). `telegram-adapter.js` script tag added to `index.html`; Telegram routing guard inserted in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime positive discriminators; participants + magic_words negative discriminators); no sender picker (delivered in Package 3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS. Routing order now: WhatsApp TXT → Android SMS XML → Facebook Messenger JSON → Instagram DM JSON → Telegram JSON → legacy TXT fallback.
 
 Package 3U (Telegram JSON Adapter) is COMPLETE — merged to main (`3f4e0c4` 2026-06-06). `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; date_unixtime Unix seconds → ISO-8601; no HTML entity decoding; senderRole always contact; engine-only; 91 new tests (telegram-adapter-tests.mjs) + 5 km-engine smoke; 2650 Node / 21 suites; STUBS array now empty; UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W.
 
@@ -49,7 +51,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | Phase 12 continuation (scoped proof panel interactions) | Product — Phase 12 | None below GATE-04; GATE-04 (full proof UX) requires PDF + checkout | Medium (scope boundary risk) |
 | Preflight runners for vendor-gated checks | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3V is now COMPLETE.** No development package has been authorized after Package 3V. The next Coordinator step is to decide the next package (candidates: Package 3W — Telegram self-ID picker, or another authorized direction).
+**Package 3W is now COMPLETE.** No development package has been authorized after Package 3W. The next Coordinator step is to decide the next package.
 
 ---
 
