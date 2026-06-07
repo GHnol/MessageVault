@@ -1,7 +1,7 @@
 # Test Strategy — KeepMees / MessageVault
 
-**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117; E2E Phase 32 added in Package 3T — real-files total 123; updated to 2650 baseline in Package 3U — telegram-adapter-tests.mjs added; E2E Phase 33 added in Package 3V — real-files total 128; E2E Phase 34 added in Package 3W — real-files total 134).
-**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up; Package 3X planning note added)
+**Status:** ACTIVE (formalized in Package 2.9; visual regression added in Package 3D; updated to 2039 baseline in Package 3F; E2E Phase 22 added in Package 3G; updated to 2082 baseline in Package 5C; E2E Phase 24 added in Package 5C; updated to 2173 baseline in Package 3I; E2E Phase 25 added in Package 3I; updated to 2269 baseline in Package 3J; E2E Phase 26 added in Package 3K — real-files total 89; E2E Phase 27 added in Package 3L — real-files total 95; updated to 2358 baseline in Package 3M — android-sms-xml-adapter-tests.mjs added; E2E Phase 28 added in Package 3N — real-files total 101; updated to 2450 baseline in Package 3O — instagram-dm-adapter-tests.mjs added; E2E Phase 29 added in Package 3P — real-files total 106; E2E Phase 30 added in Package 3Q — real-files total 112; updated to 2554 baseline in Package 3R — facebook-messenger-adapter-tests.mjs added; E2E Phase 31 added in Package 3S — real-files total 117; E2E Phase 32 added in Package 3T — real-files total 123; updated to 2650 baseline in Package 3U — telegram-adapter-tests.mjs added; E2E Phase 33 added in Package 3V — real-files total 128; E2E Phase 34 added in Package 3W — real-files total 134; updated to 2790 baseline in Package 3X — content-quality-checks-tests.mjs added; E2E Phase 35 added in Package 3X — real-files total 140).
+**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — IN PROGRESS)
 **Owner:** Development stream / Claude Code under Operator Mode.
 
 This document is the single answer to "what tests exist, what should be added, and when do they run?" for KeepMees. It is intentionally first-class — testing is not cleanup-later.
@@ -16,17 +16,18 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 
 **What:** Pure JavaScript tests, run by `node` directly. No DOM, no browser. Vm-module pattern for any test that needs to load the engine.
 
-**Suites and counts (as of Package 3U — confirmed baseline 2650):**
+**Suites and counts (as of Package 3X — confirmed baseline 2790):**
 
 | Suite | Tests | Coverage |
 |---|---|---|
+| `content-quality-checks-tests.mjs` | 134 | ContentQualityChecks.compute(): API shape, empty/invalid input, clean corpus, PHONE_NUMBER_AS_SENDER_NAME (dedup, multiple, false positives), RAW_URL_IN_CONTENT (http/https, edge cases), EMPTY_MESSAGE (whitespace/null, attachment exclusion, example sender), DUPLICATE_MESSAGE (adjacent-only, same-sender, multiple pairs), SYSTEM_MESSAGE_IN_OUTPUT (senderRole:system, WhatsApp/deleted text), issue structure contract, malformed entries, known check types, all-WARN severity, semantic guards — Package 3X |
 | `telegram-adapter-tests.mjs` | 91 | Telegram JSON adapter: API shape, canHandle (accepts/rejects IG/FB/non-Telegram), from_id discriminator, fixture rawCounts, timestamp (Unix seconds → ISO), sender extraction, text plain/array-entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory fields, importWarnings, no-throw, participants — Package 3U |
 | `facebook-messenger-adapter-tests.mjs` | 98 | Facebook Messenger JSON adapter: API shape, canHandle (accepts/rejects/magic_words discriminator), fixture rawCounts, timestamp conversion, HTML entity decoding (sender + content), senderRole, text normalization, media/attachment normalization (photo/video/audio/share/sticker/gif), NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards — Package 3R |
 | `instagram-dm-adapter-tests.mjs` | 87 | Instagram DM JSON adapter: API shape, canHandle (accepts/rejects), fixture rawCounts, timestamp conversion, HTML entity decoding (sender + content), senderRole, text normalization, media/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O |
 | `android-sms-xml-adapter-tests.mjs` | 84 | Android SMS XML adapter: API shape, canHandle (accepts/rejects), SMS type=1/type=2 parsing, senderRole derivation, MMS attachment placeholder, fixture rawCounts, participants, NormalizedMemory fields, provenance, no-throw, importWarnings, semantic guards — Package 3M |
 | `whatsapp-txt-adapter-tests.mjs` | 91 | WhatsApp adapter: API shape, canHandle (bracket/hyphen/rejects), parsing, multi-line, system-message filtering, media placeholders, participants, rawCounts, NormalizedMemory fields, no-throw, semantic guards — Package 3J |
 | `import-quality-report-tests.mjs` | 91 | ImportQualityReport.compute(): API shape, all metric fields, edge cases, semantic guards — Package 3I |
-| `km-engine-tests.mjs` | 122 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms; +5 whatsapp smoke assertions (Package 3J); +5 android-sms smoke assertions (Package 3M); +5 instagram-dm smoke assertions (Package 3O); +1 facebook-messenger platform assertion + 5 facebook-messenger smoke assertions (Package 3R); +5 telegram smoke assertions (Package 3U) |
+| `km-engine-tests.mjs` | 128 | NormalizedMemory, ProjectSession, SessionSerialization, adapters, source platforms; +5 whatsapp smoke assertions (Package 3J); +5 android-sms smoke assertions (Package 3M); +5 instagram-dm smoke assertions (Package 3O); +1 facebook-messenger platform assertion + 5 facebook-messenger smoke assertions (Package 3R); +5 telegram smoke assertions (Package 3U); +6 ContentQualityChecks smoke assertions (Package 3X) |
 | `keepsake-group-tests.mjs` | 43 | KeepsakeGroup data model |
 | `product-catalog-tests.mjs` | 127 | ProductStatuses, ProductCatalog, required fields |
 | `product-eligibility-tests.mjs` | 76 | Per-product eligibility evaluators, LegacyKeepsakeTypesBridge |
@@ -42,9 +43,9 @@ KeepMees uses six distinct test layers. Each has a different cost, a different f
 | `product-preflight-tests.mjs` | 119 | Preflight check registry, PAGINATION_STABILITY runner, aggregate status, semantic guards (Package 3E) |
 | `product-draft-lifecycle-tests.mjs` | 104 | Lifecycle coordinator API, all lifecycle paths, mutation model, duplicate handling, semantic guards (Package 3F) |
 
-**Total: 2650 tests.** All must remain green before any commit.
+**Total: 2790 tests.** All must remain green before any commit.
 
-Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the baseline to 2173. Package 3J added 91 tests (`whatsapp-txt-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2269. Package 3M added 84 tests (`android-sms-xml-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2358. Package 3O added 87 tests (`instagram-dm-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2450. Package 3R added 98 tests (`facebook-messenger-adapter-tests.mjs`) + 6 km-engine additions (1 platform assertion + 5 smoke), raising the confirmed baseline to 2554. Package 3U added 91 tests (`telegram-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2650.
+Note: 1935 was the Package 3E baseline. Package 3F added 104 tests (→2039). Package 5C added 43 tests (→2082). Package 3I added 91 tests (`import-quality-report-tests.mjs`), raising the baseline to 2173. Package 3J added 91 tests (`whatsapp-txt-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2269. Package 3M added 84 tests (`android-sms-xml-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2358. Package 3O added 87 tests (`instagram-dm-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2450. Package 3R added 98 tests (`facebook-messenger-adapter-tests.mjs`) + 6 km-engine additions (1 platform assertion + 5 smoke), raising the confirmed baseline to 2554. Package 3U added 91 tests (`telegram-adapter-tests.mjs`) + 5 km-engine smoke tests, raising the confirmed baseline to 2650. Package 3X added 134 tests (`content-quality-checks-tests.mjs`) + 6 km-engine smoke tests, raising the confirmed baseline to 2790.
 
 **Run:**
 
@@ -193,9 +194,9 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3X — Pre-print Content Quality Checks (NEXT AUTHORIZED CANDIDATE — awaiting Coordinator authorization):**
+**Package 3X — Pre-print Content Quality Checks (IN PROGRESS — branch `feature/preprint-content-quality-checks`):**
 
-Package 3X (DEF-15 non-vendor subset) will add a new `src/core/content-quality-checks.js` engine module and `#contentQualityPanel` UI surface. When authorized, expected test additions: new `content-quality-checks-tests.mjs` suite (est. 80–100 tests covering API shape, each check type, edge cases, semantic guards); `km-engine-tests.mjs` smoke assertions (+5); Node baseline will rise from 2650. E2E Layer 3 additions expected (real-files phase for panel visibility and check result display). No vendor or manufacturing inputs required. Follows Package 3I (ImportQualityReport) pattern.
+Package 3X (DEF-15 non-vendor subset) adds `src/core/content-quality-checks.js` (`KMEngine.ContentQualityChecks.compute()`) and `#contentQualityPanel` UI surface (amber/warning tone). Five advisory checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — all severity WARN. New `content-quality-checks-tests.mjs` suite (134 tests, 15 suites). `km-engine-tests.mjs` adds 6 ContentQualityChecks smoke assertions (→128 total). New Node baseline: **2790 / 22 suites**. E2E Phase 35 adds 6 real-files tests: panel hidden before import, visible after CQC fixture import, correct message count, RAW_URL warning present, PHONE_NUMBER or DUPLICATE present, clean TXT reimport hides panel. Layer 3: 140 total. Fixture: `scripts/fixtures/fake-cqc-checks.txt` (5 messages — WhatsApp bracket format). No vendor/manufacturing inputs. Follows Package 3I (ImportQualityReport) pattern.
 
 **Package 3W — Telegram Self-Identification Sender Picker (COMPLETE — merged `2bf1900` 2026-06-06):**
 
@@ -263,9 +264,9 @@ Package 5C adds 18 tests to `proof-approval-state-tests.mjs` (Suite 4 +1, Suite 
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 21 Node unit suites green (2650 tests).
+1. All 22 Node unit suites green (2790 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (134 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (140 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).

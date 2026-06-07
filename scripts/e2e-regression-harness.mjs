@@ -79,6 +79,9 @@ const TG_BOB_COUNT     = 4;  // bob_jones_99 sends 4 of the 8 imported messages
 const TELEGRAM_FIXTURE       = path.join(__dir, 'fixtures', 'fake-telegram-export.json');
 const TELEGRAM_FIXTURE_COUNT = 8;  // 10 entries - 1 service-type skip - 1 null-from skip
 
+const CQC_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cqc-checks.txt');
+const CQC_FIXTURE_COUNT = 5;  // 5 messages: triggers PHONE_NUMBER, RAW_URL, DUPLICATE
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1677,6 +1680,78 @@ async function main() {
                 return el.style.display === 'none' || el.innerHTML.trim().length === 0;
             });
             assert(hidden, '#telegramSenderPicker should be hidden after non-Telegram TXT import');
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 35 — Pre-print Content Quality Checks panel (Package 3X)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 35 — Pre-print Content Quality Checks panel ──\n');
+
+        await harness.run('before CQC import #contentQualityPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('contentQualityPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#contentQualityPanel should be hidden before any import');
+        });
+
+        await harness.run('after CQC fixture import #contentQualityPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(CQC_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('contentQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#contentQualityPanel should be visible and non-empty after CQC fixture import');
+        });
+
+        await harness.run('CQC fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === CQC_FIXTURE_COUNT,
+                `Expected ${CQC_FIXTURE_COUNT} messages from CQC fixture, got ${count}`);
+        });
+
+        await harness.run('CQC panel shows RAW_URL_IN_CONTENT warning', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('contentQualityPanel');
+                return el ? el.textContent : '';
+            });
+            assert(panelText.toLowerCase().includes('url'),
+                `Expected URL warning in CQC panel, got: "${panelText}"`);
+        });
+
+        await harness.run('CQC panel shows PHONE_NUMBER_AS_SENDER_NAME or DUPLICATE_MESSAGE warning', async page => {
+            const issues = await page.evaluate(() => {
+                const CQC = window.KMEngine && window.KMEngine.ContentQualityChecks;
+                const data = window.chatMessagesData || [];
+                if (!CQC || !data.length) return [];
+                return CQC.compute(data).map(function (i) { return i.type; });
+            });
+            const hasPhoneOrDup = issues.includes('PHONE_NUMBER_AS_SENDER_NAME') || issues.includes('DUPLICATE_MESSAGE');
+            assert(hasPhoneOrDup,
+                `Expected PHONE_NUMBER_AS_SENDER_NAME or DUPLICATE_MESSAGE, got: ${issues.join(', ')}`);
+        });
+
+        await harness.run('non-CQC TXT reimport hides #contentQualityPanel; reset state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('contentQualityPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#contentQualityPanel should be hidden after clean-corpus TXT import');
         });
 
         // ─────────────────────────────────────────────────────────────────────

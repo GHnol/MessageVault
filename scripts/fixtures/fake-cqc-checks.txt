@@ -1,0 +1,5 @@
+[1/15/24, 9:00:00 AM] Alice: Hello there, how are you doing today?
+[1/15/24, 9:01:00 AM] +14155551234: Check this out: https://example.com/promo
+[1/15/24, 9:02:00 AM] Alice: Sounds good to me!
+[1/15/24, 9:03:00 AM] Alice: Sounds good to me!
+[1/15/24, 9:04:00 AM] +14155551234: See you tomorrow

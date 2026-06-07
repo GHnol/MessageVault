@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-06 (Package 3W — Telegram Self-Identification Sender Picker — DELIVERED)
+**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — IN PROGRESS)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3W)
+## Current architecture (post-Package 3X / IN PROGRESS)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -19,6 +19,7 @@ src/
   core/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
+    content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 5 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
     source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm + facebook-messenger + telegram now 'supported' — Packages 3J + 3M + 3O + 3R + 3U)
@@ -33,6 +34,7 @@ src/
 index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSenderPicker + applyInstagramSelfSender; window.__km.applyInstagramSelfSender; mirrors WhatsApp picker pattern — Package 3Q
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
+index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; browser-loaded (Package 3V) — Package 3U/3V
     future-adapter-stubs.js        — STUBS array is now empty (all client-side adapters promoted to real implementations)
@@ -132,6 +134,16 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
+IN PROGRESS (Package 3X — Pre-print Content Quality Checks — branch `feature/preprint-content-quality-checks`):
+- `src/core/content-quality-checks.js` — `KMEngine.ContentQualityChecks`; IIFE module; `compute(memories)` returns array of `{ type, severity, count, examples, message }` issue objects; 5 advisory WARN checks; MAX_EXAMPLES=3; URL_RE case-insensitive; returns `[]` for empty/invalid input; no vendor or manufacturing inputs; follows Package 3I pattern.
+- `scripts/fixtures/fake-cqc-checks.txt` — 5-message WhatsApp bracket format fixture; triggers PHONE_NUMBER_AS_SENDER_NAME (`+14155551234`), RAW_URL_IN_CONTENT (`https://example.com/promo`), DUPLICATE_MESSAGE (Alice × 2).
+- `src/tests/content-quality-checks-tests.mjs` — 134 tests across 15 suites.
+- `src/tests/km-engine-tests.mjs` — loads `content-quality-checks.js`; `ContentQualityChecks — smoke` suite added (+6 → 128 total).
+- `index.html` — CSS for `.content-quality-panel` + `.content-quality-inner` + `.content-quality-chip` (amber/warning tone: light `#fff8e1`/dark `#1c1400`); dark mode overrides; `<script src="src/core/content-quality-checks.js">` tag after import-quality-report.js; `<div id="contentQualityPanel">` after `#importQualityPanel`; `const contentQualityPanel` binding; `renderContentQualityPanel(memories)` function; calls at all 10 same sites as `renderImportQualityPanel`; `window.__km.renderContentQualityPanel` exposed.
+- `scripts/e2e-regression-harness.mjs` — `CQC_FIXTURE` + `CQC_FIXTURE_COUNT = 5` constants; Phase 35 (6 real-files tests): hidden before import → visible after CQC import → count=5 → RAW_URL warning → PHONE_NUMBER or DUPLICATE warning → clean TXT reimport hides panel + resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 35 note; real-files baseline 134 → 140; Node baseline 2650 → 2790 (22 suites).
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3X entry.
+
 DELIVERED (Package 3W — Telegram Self-Identification Sender Picker, merged `2bf1900` 2026-06-06):
 - `index.html` — `<div id="telegramSenderPicker">` (after `#facebookSenderPicker`); `const telegramSenderPicker` binding; `showTelegramSenderPicker(memories)` + `applyTelegramSelfSender(senderName)` (mirror FB pattern); Telegram picker hide in WA branch, non-WA reset block, and restore path; `showTelegramSenderPicker(result.memories)` call in Telegram routing branch; `window.__km.applyTelegramSelfSender` exposed.
 - `scripts/e2e-regression-harness.mjs` — `TG_ALICE_COUNT = 4` + `TG_BOB_COUNT = 4`; Phase 34 (6 real-files tests): picker visible → Alice Smith + bob_jones_99 chips → Alice Smith → 4 `.me` → selfMessageCount = 4 → Skip → 0 `.me` → non-Telegram TXT reimport hides picker + resets state for Phase 12.
@@ -202,10 +214,6 @@ DELIVERED (Package 3M, merged `1228f41` 2026-06-05):
 Still expected without architectural change:
 - Preflight runners for the 9 vendor/manufacturing-gated checks (gated until vendor confirmed)
 - `src/tests/` — additional test files per new module
-
-NEXT AUTHORIZED CANDIDATE (Package 3X — awaiting Coordinator authorization):
-- `src/core/content-quality-checks.js` — `KMEngine.ContentQualityChecks`; pre-print content quality checks (non-vendor subset); checks for raw long links, duplicate messages, phone-number-as-name, system messages in output, empty messages; pure function, Node-testable; follows Package 3I (ImportQualityReport) pattern; no vendor/manufacturing inputs required
-- `index.html` — `#contentQualityPanel` UI surface; follows `#importQualityPanel` pattern
 
 ---
 
