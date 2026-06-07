@@ -65,6 +65,11 @@
                 color: #9fa8da;
             }
             .conversation-stats-chip strong { color: #c5cae9; }
+            .emoji-analysis-inner {
+                background: #001c1e;
+                color: #80cbc4;
+            }
+            .emoji-analysis-chip strong { color: #b2dfdb; }
             .sender-picker-inner {
                 background: #1c1c1e;
                 color: #8e8e93;
@@ -897,6 +902,29 @@
         }
         .conversation-stats-chip strong {
             color: #1a237e;
+        }
+
+        .emoji-analysis-panel {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 6px 16px 0;
+        }
+        .emoji-analysis-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+            background: #e0f7fa;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #006064;
+        }
+        .emoji-analysis-chip {
+            white-space: nowrap;
+        }
+        .emoji-analysis-chip strong {
+            color: #004d40;
         }
 
         .whatsapp-sender-picker {
@@ -3525,6 +3553,7 @@
         <div class="import-quality-panel" id="importQualityPanel" style="display:none;"></div>
         <div class="content-quality-panel" id="contentQualityPanel" style="display:none;"></div>
         <div class="conversation-stats-panel" id="conversationStatsPanel" style="display:none;"></div>
+        <div class="emoji-analysis-panel" id="emojiAnalysisPanel" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="whatsappSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="instagramSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="facebookSenderPicker" style="display:none;"></div>
@@ -3625,6 +3654,7 @@
     <script src="src/core/import-quality-report.js"></script>
     <script src="src/core/content-quality-checks.js"></script>
     <script src="src/core/conversation-stats.js"></script>
+    <script src="src/core/emoji-analysis.js"></script>
     <script src="src/adapters/txt-export-adapter.js"></script>
     <script src="src/adapters/imessage-chatdb-adapter.js"></script>
     <script src="src/adapters/manual-entry-adapter.js"></script>
@@ -3731,6 +3761,7 @@
         const importQualityPanel    = document.getElementById('importQualityPanel');
         const contentQualityPanel      = document.getElementById('contentQualityPanel');
         const conversationStatsPanel   = document.getElementById('conversationStatsPanel');
+        const emojiAnalysisPanel       = document.getElementById('emojiAnalysisPanel');
         const whatsappSenderPicker  = document.getElementById('whatsappSenderPicker');
         const instagramSenderPicker = document.getElementById('instagramSenderPicker');
         const facebookSenderPicker  = document.getElementById('facebookSenderPicker');
@@ -4084,6 +4115,41 @@
             conversationStatsPanel.style.display = '';
         }
 
+        function renderEmojiAnalysisPanel(memories) {
+            if (!emojiAnalysisPanel) return;
+            const EA = window.KMEngine && window.KMEngine.EmojiAnalysis;
+            if (!EA || !Array.isArray(memories) || memories.length === 0) {
+                emojiAnalysisPanel.style.display = 'none';
+                emojiAnalysisPanel.innerHTML = '';
+                return;
+            }
+            const stats = EA.compute(memories);
+            if (stats.totalEmojiCount === 0) {
+                emojiAnalysisPanel.style.display = 'none';
+                emojiAnalysisPanel.innerHTML = '';
+                return;
+            }
+            const chips = [];
+
+            stats.topEmojis.forEach(function (item) {
+                chips.push('<span class="emoji-analysis-chip"><strong>' +
+                    item.emoji + '</strong> × ' + item.count + '</span>');
+            });
+
+            if (stats.mostEmojifiedSender) {
+                chips.push('<span class="emoji-analysis-chip"><strong>' +
+                    escapeHTML(stats.mostEmojifiedSender.sender) + '</strong> sent the most emoji (' +
+                    stats.mostEmojifiedSender.count + ')</span>');
+            }
+
+            chips.push('<span class="emoji-analysis-chip"><strong>' +
+                stats.totalEmojiCount + '</strong> emoji total</span>');
+
+            emojiAnalysisPanel.innerHTML =
+                '<div class="emoji-analysis-inner">' + chips.join(' &nbsp;·&nbsp; ') + '</div>';
+            emojiAnalysisPanel.style.display = '';
+        }
+
         /* ─────────────────────────────────────────────
            WhatsApp self-identification sender picker
         ───────────────────────────────────────────── */
@@ -4130,6 +4196,7 @@
             renderImportQualityPanel(data);
             renderContentQualityPanel(data);
             renderConversationStatsPanel(data);
+            renderEmojiAnalysisPanel(data);
             if (whatsappSenderPicker) {
                 whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4187,6 +4254,7 @@
             renderImportQualityPanel(data);
             renderContentQualityPanel(data);
             renderConversationStatsPanel(data);
+            renderEmojiAnalysisPanel(data);
             if (instagramSenderPicker) {
                 instagramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4244,6 +4312,7 @@
             renderImportQualityPanel(data);
             renderContentQualityPanel(data);
             renderConversationStatsPanel(data);
+            renderEmojiAnalysisPanel(data);
             if (facebookSenderPicker) {
                 facebookSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4298,6 +4367,7 @@
             renderImportQualityPanel(data);
             renderContentQualityPanel(data);
             renderConversationStatsPanel(data);
+            renderEmojiAnalysisPanel(data);
             if (telegramSenderPicker) {
                 telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4327,6 +4397,7 @@
                     renderImportQualityPanel(result.memories);
                     renderContentQualityPanel(result.memories);
                     renderConversationStatsPanel(result.memories);
+                    renderEmojiAnalysisPanel(result.memories);
                     showWhatsAppSenderPicker(result.memories);
                     if (instagramSenderPicker) {
                         instagramSenderPicker.style.display = 'none';
@@ -4369,6 +4440,7 @@
                     renderImportQualityPanel(result.memories);
                     renderContentQualityPanel(result.memories);
                     renderConversationStatsPanel(result.memories);
+                    renderEmojiAnalysisPanel(result.memories);
                     return;
                 }
 
@@ -4381,6 +4453,7 @@
                     renderImportQualityPanel(result.memories);
                     renderContentQualityPanel(result.memories);
                     renderConversationStatsPanel(result.memories);
+                    renderEmojiAnalysisPanel(result.memories);
                     showFacebookSenderPicker(result.memories);
                     return;
                 }
@@ -4394,6 +4467,7 @@
                     renderImportQualityPanel(result.memories);
                     renderContentQualityPanel(result.memories);
                     renderConversationStatsPanel(result.memories);
+                    renderEmojiAnalysisPanel(result.memories);
                     showInstagramSenderPicker(result.memories);
                     return;
                 }
@@ -4407,6 +4481,7 @@
                     renderImportQualityPanel(result.memories);
                     renderContentQualityPanel(result.memories);
                     renderConversationStatsPanel(result.memories);
+                    renderEmojiAnalysisPanel(result.memories);
                     showTelegramSenderPicker(result.memories);
                     return;
                 }
@@ -4422,6 +4497,7 @@
                 renderImportQualityPanel(window.chatMessagesData);
                 renderContentQualityPanel(window.chatMessagesData);
                 renderConversationStatsPanel(window.chatMessagesData);
+                renderEmojiAnalysisPanel(window.chatMessagesData);
             };
 
             reader.readAsText(file);
@@ -4859,6 +4935,7 @@
                     renderImportQualityPanel(window.chatMessagesData);
                     renderContentQualityPanel(window.chatMessagesData);
                     renderConversationStatsPanel(window.chatMessagesData);
+                    renderEmojiAnalysisPanel(window.chatMessagesData);
                     hideLoading();
                 } catch (err) {
                     hideLoading();
@@ -9268,6 +9345,8 @@ ${keepsakeFooter}
             renderContentQualityPanel,
             // Package 3Y: conversation statistics bridge for E2E testability
             renderConversationStatsPanel,
+            // Package 3AA: emoji analysis bridge for E2E testability
+            renderEmojiAnalysisPanel,
             // Package 3L: WhatsApp self-id bridge for E2E testability
             applyWhatsAppSelfSender,
             // Package 3Q: Instagram DM self-id bridge for E2E testability
