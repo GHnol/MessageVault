@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 3Y — Conversation Statistics Engine COMPLETE. impl `ca8d520`, merged `e0539d2` to main 2026-06-07. No active package.
+**Status:** `active` — Package 3Z — Extended Content Quality Checks IN PROGRESS. Branch `feature/extended-content-quality-checks`. Implementation complete; awaiting pre-commit report review and Coordinator commit instruction.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
@@ -18,17 +18,40 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None — Package 3Y COMPLETE; merged `e0539d2` 2026-06-07 |
-| **Active branch** | `main` |
+| **Active pass** | Package 3Z — Extended Content Quality Checks |
+| **Active branch** | `feature/extended-content-quality-checks` |
+| **Branch base** | `main` at `61fe8fa` |
 | **main HEAD** | `e0539d2` — merge: add conversation statistics engine (Package 3Y) |
 | **Last completed pass** | Package 3Y — Conversation Statistics Engine — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
-| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Active package** | `Package 3Z — Extended Content Quality Checks` — implementation complete; stop-before-commit pending Coordinator review |
 | **Last closed package** | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (active pass — Package 3Z — Extended Content Quality Checks)
+
+Branch: `feature/extended-content-quality-checks` from `main` at `61fe8fa`. Authorized by Coordinator 2026-06-07. **Implementation complete — stop-before-commit; awaiting Coordinator review and commit instruction.**
+
+**Objective:** Extend `KMEngine.ContentQualityChecks.compute()` with 4 new advisory WARN checks. Reuse existing `#contentQualityPanel` render path. No new panel, no new CSS, no `index.html` structural work.
+
+**What was done (8 files):**
+- `src/core/content-quality-checks.js` — 4 new WARN checks: HIGH_ATTACHMENT_RATIO (>80% attachment-only), VERY_LONG_CONTENT (text.length>1000, skips attachment-only), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 unique sender); existing issue-object shape reused; MAX_EXAMPLES pattern reused
+- `scripts/fixtures/fake-cqc-extended.txt` — 6-message WhatsApp bracket fixture; all from Alice Smith; message 1 text=1007 chars; messages 2–6 `<Media omitted>`; triggers all 4 new checks
+- `src/tests/content-quality-checks-tests.mjs` — Suite 3 enlarged to 11 messages; Suites 16–19 added; 184 tests / 19 suites — 184/0 PASS
+- `src/tests/km-engine-tests.mjs` — 4 smoke assertions for new check types (→138) — 138/0 PASS
+- `scripts/e2e-regression-harness.mjs` — `CQC_EXTENDED_FIXTURE` + `CQC_EXTENDED_FIXTURE_COUNT = 6` constants; Phase 37 (7 real-files tests)
+- `docs/qa/test-strategy.md` — pre-commit baseline corrected 2790/22/140 → 2962/23/152; Package 3Z and Phase 37 notes; Package 3Y status corrected from IN PROGRESS to COMPLETE
+- `docs/architecture/architecture-roadmap.md` — header; content-quality-checks.js annotation updated to 9 checks; Package 3Z IN PROGRESS entry
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — Package 3Z active state
+
+**Node verification gate (pre-commit):** 2962/2962 Node (23 suites, 0 failed). E2E and visual regression to run before commit instruction.
+
+**Next exact action:** Run E2E seeded + real-files, visual regression --check, OS audit, state-freshness. Then produce the 9-item pre-commit implementation report for Coordinator review. Do not commit until Coordinator authorizes.
 
 ---
 
@@ -877,9 +900,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-No active pass or package. Package 3Y COMPLETE — impl `ca8d520`, merged `e0539d2` to main 2026-06-07.
+Package 3Z active on `feature/extended-content-quality-checks`. Implementation complete (8 files edited/created). Node tests 2962/2962 PASS. 
 
-Next session: read this file, verify main at `e0539d2`, confirm 2908/2908 Node tests and 146/146 real-files E2E. Await Coordinator authorization for next development package. Do not start any package without explicit Coordinator authorization.
+Next session: read this file, verify branch `feature/extended-content-quality-checks`, confirm 2962/2962 Node tests. Run E2E seeded, E2E real-files, visual regression --check, OS audit, state-freshness. Produce 9-item pre-commit implementation report. Do not commit without Coordinator authorization.
 
 Do not commit or push without explicit Coordinator authorization. No external mutations authorized.
 

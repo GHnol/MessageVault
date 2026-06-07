@@ -114,12 +114,19 @@ suite('Suite 3 — clean corpus produces no issues', function () {
     const KM = makeCtx();
     const compute = KM.ContentQualityChecks.compute;
 
+    // ≥10 messages, 2 senders, <80% attachment ratio, no long text, no dupes, no system
     const clean = [
-        mem({ sender: 'Alice',   text: 'Hello there' }),
-        mem({ sender: 'Bob',     text: 'Hi, how are you?' }),
-        mem({ sender: 'Alice',   text: 'Doing great thanks' }),
-        mem({ sender: 'Bob',     text: 'Good to hear!' }),
-        mem({ sender: 'Alice',   text: '[Attachment]', isAttachmentOnly: true, type: 'attachment-placeholder' })
+        mem({ sender: 'Alice', text: 'Hello there' }),
+        mem({ sender: 'Bob',   text: 'Hi, how are you?' }),
+        mem({ sender: 'Alice', text: 'Doing great thanks' }),
+        mem({ sender: 'Bob',   text: 'Good to hear!' }),
+        mem({ sender: 'Alice', text: 'What are you up to?' }),
+        mem({ sender: 'Bob',   text: 'Just relaxing.' }),
+        mem({ sender: 'Alice', text: 'Nice, same here.' }),
+        mem({ sender: 'Bob',   text: 'Want to grab lunch?' }),
+        mem({ sender: 'Alice', text: 'Sure, when?' }),
+        mem({ sender: 'Bob',   text: 'How about noon?', }),
+        mem({ sender: 'Alice', text: '[Attachment]', isAttachmentOnly: true, type: 'attachment-placeholder' })
     ];
     const r = compute(clean);
     assert(Array.isArray(r) && r.length === 0, 'clean corpus → 0 issues');
@@ -559,6 +566,217 @@ suite('Suite 15 — semantic guard: no vendor/product fields', function () {
     assert(!src.includes('import-quality-report'), 'no import from import-quality-report');
     assert(!src.includes('src/products'),        'no src/products reference');
     assert(!src.includes('src/state'),           'no src/state reference');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 16 — HIGH_ATTACHMENT_RATIO
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 16 — HIGH_ATTACHMENT_RATIO', function () {
+    const KM = makeCtx();
+    const compute = KM.ContentQualityChecks.compute;
+
+    function attach(sender) {
+        return mem({ sender, text: '', isAttachmentOnly: true, type: 'attachment-placeholder' });
+    }
+
+    // 5 of 6 = 83% > 80% → issue
+    const r = compute([
+        attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice'),
+        mem({ sender: 'Alice', text: 'Hello' })
+    ]);
+    const issue = r.find(function (x) { return x.type === 'HIGH_ATTACHMENT_RATIO'; });
+    assert(issue !== undefined,       'HIGH_ATTACHMENT_RATIO issue present at >80%');
+    assert(issue.severity === 'WARN', 'severity is WARN');
+    assert(issue.count === 5,         'count is attachment-only message count');
+    assert(issue.examples.length > 0, 'examples non-empty');
+    assert(typeof issue.message === 'string' && issue.message.includes('%'), 'message includes percentage');
+
+    // exactly 80% (4 of 5) → no issue (threshold is strictly >80%)
+    const at80 = compute([
+        attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice'),
+        mem({ sender: 'Alice', text: 'Hello' }),
+        mem({ sender: 'Bob',   text: 'Hi' }),
+        mem({ sender: 'Alice', text: 'Hey' }),
+        mem({ sender: 'Bob',   text: 'Yo' }),
+        mem({ sender: 'Alice', text: 'Ok' }),
+        mem({ sender: 'Bob',   text: 'Sure' })
+    ]);
+    const at80Issue = at80.find(function (x) { return x.type === 'HIGH_ATTACHMENT_RATIO'; });
+    assert(at80Issue === undefined, '4 of 10 = 40% attachment → no HIGH_ATTACHMENT_RATIO');
+
+    // zero attachments → no issue
+    const noAttach = compute([
+        mem({ sender: 'Alice', text: 'A' }), mem({ sender: 'Bob', text: 'B' }),
+        mem({ sender: 'Alice', text: 'C' }), mem({ sender: 'Bob', text: 'D' }),
+        mem({ sender: 'Alice', text: 'E' }), mem({ sender: 'Bob', text: 'F' }),
+        mem({ sender: 'Alice', text: 'G' }), mem({ sender: 'Bob', text: 'H' }),
+        mem({ sender: 'Alice', text: 'I' }), mem({ sender: 'Bob', text: 'J' })
+    ]);
+    const noAttachIssue = noAttach.find(function (x) { return x.type === 'HIGH_ATTACHMENT_RATIO'; });
+    assert(noAttachIssue === undefined, 'no attachments → no HIGH_ATTACHMENT_RATIO issue');
+
+    // 100% attachment (all attachment-only)
+    const all = compute([attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice'),
+                         attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice'), attach('Alice')]);
+    const allIssue = all.find(function (x) { return x.type === 'HIGH_ATTACHMENT_RATIO'; });
+    assert(allIssue !== undefined, '100% attachment → HIGH_ATTACHMENT_RATIO present');
+    assert(allIssue.count === 10,   '100% attachment → count 10');
+
+    // examples capped at MAX_EXAMPLES (3)
+    const manySenders = compute([
+        attach('Alice'), attach('Bob'), attach('Carol'), attach('Dave'), attach('Eve')
+    ]);
+    const manyIssue = manySenders.find(function (x) { return x.type === 'HIGH_ATTACHMENT_RATIO'; });
+    assert(manyIssue !== undefined,             'all-attachment corpus → issue present');
+    assert(manyIssue.examples.length <= 3,      'examples capped at 3');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 17 — VERY_LONG_CONTENT
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 17 — VERY_LONG_CONTENT', function () {
+    const KM = makeCtx();
+    const compute = KM.ContentQualityChecks.compute;
+
+    const longText = 'x'.repeat(1001);
+
+    // text.length > 1000 → issue
+    const r = compute([mem({ text: longText }), mem({ text: 'Short' })]);
+    const issue = r.find(function (x) { return x.type === 'VERY_LONG_CONTENT'; });
+    assert(issue !== undefined,       'VERY_LONG_CONTENT issue present for text > 1000 chars');
+    assert(issue.severity === 'WARN', 'severity is WARN');
+    assert(issue.count === 1,         'count 1');
+    assert(issue.examples.length > 0, 'at least one example');
+
+    // exactly 1000 chars → no issue
+    const exactly1000 = compute([mem({ text: 'y'.repeat(1000) })]);
+    const exact1000Issue = exactly1000.find(function (x) { return x.type === 'VERY_LONG_CONTENT'; });
+    assert(exact1000Issue === undefined, 'text.length === 1000 → no VERY_LONG_CONTENT');
+
+    // attachment-only message with long text — excluded
+    const attachLong = compute([mem({ text: longText, isAttachmentOnly: true, type: 'attachment-placeholder' })]);
+    const attachLongIssue = attachLong.find(function (x) { return x.type === 'VERY_LONG_CONTENT'; });
+    assert(attachLongIssue === undefined, 'attachment-only with long text excluded from VERY_LONG_CONTENT');
+
+    // attachment-placeholder type excluded even without isAttachmentOnly
+    const phLong = compute([mem({ text: longText, type: 'attachment-placeholder', isAttachmentOnly: false })]);
+    const phLongIssue = phLong.find(function (x) { return x.type === 'VERY_LONG_CONTENT'; });
+    assert(phLongIssue === undefined, 'attachment-placeholder type excluded from VERY_LONG_CONTENT');
+
+    // multiple long messages
+    const multi = compute([
+        mem({ text: 'z'.repeat(1001) }),
+        mem({ text: 'z'.repeat(1500) }),
+        mem({ text: 'Short' })
+    ]);
+    const multiIssue = multi.find(function (x) { return x.type === 'VERY_LONG_CONTENT'; });
+    assert(multiIssue.count === 2, 'two long messages → count 2');
+
+    // examples capped at MAX_EXAMPLES (3)
+    const many = compute([
+        mem({ text: 'a'.repeat(1001) }),
+        mem({ text: 'b'.repeat(1001) }),
+        mem({ text: 'c'.repeat(1001) }),
+        mem({ text: 'd'.repeat(1001) })
+    ]);
+    const manyIssue = many.find(function (x) { return x.type === 'VERY_LONG_CONTENT'; });
+    assert(manyIssue.count === 4,           'count reflects all 4 long messages');
+    assert(manyIssue.examples.length <= 3,  'examples capped at 3');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — SHORT_CONVERSATION
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 18 — SHORT_CONVERSATION', function () {
+    const KM = makeCtx();
+    const compute = KM.ContentQualityChecks.compute;
+
+    // 1 message → SHORT_CONVERSATION
+    const r1 = compute([mem({ sender: 'Alice', text: 'Hi' })]);
+    const issue1 = r1.find(function (x) { return x.type === 'SHORT_CONVERSATION'; });
+    assert(issue1 !== undefined,       'SHORT_CONVERSATION present for 1-message corpus');
+    assert(issue1.severity === 'WARN', 'severity is WARN');
+    assert(issue1.count === 1,         'count equals message count');
+    assert(Array.isArray(issue1.examples), 'examples is an array');
+    assert(typeof issue1.message === 'string' && issue1.message.length > 0, 'message is non-empty');
+
+    // 9 messages → SHORT_CONVERSATION
+    const nine = [];
+    for (var i = 0; i < 9; i++) nine.push(mem({ sender: i % 2 === 0 ? 'Alice' : 'Bob', text: 'msg ' + i }));
+    const r9 = compute(nine);
+    const issue9 = r9.find(function (x) { return x.type === 'SHORT_CONVERSATION'; });
+    assert(issue9 !== undefined && issue9.count === 9, '9 messages → SHORT_CONVERSATION with count 9');
+
+    // exactly 10 messages → no issue (threshold is strictly < 10)
+    const ten = [];
+    for (var i = 0; i < 10; i++) ten.push(mem({ sender: i % 2 === 0 ? 'Alice' : 'Bob', text: 'msg ' + i }));
+    const r10 = compute(ten);
+    const issue10 = r10.find(function (x) { return x.type === 'SHORT_CONVERSATION'; });
+    assert(issue10 === undefined, 'exactly 10 messages → no SHORT_CONVERSATION');
+
+    // 20 messages → no issue
+    const twenty = [];
+    for (var i = 0; i < 20; i++) twenty.push(mem({ sender: i % 2 === 0 ? 'Alice' : 'Bob', text: 'msg ' + i }));
+    const r20 = compute(twenty);
+    const issue20 = r20.find(function (x) { return x.type === 'SHORT_CONVERSATION'; });
+    assert(issue20 === undefined, '20 messages → no SHORT_CONVERSATION');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — SINGLE_SENDER_DOMINANT
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 19 — SINGLE_SENDER_DOMINANT', function () {
+    const KM = makeCtx();
+    const compute = KM.ContentQualityChecks.compute;
+
+    // All non-system messages from 1 sender → issue
+    const r = compute([
+        mem({ sender: 'Alice', senderRole: 'contact', text: 'Hello' }),
+        mem({ sender: 'Alice', senderRole: 'contact', text: 'How are you?' }),
+        mem({ sender: 'Alice', senderRole: 'self',    text: 'Just checking in' })
+    ]);
+    const issue = r.find(function (x) { return x.type === 'SINGLE_SENDER_DOMINANT'; });
+    assert(issue !== undefined,       'SINGLE_SENDER_DOMINANT present when all non-system from 1 sender');
+    assert(issue.severity === 'WARN', 'severity is WARN');
+    assert(issue.count === 3,         'count is non-system message count');
+    assert(issue.examples.includes('Alice'), 'example includes the single sender name');
+    assert(typeof issue.message === 'string' && issue.message.includes('Alice'), 'message includes sender name');
+
+    // 2 senders → no issue
+    const two = compute([
+        mem({ sender: 'Alice', text: 'Hi' }),
+        mem({ sender: 'Bob',   text: 'Hey' }),
+        mem({ sender: 'Alice', text: 'How are you?' }),
+        mem({ sender: 'Bob',   text: 'Good, thanks!' })
+    ]);
+    const twoIssue = two.find(function (x) { return x.type === 'SINGLE_SENDER_DOMINANT'; });
+    assert(twoIssue === undefined, '2 senders → no SINGLE_SENDER_DOMINANT');
+
+    // System messages excluded from sender count
+    const withSystem = compute([
+        mem({ sender: 'Alice',  senderRole: 'contact', text: 'Hi' }),
+        mem({ sender: 'Alice',  senderRole: 'contact', text: 'Hello' }),
+        mem({ sender: 'System', senderRole: 'system',  text: 'Group created' })
+    ]);
+    const sysIssue = withSystem.find(function (x) { return x.type === 'SINGLE_SENDER_DOMINANT'; });
+    assert(sysIssue !== undefined, 'system messages excluded; 1 non-system sender → issue present');
+    assert(sysIssue.count === 2,   'count excludes system messages');
+
+    // Only system messages → no issue (no non-system senders)
+    const allSys = compute([
+        mem({ sender: 'System', senderRole: 'system', text: 'Event A' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event B' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event C' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event D' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event E' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event F' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event G' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event H' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event I' }),
+        mem({ sender: 'System', senderRole: 'system', text: 'Event J' })
+    ]);
+    const allSysIssue = allSys.find(function (x) { return x.type === 'SINGLE_SENDER_DOMINANT'; });
+    assert(allSysIssue === undefined, 'all system messages → no SINGLE_SENDER_DOMINANT');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

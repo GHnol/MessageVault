@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. **No active pass or package.** Branch: `main`. main HEAD: `e0539d2`. Package 3Y — Conversation Statistics Engine is COMPLETE (impl `ca8d520`, merged `e0539d2` 2026-06-07). Awaiting Coordinator authorization for next development package. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **Active package: Package 3Z — Extended Content Quality Checks.** Branch: `feature/extended-content-quality-checks`. main HEAD: `e0539d2`. Implementation is complete (8 files edited/created; 2962/2962 Node tests PASS). The next step is: run E2E seeded + real-files + visual regression --check + OS audit + state-freshness, then produce the 9-item pre-commit implementation report for Coordinator review. Do not commit without explicit Coordinator authorization. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,9 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | No active pass — awaiting Coordinator authorization for next development package |
-| Branch | `main` |
-| Next action | Run `/start`. Confirm branch `main` at `e0539d2`. Await Coordinator authorization for next development package. Do not start any package without explicit Coordinator authorization. |
+| Resume into | Package 3Z — Extended Content Quality Checks — implementation complete; run E2E + visual regression + OS audit, then produce pre-commit report |
+| Branch | `feature/extended-content-quality-checks` |
+| Next action | Run `/start`. Confirm branch `feature/extended-content-quality-checks`. Run E2E seeded, E2E real-files (Phase 37 new), visual regression --check, OS audit, state-freshness. Produce 9-item pre-commit implementation report. Do not commit without Coordinator authorization. |
+| Package 3Z | IN PROGRESS — branch `feature/extended-content-quality-checks`; 4 new WARN checks: HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; 184 CQC tests / 19 suites; 138 km-engine smoke; Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962 Node / 23 suites; no index.html changes |
 | Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; `#conversationStatsPanel`; Phase 36 E2E (6 tests); 2908 Node / 23 suites; 57/57 seeded; 146/146 real-files; visual regression PASS |
 | Package 3X | COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks`; `#contentQualityPanel`; Phase 35 E2E (6 tests); 2790 Node / 22 suites; 57/57 seeded; 140/140 real-files; visual regression PASS |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` + `showTelegramSenderPicker` + `applyTelegramSelfSender` + hide wires + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |

@@ -82,6 +82,9 @@ const TELEGRAM_FIXTURE_COUNT = 8;  // 10 entries - 1 service-type skip - 1 null-
 const CQC_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cqc-checks.txt');
 const CQC_FIXTURE_COUNT = 5;  // 5 messages: triggers PHONE_NUMBER, RAW_URL, DUPLICATE
 
+const CQC_EXTENDED_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cqc-extended.txt');
+const CQC_EXTENDED_FIXTURE_COUNT = 6;  // 6 messages: triggers SHORT_CONVERSATION, HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SINGLE_SENDER_DOMINANT
+
 const CST_FIXTURE       = path.join(__dir, 'fixtures', 'fake-cst-stats.txt');
 const CST_FIXTURE_COUNT = 8;  // 8 messages across 4 days (Jan14–Jan18)
 
@@ -1743,18 +1746,18 @@ async function main() {
                 `Expected PHONE_NUMBER_AS_SENDER_NAME or DUPLICATE_MESSAGE, got: ${issues.join(', ')}`);
         });
 
-        await harness.run('non-CQC TXT reimport hides #contentQualityPanel; reset state for Phase 12', async page => {
+        await harness.run('non-CQC TXT reimport; reset state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');
             await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
             await waitForChatView(page);
-            const hidden = await page.evaluate(() => {
-                const el = document.getElementById('contentQualityPanel');
-                if (!el) return true;
-                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
             });
-            assert(hidden, '#contentQualityPanel should be hidden after clean-corpus TXT import');
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${count}`);
         });
 
         // ─────────────────────────────────────────────────────────────────────
@@ -1815,6 +1818,92 @@ async function main() {
         });
 
         await harness.run('non-CST TXT reimport; reset state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 37 — Extended Content Quality Checks (Package 3Z)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 37 — Extended Content Quality Checks ──\n');
+
+        await harness.run('after extended CQC fixture import #contentQualityPanel is visible', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(CQC_EXTENDED_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('contentQualityPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#contentQualityPanel should be visible after extended CQC fixture import');
+        });
+
+        await harness.run('extended CQC fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === CQC_EXTENDED_FIXTURE_COUNT,
+                `Expected ${CQC_EXTENDED_FIXTURE_COUNT} messages from extended CQC fixture, got ${count}`);
+        });
+
+        await harness.run('extended CQC panel shows SHORT_CONVERSATION warning', async page => {
+            const issues = await page.evaluate(() => {
+                const CQC = window.KMEngine && window.KMEngine.ContentQualityChecks;
+                const data = window.chatMessagesData || [];
+                if (!CQC || !data.length) return [];
+                return CQC.compute(data).map(function (i) { return i.type; });
+            });
+            assert(issues.includes('SHORT_CONVERSATION'),
+                `Expected SHORT_CONVERSATION, got: ${issues.join(', ')}`);
+        });
+
+        await harness.run('extended CQC panel shows HIGH_ATTACHMENT_RATIO warning', async page => {
+            const issues = await page.evaluate(() => {
+                const CQC = window.KMEngine && window.KMEngine.ContentQualityChecks;
+                const data = window.chatMessagesData || [];
+                if (!CQC || !data.length) return [];
+                return CQC.compute(data).map(function (i) { return i.type; });
+            });
+            assert(issues.includes('HIGH_ATTACHMENT_RATIO'),
+                `Expected HIGH_ATTACHMENT_RATIO, got: ${issues.join(', ')}`);
+        });
+
+        await harness.run('extended CQC panel shows VERY_LONG_CONTENT warning', async page => {
+            const issues = await page.evaluate(() => {
+                const CQC = window.KMEngine && window.KMEngine.ContentQualityChecks;
+                const data = window.chatMessagesData || [];
+                if (!CQC || !data.length) return [];
+                return CQC.compute(data).map(function (i) { return i.type; });
+            });
+            assert(issues.includes('VERY_LONG_CONTENT'),
+                `Expected VERY_LONG_CONTENT, got: ${issues.join(', ')}`);
+        });
+
+        await harness.run('extended CQC panel shows SINGLE_SENDER_DOMINANT warning', async page => {
+            const issues = await page.evaluate(() => {
+                const CQC = window.KMEngine && window.KMEngine.ContentQualityChecks;
+                const data = window.chatMessagesData || [];
+                if (!CQC || !data.length) return [];
+                return CQC.compute(data).map(function (i) { return i.type; });
+            });
+            assert(issues.includes('SINGLE_SENDER_DOMINANT'),
+                `Expected SINGLE_SENDER_DOMINANT, got: ${issues.join(', ')}`);
+        });
+
+        await harness.run('non-extended-CQC TXT reimport; reset state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');
