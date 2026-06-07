@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-06
-**Last mirrored:** RPT-20260606-002 (Package 3U closeout — Telegram JSON Adapter COMPLETE)
-**Active gate:** None — Package 3U COMPLETE; no active package; awaiting Coordinator direction
+**Last mirrored:** RPT-20260606-003 (Package 3V closeout — Telegram JSON UI Wiring COMPLETE)
+**Active gate:** None — Package 3V COMPLETE; no active package; awaiting Coordinator direction
 **Next expected mirror:** Next package closeout or next major planning event
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,7 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260606-003 | package_closeout | Package 3V — Telegram JSON UI Wiring | feature/telegram-json-ui-wiring | 2b232f8 / 40a6a78 | mirrored | 2026-06-06 |
 | RPT-20260606-002 | package_closeout | Package 3U — Telegram JSON Adapter | feature/telegram-json-adapter | 45d0d24 / 3f4e0c4 | mirrored | 2026-06-06 |
 | RPT-20260606-001 | package_closeout | Package 3T — Facebook Messenger Self-Identification Sender Picker | feature/facebook-messenger-self-id | b01fbff / 8b11f18 | mirrored | 2026-06-06 |
 | RPT-20260605-005 | package_closeout | Package 3O — Instagram DM JSON Adapter | feature/instagram-dm-adapter | ebb7a55 / 26f2633 | mirrored | 2026-06-05 |
@@ -61,6 +62,22 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260606-003 — package_closeout — Package 3V — Telegram JSON UI Wiring
+
+**Created:** 2026-06-06T00:00:00Z | **Branch:** feature/telegram-json-ui-wiring | **HEAD:** 2b232f8 (impl) / 40a6a78 (merge) | **Status:** mirrored
+
+Package 3V — Telegram JSON UI Wiring COMPLETE — implementation `2b232f8`, merge `40a6a78` 2026-06-06. Browser-layer delivery: wires `KMEngine.telegramAdapter` into `index.html` import flow. Delivered: (1) `index.html` — `<script src="src/adapters/telegram-adapter.js">` tag after `facebook-messenger-adapter.js`, before `future-adapter-stubs.js`; Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback — checks `window.KMEngine.telegramAdapter.canHandle(text)`, assigns `result.memories` to `window.chatMessagesData`, calls `renderConversation` + `renderImportQualityPanel`, returns early; collision-safe (from_id + date_unixtime positive discriminators; participants + magic_words negative guards prevent IG/FB false positives); no sender picker (deferred to Package 3W); no picker div; no `__km` bridge addition; no `accept` attribute change (already `.txt,.xml,.json`). (2) `scripts/e2e-regression-harness.mjs` — `TELEGRAM_FIXTURE` + `TELEGRAM_FIXTURE_COUNT = 8` constants; Phase 33 block (5 real-files tests): import via file input → chat view visible → rendered count = 8 → `#importQualityPanel` visible and non-empty → sourcePlatformId = 'telegram'; state reset (reload + TXT re-import) for later phases. (3) `docs/qa/test-strategy.md` — Phase 33 note; real-files baseline 123 → 128; Package 3V COMPLETE note. (4) `docs/architecture/architecture-roadmap.md` — Package 3V DELIVERED entry; telegram-adapter.js marked browser-loaded. (5) `src/core/source-platforms.js` — telegram notes updated: UI wiring delivered (Package 3V); sender picker pending (Package 3W). (6–8) `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs updated to reflect Package 3V COMPLETE.
+
+**Tests:** 2650 Node tests (21 suites), 0 failed (unchanged). E2E seeded 57/57 (unchanged). E2E real-files 128/128 (+5 Phase 33). Visual regression PASS (4/4 pages, baselines unchanged). OS audit: 324/0/0. State freshness: WARN only (cosmetic hash lag — post-merge; corrected in closeout state-sync). project-control-sync-validate: expected pass.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — `src/adapters/telegram-adapter.js`, `src/core/normalized-memory.js`, `src/core/import-adapters.js`, `src/core/import-quality-report.js`, `src/products/*`, `src/state/*`, package/dependency files untouched; no pagination constants, no BOOK_PAGINATION_VERSION, no BOOK_PRODUCTION_DEPS, no BOOK_PARITY; no Review view, no standalone keepsake flows, no proof/draft/preflight/lifecycle/readiness/checkout/PDF/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed; no external systems mutated.
+**Next action:** Coordinator decides next development package or operating action. Do not start any package without explicit Coordinator authorization.
+**Follow-up:** false
+
+*Entry added as the Package 3V closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260606-002 — package_closeout — Package 3U — Telegram JSON Adapter
 

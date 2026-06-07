@@ -193,7 +193,7 @@ Package 5B added `proof-approval-ux-tests.mjs` (77 tests) and 15 new persistence
 
 Layer 2 (E2E seeded 41/41) and Layer 3 (E2E real-files 64/64) pass — no regressions in book view, save/restore, standalone keepsake, or Review view. Manual QA completed per package instruction.
 
-**Package 3V — Telegram JSON UI Wiring (implementation complete on feature/telegram-json-ui-wiring — pending commit and merge):**
+**Package 3V — Telegram JSON UI Wiring (COMPLETE — merged `40a6a78` 2026-06-06):**
 
 Package 3V adds no new Node unit tests (no new engine module; adapter fully tested in Package 3U). Adds E2E Phase 33 (5 real-files tests): Telegram JSON fixture imports via file input; chat view visible; count = 8 (10 entries − 1 service-type skip − 1 null-from skip); importQualityPanel visible and non-empty; sourcePlatformId = 'telegram'; TXT re-import resets state for later phases. Node baseline unchanged: 2650 / 21 suites. Layer 2 unchanged: 57 seeded. Layer 3: 128 total when running `npm run e2e:real` (+5 Phase 33). Visual regression PASS (baselines unchanged; import panel above page canvas capture zone). No sender picker (Telegram self-ID deferred to Package 3W). No engine changes. `#fileInput` accept already includes `.json` — no change needed. Script tag added for `telegram-adapter.js` (after `facebook-messenger-adapter.js`, before `future-adapter-stubs.js`). Telegram routing guard inserted after Instagram DM and before legacy TXT fallback in `readTxtFile()` — collision-safe: `from_id` + `date_unixtime` discriminators are unique to Telegram; `participants` negative guard prevents IG/FB false positives.
 

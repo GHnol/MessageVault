@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3V — Telegram JSON UI Wiring. Branch `feature/telegram-json-ui-wiring`. Base: `main` at `a33e7ad`.
+**Status:** `closed` — Package 3V COMPLETE. Branch `main`. Final merge: `40a6a78` 2026-06-06.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-06`
 
@@ -18,13 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | `Package 3V — Telegram JSON UI Wiring` |
-| **Active branch** | `feature/telegram-json-ui-wiring` |
-| **main HEAD** | `a33e7ad` — docs: sync operating docs after Package 3U completion |
-| **Last completed pass** | `Package 3U — Telegram JSON Adapter` — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
-| **Active package** | `Package 3V — Telegram JSON UI Wiring` — IN PROGRESS |
-| **Last closed package** | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
-| **Prior closed package** | `Package 3T — Facebook Messenger Self-Identification Sender Picker` — FULLY COMPLETE — merged `8b11f18` 2026-06-06 |
+| **Active pass** | none — Package 3V COMPLETE |
+| **Active branch** | `main` |
+| **main HEAD** | `40a6a78` — merge: add Telegram JSON UI wiring (Package 3V) |
+| **Last completed pass** | `Package 3V — Telegram JSON UI Wiring` — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
+| **Active package** | none — awaiting Coordinator authorization for Package 3W |
+| **Last closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
+| **Prior closed package** | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
 | **Package 5C** | COMPLETE — impl `7b00f31`, merged `4733c32` 2026-06-04; user withdrawal (pending-review→none); cancel button; Phase 24 E2E (4 tests); 2082 Node; 57/57 seeded; 80/80 real-files; 27/27 browser QA |
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
@@ -32,9 +32,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (active pass — Package 3V — Telegram JSON UI Wiring)
+## Objective (last completed pass — Package 3V — Telegram JSON UI Wiring)
 
-Package 3V — Telegram JSON UI Wiring. **IN PROGRESS — branch `feature/telegram-json-ui-wiring`, base `main` at `a33e7ad`.**
+Package 3V — Telegram JSON UI Wiring. **COMPLETE — impl `2b232f8`, merged `40a6a78` to `main` 2026-06-06.**
 
 Objective: Wire `KMEngine.telegramAdapter` into the browser import flow so users can import Telegram Desktop JSON exports through the existing file upload and drag-and-drop flow.
 
@@ -55,9 +55,9 @@ Routing order in `readTxtFile()` after 3V:
 
 Expected counts after 3V: Node 2650/21 suites (unchanged), seeded E2E 57 (unchanged), real-files E2E 128/128 (+5 Phase 33).
 
-**What is done:** Branch created. State docs updated. All 8 authorized files edited. Full verification gate passed: 2650/2650 Node (21 suites, 0 failed), 57/57 seeded E2E, 128/128 real-files E2E (Phase 33: 5/5), visual regression PASS (4/4 pages). Hard exclusions confirmed clean (8 authorized files only). Start-router NEEDS_COORDINATOR_DECISION (expected mid-package). State-freshness 0 FAILs, 2 cosmetic WARN (hash lag). Project-control-sync-validate 11/0/0. OS-self-audit 324/0/0.
-**What remains:** Coordinator commit approval → commit → merge → closeout.
-**Next exact action:** Stop and report to Coordinator. Await commit instruction. Do not commit without explicit authorization.
+**What is done:** Branch created. State docs updated. All 8 authorized files edited. Full verification gate passed: 2650/2650 Node (21 suites, 0 failed), 57/57 seeded E2E, 128/128 real-files E2E (Phase 33: 5/5), visual regression PASS (4/4 pages). Hard exclusions confirmed clean (8 authorized files only). Committed `2b232f8`. Merged `40a6a78` to main 2026-06-06. Post-merge state-sync complete.
+**What remains:** Nothing — Package 3V COMPLETE.
+**Next exact action:** No active package. Await Coordinator authorization for Package 3W or next direction. Do not start any package without explicit Coordinator authorization.
 
 ---
 
@@ -784,9 +784,9 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
-No active package. Package 3U COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06.
+No active package. Package 3V COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06.
 
-Next session: read this file, verify main at `3f4e0c4`, confirm 2650/2650 Node tests, await Coordinator direction for next package. Do not start any package without explicit Coordinator authorization.
+Next session: read this file, verify main at `40a6a78`, confirm 2650/2650 Node tests and 128/128 real-files E2E, await Coordinator direction for Package 3W or next package. Do not start any package without explicit Coordinator authorization.
 
 Do not commit or push without explicit Coordinator authorization. No external mutations authorized.
 

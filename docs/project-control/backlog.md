@@ -1,6 +1,6 @@
 # KeepMees Backlog
 
-**Last updated:** 2026-06-06 (America/New_York — Package 3U)
+**Last updated:** 2026-06-06 (America/New_York — Package 3V)
 **Owner:** Coordinator / Project Control
 
 **Status values:** Inbox · Backlog · Ready · In Progress · Waiting / Blocked · Review · Approved · Done · Deferred · Killed
@@ -44,7 +44,8 @@
 | Package 3G — Session UI Wiring for ProductDraft Lifecycle | P2 | Done | 12 | Package 3F complete | lifecycle modules in browser; showBookView draft init; getGroupDraft helper; Phase 22 E2E; merged `3192a15` 2026-06-03 | N | Y | N |
 | Package 3H — Draft-Preflight Status Surface and Proof Panel Gate | P2 | Done | 12 | Package 3G complete | PAGINATION_STABILITY auto-check; proof panel gated on preflight-passed; Phase 23 E2E; merged `1297f92` 2026-06-03 | N | Y | N |
 | Package 5C — Proof Panel User Withdrawal and UX Completion | P2 | Done | 12 | Package 5B + 3H complete | withdrawal (pending-review→none); cancel button; Phase 24 E2E; 2082 Node; 80/80 real-files; 27/27 browser QA; merged `4733c32` 2026-06-04 | N | Y | N |
-| Package 3U — Telegram JSON Adapter | P2 | Done | 3 | none | `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); UI wiring deferred to Package 3V; self-ID picker deferred to Package 3W; merged `3f4e0c4` 2026-06-06 | N | Y | N |
+| Package 3V — Telegram JSON UI Wiring | P2 | Done | 3 | Package 3U complete | `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; collision-safe; no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 128/128 real-files; visual regression PASS; merged `40a6a78` 2026-06-06 | N | Y | N |
+| Package 3U — Telegram JSON Adapter | P2 | Done | 3 | none | `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W; merged `3f4e0c4` 2026-06-06 | N | Y | N |
 | Package 3T — Facebook Messenger Self-Identification Sender Picker | P2 | Done | 3 | Package 3S complete | `#facebookSenderPicker`; `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests); 2554 Node; 123/123 real-files; visual regression PASS; merged `8b11f18` 2026-06-06 | N | Y | N |
 | Package 3O — Instagram DM JSON Adapter | P2 | Done | 3 | none | `KMEngine.instagramDmAdapter`; instagram-dm-json-v1; Instagram DM JSON export; HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; instagram-dm platform `supported`; 87 new tests + 5 km-engine smoke; 2450 Node; engine-only; merged `26f2633` 2026-06-05 | N | Y | N |
 | Package 3M — Android SMS XML Adapter | P2 | Done | 3 | none | `KMEngine.androidSmsAdapter`; android-sms-xml-v1; SMS B&R XML; DOM-free parser; type=1/2 senderRole; MMS attachment-placeholder; android-sms platform `supported`; 84 new tests + 5 km-engine smoke; 2358 Node; engine-only; merged `1228f41` 2026-06-05 | N | Y | N |

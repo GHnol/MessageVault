@@ -131,7 +131,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3V — Telegram JSON UI Wiring, implementation complete on feature/telegram-json-ui-wiring — pending commit and merge):
+DELIVERED (Package 3V — Telegram JSON UI Wiring, merged `40a6a78` 2026-06-06):
 - `index.html` — `<script src="src/adapters/telegram-adapter.js">` tag (after `facebook-messenger-adapter.js`, before `future-adapter-stubs.js`); Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback — collision-safe (from_id + date_unixtime discriminators unique to Telegram; participants negative guard prevents IG/FB false positives); no sender picker (deferred to Package 3W); no accept change (`#fileInput` already accepts `.json`); no picker div; no `__km` bridge addition.
 - `scripts/e2e-regression-harness.mjs` — `TELEGRAM_FIXTURE` + `TELEGRAM_FIXTURE_COUNT = 8` constants; Phase 33 (5 real-files tests): import → count = 8 → importQualityPanel → sourcePlatformId = 'telegram' → TXT reset.
 - `docs/qa/test-strategy.md` — Phase 33 note; real-files baseline 123 → 128.

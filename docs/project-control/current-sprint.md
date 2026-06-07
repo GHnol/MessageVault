@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-06 (America/New_York — Package 3U completion)
+**Last updated:** 2026-06-06 (America/New_York — Package 3V completion)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -43,13 +43,14 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 19 | Package 3S — Facebook Messenger JSON UI Wiring | P2 | **Done** | impl `27b3521`, merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); 2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T) ✓ |
 | 20 | Package 3T — Facebook Messenger Self-Identification Sender Picker | P2 | **Done** | impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes ✓ |
 | 21 | Package 3U — Telegram JSON Adapter | P2 | **Done** | impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites) ✓ |
-| 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3U COMPLETE 2026-06-06 |
+| 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3V COMPLETE 2026-06-06 |
+| 23 | Package 3V — Telegram JSON UI Wiring | P2 | **Done** | impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; collision-safe; no sender picker (deferred to 3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS ✓ |
 
 ---
 
 ## Blocked tasks
 
-- **Coordinator authorize next product package** — P0 — Package 3U COMPLETE 2026-06-06; all further development work halted pending Coordinator decision.
+- **Coordinator authorize next product package** — P0 — Package 3V COMPLETE 2026-06-06; all further development work halted pending Coordinator decision.
 
 ---
 

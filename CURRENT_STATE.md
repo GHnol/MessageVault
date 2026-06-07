@@ -16,19 +16,20 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-06` (Package 3V — Telegram JSON UI Wiring — IN PROGRESS)
+**Last updated:** `2026-06-06` (Package 3V — Telegram JSON UI Wiring — COMPLETE)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `a33e7ad` — docs: sync operating docs after Package 3U completion |
-| Active branch | `feature/telegram-json-ui-wiring` |
-| Active pass | `Package 3V — Telegram JSON UI Wiring` — IN PROGRESS |
-| Last completed pass | `Package 3U — Telegram JSON Adapter` — impl `45d0d24`, merged `3f4e0c4` 2026-06-06 |
-| Last closed package | `Package 3U — Telegram JSON Adapter` — FULLY COMPLETE |
-| Next authorized target | Complete Package 3V; then Package 3W (Telegram self-identification sender picker) |
-| Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 123/123 → 128/128 after 3V; visual regression PASS (baseline unchanged) |
-| Package 3U | COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; senderRole always contact; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); engine-only; telegram platform `supported`; STUBS array now empty; no index.html; UI wiring deferred to Package 3V; self-ID picker deferred to Package 3W |
+| main HEAD | `40a6a78` — merge: add Telegram JSON UI wiring (Package 3V) |
+| Active branch | `main` |
+| Active pass | none — Package 3V COMPLETE — merged `40a6a78` 2026-06-06 |
+| Last completed pass | `Package 3V — Telegram JSON UI Wiring` — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
+| Last closed package | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE |
+| Next authorized target | Await Coordinator authorization for Package 3W (Telegram self-identification sender picker) |
+| Test baseline | **2650 Node tests** (21 suites); E2E seeded 57/57; E2E real-files 128/128 (+5 Phase 33); visual regression PASS (baseline unchanged) |
+| Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime discriminators); no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
+| Package 3U | COMPLETE — impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; senderRole always contact; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites); engine-only; telegram platform `supported`; STUBS array now empty; no index.html; UI wiring delivered in Package 3V; self-ID picker deferred to Package 3W |
 | Package 3T | COMPLETE — impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` div + `const facebookSenderPicker` binding + `showFacebookSenderPicker` + `applyFacebookSelfSender` + picker hide wires in WA branch / non-WA reset / FB branch / restore path + `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests, 6/6 PASS); `FB_ALICE_COUNT=4` + `FB_CHARLIE_COUNT=4`; 2554/2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS |
 | Package 3S | COMPLETE — merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); no sender picker (deferred to 3T); no engine changes; impl `27b3521` |
 | Package 3R | COMPLETE — merged `b6c85e9` 2026-06-05; `KMEngine.facebookMessengerAdapter`; facebook-messenger-json-v1; magic_words discriminator (Array.isArray check); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; 98 new tests (17 suites) + 6 km-engine additions; 2554 Node total / 20 suites; engine-only; facebook-messenger platform `supported`; no UI wiring; no E2E; impl `f63123d` |

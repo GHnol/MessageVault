@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-06
-**Updated by:** Claude Code (post-Package-3U state-sync)
+**Updated by:** Claude Code (post-Package-3V state-sync)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -48,6 +48,7 @@
 | Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
 | Package 3O | Instagram DM JSON Adapter | COMPLETE — merged to main | `ebb7a55` | `26f2633` |
 | Package 3P | Instagram DM JSON UI Wiring | COMPLETE — merged to main | `fa6f6f2` | `d99fb84` |
+| Package 3V | Telegram JSON UI Wiring | COMPLETE — merged to main | `2b232f8` | `40a6a78` |
 | Package 3U | Telegram JSON Adapter | COMPLETE — merged to main | `45d0d24` | `3f4e0c4` |
 | Package 3T | Facebook Messenger Self-Identification Sender Picker | COMPLETE — merged to main | `b01fbff` | `8b11f18` |
 | Package 3S | Facebook Messenger JSON UI Wiring | COMPLETE — merged to main | `27b3521` | `e326fba` |
@@ -59,7 +60,7 @@
 
 ## App code state
 
-- App code last changed: Package 3T (`b01fbff`) — `index.html` `#facebookSenderPicker` div, `const facebookSenderPicker`, `showFacebookSenderPicker`, `applyFacebookSelfSender`, picker hide wires (WA branch / non-WA reset / restore path), `showFacebookSenderPicker` call in FB branch, `window.__km.applyFacebookSelfSender`; Phase 32 E2E (6 tests). (Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3V (`2b232f8`) — `index.html` `<script src="src/adapters/telegram-adapter.js">` tag + Telegram routing guard in `readTxtFile()` after Instagram DM guard; `scripts/e2e-regression-harness.mjs` Phase 33 (5 tests) + `TELEGRAM_FIXTURE` + `TELEGRAM_FIXTURE_COUNT = 8` constants; `src/core/source-platforms.js` Telegram notes updated. (Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
 - `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
