@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (Package 3Z — Extended Content Quality Checks — COMPLETE; merged `ff79f9e` 2026-06-07)
+**Updated by:** Claude Code (Package 3AA — Emoji Analysis Engine — COMPLETE; impl `0e15cfb`, merged `29c4491` 2026-06-07)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -48,6 +48,7 @@
 | Package 3N | Android SMS UI Wiring | COMPLETE — merged to main | `04d30ed` | `6d61367` |
 | Package 3O | Instagram DM JSON Adapter | COMPLETE — merged to main | `ebb7a55` | `26f2633` |
 | Package 3P | Instagram DM JSON UI Wiring | COMPLETE — merged to main | `fa6f6f2` | `d99fb84` |
+| Package 3AA | Emoji Analysis Engine | COMPLETE — merged to main | `0e15cfb` | `29c4491` |
 | Package 3Z | Extended Content Quality Checks | COMPLETE — merged to main | `4902d50` | `ff79f9e` |
 | Package 3Y | Conversation Statistics Engine | COMPLETE — merged to main | `ca8d520` | `e0539d2` |
 | Package 3X | Pre-print Content Quality Checks | COMPLETE — merged to main | `e424825` | `7bdcdb5` |
@@ -64,19 +65,20 @@
 
 ## App code state
 
-- App code last changed: Package 3Z (`4902d50`) — `src/core/content-quality-checks.js` extended (+4 WARN checks); `src/tests/content-quality-checks-tests.mjs` enlarged (Suite 3 + Suites 16–19, 134→184); `src/tests/km-engine-tests.mjs` (+4 smoke, 134→138); `scripts/fixtures/fake-cqc-extended.txt` (new); `scripts/e2e-regression-harness.mjs` Phase 37 (7 tests) + Phase 35 test 6 updated + `CQC_EXTENDED_FIXTURE`/`CQC_EXTENDED_FIXTURE_COUNT` constants. No index.html changes. (Package 3Y added `src/core/conversation-stats.js` + `#conversationStatsPanel`. Package 3X added `src/core/content-quality-checks.js` + `#contentQualityPanel`. Package 3W added `#telegramSenderPicker`. Package 3V added `telegram-adapter.js` script tag + Telegram routing guard. Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3AA (`0e15cfb`) — `src/core/emoji-analysis.js` (NEW, `KMEngine.EmojiAnalysis.compute()`); `scripts/fixtures/fake-emoji-conversation.txt` (NEW, EA_FIXTURE_COUNT=10); `src/tests/emoji-analysis-tests.mjs` (NEW, 100 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 EmojiAnalysis smoke, 138→144); `index.html` (teal CSS, `emoji-analysis.js` script tag, `#emojiAnalysisPanel` div, `renderEmojiAnalysisPanel()` at 11 call sites, `window.__km.renderEmojiAnalysisPanel`); `scripts/e2e-regression-harness.mjs` Phase 38 (6 tests) + `EA_FIXTURE`/`EA_FIXTURE_COUNT` constants. (Package 3Z extended `src/core/content-quality-checks.js` +4 WARN checks, no index.html changes. Package 3Y added `src/core/conversation-stats.js` + `#conversationStatsPanel`. Package 3X added `src/core/content-quality-checks.js` + `#contentQualityPanel`. Package 3W added `#telegramSenderPicker`. Package 3V added `telegram-adapter.js` script tag + Telegram routing guard. Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
-- `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new)
+- `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new) + `content-quality-checks.js` (Package 3X, new) + `conversation-stats.js` (Package 3Y, new) + `emoji-analysis.js` (Package 3AA, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 23 suites, **2962 Node tests** — all green
+- `src/tests/`: 24 suites, **3068 Node tests** — all green
+  - `emoji-analysis-tests.mjs`: 100 (Package 3AA; 15 suites: API shape, empty/null/invalid zero-state, basic emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, mostEmojifiedSender tie-breaking, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards)
   - `conversation-stats-tests.mjs`: 112 (Package 3Y; 14 suites: API shape, empty/invalid zero-state, single memory, busiestDay tie-break, longestStreak, totalDays span, avgMessagesPerDay, perSenderStats ordering, includes senderRole:self, excludes blank senders, pct calculation, malformed entries, immutability, semantic guards)
   - `content-quality-checks-tests.mjs`: 184 (Package 3X: 15 suites — API shape, empty/invalid input, clean corpus, PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE, SYSTEM_MESSAGE_IN_OUTPUT, issue contract, malformed, known check types, all-WARN severity, semantic guards; Package 3Z: Suites 16–19 — HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; Suite 3 enlarged ≥10 messages)
   - `telegram-adapter-tests.mjs`: 91 (Package 3U; 17 suites: API shape, canHandle accepts/rejects, from_id discriminator, fixture rawCounts, timestamp Unix seconds → ISO, text plain/array-entity, media/attachment, senderRole, NormalizedMemory fields, importWarnings, no-throw, participants)
   - `facebook-messenger-adapter-tests.mjs`: 98 (Package 3R; 17 suites)
   - `android-sms-xml-adapter-tests.mjs`: 84 (Package 3M; 14 suites: API shape, canHandle, SMS type=1/2, senderRole, MMS, fixture rawCounts, participants, NormalizedMemory fields, provenance, importWarnings, semantic guards)
   - `whatsapp-txt-adapter-tests.mjs`: 91 (Package 3J; 14 suites: API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards)
-  - `km-engine-tests.mjs`: 138 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J; +5 instagram-dm smoke — Package 3O; +6 facebook-messenger additions — Package 3R; +5 telegram smoke — Package 3U; +6 content-quality-checks smoke — Package 3X; +6 conversation-stats smoke — Package 3Y; +4 extended CQC smoke — Package 3Z)
+  - `km-engine-tests.mjs`: 144 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J; +5 instagram-dm smoke — Package 3O; +6 facebook-messenger additions — Package 3R; +5 telegram smoke — Package 3U; +6 content-quality-checks smoke — Package 3X; +6 conversation-stats smoke — Package 3Y; +4 extended CQC smoke — Package 3Z; +6 EmojiAnalysis smoke — Package 3AA)
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
@@ -97,7 +99,7 @@
 - `src/core/source-platforms.js`: modified (Package 3J); WhatsApp platform `stub` → `supported`
 - `src/adapters/future-adapter-stubs.js`: modified (Package 3J); removed `whatsapp-txt-v1` stub
 - `scripts/fixtures/fake-whatsapp-chat.txt`: new (Package 3J); fake bracket-format WhatsApp fixture
-- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 96-test real-file coverage (phases 11–19 + Phases 25–37, Packages 3C + 3I + 3K + 3L + 3N + 3P + 3Q + 3S + 3T + 3V + 3W + 3X + 3Y + 3Z) — 153 total
+- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 102-test real-file coverage (phases 11–19 + Phases 25–38, Packages 3C + 3I + 3K + 3L + 3N + 3P + 3Q + 3S + 3T + 3V + 3W + 3X + 3Y + 3Z + 3AA) — 159 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -106,14 +108,14 @@
 
 ---
 
-## Git state (as of post-Package-3Z state-sync)
+## Git state (as of post-Package-3AA state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `058af68` — docs: close post-Package-3Z Tower catch-up |
+| main HEAD | `29c4491` — feat: add EmojiAnalysis engine + #emojiAnalysisPanel (Package 3AA) (state-sync commit pending) |
 | Active branch | `main` |
-| Working tree | Clean |
-| Pushed to remote | main is current through Package 3Z merge (`ff79f9e`) |
+| Working tree | Clean (state-sync docs edits in progress) |
+| Pushed to remote | main pushed through Package 3AA state-sync |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -158,13 +160,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07); post-3Z Tower catch-up in progress; next candidate: Package 3AA — Emoji Analysis Engine (no external gate; partially activates DEF-14); see `docs/project-control/decision-log.md` |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AA COMPLETE (impl `0e15cfb`, merged `29c4491` 2026-06-07); next candidate: TBD — no package authorized after Package 3AA; see `docs/project-control/decision-log.md` |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> No active package. Package 3Z COMPLETE (merged `ff79f9e` 2026-06-07). Extended content quality checks delivered — 4 new WARN checks (HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT); `content-quality-checks.js` now 9 WARN checks total; Phase 37 E2E (7 tests); 2962 Node; 153/153 real-files; OS audit 324/0/0. Do not start any package without explicit Coordinator authorization.
+> No active package. Package 3AA COMPLETE (impl `0e15cfb`, merged `29c4491` 2026-06-07). Emoji Analysis Engine delivered — `KMEngine.EmojiAnalysis.compute()`; `#emojiAnalysisPanel` teal panel; topEmojis MAX_TOP=5; mostEmojifiedSender; ZWJ+skin-tone+keycap+flag emoji support; 100 new tests (15 suites); 3068 Node / 24 suites; 159/159 real-files; Phase 38 E2E (6 tests); partially activates DEF-14. Do not start any package without explicit Coordinator authorization.
 
 ---
 

@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3AA — Emoji Analysis Engine — IN PROGRESS; branch `feature/emoji-analysis-engine`)
+**Last updated:** 2026-06-07 (Package 3AA — Emoji Analysis Engine — COMPLETE; impl `0e15cfb`, merged `29c4491`)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3AA)
+## Current architecture (post-Package 3AA — Emoji Analysis Engine COMPLETE)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -139,7 +139,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3AA — Emoji Analysis Engine, branch `feature/emoji-analysis-engine`, base `f54e56b`):
+DELIVERED (Package 3AA — Emoji Analysis Engine, impl `0e15cfb`, merged `29c4491` 2026-06-07):
 - `src/core/emoji-analysis.js` — `KMEngine.EmojiAnalysis`; IIFE module; `compute(memories)` returns `{ topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }`; MAX_TOP=5; `extractEmojis(text)` uses `new RegExp(...)` with `gu` flag; handles `\p{Emoji_Modifier_Base}\p{Emoji_Modifier}` (skin tone), `\p{Extended_Pictographic}️?` + ZWJ chains, `[#*0-9]️?⃣` (keycaps), `\p{Regional_Indicator}\p{Regional_Indicator}` (flags); try/catch wrapper; pure, no DOM, no side effects.
 - `scripts/fixtures/fake-emoji-conversation.txt` — 10-message WhatsApp bracket fixture; 3 senders: Alice (6 messages, 11 emoji), Bob (2, 1 emoji), Carol (2, 1 emoji); totalEmojiCount=13, uniqueEmojiCount=7; topEmojis=[🎉×3,😊×3,💕×2,🔥×2,🌟×1].
 - `src/tests/emoji-analysis-tests.mjs` — 100 tests across 15 suites.
