@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — IN PROGRESS; branch `feature/conversation-statistics`)
+**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — COMPLETE; impl `ca8d520`, merged `e0539d2`)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3X; Package 3Y IN PROGRESS)
+## Current architecture (post-Package 3Y)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -20,7 +20,7 @@ src/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 5 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X
-    conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y IN PROGRESS
+    conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y
     normalized-memory.js      — canonical message model (NormalizedMemory)
     project-session.js        — session container
     source-platforms.js       — source platform registry (whatsapp + android-sms + instagram-dm + facebook-messenger + telegram now 'supported' — Packages 3J + 3M + 3O + 3R + 3U)
@@ -36,7 +36,7 @@ index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSe
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
 index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
-index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y IN PROGRESS
+index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
     telegram-adapter.js            — KMEngine.telegramAdapter; Telegram Desktop JSON export; from_id + date_unixtime discriminators; no HTML entity decoding (plain Unicode); extractText() handles string or array-of-entities; hasMedia() checks photo/file/media_type; date_unixtime Unix seconds string → ISO-8601; senderRole always contact; ADAPTER_ID telegram-json-v1; browser-loaded (Package 3V) — Package 3U/3V
     future-adapter-stubs.js        — STUBS array is now empty (all client-side adapters promoted to real implementations)
@@ -135,6 +135,16 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+DELIVERED (Package 3Y — Conversation Statistics Engine, impl `ca8d520`, merged `e0539d2` 2026-06-07):
+- `src/core/conversation-stats.js` — `KMEngine.ConversationStats`; IIFE module; `compute(memories)` returns `{ busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }`; zero-state for empty/invalid input; timezone-safe `parseDay()` using `Date.UTC`; busiestDay tie-break: earliest date wins; totalDays = inclusive calendar span; longestStreak counts consecutive unique days; avgMessagesPerDay = timestamped count / totalDays (1 decimal); perSenderStats includes all senders including `senderRole:self`, sorted count desc / name asc; pct = 1 decimal; no DOM, no side effects.
+- `scripts/fixtures/fake-cst-stats.txt` — 8-message WhatsApp bracket fixture; Alice (5) + Bob (3); Jan 14–18 with gap at Jan 17; busiestDay=Jan 15 (3 msgs); longestStreak=3 (Jan 14–16); totalDays=5 (span).
+- `src/tests/conversation-stats-tests.mjs` — 112 tests across 14 suites.
+- `src/tests/km-engine-tests.mjs` — loads `conversation-stats.js`; `ConversationStats — smoke` suite added (+6 → 134 total).
+- `index.html` — CSS for `.conversation-stats-panel` + `.conversation-stats-inner` + `.conversation-stats-chip` (indigo tone: light `#e8eaf6`/dark `#0d0f29`); dark mode overrides; `<script src="src/core/conversation-stats.js">` tag after content-quality-checks.js; `<div id="conversationStatsPanel">` after `#contentQualityPanel`; `const conversationStatsPanel` binding; `renderConversationStatsPanel(memories)` function; calls at all 11 import/open sites (same sites as `renderContentQualityPanel` + `openConversation`); `window.__km.renderConversationStatsPanel` exposed.
+- `scripts/e2e-regression-harness.mjs` — `CST_FIXTURE` + `CST_FIXTURE_COUNT = 8` constants; Phase 36 (6 real-files tests): hidden before import → visible after CST import → count=8 → busiestDay chip → top-sender chip → TXT reimport resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 36 note; real-files baseline 140 → 146; Node baseline 2790 → 2908 (23 suites).
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3Y entry.
 
 DELIVERED (Package 3X — Pre-print Content Quality Checks, impl `e424825`, merged `7bdcdb5` 2026-06-07):
 - `src/core/content-quality-checks.js` — `KMEngine.ContentQualityChecks`; IIFE module; `compute(memories)` returns array of `{ type, severity, count, examples, message }` issue objects; 5 advisory WARN checks; MAX_EXAMPLES=3; URL_RE case-insensitive; returns `[]` for empty/invalid input; no vendor or manufacturing inputs; follows Package 3I pattern.

@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-07 (Package 3X — Pre-print Content Quality Checks — COMPLETE)
+**Last updated:** 2026-06-07 (Package 3Y — Conversation Statistics Engine — COMPLETE; merged `e0539d2`)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -32,7 +32,7 @@
 - _(empty — no active development pass or package)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3X COMPLETE 2026-06-07 (impl `e424825`, merged `7bdcdb5`); next candidate: TBD — awaiting Coordinator authorization
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3Y COMPLETE 2026-06-07 (impl `ca8d520`, merged `e0539d2`); next candidate: TBD — awaiting Coordinator authorization
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3Y — Conversation Statistics Engine** · Development / Engine+UI · Ph3 · implementation `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; returns busiestDay/busiestDayCount/longestStreakDays/avgMessagesPerDay/totalDays/perSenderStats; `#conversationStatsPanel` indigo panel; `renderConversationStatsPanel(memories)` at 11 call sites; `window.__km.renderConversationStatsPanel`; 112 new tests (`conversation-stats-tests.mjs`, 14 suites) + 6 km-engine smoke (2908 Node / 23 suites); Phase 36 E2E (6 tests); 146/146 real-files; no vendor/manufacturing scope — COMPLETE
 - **Package 3X — Pre-print Content Quality Checks** · Development / Engine+UI · Ph3 · implementation `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks.compute()`; 5 WARN advisory checks; `#contentQualityPanel` amber panel; `renderContentQualityPanel(memories)` at 10 call sites; `window.__km.renderContentQualityPanel`; 134 new tests (`content-quality-checks-tests.mjs`, 15 suites) + 6 km-engine smoke (2790 Node / 22 suites); Phase 35 E2E (6 tests); 140/140 real-files; no vendor/manufacturing scope — COMPLETE
 - **Post-Package-3W Tower Catch-Up operating pass** · Docs-only · docs `056cdd9`, merged `24810bf` 2026-06-07; corrected stale deferred-gated-ideas (DEF-01–05, DEF-12), decision-log, backlog-roadmap, current-sprint, next-actions, architecture-roadmap after client-side source adapter series completion — COMPLETE
 - **Package 3W — Telegram Self-Identification Sender Picker** · Development / UI · Ph3 · implementation `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` inline picker; `showTelegramSenderPicker` + `applyTelegramSelfSender`; picker hides on all non-Telegram paths + restore; `window.__km.applyTelegramSelfSender` exposed; Phase 34 E2E (6 tests); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS; no engine/adapter changes — COMPLETE

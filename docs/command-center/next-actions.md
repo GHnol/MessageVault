@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (post-Package-3X state-sync; Package 3X COMPLETE; next package TBD)
+**Updated by:** Claude Code (post-Package-3Y state-sync; Package 3Y COMPLETE; next package TBD)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3X COMPLETE (merged `7bdcdb5` 2026-06-07); next candidate TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3Y COMPLETE (merged `e0539d2` 2026-06-07); next candidate TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3X COMPLETE — merged `7bdcdb5` 2026-06-07. Coordinator decides next package.**
+**Status: Package 3Y COMPLETE — merged `e0539d2` 2026-06-07. Coordinator decides next package.**
+
+Package 3Y (Conversation Statistics Engine) is COMPLETE — merged to main (`e0539d2` 2026-06-07). `KMEngine.ConversationStats.compute(memories)` engine module added (`src/core/conversation-stats.js`); returns busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats; zero-state for empty/invalid; perSenderStats includes all senders including senderRole:self; `#conversationStatsPanel` wired in `index.html` with indigo CSS scheme; `renderConversationStatsPanel(memories)` called at 11 import/open sites; `window.__km.renderConversationStatsPanel` exposed for E2E testability; Phase 36 E2E (6 tests); 2908 Node (23 suites); 57/57 seeded; 146/146 real-files; OS audit 324/0/0.
 
 Package 3X (Pre-print Content Quality Checks) is COMPLETE — merged to main (`7bdcdb5` 2026-06-07). `KMEngine.ContentQualityChecks.compute(memories)` engine module added (`src/core/content-quality-checks.js`); 5 advisory WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT; `#contentQualityPanel` wired in `index.html` with amber CSS scheme; `renderContentQualityPanel(memories)` called at 10 import/open sites; `window.__km.renderContentQualityPanel` exposed for E2E testability; Phase 35 E2E (6 tests); 2790 Node (22 suites); 57/57 seeded; 140/140 real-files; OS audit 324/0/0.
 

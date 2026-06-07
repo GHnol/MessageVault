@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Package 3Y — Conversation Statistics Engine — IN PROGRESS; branch `feature/conversation-statistics`)
+**Last updated:** `2026-06-07` (Package 3Y — Conversation Statistics Engine — COMPLETE; impl `ca8d520`, merged `e0539d2`)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `5c1119f` — docs: sync operating docs after Package 3X completion |
-| Active branch | `feature/conversation-statistics` |
-| Active pass | Package 3Y — Conversation Statistics Engine — IN PROGRESS |
-| Last completed pass | Package 3X — Pre-print Content Quality Checks — impl `e424825`, merged `7bdcdb5` 2026-06-07 |
-| Last closed package | `Package 3X — Pre-print Content Quality Checks` — FULLY COMPLETE |
-| Active package | `Package 3Y — Conversation Statistics Engine` — IN PROGRESS (stop before commit) |
-| Test baseline | **2790 Node tests** (22 suites); E2E seeded 57/57; E2E real-files 140/140 (+6 Phase 35); visual regression PASS (baseline unchanged) — Package 3Y expected ~2908 / 23 suites / Phase 36: 6 tests |
-| Package 3Y | IN PROGRESS — branch `feature/conversation-statistics`; 8 implementation files created/modified; `KMEngine.ConversationStats.compute()`; busiestDay/busiestDayCount/longestStreakDays/avgMessagesPerDay/totalDays/perSenderStats; `#conversationStatsPanel` indigo panel; `renderConversationStatsPanel(memories)` at 11 call sites; `window.__km.renderConversationStatsPanel`; ~112 new tests (`conversation-stats-tests.mjs`) + 6 km-engine smoke (→134); Phase 36 E2E (6 tests); stop before commit |
+| main HEAD | `e0539d2` — merge: add conversation statistics engine (Package 3Y) |
+| Active branch | `main` |
+| Active pass | None — Package 3Y COMPLETE; merged `e0539d2` 2026-06-07 |
+| Last completed pass | Package 3Y — Conversation Statistics Engine — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
+| Last closed package | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE |
+| Active package | None — awaiting Coordinator authorization for next development package |
+| Test baseline | **2908 Node tests** (23 suites); E2E seeded 57/57; E2E real-files 146/146 (+6 Phase 36); visual regression PASS (baseline unchanged) |
+| Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; returns busiestDay/busiestDayCount/longestStreakDays/avgMessagesPerDay/totalDays/perSenderStats; zero-state for empty/invalid; perSenderStats includes senderRole:self; `#conversationStatsPanel` indigo panel; `renderConversationStatsPanel(memories)` at 11 call sites; `window.__km.renderConversationStatsPanel`; 112 new tests (`conversation-stats-tests.mjs`, 14 suites) + 6 km-engine smoke (→134); Phase 36 E2E (6 tests, 6/6 PASS); `CST_FIXTURE_COUNT=8`; 2908/2908 Node; 57/57 seeded; 146/146 real-files |
 | Package 3X | COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks.compute()`; 5 WARN checks (PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE, SYSTEM_MESSAGE_IN_OUTPUT); `#contentQualityPanel` amber panel; `renderContentQualityPanel(memories)` at 10 call sites; `window.__km.renderContentQualityPanel`; 134 new tests (`content-quality-checks-tests.mjs`) + 6 km-engine smoke (→128); Phase 35 E2E (6 tests, 6/6 PASS); `CQC_FIXTURE_COUNT=5`; 2790/2790 Node; 57/57 seeded; 140/140 real-files |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` div + `const telegramSenderPicker` binding + `showTelegramSenderPicker` + `applyTelegramSelfSender` + picker hide wires in WA branch / non-WA reset / Telegram branch / restore path + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6 PASS); `TG_ALICE_COUNT=4` + `TG_BOB_COUNT=4`; 2650/2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard, before legacy TXT fallback; collision-safe (from_id + date_unixtime discriminators); no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |

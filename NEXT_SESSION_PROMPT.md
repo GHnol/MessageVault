@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. **Active package: Package 3Y — Conversation Statistics Engine — IN PROGRESS.** Branch: `feature/conversation-statistics` from `main` at `5c1119f`. All 8 implementation files are created/modified. What remains: run all Node unit suites (~2908 expected / 23 suites), run seeded E2E (57/57), run real-files E2E (~146/146, Phase 36: 6/6), run visual regression, run OS audit (324/0/0), run state-freshness check, verify hard-exclusion diff, produce pre-commit report, STOP before commit. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **No active pass or package.** Branch: `main`. main HEAD: `e0539d2`. Package 3Y — Conversation Statistics Engine is COMPLETE (impl `ca8d520`, merged `e0539d2` 2026-06-07). Awaiting Coordinator authorization for next development package. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,10 +47,10 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3Y — Conversation Statistics Engine — IN PROGRESS; stop before commit |
-| Branch | `feature/conversation-statistics` |
-| Next action | Run `/start`. Confirm branch `feature/conversation-statistics` from main at `5c1119f`. Run all Node unit suites, E2E, visual regression, OS audit, state-freshness. Produce pre-commit report. STOP before commit. |
-| Package 3Y | IN PROGRESS — `KMEngine.ConversationStats.compute()`; `#conversationStatsPanel`; Phase 36 E2E (6 tests); ~2908 Node / 23 suites expected; all 8 implementation files created/modified; stop before commit |
+| Resume into | No active pass — awaiting Coordinator authorization for next development package |
+| Branch | `main` |
+| Next action | Run `/start`. Confirm branch `main` at `e0539d2`. Await Coordinator authorization for next development package. Do not start any package without explicit Coordinator authorization. |
+| Package 3Y | COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07; `KMEngine.ConversationStats.compute()`; `#conversationStatsPanel`; Phase 36 E2E (6 tests); 2908 Node / 23 suites; 57/57 seeded; 146/146 real-files; visual regression PASS |
 | Package 3X | COMPLETE — impl `e424825`, merged `7bdcdb5` 2026-06-07; `KMEngine.ContentQualityChecks`; `#contentQualityPanel`; Phase 35 E2E (6 tests); 2790 Node / 22 suites; 57/57 seeded; 140/140 real-files; visual regression PASS |
 | Package 3W | COMPLETE — impl `a60c6e3`, merged `2bf1900` 2026-06-06; `#telegramSenderPicker` + `showTelegramSenderPicker` + `applyTelegramSelfSender` + hide wires + `window.__km.applyTelegramSelfSender`; Phase 34 E2E (6 tests, 6/6); 2650 Node; 57/57 seeded; 134/134 real-files; visual regression PASS |
 | Package 3V | COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06; `telegram-adapter.js` script tag; Telegram routing guard in `readTxtFile()` after Instagram DM guard; no sender picker (3W); Phase 33 E2E (5 tests); 2650 Node; 57/57 seeded; 128/128 real-files; visual regression PASS |
