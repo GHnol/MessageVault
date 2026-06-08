@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Package 3AH — Reaction Analysis Engine + Panel — COMPLETE; impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`; Post-Package-3AH Tower Catch-Up IN PROGRESS)
+**Updated by:** Claude Code (Package 3AI — Verification & Harness Reliability Hardening — COMPLETE; impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`; Post-Package-3AI Tower Catch-Up IN PROGRESS — docs-only, stop-before-commit)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3AH COMPLETE (impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3AI COMPLETE (impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`); Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3AH COMPLETE — impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`. Coordinator decides next package.**
+**Status: Package 3AI COMPLETE — impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`. Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit). Coordinator decides next package.**
+
+Package 3AI (Verification & Harness Reliability Hardening) is COMPLETE — fast-forward merged to main (`d4a6c71`; state-sync `803cd64` 2026-06-08). Scripts + docs only: `scripts/e2e-regression-harness.mjs` Phase 1 startup reliability hardened (bounded 3-attempt server re-probe + backoff; richer `waitForKm`/`Harness.run` failure diagnostics) with **no assertion or test-count changes**; baseline docs refreshed without a new stale-number trap (`test-strategy.md` changelog → 3AG/3AH; `current-status.md` detail-lag → 3AH; `pre-commit-verification-template.md` non-staling baseline pointer). No `index.html`, no `src/**`, no new test-runner orchestrator. Baseline unchanged: 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS. The Post-Package-3AI Tower Catch-Up (this docs-only pass) records 3AI across the Tower and is awaiting Coordinator commit authorization.
 
 Package 3AH (Reaction Analysis Engine + Panel) is COMPLETE — fast-forward merged to main (`a165122` 2026-06-08; state-sync `c8378c7`). `KMEngine.ReactionAnalysis.compute(memories)` pure IIFE engine added (`src/core/reaction-analysis.js`); returns { totalReactions, messagesWithReactions, topReactionEmojis: [{ emoji, count, rank }] (MAX_TOP=5), topReactor: { reactor, count } | null, mostReactedToSender: { sender, count } | null }; consumes the `NormalizedMemory.reactions[]` captured in Package 3AG; counts by emoji, by reactor, and by reacted-to message sender; sort count desc then string asc; zero-state for empty/invalid/no-reaction. `#reactionAnalysisPanel` rose/crimson panel is an **import-time advisory surface only** (hidden when totalReactions === 0); `renderReactionAnalysisPanel(memories)` called at all 11 import/open sites; `window.__km.renderReactionAnalysisPanel` exposed. `reaction-analysis-tests.mjs` (66 tests / 14 suites, incl. an ImportQualityReport-preservation regression assertion) + 6 km-engine smoke (→180); Phase 44 E2E (6 tests, reuses `fake-instagram-dm.json`); 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS. **No DEF-11 in-book reaction rendering, no Message Book reaction badges, no adapter / import-quality-report / normalized-memory changes.** The ReactionAnalysis engine + panel that was the likely 3AG follow-up candidate is now DELIVERED; next candidate: TBD pending Coordinator authorization.
 
@@ -69,7 +71,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | TBD — Coordinator to decide | TBD | TBD | — |
 | Phase 12 continuation (preflight runners for vendor-gated checks) | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3AH is now COMPLETE — the latest complete package.** ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) are now DELIVERED, consuming the reaction data captured in Package 3AG — so the earlier "likely candidate" ReactionAnalysis engine is no longer pending. No development package has been authorized after Package 3AH. The next Coordinator step is to decide the next package (candidate TBD).
+**Package 3AI is now COMPLETE — the latest complete package** (Verification & Harness Reliability Hardening; scripts + docs only — no app code). The latest *engine* work remains Package 3AH (ReactionAnalysis + #reactionAnalysisPanel, import-time advisory only), which is DELIVERED — so the earlier "likely candidate" ReactionAnalysis engine is no longer pending. No development package has been authorized after Package 3AI. Post-Package-3AI Tower Catch-Up (docs-only) is IN PROGRESS (stop-before-commit). The next Coordinator step is to decide the next package (candidate TBD).
 
 ---
 

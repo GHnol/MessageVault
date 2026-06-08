@@ -1,6 +1,6 @@
 # KeepMees Backlog
 
-**Last updated:** 2026-06-08 (America/New_York — Package 3AH — Reaction Analysis Engine + Panel — COMPLETE; impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`; Post-Package-3AH Tower Catch-Up IN PROGRESS; awaiting Coordinator authorization for next package)
+**Last updated:** 2026-06-08 (America/New_York — Package 3AI — Verification & Harness Reliability Hardening — COMPLETE; impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`; Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); awaiting Coordinator authorization for next package)
 **Owner:** Coordinator / Project Control
 
 **Status values:** Inbox · Backlog · Ready · In Progress · Waiting / Blocked · Review · Approved · Done · Deferred · Killed
@@ -34,7 +34,9 @@
 | Authorize Package 3AG — Meta Reaction Capture | P2 | Done | 3 | Coordinator authorization | Package 3AG authorized and COMPLETE — impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`; Instagram DM + Facebook Messenger adapters map Meta `{reaction,actor}` → `NormalizedMemory.reactions[]` `{reactor,emoji,label}`; `decodeReaction()` mojibake repair + raw-preserve fallback; IG tests 87→101, FB tests 98→113; 3573 Node / 29 suites; capture-only (no engine/panel/DEF-11 rendering) | N | Y | N |
 | Post-Package-3AG Tower Catch-Up operating pass | P1 | Done | 0 | Package 3AG complete | Tower docs current through 3AG; docs `79d3246` merged to `main` 2026-06-08 | N | Y | N |
 | Authorize Package 3AH — Reaction Analysis Engine + Panel | P2 | Done | 3 | Coordinator authorization | Package 3AH authorized and COMPLETE — impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`; `KMEngine.ReactionAnalysis.compute()`; `#reactionAnalysisPanel` rose/crimson import-time advisory panel; 66 reaction-analysis tests (incl. IQR-preservation regression) + 6 km-engine smoke (→180); Phase 44 E2E (6 tests); 3645 Node / 30 suites; capture consumed from Package 3AG; NO DEF-11 in-book rendering / NO Message Book reaction badges | N | Y | N |
-| Post-Package-3AH Tower Catch-Up operating pass | P1 | In Progress | 0 | Package 3AH complete | Bring Tower/command-center/backlog/roadmap/report-mirror/ops docs current after Package 3AH; next candidate TBD | N | Y | N |
+| Post-Package-3AH Tower Catch-Up operating pass | P1 | Done | 0 | Package 3AH complete | Tower docs current through 3AH; docs `a65d080` merged to `main` 2026-06-08; closeout `47d459a` | N | Y | N |
+| Package 3AI — Verification & Harness Reliability Hardening | P2 | Done | 0 (QA infra) | Coordinator authorization | Package 3AI authorized and COMPLETE — impl `d4a6c71`, state-sync `803cd64`, merged to `main` 2026-06-08; scripts + docs only; E2E harness Phase 1 startup reliability hardened (bounded re-probe + backoff, richer failure diagnostics) with NO assertion/count changes; baseline docs refreshed without a new stale-number trap; no app code, no `index.html`, no `src/**`, no new test-runner orchestrator; baseline unchanged 3645 Node / 30 suites / 57 seeded / 195 real-files / VR PASS | N | Y | N |
+| Post-Package-3AI Tower Catch-Up operating pass | P1 | In Progress | 0 | Package 3AI complete | Bring Tower/command-center/backlog/roadmap/report-mirror/ops docs current after Package 3AI; correct stale 3AH "latest package" claim + HEAD refs; add 3AI report-mirror entry; next candidate TBD | N | Y | N |
 | Decide ClickUp/TickTick/Calendar adoption | P2 | Backlog | 0 | — | Founder choice recorded | Y | N | N |
 | Decide scripts/node_modules history cleanup | P3 | Deferred | 0 | — | Decision recorded in decision-log | N | Y | N |
 

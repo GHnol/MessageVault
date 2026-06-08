@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, merged to `main` 2026-06-08; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`)
+**Updated by:** Claude Code (Post-Package-3AI Tower Catch-Up IN PROGRESS — docs-only, branch `docs/post-3ai-tower-catchup`, stop-before-commit; Package 3AI — Verification & Harness Reliability Hardening COMPLETE — impl `d4a6c71`, state-sync `803cd64`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -56,6 +56,7 @@
 | Package 3AF | Conversation Initiation Analysis Engine | COMPLETE — merged to main (ff-only) | `7f03889` | `7f03889` |
 | Package 3AG | Meta Reaction Capture (IG + FB adapters; capture-only) | COMPLETE — merged to main (ff-only) | `0331da0` | `0331da0` |
 | Package 3AH | Reaction Analysis Engine + Panel (import-time advisory) | COMPLETE — merged to main (ff-only) | `a165122` | `a165122` |
+| Package 3AI | Verification & Harness Reliability Hardening (scripts + docs only) | COMPLETE — merged to main (ff-only) | `d4a6c71` | `d4a6c71` |
 | Package 3Z | Extended Content Quality Checks | COMPLETE — merged to main | `4902d50` | `ff79f9e` |
 | Package 3Y | Conversation Statistics Engine | COMPLETE — merged to main | `ca8d520` | `e0539d2` |
 | Package 3X | Pre-print Content Quality Checks | COMPLETE — merged to main | `e424825` | `7bdcdb5` |
@@ -121,14 +122,16 @@
 
 ---
 
-## Git state (as of Post-Package-3AH Tower Catch-Up — 2026-06-08)
+## Git state (as of Post-Package-3AI Tower Catch-Up — 2026-06-08)
 
 | Item | Value |
 |---|---|
-| main HEAD | `a65d080` — docs: close Post-Package-3AH Tower Catch-Up (Package 3AH impl `a165122`, state-sync `c8378c7`) |
-| Active branch | `main` |
-| Working tree | Clean |
-| Pushed to remote | pending push authorization (local `main` ahead of `origin/main` by the closeout commit) |
+| main HEAD | `803cd64` — docs: sync operating docs after Package 3AI completion (Package 3AI impl `d4a6c71`) |
+| Active branch | `docs/post-3ai-tower-catchup` (Post-Package-3AI Tower Catch-Up, docs-only, IN PROGRESS — stop-before-commit) |
+| Working tree | Catch-up edits staged on branch; awaiting Coordinator commit authorization |
+| Pushed to remote | pending push authorization |
+
+**Package 3AI (`d4a6c71` / state-sync `803cd64`):** Verification & Harness Reliability Hardening — scripts + docs only. `scripts/e2e-regression-harness.mjs` Phase 1 startup reliability hardened (`MAX_STARTUP_ATTEMPTS = 3` bounded re-probe of the static server + backoff, real error re-raised on final attempt — failures not masked; richer `waitForKm()` / `Harness.run()` failure diagnostics) with **no assertion or test-count changes**. Baseline docs refreshed without a new stale-number trap: `docs/qa/test-strategy.md` changelog → 3AG/3AH; `docs/command-center/current-status.md` detail-lag → 3AH; `docs/qa/pre-commit-verification-template.md` given a non-staling pointer to the authoritative baseline (no hardcoded numbers). No `index.html`, no `src/**`, no new test-runner orchestrator. Baseline unchanged: 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS.
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -173,13 +176,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AH COMPLETE (impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`); ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) delivered, consuming the reactions[] captured in Package 3AG; NO DEF-11 in-book rendering / NO Message Book reaction badges; next recommended candidate: TBD; awaiting Coordinator authorization |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AI COMPLETE (impl `d4a6c71`, state-sync `803cd64`, merged to `main` 2026-06-08); Verification & Harness Reliability Hardening delivered (scripts + docs only; no app code); Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit). Latest engine work remains Package 3AH (ReactionAnalysis + #reactionAnalysisPanel, import-time advisory only; NO DEF-11 in-book rendering / NO Message Book reaction badges). Next recommended candidate: TBD; awaiting Coordinator authorization |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> Package 3AH — Reaction Analysis Engine + Panel COMPLETE (impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`). Post-Package-3AH Tower Catch-Up COMPLETE (docs `a65d080`, merged to `main` 2026-06-08). No active pass. No active development package. ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) delivered, consuming the reactions[] captured in Package 3AG; NO DEF-11 in-book rendering / NO Message Book reaction badges. Next development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
+> Package 3AI — Verification & Harness Reliability Hardening COMPLETE (impl `d4a6c71`, state-sync `803cd64`, merged to `main` 2026-06-08; scripts + docs only — no app code). Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only; branch `docs/post-3ai-tower-catchup`; stop-before-commit; awaiting Coordinator commit authorization). Previously: Package 3AH — Reaction Analysis Engine + Panel COMPLETE (impl `a165122`, state-sync `c8378c7`); Post-Package-3AH Tower Catch-Up COMPLETE (docs `a65d080`). No active development package. ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) remains the latest engine work; NO DEF-11 in-book rendering / NO Message Book reaction badges. Next development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
 
 ---
 

@@ -1,6 +1,6 @@
 # KeepMees Master Roadmap
 
-**Last updated:** 2026-06-08 (America/New_York — post-Package-3AH Tower catch-up; Package 3AH — Reaction Analysis Engine + Panel COMPLETE (engine + import-time advisory panel only); import analytics ENGINE layer complete through 3AH; all DEF-14 engine data points complete)
+**Last updated:** 2026-06-08 (America/New_York — Post-Package-3AI Tower Catch-Up, docs-only; Package 3AI — Verification & Harness Reliability Hardening COMPLETE (scripts + docs only, Phase 0 QA infra; no app code); import analytics ENGINE layer complete through 3AH; all DEF-14 engine data points complete)
 **Owner:** Coordinator / Project Control
 **Source of truth:** this file summarizes `docs/strategy/`, `docs/ops/decision-register.md`, `docs/ops/backlog-roadmap.md`, `docs/command-center/current-status.md`. If they conflict, those win and this is corrected.
 
@@ -67,6 +67,7 @@ Significant foundation work is already done. Completed packages map to phases as
 | Package 3AF — Conversation Initiation Analysis Engine | Phase 3 | DONE |
 | Package 3AG — Meta Reaction Capture (Instagram DM + Facebook Messenger adapters; capture-only; no engine/panel) | Phase 3 | DONE |
 | Package 3AH — Reaction Analysis Engine + Panel (import-time advisory panel only; no DEF-11 in-book rendering) | Phase 3 | DONE |
+| Package 3AI — Verification & Harness Reliability Hardening (E2E harness startup reliability; baseline-docs refresh; scripts + docs only; no app code) | Phase 0 (QA infra) | DONE |
 
 Phase names below do **not** imply zero progress — read the "completed work" line in each phase.
 
