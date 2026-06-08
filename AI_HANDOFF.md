@@ -8,9 +8,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Post-Package-3AD Tower Catch-Up COMPLETE — docs `dfb2910`, merged to `main` 2026-06-07. Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07.
+**Status:** `active` — Package 3AE — Message Length Analysis Engine — IN PROGRESS — branch `feature/message-length-analysis` from `main` at `1523330`.
 
-**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
+**Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-08`
 
 ---
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `dfb2910` (Post-Package-3AD Tower Catch-Up docs, merged to main 2026-06-07) |
-| **Last completed pass** | Package 3AD — Response Time Analysis Engine — impl `6fe873c`, merged to `main` 2026-06-07 |
-| **Active package** | None |
+| **Active pass** | Package 3AE — Message Length Analysis Engine |
+| **Active branch** | `feature/message-length-analysis` |
+| **base HEAD** | `1523330` (docs: close Post-Package-3AD Tower Catch-Up, from main 2026-06-07) |
+| **Last completed pass** | Post-Package-3AD Tower Catch-Up — docs `dfb2910`, merged to `main` 2026-06-07 |
+| **Active package** | `Package 3AE — Message Length Analysis Engine` — IN PROGRESS |
 | **Last closed package** | `Package 3AD — Response Time Analysis Engine` — FULLY COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07 |
 | **Prior closed package** | `Package 3AA — Emoji Analysis Engine` — FULLY COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07 |
 | **Prior closed package** | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
@@ -31,6 +31,29 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AE — Message Length Analysis Engine — IN PROGRESS)
+
+Branch: `feature/message-length-analysis` from `main` at `1523330`. Authorized by Coordinator 2026-06-08.
+
+**Objective:** Add `KMEngine.MessageLengthAnalysis.compute(memories)` pure IIFE engine module; Node tests; km-engine smoke; `#messageLengthPanel` UI surface (cyan/sky-blue tone); E2E Phase 42; docs updates.
+
+**Files changed (11 files — 3 new, 8 modified):**
+- `src/core/message-length-analysis.js` (NEW) — IIFE; `compute(memories)` → `{ avgCharsPerMessage, longestMessage, perSenderStats }`; skips system/attachment-only/attachment-placeholder/non-string/blank; avgChars rounded to 1 decimal; longestMessage earliest tie-break; perSenderStats desc avg then alpha; pure, no DOM ✓
+- `scripts/fixtures/fake-message-length.txt` (NEW) — 12 messages; Alice (6, ~69.2 avg chars) + Bob (5 text + 1 `<Media omitted>`); Alice is longest message sender (84 chars) ✓
+- `src/tests/message-length-analysis-tests.mjs` (NEW) — 82 tests / 15 suites; all PASS ✓
+- `src/tests/km-engine-tests.mjs` — loads message-length-analysis.js; `MessageLengthAnalysis — smoke` suite (+6 → 168 total); all PASS ✓
+- `index.html` — CSS cyan/sky-blue light+dark; `<script src="src/core/message-length-analysis.js">`; `<div id="messageLengthPanel">`; `const messageLengthPanel`; `renderMessageLengthPanel(memories)`; called at all 11 import/open sites; `window.__km.renderMessageLengthPanel` ✓
+- `scripts/e2e-regression-harness.mjs` — `ML_FIXTURE` + `ML_FIXTURE_COUNT = 12`; Phase 42 (6 real-files tests) ✓
+- `docs/qa/test-strategy.md` — Phase 42 note; Node baseline 3360→3448 / 27→28 suites; real-files 177→183 ✓
+- `docs/architecture/architecture-roadmap.md` — message-length-analysis.js module map; `#messageLengthPanel`; message-length-analysis-tests.mjs; Package 3AE IN PROGRESS entry ✓
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs ✓
+
+**What is done:** All implementation files written. All Node tests passing (168/168 km-engine, 82/82 unit). Verification gate not yet run.
+**What remains:** Run full verification gate (seeded E2E 57/57, real-files E2E 183/183, visual regression). Report pre-commit summary. Do NOT commit without Coordinator authorization.
+**Next exact action:** Run `node src/tests/km-engine-tests.mjs` and all unit tests. Then run seeded + real-files E2E. Then report pre-commit summary.
 
 ---
 

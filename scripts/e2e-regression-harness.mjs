@@ -100,6 +100,9 @@ const TIMING_FIXTURE_COUNT = 12; // 12 messages across 3 days: Alice (6), Bob (6
 const RESP_FIXTURE       = path.join(__dir, 'fixtures', 'fake-response-time.txt');
 const RESP_FIXTURE_COUNT = 12; // 12 messages: Alice (6) responds ~1min, Bob (6) responds ~5min
 
+const ML_FIXTURE       = path.join(__dir, 'fixtures', 'fake-message-length.txt');
+const ML_FIXTURE_COUNT = 12; // 12 messages: Alice (6) longer avg, Bob (5 text + 1 attachment-only)
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -2200,6 +2203,77 @@ async function main() {
         });
 
         await harness.run('non-RTA TXT reimport hides panel and resets state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 42 — Message Length Analysis panel (Package 3AE)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 42 — Message Length Analysis panel ──\n');
+
+        await harness.run('before ML import #messageLengthPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('messageLengthPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#messageLengthPanel should be hidden before any import');
+        });
+
+        await harness.run('after ML fixture import #messageLengthPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(ML_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('messageLengthPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#messageLengthPanel should be visible and non-empty after ML fixture import');
+        });
+
+        await harness.run('ML fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === ML_FIXTURE_COUNT,
+                `Expected ${ML_FIXTURE_COUNT} messages from ML fixture, got ${count}`);
+        });
+
+        await harness.run('ML panel shows avg chars chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('messageLengthPanel');
+                return el ? el.textContent : '';
+            });
+            const hasAvg = /\d+(\.\d+)?\s+avg chars/.test(panelText);
+            assert(hasAvg,
+                `Expected avg chars in ML panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('ML panel shows Alice as longest message sender', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('messageLengthPanel');
+                return el ? el.textContent : '';
+            });
+            const hasAlice = /Alice/.test(panelText);
+            assert(hasAlice,
+                `Expected "Alice" as longest message sender in ML panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('non-ML TXT reimport hides ML panel and resets state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');

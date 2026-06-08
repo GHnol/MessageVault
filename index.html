@@ -85,6 +85,11 @@
                 color: #ffccbc;
             }
             .response-time-chip strong { color: #ff8a65; }
+            .message-length-inner {
+                background: #001a1a;
+                color: #b2ebf2;
+            }
+            .message-length-chip strong { color: #4dd0e1; }
             .sender-picker-inner {
                 background: #1c1c1e;
                 color: #8e8e93;
@@ -1009,6 +1014,29 @@
         }
         .response-time-chip strong {
             color: #e65100;
+        }
+
+        .message-length-panel {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 6px 16px 0;
+        }
+        .message-length-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+            background: #e0f7fa;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #006064;
+        }
+        .message-length-chip {
+            white-space: nowrap;
+        }
+        .message-length-chip strong {
+            color: #00838f;
         }
 
         .whatsapp-sender-picker {
@@ -3641,6 +3669,7 @@
         <div class="word-analysis-panel" id="wordAnalysisPanel" style="display:none;"></div>
         <div class="timing-analysis-panel" id="timingAnalysisPanel" style="display:none;"></div>
         <div class="response-time-panel" id="responseTimePanel" style="display:none;"></div>
+        <div class="message-length-panel" id="messageLengthPanel" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="whatsappSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="instagramSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="facebookSenderPicker" style="display:none;"></div>
@@ -3745,6 +3774,7 @@
     <script src="src/core/word-analysis.js"></script>
     <script src="src/core/timing-analysis.js"></script>
     <script src="src/core/response-time-analysis.js"></script>
+    <script src="src/core/message-length-analysis.js"></script>
     <script src="src/adapters/txt-export-adapter.js"></script>
     <script src="src/adapters/imessage-chatdb-adapter.js"></script>
     <script src="src/adapters/manual-entry-adapter.js"></script>
@@ -3855,6 +3885,7 @@
         const wordAnalysisPanel        = document.getElementById('wordAnalysisPanel');
         const timingAnalysisPanel      = document.getElementById('timingAnalysisPanel');
         const responseTimePanel        = document.getElementById('responseTimePanel');
+        const messageLengthPanel       = document.getElementById('messageLengthPanel');
         const whatsappSenderPicker  = document.getElementById('whatsappSenderPicker');
         const instagramSenderPicker = document.getElementById('instagramSenderPicker');
         const facebookSenderPicker  = document.getElementById('facebookSenderPicker');
@@ -4331,6 +4362,30 @@
             responseTimePanel.style.display = '';
         }
 
+        function renderMessageLengthPanel(memories) {
+            if (!messageLengthPanel) return;
+            const MLA = window.KMEngine && window.KMEngine.MessageLengthAnalysis;
+            if (!MLA || !Array.isArray(memories) || memories.length === 0) {
+                messageLengthPanel.style.display = 'none';
+                messageLengthPanel.innerHTML = '';
+                return;
+            }
+            const stats = MLA.compute(memories);
+            if (stats.avgCharsPerMessage === 0) {
+                messageLengthPanel.style.display = 'none';
+                messageLengthPanel.innerHTML = '';
+                return;
+            }
+            const chips = [];
+            chips.push('<span class="message-length-chip"><strong>' + stats.avgCharsPerMessage + '</strong> avg chars/msg</span>');
+            if (stats.longestMessage) {
+                chips.push('<span class="message-length-chip"><strong>' + stats.longestMessage.sender + '</strong> longest message</span>');
+            }
+            messageLengthPanel.innerHTML =
+                '<div class="message-length-inner">' + chips.join(' &nbsp;·&nbsp; ') + '</div>';
+            messageLengthPanel.style.display = '';
+        }
+
         /* ─────────────────────────────────────────────
            WhatsApp self-identification sender picker
         ───────────────────────────────────────────── */
@@ -4381,6 +4436,7 @@
             renderWordAnalysisPanel(data);
             renderTimingAnalysisPanel(data);
             renderResponseTimePanel(data);
+            renderMessageLengthPanel(data);
             if (whatsappSenderPicker) {
                 whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4442,6 +4498,7 @@
             renderWordAnalysisPanel(data);
             renderTimingAnalysisPanel(data);
             renderResponseTimePanel(data);
+            renderMessageLengthPanel(data);
             if (instagramSenderPicker) {
                 instagramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4503,6 +4560,7 @@
             renderWordAnalysisPanel(data);
             renderTimingAnalysisPanel(data);
             renderResponseTimePanel(data);
+            renderMessageLengthPanel(data);
             if (facebookSenderPicker) {
                 facebookSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4561,6 +4619,7 @@
             renderWordAnalysisPanel(data);
             renderTimingAnalysisPanel(data);
             renderResponseTimePanel(data);
+            renderMessageLengthPanel(data);
             if (telegramSenderPicker) {
                 telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4594,6 +4653,7 @@
                     renderWordAnalysisPanel(result.memories);
                     renderTimingAnalysisPanel(result.memories);
                     renderResponseTimePanel(result.memories);
+                    renderMessageLengthPanel(result.memories);
                     showWhatsAppSenderPicker(result.memories);
                     if (instagramSenderPicker) {
                         instagramSenderPicker.style.display = 'none';
@@ -4640,6 +4700,7 @@
                     renderWordAnalysisPanel(result.memories);
                     renderTimingAnalysisPanel(result.memories);
                     renderResponseTimePanel(result.memories);
+                    renderMessageLengthPanel(result.memories);
                     return;
                 }
 
@@ -4656,6 +4717,7 @@
                     renderWordAnalysisPanel(result.memories);
                     renderTimingAnalysisPanel(result.memories);
                     renderResponseTimePanel(result.memories);
+                    renderMessageLengthPanel(result.memories);
                     showFacebookSenderPicker(result.memories);
                     return;
                 }
@@ -4673,6 +4735,7 @@
                     renderWordAnalysisPanel(result.memories);
                     renderTimingAnalysisPanel(result.memories);
                     renderResponseTimePanel(result.memories);
+                    renderMessageLengthPanel(result.memories);
                     showInstagramSenderPicker(result.memories);
                     return;
                 }
@@ -4690,6 +4753,7 @@
                     renderWordAnalysisPanel(result.memories);
                     renderTimingAnalysisPanel(result.memories);
                     renderResponseTimePanel(result.memories);
+                    renderMessageLengthPanel(result.memories);
                     showTelegramSenderPicker(result.memories);
                     return;
                 }
@@ -4709,6 +4773,7 @@
                 renderWordAnalysisPanel(window.chatMessagesData);
                 renderTimingAnalysisPanel(window.chatMessagesData);
                 renderResponseTimePanel(window.chatMessagesData);
+                renderMessageLengthPanel(window.chatMessagesData);
             };
 
             reader.readAsText(file);
@@ -5150,6 +5215,7 @@
                     renderWordAnalysisPanel(window.chatMessagesData);
                     renderTimingAnalysisPanel(window.chatMessagesData);
                     renderResponseTimePanel(window.chatMessagesData);
+                    renderMessageLengthPanel(window.chatMessagesData);
                     hideLoading();
                 } catch (err) {
                     hideLoading();
@@ -9567,6 +9633,8 @@ ${keepsakeFooter}
             renderTimingAnalysisPanel,
             // Package 3AD: response time analysis bridge for E2E testability
             renderResponseTimePanel,
+            // Package 3AE: message length analysis bridge for E2E testability
+            renderMessageLengthPanel,
             // Package 3L: WhatsApp self-id bridge for E2E testability
             applyWhatsAppSelfSender,
             // Package 3Q: Instagram DM self-id bridge for E2E testability

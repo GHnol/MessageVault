@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Post-Package-3AD Tower Catch-Up COMPLETE — docs `dfb2910`, merged to `main` 2026-06-07; Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07)
+**Last updated:** `2026-06-08` (Package 3AE — Message Length Analysis Engine — IN PROGRESS — branch `feature/message-length-analysis` from `main` at `1523330`)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `dfb2910` — docs: close Post-Package-3AD Tower Catch-Up |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `1523330` — docs: close Post-Package-3AD Tower Catch-Up |
+| Active branch | `feature/message-length-analysis` |
+| Active pass | Package 3AE — Message Length Analysis Engine |
 | Last completed pass | Post-Package-3AD Tower Catch-Up — docs `dfb2910`, merged to `main` 2026-06-07 |
 | Last closed package | `Package 3AD — Response Time Analysis Engine` — FULLY COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07 |
-| Active package | None |
-| Test baseline | **3360 Node tests** (27 suites); E2E seeded 57/57; E2E real-files 177/177 (Phase 41: 6 tests); visual regression PASS |
+| Active package | `Package 3AE — Message Length Analysis Engine` — IN PROGRESS |
+| Test baseline | **3448 Node tests** (28 suites); E2E seeded 57/57; E2E real-files 183/183 expected (Phase 42: 6 tests — not yet run); visual regression PASS (not yet run for 3AE) |
+| Package 3AE | IN PROGRESS — branch `feature/message-length-analysis`; `src/core/message-length-analysis.js` (NEW); `scripts/fixtures/fake-message-length.txt` (NEW); `src/tests/message-length-analysis-tests.mjs` (NEW, 82 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 → 168); `index.html` (CSS, script tag, div, binding, renderMessageLengthPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 42, 6 tests); docs updated |
 | Package 3AD | COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07; `src/core/response-time-analysis.js` (NEW); `scripts/fixtures/fake-response-time.txt` (NEW); `src/tests/response-time-analysis-tests.mjs` (NEW, 81 tests / 18 suites); `src/tests/km-engine-tests.mjs` (+6 → 162); `index.html` (CSS, script tag, div, binding, renderResponseTimePanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 41, 6 tests); docs updated |
 | Package 3AC | COMPLETE — impl `74ff910`, merged to `main` 2026-06-07; `src/core/timing-analysis.js` (NEW); `scripts/fixtures/fake-timing-analysis.txt` (NEW); `src/tests/timing-analysis-tests.mjs` (NEW, 93 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 → 156); `index.html` (CSS, script tag, div, binding, renderTimingAnalysisPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 40, 6 tests); docs updated |
 | Package 3AB | COMPLETE — impl `9290b8e`, merged `ebf9668` 2026-06-08; `src/core/word-analysis.js` (NEW); `scripts/fixtures/fake-word-analysis.txt` (NEW); `src/tests/word-analysis-tests.mjs` (NEW, 100 tests / 19 suites); `src/tests/km-engine-tests.mjs` (+6 → 150); `index.html` (CSS, script tag, div, binding, renderWordAnalysisPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 39, 6 tests); docs updated |

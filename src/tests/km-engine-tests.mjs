@@ -47,6 +47,7 @@ load('src/core/emoji-analysis.js');
 load('src/core/word-analysis.js');
 load('src/core/timing-analysis.js');
 load('src/core/response-time-analysis.js');
+load('src/core/message-length-analysis.js');
 
 const { KMEngine } = ctx.window;
 
@@ -459,6 +460,17 @@ assert(typeof rtaEmpty === 'object' && rtaEmpty !== null,                       
 assert(rtaEmpty.avgResponseTimeMs === 0 && rtaEmpty.fastestResponder === null,                 'compute([]) returns zero-state');
 assert(Array.isArray(rtaEmpty.perSenderStats) && rtaEmpty.perSenderStats.length === 0,        'compute([]) perSenderStats is empty array');
 assert(Object.keys(KMEngine.ResponseTimeAnalysis).length === 1,                                'ResponseTimeAnalysis exposes only compute');
+
+// ── MESSAGE LENGTH ANALYSIS — smoke ──────────────────────────────────────────
+
+suite('MessageLengthAnalysis — smoke');
+assert(KMEngine.MessageLengthAnalysis !== undefined,                                           'MessageLengthAnalysis exists on KMEngine');
+assert(typeof KMEngine.MessageLengthAnalysis.compute === 'function',                           'compute is a function');
+const mlaEmpty = KMEngine.MessageLengthAnalysis.compute([]);
+assert(typeof mlaEmpty === 'object' && mlaEmpty !== null,                                      'compute([]) returns an object');
+assert(mlaEmpty.avgCharsPerMessage === 0 && mlaEmpty.longestMessage === null,                  'compute([]) returns zero-state');
+assert(Array.isArray(mlaEmpty.perSenderStats) && mlaEmpty.perSenderStats.length === 0,        'compute([]) perSenderStats is empty array');
+assert(Object.keys(KMEngine.MessageLengthAnalysis).length === 1,                               'MessageLengthAnalysis exposes only compute');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 

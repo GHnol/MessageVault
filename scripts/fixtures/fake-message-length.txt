@@ -1,0 +1,12 @@
+[1/5/25, 10:00:00 AM] Alice: Hey how are you doing today hope everything is going well
+[1/5/25, 10:01:00 AM] Bob: Fine thanks
+[1/5/25, 10:02:00 AM] Alice: I was thinking we could meet up this weekend and catch up on things
+[1/5/25, 10:03:00 AM] Bob: Sounds good
+[1/5/25, 10:04:00 AM] Alice: Great let me know what time works best for you and we can plan accordingly
+[1/5/25, 10:05:00 AM] Bob: <Media omitted>
+[1/5/25, 10:06:00 AM] Alice: No worries I can also bring some snacks if you want anything specific
+[1/5/25, 10:07:00 AM] Bob: Sure
+[1/5/25, 10:08:00 AM] Alice: Perfect see you then and looking forward to catching up with you
+[1/5/25, 10:09:00 AM] Bob: Me too
+[1/5/25, 10:10:00 AM] Alice: Also wanted to ask if you have any allergies or food preferences I should know about
+[1/5/25, 10:11:00 AM] Bob: None that I know of
