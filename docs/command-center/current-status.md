@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (Post-Package-3AD Tower Catch-Up COMPLETE; Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07; state-sync `3276190`)
+**Updated by:** Claude Code (Post-Package-3AD Tower Catch-Up COMPLETE — docs `dfb2910`, merged to `main` 2026-06-07; Package 3AD COMPLETE — impl `6fe873c`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -113,14 +113,14 @@
 
 ---
 
-## Git state (as of post-Package-3AD state-sync — Tower Catch-Up pending)
+## Git state (as of post-Package-3AD Tower Catch-Up state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `3276190` — docs: sync operating docs after Package 3AD completion |
+| main HEAD | `dfb2910` — docs: close Post-Package-3AD Tower Catch-Up |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | main pushed through `3276190` (Package 3AD impl `6fe873c` + state-sync `3276190`) |
+| Pushed to remote | main pushed through `dfb2910` (Post-Package-3AD Tower Catch-Up + state-sync) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
