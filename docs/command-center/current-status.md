@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`, merged to `main` 2026-06-08; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`)
+**Updated by:** Claude Code (Post-Package-3AH Tower Catch-Up IN PROGRESS — docs-only; branch `docs/post-3ah-tower-catchup`, base `c8378c7`; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -55,6 +55,7 @@
 | Package 3AE | Message Length Analysis Engine | COMPLETE — merged to main (ff-only) | `dde558c` | `dde558c` |
 | Package 3AF | Conversation Initiation Analysis Engine | COMPLETE — merged to main (ff-only) | `7f03889` | `7f03889` |
 | Package 3AG | Meta Reaction Capture (IG + FB adapters; capture-only) | COMPLETE — merged to main (ff-only) | `0331da0` | `0331da0` |
+| Package 3AH | Reaction Analysis Engine + Panel (import-time advisory) | COMPLETE — merged to main (ff-only) | `a165122` | `a165122` |
 | Package 3Z | Extended Content Quality Checks | COMPLETE — merged to main | `4902d50` | `ff79f9e` |
 | Package 3Y | Conversation Statistics Engine | COMPLETE — merged to main | `ca8d520` | `e0539d2` |
 | Package 3X | Pre-print Content Quality Checks | COMPLETE — merged to main | `e424825` | `7bdcdb5` |
@@ -118,14 +119,14 @@
 
 ---
 
-## Git state (as of Post-Package-3AG Tower Catch-Up — 2026-06-08)
+## Git state (as of Post-Package-3AH Tower Catch-Up — 2026-06-08)
 
 | Item | Value |
 |---|---|
-| main HEAD | `79d3246` — docs: close Post-Package-3AG Tower Catch-Up (Package 3AG impl `0331da0`, state-sync `2e081fe`) |
-| Active branch | `main` |
-| Working tree | Clean |
-| Pushed to remote | pending push authorization (local `main` ahead of `origin/main` by the closeout commit) |
+| main HEAD | `c8378c7` — post-merge state-sync after Package 3AH impl `a165122` |
+| Active branch | `docs/post-3ah-tower-catchup` (base `c8378c7`) — Post-Package-3AH Tower Catch-Up (docs-only) IN PROGRESS |
+| Working tree | docs-only edits in progress on the catch-up branch |
+| Pushed to remote | pending push authorization |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -170,13 +171,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AG COMPLETE (impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`); Meta Reaction Capture delivered (IG + FB adapters map Meta reactions into `NormalizedMemory.reactions[]`; capture-only — no engine/panel/DEF-11 rendering); a ReactionAnalysis engine + panel is a likely candidate; next recommended candidate: TBD; awaiting Coordinator authorization |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AH COMPLETE (impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`); ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) delivered, consuming the reactions[] captured in Package 3AG; NO DEF-11 in-book rendering / NO Message Book reaction badges; next recommended candidate: TBD; awaiting Coordinator authorization |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> Package 3AG — Meta Reaction Capture COMPLETE (impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`). Post-Package-3AG Tower Catch-Up IN PROGRESS (docs-only; branch `docs/post-3ag-tower-catchup`). No active development package. 3AG is capture-only — no ReactionAnalysis engine, no reaction panel, no DEF-11 in-book rendering. Next development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
+> Package 3AH — Reaction Analysis Engine + Panel COMPLETE (impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`). Post-Package-3AH Tower Catch-Up IN PROGRESS (docs-only; branch `docs/post-3ah-tower-catchup`). No active development package. ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) delivered, consuming the reactions[] captured in Package 3AG; NO DEF-11 in-book rendering / NO Message Book reaction badges. Next development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
 
 ---
 

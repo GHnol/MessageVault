@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Package 3AG — Meta Reaction Capture — COMPLETE; impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`; Post-Package-3AG Tower Catch-Up IN PROGRESS)
+**Updated by:** Claude Code (Package 3AH — Reaction Analysis Engine + Panel — COMPLETE; impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`; Post-Package-3AH Tower Catch-Up IN PROGRESS)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3AG COMPLETE (impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`); next candidate: TBD (a ReactionAnalysis engine + panel is a likely candidate); see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3AH COMPLETE (impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3AG COMPLETE — impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`. Coordinator decides next package.**
+**Status: Package 3AH COMPLETE — impl `a165122`, merged to `main` 2026-06-08; state-sync `c8378c7`. Coordinator decides next package.**
+
+Package 3AH (Reaction Analysis Engine + Panel) is COMPLETE — fast-forward merged to main (`a165122` 2026-06-08; state-sync `c8378c7`). `KMEngine.ReactionAnalysis.compute(memories)` pure IIFE engine added (`src/core/reaction-analysis.js`); returns { totalReactions, messagesWithReactions, topReactionEmojis: [{ emoji, count, rank }] (MAX_TOP=5), topReactor: { reactor, count } | null, mostReactedToSender: { sender, count } | null }; consumes the `NormalizedMemory.reactions[]` captured in Package 3AG; counts by emoji, by reactor, and by reacted-to message sender; sort count desc then string asc; zero-state for empty/invalid/no-reaction. `#reactionAnalysisPanel` rose/crimson panel is an **import-time advisory surface only** (hidden when totalReactions === 0); `renderReactionAnalysisPanel(memories)` called at all 11 import/open sites; `window.__km.renderReactionAnalysisPanel` exposed. `reaction-analysis-tests.mjs` (66 tests / 14 suites, incl. an ImportQualityReport-preservation regression assertion) + 6 km-engine smoke (→180); Phase 44 E2E (6 tests, reuses `fake-instagram-dm.json`); 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS. **No DEF-11 in-book reaction rendering, no Message Book reaction badges, no adapter / import-quality-report / normalized-memory changes.** The ReactionAnalysis engine + panel that was the likely 3AG follow-up candidate is now DELIVERED; next candidate: TBD pending Coordinator authorization.
 
 Package 3AG (Meta Reaction Capture) is COMPLETE — fast-forward merged to main (`0331da0` 2026-06-08; state-sync `2e081fe`). Capture-only groundwork: the Instagram DM and Facebook Messenger adapters now map Meta `{ reaction, actor }` into `NormalizedMemory.reactions[]` as canonical `{ reactor, emoji, label }` via new per-adapter `mapReactions()` + `decodeReaction()` helpers (`decodeReaction()` repairs Latin-1-escaped-UTF-8 mojibake with a raw-preserve fallback; malformed-safe). Fixtures enriched (IG 2 clean-unicode; FB 1 mojibake→👍 + 1 clean; 8 imported each unchanged); `ImportQualityReport` reaction counts now real for Meta imports. `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57/57 seeded; 189/189 real-files. **No ReactionAnalysis engine, no reaction panel, no DEF-11 in-book reaction rendering** — those are deferred (a ReactionAnalysis engine + panel is the likely next candidate, TBD pending Coordinator authorization).
 
@@ -67,7 +69,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | TBD — Coordinator to decide | TBD | TBD | — |
 | Phase 12 continuation (preflight runners for vendor-gated checks) | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3AG is now COMPLETE.** No development package has been authorized after Package 3AG. The next Coordinator step is to decide the next package (a ReactionAnalysis engine + panel consuming the newly-captured reaction data is a likely candidate, TBD).
+**Package 3AH is now COMPLETE — the latest complete package.** ReactionAnalysis engine + #reactionAnalysisPanel (import-time advisory only) are now DELIVERED, consuming the reaction data captured in Package 3AG — so the earlier "likely candidate" ReactionAnalysis engine is no longer pending. No development package has been authorized after Package 3AH. The next Coordinator step is to decide the next package (candidate TBD).
 
 ---
 
