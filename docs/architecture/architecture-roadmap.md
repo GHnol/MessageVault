@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3AA — Emoji Analysis Engine — COMPLETE; impl `0e15cfb`, merged `29c4491`)
+**Last updated:** 2026-06-07 (Package 3AB — Word Count / Language Analysis Engine — IN PROGRESS)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3AA — Emoji Analysis Engine COMPLETE)
+## Current architecture (post-Package 3AA — Emoji Analysis Engine COMPLETE; Package 3AB IN PROGRESS)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -20,6 +20,7 @@ src/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 9 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X; HIGH_ATTACHMENT_RATIO (>80%), VERY_LONG_CONTENT (text.length>1000), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 sender) — Package 3Z
+    word-analysis.js            — KMEngine.WordAnalysis; compute(memories) pure function; returns { totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation; lowercase; skips attachment-only and blank/null text; zero-state for empty/invalid; tie-break topWords by count desc then word asc; topWordSender tie-break wordCount desc then name asc; avgWordsPerMessage rounded to 1 decimal — Package 3AB
     emoji-analysis.js          — KMEngine.EmojiAnalysis; compute(memories) pure function; returns { topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }; MAX_TOP=5; handles ZWJ sequences, skin-tone modifiers, keycap sequences, flag sequences; zero-state for empty/invalid; tie-break by count desc then emoji string asc; mostEmojifiedSender tie-break count desc then name asc — Package 3AA
     conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y
     normalized-memory.js      — canonical message model (NormalizedMemory)
@@ -37,6 +38,7 @@ index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSe
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
 index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
+index.html (word analysis panel)  — #wordAnalysisPanel; renderWordAnalysisPanel(memories); purple/violet tone (light #f3e5f5/#4a148c, dark #1a0030/#ce93d8); chips: topWords (word × count), topWordSender ("sent the most words"), totalWords; called at all 11 import/open sites; window.__km.renderWordAnalysisPanel — Package 3AB
 index.html (emoji analysis panel) — #emojiAnalysisPanel; renderEmojiAnalysisPanel(memories); teal tone (light #e0f7fa/#006064, dark #001c1e/#80cbc4); chips: topEmojis (emoji × count), mostEmojifiedSender, totalEmojiCount; called at all 11 import/open sites; window.__km.renderEmojiAnalysisPanel — Package 3AA
 index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y
     facebook-messenger-adapter.js  — KMEngine.facebookMessengerAdapter; Facebook Messenger JSON export; magic_words discriminator (present in FB, absent in Instagram DM); HTML entity decoding; media+share → attachment-placeholder; senderRole always contact; ADAPTER_ID facebook-messenger-json-v1; browser-loaded (Package 3S) — Package 3R/3S
@@ -82,6 +84,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     facebook-messenger-adapter-tests.mjs   — 103 tests; API shape, canHandle (accepts/rejects/magic_words discriminator), fixture rawCounts, timestamp conversion, HTML entity decoding, senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards — Package 3R
     instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
     telegram-adapter-tests.mjs              — 91 tests; API shape, canHandle (accepts/rejects IG/FB/non-Telegram/from_id discriminator), fixture rawCounts, timestamp (Unix seconds → ISO), sender extraction, text plain/array-entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory fields, importWarnings, no-throw, participants — Package 3U
+    word-analysis-tests.mjs                — 100 tests; API shape, empty/null/invalid zero-state, attachment-only exclusion, basic word extraction, lowercase normalization, punctuation stripping, word accumulation, totalWords, avgWordsPerMessage rounding, topWords sorting/ranking/MAX_TOP=10, tie-breaking, topWordSender, topWordSender tie-breaking, multi-sender scenario, blank/empty text, malformed entries no-throw, fixture behavior, semantic guards — Package 3AB
     emoji-analysis-tests.mjs               — 100 tests; API shape, empty/null/invalid zero-state, emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards — Package 3AA
 ```
 
@@ -138,6 +141,16 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `index.html` — CSS/HTML/JS for `#whatsappSenderPicker` inline panel; two targeted changes to `renderConversation()` to use `senderRole` for bubble classification (with `sender==='Me'` fallback for legacy imports); new `showWhatsAppSenderPicker()` and `applyWhatsAppSelfSender()` functions; picker shown after WA import, hidden after non-WA import and on restore; `applyWhatsAppSelfSender` exposed on `window.__km`.
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
+
+IN PROGRESS (Package 3AB — Word Count / Language Analysis Engine):
+- `src/core/word-analysis.js` — `KMEngine.WordAnalysis`; IIFE module; `compute(memories)` returns `{ totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }`; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation (`/^[^\w]+|[^\w]+$/g`); lowercase; skips `type=attachment-placeholder` and `isAttachmentOnly=true`; skips blank/null text; zero-state for empty/invalid; pure, no DOM, no side effects.
+- `scripts/fixtures/fake-word-analysis.txt` — 10-message WhatsApp bracket fixture; 2 senders: Alice (6 messages, 22 words), Bob (4 messages, 14 words); totalWords=36, avgWordsPerMessage=3.6; top word="hello" (count 9); topWordSender=Alice.
+- `src/tests/word-analysis-tests.mjs` — 100 tests across 19 suites.
+- `src/tests/km-engine-tests.mjs` — loads `word-analysis.js`; `WordAnalysis — smoke` suite added (+6 → 150 total).
+- `index.html` — CSS for `.word-analysis-panel` + `.word-analysis-inner` + `.word-analysis-chip` (purple/violet tone: light `#f3e5f5`/dark `#1a0030`); dark mode overrides; `<script src="src/core/word-analysis.js">` tag after emoji-analysis.js; `<div id="wordAnalysisPanel">` after `#emojiAnalysisPanel`; `const wordAnalysisPanel` binding; `renderWordAnalysisPanel(memories)` function; calls at all 11 import/open sites; `window.__km.renderWordAnalysisPanel` exposed.
+- `scripts/e2e-regression-harness.mjs` — `WORD_ANALYSIS_FIXTURE` + `WORD_ANALYSIS_FIXTURE_COUNT = 10` constants; Phase 39 (6 real-files tests): hidden before import → visible after WA fixture import → count=10 → `× N` top word chip → "sent the most words" sender chip → TXT reimport resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 39 note; real-files baseline 159→165; Node baseline 3068→3174 (25 suites).
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3AB entry.
 
 DELIVERED (Package 3AA — Emoji Analysis Engine, impl `0e15cfb`, merged `29c4491` 2026-06-07):
 - `src/core/emoji-analysis.js` — `KMEngine.EmojiAnalysis`; IIFE module; `compute(memories)` returns `{ topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }`; MAX_TOP=5; `extractEmojis(text)` uses `new RegExp(...)` with `gu` flag; handles `\p{Emoji_Modifier_Base}\p{Emoji_Modifier}` (skin tone), `\p{Extended_Pictographic}️?` + ZWJ chains, `[#*0-9]️?⃣` (keycaps), `\p{Regional_Indicator}\p{Regional_Indicator}` (flags); try/catch wrapper; pure, no DOM, no side effects.
