@@ -1,6 +1,6 @@
 # Deferred and Gated Ideas Register — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (America/New_York — post-Package-3W tower catch-up; DEF-01–DEF-05 and DEF-12 marked DELIVERED)
+**Last updated:** 2026-06-07 (America/New_York — post-Package-3AC tower catch-up; DEF-14 engine progress note updated; TimingAnalysis noted as additional engine capability)
 **Status:** Active
 
 ---
@@ -187,7 +187,7 @@
 **Effort:** Medium.
 **Priority:** Medium — strong engagement feature; emotionally resonant.
 **Note:** Tone should be adjustable — playful stats work for couples/friends; memorial books need a gentler treatment.
-**Engine-layer progress:** All 7 DEF-14 data points now have engine-layer delivery — total messages (Package 3I / ImportQualityReport); story span, most active day, longest streak, messages by person (Package 3Y / ConversationStats); top emojis (Package 3AA / EmojiAnalysis); words shared (Package 3AB / WordAnalysis). The actual in-book Stats Page surface remains deferred.
+**Engine-layer progress:** All 7 DEF-14 data points now have engine-layer delivery — total messages (Package 3I / ImportQualityReport); story span, most active day, longest streak, messages by person (Package 3Y / ConversationStats); top emojis (Package 3AA / EmojiAnalysis); words shared (Package 3AB / WordAnalysis). The actual in-book Stats Page surface remains deferred. Package 3AC (TimingAnalysis) delivers peak hour and day-of-week distribution as an additional engine capability beyond the original DEF-14 data points.
 **Activate when:** book editor is consumer-ready.
 
 ---

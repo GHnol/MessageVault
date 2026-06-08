@@ -26,10 +26,10 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 
 ## Latest state summary
 
-**As of:** 2026-06-08
-**Last mirrored:** RPT-20260608-002 (Post-Package-3AB Tower Catch-Up operating pass COMPLETE — docs `61bac12`, merged `b70d840` 2026-06-08)
-**Active gate:** None — Package 3AB COMPLETE; Tower catch-up COMPLETE; main HEAD `b70d840`; awaiting Coordinator authorization for next development package
-**Next expected mirror:** Next package closeout
+**As of:** 2026-06-07
+**Last mirrored:** RPT-20260607-009 (Post-Package-3AC Tower Catch-Up operating pass — IN PROGRESS on `docs/post-3ac-tower-catchup`)
+**Active gate:** Post-Package-3AC Tower Catch-Up IN PROGRESS — Package 3AC COMPLETE; main HEAD `df3f868`; Tower pass docs editing in progress; awaiting Coordinator authorization to commit
+**Next expected mirror:** Post-Package-3AC Tower Catch-Up closeout (commit + merge)
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,6 +39,8 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260607-009 | weekly_sync | Post-Package-3AC Tower Catch-Up operating pass | docs/post-3ac-tower-catchup | TBD (in progress) | in-progress | 2026-06-07 |
+| RPT-20260607-008 | package_closeout | Package 3AC — Message Timing Analysis Engine | feature/timing-analysis-engine | 74ff910 / df3f868 | mirrored | 2026-06-07 |
 | RPT-20260608-002 | weekly_sync | Post-Package-3AB Tower Catch-Up operating pass | docs/post-3ab-tower-catchup | 61bac12 / b70d840 | mirrored | 2026-06-08 |
 | RPT-20260608-001 | package_closeout | Package 3AB — Word Count / Language Analysis Engine | feature/word-analysis-engine | 9290b8e / ebf9668 | mirrored | 2026-06-08 |
 | RPT-20260607-007 | weekly_sync | Post-Package-3AA Tower Catch-Up operating pass | docs/post-3aa-tower-catchup | e1348cb / 0d2d49d | mirrored | 2026-06-07 |
@@ -72,6 +74,34 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260607-009 — weekly_sync — Post-Package-3AC Tower Catch-Up operating pass
+
+**Created:** 2026-06-07T00:00:00Z | **Branch:** docs/post-3ac-tower-catchup | **HEAD:** TBD (in progress) | **Status:** in-progress
+
+Post-Package-3AC Tower Catch-Up operating pass IN PROGRESS — docs-only pass on `docs/post-3ac-tower-catchup` from `main` at `df3f868`. 15 authorized docs. No app code. Correcting stale Tower/command-center/project-control docs after Package 3AC (Message Timing Analysis Engine). Edits in progress; not yet committed; awaiting Coordinator authorization to commit.
+
+**Hard exclusions:** no index.html, no src/*, no scripts/e2e-regression-harness.mjs, no scripts/fixtures/*, no tests, no adapters, no product/state/proof/PDF/checkout/vendor/manufacturing/pagination/dependency files; no external systems mutated; no credentials/tokens/raw-transcripts committed.
+**Next action:** Complete remaining doc edits; run validators; produce pre-commit report; await Coordinator authorization to commit.
+**Follow-up:** false
+
+*Entry added as the Post-Package-3AC Tower Catch-Up in-progress record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
+
+### RPT-20260607-008 — package_closeout — Package 3AC — Message Timing Analysis Engine
+
+**Created:** 2026-06-07T00:00:00Z | **Branch:** feature/timing-analysis-engine | **HEAD:** 74ff910 (impl) / df3f868 (state-sync on main) | **Status:** mirrored
+
+Package 3AC — Message Timing Analysis Engine COMPLETE — implementation `74ff910`, fast-forward merged to `main` 2026-06-07; state-sync commit `df3f868`. Delivered: (1) `src/core/timing-analysis.js` — NEW; `KMEngine.TimingAnalysis.compute(memories)`; IIFE; returns { peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }; UTC-based; zero-state for empty/invalid; tie-break lowest index wins; pure, no DOM. (2) `scripts/fixtures/fake-timing-analysis.txt` — NEW; 12-message WhatsApp bracket fixture; dates Jun 10–12 2025. (3) `src/tests/timing-analysis-tests.mjs` — NEW; 93 tests / 15 suites; all pass. (4) `src/tests/km-engine-tests.mjs` — +6 TimingAnalysis smoke (→156). (5) `index.html` — green CSS `.timing-analysis-panel`/`.timing-analysis-inner`/`.timing-analysis-chip`; `<script src="src/core/timing-analysis.js">`; `#timingAnalysisPanel` div; `renderTimingAnalysisPanel(memories)` at 11 call sites; `window.__km.renderTimingAnalysisPanel`; `DAY_NAMES` constant. (6) `scripts/e2e-regression-harness.mjs` — Phase 40 (6 tests); `TIMING_FIXTURE` + `TIMING_FIXTURE_COUNT=12`. (7) `docs/qa/test-strategy.md` — baseline 3273/26 suites; timing-analysis-tests.mjs row. (8) `docs/architecture/architecture-roadmap.md` — timing-analysis.js in module map; `#timingAnalysisPanel` in panels. (9–11) `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs updated. Verification gate: 3273/26 Node PASS; 57/57 seeded PASS; 171/171 real-files PASS (Phase 40 6/6); visual regression PASS; state freshness PASS.
+
+**Hard exclusions:** confirmed — no unauthorized files; no product/state/proof/PDF/checkout/vendor/manufacturing/pagination/dependency files; no external systems mutated.
+**Next action:** Post-Package-3AC Tower Catch-Up docs pass.
+**Follow-up:** false
+
+*Entry added as the Package 3AC closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260608-002 — weekly_sync — Post-Package-3AB Tower Catch-Up operating pass
 
