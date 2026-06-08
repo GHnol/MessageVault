@@ -279,9 +279,9 @@ Package 5C adds 18 tests to `proof-approval-state-tests.mjs` (Suite 4 +1, Suite 
 
 Before any commit instruction is acted on, the agent must verify:
 
-1. All 24 Node unit suites green (3068 tests).
+1. All 25 Node unit suites green (3174 tests).
 2. If `index.html` or `src/` changed: E2E seeded green (57 tests).
-3. If real-file paths changed: E2E real-files green (159 total — `npm run e2e:real`).
+3. If real-file paths changed: E2E real-files green (165 total — `npm run e2e:real`).
 4. If Message Book rendering changed: relevant capture harness scenario green; visual regression check green (`node scripts/visual-regression-harness.mjs --check`).
 5. Manual QA recorded if UI behavior changed (`docs/qa/manual-qa-template.md`).
 6. Package verification recorded (`docs/qa/package-verification-template.md`).
