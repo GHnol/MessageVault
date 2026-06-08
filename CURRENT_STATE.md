@@ -16,15 +16,15 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-08` (Post-Package-3AH Tower Catch-Up (docs-only) IN PROGRESS on branch `docs/post-3ah-tower-catchup`, base `c8378c7`. Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, fast-forward merged to `main` 2026-06-08; post-merge state-sync `c8378c7`. Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`; Package 3AG COMPLETE — impl `0331da0`, state-sync `2e081fe`)
+**Last updated:** `2026-06-08` (Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync. Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`. Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`; Package 3AG COMPLETE — impl `0331da0`, state-sync `2e081fe`)
 **Updated by:** `Claude Code (Opus 4.8)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `c8378c7` — post-merge state-sync after Package 3AH impl `a165122` |
-| Active branch | `docs/post-3ah-tower-catchup` (base `c8378c7`) |
-| Active pass | Post-Package-3AH Tower Catch-Up (docs-only) — IN PROGRESS |
-| Last completed pass | Post-Package-3AG Tower Catch-Up — docs `79d3246`, merged to `main` 2026-06-08 |
+| main HEAD | `a65d080` — docs: close Post-Package-3AH Tower Catch-Up |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | Post-Package-3AH Tower Catch-Up — docs `a65d080`, merged to `main` 2026-06-08 |
 | Last closed package | `Package 3AH — Reaction Analysis Engine + Panel` — FULLY COMPLETE — impl `a165122`, fast-forward merged to `main` 2026-06-08 |
 | Active package | None |
 | Test baseline | **3645 Node tests** (30 suites); E2E seeded 57/57; E2E real-files 195/195; visual regression PASS (Package 3AH added 66 reaction-analysis + 6 km-engine smoke; Phase 44 +6 real-files) |

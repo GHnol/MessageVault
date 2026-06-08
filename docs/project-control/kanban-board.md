@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-08 (Post-Package-3AH Tower Catch-Up IN PROGRESS — docs-only; branch `docs/post-3ah-tower-catchup`, base `c8378c7`; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`)
+**Last updated:** 2026-06-08 (Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, merged to `main` 2026-06-08; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- **Post-Package-3AH Tower Catch-Up operating pass** · Docs-only · branch `docs/post-3ah-tower-catchup` (base `c8378c7`); bringing 13 authorized Tower docs current after Package 3AH COMPLETE; next development candidate TBD — IN PROGRESS
+- _(empty)_
 
 ### Waiting / Blocked
 - **Coordinator authorize next development package** · Coordinator · P0 · Package 3AH COMPLETE 2026-06-08 (impl `a165122`, merged to `main`; state-sync `c8378c7`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AH
@@ -45,6 +45,7 @@
 
 ### Done
 - **Package 3AH — Reaction Analysis Engine + Panel** · Development / Engine+UI · Ph3 · implementation `a165122`, merged to `main` 2026-06-08 (ff-only); state-sync `c8378c7`; `KMEngine.ReactionAnalysis.compute()` (`src/core/reaction-analysis.js`); returns { totalReactions, messagesWithReactions, topReactionEmojis: [{emoji,count,rank}] (MAX_TOP=5), topReactor: {reactor,count}|null, mostReactedToSender: {sender,count}|null }; consumes `NormalizedMemory.reactions[]` captured in Package 3AG; counts by emoji, reactor, and reacted-to sender; sort count desc then string asc; zero-state for empty/invalid/no-reaction; `#reactionAnalysisPanel` rose/crimson **import-time advisory panel only** (hidden when totalReactions===0); `renderReactionAnalysisPanel(memories)` at 11 call sites; `window.__km.renderReactionAnalysisPanel`; 66 new tests (`reaction-analysis-tests.mjs`, 14 suites, incl. IQR-preservation regression) + 6 km-engine smoke (→180); Phase 44 E2E (6 tests, reuses `fake-instagram-dm.json`); 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS; NO adapter/import-quality-report/normalized-memory changes; NO DEF-11 in-book rendering; NO Message Book reaction badges — COMPLETE
+- **Post-Package-3AH Tower Catch-Up operating pass** · Docs-only · docs `a65d080`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AH COMPLETE; closeout state-sync brought continuity docs to resting state — COMPLETE
 - **Post-Package-3AG Tower Catch-Up operating pass** · Docs-only · docs `79d3246`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AG COMPLETE — COMPLETE
 - **Package 3AG — Meta Reaction Capture** · Development / Engine (adapters) · Ph3 · implementation `0331da0`, merged to `main` 2026-06-08 (ff-only); state-sync `2e081fe`; Instagram DM + Facebook Messenger adapters map Meta `{reaction,actor}` → `NormalizedMemory.reactions[]` canonical `{reactor,emoji,label}`; per-adapter `mapReactions()` + `decodeReaction()` (Latin-1-escaped-UTF-8 mojibake repair + raw-preserve fallback, malformed-safe); fixtures enriched (IG 2 clean-unicode; FB 1 mojibake→👍 + 1 clean; 8 imported each unchanged); `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57/57 seeded; 189/189 real-files; `ImportQualityReport` reaction counts now real for Meta; capture-only — NO ReactionAnalysis engine, NO reaction panel, NO DEF-11 in-book rendering — COMPLETE
 - **Post-Package-3AF Tower Catch-Up operating pass** · Docs-only · docs `be171dc`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AF COMPLETE — COMPLETE
