@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Package 3AE — Message Length Analysis Engine — COMPLETE; impl `dde558c`, merged to `main` 2026-06-08; state-sync `89c3864`; Post-Package-3AE Tower Catch-Up IN PROGRESS)
+**Updated by:** Claude Code (Package 3AF — Conversation Initiation Analysis Engine — COMPLETE; impl `7f03889`, merged to `main` 2026-06-08; state-sync `4ff64b5`; Post-Package-3AF Tower Catch-Up IN PROGRESS)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3AE COMPLETE (impl `dde558c`, merged to `main` 2026-06-08; state-sync `89c3864`); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3AF COMPLETE (impl `7f03889`, merged to `main` 2026-06-08; state-sync `4ff64b5`); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3AE COMPLETE — impl `dde558c`, merged to `main` 2026-06-08; state-sync `89c3864`. Coordinator decides next package.**
+**Status: Package 3AF COMPLETE — impl `7f03889`, merged to `main` 2026-06-08; state-sync `4ff64b5`. Coordinator decides next package.**
+
+Package 3AF (Conversation Initiation Analysis Engine) is COMPLETE — fast-forward merged to main (`7f03889` 2026-06-08; state-sync `4ff64b5`). `KMEngine.ConversationInitiation.compute(memories)` engine module added (`src/core/conversation-initiation.js`); returns { totalConversations, topInitiator: { sender, initiationCount } | null, perSenderStats: [{ sender, initiationCount, initiationPct }] }; filters non-system messages with valid timestamps, sorts ascending; a conversation start = first valid message + any message whose gap from the previous valid message >= GAP_THRESHOLD_MS (named constant, 6 hours); topInitiator tie-break sender asc; perSenderStats sorted initiationCount desc then sender asc; initiationPct = count/total × 100 rounded 1 decimal; zero-state for empty/invalid/no-valid input; pure IIFE, no DOM; `#conversationInitiationPanel` pink/magenta CSS wired in `index.html`; `renderConversationInitiationPanel(memories)` called at 11 import/open sites; `window.__km.renderConversationInitiationPanel` exposed; Phase 43 E2E (6 tests); 3544 Node / 29 suites; 57/57 seeded; 189/189 real-files.
 
 Package 3AC (Message Timing Analysis Engine) is COMPLETE — fast-forward merged to main (`74ff910` 2026-06-07). `KMEngine.TimingAnalysis.compute(memories)` engine module added (`src/core/timing-analysis.js`); returns { peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }; UTC-based (getUTCHours / getUTCDay); skips null/falsy/invalid timestamps; zero-state for empty/invalid/no-valid-timestamps; tie-break lowest index wins; pure IIFE, no DOM; `#timingAnalysisPanel` green CSS wired in `index.html`; `renderTimingAnalysisPanel(memories)` called at 11 import/open sites; `window.__km.renderTimingAnalysisPanel` exposed; Phase 40 E2E (6 tests); 3273 Node / 26 suites; 57/57 seeded; 171/171 real-files.
 
@@ -63,7 +65,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | TBD — Coordinator to decide | TBD | TBD | — |
 | Phase 12 continuation (preflight runners for vendor-gated checks) | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3AE is now COMPLETE.** No development package has been authorized after Package 3AE. The next Coordinator step is to decide the next package.
+**Package 3AF is now COMPLETE.** No development package has been authorized after Package 3AF. The next Coordinator step is to decide the next package.
 
 ---
 

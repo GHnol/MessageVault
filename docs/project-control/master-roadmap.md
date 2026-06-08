@@ -1,6 +1,6 @@
 # KeepMees Master Roadmap
 
-**Last updated:** 2026-06-08 (America/New_York — post-Package-3AE Tower catch-up; import analytics layer complete through IQR, CQC, ConversationStats, ExtendedCQC, EmojiAnalysis, WordAnalysis, TimingAnalysis, ResponseTimeAnalysis, MessageLengthAnalysis; all DEF-14 engine data points complete)
+**Last updated:** 2026-06-08 (America/New_York — post-Package-3AF Tower catch-up; import analytics layer complete through IQR, CQC, ConversationStats, ExtendedCQC, EmojiAnalysis, WordAnalysis, TimingAnalysis, ResponseTimeAnalysis, MessageLengthAnalysis, ConversationInitiation; all DEF-14 engine data points complete)
 **Owner:** Coordinator / Project Control
 **Source of truth:** this file summarizes `docs/strategy/`, `docs/ops/decision-register.md`, `docs/ops/backlog-roadmap.md`, `docs/command-center/current-status.md`. If they conflict, those win and this is corrected.
 
@@ -55,7 +55,7 @@ Significant foundation work is already done. Completed packages map to phases as
 | Package 3U — Telegram JSON Adapter | Phase 3 | DONE |
 | Package 3V — Telegram JSON UI Wiring | Phase 3 | DONE |
 | Package 3W — Telegram Self-Identification Sender Picker | Phase 3 | DONE |
-| **Import analytics layer — ALL COMPLETE (Packages 3I, 3X, 3Y, 3Z, 3AA, 3AB, 3AC, 3AD, 3AE)** | **Phase 3** | **DONE** |
+| **Import analytics layer — ALL COMPLETE (Packages 3I, 3X, 3Y, 3Z, 3AA, 3AB, 3AC, 3AD, 3AE, 3AF)** | **Phase 3** | **DONE** |
 | Package 3X — Pre-print Content Quality Checks (5 WARN checks) | Phase 3 | DONE |
 | Package 3Y — Conversation Statistics Engine | Phase 3 | DONE |
 | Package 3Z — Extended Content Quality Checks (+4 WARN checks, 9 total) | Phase 3 | DONE |
@@ -64,6 +64,7 @@ Significant foundation work is already done. Completed packages map to phases as
 | Package 3AC — Message Timing Analysis Engine | Phase 3 | DONE |
 | Package 3AD — Response Time Analysis Engine | Phase 3 | DONE |
 | Package 3AE — Message Length Analysis Engine | Phase 3 | DONE |
+| Package 3AF — Conversation Initiation Analysis Engine | Phase 3 | DONE |
 
 Phase names below do **not** imply zero progress — read the "completed work" line in each phase.
 
@@ -114,16 +115,16 @@ Phase names below do **not** imply zero progress — read the "completed work" l
 ## Phase 3 — Source Intake and Message Selection Flow
 
 - **Purpose:** Import real conversations and select meaningful messages.
-- **Start / End:** Package 1 → **COMPLETE through Package 3AE** (all client-side source adapters delivered; import analytics layer IQR → CQC → ConversationStats → ExtendedCQC → EmojiAnalysis → WordAnalysis → TimingAnalysis → ResponseTimeAnalysis → MessageLengthAnalysis complete; E2E phases 11–19 + 25–42 covered). **Confidence: High**
+- **Start / End:** Package 1 → **COMPLETE through Package 3AF** (all client-side source adapters delivered; import analytics layer IQR → CQC → ConversationStats → ExtendedCQC → EmojiAnalysis → WordAnalysis → TimingAnalysis → ResponseTimeAnalysis → MessageLengthAnalysis → ConversationInitiation complete; E2E phases 11–19 + 25–43 covered). **Confidence: High**
 - **Entry:** Adapter registry.
-- **Exit:** iMessage chat.db / .txt / manual entry import; WhatsApp, Android SMS, Instagram DM, Facebook Messenger, Telegram JSON imports; self-ID sender pickers; import quality report; content quality checks (9 WARN); conversation stats; emoji analysis; word analysis; timing analysis (peak hour/day of week); response time analysis (avg response time, fastest responder); message length analysis (avg chars/msg, longest message sender); selection → review flow; real-file E2E green.
-- **Deliverables:** adapters, NormalizedMemory, selection UI, Import Quality Report, Content Quality Checks, Conversation Stats, Emoji Analysis, Word Analysis, Timing Analysis, Response Time Analysis, Message Length Analysis, sender pickers, E2E phases 11–19 + 25–42.
-- **Completed work:** Packages 1, 3A, 3C, 3I, 3J, 3K, 3L, 3M, 3N, 3O, 3P, 3Q, 3R, 3S, 3T, 3U, 3V, 3W, 3X, 3Y, 3Z, 3AA, 3AB, 3AC, 3AD, 3AE. All 5 client-side platform adapters delivered and `supported`. `future-adapter-stubs.js` STUBS array now empty. Import analytics layer (IQR + CQC 9 checks + ConversationStats + EmojiAnalysis + WordAnalysis + TimingAnalysis + ResponseTimeAnalysis + MessageLengthAnalysis) complete. All DEF-14 engine-layer data points complete through Package 3AB; Package 3AC adds peak hour/day-of-week analysis beyond DEF-14 scope; Package 3AD adds response time analysis beyond DEF-14 scope; Package 3AE adds message length analysis beyond DEF-14 scope.
+- **Exit:** iMessage chat.db / .txt / manual entry import; WhatsApp, Android SMS, Instagram DM, Facebook Messenger, Telegram JSON imports; self-ID sender pickers; import quality report; content quality checks (9 WARN); conversation stats; emoji analysis; word analysis; timing analysis (peak hour/day of week); response time analysis (avg response time, fastest responder); message length analysis (avg chars/msg, longest message sender); conversation initiation analysis (who starts conversations, gap-based); selection → review flow; real-file E2E green.
+- **Deliverables:** adapters, NormalizedMemory, selection UI, Import Quality Report, Content Quality Checks, Conversation Stats, Emoji Analysis, Word Analysis, Timing Analysis, Response Time Analysis, Message Length Analysis, Conversation Initiation Analysis, sender pickers, E2E phases 11–19 + 25–43.
+- **Completed work:** Packages 1, 3A, 3C, 3I, 3J, 3K, 3L, 3M, 3N, 3O, 3P, 3Q, 3R, 3S, 3T, 3U, 3V, 3W, 3X, 3Y, 3Z, 3AA, 3AB, 3AC, 3AD, 3AE, 3AF. All 5 client-side platform adapters delivered and `supported`. `future-adapter-stubs.js` STUBS array now empty. Import analytics layer (IQR + CQC 9 checks + ConversationStats + EmojiAnalysis + WordAnalysis + TimingAnalysis + ResponseTimeAnalysis + MessageLengthAnalysis + ConversationInitiation) complete. All DEF-14 engine-layer data points complete through Package 3AB; Package 3AC adds peak hour/day-of-week analysis beyond DEF-14 scope; Package 3AD adds response time analysis beyond DEF-14 scope; Package 3AE adds message length analysis beyond DEF-14 scope; Package 3AF adds conversation initiation analysis beyond DEF-14 scope.
 - **Dependencies:** none external.
 - **Risks:** future macOS/iOS chat.db schema change (RISK in `docs/ops/risk-register.md`).
 - **Owner lane:** Development.
 - **Success criteria:** Real .txt, .xml, .json, and chat.db import without crash; selection persists; sender identification working for all ambiguous-sender platforms.
-- **Next review:** Weekly Development Review. Import analytics layer complete through Package 3AE. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). Package 3AC (TimingAnalysis) adds peak hour and day-of-week distribution beyond DEF-14 scope. Package 3AD (ResponseTimeAnalysis) adds average response time, fastest responder, and per-sender response stats beyond DEF-14 scope. Package 3AE (MessageLengthAnalysis) adds avg chars per message, longest message sender, and per-sender char stats beyond DEF-14 scope. DEF-14 Stats Page surface remains deferred until book editor is consumer-ready. Next development candidate: **TBD — awaiting Coordinator authorization**.
+- **Next review:** Weekly Development Review. Import analytics layer complete through Package 3AF. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). Package 3AC (TimingAnalysis) adds peak hour and day-of-week distribution beyond DEF-14 scope. Package 3AD (ResponseTimeAnalysis) adds average response time, fastest responder, and per-sender response stats beyond DEF-14 scope. Package 3AE (MessageLengthAnalysis) adds avg chars per message, longest message sender, and per-sender char stats beyond DEF-14 scope. Package 3AF (ConversationInitiation) adds conversation-start counts, top initiator, and per-sender initiation stats beyond DEF-14 scope. DEF-14 Stats Page surface remains deferred until book editor is consumer-ready. Next development candidate: **TBD — awaiting Coordinator authorization**.
 
 ## Phase 4 — Keepsake Grouping and Product Eligibility
 

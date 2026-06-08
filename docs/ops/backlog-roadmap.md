@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (post-Package-3AE tower catch-up)
+**Updated by:** Claude Code (post-Package-3AF tower catch-up)
 **Status:** Active
 
 ---
@@ -520,9 +520,9 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 
 ---
 
-### Current position — import analytics layer COMPLETE through Package 3AE
+### Current position — import analytics layer COMPLETE through Package 3AF
 
-**Status:** No package authorized. Package 3AE COMPLETE (impl `dde558c`, merged to `main`, state-sync `89c3864` 2026-06-08) — Message Length Analysis Engine delivered. All DEF-14 engine-layer data points complete through Package 3AB. Package 3AC adds peak hour/day-of-week beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Coordinator decides next development package.
+**Status:** No package authorized. Package 3AF COMPLETE (impl `7f03889`, merged to `main`, state-sync `4ff64b5` 2026-06-08) — Conversation Initiation Analysis Engine delivered. All DEF-14 engine-layer data points complete through Package 3AB. Package 3AC adds peak hour/day-of-week beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Package 3AF adds conversation initiation analysis (who starts conversations, gap-based) beyond DEF-14. Coordinator decides next development package.
 
 **Import analytics layer delivery summary:**
 - Package 3I — Import Quality Report (`KMEngine.ImportQualityReport.compute()`, `#importQualityPanel`) ✓
@@ -534,9 +534,10 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 - Package 3AC — Message Timing Analysis Engine: `KMEngine.TimingAnalysis.compute()`, `#timingAnalysisPanel` (green); peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution[24], dailyDistribution[7]; UTC-based; additional capability beyond DEF-14 ✓
 - Package 3AD — Response Time Analysis Engine: `KMEngine.ResponseTimeAnalysis.compute()`, `#responseTimePanel` (orange/rose); avgResponseTimeMs, fastestResponder, perSenderStats; additional engine capability beyond DEF-14 ✓
 - Package 3AE — Message Length Analysis Engine: `KMEngine.MessageLengthAnalysis.compute()`, `#messageLengthPanel` (cyan/sky-blue); avgCharsPerMessage, longestMessage (sender + length), perSenderStats; additional engine capability beyond DEF-14 ✓
+- Package 3AF — Conversation Initiation Analysis Engine: `KMEngine.ConversationInitiation.compute()`, `#conversationInitiationPanel` (pink/magenta); totalConversations, topInitiator (sender + initiationCount), perSenderStats (initiationCount + initiationPct); GAP_THRESHOLD_MS = 6h gap-based detection; additional engine capability beyond DEF-14 ✓
 - **Client-side adapter series also complete (Packages 3J–3W):** `future-adapter-stubs.js` STUBS array now empty
 
-**Next development candidate:** TBD — awaiting Coordinator authorization. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). Package 3AC adds timing analysis beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. DEF-14 Stats Page surface remains deferred until book editor is consumer-ready.
+**Next development candidate:** TBD — awaiting Coordinator authorization. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). Package 3AC adds timing analysis beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Package 3AF adds conversation initiation analysis beyond DEF-14. DEF-14 Stats Page surface remains deferred until book editor is consumer-ready.
 
 **Candidates still blocked (do not start):**
 - Phase 12 continuation / GATE-04 — blocked: PDF pipeline + vendor + checkout
