@@ -103,6 +103,9 @@ const RESP_FIXTURE_COUNT = 12; // 12 messages: Alice (6) responds ~1min, Bob (6)
 const ML_FIXTURE       = path.join(__dir, 'fixtures', 'fake-message-length.txt');
 const ML_FIXTURE_COUNT = 12; // 12 messages: Alice (6) longer avg, Bob (5 text + 1 attachment-only)
 
+const CI_FIXTURE       = path.join(__dir, 'fixtures', 'fake-conversation-initiation.txt');
+const CI_FIXTURE_COUNT = 12; // 12 messages across 3 gap-separated conversations: Alice starts 2, Bob starts 1
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -2273,7 +2276,78 @@ async function main() {
                 `Expected "Alice" as longest message sender in ML panel, got: "${panelText.substring(0, 80)}"`);
         });
 
-        await harness.run('non-ML TXT reimport hides ML panel and resets state for Phase 12', async page => {
+        await harness.run('non-ML TXT reimport hides ML panel and resets state for Phase 43', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 43 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 43 — Conversation Initiation Analysis panel (Package 3AF)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 43 — Conversation Initiation Analysis panel ──\n');
+
+        await harness.run('before CI import #conversationInitiationPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('conversationInitiationPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#conversationInitiationPanel should be hidden before any import');
+        });
+
+        await harness.run('after CI fixture import #conversationInitiationPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(CI_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('conversationInitiationPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#conversationInitiationPanel should be visible and non-empty after CI fixture import');
+        });
+
+        await harness.run('CI fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === CI_FIXTURE_COUNT,
+                `Expected ${CI_FIXTURE_COUNT} messages from CI fixture, got ${count}`);
+        });
+
+        await harness.run('CI panel shows Alice as top initiator', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('conversationInitiationPanel');
+                return el ? el.textContent : '';
+            });
+            const hasAlice = /Alice/.test(panelText);
+            assert(hasAlice,
+                `Expected "Alice" as top initiator in CI panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('CI panel shows conversation count or percentage chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('conversationInitiationPanel');
+                return el ? el.textContent : '';
+            });
+            const hasMetric = /\d+\s+conversations/.test(panelText) || /\d+(\.\d+)?%/.test(panelText);
+            assert(hasMetric,
+                `Expected conversation count or percentage in CI panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('non-CI TXT reimport hides CI panel and resets state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');

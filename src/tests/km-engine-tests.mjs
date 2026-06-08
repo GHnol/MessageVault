@@ -48,6 +48,7 @@ load('src/core/word-analysis.js');
 load('src/core/timing-analysis.js');
 load('src/core/response-time-analysis.js');
 load('src/core/message-length-analysis.js');
+load('src/core/conversation-initiation.js');
 
 const { KMEngine } = ctx.window;
 
@@ -471,6 +472,17 @@ assert(typeof mlaEmpty === 'object' && mlaEmpty !== null,                       
 assert(mlaEmpty.avgCharsPerMessage === 0 && mlaEmpty.longestMessage === null,                  'compute([]) returns zero-state');
 assert(Array.isArray(mlaEmpty.perSenderStats) && mlaEmpty.perSenderStats.length === 0,        'compute([]) perSenderStats is empty array');
 assert(Object.keys(KMEngine.MessageLengthAnalysis).length === 1,                               'MessageLengthAnalysis exposes only compute');
+
+// ── CONVERSATION INITIATION ANALYSIS — smoke ─────────────────────────────────
+
+suite('ConversationInitiation — smoke');
+assert(KMEngine.ConversationInitiation !== undefined,                                          'ConversationInitiation exists on KMEngine');
+assert(typeof KMEngine.ConversationInitiation.compute === 'function',                          'compute is a function');
+const ciEmpty = KMEngine.ConversationInitiation.compute([]);
+assert(typeof ciEmpty === 'object' && ciEmpty !== null,                                        'compute([]) returns an object');
+assert(ciEmpty.totalConversations === 0 && ciEmpty.topInitiator === null,                      'compute([]) returns zero-state');
+assert(Array.isArray(ciEmpty.perSenderStats) && ciEmpty.perSenderStats.length === 0,           'compute([]) perSenderStats is empty array');
+assert(Object.keys(KMEngine.ConversationInitiation).length === 1,                              'ConversationInitiation exposes only compute');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
