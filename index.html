@@ -4507,17 +4507,23 @@
         }
 
         // Package 3AJ: import insights dispatcher — delegates to the per-panel renderers in order (wiring consolidation only; no behavior change)
+        // Package 3AK: registry-driven — IMPORT_INSIGHT_RENDERERS is the single ordered source of dispatch order; renderImportInsights iterates it (no behavior change)
+        const IMPORT_INSIGHT_RENDERERS = [
+            renderImportQualityPanel,
+            renderContentQualityPanel,
+            renderConversationStatsPanel,
+            renderEmojiAnalysisPanel,
+            renderWordAnalysisPanel,
+            renderTimingAnalysisPanel,
+            renderResponseTimePanel,
+            renderMessageLengthPanel,
+            renderConversationInitiationPanel,
+            renderReactionAnalysisPanel,
+        ];
         function renderImportInsights(memories) {
-            renderImportQualityPanel(memories);
-            renderContentQualityPanel(memories);
-            renderConversationStatsPanel(memories);
-            renderEmojiAnalysisPanel(memories);
-            renderWordAnalysisPanel(memories);
-            renderTimingAnalysisPanel(memories);
-            renderResponseTimePanel(memories);
-            renderMessageLengthPanel(memories);
-            renderConversationInitiationPanel(memories);
-            renderReactionAnalysisPanel(memories);
+            for (var i = 0; i < IMPORT_INSIGHT_RENDERERS.length; i++) {
+                IMPORT_INSIGHT_RENDERERS[i](memories);
+            }
         }
 
         /* ─────────────────────────────────────────────

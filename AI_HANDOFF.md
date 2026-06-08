@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — **Post-Package-3AJ Tower Catch-Up COMPLETE** (docs-only) — docs `1260aa1`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync (this update). Brought the broader Tower/command-center/project-control/ops/report-mirror docs current after **Package 3AJ — Import Insights Consolidation COMPLETE** — impl/merge `92435b7`, state-sync `e445212`, fast-forward merged to `main` 2026-06-08. Behavior-preserving wiring consolidation: a single `renderImportInsights(memories)` dispatcher in `index.html` delegating to the ten existing import-panel renderers in order; 11 per-panel call clusters replaced with one dispatcher call each; all `renderXPanel` functions + `window.__km` bridges preserved; `window.__km.renderImportInsights` added. No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change. Baseline unchanged: 3645 Node / 30 suites / 0 failed; 57/57 seeded E2E; 195/195 real-files E2E; visual regression PASS (4/4 baselines unchanged). Active branch `main`. No active pass. No active package. No active Tower catch-up. Next: Coordinator decision on the next development package (candidate TBD). **Package 3AI — Verification & Harness Reliability Hardening remains CLOSED/COMPLETE** (impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, closeout `a84c4f9`). **Post-Package-3AI Tower Catch-Up remains CLOSED/COMPLETE.** Previously: Package 3AH COMPLETE — impl `a165122`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`.
+**Status:** `active` — **Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation IN PROGRESS** on branch `feature/import-insights-registry` (from `main` at `dfeb63b`); stop-before-commit. Behavior-preserving wiring consolidation completing the Package 3AJ debt-paydown: `renderImportInsights(memories)` in `index.html` now iterates an ordered `IMPORT_INSIGHT_RENDERERS` registry array (the ten existing panel renderers in their exact current order) instead of ten hardcoded calls; all ten `renderXPanel` functions, their individual `window.__km` bridges, the literal `window.__km` bridge block, `window.__km.renderImportInsights`, and all 11 dispatcher call sites preserved unchanged; the bridge block is deliberately left literal (not generated from the registry). No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change. Baseline unchanged: 3645 Node / 30 suites / 0 failed; 57/57 seeded E2E; 195/195 real-files E2E; visual regression PASS (4/4 baselines unchanged). Implementation + docs done on branch; verification gate green; awaiting Coordinator commit authorization. **Package 3AJ — Import Insights Consolidation remains CLOSED/COMPLETE** — impl/merge `92435b7`, state-sync `e445212`, merged to `main` 2026-06-08. **Post-Package-3AJ Tower Catch-Up remains CLOSED/COMPLETE** — docs `1260aa1`, closeout `dfeb63b`, merged to `main` 2026-06-08. **Package 3AI — Verification & Harness Reliability Hardening remains CLOSED/COMPLETE** (impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, closeout `a84c4f9`). **Post-Package-3AI Tower Catch-Up remains CLOSED/COMPLETE.** Previously: Package 3AH COMPLETE — impl `a165122`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `1260aa1` (docs: close Post-Package-3AJ Tower Catch-Up; `main` HEAD — pre-closeout-commit value) |
-| **Active package** | None |
+| **Active pass** | None (Package 3AK is a development package, not a Tower pass) |
+| **Active branch** | `feature/import-insights-registry` (Package 3AK; from `main` at `dfeb63b`) |
+| **base HEAD** | `dfeb63b` (branch base = `main` HEAD at Package 3AK branch creation; `docs: close Post-Package-3AJ Tower Catch-Up`) |
+| **Active package** | `Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation` — IN PROGRESS on `feature/import-insights-registry`; implementation + docs done, verification gate green, stop-before-commit awaiting Coordinator commit authorization |
 | **Last completed pass** | Post-Package-3AJ Tower Catch-Up — docs `1260aa1`, fast-forward merged to `main` 2026-06-08 |
 | **Last closed package** | `Package 3AJ — Import Insights Consolidation` — FULLY COMPLETE (behavior-preserving wiring consolidation; `renderImportInsights` dispatcher; no new engine/panel; no behavior change) — impl/merge `92435b7`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AI — Verification & Harness Reliability Hardening` — FULLY COMPLETE (scripts + docs only) — impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, fast-forward merged to `main` 2026-06-08 |
@@ -36,6 +36,28 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation — IN PROGRESS)
+
+Branch: `feature/import-insights-registry` from `main` at `dfeb63b`. Authorized by Coordinator 2026-06-08. **Behavior-preserving `index.html` wiring consolidation only. No new engine, no new panel, no DOM/CSS/order/copy/visibility/behavior change.** **IN PROGRESS — implementation + docs complete on branch; verification gate green; stop-before-commit awaiting Coordinator commit authorization.**
+
+**Objective:** Complete the Package 3AJ debt-paydown by making `renderImportInsights(memories)` registry-driven.
+
+**Files changed (6):**
+- `index.html` — added an ordered `IMPORT_INSIGHT_RENDERERS` registry array listing the ten existing panel renderers in their exact current order (`renderImportQualityPanel`, `renderContentQualityPanel`, `renderConversationStatsPanel`, `renderEmojiAnalysisPanel`, `renderWordAnalysisPanel`, `renderTimingAnalysisPanel`, `renderResponseTimePanel`, `renderMessageLengthPanel`, `renderConversationInitiationPanel`, `renderReactionAnalysisPanel`); rewrote `renderImportInsights(memories)` to iterate the registry (`for` loop, same argument, same order) in place of the ten hardcoded calls. All ten `renderXPanel` functions, their individual `window.__km` bridges, the literal `window.__km` bridge block, `window.__km.renderImportInsights`, and all 11 dispatcher call sites preserved unchanged. The `window.__km` bridge block is deliberately NOT generated from the registry (left literal per scope, to avoid key-name drift).
+- `docs/architecture/architecture-roadmap.md` — registry-driven dispatcher recorded (module map + near-term-additions note); wiring consolidation only.
+- `docs/qa/test-strategy.md` — Package 3AK note; baseline counts unchanged.
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — this state update.
+
+**Verification gate (all green):** 3645 Node / 30 suites / 0 failed (unchanged); 57/57 seeded E2E; 195/195 real-files E2E (Phases 25–44 panel assertions green under the registry dispatcher); visual regression PASS (4/4 baselines unchanged); os-self-audit 324/0/0; project-control-sync-validate 11/0/0; project-control-sync-dry-run STRUCTURAL PASS; state-freshness 0 FAIL. Grep confirms `renderImportInsights` has exactly 11 call sites; the registry contains exactly the 10 panel renderers in current order; all 10 `renderXPanel` functions + `window.__km` bridges remain present.
+
+**Hard exclusions confirmed:** no generated `window.__km` bridge registry (bridge block left literal); no new engine; no new panel; no analytics-series continuation; no panel regrouping/tabs/accordion/collapse/visual redesign; no CSS change; no DOM-structure change; no panel-text/order/visibility change; no renaming/removal of any `renderXPanel` function or any existing `window.__km` bridge key; no `src/core/*`; no `src/adapters/*`; no `src/products/*`; no `src/state/*`; no `src/tests/*`; no `scripts/**`; no `scripts/fixtures/*`; no test-runner orchestrator; no dependency installs; no DEF-11 in-book reaction rendering / Message Book reaction badges; no DEF-14 in-book Stats Page; no DEF-13 library shelf; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no ProductDraft/Preflight/Lifecycle; no proof approval; no Review view; no standalone keepsake flows; no PDF/checkout/vendor/manufacturing/cover; no external systems.
+
+**What is done:** Implementation + authorized docs + state docs complete on branch; full verification gate green; hard-exclusion diff clean.
+**What remains:** Coordinator commit authorization, then commit + merge to `main` and post-merge state-sync.
+**Next exact action:** Stop before commit. Report to Coordinator and await commit authorization. Do not commit, push, or merge without explicit instruction.
 
 ---
 
