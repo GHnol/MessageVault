@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-08 (Post-Package-3AJ Tower Catch-Up IN PROGRESS — docs-only, stop-before-commit, branch `docs/post-3aj-tower-catchup` from `main` at `e445212`; Package 3AJ — Import Insights Consolidation COMPLETE — impl/merge `92435b7`, state-sync `e445212`, fast-forward merged to `main` 2026-06-08; behavior-preserving `index.html` wiring consolidation. Prior: Post-Package-3AI Tower Catch-Up COMPLETE — docs `106f500`, closeout `a84c4f9`; Package 3AI — Verification & Harness Reliability Hardening COMPLETE — impl `d4a6c71`, state-sync `803cd64`; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`)
+**Last updated:** 2026-06-08 (Post-Package-3AJ Tower Catch-Up COMPLETE — docs `1260aa1`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync; Package 3AJ — Import Insights Consolidation COMPLETE — impl/merge `92435b7`, state-sync `e445212`; behavior-preserving `index.html` wiring consolidation. Prior: Post-Package-3AI Tower Catch-Up COMPLETE — docs `106f500`, closeout `a84c4f9`; Package 3AI — Verification & Harness Reliability Hardening COMPLETE — impl `d4a6c71`, state-sync `803cd64`; Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- **Post-Package-3AJ Tower Catch-Up operating pass** · Docs-only · Ph0 · branch `docs/post-3aj-tower-catchup` from `main` at `e445212` · IN PROGRESS (stop-before-commit) — bringing Tower/command-center/project-control/ops/report-mirror docs current after Package 3AJ; replacing stale "Package 3AI latest" claims with 3AJ; adding 3AJ report-mirror entry
+- _(empty)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AJ COMPLETE 2026-06-08 (impl/merge `92435b7`, merged to `main`; state-sync `e445212`); Post-Package-3AJ Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AJ
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AJ COMPLETE 2026-06-08 (impl/merge `92435b7`, merged to `main`; state-sync `e445212`); Post-Package-3AJ Tower Catch-Up COMPLETE (docs `1260aa1`, merged to `main`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AJ
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Post-Package-3AJ Tower Catch-Up operating pass** · Docs-only · docs `1260aa1`, fast-forward merged to `main` 2026-06-08; 13 authorized Tower docs updated recording Package 3AJ as the latest complete package; replaced stale "Package 3AI latest" claims with 3AJ; corrected app-code-state lag to 3AJ; added Package 3AJ report-mirror entries (RPT-20260608-013 closeout + RPT-20260608-014 catch-up); post-merge closeout state-sync brought continuity docs to resting state — COMPLETE
 - **Package 3AJ — Import Insights Consolidation** · Development / App refactor (QA / maintainability) · Ph3 · impl/merge `92435b7`, merged to `main` 2026-06-08 (ff-only); state-sync `e445212`; behavior-preserving `index.html` wiring consolidation — `renderImportInsights(memories)` dispatcher delegating to the 10 import-panel renderers (`renderImportQualityPanel` → `renderReactionAnalysisPanel`) in order; the 11 per-panel call clusters at all import/open sites collapsed to one `renderImportInsights(...)` call each (same argument per site); all individual `renderXPanel` functions + `window.__km` bridges preserved; `window.__km.renderImportInsights` added; NO new engine, NO new panel, NO DOM/CSS/panel-order/panel-copy/visibility/behavior change; 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS — COMPLETE
 - **Post-Package-3AI Tower Catch-Up operating pass** · Docs-only · docs `106f500`, fast-forward merged to `main` 2026-06-08; 7 authorized state/Tower docs updated in closeout; recorded Package 3AI as the latest complete package; corrected the stale "Package 3AH is the latest complete package" claim + `a65d080`→`803cd64` affirmative HEAD refs; added the missing Package 3AI report-mirror entry (RPT-20260608-011); post-merge closeout state-sync brought continuity docs to resting state (RPT-20260608-012) — COMPLETE
 - **Package 3AI — Verification & Harness Reliability Hardening** · QA Infrastructure / Docs · Ph0 · implementation `d4a6c71`, merged to `main` 2026-06-08 (ff-only); state-sync `803cd64`; scripts + docs only; `scripts/e2e-regression-harness.mjs` Phase 1 startup reliability hardened (`MAX_STARTUP_ATTEMPTS=3` bounded re-probe of the static server + backoff, real error re-raised on final attempt; richer `waitForKm()` / `Harness.run()` failure diagnostics) with NO assertion or test-count changes; baseline docs refreshed without a new stale-number trap (`test-strategy.md` changelog → 3AG/3AH; `current-status.md` detail-lag → 3AH; `pre-commit-verification-template.md` non-staling baseline pointer); NO `index.html`, NO `src/**`, NO new test-runner orchestrator; baseline unchanged 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS — COMPLETE
