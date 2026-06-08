@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07
-**Updated by:** Claude Code (Package 3AA — Emoji Analysis Engine — COMPLETE; impl `0e15cfb`, merged `29c4491` 2026-06-07; awaiting Coordinator authorization for next package)
+**Last updated:** 2026-06-08
+**Updated by:** Claude Code (Package 3AB — Word Count / Language Analysis Engine — COMPLETE; impl `9290b8e`, merged `ebf9668` 2026-06-08; awaiting Coordinator authorization for next package)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3AA COMPLETE (impl `0e15cfb`, merged `29c4491` 2026-06-07); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3AB COMPLETE (impl `9290b8e`, merged `ebf9668` 2026-06-08); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3AA COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07. Coordinator decides next package.**
+**Status: Package 3AB COMPLETE — impl `9290b8e`, merged `ebf9668` 2026-06-08. Coordinator decides next package.**
+
+Package 3AB (Word Count / Language Analysis Engine) is COMPLETE — merged to main (`ebf9668` 2026-06-08). `KMEngine.WordAnalysis.compute(memories)` engine module added (`src/core/word-analysis.js`); returns { totalWords, avgWordsPerMessage, topWords: [{word,count,rank}], topWordSender: {sender,wordCount}|null }; MAX_TOP=10; splits on whitespace; strips leading/trailing non-word chars; lowercase; skips attachment-only and blank/null text; tie-break topWords by count desc then word asc; topWordSender tie-break wordCount desc then sender asc; avgWordsPerMessage rounded to 1 decimal; `#wordAnalysisPanel` purple/violet CSS wired in `index.html`; `renderWordAnalysisPanel(memories)` called at 11 import/open sites; `window.__km.renderWordAnalysisPanel` exposed; Phase 39 E2E (6 tests); 3174 Node / 25 suites; 57/57 seeded; 165/165 real-files.
 
 Package 3AA (Emoji Analysis Engine) is COMPLETE — merged to main (`29c4491` 2026-06-07). `KMEngine.EmojiAnalysis.compute(memories)` engine module added (`src/core/emoji-analysis.js`); returns topEmojis (MAX_TOP=5, [{emoji,count,rank}]), totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender; handles ZWJ sequences, skin-tone modifiers, keycap sequences, regional indicator flag pairs; safe zero-state for empty/null/non-array; `#emojiAnalysisPanel` teal CSS scheme wired in `index.html`; `renderEmojiAnalysisPanel(memories)` called at 11 import/open sites; `window.__km.renderEmojiAnalysisPanel` exposed; Phase 38 E2E (6 tests); 3068 Node / 24 suites; 57/57 seeded; 159/159 real-files; partially activates DEF-14.
 

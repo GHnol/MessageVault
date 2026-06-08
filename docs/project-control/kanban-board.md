@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-07 (Post-Package-3AA Tower Catch-Up — COMPLETE; docs `e1348cb`, merged `0d2d49d`)
+**Last updated:** 2026-06-08 (Package 3AB — Word Count / Language Analysis Engine — COMPLETE; impl `9290b8e`, merged `ebf9668`)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -32,7 +32,7 @@
 - _(empty — no active development pass or package)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AA COMPLETE 2026-06-07 (impl `0e15cfb`, merged `29c4491`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AA
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AB COMPLETE 2026-06-08 (impl `9290b8e`, merged `ebf9668`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AB
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3AB — Word Count / Language Analysis Engine** · Development / Engine+UI · Ph3 · implementation `9290b8e`, merged `ebf9668` 2026-06-08; `KMEngine.WordAnalysis.compute()`; returns { totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation; lowercase; skips attachment-only; tie-break topWords by count desc then word asc; topWordSender tie-break wordCount desc then sender asc; `#wordAnalysisPanel` purple/violet CSS; `renderWordAnalysisPanel(memories)` at 11 call sites; `window.__km.renderWordAnalysisPanel`; 100 new tests (`word-analysis-tests.mjs`, 19 suites) + 6 km-engine smoke (→150 total); Phase 39 E2E (6 tests); `WORD_ANALYSIS_FIXTURE_COUNT=10`; 3174 Node / 25 suites; 57/57 seeded; 165/165 real-files — COMPLETE
 - **Post-Package-3AA Tower Catch-Up operating pass** · Docs-only · docs `e1348cb`, merged `0d2d49d` 2026-06-07; brought backlog-roadmap.md and master-roadmap.md current after Package 3AA; Package 3AB set as next recommended development candidate — COMPLETE
 - **Package 3AA — Emoji Analysis Engine** · Development / Engine+UI · Ph3 · implementation `0e15cfb`, merged `29c4491` 2026-06-07; `KMEngine.EmojiAnalysis.compute()`; returns topEmojis (MAX_TOP=5, rank/emoji/count), totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender; handles ZWJ sequences, skin-tone modifiers, keycap sequences, flag sequences; `#emojiAnalysisPanel` teal CSS scheme; `renderEmojiAnalysisPanel(memories)` called at 11 import/open sites; `window.__km.renderEmojiAnalysisPanel` exposed; 100 new tests (`emoji-analysis-tests.mjs`, 15 suites) + 6 km-engine smoke (→144 total); Phase 38 E2E (6 tests); `EA_FIXTURE_COUNT=10`; 3068 Node / 24 suites; 57/57 seeded; 159/159 real-files; partially activates DEF-14 — COMPLETE
 - **Post-Package-3Z Tower Catch-Up operating pass** · Docs-only · docs `341d714`, merged `058af68` 2026-06-07; corrected stale deferred-gated-ideas (DEF-15 DELIVERED), decision-log (Package 3AA named), backlog-roadmap, current-sprint, next-actions, architecture-roadmap, master-roadmap after import analytics series completion — COMPLETE
