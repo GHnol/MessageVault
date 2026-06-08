@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync (this update). Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7` (3645 Node / 30 suites; 57/57 seeded E2E; 195/195 real-files E2E Phase 44 6/6; visual regression PASS). No active pass. No active package. Next development candidate: TBD — awaiting Coordinator authorization. Previously: Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`.
+**Status:** `in-progress` — **Package 3AI — Verification & Harness Reliability Hardening IN PROGRESS** on branch `task/package-3ai-verification-hardening` (from `main` at `47d459a`). Authorized by Coordinator 2026-06-08. Scripts + docs only (no app feature work, no `index.html`, no `src/**`). Implementation complete, uncommitted, pending Coordinator commit authorization. Verification gate GREEN: 3645 Node / 30 suites / 0 failed; 57/57 seeded E2E; 195/195 real-files E2E; visual regression PASS (4/4 baselines unchanged). **Package 3AH — Reaction Analysis Engine + Panel remains CLOSED/COMPLETE** — impl `a165122`, fast-forward merged to `main`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`. No active Tower catch-up. Previously: Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -19,10 +19,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | Field | Value |
 |---|---|
 | **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `a65d080` (docs: close Post-Package-3AH Tower Catch-Up; `main` HEAD) |
+| **Active branch** | `task/package-3ai-verification-hardening` |
+| **base HEAD** | `47d459a` (base for branch `task/package-3ai-verification-hardening`; current `main` HEAD) |
 | **Last completed pass** | Post-Package-3AH Tower Catch-Up — docs `a65d080`, merged to `main` 2026-06-08 |
-| **Active package** | None |
+| **Active package** | `Package 3AI — Verification & Harness Reliability Hardening` (IN PROGRESS — scripts + docs only; impl complete, uncommitted) |
 | **Last closed package** | `Package 3AH — Reaction Analysis Engine + Panel` — FULLY COMPLETE — impl `a165122`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
@@ -34,6 +34,29 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AI — Verification & Harness Reliability Hardening — IN PROGRESS)
+
+Branch: `task/package-3ai-verification-hardening` from `main` at `47d459a`. Authorized by Coordinator 2026-06-08. **Scripts + docs only. No app feature work, no `index.html`, no `src/**`, no new engine/panel, no UI consolidation, no gated product work.** Implementation complete, uncommitted — pending Coordinator commit authorization.
+
+**Objective:** Harden verification reliability and correct stale operational baseline docs after Package 3AH.
+
+**Files changed (6):**
+- `scripts/e2e-regression-harness.mjs` — Phase 1 startup retry hardened: bounded 3-attempt retry (`MAX_STARTUP_ATTEMPTS = 3`) that re-probes the static server (`waitForServer`) and backs off (`250 × attempt` ms) between attempts, re-raising the real error on the final attempt (does **not** mask failures); `waitForKm()` failure-path diagnostic now reports `url`/`readyState`/`KMEngine`; `Harness.run()` failure log now includes elapsed ms + page url. **No assertion or test-count changes** (still 57 seeded / 195 real-files).
+- `docs/qa/test-strategy.md` — Status changelog (line 3) extended to Package 3AG (3573) + 3AH (3645 / Phase 44 / 195). Pre-commit baseline section was already current (30 suites / 3645 / 57 / 195).
+- `docs/qa/pre-commit-verification-template.md` — added a non-staling pointer to the authoritative baseline in `test-strategy.md` (the file is a generic fill-in template with no hardcoded numbers; injecting numbers would re-create staleness). **Flagged for Coordinator: deviation from literal "insert numbers" wording.**
+- `docs/command-center/current-status.md` — App code state / src/tests detail-lag corrected to 3AH: app code last changed → 3AH (`a165122`); `reaction-analysis.js` (src/core) + `reaction-analysis-tests.mjs` (66) added; `km-engine-tests.mjs` 174→180; `facebook-messenger-adapter-tests.mjs` 98→113 + `instagram-dm-adapter-tests.mjs` 101 (3AG reaction capture); suites 29→30; Node 3544→3645; e2e 189→195 + Phase 44.
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — this state-doc update.
+
+**Verification gate (all green):** 3645 Node / 30 suites / 0 failed; 57/57 seeded E2E; 195/195 real-files E2E; visual regression PASS (4/4 baselines unchanged). Doc/structure validators run as part of closeout.
+
+**Hard exclusions confirmed:** no `index.html`; no `src/**`; no `scripts/fixtures/**`; no `src/tests/**`; no test-runner orchestrator / `scripts/run-all-node-tests.mjs`; no analytics engine/panel; no Import Insights Consolidation; no DEF-11 in-book reaction rendering / Message Book reaction badges; no DEF-14 in-book Stats Page; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no `src/products/*` / `src/state/*` / adapters / ProductDraft / Preflight / Lifecycle / proof approval / Review view / standalone keepsake flows / PDF / checkout / vendor / manufacturing / cover; no dependency installs; no external systems.
+
+**What is done:** All 6 authorized files edited; harness `node --check` passes; full verification gate green (above).
+**What remains:** Coordinator review of this report; commit authorization. Do not commit until authorized.
+**Next exact action:** Report to Coordinator (done in chat). Stop before commit. On authorization, commit on `task/package-3ai-verification-hardening` and propose merge plan.
 
 ---
 

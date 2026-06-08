@@ -16,17 +16,17 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-08` (Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync. Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`, state-sync `c8378c7`. Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`; Package 3AG COMPLETE — impl `0331da0`, state-sync `2e081fe`)
+**Last updated:** `2026-06-08` (**Package 3AI — Verification & Harness Reliability Hardening IN PROGRESS** on branch `task/package-3ai-verification-hardening` from `main` at `47d459a`; scripts + docs only; impl complete, uncommitted; verification gate green — 3645 Node / 30 suites / 0 failed, 57/57 seeded E2E, 195/195 real-files E2E, visual regression PASS. Package 3AH — Reaction Analysis Engine + Panel CLOSED/COMPLETE — impl `a165122`, merged to `main`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`. Package 3AG COMPLETE — impl `0331da0`, state-sync `2e081fe`)
 **Updated by:** `Claude Code (Opus 4.8)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `a65d080` — docs: close Post-Package-3AH Tower Catch-Up |
-| Active branch | `main` |
+| main HEAD | `47d459a` — docs: close Post-Package-3AH Tower Catch-Up |
+| Active branch | `task/package-3ai-verification-hardening` (base `main` @ `47d459a`) |
 | Active pass | None |
 | Last completed pass | Post-Package-3AH Tower Catch-Up — docs `a65d080`, merged to `main` 2026-06-08 |
 | Last closed package | `Package 3AH — Reaction Analysis Engine + Panel` — FULLY COMPLETE — impl `a165122`, fast-forward merged to `main` 2026-06-08 |
-| Active package | None |
+| Active package | `Package 3AI — Verification & Harness Reliability Hardening` (IN PROGRESS — scripts + docs only; impl complete, uncommitted; gate green) |
 | Test baseline | **3645 Node tests** (30 suites); E2E seeded 57/57; E2E real-files 195/195; visual regression PASS (Package 3AH added 66 reaction-analysis + 6 km-engine smoke; Phase 44 +6 real-files) |
 | Package 3AH | COMPLETE — impl `a165122`, fast-forward merged to `main` 2026-06-08; `src/core/reaction-analysis.js` (NEW) `KMEngine.ReactionAnalysis.compute()` → { totalReactions, messagesWithReactions, topReactionEmojis:[{emoji,count,rank}] MAX_TOP=5, topReactor:{reactor,count}|null, mostReactedToSender:{sender,count}|null }; reads `NormalizedMemory.reactions[]` captured in 3AG; `#reactionAnalysisPanel` rose/crimson panel (hidden when totalReactions===0); `reaction-analysis-tests.mjs` (66 tests / 14 suites incl. IQR-preservation regression); km-engine +6 → 180; Phase 44 E2E (6 tests, reuses fake-instagram-dm.json); 3645 Node / 30 suites; 57 seeded; 195 real-files; visual regression PASS; NO adapter / import-quality-report / normalized-memory changes; NO DEF-11 in-book rendering |
 | Package 3AG | COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08; Instagram DM + Facebook Messenger adapters map `msg.reactions` (Meta `{reaction,actor}`) → `NormalizedMemory.reactions[]` canonical `{reactor,emoji,label}`; per-adapter `mapReactions()` + `decodeReaction()` (Latin-1-escaped-UTF-8 mojibake repair + raw-preserve fallback, malformed-safe); fixtures enriched (IG 2 clean-unicode; FB 1 mojibake→👍 + 1 clean; 8 imported each unchanged); `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57 seeded; 189 real-files; `ImportQualityReport` reaction counts now real for Meta imports; NO engine/panel (deferred to 3AH), NO `index.html`, NO book reaction rendering |

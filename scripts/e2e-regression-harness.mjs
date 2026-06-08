@@ -178,9 +178,21 @@ async function waitForKm(page) {
     await page.waitForFunction(
         () => typeof window.__km !== 'undefined',
         { timeout: 10_000 }
-    ).catch(() => {
+    ).catch(async () => {
+        // Failure-path only: gather best-effort context so a flaky startup is
+        // distinguishable from a genuine "scripts loaded but bridge missing" failure.
+        // Does not affect the success path, the timeout, or any assertion.
+        let detail = '';
+        try {
+            const probe = await page.evaluate(() => ({
+                url: location.href,
+                readyState: document.readyState,
+                hasKMEngine: typeof window.KMEngine !== 'undefined',
+            }));
+            detail = ` (url=${probe.url}, readyState=${probe.readyState}, KMEngine=${probe.hasKMEngine})`;
+        } catch (_) { /* page may not be navigable yet; context is best-effort */ }
         throw new Error(
-            'window.__km was not defined within 10s — ' +
+            'window.__km was not defined within 10s' + detail + ' — ' +
             'check that index.html loaded and all src/ modules were served correctly'
         );
     });
@@ -219,9 +231,14 @@ class Harness {
             this.results.push({ name, passed: true, ms: Date.now() - start });
             console.log(`  ✓  ${name}`);
         } catch (err) {
-            this.results.push({ name, passed: false, ms: Date.now() - start, error: err.message });
-            console.error(`  ✗  ${name}`);
+            const ms = Date.now() - start;
+            this.results.push({ name, passed: false, ms, error: err.message });
+            console.error(`  ✗  ${name}  (failed after ${ms}ms)`);
             console.error(`     ${err.message}`);
+            // Best-effort per-phase context to speed triage of flaky vs. genuine failures.
+            try {
+                console.error(`     page url: ${this.page.url()}`);
+            } catch (_) { /* page may be closed; ignore */ }
             await this._screenshot(name);
         }
     }
@@ -306,21 +323,31 @@ async function main() {
     console.log('── PHASE 1 — App load ──\n');
 
     await harness.run('navigate to app and wait for window.__km', async page => {
-        // One bounded retry for the initial navigation — first Chromium connection can
-        // occasionally be slower than the server probe, especially on Windows.
-        for (let attempt = 1; attempt <= 2; attempt++) {
+        // Bounded retry for the initial navigation — the first Chromium connection can
+        // occasionally be slower than the server probe, especially on Windows. Each retry
+        // re-probes the static server (same readiness pattern as the pre-launch probe) and
+        // backs off briefly so a slow first paint can settle. Bounded to MAX_STARTUP_ATTEMPTS
+        // and re-raises the real error on the final attempt, so a genuine load failure still
+        // fails the phase rather than being masked.
+        const MAX_STARTUP_ATTEMPTS = 3;
+        let lastErr = null;
+        for (let attempt = 1; attempt <= MAX_STARTUP_ATTEMPTS; attempt++) {
             try {
                 await page.goto(url, { waitUntil: 'domcontentloaded' });
                 await waitForKm(page);
                 return;
             } catch (e) {
-                if (attempt < 2) {
-                    console.log(`     [startup retry] initial load did not complete — retrying once`);
-                } else {
-                    throw e;
+                lastErr = e;
+                if (attempt < MAX_STARTUP_ATTEMPTS) {
+                    console.log(`     [startup retry] attempt ${attempt}/${MAX_STARTUP_ATTEMPTS} did not complete (${e.message.split('\n')[0]}) — re-probing server, backing off, retrying`);
+                    await waitForServer(url).catch(() => {});
+                    await new Promise(r => setTimeout(r, 250 * attempt));
                 }
             }
         }
+        throw new Error(
+            `App did not load after ${MAX_STARTUP_ATTEMPTS} startup attempts. Last error: ${lastErr && lastErr.message}`
+        );
     });
 
     await harness.run('landing page visible', async page => {

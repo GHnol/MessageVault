@@ -51,6 +51,7 @@ git diff -- [each changed file]
 - [ ] E2E run (or N/A — reason: )
 - [ ] Capture harness run (or N/A — reason: )
 - [ ] All run checks green
+- [ ] Counts match the current baseline in `docs/qa/test-strategy.md` § "Pre-commit baseline" (authoritative source — Node suites/tests, seeded E2E, real-files E2E)
 
 ## 4. Manual QA (UI/behavior changes only)
 
