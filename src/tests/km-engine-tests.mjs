@@ -49,6 +49,7 @@ load('src/core/timing-analysis.js');
 load('src/core/response-time-analysis.js');
 load('src/core/message-length-analysis.js');
 load('src/core/conversation-initiation.js');
+load('src/core/reaction-analysis.js');
 
 const { KMEngine } = ctx.window;
 
@@ -483,6 +484,17 @@ assert(typeof ciEmpty === 'object' && ciEmpty !== null,                         
 assert(ciEmpty.totalConversations === 0 && ciEmpty.topInitiator === null,                      'compute([]) returns zero-state');
 assert(Array.isArray(ciEmpty.perSenderStats) && ciEmpty.perSenderStats.length === 0,           'compute([]) perSenderStats is empty array');
 assert(Object.keys(KMEngine.ConversationInitiation).length === 1,                              'ConversationInitiation exposes only compute');
+
+// ── REACTION ANALYSIS — smoke ────────────────────────────────────────────────
+
+suite('ReactionAnalysis — smoke');
+assert(KMEngine.ReactionAnalysis !== undefined,                                                'ReactionAnalysis exists on KMEngine');
+assert(typeof KMEngine.ReactionAnalysis.compute === 'function',                                'compute is a function');
+const raEmpty = KMEngine.ReactionAnalysis.compute([]);
+assert(typeof raEmpty === 'object' && raEmpty !== null,                                         'compute([]) returns an object');
+assert(raEmpty.totalReactions === 0 && raEmpty.topReactor === null,                             'compute([]) returns zero-state');
+assert(Array.isArray(raEmpty.topReactionEmojis) && raEmpty.topReactionEmojis.length === 0,      'compute([]) topReactionEmojis is empty array');
+assert(Object.keys(KMEngine.ReactionAnalysis).length === 1,                                     'ReactionAnalysis exposes only compute');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 

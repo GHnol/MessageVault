@@ -2347,7 +2347,7 @@ async function main() {
                 `Expected conversation count or percentage in CI panel, got: "${panelText.substring(0, 80)}"`);
         });
 
-        await harness.run('non-CI TXT reimport hides CI panel and resets state for Phase 12', async page => {
+        await harness.run('non-CI TXT reimport hides CI panel and resets state for Phase 44', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');
@@ -2358,7 +2358,83 @@ async function main() {
                 return data.length;
             });
             assert(count === TXT_FIXTURE_COUNT,
-                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${count}`);
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 44 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 44 — Reaction Analysis panel (Package 3AH)
+        // Reuses the Package 3AG-enriched Instagram DM fixture (2 reactions:
+        // Alice Smith reacts ❤️ and 😂 to bob_jones_99's messages).
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 44 — Reaction Analysis panel ──\n');
+
+        await harness.run('before reaction import #reactionAnalysisPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('reactionAnalysisPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#reactionAnalysisPanel should be hidden before any import');
+        });
+
+        await harness.run('after Instagram fixture import #reactionAnalysisPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(INSTAGRAM_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('reactionAnalysisPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#reactionAnalysisPanel should be visible and non-empty after Instagram fixture import');
+        });
+
+        await harness.run('Instagram fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === INSTAGRAM_FIXTURE_COUNT,
+                `Expected ${INSTAGRAM_FIXTURE_COUNT} messages from Instagram fixture, got ${count}`);
+        });
+
+        await harness.run('reaction panel shows Alice Smith as top reactor', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('reactionAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasAlice = /Alice Smith/.test(panelText);
+            assert(hasAlice,
+                `Expected "Alice Smith" as top reactor in reaction panel, got: "${panelText.substring(0, 100)}"`);
+        });
+
+        await harness.run('reaction panel shows total reactions or most-reacted-to-sender chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('reactionAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasMetric = /\d+\s+reactions/.test(panelText) || /bob_jones_99/.test(panelText);
+            assert(hasMetric,
+                `Expected reaction count or most-reacted-to sender in reaction panel, got: "${panelText.substring(0, 100)}"`);
+        });
+
+        await harness.run('non-reaction TXT reimport hides reaction panel and resets state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const result = await page.evaluate(() => {
+                const el = document.getElementById('reactionAnalysisPanel');
+                const hidden = !el || el.style.display === 'none' || el.innerHTML.trim().length === 0;
+                const data = window.chatMessagesData || [];
+                return { hidden, count: data.length };
+            });
+            assert(result.hidden, '#reactionAnalysisPanel hidden after non-reaction TXT reimport');
+            assert(result.count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${result.count}`);
         });
 
         // ─────────────────────────────────────────────────────────────────────

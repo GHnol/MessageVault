@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync (this update). Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`. No active pass. No active package. Next development candidate: TBD — awaiting Coordinator authorization. Previously: Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`.
+**Status:** `in-progress (pending commit authorization)` — Package 3AH — Reaction Analysis Engine + Panel — implementation COMPLETE on branch `feature/reaction-analysis-engine` (from `main` at `5834b54`); NOT committed; awaiting Coordinator commit authorization. All verification green: 3645 Node / 30 suites; 57/57 seeded E2E; 195/195 real-files E2E (Phase 44 6/6); visual regression PASS (4/4). Previously: Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`, merged to `main` 2026-06-08; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -19,10 +19,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | Field | Value |
 |---|---|
 | **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `79d3246` (docs: close Post-Package-3AG Tower Catch-Up; `main` HEAD) |
+| **Active branch** | `feature/reaction-analysis-engine` (from `main` at `5834b54`) |
+| **base HEAD** | `5834b54` (docs: close Post-Package-3AG Tower Catch-Up; `main` HEAD at branch creation) |
 | **Last completed pass** | Post-Package-3AG Tower Catch-Up — docs `79d3246`, merged to `main` 2026-06-08 |
-| **Active package** | None |
+| **Active package** | `Package 3AH — Reaction Analysis Engine + Panel` — implementation COMPLETE, uncommitted, awaiting Coordinator commit authorization |
 | **Last closed package** | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AE — Message Length Analysis Engine` — FULLY COMPLETE — impl `dde558c`, merged to `main` 2026-06-08 |
@@ -33,6 +33,34 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AH — Reaction Analysis Engine + Panel — IN PROGRESS, pending commit authorization)
+
+Branch: `feature/reaction-analysis-engine` from `main` at `5834b54`. Authorized by Coordinator 2026-06-08. **Implementation COMPLETE; all verification green; NOT committed — awaiting Coordinator commit authorization.**
+
+**Objective:** Add `KMEngine.ReactionAnalysis.compute(memories)` (pure IIFE, `src/core/reaction-analysis.js`) summarizing the `NormalizedMemory.reactions[]` captured in Package 3AG, plus an import-time advisory `#reactionAnalysisPanel`. Engine + panel only — NO DEF-11 in-book reaction rendering.
+
+**Return shape:** `{ totalReactions, messagesWithReactions, topReactionEmojis: [{ emoji, count, rank }], topReactor: { reactor, count } | null, mostReactedToSender: { sender, count } | null }`. MAX_TOP=5. Every valid reaction object counts toward totalReactions; messages with ≥1 reaction toward messagesWithReactions; emoji (skip null/empty) → topReactionEmojis; reactor (skip null/empty) → topReactor; message sender → mostReactedToSender. Sort count desc then string asc. Zero-state for empty/invalid/no-reaction. Pure, no DOM.
+
+**Files changed (10 — 2 new, 8 modified):**
+- `src/core/reaction-analysis.js` (NEW) — engine IIFE ✓
+- `src/tests/reaction-analysis-tests.mjs` (NEW) — 66 tests / 14 suites incl. IQR preservation regression ✓
+- `src/tests/km-engine-tests.mjs` — loads reaction-analysis.js; `ReactionAnalysis — smoke` (+6 → 180) ✓
+- `index.html` — CSS (rose/crimson) light+dark; script tag; `#reactionAnalysisPanel` div; binding; `renderReactionAnalysisPanel(memories)`; 11 call sites; `window.__km.renderReactionAnalysisPanel`; hidden when totalReactions===0 ✓
+- `scripts/e2e-regression-harness.mjs` — Phase 44 (6 tests, reuses `fake-instagram-dm.json`); Phase 43 reset relabeled to feed Phase 44 ✓
+- `docs/qa/test-strategy.md` — counts (3573→3645, 29→30 suites), reaction-analysis row, real-files 189→195, Phase 44, Package 3AH subsection ✓
+- `docs/architecture/architecture-roadmap.md` — module map + panel + test row + Package 3AH DELIVERED entry; fixed stale inner subheader ✓
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs ✓
+
+**Verification gate (all green):** 3645 Node / 30 suites PASS (+72: 66 reaction-analysis + 6 km-engine smoke); seeded E2E 57/57; real-files E2E 195/195 (Phase 44 6/6); visual regression PASS (4/4 baselines unchanged); OS audit 324/0/0; project-control-sync-validate 11/0/0; project-control-sync-dry-run STRUCTURAL PASS.
+
+**Hard exclusions confirmed:** no adapter changes; no `src/core/import-quality-report.js`; no `src/core/normalized-memory.js`; no DEF-11 in-book reaction rendering; no Message Book reaction badges; no book composition; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no `src/products/*`; no `src/state/*`; no ProductDraft/Preflight/Lifecycle; no proof approval; no Review view; no standalone keepsake flows; no DEF-14 in-book Stats Page; no PDF/checkout/vendor/manufacturing/cover; no dependency installs; no external systems.
+
+**What is done:** Implementation + tests + docs complete; all gates green; on branch `feature/reaction-analysis-engine`; NOT committed.
+**What remains:** Coordinator commit authorization → commit → (optional) merge to `main` → post-merge state-sync.
+**Next exact action:** Report verification results to Coordinator and await explicit commit authorization. Do not commit until authorized.
 
 ---
 
