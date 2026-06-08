@@ -164,7 +164,7 @@ DELIVERED (Package 3AC — Message Timing Analysis Engine, impl `74ff910`, merge
 - `docs/qa/test-strategy.md` — Phase 40 note; real-files baseline 165→171; Node baseline 3174→3273 (26 suites).
 - `docs/architecture/architecture-roadmap.md` — this file; Package 3AC entry.
 
-DELIVERED (Package 3AF — Conversation Initiation Analysis Engine, impl pending state-sync, merged to `main` 2026-06-08):
+DELIVERED (Package 3AF — Conversation Initiation Analysis Engine, impl `7f03889`, merged to `main` 2026-06-08):
 - `src/core/conversation-initiation.js` — `KMEngine.ConversationInitiation`; IIFE module; `compute(memories)` returns `{ totalConversations, topInitiator: { sender, initiationCount } | null, perSenderStats: [{ sender, initiationCount, initiationPct }] }`; filters non-system messages with valid timestamps, sorts ascending; a conversation start = first valid message + any message whose gap from the previous valid message `>= GAP_THRESHOLD_MS` (named constant = 6 hours); credits each start to that message's sender; topInitiator = highest initiationCount (tie-break sender asc); perSenderStats sorted initiationCount desc then name asc; initiationPct = count / totalConversations × 100 rounded to 1 decimal; zero-state for empty/invalid/no-valid-message input; pure, no DOM, no side effects.
 - `scripts/fixtures/fake-conversation-initiation.txt` — 12-message WhatsApp bracket fixture; 2 senders Alice/Bob; 3 gap-separated conversations (intraday morning + intraday evening after ~9h gap + next-day morning after ~14h gap); Alice starts 2, Bob starts 1.
 - `src/tests/conversation-initiation-tests.mjs` — 90 tests across 20 suites.
