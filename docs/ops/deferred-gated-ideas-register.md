@@ -182,11 +182,12 @@
 
 ### DEF-14 — Stats page
 
-**Status:** Deferred
+**Status:** Deferred (engine-layer data points complete through Package 3AB; Stats Page surface deferred)
 **Description:** A modular stats page within the book showing: total messages, story span, messages by each person, top emojis, words shared, most active day, longest streak.
 **Effort:** Medium.
 **Priority:** Medium — strong engagement feature; emotionally resonant.
 **Note:** Tone should be adjustable — playful stats work for couples/friends; memorial books need a gentler treatment.
+**Engine-layer progress:** All 7 DEF-14 data points now have engine-layer delivery — total messages (Package 3I / ImportQualityReport); story span, most active day, longest streak, messages by person (Package 3Y / ConversationStats); top emojis (Package 3AA / EmojiAnalysis); words shared (Package 3AB / WordAnalysis). The actual in-book Stats Page surface remains deferred.
 **Activate when:** book editor is consumer-ready.
 
 ---

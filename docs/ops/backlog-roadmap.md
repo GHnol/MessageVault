@@ -520,20 +520,20 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 
 ---
 
-### Current position — import analytics layer COMPLETE through Package 3AA
+### Current position — import analytics layer COMPLETE through Package 3AB
 
-**Status:** No package authorized. Package 3AA COMPLETE (merged `29c4491` 2026-06-07) — Emoji Analysis Engine delivered. Coordinator decides next development package.
+**Status:** No package authorized. Package 3AB COMPLETE (merged `ebf9668` 2026-06-08) — Word Count / Language Analysis Engine delivered. All DEF-14 engine-layer data points complete. Coordinator decides next development package.
 
 **Import analytics layer delivery summary:**
 - Package 3I — Import Quality Report (`KMEngine.ImportQualityReport.compute()`, `#importQualityPanel`) ✓
 - Package 3X — Pre-print Content Quality Checks: 5 WARN checks; `KMEngine.ContentQualityChecks.compute()`, `#contentQualityPanel` ✓
 - Package 3Y — Conversation Statistics Engine: `KMEngine.ConversationStats.compute()`, `#conversationStatsPanel` ✓
 - Package 3Z — Extended CQC: +4 WARN checks → 9 total in `KMEngine.ContentQualityChecks.compute()` ✓
-- Package 3AA — Emoji Analysis Engine: `KMEngine.EmojiAnalysis.compute()`, `#emojiAnalysisPanel`; topEmojis (MAX_TOP=5), totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender; partially activates DEF-14 ✓
+- Package 3AA — Emoji Analysis Engine: `KMEngine.EmojiAnalysis.compute()`, `#emojiAnalysisPanel`; topEmojis (MAX_TOP=5), totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender ✓
+- Package 3AB — Word Count / Language Analysis Engine: `KMEngine.WordAnalysis.compute()`, `#wordAnalysisPanel`; totalWords, avgWordsPerMessage, topWords (MAX_TOP=10), topWordSender; completes all DEF-14 engine data points ✓
 - **Client-side adapter series also complete (Packages 3J–3W):** `future-adapter-stubs.js` STUBS array now empty
 
-**Next recommended candidate (awaiting Coordinator authorization):**
-- **Package 3AB — Word Count / Language Analysis Engine** — new `src/core/word-analysis.js` IIFE engine module; `KMEngine.WordAnalysis.compute(memories)`; returns `{totalWords, avgWordsPerMessage, topWords, topWordSender}`; new `#wordAnalysisPanel` in `index.html`; no external gate; completes DEF-14 "words shared" data point; medium effort; follows established compute(memories) IIFE pattern
+**Next development candidate:** TBD — awaiting Coordinator authorization. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). DEF-14 Stats Page surface remains deferred until book editor is consumer-ready.
 
 **Candidates still blocked (do not start):**
 - Phase 12 continuation / GATE-04 — blocked: PDF pipeline + vendor + checkout
