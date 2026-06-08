@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `open` — Package 3AC (Message Timing Analysis Engine) IN PROGRESS. Branch: `feature/timing-analysis-engine` from `main` at `3b346dd`. Authorized by Coordinator 2026-06-07.
+**Status:** `closed` — Package 3AC (Message Timing Analysis Engine) COMPLETE. Impl `74ff910`, merged to `main` 2026-06-07. No active package. Awaiting Coordinator authorization.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
@@ -19,11 +19,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | Field | Value |
 |---|---|
 | **Active pass** | None |
-| **Active branch** | `feature/timing-analysis-engine` |
-| **main HEAD** | `3b346dd` — docs: close Post-Package-3AB Tower Catch-Up |
+| **Active branch** | `main` |
+| **main HEAD** | `74ff910` — feat: add timing analysis engine |
 | **Last completed pass** | Post-Package-3AB Tower Catch-Up — docs `61bac12`, merged `b70d840` 2026-06-08 |
-| **Active package** | `Package 3AC — Message Timing Analysis Engine` — IN PROGRESS |
-| **Last closed package** | `Package 3AB — Word Count / Language Analysis Engine` — FULLY COMPLETE — impl `9290b8e`, merged `ebf9668` 2026-06-08 |
+| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Last closed package** | `Package 3AC — Message Timing Analysis Engine` — FULLY COMPLETE — impl `74ff910`, merged to `main` 2026-06-07 |
 | **Prior closed package** | `Package 3AA — Emoji Analysis Engine` — FULLY COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07 |
 | **Prior closed package** | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
@@ -34,32 +34,15 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (Package 3AC — Message Timing Analysis Engine — IN PROGRESS)
+## Objective (Package 3AC — Message Timing Analysis Engine — COMPLETE)
 
-Branch: `feature/timing-analysis-engine` from `main` at `3b346dd`. Authorized by Coordinator 2026-06-07.
+Branch: `feature/timing-analysis-engine` from `main` at `3b346dd`. Authorized by Coordinator 2026-06-07. **COMPLETE — impl `74ff910`, merged to `main` 2026-06-07.**
 
 **Objective:** Add `KMEngine.TimingAnalysis.compute(memories)` pure IIFE engine module; Node tests; km-engine smoke; `#timingAnalysisPanel` UI surface (green tone); E2E Phase 40; docs updates.
 
-**Return shape:** `{ peakHour: number|null, peakHourCount: number, peakDayOfWeek: number|null, peakDayOfWeekCount: number, hourlyDistribution: number[24], dailyDistribution: number[7] }`
+**Files changed (11 files — 3 new, 8 modified):** `src/core/timing-analysis.js` (NEW), `scripts/fixtures/fake-timing-analysis.txt` (NEW), `src/tests/timing-analysis-tests.mjs` (NEW, 93 tests / 15 suites), `src/tests/km-engine-tests.mjs` (+6 → 156), `index.html`, `scripts/e2e-regression-harness.mjs` (Phase 40, 6 tests), `docs/qa/test-strategy.md`, `docs/architecture/architecture-roadmap.md`, `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`.
 
-**Behavior:** UTC only; `peakHour` 0–23 via `getUTCHours()`; `peakDayOfWeek` 0–6 via `getUTCDay()` (Sunday=0); skip null/falsy/invalid timestamps; zero-state for empty/invalid/no-valid-timestamp input; tie-break: lowest index wins for peakHour and peakDayOfWeek; pure, no DOM, no side effects.
-
-**Files to change (11 files — 3 new, 8 modified):**
-- `src/core/timing-analysis.js` — NEW; IIFE module; `KMEngine.TimingAnalysis = { compute }`; UTC hour-of-day + day-of-week distribution
-- `scripts/fixtures/fake-timing-analysis.txt` — NEW; WhatsApp bracket fixture; ~12 messages; deterministic peakHour and peakDayOfWeek
-- `src/tests/timing-analysis-tests.mjs` — NEW; ~100 tests / ~15 suites
-- `src/tests/km-engine-tests.mjs` — MODIFIED; loads `timing-analysis.js`; `TimingAnalysis — smoke` suite (+6)
-- `index.html` — MODIFIED; green CSS; script tag; `#timingAnalysisPanel`; binding; `renderTimingAnalysisPanel()`; 11 call sites; `window.__km.renderTimingAnalysisPanel`
-- `scripts/e2e-regression-harness.mjs` — MODIFIED; `TIMING_FIXTURE` + count constant; Phase 40 (6 tests)
-- `docs/qa/test-strategy.md` — MODIFIED; Phase 40 note; Node baseline 3174→new; real-files 165→171
-- `docs/architecture/architecture-roadmap.md` — MODIFIED; `timing-analysis.js` in module map; Package 3AC entry
-- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs
-
-**Hard exclusions confirmed:** `src/products/*`, `src/state/*`, all existing `src/core/` modules, all `src/adapters/*`, existing `scripts/fixtures/*`, pagination constants, `BOOK_PAGINATION_VERSION`, `BOOK_PRODUCTION_DEPS`, `BOOK_PARITY`, standalone keepsake flows, Review view, proof/draft/lifecycle/product/checkout/PDF/vendor/manufacturing scope, external systems.
-
-**What is done:** Branch created; state docs updated.
-**What remains:** Implement all 11 files; run verification gate.
-**Next exact action:** Write `src/core/timing-analysis.js`, fixture, tests, update km-engine-tests.mjs, index.html, e2e harness, Tower docs. Run full verification gate. Stop before commit.
+**Verification gate result:** 3273/26 Node PASS; 57/57 seeded E2E PASS; 171/171 real-files E2E PASS (Phase 40 6/6); visual regression PASS; state freshness PASS (post-merge sync COMPLETE).
 
 ---
 

@@ -16,18 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Package 3AC — Message Timing Analysis Engine — IN PROGRESS; branch `feature/timing-analysis-engine` from `3b346dd`)
+**Last updated:** `2026-06-07` (Package 3AC — Message Timing Analysis Engine — COMPLETE; impl `74ff910`, merged to `main` 2026-06-07)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `3b346dd` — docs: close Post-Package-3AB Tower Catch-Up |
-| Active branch | `feature/timing-analysis-engine` |
+| main HEAD | `74ff910` — feat: add timing analysis engine |
+| Active branch | `main` |
 | Active pass | None |
 | Last completed pass | Post-Package-3AB Tower Catch-Up — docs `61bac12`, merged `b70d840` 2026-06-08 |
-| Last closed package | `Package 3AB — Word Count / Language Analysis Engine` — FULLY COMPLETE — impl `9290b8e`, merged `ebf9668` 2026-06-08 |
-| Active package | `Package 3AC — Message Timing Analysis Engine` — IN PROGRESS — branch `feature/timing-analysis-engine` |
-| Test baseline | **3174 Node tests** (25 suites); E2E seeded 57/57; E2E real-files 165/165 (Phase 39: 6 tests); visual regression PASS |
+| Last closed package | `Package 3AC — Message Timing Analysis Engine` — FULLY COMPLETE — impl `74ff910`, merged to `main` 2026-06-07 |
+| Active package | None — awaiting Coordinator authorization for next development package |
+| Test baseline | **3273 Node tests** (26 suites); E2E seeded 57/57; E2E real-files 171/171 (Phase 40: 6 tests); visual regression PASS |
+| Package 3AC | COMPLETE — impl `74ff910`, merged to `main` 2026-06-07; `src/core/timing-analysis.js` (NEW); `scripts/fixtures/fake-timing-analysis.txt` (NEW); `src/tests/timing-analysis-tests.mjs` (NEW, 93 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 → 156); `index.html` (CSS, script tag, div, binding, renderTimingAnalysisPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 40, 6 tests); docs updated |
 | Package 3AB | COMPLETE — impl `9290b8e`, merged `ebf9668` 2026-06-08; `src/core/word-analysis.js` (NEW); `scripts/fixtures/fake-word-analysis.txt` (NEW); `src/tests/word-analysis-tests.mjs` (NEW, 100 tests / 19 suites); `src/tests/km-engine-tests.mjs` (+6 → 150); `index.html` (CSS, script tag, div, binding, renderWordAnalysisPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 39, 6 tests); docs updated |
 | Package 3AA | COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07; `src/core/emoji-analysis.js` (NEW); `scripts/fixtures/fake-emoji-conversation.txt` (NEW); `src/tests/emoji-analysis-tests.mjs` (NEW, 100 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 → 144); `index.html` (CSS, script tag, div, binding, renderEmojiAnalysisPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 38, 6 tests); docs updated |
 | Package 3Z | COMPLETE — impl `4902d50`, merged `ff79f9e` 2026-06-07; extends `KMEngine.ContentQualityChecks.compute()` with 4 new WARN checks: HIGH_ATTACHMENT_RATIO, VERY_LONG_CONTENT, SHORT_CONVERSATION, SINGLE_SENDER_DOMINANT; Suite 3 enlarged + Suites 16–19 added (184 tests / 19 suites); 4 km-engine smoke (→138); Phase 37 E2E (7 tests); `CQC_EXTENDED_FIXTURE_COUNT=6`; 2962/2962 Node; no index.html changes |
