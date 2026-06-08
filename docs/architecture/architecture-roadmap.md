@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-08 (Package 3AH — Reaction Analysis Engine + Panel — IN PROGRESS)
+**Last updated:** 2026-06-08 (Package 3AH — Reaction Analysis Engine + Panel — COMPLETE — impl `a165122`, merged to `main`)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (Package 3AH — Reaction Analysis Engine + Panel IN PROGRESS)
+## Current architecture (Package 3AH — Reaction Analysis Engine + Panel COMPLETE)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -183,7 +183,7 @@ DELIVERED (Package 3AG — Meta Reaction Capture, 2026-06-08):
 - `src/tests/instagram-dm-adapter-tests.mjs` (Suite 16, +14 → 101) and `src/tests/facebook-messenger-adapter-tests.mjs` (Suite 18, +15 → 113); Node baseline 3544 → 3573 (29 suites).
 - No engine module, no `#reactionAnalysisPanel`, no `index.html` change (ReactionAnalysis engine + panel deferred to Package 3AH). No DEF-11 in-book reaction rendering. No E2E phase added (Meta Phases 29–32 unchanged; real-files 189).
 
-DELIVERED (Package 3AH — Reaction Analysis Engine + Panel, 2026-06-08):
+DELIVERED (Package 3AH — Reaction Analysis Engine + Panel, impl `a165122`, merged to `main` 2026-06-08):
 - `src/core/reaction-analysis.js` (NEW) — `KMEngine.ReactionAnalysis`; IIFE module; `compute(memories)` returns `{ totalReactions, messagesWithReactions, topReactionEmojis: [{ emoji, count, rank }], topReactor: { reactor, count } | null, mostReactedToSender: { sender, count } | null }`; reads `NormalizedMemory.reactions[]` captured in Package 3AG; MAX_TOP=5; counts every valid reaction object toward totalReactions, messages with ≥1 reaction toward messagesWithReactions, emoji (skip null/empty) toward topReactionEmojis, reactor (skip null/empty) toward topReactor, message sender toward mostReactedToSender; sort count desc then string asc; zero-state for empty/invalid/no-reaction; pure, no DOM.
 - `src/tests/reaction-analysis-tests.mjs` (NEW) — 66 tests across 14 suites; includes an ImportQualityReport preservation regression assertion (loads `import-quality-report.js`; does not modify it).
 - `src/tests/km-engine-tests.mjs` — loads `reaction-analysis.js`; `ReactionAnalysis — smoke` suite added (+6 → 180 total).
