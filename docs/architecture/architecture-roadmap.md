@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07 (Package 3AC — Message Timing Analysis Engine — COMPLETE)
+**Last updated:** 2026-06-07 (Package 3AD — Response Time Analysis Engine — COMPLETE)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (Package 3AC — Message Timing Analysis Engine COMPLETE)
+## Current architecture (Package 3AD — Response Time Analysis Engine COMPLETE)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -21,6 +21,7 @@ src/
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 9 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X; HIGH_ATTACHMENT_RATIO (>80%), VERY_LONG_CONTENT (text.length>1000), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 sender) — Package 3Z
     timing-analysis.js          — KMEngine.TimingAnalysis; compute(memories) pure function; returns { peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }; UTC only (getUTCHours / getUTCDay); skips null/falsy/invalid timestamps; zero-state for empty/invalid/no-valid-ts input; tie-break: lowest index wins; pure, no DOM, no side effects — Package 3AC
+    response-time-analysis.js   — KMEngine.ResponseTimeAnalysis; compute(memories) pure function; returns { avgResponseTimeMs: number, fastestResponder: { sender, avgResponseTimeMs, responseCount } | null, perSenderStats: [{ sender, avgResponseTimeMs, responseCount }] }; skips senderRole:system; skips null/falsy/invalid timestamps; sorts by timestamp before pairing; pairs consecutive different-sender entries only; perSenderStats sorted avgMs asc then name asc; zero-state for empty/invalid/no-valid-pair input; pure, no DOM, no side effects — Package 3AD
     word-analysis.js            — KMEngine.WordAnalysis; compute(memories) pure function; returns { totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation; lowercase; skips attachment-only and blank/null text; zero-state for empty/invalid; tie-break topWords by count desc then word asc; topWordSender tie-break wordCount desc then name asc; avgWordsPerMessage rounded to 1 decimal — Package 3AB
     emoji-analysis.js          — KMEngine.EmojiAnalysis; compute(memories) pure function; returns { topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }; MAX_TOP=5; handles ZWJ sequences, skin-tone modifiers, keycap sequences, flag sequences; zero-state for empty/invalid; tie-break by count desc then emoji string asc; mostEmojifiedSender tie-break count desc then name asc — Package 3AA
     conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y
@@ -40,6 +41,7 @@ index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFac
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
 index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
 index.html (timing analysis panel) — #timingAnalysisPanel; renderTimingAnalysisPanel(memories); green tone (light #e8f5e9/#1b5e20, dark #001400/#a5d6a7); chips: peakHour ("HH:00 UTC peak hour"), peakDayOfWeek (day name + "peak day"); called at all 11 import/open sites; window.__km.renderTimingAnalysisPanel — Package 3AC
+index.html (response time panel)  — #responseTimePanel; renderResponseTimePanel(memories); orange/rose tone (light #fff3e0/#bf360c, dark #1a0800/#ffccbc); chips: avgResponseTimeMs formatted as "N.N min"/"Ns"/"N.N hr", fastestResponder sender name; hidden if no valid response pairs; called at all 11 import/open sites; window.__km.renderResponseTimePanel — Package 3AD
 index.html (word analysis panel)  — #wordAnalysisPanel; renderWordAnalysisPanel(memories); purple/violet tone (light #f3e5f5/#4a148c, dark #1a0030/#ce93d8); chips: topWords (word × count), topWordSender ("sent the most words"), totalWords; called at all 11 import/open sites; window.__km.renderWordAnalysisPanel — Package 3AB
 index.html (emoji analysis panel) — #emojiAnalysisPanel; renderEmojiAnalysisPanel(memories); teal tone (light #e0f7fa/#006064, dark #001c1e/#80cbc4); chips: topEmojis (emoji × count), mostEmojifiedSender, totalEmojiCount; called at all 11 import/open sites; window.__km.renderEmojiAnalysisPanel — Package 3AA
 index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y
@@ -87,6 +89,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
     telegram-adapter-tests.mjs              — 91 tests; API shape, canHandle (accepts/rejects IG/FB/non-Telegram/from_id discriminator), fixture rawCounts, timestamp (Unix seconds → ISO), sender extraction, text plain/array-entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory fields, importWarnings, no-throw, participants — Package 3U
     timing-analysis-tests.mjs              — 93 tests; API shape, empty/null/non-array zero-state, no-valid-timestamps zero-state, single message, hourlyDistribution 24-slot accuracy, dailyDistribution 7-slot accuracy, peakHour computation, peakDayOfWeek computation, null/missing/invalid/falsy timestamps skipped, peakHour tie-break (lowest index), peakDayOfWeek tie-break (lowest index), multi-sender sender-agnostic, no-throw, semantic guards — Package 3AC
+    response-time-analysis-tests.mjs      — 81 tests; API shape, empty/null/non-array zero-state, no-valid-timestamps zero-state, system-message exclusion, single-message/all-same-sender zero-state, basic response pair detection, avgResponseTimeMs accuracy, perSenderStats accuracy/sort, fastestResponder, system skipped in pairs, same-sender pairs skipped, unsorted input handled, zero delta counted, null/invalid timestamps skipped, tie-break alphabetical, no-throw, semantic guards — Package 3AD
     word-analysis-tests.mjs                — 100 tests; API shape, empty/null/invalid zero-state, attachment-only exclusion, basic word extraction, lowercase normalization, punctuation stripping, word accumulation, totalWords, avgWordsPerMessage rounding, topWords sorting/ranking/MAX_TOP=10, tie-breaking, topWordSender, topWordSender tie-breaking, multi-sender scenario, blank/empty text, malformed entries no-throw, fixture behavior, semantic guards — Package 3AB
     emoji-analysis-tests.mjs               — 100 tests; API shape, empty/null/invalid zero-state, emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards — Package 3AA
 ```
@@ -145,7 +148,7 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3AC — Message Timing Analysis Engine):
+DELIVERED (Package 3AC — Message Timing Analysis Engine, impl `74ff910`, merged to `main` 2026-06-07):
 - `src/core/timing-analysis.js` — `KMEngine.TimingAnalysis`; IIFE module; `compute(memories)` returns `{ peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }`; UTC only (`getUTCHours()` / `getUTCDay()`, Sunday=0); skips null/falsy/invalid timestamps; zero-state for empty/null/non-array/no-valid-ts; tie-break: lowest index wins; pure, no DOM, no side effects.
 - `scripts/fixtures/fake-timing-analysis.txt` — 12-message WhatsApp bracket fixture; 2 senders: Alice (6) + Bob (6); 3 days (Jun 10–12, 2025); local hour 14 appears most; diverse hours for UTC distribution testing.
 - `src/tests/timing-analysis-tests.mjs` — 93 tests across 15 suites.
@@ -154,6 +157,16 @@ IN PROGRESS (Package 3AC — Message Timing Analysis Engine):
 - `scripts/e2e-regression-harness.mjs` — `TIMING_FIXTURE` + `TIMING_FIXTURE_COUNT = 12` constants; Phase 40 (6 real-files tests): hidden before import → visible after TA fixture import → count=12 → `HH:MM UTC` hour chip → day name chip → TXT reimport resets state for Phase 12.
 - `docs/qa/test-strategy.md` — Phase 40 note; real-files baseline 165→171; Node baseline 3174→3273 (26 suites).
 - `docs/architecture/architecture-roadmap.md` — this file; Package 3AC entry.
+
+DELIVERED (Package 3AD — Response Time Analysis Engine, 2026-06-07):
+- `src/core/response-time-analysis.js` — `KMEngine.ResponseTimeAnalysis`; IIFE module; `compute(memories)` returns `{ avgResponseTimeMs, fastestResponder: { sender, avgResponseTimeMs, responseCount } | null, perSenderStats: [{ sender, avgResponseTimeMs, responseCount }] }`; skips `senderRole:system`; skips null/falsy/invalid timestamps; sorts valid entries by timestamp ascending before pairing; pairs only consecutive different-sender entries; skips delta < 0; `perSenderStats` sorted avgMs asc then name asc; `avgResponseTimeMs` = `Math.round(sum/count)`; zero-state for empty/invalid/no-valid-pair input; pure, no DOM, no side effects.
+- `scripts/fixtures/fake-response-time.txt` — 12-message WhatsApp bracket fixture; 2 senders: Alice (6, responds ~1 min after Bob) + Bob (6, responds ~5 min after Alice); Alice is fastest responder.
+- `src/tests/response-time-analysis-tests.mjs` — 81 tests across 18 suites.
+- `src/tests/km-engine-tests.mjs` — loads `response-time-analysis.js`; `ResponseTimeAnalysis — smoke` suite added (+6 → 162 total).
+- `index.html` — CSS for `.response-time-panel` + `.response-time-inner` + `.response-time-chip` (orange/rose tone: light `#fff3e0`/`#bf360c`, dark `#1a0800`/`#ffccbc`); dark mode overrides; `<script src="src/core/response-time-analysis.js">` tag after timing-analysis.js; `<div id="responseTimePanel">` after `#timingAnalysisPanel`; `const responseTimePanel` binding; `renderResponseTimePanel(memories)` function; chips: avgResponseTimeMs formatted as "N.N min"/"Ns"/"N.N hr", fastestResponder sender name; calls at all 11 import/open sites; `window.__km.renderResponseTimePanel` exposed.
+- `scripts/e2e-regression-harness.mjs` — `RESP_FIXTURE` + `RESP_FIXTURE_COUNT = 12` constants; Phase 41 (6 real-files tests): hidden before import → visible after RTA fixture import → count=12 → "N.N min" avg response chip → "Alice" fastest responder chip → TXT reimport resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 41 note; real-files baseline 171→177; Node baseline 3273→3360 (27 suites).
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3AD entry.
 
 DELIVERED (Package 3AB — Word Count / Language Analysis Engine, impl `9290b8e`, merged `ebf9668` 2026-06-08):
 - `src/core/word-analysis.js` — `KMEngine.WordAnalysis`; IIFE module; `compute(memories)` returns `{ totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }`; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation (`/^[^\w]+|[^\w]+$/g`); lowercase; skips `type=attachment-placeholder` and `isAttachmentOnly=true`; skips blank/null text; zero-state for empty/invalid; pure, no DOM, no side effects.

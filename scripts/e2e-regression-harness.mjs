@@ -97,6 +97,9 @@ const WORD_ANALYSIS_FIXTURE_COUNT = 10; // 10 messages: Alice (6), Bob (4)
 const TIMING_FIXTURE       = path.join(__dir, 'fixtures', 'fake-timing-analysis.txt');
 const TIMING_FIXTURE_COUNT = 12; // 12 messages across 3 days: Alice (6), Bob (6)
 
+const RESP_FIXTURE       = path.join(__dir, 'fixtures', 'fake-response-time.txt');
+const RESP_FIXTURE_COUNT = 12; // 12 messages: Alice (6) responds ~1min, Bob (6) responds ~5min
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -2126,6 +2129,77 @@ async function main() {
         });
 
         await harness.run('non-TA TXT reimport hides panel and resets state for Phase 12', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 12 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 41 — Response Time Analysis panel (Package 3AD)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 41 — Response Time Analysis panel ──\n');
+
+        await harness.run('before RTA import #responseTimePanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('responseTimePanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#responseTimePanel should be hidden before any import');
+        });
+
+        await harness.run('after RTA fixture import #responseTimePanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(RESP_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('responseTimePanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#responseTimePanel should be visible and non-empty after RTA fixture import');
+        });
+
+        await harness.run('RTA fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === RESP_FIXTURE_COUNT,
+                `Expected ${RESP_FIXTURE_COUNT} messages from RTA fixture, got ${count}`);
+        });
+
+        await harness.run('RTA panel shows avg response chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('responseTimePanel');
+                return el ? el.textContent : '';
+            });
+            const hasAvg = /\d+(\.\d+)? (min|s|hr)/.test(panelText);
+            assert(hasAvg,
+                `Expected a time format (e.g. "3.2 min") in RTA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('RTA panel shows fastest responder chip with Alice', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('responseTimePanel');
+                return el ? el.textContent : '';
+            });
+            const hasAlice = /Alice/.test(panelText);
+            assert(hasAlice,
+                `Expected "Alice" as fastest responder in RTA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('non-RTA TXT reimport hides panel and resets state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');

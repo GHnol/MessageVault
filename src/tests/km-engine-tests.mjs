@@ -46,6 +46,7 @@ load('src/core/conversation-stats.js');
 load('src/core/emoji-analysis.js');
 load('src/core/word-analysis.js');
 load('src/core/timing-analysis.js');
+load('src/core/response-time-analysis.js');
 
 const { KMEngine } = ctx.window;
 
@@ -447,6 +448,17 @@ assert(typeof taEmpty === 'object' && taEmpty !== null,                'compute(
 assert(taEmpty.peakHour === null && taEmpty.peakDayOfWeek === null,    'compute([]) returns zero-state');
 assert(Array.isArray(taEmpty.hourlyDistribution) && taEmpty.hourlyDistribution.length === 24, 'compute([]) hourlyDistribution has 24 slots');
 assert(Array.isArray(taEmpty.dailyDistribution) && taEmpty.dailyDistribution.length === 7,   'compute([]) dailyDistribution has 7 slots');
+
+// ── RESPONSE TIME ANALYSIS — smoke ────────────────────────────────────────────
+
+suite('ResponseTimeAnalysis — smoke');
+assert(KMEngine.ResponseTimeAnalysis !== undefined,                                            'ResponseTimeAnalysis exists on KMEngine');
+assert(typeof KMEngine.ResponseTimeAnalysis.compute === 'function',                            'compute is a function');
+const rtaEmpty = KMEngine.ResponseTimeAnalysis.compute([]);
+assert(typeof rtaEmpty === 'object' && rtaEmpty !== null,                                      'compute([]) returns an object');
+assert(rtaEmpty.avgResponseTimeMs === 0 && rtaEmpty.fastestResponder === null,                 'compute([]) returns zero-state');
+assert(Array.isArray(rtaEmpty.perSenderStats) && rtaEmpty.perSenderStats.length === 0,        'compute([]) perSenderStats is empty array');
+assert(Object.keys(KMEngine.ResponseTimeAnalysis).length === 1,                                'ResponseTimeAnalysis exposes only compute');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
