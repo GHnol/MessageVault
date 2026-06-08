@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-08 (Package 3AH — Reaction Analysis Engine + Panel — COMPLETE — impl `a165122`, merged to `main`)
+**Last updated:** 2026-06-08 (Package 3AJ — Import Insights Consolidation — wiring consolidation only; `renderImportInsights` dispatcher; no new engine, no new panel, no behavior change. Prior: Package 3AH — Reaction Analysis Engine + Panel — COMPLETE — impl `a165122`, merged to `main`)
 **Status:** Active
 
 ---
@@ -48,6 +48,7 @@ index.html (response time panel)  — #responseTimePanel; renderResponseTimePane
 index.html (message length panel) — #messageLengthPanel; renderMessageLengthPanel(memories); cyan/sky-blue tone (light #e0f7fa/#006064, dark #001a1a/#b2ebf2); chips: avgCharsPerMessage ("N.N avg chars/msg"), longestMessage sender name; hidden if avgCharsPerMessage === 0; called at all 11 import/open sites; window.__km.renderMessageLengthPanel — Package 3AE
 index.html (conversation initiation panel) — #conversationInitiationPanel; renderConversationInitiationPanel(memories); pink/magenta tone (light #fce4ec/#880e4f, dark #1a0014/#f8bbd0); chips: totalConversations ("N conversations"), topInitiator ("X started the most"), top initiator initiationPct ("N% of conversations"); hidden if totalConversations === 0; called at all 11 import/open sites; window.__km.renderConversationInitiationPanel — Package 3AF
 index.html (reaction analysis panel) — #reactionAnalysisPanel; renderReactionAnalysisPanel(memories); rose/crimson tone (light #ffebee/#b71c1c, dark #1a0006/#ef9a9a); chips: totalReactions ("N reactions"), top emoji ("emoji × N"), topReactor ("X reacted most"), mostReactedToSender ("Y most reacted-to"); hidden if totalReactions === 0; called at all 11 import/open sites; window.__km.renderReactionAnalysisPanel — Package 3AH
+index.html (import insights dispatcher) — renderImportInsights(memories); single dispatcher that delegates to the 10 import-panel renderers (renderImportQualityPanel → renderReactionAnalysisPanel) in their existing order; now invoked once at each of the 11 import/open sites in place of the per-panel call clusters; individual renderXPanel functions + window.__km bridges preserved; window.__km.renderImportInsights; pure wiring consolidation — no new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility change — Package 3AJ
 index.html (word analysis panel)  — #wordAnalysisPanel; renderWordAnalysisPanel(memories); purple/violet tone (light #f3e5f5/#4a148c, dark #1a0030/#ce93d8); chips: topWords (word × count), topWordSender ("sent the most words"), totalWords; called at all 11 import/open sites; window.__km.renderWordAnalysisPanel — Package 3AB
 index.html (emoji analysis panel) — #emojiAnalysisPanel; renderEmojiAnalysisPanel(memories); teal tone (light #e0f7fa/#006064, dark #001c1e/#80cbc4); chips: topEmojis (emoji × count), mostEmojifiedSender, totalEmojiCount; called at all 11 import/open sites; window.__km.renderEmojiAnalysisPanel — Package 3AA
 index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y
@@ -108,6 +109,9 @@ All modules expose into `window.KMEngine`. No build step.
 ---
 
 ## Near-term additions (Package 3 and beyond)
+
+DELIVERED (Package 3AJ — Import Insights Consolidation, branch `feature/import-insights-consolidation` from `main` at `a84c4f9`):
+- `index.html` — added `renderImportInsights(memories)` dispatcher that delegates to the ten existing import-panel render functions (`renderImportQualityPanel`, `renderContentQualityPanel`, `renderConversationStatsPanel`, `renderEmojiAnalysisPanel`, `renderWordAnalysisPanel`, `renderTimingAnalysisPanel`, `renderResponseTimePanel`, `renderMessageLengthPanel`, `renderConversationInitiationPanel`, `renderReactionAnalysisPanel`) in their existing order. Replaced the per-panel call clusters at all 11 import/open sites with one `renderImportInsights(...)` call (same argument per site). All individual `renderXPanel` functions and their `window.__km` bridges preserved; added `window.__km.renderImportInsights`. No DOM/CSS/panel-order/panel-copy/visibility-logic change — visibility logic remains inside each `renderXPanel`; the dispatcher only delegates. Pure wiring consolidation — no new engine, no new panel, no product behavior change. Baseline unchanged: 3645 Node / 30 suites; 57 seeded; 195 real-files; visual regression PASS.
 
 DELIVERED (Package 3E, merged `4390038` 2026-06-02):
 - `src/products/product-draft-state.js` — ProductDraft lifecycle state model (per-product draft container). Delivered as `ProductDraftState`.

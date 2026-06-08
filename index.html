@@ -4506,6 +4506,20 @@
             reactionAnalysisPanel.style.display = '';
         }
 
+        // Package 3AJ: import insights dispatcher — delegates to the per-panel renderers in order (wiring consolidation only; no behavior change)
+        function renderImportInsights(memories) {
+            renderImportQualityPanel(memories);
+            renderContentQualityPanel(memories);
+            renderConversationStatsPanel(memories);
+            renderEmojiAnalysisPanel(memories);
+            renderWordAnalysisPanel(memories);
+            renderTimingAnalysisPanel(memories);
+            renderResponseTimePanel(memories);
+            renderMessageLengthPanel(memories);
+            renderConversationInitiationPanel(memories);
+            renderReactionAnalysisPanel(memories);
+        }
+
         /* ─────────────────────────────────────────────
            WhatsApp self-identification sender picker
         ───────────────────────────────────────────── */
@@ -4549,16 +4563,7 @@
                 data[i].senderRole = (senderName && data[i].sender === senderName) ? 'self' : 'contact';
             }
             renderConversation(data);
-            renderImportQualityPanel(data);
-            renderContentQualityPanel(data);
-            renderConversationStatsPanel(data);
-            renderEmojiAnalysisPanel(data);
-            renderWordAnalysisPanel(data);
-            renderTimingAnalysisPanel(data);
-            renderResponseTimePanel(data);
-            renderMessageLengthPanel(data);
-            renderConversationInitiationPanel(data);
-            renderReactionAnalysisPanel(data);
+            renderImportInsights(data);
             if (whatsappSenderPicker) {
                 whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4613,16 +4618,7 @@
                 data[i].senderRole = (senderName && data[i].sender === senderName) ? 'self' : 'contact';
             }
             renderConversation(data);
-            renderImportQualityPanel(data);
-            renderContentQualityPanel(data);
-            renderConversationStatsPanel(data);
-            renderEmojiAnalysisPanel(data);
-            renderWordAnalysisPanel(data);
-            renderTimingAnalysisPanel(data);
-            renderResponseTimePanel(data);
-            renderMessageLengthPanel(data);
-            renderConversationInitiationPanel(data);
-            renderReactionAnalysisPanel(data);
+            renderImportInsights(data);
             if (instagramSenderPicker) {
                 instagramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4677,16 +4673,7 @@
                 data[i].senderRole = (senderName && data[i].sender === senderName) ? 'self' : 'contact';
             }
             renderConversation(data);
-            renderImportQualityPanel(data);
-            renderContentQualityPanel(data);
-            renderConversationStatsPanel(data);
-            renderEmojiAnalysisPanel(data);
-            renderWordAnalysisPanel(data);
-            renderTimingAnalysisPanel(data);
-            renderResponseTimePanel(data);
-            renderMessageLengthPanel(data);
-            renderConversationInitiationPanel(data);
-            renderReactionAnalysisPanel(data);
+            renderImportInsights(data);
             if (facebookSenderPicker) {
                 facebookSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4738,16 +4725,7 @@
                 data[i].senderRole = (senderName && data[i].sender === senderName) ? 'self' : 'contact';
             }
             renderConversation(data);
-            renderImportQualityPanel(data);
-            renderContentQualityPanel(data);
-            renderConversationStatsPanel(data);
-            renderEmojiAnalysisPanel(data);
-            renderWordAnalysisPanel(data);
-            renderTimingAnalysisPanel(data);
-            renderResponseTimePanel(data);
-            renderMessageLengthPanel(data);
-            renderConversationInitiationPanel(data);
-            renderReactionAnalysisPanel(data);
+            renderImportInsights(data);
             if (telegramSenderPicker) {
                 telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4774,16 +4752,7 @@
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
-                    renderImportQualityPanel(result.memories);
-                    renderContentQualityPanel(result.memories);
-                    renderConversationStatsPanel(result.memories);
-                    renderEmojiAnalysisPanel(result.memories);
-                    renderWordAnalysisPanel(result.memories);
-                    renderTimingAnalysisPanel(result.memories);
-                    renderResponseTimePanel(result.memories);
-                    renderMessageLengthPanel(result.memories);
-                    renderConversationInitiationPanel(result.memories);
-                    renderReactionAnalysisPanel(result.memories);
+                    renderImportInsights(result.memories);
                     showWhatsAppSenderPicker(result.memories);
                     if (instagramSenderPicker) {
                         instagramSenderPicker.style.display = 'none';
@@ -4823,16 +4792,7 @@
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
-                    renderImportQualityPanel(result.memories);
-                    renderContentQualityPanel(result.memories);
-                    renderConversationStatsPanel(result.memories);
-                    renderEmojiAnalysisPanel(result.memories);
-                    renderWordAnalysisPanel(result.memories);
-                    renderTimingAnalysisPanel(result.memories);
-                    renderResponseTimePanel(result.memories);
-                    renderMessageLengthPanel(result.memories);
-                    renderConversationInitiationPanel(result.memories);
-                    renderReactionAnalysisPanel(result.memories);
+                    renderImportInsights(result.memories);
                     return;
                 }
 
@@ -4842,16 +4802,7 @@
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
-                    renderImportQualityPanel(result.memories);
-                    renderContentQualityPanel(result.memories);
-                    renderConversationStatsPanel(result.memories);
-                    renderEmojiAnalysisPanel(result.memories);
-                    renderWordAnalysisPanel(result.memories);
-                    renderTimingAnalysisPanel(result.memories);
-                    renderResponseTimePanel(result.memories);
-                    renderMessageLengthPanel(result.memories);
-                    renderConversationInitiationPanel(result.memories);
-                    renderReactionAnalysisPanel(result.memories);
+                    renderImportInsights(result.memories);
                     showFacebookSenderPicker(result.memories);
                     return;
                 }
@@ -4862,16 +4813,7 @@
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
-                    renderImportQualityPanel(result.memories);
-                    renderContentQualityPanel(result.memories);
-                    renderConversationStatsPanel(result.memories);
-                    renderEmojiAnalysisPanel(result.memories);
-                    renderWordAnalysisPanel(result.memories);
-                    renderTimingAnalysisPanel(result.memories);
-                    renderResponseTimePanel(result.memories);
-                    renderMessageLengthPanel(result.memories);
-                    renderConversationInitiationPanel(result.memories);
-                    renderReactionAnalysisPanel(result.memories);
+                    renderImportInsights(result.memories);
                     showInstagramSenderPicker(result.memories);
                     return;
                 }
@@ -4882,16 +4824,7 @@
                     window.chatMessagesData = result.memories;
                     showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
                     renderConversation(result.memories);
-                    renderImportQualityPanel(result.memories);
-                    renderContentQualityPanel(result.memories);
-                    renderConversationStatsPanel(result.memories);
-                    renderEmojiAnalysisPanel(result.memories);
-                    renderWordAnalysisPanel(result.memories);
-                    renderTimingAnalysisPanel(result.memories);
-                    renderResponseTimePanel(result.memories);
-                    renderMessageLengthPanel(result.memories);
-                    renderConversationInitiationPanel(result.memories);
-                    renderReactionAnalysisPanel(result.memories);
+                    renderImportInsights(result.memories);
                     showTelegramSenderPicker(result.memories);
                     return;
                 }
@@ -4904,16 +4837,7 @@
                     : normalizedMessages;
                 showStatusIn(txtStatus, `Found ${normalizedMessages.length.toLocaleString()} messages — processed locally`);
                 renderConversation(normalizedMessages);
-                renderImportQualityPanel(window.chatMessagesData);
-                renderContentQualityPanel(window.chatMessagesData);
-                renderConversationStatsPanel(window.chatMessagesData);
-                renderEmojiAnalysisPanel(window.chatMessagesData);
-                renderWordAnalysisPanel(window.chatMessagesData);
-                renderTimingAnalysisPanel(window.chatMessagesData);
-                renderResponseTimePanel(window.chatMessagesData);
-                renderMessageLengthPanel(window.chatMessagesData);
-                renderConversationInitiationPanel(window.chatMessagesData);
-                renderReactionAnalysisPanel(window.chatMessagesData);
+                renderImportInsights(window.chatMessagesData);
             };
 
             reader.readAsText(file);
@@ -5348,16 +5272,7 @@
                     backToPickerBtn.style.display = 'inline-flex';
                     showView(chatView);
                     renderConversation(messages);
-                    renderImportQualityPanel(window.chatMessagesData);
-                    renderContentQualityPanel(window.chatMessagesData);
-                    renderConversationStatsPanel(window.chatMessagesData);
-                    renderEmojiAnalysisPanel(window.chatMessagesData);
-                    renderWordAnalysisPanel(window.chatMessagesData);
-                    renderTimingAnalysisPanel(window.chatMessagesData);
-                    renderResponseTimePanel(window.chatMessagesData);
-                    renderMessageLengthPanel(window.chatMessagesData);
-                    renderConversationInitiationPanel(window.chatMessagesData);
-                    renderReactionAnalysisPanel(window.chatMessagesData);
+                    renderImportInsights(window.chatMessagesData);
                     hideLoading();
                 } catch (err) {
                     hideLoading();
@@ -9781,6 +9696,8 @@ ${keepsakeFooter}
             renderConversationInitiationPanel,
             // Package 3AH: reaction analysis bridge for E2E testability
             renderReactionAnalysisPanel,
+            // Package 3AJ: import insights dispatcher bridge for E2E testability
+            renderImportInsights,
             // Package 3L: WhatsApp self-id bridge for E2E testability
             applyWhatsAppSelfSender,
             // Package 3Q: Instagram DM self-id bridge for E2E testability
