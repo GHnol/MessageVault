@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `in-progress` — Package 3AG — Meta Reaction Capture — IMPLEMENTATION COMPLETE on branch `feature/meta-reaction-capture` (base `main` `9bf1a4b`); full verification gate green; **awaiting Coordinator commit authorization** (no commit yet). Previously: Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`.
+**Status:** `closed` — Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08. No active pass. No active package. Next recommended: Post-Package-3AG Tower Catch-Up (docs-only). Previously: Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -18,12 +18,13 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | Package 3AG — Meta Reaction Capture (implementation complete; awaiting commit authorization) |
-| **Active branch** | `feature/meta-reaction-capture` (base `main` `9bf1a4b`) |
-| **base HEAD** | `9bf1a4b` (branch base; `main` HEAD unchanged — no commit yet) |
+| **Active pass** | None |
+| **Active branch** | `main` |
+| **base HEAD** | `0331da0` (feat: capture Meta reactions in Instagram DM and Facebook Messenger adapters (Package 3AG), fast-forward merged to `main` 2026-06-08) |
 | **Last completed pass** | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
-| **Active package** | `Package 3AG — Meta Reaction Capture` — implementation complete on `feature/meta-reaction-capture`; awaiting commit authorization |
-| **Last closed package** | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
+| **Active package** | None |
+| **Last closed package** | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
+| **Prior closed package** | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AE — Message Length Analysis Engine` — FULLY COMPLETE — impl `dde558c`, merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AA — Emoji Analysis Engine` — FULLY COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07 |
 | **Prior closed package** | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
@@ -35,9 +36,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
-## Objective (Package 3AG — Meta Reaction Capture — IMPLEMENTATION COMPLETE, awaiting commit)
+## Objective (Package 3AG — Meta Reaction Capture — COMPLETE)
 
-Branch: `feature/meta-reaction-capture` from `main` at `9bf1a4b`. Authorized by Coordinator 2026-06-08. **IMPLEMENTATION COMPLETE — full verification gate green — NOT committed (awaiting Coordinator authorization).**
+Branch: `feature/meta-reaction-capture` from `main` at `9bf1a4b`. Authorized by Coordinator 2026-06-08. **COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08. Post-merge state-sync in progress (this update).**
 
 **Objective:** Capture-only groundwork for a later ReactionAnalysis engine (Package 3AH). Map Instagram DM and Facebook Messenger message reactions (Meta `{ reaction, actor }`) into `NormalizedMemory.reactions[]` as canonical `{ reactor, emoji, label }`. No ReactionAnalysis engine, no reaction panel, no book reaction rendering.
 
@@ -58,9 +59,9 @@ Branch: `feature/meta-reaction-capture` from `main` at `9bf1a4b`. Authorized by 
 
 **Hard exclusions confirmed:** no `index.html`; no `src/core/*`; no `src/products/*`; no `src/state/*`; no ReactionAnalysis engine / `#reactionAnalysisPanel`; no Message Book reaction rendering; no DEF-11 in-book rendering; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no proof/draft/preflight/lifecycle; no PDF/checkout/vendor/manufacturing; no dependency installs; no external systems.
 
-**What is done:** Implementation + tests + docs complete; all gates green; hard-exclusion diff clean.
-**What remains:** Coordinator commit authorization; then commit + fast-forward merge + post-merge state-sync; then Post-Package-3AG Tower catch-up.
-**Next exact action:** Await Coordinator authorization to commit on `feature/meta-reaction-capture`. Do not commit or push without explicit authorization.
+**What is done:** Implementation + tests + docs complete; all gates green; committed `0331da0`; fast-forward merged to `main` 2026-06-08; post-merge state-sync in progress (this update).
+**What remains:** Nothing — Package 3AG FULLY COMPLETE. Post-Package-3AG Tower Catch-Up still to be authorized.
+**Next exact action:** No active package. Recommend Post-Package-3AG Tower Catch-Up (docs-only) to bring the broader Tower docs current. Do not start any package without explicit Coordinator authorization.
 
 ---
 

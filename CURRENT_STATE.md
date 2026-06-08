@@ -16,19 +16,19 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-08` (Package 3AG — Meta Reaction Capture — IMPLEMENTATION COMPLETE on `feature/meta-reaction-capture`; full verification gate green; awaiting Coordinator commit authorization)
+**Last updated:** `2026-06-08` (Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08; post-merge state-sync)
 **Updated by:** `Claude Code (Opus 4.8)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `9bf1a4b` — docs: close Post-Package-3AF Tower Catch-Up (`main` unchanged; Package 3AG not committed) |
-| Active branch | `feature/meta-reaction-capture` (base `main` `9bf1a4b`) |
-| Active pass | Package 3AG — Meta Reaction Capture (implementation complete; awaiting commit authorization) |
+| main HEAD | `0331da0` — feat: capture Meta reactions in Instagram DM and Facebook Messenger adapters (Package 3AG) |
+| Active branch | `main` |
+| Active pass | None |
 | Last completed pass | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
-| Last closed package | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
-| Active package | `Package 3AG — Meta Reaction Capture` — implementation complete on `feature/meta-reaction-capture`; awaiting commit authorization |
+| Last closed package | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
+| Active package | None |
 | Test baseline | **3573 Node tests** (29 suites); E2E seeded 57/57; E2E real-files 189/189; visual regression PASS (Package 3AG added +14 IG / +15 FB reaction-capture tests) |
-| Package 3AG | IMPLEMENTATION COMPLETE (awaiting commit) — branch `feature/meta-reaction-capture`; Instagram DM + Facebook Messenger adapters map `msg.reactions` (Meta `{reaction,actor}`) → `NormalizedMemory.reactions[]` canonical `{reactor,emoji,label}`; per-adapter `mapReactions()` + `decodeReaction()` (Latin-1-escaped-UTF-8 mojibake repair + raw-preserve fallback, malformed-safe); fixtures enriched (IG 2 clean-unicode; FB 1 mojibake→👍 + 1 clean; 8 imported each unchanged); `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57 seeded; 189 real-files; `ImportQualityReport` reaction counts now real for Meta imports; NO engine/panel (deferred to 3AH), NO `index.html`, NO book reaction rendering |
+| Package 3AG | COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08; Instagram DM + Facebook Messenger adapters map `msg.reactions` (Meta `{reaction,actor}`) → `NormalizedMemory.reactions[]` canonical `{reactor,emoji,label}`; per-adapter `mapReactions()` + `decodeReaction()` (Latin-1-escaped-UTF-8 mojibake repair + raw-preserve fallback, malformed-safe); fixtures enriched (IG 2 clean-unicode; FB 1 mojibake→👍 + 1 clean; 8 imported each unchanged); `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57 seeded; 189 real-files; `ImportQualityReport` reaction counts now real for Meta imports; NO engine/panel (deferred to 3AH), NO `index.html`, NO book reaction rendering |
 | Package 3AF | COMPLETE — impl `7f03889`, merged to `main` 2026-06-08; `src/core/conversation-initiation.js` (NEW); `scripts/fixtures/fake-conversation-initiation.txt` (NEW); `src/tests/conversation-initiation-tests.mjs` (NEW, 90 tests / 20 suites); `src/tests/km-engine-tests.mjs` (+6 → 174); `index.html` (pink/magenta CSS, script tag, `#conversationInitiationPanel`, binding, `renderConversationInitiationPanel`, 11 call sites, `__km`); `scripts/e2e-regression-harness.mjs` (Phase 43, 6 tests); `KMEngine.ConversationInitiation.compute()` returns { totalConversations, topInitiator, perSenderStats }; GAP_THRESHOLD_MS = 6h; 3544 Node / 29 suites; 57 seeded; 189 real-files |
 | Package 3AE | COMPLETE — impl `dde558c`, merged to `main` 2026-06-08; `src/core/message-length-analysis.js` (NEW); `scripts/fixtures/fake-message-length.txt` (NEW); `src/tests/message-length-analysis-tests.mjs` (NEW, 82 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 → 168); `index.html` (CSS, script tag, div, binding, renderMessageLengthPanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 42, 6 tests); docs updated |
 | Package 3AD | COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07; `src/core/response-time-analysis.js` (NEW); `scripts/fixtures/fake-response-time.txt` (NEW); `src/tests/response-time-analysis-tests.mjs` (NEW, 81 tests / 18 suites); `src/tests/km-engine-tests.mjs` (+6 → 162); `index.html` (CSS, script tag, div, binding, renderResponseTimePanel, 11 call sites, __km); `scripts/e2e-regression-harness.mjs` (Phase 41, 6 tests); docs updated |
