@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-08 (Post-Package-3AF Tower Catch-Up IN PROGRESS — branch `docs/post-3af-tower-catchup` from `main` at `4ff64b5`; Package 3AF COMPLETE — impl `7f03889`, merged to `main` 2026-06-08)
+**Last updated:** 2026-06-08 (Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,7 +29,7 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- **Post-Package-3AF Tower Catch-Up operating pass** · Docs-only · Ph0 · branch `docs/post-3af-tower-catchup` from `main` at `4ff64b5`; bringing Tower/command-center/backlog/roadmap/report-mirror/operating docs current after Package 3AF COMPLETE; no app code; awaiting Coordinator commit authorization
+- _(empty — no active development pass or package)_
 
 ### Waiting / Blocked
 - **Coordinator authorize next development package** · Coordinator · P0 · Package 3AF COMPLETE 2026-06-08 (impl `7f03889`, merged to `main`; state-sync `4ff64b5`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AF
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Post-Package-3AF Tower Catch-Up operating pass** · Docs-only · docs `be171dc`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AF COMPLETE — COMPLETE
 - **Package 3AF — Conversation Initiation Analysis Engine** · Development / Engine+UI · Ph3 · implementation `7f03889`, merged to `main` 2026-06-08 (ff-only); state-sync `4ff64b5`; `KMEngine.ConversationInitiation.compute()`; returns { totalConversations, topInitiator, perSenderStats }; filters non-system + valid-timestamp, sorts ascending; conversation start = first valid message + any message with gap >= GAP_THRESHOLD_MS (6h); topInitiator tie-break sender asc; perSenderStats sorted initiationCount desc then alpha; initiationPct count/total × 100 rounded 1 decimal; `#conversationInitiationPanel` pink/magenta CSS; `renderConversationInitiationPanel(memories)` at 11 call sites; `window.__km.renderConversationInitiationPanel`; 90 new tests (`conversation-initiation-tests.mjs`, 20 suites) + 6 km-engine smoke (→174 total); Phase 43 E2E (6 tests); 3544 Node / 29 suites; 57/57 seeded; 189/189 real-files — COMPLETE
 - **Post-Package-3AE Tower Catch-Up operating pass** · Docs-only · docs `00e084b`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AE COMPLETE — COMPLETE
 - **Package 3AE — Message Length Analysis Engine** · Development / Engine+UI · Ph3 · implementation `dde558c`, merged to `main` 2026-06-08 (ff-only); `KMEngine.MessageLengthAnalysis.compute()`; returns { avgCharsPerMessage, longestMessage, perSenderStats }; skips system/attachment-only/attachment-placeholder/non-string/blank; rounded to 1 decimal; earliest tie-break for longest; perSenderStats sorted desc avg then alpha; `#messageLengthPanel` cyan/sky-blue CSS; `renderMessageLengthPanel(memories)` at 11 call sites; `window.__km.renderMessageLengthPanel`; 82 new tests (`message-length-analysis-tests.mjs`, 15 suites) + 6 km-engine smoke (→168 total); Phase 42 E2E (6 tests); 3448 Node / 28 suites; 57/57 seeded; 183/183 real-files — COMPLETE

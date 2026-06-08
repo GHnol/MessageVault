@@ -16,15 +16,15 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-08` (Post-Package-3AF Tower Catch-Up IN PROGRESS — branch `docs/post-3af-tower-catchup` from `main` at `4ff64b5`; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`)
+**Last updated:** `2026-06-08` (Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; post-merge closeout state-sync)
 **Updated by:** `Claude Code (Opus 4.8)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `4ff64b5` — docs: sync operating docs after Package 3AF completion |
-| Active branch | `docs/post-3af-tower-catchup` (from `main` at `4ff64b5`) |
-| Active pass | Post-Package-3AF Tower Catch-Up (docs-only; uncommitted) |
-| Last completed pass | Post-Package-3AE Tower Catch-Up — docs `00e084b`, merged to `main` 2026-06-08 |
+| main HEAD | `be171dc` — docs: close Post-Package-3AF Tower Catch-Up |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
 | Last closed package | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
 | Active package | None |
 | Test baseline | **3544 Node tests** (29 suites); E2E seeded 57/57; E2E real-files 189/189 (Phase 43: 6 tests PASS); visual regression PASS |

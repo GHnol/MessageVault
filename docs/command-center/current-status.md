@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Post-Package-3AF Tower Catch-Up IN PROGRESS — branch `docs/post-3af-tower-catchup`; Package 3AF COMPLETE — impl `7f03889`, merged to `main` 2026-06-08; state-sync `4ff64b5`)
+**Updated by:** Claude Code (Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -121,10 +121,10 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `4ff64b5` — docs: sync operating docs after Package 3AF completion (Package 3AF impl `7f03889`) |
-| Active branch | `docs/post-3af-tower-catchup` (Tower catch-up in progress; from `main` at `4ff64b5`) |
-| Working tree | Clean (pre-commit for this catch-up pass) |
-| Pushed to remote | `main` pushed through `4ff64b5`; this catch-up pass not yet committed |
+| main HEAD | `be171dc` — docs: close Post-Package-3AF Tower Catch-Up (Package 3AF impl `7f03889`, state-sync `4ff64b5`) |
+| Active branch | `main` |
+| Working tree | Clean |
+| Pushed to remote | pending push authorization (local `main` ahead of `origin/main` by the closeout commit) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -175,7 +175,7 @@
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> Package 3AF — Conversation Initiation Analysis Engine COMPLETE (impl `7f03889`, merged to `main` 2026-06-08; state-sync `4ff64b5`). Post-Package-3AF Tower Catch-Up in progress on branch `docs/post-3af-tower-catchup`. No active development package. Next development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
+> Package 3AF — Conversation Initiation Analysis Engine COMPLETE (impl `7f03889`, merged to `main` 2026-06-08; state-sync `4ff64b5`). Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08. No active pass. No active development package. Next development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
 
 ---
 

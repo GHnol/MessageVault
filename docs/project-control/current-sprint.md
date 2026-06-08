@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-08 (Post-Package-3AF Tower Catch-Up IN PROGRESS — branch `docs/post-3af-tower-catchup` from `main` at `4ff64b5`; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`, merged to `main` 2026-06-08)
+**Last updated:** 2026-06-08 (Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -44,7 +44,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 20 | Package 3T — Facebook Messenger Self-Identification Sender Picker | P2 | **Done** | impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes ✓ |
 | 21 | Package 3U — Telegram JSON Adapter | P2 | **Done** | impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites) ✓ |
 | 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3AF COMPLETE 2026-06-08 (impl `7f03889`, merged to `main`; state-sync `4ff64b5`); awaiting Coordinator authorization for next package after Package 3AF |
-| 41 | Post-Package-3AF Tower Catch-Up operating pass | P1 | **In Progress** | branch `docs/post-3af-tower-catchup` from `main` at `4ff64b5`; docs-only; bringing Tower/command-center/backlog/roadmap/report-mirror/operating docs current after Package 3AF COMPLETE; no app code |
+| 41 | Post-Package-3AF Tower Catch-Up operating pass | P1 | **Done** | docs `be171dc`, merged to `main` 2026-06-08; docs-only; brought Tower/command-center/backlog/roadmap/report-mirror/operating docs current after Package 3AF COMPLETE; no app code ✓ |
 | 40 | Package 3AF — Conversation Initiation Analysis Engine | P2 | **Done** | impl `7f03889`, merged to `main` 2026-06-08 (ff-only); state-sync `4ff64b5`; `KMEngine.ConversationInitiation.compute()`; `#conversationInitiationPanel` pink/magenta panel; GAP_THRESHOLD_MS = 6h; 90 conversation-initiation tests (20 suites) + 6 km-engine smoke (→174); Phase 43 E2E (6 tests); 3544 Node / 29 suites; 57/57 seeded; 189/189 real-files ✓ |
 | 39 | Post-Package-3AE Tower Catch-Up operating pass | P1 | **Done** | docs `00e084b`, merged to `main` 2026-06-08; docs-only; 13 authorized Tower docs updated after Package 3AE COMPLETE; no app code ✓ |
 | 38 | Package 3AE — Message Length Analysis Engine | P2 | **Done** | impl `dde558c`, merged to `main` 2026-06-08 (ff-only); `KMEngine.MessageLengthAnalysis.compute()`; `#messageLengthPanel` cyan/sky-blue panel; 82 message-length tests (15 suites) + 6 km-engine smoke (→168); Phase 42 E2E (6 tests); 3448 Node / 28 suites; 57/57 seeded; 183/183 real-files ✓ |
@@ -68,7 +68,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 
 ## Blocked tasks
 
-- **Coordinator authorize next development package** — P0 — Package 3AF COMPLETE 2026-06-08 (impl `7f03889`, merged to `main`; state-sync `4ff64b5`); Post-Package-3AF Tower Catch-Up in progress on `docs/post-3af-tower-catchup`; all development work halted pending Coordinator authorization for the next package after Package 3AF.
+- **Coordinator authorize next development package** — P0 — Package 3AF COMPLETE 2026-06-08 (impl `7f03889`, merged to `main`; state-sync `4ff64b5`); Post-Package-3AF Tower Catch-Up COMPLETE (docs `be171dc`); all development work halted pending Coordinator authorization for the next package after Package 3AF.
 
 ---
 
