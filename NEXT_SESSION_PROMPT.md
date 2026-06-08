@@ -8,7 +8,7 @@
 
 ## Paste-ready resume prompt
 
-> You are resuming work on KeepMees / MessageVault. **Package 3AD — Response Time Analysis Engine — COMPLETE.** impl `6fe873c`, merged to `main` 2026-06-07. No active pass. No active package. Next recommended action: Post-Package-3AD Tower Catch-Up (requires Coordinator authorization). Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
+> You are resuming work on KeepMees / MessageVault. **Post-Package-3AD Tower Catch-Up — IN PROGRESS** on branch `docs/post-3ad-tower-catchup` from `main` at `3276190`. Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07. Do not trust any memory of prior conversation. Read, in this order: `AGENTS.md`, `CLAUDE.md` (if you are Claude Code), `AI_HANDOFF.md`, `CURRENT_STATE.md`, `docs/ai-system/README.md`, `docs/dev/auto-management-protocol.md`. Then run `git status --short` and `git log --oneline -10`. Then state out loud: current pass, branch, objective, approved scope, hard exclusions, what is done, what remains, and your exact next action. Do not edit any file until you have done this. Do not commit or push without explicit instruction. If `AI_HANDOFF.md` is missing, stale, or conflicts with git state, stop and ask the Coordinator.
 
 ---
 
@@ -47,9 +47,9 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07. No active pass. No active package. Next recommended action: Post-Package-3AD Tower Catch-Up. Await Coordinator authorization before starting. |
-| Branch | `main` |
-| Next action | Run `/start`, read `AI_HANDOFF.md`, confirm branch is `main`, Package 3AD is COMPLETE, no active package. Await Coordinator authorization for Post-Package-3AD Tower Catch-Up. Do not start any package without explicit authorization. |
+| Resume into | Post-Package-3AD Tower Catch-Up IN PROGRESS on `docs/post-3ad-tower-catchup` from `main` at `3276190`. Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07. All 13 authorized docs updated; awaiting Coordinator authorization to commit. |
+| Branch | `docs/post-3ad-tower-catchup` |
+| Next action | Run `/start`, read `AI_HANDOFF.md`, confirm branch is `docs/post-3ad-tower-catchup`, Tower Catch-Up IN PROGRESS. Run validators, produce 7-item pre-commit report, await Coordinator authorization before committing. |
 | Package 3AD | COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07; `src/core/response-time-analysis.js` NEW; `scripts/fixtures/fake-response-time.txt` NEW; `src/tests/response-time-analysis-tests.mjs` NEW (81 tests / 18 suites); `src/tests/km-engine-tests.mjs` +6 → 162; `index.html` CSS+script+div+binding+renderResponseTimePanel+11 call sites+__km; `scripts/e2e-regression-harness.mjs` Phase 41 (6 tests); 3360 Node / 27 suites; 177 real-files |
 | Post-Package-3AC Tower Catch-Up | COMPLETE — docs `422e0a6`, merged to `main` 2026-06-07; 15 authorized docs updated; no app code |
 | Package 3AC | COMPLETE — impl `74ff910`, merged to `main` 2026-06-07; `src/core/timing-analysis.js` NEW; `scripts/fixtures/fake-timing-analysis.txt` NEW; `src/tests/timing-analysis-tests.mjs` NEW (93 tests / 15 suites); `src/tests/km-engine-tests.mjs` +6 → 156; `index.html` CSS+script+div+binding+renderTimingAnalysisPanel+11 call sites+__km; `scripts/e2e-regression-harness.mjs` Phase 40 (6 tests); 3273 Node / 26 suites; 171 real-files |

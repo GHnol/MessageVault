@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-07 (Post-Package-3AC Tower Catch-Up COMPLETE — docs `422e0a6`, merged to `main` 2026-06-07)
+**Last updated:** 2026-06-07 (Post-Package-3AD Tower Catch-Up COMPLETE — docs-only; Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -43,7 +43,9 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 19 | Package 3S — Facebook Messenger JSON UI Wiring | P2 | **Done** | impl `27b3521`, merged `e326fba` 2026-06-06; `facebook-messenger-adapter.js` script tag; FB routing guard in `readTxtFile()` (after Android SMS, before Instagram DM — required order; magic_words discriminator prevents IG collision); Phase 31 E2E (5 tests); 2554 Node; 57/57 seeded; 117/117 real-files; visual regression PASS; no sender picker (deferred to 3T) ✓ |
 | 20 | Package 3T — Facebook Messenger Self-Identification Sender Picker | P2 | **Done** | impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes ✓ |
 | 21 | Package 3U — Telegram JSON Adapter | P2 | **Done** | impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites) ✓ |
-| 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3AC COMPLETE 2026-06-07 (impl `74ff910`, merged to `main`; state-sync `df3f868`); awaiting Coordinator authorization for next package after Package 3AC |
+| 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3AD COMPLETE 2026-06-07 (impl `6fe873c`, merged to `main`; state-sync `3276190`); awaiting Coordinator authorization for next package after Package 3AD |
+| 36 | Package 3AD — Response Time Analysis Engine | P2 | **Done** | impl `6fe873c`, merged to `main` 2026-06-07 (ff-only); `KMEngine.ResponseTimeAnalysis.compute()`; `#responseTimePanel` orange/rose panel; 81 response-time tests (18 suites) + 6 km-engine smoke (→162); Phase 41 E2E (6 tests); 3360 Node / 27 suites; 57/57 seeded; 177/177 real-files ✓ |
+| 37 | Post-Package-3AD Tower Catch-Up operating pass | P1 | **Done** | docs-only; 13 authorized docs updated; no app code ✓ |
 | 35 | Package 3AC — Message Timing Analysis Engine | P2 | **Done** | impl `74ff910`, merged to `main` 2026-06-07 (ff-only); `KMEngine.TimingAnalysis.compute()`; `#timingAnalysisPanel` green panel; 93 timing-analysis tests (15 suites) + 6 km-engine smoke (→156); Phase 40 E2E (6 tests); 3273 Node / 26 suites; 57/57 seeded; 171/171 real-files ✓ |
 | 34 | Post-Package-3AC Tower Catch-Up operating pass | P1 | **Done** | docs `422e0a6`, merged to `main` 2026-06-07; docs-only; 15 authorized docs updated; no app code ✓ |
 | 32 | Package 3AB — Word Count / Language Analysis Engine | P2 | **Done** | impl `9290b8e`, merged `ebf9668` 2026-06-08; `KMEngine.WordAnalysis.compute()`; `#wordAnalysisPanel` purple panel; 100 word-analysis tests (19 suites) + 6 km-engine smoke (→150); Phase 39 E2E (6 tests); 3174 Node / 25 suites; 57/57 seeded; 165/165 real-files ✓ |
@@ -62,7 +64,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 
 ## Blocked tasks
 
-- **Coordinator authorize next development package** — P0 — Package 3AC COMPLETE 2026-06-07 (impl `74ff910`, merged to `main`; Tower catch-up `422e0a6` merged 2026-06-07); all development work halted pending Coordinator authorization for the next package after Package 3AC.
+- **Coordinator authorize next development package** — P0 — Package 3AD COMPLETE 2026-06-07 (impl `6fe873c`, merged to `main`; state-sync `3276190`; Tower catch-up COMPLETE); all development work halted pending Coordinator authorization for the next package after Package 3AD.
 
 ---
 

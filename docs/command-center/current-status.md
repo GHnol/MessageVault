@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (Post-Package-3AC Tower Catch-Up COMPLETE — docs `422e0a6`, merged to `main` 2026-06-07; Package 3AC COMPLETE — impl `74ff910`)
+**Updated by:** Claude Code (Post-Package-3AD Tower Catch-Up COMPLETE; Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07; state-sync `3276190`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -51,6 +51,7 @@
 | Package 3AA | Emoji Analysis Engine | COMPLETE — merged to main | `0e15cfb` | `29c4491` |
 | Package 3AB | Word Count / Language Analysis Engine | COMPLETE — merged to main | `9290b8e` | `ebf9668` |
 | Package 3AC | Message Timing Analysis Engine | COMPLETE — merged to main (ff-only) | `74ff910` | `74ff910` |
+| Package 3AD | Response Time Analysis Engine | COMPLETE — merged to main (ff-only) | `6fe873c` | `6fe873c` |
 | Package 3Z | Extended Content Quality Checks | COMPLETE — merged to main | `4902d50` | `ff79f9e` |
 | Package 3Y | Conversation Statistics Engine | COMPLETE — merged to main | `ca8d520` | `e0539d2` |
 | Package 3X | Pre-print Content Quality Checks | COMPLETE — merged to main | `e424825` | `7bdcdb5` |
@@ -67,12 +68,12 @@
 
 ## App code state
 
-- App code last changed: Package 3AC (`74ff910`) — `src/core/timing-analysis.js` (NEW, `KMEngine.TimingAnalysis.compute()`); `scripts/fixtures/fake-timing-analysis.txt` (NEW, TIMING_FIXTURE_COUNT=12); `src/tests/timing-analysis-tests.mjs` (NEW, 93 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 TimingAnalysis smoke, 150→156); `index.html` (green CSS, `timing-analysis.js` script tag, `#timingAnalysisPanel` div, `renderTimingAnalysisPanel()` at 11 call sites, `window.__km.renderTimingAnalysisPanel`, `DAY_NAMES` constant); `scripts/e2e-regression-harness.mjs` Phase 40 (6 tests) + `TIMING_FIXTURE`/`TIMING_FIXTURE_COUNT` constants. (Package 3AB added `src/core/word-analysis.js` + `#wordAnalysisPanel`. Package 3AA added `src/core/emoji-analysis.js` + `#emojiAnalysisPanel`. Package 3Z extended `src/core/content-quality-checks.js` +4 WARN checks, no index.html changes. Package 3Y added `src/core/conversation-stats.js` + `#conversationStatsPanel`. Package 3X added `src/core/content-quality-checks.js` + `#contentQualityPanel`. Package 3W added `#telegramSenderPicker`. Package 3V added `telegram-adapter.js` script tag + Telegram routing guard. Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3AD (`6fe873c`) — `src/core/response-time-analysis.js` (NEW, `KMEngine.ResponseTimeAnalysis.compute()`); `scripts/fixtures/fake-response-time.txt` (NEW, 12 messages); `src/tests/response-time-analysis-tests.mjs` (NEW, 81 tests / 18 suites); `src/tests/km-engine-tests.mjs` (+6 ResponseTimeAnalysis smoke, 156→162); `index.html` (orange/rose CSS, `response-time-analysis.js` script tag, `#responseTimePanel` div, `renderResponseTimePanel()` at 11 call sites, `window.__km.renderResponseTimePanel`); `scripts/e2e-regression-harness.mjs` Phase 41 (6 tests) + `RESP_FIXTURE`/`RESP_FIXTURE_COUNT` constants. (Package 3AC added `src/core/timing-analysis.js` (NEW, `KMEngine.TimingAnalysis.compute()`); `scripts/fixtures/fake-timing-analysis.txt` (NEW, TIMING_FIXTURE_COUNT=12); `src/tests/timing-analysis-tests.mjs` (NEW, 93 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 TimingAnalysis smoke, 150→156); `index.html` (green CSS, `timing-analysis.js` script tag, `#timingAnalysisPanel` div, `renderTimingAnalysisPanel()` at 11 call sites, `window.__km.renderTimingAnalysisPanel`, `DAY_NAMES` constant); `scripts/e2e-regression-harness.mjs` Phase 40 (6 tests) + `TIMING_FIXTURE`/`TIMING_FIXTURE_COUNT` constants. (Package 3AB added `src/core/word-analysis.js` + `#wordAnalysisPanel`. Package 3AA added `src/core/emoji-analysis.js` + `#emojiAnalysisPanel`. Package 3Z extended `src/core/content-quality-checks.js` +4 WARN checks, no index.html changes. Package 3Y added `src/core/conversation-stats.js` + `#conversationStatsPanel`. Package 3X added `src/core/content-quality-checks.js` + `#contentQualityPanel`. Package 3W added `#telegramSenderPicker`. Package 3V added `telegram-adapter.js` script tag + Telegram routing guard. Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
-- `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new) + `content-quality-checks.js` (Package 3X, new) + `conversation-stats.js` (Package 3Y, new) + `emoji-analysis.js` (Package 3AA, new) + `word-analysis.js` (Package 3AB, new) + `timing-analysis.js` (Package 3AC, new)
+- `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new) + `content-quality-checks.js` (Package 3X, new) + `conversation-stats.js` (Package 3Y, new) + `emoji-analysis.js` (Package 3AA, new) + `word-analysis.js` (Package 3AB, new) + `timing-analysis.js` (Package 3AC, new) + `response-time-analysis.js` (Package 3AD, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 26 suites, **3273 Node tests** — all green
+- `src/tests/`: 27 suites, **3360 Node tests** — all green
   - `timing-analysis-tests.mjs`: 93 (Package 3AC; 15 suites: API shape, empty/null/non-array zero-state, no-valid-timestamps zero-state, single message, hourlyDistribution/dailyDistribution accuracy, peakHour/peakDayOfWeek computation, midnight/Sunday edge cases, null/invalid timestamps skipped, tie-break lowest index wins, semantic guards)
   - `word-analysis-tests.mjs`: 100 (Package 3AB; 19 suites: API shape, empty/null/invalid zero-state, attachment-only exclusion, basic word extraction, lowercase normalization, punctuation stripping, word accumulation, totalWords, avgWordsPerMessage, topWords sorting/ranking/MAX_TOP=10, tie-breaking, topWordSender, topWordSender tie-breaking, multi-sender scenario, blank/empty text, malformed entries, fixture behavior, semantic guards)
   - `emoji-analysis-tests.mjs`: 100 (Package 3AA; 15 suites: API shape, empty/null/invalid zero-state, basic emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, mostEmojifiedSender tie-breaking, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards)
@@ -112,14 +113,14 @@
 
 ---
 
-## Git state (as of post-Package-3AC Tower Catch-Up state-sync)
+## Git state (as of post-Package-3AD state-sync — Tower Catch-Up pending)
 
 | Item | Value |
 |---|---|
-| main HEAD | `422e0a6` — docs: close Post-Package-3AC Tower Catch-Up |
+| main HEAD | `3276190` — docs: sync operating docs after Package 3AD completion |
 | Active branch | `main` |
 | Working tree | Clean |
-| Pushed to remote | main pushed through `422e0a6` (Post-Package-3AC Tower Catch-Up + state-sync) |
+| Pushed to remote | main pushed through `3276190` (Package 3AD impl `6fe873c` + state-sync `3276190`) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -164,13 +165,13 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AC COMPLETE (impl `74ff910`, merged to `main` 2026-06-07; state-sync `df3f868`); all DEF-14 engine data points complete; TimingAnalysis adds peak hour/day beyond DEF-14; next recommended candidate: TBD; awaiting Coordinator authorization |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AD COMPLETE (impl `6fe873c`, merged to `main` 2026-06-07; state-sync `3276190`); all DEF-14 engine data points complete; ResponseTimeAnalysis adds avg response time/fastest responder beyond DEF-14; next recommended candidate: TBD; awaiting Coordinator authorization |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |
 | Founder adoption of ClickUp / TickTick / Google Calendar imports | OPTIONAL — repo works without them |
 
-> No active pass. No active package. Package 3AA COMPLETE (impl `0e15cfb`, merged `29c4491` 2026-06-07). Post-Package-3AA Tower Catch-Up COMPLETE (docs `e1348cb`, merged `0d2d49d` 2026-06-07). Next recommended development candidate: Package 3AB — Word Count / Language Analysis Engine (pending Coordinator authorization). Do not start any package without explicit Coordinator authorization.
+> No active pass. No active package. Package 3AD COMPLETE (impl `6fe873c`, merged to `main` 2026-06-07; state-sync `3276190`). Post-Package-3AD Tower Catch-Up COMPLETE. Next recommended development candidate: TBD — awaiting Coordinator authorization. Do not start any package without explicit Coordinator authorization.
 
 ---
 

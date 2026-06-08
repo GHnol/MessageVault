@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-07 (Post-Package-3AC Tower Catch-Up COMPLETE — docs `422e0a6`, merged to `main` 2026-06-07)
+**Last updated:** 2026-06-07 (Post-Package-3AD Tower Catch-Up COMPLETE — docs-only; Package 3AD COMPLETE — impl `6fe873c`, merged to `main` 2026-06-07)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -32,7 +32,7 @@
 - _(empty — no active development pass or package)_
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AC COMPLETE 2026-06-07 (impl `74ff910`, merged to `main`; Tower catch-up `422e0a6` merged 2026-06-07); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AC
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AD COMPLETE 2026-06-07 (impl `6fe873c`, merged to `main`; state-sync `3276190`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AD
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,8 @@
 - _(empty)_
 
 ### Done
+- **Post-Package-3AD Tower Catch-Up operating pass** · Docs-only · docs-only pass; 13 authorized Tower docs updated; no app code — COMPLETE
+- **Package 3AD — Response Time Analysis Engine** · Development / Engine+UI · Ph3 · implementation `6fe873c`, merged to `main` 2026-06-07 (ff-only); `KMEngine.ResponseTimeAnalysis.compute()`; returns { avgResponseTimeMs, fastestResponder, perSenderStats }; same-sender pairs skipped; `#responseTimePanel` orange/rose CSS; `renderResponseTimePanel(memories)` at 11 call sites; `window.__km.renderResponseTimePanel`; 81 new tests (`response-time-analysis-tests.mjs`, 18 suites) + 6 km-engine smoke (→162 total); Phase 41 E2E (6 tests); 3360 Node / 27 suites; 57/57 seeded; 177/177 real-files — COMPLETE
 - **Post-Package-3AC Tower Catch-Up operating pass** · Docs-only · docs `422e0a6`, merged to `main` 2026-06-07; 15 authorized Tower docs updated; no app code — COMPLETE
 - **Package 3AC — Message Timing Analysis Engine** · Development / Engine+UI · Ph3 · implementation `74ff910`, merged to `main` 2026-06-07 (ff-only); `KMEngine.TimingAnalysis.compute()`; returns { peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }; UTC-based (getUTCHours / getUTCDay); skips null/invalid timestamps; zero-state for empty/invalid; tie-break lowest index wins; `#timingAnalysisPanel` green CSS; `renderTimingAnalysisPanel(memories)` at 11 call sites; `window.__km.renderTimingAnalysisPanel`; 93 new tests (`timing-analysis-tests.mjs`, 15 suites) + 6 km-engine smoke (→156 total); Phase 40 E2E (6 tests); `TIMING_FIXTURE_COUNT=12`; 3273 Node / 26 suites; 57/57 seeded; 171/171 real-files — COMPLETE
 - **Package 3AB — Word Count / Language Analysis Engine** · Development / Engine+UI · Ph3 · implementation `9290b8e`, merged `ebf9668` 2026-06-08; `KMEngine.WordAnalysis.compute()`; returns { totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation; lowercase; skips attachment-only; tie-break topWords by count desc then word asc; topWordSender tie-break wordCount desc then sender asc; `#wordAnalysisPanel` purple/violet CSS; `renderWordAnalysisPanel(memories)` at 11 call sites; `window.__km.renderWordAnalysisPanel`; 100 new tests (`word-analysis-tests.mjs`, 19 suites) + 6 km-engine smoke (→150 total); Phase 39 E2E (6 tests); `WORD_ANALYSIS_FIXTURE_COUNT=10`; 3174 Node / 25 suites; 57/57 seeded; 165/165 real-files — COMPLETE
