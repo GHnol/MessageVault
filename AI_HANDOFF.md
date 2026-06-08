@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08. No active pass. No active package. Next recommended: Post-Package-3AG Tower Catch-Up (docs-only). Previously: Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`.
+**Status:** `in-progress` — Post-Package-3AG Tower Catch-Up (docs-only) IN PROGRESS on branch `docs/post-3ag-tower-catchup` (base `main` `2e081fe`); bringing Tower/command-center/backlog/roadmap/report-mirror/ops docs current after Package 3AG. **Stop-before-commit — awaiting Coordinator commit authorization.** Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08; state-sync `2e081fe`. No active development package. Previously: Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `0331da0` (feat: capture Meta reactions in Instagram DM and Facebook Messenger adapters (Package 3AG), fast-forward merged to `main` 2026-06-08) |
+| **Active pass** | Post-Package-3AG Tower Catch-Up (docs-only) — IN PROGRESS on `docs/post-3ag-tower-catchup`; stop-before-commit |
+| **Active branch** | `docs/post-3ag-tower-catchup` (base `main` `2e081fe`) |
+| **base HEAD** | `2e081fe` (docs: sync operating docs after Package 3AG completion; `main` HEAD) |
 | **Last completed pass** | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
-| **Active package** | None |
+| **Active package** | None (Package 3AG closed) |
 | **Last closed package** | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AE — Message Length Analysis Engine` — FULLY COMPLETE — impl `dde558c`, merged to `main` 2026-06-08 |

@@ -47,9 +47,9 @@ Stop and ask the Coordinator if **any** of these are true:
 
 | Field | Value |
 |---|---|
-| Resume into | Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08. No active pass. No active package. Recommended next: Post-Package-3AG Tower Catch-Up (docs-only). |
-| Branch | `main` |
-| Next action | Run `/start`, read `AI_HANDOFF.md`, confirm branch is `main`, Package 3AG COMPLETE, no active package. Await Coordinator authorization for the Post-Package-3AG Tower Catch-Up or the next development package. Do not start any package without explicit authorization. |
+| Resume into | Post-Package-3AG Tower Catch-Up (docs-only) IN PROGRESS on `docs/post-3ag-tower-catchup` (base `main` `2e081fe`) — stop-before-commit, awaiting Coordinator commit authorization. Package 3AG — Meta Reaction Capture COMPLETE (impl `0331da0`, state-sync `2e081fe`). No active development package. |
+| Branch | `docs/post-3ag-tower-catchup` (base `main` `2e081fe`) |
+| Next action | Run `/start`, read `AI_HANDOFF.md`, confirm branch is `docs/post-3ag-tower-catchup`, Post-Package-3AG Tower Catch-Up docs complete and pending commit. Await Coordinator authorization to commit the catch-up. Do not commit or push without explicit authorization. |
 | Package 3AG | COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08; Meta reaction capture; IG + FB adapters map `msg.reactions` (Meta `{reaction,actor}`) → `NormalizedMemory.reactions[]` `{reactor,emoji,label}`; `decodeReaction()` mojibake repair + raw-preserve fallback; fixtures enriched (IG 2 clean, FB 1 mojibake→👍 + 1 clean); `instagram-dm-adapter-tests.mjs` 87→101, `facebook-messenger-adapter-tests.mjs` 98→113; 3573 Node / 29 suites; 57 seeded; 189 real-files; IQR reaction counts real for Meta; no engine/panel (deferred to 3AH), no `index.html` |
 | Package 3AF | COMPLETE — impl `7f03889`, merged to `main` 2026-06-08; `KMEngine.ConversationInitiation.compute()`; `#conversationInitiationPanel` pink/magenta panel; `src/core/conversation-initiation.js` NEW; `scripts/fixtures/fake-conversation-initiation.txt` NEW; `src/tests/conversation-initiation-tests.mjs` NEW (90 tests / 20 suites); `src/tests/km-engine-tests.mjs` +6 → 174; `index.html` CSS+script+div+binding+renderConversationInitiationPanel+11 call sites+__km; `scripts/e2e-regression-harness.mjs` Phase 43 (6 tests); 3544 Node / 29 suites; 189 real-files |
 | Post-Package-3AE Tower Catch-Up | COMPLETE — docs `00e084b`, merged to `main` 2026-06-08; 13 authorized docs updated; no app code |

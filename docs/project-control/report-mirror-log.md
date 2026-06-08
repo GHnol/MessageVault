@@ -27,9 +27,9 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-08
-**Last mirrored:** RPT-20260608-006 (Post-Package-3AF Tower Catch-Up operating pass — COMPLETE; docs `be171dc`, merged to `main` 2026-06-08)
-**Active gate:** None — Package 3AF COMPLETE (impl `7f03889`, state-sync `4ff64b5`); Post-Package-3AF Tower Catch-Up COMPLETE (docs `be171dc`); main HEAD `be171dc`; no active development package
-**Next expected mirror:** Next development package or operating pass
+**Last mirrored:** RPT-20260608-008 (Post-Package-3AG Tower Catch-Up operating pass — IN PROGRESS; docs-only; branch `docs/post-3ag-tower-catchup` from `main` at `2e081fe`)
+**Active gate:** None — Package 3AG COMPLETE (impl `0331da0`, state-sync `2e081fe`); Post-Package-3AG Tower Catch-Up IN PROGRESS (branch `docs/post-3ag-tower-catchup`); main HEAD `2e081fe`; no active development package
+**Next expected mirror:** Post-Package-3AG Tower Catch-Up closeout (commit pending), then next development package or operating pass
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,6 +39,8 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260608-008 | weekly_sync | Post-Package-3AG Tower Catch-Up operating pass | docs/post-3ag-tower-catchup | pending commit | in-progress | 2026-06-08 |
+| RPT-20260608-007 | package_closeout | Package 3AG — Meta Reaction Capture | feature/meta-reaction-capture | 0331da0 / 2e081fe | mirrored | 2026-06-08 |
 | RPT-20260608-006 | weekly_sync | Post-Package-3AF Tower Catch-Up operating pass | docs/post-3af-tower-catchup | be171dc | mirrored | 2026-06-08 |
 | RPT-20260608-005 | package_closeout | Package 3AF — Conversation Initiation Analysis Engine | feature/conversation-initiation | 7f03889 / 4ff64b5 | mirrored | 2026-06-08 |
 | RPT-20260608-004 | weekly_sync | Post-Package-3AE Tower Catch-Up operating pass | docs/post-3ae-tower-catchup | 00e084b | mirrored | 2026-06-08 |
@@ -80,6 +82,38 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260608-008 — weekly_sync — Post-Package-3AG Tower Catch-Up operating pass
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** docs/post-3ag-tower-catchup | **HEAD:** pending commit | **Status:** in-progress
+
+Post-Package-3AG Tower Catch-Up operating pass IN PROGRESS — docs-only; branch `docs/post-3ag-tower-catchup` from `main` at `2e081fe`. Bringing Tower, command-center, backlog, roadmap, report-mirror, and ops docs current after Package 3AG (Meta Reaction Capture) completion. Files updated: AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md, docs/command-center/current-status.md, docs/command-center/next-actions.md, docs/ops/backlog-roadmap.md, docs/ops/deferred-gated-ideas-register.md, docs/project-control/backlog.md, docs/project-control/current-sprint.md, docs/project-control/decision-log.md, docs/project-control/kanban-board.md, docs/project-control/master-roadmap.md, docs/project-control/report-mirror-log.md. (docs/architecture/architecture-roadmap.md and docs/qa/test-strategy.md left untouched — already current from the Package 3AG implementation/state-sync.)
+
+**Tests:** No tests run — docs-only pass.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, src/*, scripts/*, scripts/fixtures/*, tests/* untouched; no architecture-roadmap/test-strategy changes (already current); no app code; no credentials/tokens/raw-transcripts committed.
+**Next action:** Coordinator authorizes commit of the Tower Catch-Up docs; HEAD assigned at commit; then Coordinator decides next development package.
+**Follow-up:** false
+
+*Entry added as the Post-Package-3AG Tower Catch-Up record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
+
+### RPT-20260608-007 — package_closeout — Package 3AG — Meta Reaction Capture
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** feature/meta-reaction-capture | **HEAD:** 0331da0 (impl) / 2e081fe (state-sync) | **Status:** mirrored
+
+Package 3AG — Meta Reaction Capture COMPLETE — implementation `0331da0`, fast-forward merged to `main` 2026-06-08; post-merge state-sync `2e081fe`. Capture-only groundwork for a later ReactionAnalysis engine. Delivered: (1) `src/adapters/instagram-dm-adapter.js` + `src/adapters/facebook-messenger-adapter.js` — new per-adapter `mapReactions()` + `decodeReaction()` helpers; `reactions: []` replaced with `reactions: mapReactions(msg.reactions)`; Meta `{ reaction, actor }` mapped to canonical `{ reactor, emoji, label: null }`; `decodeReaction()` repairs Latin-1-escaped-UTF-8 mojibake via `decodeURIComponent(escape())` and preserves the raw string on incomplete/failed decode (never drops); non-array/missing/malformed `msg.reactions` → `[]`; message IDs / sender / timestamp / text / type / rawCounts / skip behavior / `generateMemoryId` all unchanged. (2) `scripts/fixtures/fake-instagram-dm.json` — 2 clean-unicode reactions; `scripts/fixtures/fake-facebook-messenger.json` — existing mojibake reaction preserved (decodes to 👍) + 1 clean reaction; message counts unchanged (8 imported each). (3) `src/tests/instagram-dm-adapter-tests.mjs` — Suite 16 (+14 → 101); `src/tests/facebook-messenger-adapter-tests.mjs` — Suite 18 (+15 → 113); both load `import-quality-report.js` to prove `ImportQualityReport` reaction counts become real (2 each). (4) `docs/qa/test-strategy.md` + `docs/architecture/architecture-roadmap.md` — counts + 3AG entries. (5) `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs.
+
+**Tests:** 3573/29 Node PASS (+29: 14 IG + 15 FB); km-engine 174 unchanged; 57/57 seeded E2E; 189/189 real-files E2E (Meta Phases 29–32 unchanged); visual regression PASS (no index.html change); OS audit 324/0/0; project-control-sync-validate 11/0/0.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — no `index.html`, no `src/core/*`, no `src/products/*`, no `src/state/*`, no `scripts/e2e-regression-harness.mjs`, no `km-engine-tests.mjs`; no ReactionAnalysis engine / reaction panel / DEF-11 in-book rendering; no pagination/proof/PDF/checkout/vendor/manufacturing scope; no credentials/tokens/raw-transcripts committed.
+**Next action:** Post-Package-3AG Tower Catch-Up (docs-only); then Coordinator decides next package.
+**Follow-up:** false
+
+*Entry added as the Package 3AG closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260608-006 — weekly_sync — Post-Package-3AF Tower Catch-Up operating pass
 

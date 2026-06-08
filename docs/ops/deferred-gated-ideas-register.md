@@ -1,6 +1,6 @@
 # Deferred and Gated Ideas Register — KeepMees / MessageVault
 
-**Last updated:** 2026-06-08 (America/New_York — post-Package-3AF tower catch-up; DEF-14 engine progress note updated; ConversationInitiation noted as additional engine capability)
+**Last updated:** 2026-06-08 (America/New_York — post-Package-3AG tower catch-up; DEF-11 Meta reaction capture groundwork noted (Package 3AG); ReactionAnalysis engine + DEF-11 in-book rendering remain deferred)
 **Status:** Active
 
 ---
@@ -151,7 +151,7 @@
 
 ### DEF-11 — Reactions / tapbacks rendering
 
-**Status:** Deferred (data is already parsed from iMessage chat.db export)
+**Status:** Deferred — in-book rendering not started. **Capture groundwork advanced:** Package 3AG (Meta Reaction Capture, COMPLETE 2026-06-08 — impl `0331da0`) maps Instagram DM + Facebook Messenger reactions (Meta `{ reaction, actor }`) into `NormalizedMemory.reactions[]` as `{ reactor, emoji, label }`; iMessage chat.db tapbacks are also parsed upstream. The in-book corner-anchored reaction *rendering* (this DEF) remains deferred/gated on the Figma reaction-badge design. A ReactionAnalysis engine + panel consuming the captured data is a separate likely candidate (not delivered in 3AG).
 **Description:** Render iMessage reactions/tapbacks (heart, thumbs-up, haha, etc.) in the book as corner-anchored badges attached to bubbles.
 **Effort:** Medium. The raw tapback data is available in the export; it's a parser + renderer gap.
 **Priority:** HIGH — this is a competitive differentiator vs MyForeverBooks (which parses but doesn't render them).
@@ -187,7 +187,7 @@
 **Effort:** Medium.
 **Priority:** Medium — strong engagement feature; emotionally resonant.
 **Note:** Tone should be adjustable — playful stats work for couples/friends; memorial books need a gentler treatment.
-**Engine-layer progress:** All 7 DEF-14 data points now have engine-layer delivery — total messages (Package 3I / ImportQualityReport); story span, most active day, longest streak, messages by person (Package 3Y / ConversationStats); top emojis (Package 3AA / EmojiAnalysis); words shared (Package 3AB / WordAnalysis). The actual in-book Stats Page surface remains deferred. Package 3AC (TimingAnalysis) delivers peak hour and day-of-week distribution as an additional engine capability beyond the original DEF-14 data points. Package 3AD (ResponseTimeAnalysis) delivers average response time, fastest responder, and per-sender response stats as additional engine capability beyond the original DEF-14 data points. Package 3AE (MessageLengthAnalysis) delivers average chars per message, longest message sender, and per-sender char stats as additional engine capability beyond the original DEF-14 data points. Package 3AF (ConversationInitiation) delivers conversation-start counts (who initiates conversations, detected from >= 6h timestamp gaps), top initiator, and per-sender initiation counts + percentages as additional engine capability beyond the original DEF-14 data points.
+**Engine-layer progress:** All 7 DEF-14 data points now have engine-layer delivery — total messages (Package 3I / ImportQualityReport); story span, most active day, longest streak, messages by person (Package 3Y / ConversationStats); top emojis (Package 3AA / EmojiAnalysis); words shared (Package 3AB / WordAnalysis). The actual in-book Stats Page surface remains deferred. Package 3AC (TimingAnalysis) delivers peak hour and day-of-week distribution as an additional engine capability beyond the original DEF-14 data points. Package 3AD (ResponseTimeAnalysis) delivers average response time, fastest responder, and per-sender response stats as additional engine capability beyond the original DEF-14 data points. Package 3AE (MessageLengthAnalysis) delivers average chars per message, longest message sender, and per-sender char stats as additional engine capability beyond the original DEF-14 data points. Package 3AF (ConversationInitiation) delivers conversation-start counts (who initiates conversations, detected from >= 6h timestamp gaps), top initiator, and per-sender initiation counts + percentages as additional engine capability beyond the original DEF-14 data points. Package 3AG (Meta Reaction Capture) is not a DEF-14 data point; it captures reaction data in the Instagram DM + Facebook Messenger adapters (capture-only groundwork) that a future ReactionAnalysis engine could surface.
 **Activate when:** book editor is consumer-ready.
 
 ---

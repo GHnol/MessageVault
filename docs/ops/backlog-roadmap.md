@@ -1,7 +1,7 @@
 # Backlog and Roadmap — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (post-Package-3AF tower catch-up)
+**Updated by:** Claude Code (post-Package-3AG tower catch-up)
 **Status:** Active
 
 ---
@@ -520,9 +520,9 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 
 ---
 
-### Current position — import analytics layer COMPLETE through Package 3AF
+### Current position — import analytics ENGINE layer COMPLETE through Package 3AF; Meta Reaction Capture (Package 3AG) COMPLETE
 
-**Status:** No package authorized. Package 3AF COMPLETE (impl `7f03889`, merged to `main`, state-sync `4ff64b5` 2026-06-08) — Conversation Initiation Analysis Engine delivered. All DEF-14 engine-layer data points complete through Package 3AB. Package 3AC adds peak hour/day-of-week beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Package 3AF adds conversation initiation analysis (who starts conversations, gap-based) beyond DEF-14. Coordinator decides next development package.
+**Status:** No package authorized. Package 3AG COMPLETE (impl `0331da0`, merged to `main`, state-sync `2e081fe` 2026-06-08) — Meta Reaction Capture delivered: the Instagram DM and Facebook Messenger adapters now map Meta `{ reaction, actor }` into `NormalizedMemory.reactions[]` as canonical `{ reactor, emoji, label }`, so `ImportQualityReport` reaction counts become real for enriched Meta fixtures. 3AG is **capture-only groundwork** — it did NOT add a ReactionAnalysis engine, a reaction panel, or DEF-11 in-book reaction rendering. The import analytics ENGINE layer remains complete through Package 3AF (3AG added no engine). Package 3AF COMPLETE (impl `7f03889`, state-sync `4ff64b5`) — Conversation Initiation Analysis Engine delivered. All DEF-14 engine-layer data points complete through Package 3AB. Package 3AC adds peak hour/day-of-week beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Package 3AF adds conversation initiation analysis (who starts conversations, gap-based) beyond DEF-14. Coordinator decides next development package.
 
 **Import analytics layer delivery summary:**
 - Package 3I — Import Quality Report (`KMEngine.ImportQualityReport.compute()`, `#importQualityPanel`) ✓
@@ -536,8 +536,9 @@ What this does NOT deliver: Me/self sender inference (deferred to Package 3K or 
 - Package 3AE — Message Length Analysis Engine: `KMEngine.MessageLengthAnalysis.compute()`, `#messageLengthPanel` (cyan/sky-blue); avgCharsPerMessage, longestMessage (sender + length), perSenderStats; additional engine capability beyond DEF-14 ✓
 - Package 3AF — Conversation Initiation Analysis Engine: `KMEngine.ConversationInitiation.compute()`, `#conversationInitiationPanel` (pink/magenta); totalConversations, topInitiator (sender + initiationCount), perSenderStats (initiationCount + initiationPct); GAP_THRESHOLD_MS = 6h gap-based detection; additional engine capability beyond DEF-14 ✓
 - **Client-side adapter series also complete (Packages 3J–3W):** `future-adapter-stubs.js` STUBS array now empty
+- Package 3AG — Meta Reaction Capture (capture-only adapter groundwork; not an analytics engine): Instagram DM + Facebook Messenger adapters map Meta `{ reaction, actor }` → `NormalizedMemory.reactions[]` `{ reactor, emoji, label }`; `decodeReaction()` repairs mojibake with raw-preserve fallback; `ImportQualityReport` reaction counts now real for Meta; no ReactionAnalysis engine / reaction panel / DEF-11 in-book rendering (deferred to a later package) ✓
 
-**Next development candidate:** TBD — awaiting Coordinator authorization. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). Package 3AC adds timing analysis beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Package 3AF adds conversation initiation analysis beyond DEF-14. DEF-14 Stats Page surface remains deferred until book editor is consumer-ready.
+**Next development candidate:** TBD — awaiting Coordinator authorization. All DEF-14 engine-layer data points complete (total messages → IQR; story span + most active day + longest streak + messages by person → ConversationStats; top emojis → EmojiAnalysis; words shared → WordAnalysis). Package 3AC adds timing analysis beyond DEF-14. Package 3AD adds response time analysis beyond DEF-14. Package 3AE adds message length analysis beyond DEF-14. Package 3AF adds conversation initiation analysis beyond DEF-14. Package 3AG (Meta Reaction Capture) is COMPLETE — capture-only adapter groundwork (no engine/panel); a ReactionAnalysis engine + panel consuming the newly-captured reaction data is a likely next candidate but remains TBD pending Coordinator authorization. DEF-14 Stats Page surface remains deferred until book editor is consumer-ready.
 
 **Candidates still blocked (do not start):**
 - Phase 12 continuation / GATE-04 — blocked: PDF pipeline + vendor + checkout

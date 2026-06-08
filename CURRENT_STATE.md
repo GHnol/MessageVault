@@ -21,9 +21,9 @@
 
 | Field | Value |
 |---|---|
-| main HEAD | `0331da0` — feat: capture Meta reactions in Instagram DM and Facebook Messenger adapters (Package 3AG) |
-| Active branch | `main` |
-| Active pass | None |
+| main HEAD | `2e081fe` — docs: sync operating docs after Package 3AG completion (Package 3AG impl `0331da0`) |
+| Active branch | `docs/post-3ag-tower-catchup` (base `main` `2e081fe`) |
+| Active pass | Post-Package-3AG Tower Catch-Up (docs-only) — IN PROGRESS; stop-before-commit |
 | Last completed pass | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
 | Last closed package | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
 | Active package | None |

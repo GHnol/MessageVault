@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-08 (Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`)
+**Last updated:** 2026-06-08 (Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`; Post-Package-3AG Tower Catch-Up in progress)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -29,10 +29,10 @@
 - **Monthly budget / viability review** · Finance · P2 · Ph0 · recurring
 
 ### In Progress
-- _(empty — no active development pass or package)_
+- **Post-Package-3AG Tower Catch-Up operating pass** · Docs-only · Ph0 · Coordinator · bringing Tower/command-center/backlog/roadmap/report-mirror/ops docs current after Package 3AG COMPLETE; next candidate TBD
 
 ### Waiting / Blocked
-- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AF COMPLETE 2026-06-08 (impl `7f03889`, merged to `main`; state-sync `4ff64b5`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AF
+- **Coordinator authorize next development package** · Coordinator · P0 · Package 3AG COMPLETE 2026-06-08 (impl `0331da0`, merged to `main`; state-sync `2e081fe`); next candidate TBD — awaiting Coordinator authorization for next package after Package 3AG
 - **Vendor confirmation decision** · Vendor · P1 · Ph9 · blocked: vendor replies (outside repo)
 - **Hold Figma execution until designer confirmed** · Design · P1 · Ph7 · blocked: budget decision
 - **Hold packaging spec until vendor real** · Packaging · P2 · Ph10 · blocked: Phase 9
@@ -44,6 +44,7 @@
 - _(empty)_
 
 ### Done
+- **Package 3AG — Meta Reaction Capture** · Development / Engine (adapters) · Ph3 · implementation `0331da0`, merged to `main` 2026-06-08 (ff-only); state-sync `2e081fe`; Instagram DM + Facebook Messenger adapters map Meta `{reaction,actor}` → `NormalizedMemory.reactions[]` canonical `{reactor,emoji,label}`; per-adapter `mapReactions()` + `decodeReaction()` (Latin-1-escaped-UTF-8 mojibake repair + raw-preserve fallback, malformed-safe); fixtures enriched (IG 2 clean-unicode; FB 1 mojibake→👍 + 1 clean; 8 imported each unchanged); `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57/57 seeded; 189/189 real-files; `ImportQualityReport` reaction counts now real for Meta; capture-only — NO ReactionAnalysis engine, NO reaction panel, NO DEF-11 in-book rendering — COMPLETE
 - **Post-Package-3AF Tower Catch-Up operating pass** · Docs-only · docs `be171dc`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AF COMPLETE — COMPLETE
 - **Package 3AF — Conversation Initiation Analysis Engine** · Development / Engine+UI · Ph3 · implementation `7f03889`, merged to `main` 2026-06-08 (ff-only); state-sync `4ff64b5`; `KMEngine.ConversationInitiation.compute()`; returns { totalConversations, topInitiator, perSenderStats }; filters non-system + valid-timestamp, sorts ascending; conversation start = first valid message + any message with gap >= GAP_THRESHOLD_MS (6h); topInitiator tie-break sender asc; perSenderStats sorted initiationCount desc then alpha; initiationPct count/total × 100 rounded 1 decimal; `#conversationInitiationPanel` pink/magenta CSS; `renderConversationInitiationPanel(memories)` at 11 call sites; `window.__km.renderConversationInitiationPanel`; 90 new tests (`conversation-initiation-tests.mjs`, 20 suites) + 6 km-engine smoke (→174 total); Phase 43 E2E (6 tests); 3544 Node / 29 suites; 57/57 seeded; 189/189 real-files — COMPLETE
 - **Post-Package-3AE Tower Catch-Up operating pass** · Docs-only · docs `00e084b`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AE COMPLETE — COMPLETE
