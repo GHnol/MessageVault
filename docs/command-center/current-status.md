@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-07
-**Updated by:** Claude Code (Post-Package-3AC Tower Catch-Up IN PROGRESS; Package 3AC COMPLETE — impl `74ff910`, state-sync `df3f868`; active branch `docs/post-3ac-tower-catchup`)
+**Updated by:** Claude Code (Post-Package-3AC Tower Catch-Up COMPLETE — docs `422e0a6`, merged to `main` 2026-06-07; Package 3AC COMPLETE — impl `74ff910`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -112,14 +112,14 @@
 
 ---
 
-## Git state (as of post-Package-3AB state-sync)
+## Git state (as of post-Package-3AC Tower Catch-Up state-sync)
 
 | Item | Value |
 |---|---|
-| main HEAD | `df3f868` — docs: sync operating docs after Package 3AC completion |
-| Active branch | `docs/post-3ac-tower-catchup` (Tower catch-up docs pass in progress) |
-| Working tree | Modified (Tower catch-up docs edits in progress; not yet committed) |
-| Pushed to remote | main pushed through `df3f868` (post-Package-3AC state-sync) |
+| main HEAD | `422e0a6` — docs: close Post-Package-3AC Tower Catch-Up |
+| Active branch | `main` |
+| Working tree | Clean |
+| Pushed to remote | main pushed through `422e0a6` (Post-Package-3AC Tower Catch-Up + state-sync) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 

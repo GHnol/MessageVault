@@ -16,15 +16,15 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-07` (Post-Package-3AC Tower Catch-Up — IN PROGRESS on `docs/post-3ac-tower-catchup`)
+**Last updated:** `2026-06-07` (Post-Package-3AC Tower Catch-Up COMPLETE — docs `422e0a6`, merged to `main` 2026-06-07)
 **Updated by:** `Claude Code (Sonnet 4.6)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `df3f868` — docs: sync operating docs after Package 3AC completion |
-| Active branch | `docs/post-3ac-tower-catchup` |
-| Active pass | Post-Package-3AC Tower Catch-Up — IN PROGRESS |
-| Last completed pass | Post-Package-3AB Tower Catch-Up — docs `61bac12`, merged `b70d840` 2026-06-08 |
+| main HEAD | `422e0a6` — docs: close Post-Package-3AC Tower Catch-Up |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | Post-Package-3AC Tower Catch-Up — docs `422e0a6`, merged to `main` 2026-06-07 |
 | Last closed package | `Package 3AC — Message Timing Analysis Engine` — FULLY COMPLETE — impl `74ff910`, merged to `main` 2026-06-07 |
 | Active package | None — awaiting Coordinator authorization for next development package |
 | Test baseline | **3273 Node tests** (26 suites); E2E seeded 57/57; E2E real-files 171/171 (Phase 40: 6 tests); visual regression PASS |
