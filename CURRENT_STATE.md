@@ -16,15 +16,15 @@
 
 ## State as of last update
 
-**Last updated:** `2026-06-08` (Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08; post-merge state-sync)
+**Last updated:** `2026-06-08` (Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`, merged to `main` 2026-06-08; post-merge closeout state-sync. Package 3AG COMPLETE — impl `0331da0`, state-sync `2e081fe`)
 **Updated by:** `Claude Code (Opus 4.8)`
 
 | Field | Value |
 |---|---|
-| main HEAD | `2e081fe` — docs: sync operating docs after Package 3AG completion (Package 3AG impl `0331da0`) |
-| Active branch | `docs/post-3ag-tower-catchup` (base `main` `2e081fe`) |
-| Active pass | Post-Package-3AG Tower Catch-Up (docs-only) — IN PROGRESS; stop-before-commit |
-| Last completed pass | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
+| main HEAD | `79d3246` — docs: close Post-Package-3AG Tower Catch-Up |
+| Active branch | `main` |
+| Active pass | None |
+| Last completed pass | Post-Package-3AG Tower Catch-Up — docs `79d3246`, merged to `main` 2026-06-08 |
 | Last closed package | `Package 3AG — Meta Reaction Capture` — FULLY COMPLETE — impl `0331da0`, fast-forward merged to `main` 2026-06-08 |
 | Active package | None |
 | Test baseline | **3573 Node tests** (29 suites); E2E seeded 57/57; E2E real-files 189/189; visual regression PASS (Package 3AG added +14 IG / +15 FB reaction-capture tests) |

@@ -1,6 +1,6 @@
 # Current Sprint
 
-**Last updated:** 2026-06-08 (Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, merged to `main` 2026-06-08; state-sync `2e081fe`; Post-Package-3AG Tower Catch-Up in progress)
+**Last updated:** 2026-06-08 (Post-Package-3AG Tower Catch-Up COMPLETE — docs `79d3246`, merged to `main` 2026-06-08; Package 3AG — Meta Reaction Capture COMPLETE — impl `0331da0`, state-sync `2e081fe`)
 **Owner:** Coordinator / Project Control
 
 ---
@@ -44,7 +44,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 | 20 | Package 3T — Facebook Messenger Self-Identification Sender Picker | P2 | **Done** | impl `b01fbff`, merged `8b11f18` 2026-06-06; `#facebookSenderPicker` + `showFacebookSenderPicker` + `applyFacebookSelfSender`; picker hides on all non-Facebook paths + restore; `window.__km.applyFacebookSelfSender` exposed; Phase 32 E2E (6 tests); 2554 Node; 57/57 seeded; 123/123 real-files; visual regression PASS; no engine/adapter changes ✓ |
 | 21 | Package 3U — Telegram JSON Adapter | P2 | **Done** | impl `45d0d24`, merged `3f4e0c4` 2026-06-06; `KMEngine.telegramAdapter`; telegram-json-v1; from_id+date_unixtime discriminators; extractText() for string/array-entity; hasMedia() for photo/file/media_type; Unix seconds → ISO-8601; engine-only; telegram platform `supported`; STUBS array now empty; 91 new tests + 5 km-engine smoke (2650 Node / 21 suites) ✓ |
 | 22 | Authorize next development package | P0 | **Waiting / Blocked** | Coordinator decision required; Package 3AG COMPLETE 2026-06-08 (impl `0331da0`, merged to `main`; state-sync `2e081fe`); awaiting Coordinator authorization for next package after Package 3AG |
-| 43 | Post-Package-3AG Tower Catch-Up operating pass | P1 | **In Progress** | docs-only; bringing Tower/command-center/backlog/roadmap/report-mirror/ops docs current after Package 3AG COMPLETE; next candidate TBD |
+| 43 | Post-Package-3AG Tower Catch-Up operating pass | P1 | **Done** | docs `79d3246`, merged to `main` 2026-06-08; docs-only; brought Tower/command-center/backlog/roadmap/report-mirror/ops docs current after Package 3AG COMPLETE; no app code ✓ |
 | 42 | Package 3AG — Meta Reaction Capture | P2 | **Done** | impl `0331da0`, merged to `main` 2026-06-08 (ff-only); state-sync `2e081fe`; Instagram DM + Facebook Messenger adapters map Meta `{reaction,actor}` → `NormalizedMemory.reactions[]` `{reactor,emoji,label}`; `decodeReaction()` mojibake repair + raw-preserve fallback; fixtures enriched (IG 2 clean, FB 1 mojibake→👍 + 1 clean); `instagram-dm-adapter-tests.mjs` 87→101 (Suite 16), `facebook-messenger-adapter-tests.mjs` 98→113 (Suite 18); 3573 Node / 29 suites; 57/57 seeded; 189/189 real-files; capture-only — no engine/panel/DEF-11 rendering ✓ |
 | 41 | Post-Package-3AF Tower Catch-Up operating pass | P1 | **Done** | docs `be171dc`, merged to `main` 2026-06-08; docs-only; brought Tower/command-center/backlog/roadmap/report-mirror/operating docs current after Package 3AF COMPLETE; no app code ✓ |
 | 40 | Package 3AF — Conversation Initiation Analysis Engine | P2 | **Done** | impl `7f03889`, merged to `main` 2026-06-08 (ff-only); state-sync `4ff64b5`; `KMEngine.ConversationInitiation.compute()`; `#conversationInitiationPanel` pink/magenta panel; GAP_THRESHOLD_MS = 6h; 90 conversation-initiation tests (20 suites) + 6 km-engine smoke (→174); Phase 43 E2E (6 tests); 3544 Node / 29 suites; 57/57 seeded; 189/189 real-files ✓ |
@@ -70,7 +70,7 @@ Sprint 2026-06-B is OPEN — awaiting Coordinator decision on the next authorize
 
 ## Blocked tasks
 
-- **Coordinator authorize next development package** — P0 — Package 3AG COMPLETE 2026-06-08 (impl `0331da0`, merged to `main`; state-sync `2e081fe`); Post-Package-3AG Tower Catch-Up in progress; all development work halted pending Coordinator authorization for the next package after Package 3AG.
+- **Coordinator authorize next development package** — P0 — Package 3AG COMPLETE 2026-06-08 (impl `0331da0`, merged to `main`; state-sync `2e081fe`); Post-Package-3AG Tower Catch-Up COMPLETE (docs `79d3246`); all development work halted pending Coordinator authorization for the next package after Package 3AG.
 
 ---
 
