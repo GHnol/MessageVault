@@ -30,6 +30,44 @@
                (msg.sticker != null);
     }
 
+    // Meta exports store reaction emoji as Latin-1-escaped UTF-8 bytes (mojibake).
+    // Re-decode to a proper glyph; preserve the raw string if the byte sequence is
+    // incomplete or decoding throws — never drop the reaction.
+    function decodeReaction(str) {
+        if (typeof str !== 'string' || !str) return str;
+        var needsDecode = false;
+        for (var i = 0; i < str.length; i++) {
+            var c = str.charCodeAt(i);
+            if (c >= 0x80 && c <= 0xFF) { needsDecode = true; break; }
+        }
+        if (!needsDecode) return str;
+        try {
+            return decodeURIComponent(escape(str));
+        } catch (e) {
+            return str;
+        }
+    }
+
+    // Map Meta reaction objects { reaction, actor } to the canonical
+    // NormalizedMemory reaction shape { reactor, emoji, label }.
+    function mapReactions(rawReactions) {
+        if (!Array.isArray(rawReactions)) return [];
+        var out = [];
+        for (var i = 0; i < rawReactions.length; i++) {
+            var r = rawReactions[i];
+            if (!r || typeof r !== 'object') continue;
+            var hasReaction = typeof r.reaction === 'string';
+            var hasActor    = typeof r.actor === 'string' && r.actor.trim() !== '';
+            if (!hasReaction && !hasActor) continue;
+            out.push({
+                reactor: hasActor ? r.actor.trim() : null,
+                emoji:   hasReaction ? decodeReaction(r.reaction) : null,
+                label:   null
+            });
+        }
+        return out;
+    }
+
     var adapter = {
         id:               ADAPTER_ID,
         sourcePlatformId: PLATFORM_ID,
@@ -101,7 +139,7 @@
                     sender:           sender,
                     senderRole:       'contact',
                     text:             text,
-                    reactions:        [],
+                    reactions:        mapReactions(msg.reactions),
                     isAttachmentOnly: isAttach,
                     type:             memType,
                     provenance:       { importedAt: importedAt, adapterVersion: ADAPTER_VERSION }

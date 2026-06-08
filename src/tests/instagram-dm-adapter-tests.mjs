@@ -22,6 +22,7 @@ function makeCtx() {
     load(ctx, 'src/core/normalized-memory.js');
     load(ctx, 'src/core/import-adapters.js');
     load(ctx, 'src/adapters/instagram-dm-adapter.js');
+    load(ctx, 'src/core/import-quality-report.js');
     return ctx.window.KMEngine;
 }
 
@@ -231,6 +232,32 @@ assert(Array.isArray(parts),                              'participants is an ar
 assert(parts[0] === 'Alice Smith' && parts[1] === 'bob_jones_99', 'participants in first-seen order from imported memories');
 assert(new Set(parts).size === parts.length,              'no duplicate participants');
 assert(parts.length === 2,                                'participant count matches unique sender count');
+
+// ── Suite 16 — Reaction capture (Package 3AG) ────────────────────────────────
+
+suite('Suite 16 — Reaction capture');
+const IG_HEART = String.fromCodePoint(0x2764, 0xFE0F);
+const IG_JOY   = String.fromCodePoint(0x1F602);
+const igNoReact = fixtureResult.memories[0];
+const igReact1  = fixtureResult.memories[1];
+const igReact7  = fixtureResult.memories[7];
+assert(Array.isArray(igNoReact.reactions) && igNoReact.reactions.length === 0, 'message without reactions → reactions []');
+assert(igReact1.reactions.length === 1,                    'reacted message → 1 reaction captured');
+assert(igReact1.reactions[0].reactor === 'Alice Smith',   'reaction reactor mapped from actor');
+assert(igReact1.reactions[0].emoji === IG_HEART,          'reaction emoji mapped (clean unicode preserved)');
+assert(igReact1.reactions[0].label === null,              'reaction label is null (Instagram has no label)');
+assert(igReact7.reactions.length === 1 && igReact7.reactions[0].emoji === IG_JOY, 'second reacted message maps emoji');
+assert(Object.keys(igReact1.reactions[0]).sort().join(',') === 'emoji,label,reactor', 'canonical reaction shape is { reactor, emoji, label }');
+const igMalformed = adapter['import']('{"participants":[{"name":"A"}],"messages":[{"sender_name":"A","timestamp_ms":1640000000000,"content":"Hi","type":"Generic","reactions":"notarray"}]}').memories[0];
+assert(Array.isArray(igMalformed.reactions) && igMalformed.reactions.length === 0, 'non-array reactions → []');
+const igPartial = adapter['import']('{"participants":[{"name":"A"}],"messages":[{"sender_name":"A","timestamp_ms":1640000000000,"content":"Hi","type":"Generic","reactions":[null,42,{"foo":"bar"},{"reaction":"x","actor":"B"}]}]}').memories[0];
+assert(igPartial.reactions.length === 1,                   'malformed reaction entries ignored; valid one kept');
+assert(igPartial.reactions[0].reactor === 'B' && igPartial.reactions[0].emoji === 'x', 'valid partial reaction mapped correctly');
+assert(igReact1.type === 'message' && igReact1.text === 'Really good! Work & life keeping me busy.', 'reacted message text/type unchanged');
+assert(igReact1.sender === 'bob_jones_99' && igReact1.senderRole === 'contact', 'reacted message sender/role unchanged');
+const igIqr = KMEngine.ImportQualityReport.compute(fixtureResult.memories);
+assert(igIqr.totalReactionCount === 2,         'ImportQualityReport totalReactionCount = 2 for enriched fixture');
+assert(igIqr.messagesWithReactionsCount === 2, 'ImportQualityReport messagesWithReactionsCount = 2 for enriched fixture');
 
 // ── Summary ───────────────────────────────────────────────────────────────────
 

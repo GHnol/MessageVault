@@ -1,7 +1,11 @@
 {
   "participants": [
-    {"name": "Alice Johnson"},
-    {"name": "charlie_b_99"}
+    {
+      "name": "Alice Johnson"
+    },
+    {
+      "name": "charlie_b_99"
+    }
   ],
   "messages": [
     {
@@ -16,43 +20,72 @@
       "content": "Work &amp; family keeping me busy!",
       "type": "Generic",
       "reactions": [
-        {"reaction": "ð", "actor": "Alice Johnson"}
+        {
+          "reaction": "ð",
+          "actor": "Alice Johnson"
+        }
       ]
     },
     {
       "sender_name": "Alice Johnson",
       "timestamp_ms": 1609459320000,
-      "photos": [{"uri": "messages/inbox/charlie_b_99_1234567890/photos/photo001.jpg", "creation_timestamp": 1609459319}],
+      "photos": [
+        {
+          "uri": "messages/inbox/charlie_b_99_1234567890/photos/photo001.jpg",
+          "creation_timestamp": 1609459319
+        }
+      ],
       "type": "Generic"
     },
     {
       "sender_name": "charlie_b_99",
       "timestamp_ms": 1609459380000,
-      "videos": [{"uri": "messages/inbox/charlie_b_99_1234567890/videos/clip001.mp4", "creation_timestamp": 1609459379}],
+      "videos": [
+        {
+          "uri": "messages/inbox/charlie_b_99_1234567890/videos/clip001.mp4",
+          "creation_timestamp": 1609459379
+        }
+      ],
       "type": "Generic"
     },
     {
       "sender_name": "Alice Johnson",
       "timestamp_ms": 1609459440000,
-      "audio_files": [{"uri": "messages/inbox/charlie_b_99_1234567890/audio/audio001.mp4", "creation_timestamp": 1609459439}],
+      "audio_files": [
+        {
+          "uri": "messages/inbox/charlie_b_99_1234567890/audio/audio001.mp4",
+          "creation_timestamp": 1609459439
+        }
+      ],
       "type": "Generic"
     },
     {
       "sender_name": "charlie_b_99",
       "timestamp_ms": 1609459500000,
-      "share": {"link": "https://www.facebook.com/share/FakePostId456/", "share_text": "Shared a post"},
+      "share": {
+        "link": "https://www.facebook.com/share/FakePostId456/",
+        "share_text": "Shared a post"
+      },
       "type": "Share"
     },
     {
       "sender_name": "Alice Johnson",
       "timestamp_ms": 1609459560000,
       "content": "That&#39;s awesome!",
-      "type": "Generic"
+      "type": "Generic",
+      "reactions": [
+        {
+          "reaction": "❤️",
+          "actor": "charlie_b_99"
+        }
+      ]
     },
     {
       "sender_name": "charlie_b_99",
       "timestamp_ms": 1609459620000,
-      "sticker": {"uri": "messages/stickers_used/fake_sticker_001.png"},
+      "sticker": {
+        "uri": "messages/stickers_used/fake_sticker_001.png"
+      },
       "type": "Generic"
     },
     {
@@ -73,5 +106,8 @@
   "thread_type": "Regular",
   "thread_path": "inbox/AliceJohnson_1234567890",
   "magic_words": [],
-  "image": {"uri": "messages/inbox/AliceJohnson_1234567890/photos/avatar.jpg", "creation_timestamp": 1609459000}
+  "image": {
+    "uri": "messages/inbox/AliceJohnson_1234567890/photos/avatar.jpg",
+    "creation_timestamp": 1609459000
+  }
 }

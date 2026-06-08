@@ -22,6 +22,7 @@ function makeCtx() {
     load(ctx, 'src/core/normalized-memory.js');
     load(ctx, 'src/core/import-adapters.js');
     load(ctx, 'src/adapters/facebook-messenger-adapter.js');
+    load(ctx, 'src/core/import-quality-report.js');
     return ctx.window.KMEngine;
 }
 
@@ -265,6 +266,35 @@ assert(mem0.checkout        === undefined, 'no checkout field on NormalizedMemor
 assert(mem0.manufacturing   === undefined, 'no manufacturing field on NormalizedMemory');
 assert(mem0.estimatedPages  === undefined, 'no estimatedPages field on NormalizedMemory');
 assert(adapter.isManufacturingReady === undefined, 'no isManufacturingReady field on adapter');
+
+// ── Suite 18 — Reaction capture (Package 3AG) ────────────────────────────────
+
+suite('Suite 18 — Reaction capture');
+const FB_THUMBSUP = String.fromCodePoint(0x1F44D);
+const FB_HEART    = String.fromCodePoint(0x2764, 0xFE0F);
+const fbNoReact = fixtureResult.memories[0];
+const fbReact1  = fixtureResult.memories[1];
+const fbReact6  = fixtureResult.memories[6];
+assert(Array.isArray(fbNoReact.reactions) && fbNoReact.reactions.length === 0, 'message without reactions → reactions []');
+assert(fbReact1.reactions.length === 1,                     'reacted message → 1 reaction captured');
+assert(fbReact1.reactions[0].reactor === 'Alice Johnson',  'reaction reactor mapped from actor');
+assert(fbReact1.reactions[0].emoji === FB_THUMBSUP,        'mojibake reaction decoded to thumbs-up emoji');
+assert(fbReact1.reactions[0].label === null,               'reaction label is null');
+assert(fbReact6.reactions.length === 1 && fbReact6.reactions[0].emoji === FB_HEART, 'clean unicode reaction preserved');
+assert(Object.keys(fbReact1.reactions[0]).sort().join(',') === 'emoji,label,reactor', 'canonical reaction shape is { reactor, emoji, label }');
+const fbFallbackJson = '{"participants":[{"name":"A"}],"messages":[{"sender_name":"A","timestamp_ms":1640000000000,"content":"Hi","type":"Generic","reactions":[{"reaction":"' + String.fromCharCode(0xF0) + '","actor":"B"}]}],"magic_words":[]}';
+const fbFallback = adapter['import'](fbFallbackJson).memories[0];
+assert(fbFallback.reactions.length === 1, 'undecodable reaction is preserved, not dropped');
+assert(typeof fbFallback.reactions[0].emoji === 'string' && fbFallback.reactions[0].emoji.length > 0, 'undecodable reaction keeps a raw string');
+const fbMalformed = adapter['import']('{"participants":[{"name":"A"}],"messages":[{"sender_name":"A","timestamp_ms":1640000000000,"content":"Hi","type":"Generic","reactions":"notarray"}],"magic_words":[]}').memories[0];
+assert(Array.isArray(fbMalformed.reactions) && fbMalformed.reactions.length === 0, 'non-array reactions → []');
+const fbPartial = adapter['import']('{"participants":[{"name":"A"}],"messages":[{"sender_name":"A","timestamp_ms":1640000000000,"content":"Hi","type":"Generic","reactions":[null,42,{"foo":"bar"},{"reaction":"x","actor":"B"}]}],"magic_words":[]}').memories[0];
+assert(fbPartial.reactions.length === 1 && fbPartial.reactions[0].emoji === 'x', 'malformed reaction entries ignored; valid one kept');
+assert(fbReact1.type === 'message' && fbReact1.text === 'Work & family keeping me busy!', 'reacted message text/type unchanged');
+assert(fbReact1.sender === 'charlie_b_99' && fbReact1.senderRole === 'contact', 'reacted message sender/role unchanged');
+const fbIqr = KMEngine.ImportQualityReport.compute(fixtureResult.memories);
+assert(fbIqr.totalReactionCount === 2,         'ImportQualityReport totalReactionCount = 2 for enriched fixture');
+assert(fbIqr.messagesWithReactionsCount === 2, 'ImportQualityReport messagesWithReactionsCount = 2 for enriched fixture');
 
 // ── Summary ───────────────────────────────────────────────────────────────────
 

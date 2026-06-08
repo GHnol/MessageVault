@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, fast-forward merged to `main` 2026-06-08. Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`. No active pass. No active package. Await Coordinator authorization for next development package.
+**Status:** `in-progress` — Package 3AG — Meta Reaction Capture — IMPLEMENTATION COMPLETE on branch `feature/meta-reaction-capture` (base `main` `9bf1a4b`); full verification gate green; **awaiting Coordinator commit authorization** (no commit yet). Previously: Post-Package-3AF Tower Catch-Up COMPLETE — docs `be171dc`, merged to `main` 2026-06-08; Package 3AF COMPLETE — impl `7f03889`, state-sync `4ff64b5`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -18,11 +18,11 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `be171dc` (docs: close Post-Package-3AF Tower Catch-Up, merged to `main` 2026-06-08) |
+| **Active pass** | Package 3AG — Meta Reaction Capture (implementation complete; awaiting commit authorization) |
+| **Active branch** | `feature/meta-reaction-capture` (base `main` `9bf1a4b`) |
+| **base HEAD** | `9bf1a4b` (branch base; `main` HEAD unchanged — no commit yet) |
 | **Last completed pass** | Post-Package-3AF Tower Catch-Up — docs `be171dc`, merged to `main` 2026-06-08 |
-| **Active package** | None |
+| **Active package** | `Package 3AG — Meta Reaction Capture` — implementation complete on `feature/meta-reaction-capture`; awaiting commit authorization |
 | **Last closed package** | `Package 3AF — Conversation Initiation Analysis Engine` — FULLY COMPLETE — impl `7f03889`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AE — Message Length Analysis Engine` — FULLY COMPLETE — impl `dde558c`, merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AA — Emoji Analysis Engine` — FULLY COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07 |
@@ -32,6 +32,35 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AG — Meta Reaction Capture — IMPLEMENTATION COMPLETE, awaiting commit)
+
+Branch: `feature/meta-reaction-capture` from `main` at `9bf1a4b`. Authorized by Coordinator 2026-06-08. **IMPLEMENTATION COMPLETE — full verification gate green — NOT committed (awaiting Coordinator authorization).**
+
+**Objective:** Capture-only groundwork for a later ReactionAnalysis engine (Package 3AH). Map Instagram DM and Facebook Messenger message reactions (Meta `{ reaction, actor }`) into `NormalizedMemory.reactions[]` as canonical `{ reactor, emoji, label }`. No ReactionAnalysis engine, no reaction panel, no book reaction rendering.
+
+**Files changed (11 — 0 new):**
+- `src/adapters/instagram-dm-adapter.js` — `mapReactions()` + `decodeReaction()` helpers; `reactions: []` → `reactions: mapReactions(msg.reactions)` ✓
+- `src/adapters/facebook-messenger-adapter.js` — same helpers + mapping ✓
+- `scripts/fixtures/fake-instagram-dm.json` — 2 clean-unicode reactions (msgs 1, 7); reformatted (pretty-printed via JSON round-trip); 8 imported unchanged ✓
+- `scripts/fixtures/fake-facebook-messenger.json` — msg 6 clean reaction added; existing msg 1 mojibake preserved (decodes to 👍); reformatted; 8 imported unchanged ✓
+- `src/tests/instagram-dm-adapter-tests.mjs` — IQR load in makeCtx + Suite 16 reaction capture (+14 → 101) ✓
+- `src/tests/facebook-messenger-adapter-tests.mjs` — IQR load in makeCtx + Suite 18 reaction capture (+15 → 113) ✓
+- `docs/qa/test-strategy.md` — counts (3544→3573), IG/FB rows, Package 3AG note + subsection ✓
+- `docs/architecture/architecture-roadmap.md` — adapter module-map + test descriptions + Package 3AG DELIVERED entry ✓
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs ✓
+
+**Canonical mapping:** `{ reaction, actor }` → `{ reactor: actor, emoji: decodeReaction(reaction), label: null }`. `decodeReaction()` repairs Latin-1-escaped-UTF-8 mojibake via `decodeURIComponent(escape())` and preserves the raw string on incomplete/failed decode (never drops). Non-array / missing / malformed `msg.reactions` → `[]`; entries lacking both `reaction` and `actor` skipped. Message IDs, sender/timestamp/text/type normalization, rawCounts, skip behavior, and `generateMemoryId` all unchanged. `ImportQualityReport` reaction counts become real for Meta imports automatically.
+
+**Verification gate (all green):** 3573/29 Node PASS (+29: 14 IG + 15 FB); km-engine 174 unchanged; seeded E2E 57/57; real-files E2E 189/189 (Meta Phases 29–32 unchanged — no harness edit needed); visual regression PASS (4/4 baselines unchanged); OS audit 324/0/0; project-control-sync-validate 11/0/0; project-control-sync-dry-run STRUCTURAL PASS.
+
+**Hard exclusions confirmed:** no `index.html`; no `src/core/*`; no `src/products/*`; no `src/state/*`; no ReactionAnalysis engine / `#reactionAnalysisPanel`; no Message Book reaction rendering; no DEF-11 in-book rendering; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no proof/draft/preflight/lifecycle; no PDF/checkout/vendor/manufacturing; no dependency installs; no external systems.
+
+**What is done:** Implementation + tests + docs complete; all gates green; hard-exclusion diff clean.
+**What remains:** Coordinator commit authorization; then commit + fast-forward merge + post-merge state-sync; then Post-Package-3AG Tower catch-up.
+**Next exact action:** Await Coordinator authorization to commit on `feature/meta-reaction-capture`. Do not commit or push without explicit authorization.
 
 ---
 
