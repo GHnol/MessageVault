@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-08 (Package 3AE — Message Length Analysis Engine — IN PROGRESS)
+**Last updated:** 2026-06-08 (Package 3AE — Message Length Analysis Engine — COMPLETE)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (Package 3AE — Message Length Analysis Engine IN PROGRESS)
+## Current architecture (Package 3AE — Message Length Analysis Engine COMPLETE)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -161,7 +161,7 @@ DELIVERED (Package 3AC — Message Timing Analysis Engine, impl `74ff910`, merge
 - `docs/qa/test-strategy.md` — Phase 40 note; real-files baseline 165→171; Node baseline 3174→3273 (26 suites).
 - `docs/architecture/architecture-roadmap.md` — this file; Package 3AC entry.
 
-IN PROGRESS (Package 3AE — Message Length Analysis Engine, branch `feature/message-length-analysis`, 2026-06-08):
+DELIVERED (Package 3AE — Message Length Analysis Engine, impl `dde558c`, merged to `main` 2026-06-08):
 - `src/core/message-length-analysis.js` — `KMEngine.MessageLengthAnalysis`; IIFE module; `compute(memories)` returns `{ avgCharsPerMessage, longestMessage: { sender, length } | null, perSenderStats: [{ sender, avgCharsPerMessage, messageCount }] }`; skips `senderRole:system`, `isAttachmentOnly:true`, `type:attachment-placeholder`, non-string text, blank/whitespace-only text; `avgCharsPerMessage` = `Math.round(sum/count * 10) / 10`; `longestMessage` tie-break: earliest valid occurrence in input order; `perSenderStats` sorted avgChars desc then name asc; zero-state for empty/invalid/no-valid-message input; pure, no DOM, no side effects.
 - `scripts/fixtures/fake-message-length.txt` — 12-message WhatsApp bracket fixture; 2 senders: Alice (6, avg ~69.2 chars) + Bob (5 text + 1 `<Media omitted>`); Alice is longest message sender (84 chars).
 - `src/tests/message-length-analysis-tests.mjs` — 82 tests across 15 suites.
