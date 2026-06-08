@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-08 (Package 3AJ — Import Insights Consolidation — wiring consolidation only; `renderImportInsights` dispatcher; no new engine, no new panel, no behavior change. Prior: Package 3AH — Reaction Analysis Engine + Panel — COMPLETE — impl `a165122`, merged to `main`)
+**Last updated:** 2026-06-08 (Package 3AJ — Import Insights Consolidation — COMPLETE, impl/merge `92435b7`; wiring consolidation only; `renderImportInsights` dispatcher; no new engine, no new panel, no behavior change. Prior: Package 3AH — Reaction Analysis Engine + Panel — COMPLETE — impl `a165122`, merged to `main`)
 **Status:** Active
 
 ---
@@ -110,7 +110,7 @@ All modules expose into `window.KMEngine`. No build step.
 
 ## Near-term additions (Package 3 and beyond)
 
-DELIVERED (Package 3AJ — Import Insights Consolidation, branch `feature/import-insights-consolidation` from `main` at `a84c4f9`):
+DELIVERED (Package 3AJ — Import Insights Consolidation, impl/merge `92435b7`, fast-forward merged to `main` 2026-06-08):
 - `index.html` — added `renderImportInsights(memories)` dispatcher that delegates to the ten existing import-panel render functions (`renderImportQualityPanel`, `renderContentQualityPanel`, `renderConversationStatsPanel`, `renderEmojiAnalysisPanel`, `renderWordAnalysisPanel`, `renderTimingAnalysisPanel`, `renderResponseTimePanel`, `renderMessageLengthPanel`, `renderConversationInitiationPanel`, `renderReactionAnalysisPanel`) in their existing order. Replaced the per-panel call clusters at all 11 import/open sites with one `renderImportInsights(...)` call (same argument per site). All individual `renderXPanel` functions and their `window.__km` bridges preserved; added `window.__km.renderImportInsights`. No DOM/CSS/panel-order/panel-copy/visibility-logic change — visibility logic remains inside each `renderXPanel`; the dispatcher only delegates. Pure wiring consolidation — no new engine, no new panel, no product behavior change. Baseline unchanged: 3645 Node / 30 suites; 57 seeded; 195 real-files; visual regression PASS.
 
 DELIVERED (Package 3E, merged `4390038` 2026-06-02):
