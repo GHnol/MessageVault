@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
-**Last updated:** 2026-06-07
-**Updated by:** Claude Code (Post-Package-3AD Tower Catch-Up COMPLETE — docs `dfb2910`, merged to `main` 2026-06-07; Package 3AD COMPLETE — impl `6fe873c`)
+**Last updated:** 2026-06-08
+**Updated by:** Claude Code (Post-Package-3AE Tower Catch-Up IN PROGRESS — branch `docs/post-3ae-tower-catchup`; Package 3AE COMPLETE — impl `dde558c`, merged to `main` 2026-06-08)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -52,6 +52,7 @@
 | Package 3AB | Word Count / Language Analysis Engine | COMPLETE — merged to main | `9290b8e` | `ebf9668` |
 | Package 3AC | Message Timing Analysis Engine | COMPLETE — merged to main (ff-only) | `74ff910` | `74ff910` |
 | Package 3AD | Response Time Analysis Engine | COMPLETE — merged to main (ff-only) | `6fe873c` | `6fe873c` |
+| Package 3AE | Message Length Analysis Engine | COMPLETE — merged to main (ff-only) | `dde558c` | `dde558c` |
 | Package 3Z | Extended Content Quality Checks | COMPLETE — merged to main | `4902d50` | `ff79f9e` |
 | Package 3Y | Conversation Statistics Engine | COMPLETE — merged to main | `ca8d520` | `e0539d2` |
 | Package 3X | Pre-print Content Quality Checks | COMPLETE — merged to main | `e424825` | `7bdcdb5` |
@@ -68,12 +69,13 @@
 
 ## App code state
 
-- App code last changed: Package 3AD (`6fe873c`) — `src/core/response-time-analysis.js` (NEW, `KMEngine.ResponseTimeAnalysis.compute()`); `scripts/fixtures/fake-response-time.txt` (NEW, 12 messages); `src/tests/response-time-analysis-tests.mjs` (NEW, 81 tests / 18 suites); `src/tests/km-engine-tests.mjs` (+6 ResponseTimeAnalysis smoke, 156→162); `index.html` (orange/rose CSS, `response-time-analysis.js` script tag, `#responseTimePanel` div, `renderResponseTimePanel()` at 11 call sites, `window.__km.renderResponseTimePanel`); `scripts/e2e-regression-harness.mjs` Phase 41 (6 tests) + `RESP_FIXTURE`/`RESP_FIXTURE_COUNT` constants. (Package 3AC added `src/core/timing-analysis.js` (NEW, `KMEngine.TimingAnalysis.compute()`); `scripts/fixtures/fake-timing-analysis.txt` (NEW, TIMING_FIXTURE_COUNT=12); `src/tests/timing-analysis-tests.mjs` (NEW, 93 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 TimingAnalysis smoke, 150→156); `index.html` (green CSS, `timing-analysis.js` script tag, `#timingAnalysisPanel` div, `renderTimingAnalysisPanel()` at 11 call sites, `window.__km.renderTimingAnalysisPanel`, `DAY_NAMES` constant); `scripts/e2e-regression-harness.mjs` Phase 40 (6 tests) + `TIMING_FIXTURE`/`TIMING_FIXTURE_COUNT` constants. (Package 3AB added `src/core/word-analysis.js` + `#wordAnalysisPanel`. Package 3AA added `src/core/emoji-analysis.js` + `#emojiAnalysisPanel`. Package 3Z extended `src/core/content-quality-checks.js` +4 WARN checks, no index.html changes. Package 3Y added `src/core/conversation-stats.js` + `#conversationStatsPanel`. Package 3X added `src/core/content-quality-checks.js` + `#contentQualityPanel`. Package 3W added `#telegramSenderPicker`. Package 3V added `telegram-adapter.js` script tag + Telegram routing guard. Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
+- App code last changed: Package 3AE (`dde558c`) — `src/core/message-length-analysis.js` (NEW, `KMEngine.MessageLengthAnalysis.compute()`); `scripts/fixtures/fake-message-length.txt` (NEW, 12 messages); `src/tests/message-length-analysis-tests.mjs` (NEW, 82 tests / 15 suites); `src/tests/km-engine-tests.mjs` (+6 MessageLengthAnalysis smoke, 162→168); `index.html` (cyan/sky-blue CSS, `message-length-analysis.js` script tag, `#messageLengthPanel` div, `renderMessageLengthPanel()` at 11 call sites, `window.__km.renderMessageLengthPanel`); `scripts/e2e-regression-harness.mjs` Phase 42 (6 tests) + `ML_FIXTURE`/`ML_FIXTURE_COUNT` constants. (Package 3AD added `src/core/response-time-analysis.js` (NEW, `KMEngine.ResponseTimeAnalysis.compute()`); `scripts/fixtures/fake-response-time.txt` (NEW, 12 messages); `src/tests/response-time-analysis-tests.mjs` (NEW, 81 tests / 18 suites); `src/tests/km-engine-tests.mjs` (+6 ResponseTimeAnalysis smoke, 156→162); `index.html` (orange/rose CSS, `response-time-analysis.js` script tag, `#responseTimePanel` div, `renderResponseTimePanel()` at 11 call sites, `window.__km.renderResponseTimePanel`); `scripts/e2e-regression-harness.mjs` Phase 41 (6 tests). (Package 3AC added `src/core/timing-analysis.js`. Package 3AB added `src/core/word-analysis.js` + `#wordAnalysisPanel`. Package 3AA added `src/core/emoji-analysis.js` + `#emojiAnalysisPanel`. Package 3Z extended `src/core/content-quality-checks.js` +4 WARN checks. Package 3Y added `src/core/conversation-stats.js` + `#conversationStatsPanel`. Package 3X added `src/core/content-quality-checks.js` + `#contentQualityPanel`. Package 3W added `#telegramSenderPicker`. Package 3V added `telegram-adapter.js` script tag + Telegram routing guard. Package 3T added `#facebookSenderPicker`. Package 3S added FB routing guard + script tag. Package 3Q added `#instagramSenderPicker`. Package 3P added Instagram DM routing guard + `instagram-dm-adapter.js` script tag. Package 3N added Android SMS routing guard. Package 3L added `#whatsappSenderPicker`. Package 3K added WA detection guard. Package 3I added `#importQualityPanel`. Package 3J added `src/adapters/whatsapp-txt-adapter.js` — engine-only. Package 5C added cancel button. Package 3H gated proof panel. Package 3G loaded lifecycle modules.)
 - `index.html`: modified (Package 3B: `window.__km` harness entries; Package 4D: 6 script tags + 2 readiness consumer bridge methods; Package 4E: CSS + `buildFormatAvailability` + wiring in `buildKeepsakeCard`; Package 5B: script tags for 5A+5B modules, `#bookProofPanel`, CSS, `renderBookProofPanel()`, save/restore wiring; Package 3G: 3 script tags for lifecycle modules; Package 5C: cancel button + CSS; Package 3I: import-quality-report.js script tag, `#importQualityPanel`, CSS, `renderImportQualityPanel()`, callsites).
 - `src/state/`: 3 modules in Package 3A; modified in Package 5B (proofApprovalStates) and Package 3E (`project-persistence.js` + `project-session-restore.js` — productDrafts validation + restore normalization + group serialization)
-- `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new) + `content-quality-checks.js` (Package 3X, new) + `conversation-stats.js` (Package 3Y, new) + `emoji-analysis.js` (Package 3AA, new) + `word-analysis.js` (Package 3AB, new) + `timing-analysis.js` (Package 3AC, new) + `response-time-analysis.js` (Package 3AD, new)
+- `src/core/`: 5 modules (source-platforms, normalized-memory, import-adapters, project-session, keepsake-group) + `import-quality-report.js` (Package 3I, new) + `content-quality-checks.js` (Package 3X, new) + `conversation-stats.js` (Package 3Y, new) + `emoji-analysis.js` (Package 3AA, new) + `word-analysis.js` (Package 3AB, new) + `timing-analysis.js` (Package 3AC, new) + `response-time-analysis.js` (Package 3AD, new) + `message-length-analysis.js` (Package 3AE, new)
 - `src/products/`: 16 modules. Package 5C modified `proof-approval-state.js` (new transition) and `proof-approval-ux.js` (new method).
-- `src/tests/`: 27 suites, **3360 Node tests** — all green
+- `src/tests/`: 28 suites, **3448 Node tests** — all green
+  - `message-length-analysis-tests.mjs`: 82 (Package 3AE; 15 suites: API shape, zero-state compute([]), null/non-array inputs, system messages excluded, attachment-only excluded, attachment-placeholder excluded, blank/non-string text, avgCharsPerMessage accuracy, longestMessage accuracy, longestMessage tie-break earliest, perSenderStats accuracy, perSenderStats sort order, skip rules combined, no throw on malformed, semantic guards)
   - `timing-analysis-tests.mjs`: 93 (Package 3AC; 15 suites: API shape, empty/null/non-array zero-state, no-valid-timestamps zero-state, single message, hourlyDistribution/dailyDistribution accuracy, peakHour/peakDayOfWeek computation, midnight/Sunday edge cases, null/invalid timestamps skipped, tie-break lowest index wins, semantic guards)
   - `word-analysis-tests.mjs`: 100 (Package 3AB; 19 suites: API shape, empty/null/invalid zero-state, attachment-only exclusion, basic word extraction, lowercase normalization, punctuation stripping, word accumulation, totalWords, avgWordsPerMessage, topWords sorting/ranking/MAX_TOP=10, tie-breaking, topWordSender, topWordSender tie-breaking, multi-sender scenario, blank/empty text, malformed entries, fixture behavior, semantic guards)
   - `emoji-analysis-tests.mjs`: 100 (Package 3AA; 15 suites: API shape, empty/null/invalid zero-state, basic emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, mostEmojifiedSender tie-breaking, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards)
@@ -83,7 +85,7 @@
   - `facebook-messenger-adapter-tests.mjs`: 98 (Package 3R; 17 suites)
   - `android-sms-xml-adapter-tests.mjs`: 84 (Package 3M; 14 suites: API shape, canHandle, SMS type=1/2, senderRole, MMS, fixture rawCounts, participants, NormalizedMemory fields, provenance, importWarnings, semantic guards)
   - `whatsapp-txt-adapter-tests.mjs`: 91 (Package 3J; 14 suites: API shape, canHandle, parsing, multi-line, system messages, media, participants, rawCounts, NormalizedMemory fields, semantic guards)
-  - `km-engine-tests.mjs`: 156 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J; +5 instagram-dm smoke — Package 3O; +6 facebook-messenger additions — Package 3R; +5 telegram smoke — Package 3U; +6 content-quality-checks smoke — Package 3X; +6 conversation-stats smoke — Package 3Y; +4 extended CQC smoke — Package 3Z; +6 EmojiAnalysis smoke — Package 3AA; +6 WordAnalysis smoke — Package 3AB; +6 TimingAnalysis smoke — Package 3AC)
+  - `km-engine-tests.mjs`: 168 (+5 android-sms smoke — Package 3M; +5 whatsapp smoke — Package 3J; +5 instagram-dm smoke — Package 3O; +6 facebook-messenger additions — Package 3R; +5 telegram smoke — Package 3U; +6 content-quality-checks smoke — Package 3X; +6 conversation-stats smoke — Package 3Y; +4 extended CQC smoke — Package 3Z; +6 EmojiAnalysis smoke — Package 3AA; +6 WordAnalysis smoke — Package 3AB; +6 TimingAnalysis smoke — Package 3AC; +6 ResponseTimeAnalysis smoke — Package 3AD; +6 MessageLengthAnalysis smoke — Package 3AE)
   - `keepsake-group-tests.mjs`: 43
   - `product-catalog-tests.mjs`: 127
   - `product-eligibility-tests.mjs`: 76
@@ -104,7 +106,7 @@
 - `src/core/source-platforms.js`: modified (Package 3J); WhatsApp platform `stub` → `supported`
 - `src/adapters/future-adapter-stubs.js`: modified (Package 3J); removed `whatsapp-txt-v1` stub
 - `scripts/fixtures/fake-whatsapp-chat.txt`: new (Package 3J); fake bracket-format WhatsApp fixture
-- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 114-test real-file coverage (phases 11–19 + Phases 25–40, Packages 3C + 3I + 3K + 3L + 3N + 3P + 3Q + 3S + 3T + 3V + 3W + 3X + 3Y + 3Z + 3AA + 3AB + 3AC) — 171 total
+- `scripts/e2e-regression-harness.mjs`: 57-test seeded Playwright harness (phases 1–10 + 20–24) + 126-test real-file coverage (phases 11–19 + Phases 25–42, Packages 3C + 3I + 3K + 3L + 3N + 3P + 3Q + 3S + 3T + 3V + 3W + 3X + 3Y + 3Z + 3AA + 3AB + 3AC + 3AD + 3AE) — 183 total
 - `scripts/e2e-test-data.mjs`: deterministic NormalizedMemory seed data (Package 3B)
 - `scripts/fixtures/fake-conversation.txt`: safe fake fixture for real .txt import testing (Package 3C)
 - `scripts/process-operator-inbox.mjs`: stream update processor — generates routing packets, Coordinator summaries, suggested prompts from inbox Markdown files (Package 2.6)
@@ -113,14 +115,14 @@
 
 ---
 
-## Git state (as of post-Package-3AD Tower Catch-Up state-sync)
+## Git state (as of post-Package-3AE state-sync — Tower Catch-Up IN PROGRESS)
 
 | Item | Value |
 |---|---|
-| main HEAD | `dfb2910` — docs: close Post-Package-3AD Tower Catch-Up |
-| Active branch | `main` |
-| Working tree | Clean |
-| Pushed to remote | main pushed through `dfb2910` (Post-Package-3AD Tower Catch-Up + state-sync) |
+| main HEAD | `89c3864` — docs: sync operating docs after Package 3AE completion |
+| Active branch | `docs/post-3ae-tower-catchup` (Tower Catch-Up in progress) |
+| Working tree | Modified (Tower Catch-Up docs only) |
+| Pushed to remote | main pushed through `89c3864` (Package 3AE impl + state-sync) |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 
@@ -165,7 +167,7 @@
 
 | Item | Status |
 |---|---|
-| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AD COMPLETE (impl `6fe873c`, merged to `main` 2026-06-07; state-sync `3276190`); all DEF-14 engine data points complete; ResponseTimeAnalysis adds avg response time/fastest responder beyond DEF-14; next recommended candidate: TBD; awaiting Coordinator authorization |
+| Authorize next development package | NEEDS COORDINATOR DECISION — Package 3AE COMPLETE (impl `dde558c`, merged to `main` 2026-06-08; state-sync `89c3864`); all DEF-14 engine data points complete; MessageLengthAnalysis adds avg chars/msg, longest message sender, per-sender char stats beyond DEF-14; next recommended candidate: TBD; awaiting Coordinator authorization |
 | Designer budget re-authorization | NEEDS COORDINATOR DECISION — blocks Figma / Phase 7+ |
 | GitHub Projects (Command Center board) | NEEDS COORDINATOR DECISION |
 | NotebookLM adoption as project tool | NEEDS COORDINATOR DECISION |

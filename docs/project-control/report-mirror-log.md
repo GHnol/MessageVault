@@ -26,10 +26,10 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 
 ## Latest state summary
 
-**As of:** 2026-06-07
-**Last mirrored:** RPT-20260607-011 (Post-Package-3AD Tower Catch-Up operating pass — COMPLETE; docs `dfb2910`, merged to `main` 2026-06-07)
-**Active gate:** None — Post-Package-3AD Tower Catch-Up COMPLETE; main HEAD `dfb2910`; no active pass; awaiting Coordinator authorization for next development package
-**Next expected mirror:** Next development package or operating pass
+**As of:** 2026-06-08
+**Last mirrored:** RPT-20260608-004 (Post-Package-3AE Tower Catch-Up operating pass — IN PROGRESS; branch `docs/post-3ae-tower-catchup` from `main` at `89c3864`)
+**Active gate:** Post-Package-3AE Tower Catch-Up IN PROGRESS on `docs/post-3ae-tower-catchup`; main HEAD `89c3864`; no active development package
+**Next expected mirror:** Post-Package-3AE Tower Catch-Up commit and merge
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
 
@@ -39,6 +39,8 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260608-004 | weekly_sync | Post-Package-3AE Tower Catch-Up operating pass | docs/post-3ae-tower-catchup | pending commit | mirrored | 2026-06-08 |
+| RPT-20260608-003 | package_closeout | Package 3AE — Message Length Analysis Engine | feature/message-length-analysis | dde558c / 89c3864 | mirrored | 2026-06-08 |
 | RPT-20260607-011 | weekly_sync | Post-Package-3AD Tower Catch-Up operating pass | docs/post-3ad-tower-catchup | dfb2910 | mirrored | 2026-06-07 |
 | RPT-20260607-010 | package_closeout | Package 3AD — Response Time Analysis Engine | feature/response-time-analysis | 6fe873c / 3276190 | mirrored | 2026-06-07 |
 | RPT-20260607-009 | weekly_sync | Post-Package-3AC Tower Catch-Up operating pass | docs/post-3ac-tower-catchup | 422e0a6 | mirrored | 2026-06-07 |
@@ -76,6 +78,38 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260608-004 — weekly_sync — Post-Package-3AE Tower Catch-Up operating pass
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** docs/post-3ae-tower-catchup | **HEAD:** pending commit | **Status:** mirrored
+
+Post-Package-3AE Tower Catch-Up operating pass IN PROGRESS — docs-only; branch `docs/post-3ae-tower-catchup` from main at `89c3864`. 13 authorized Tower docs updated. No app code, no tests, no fixtures, no scripts. Corrected stale Tower, command-center, backlog, roadmap, and project-control docs after Package 3AE (Message Length Analysis Engine). Files updated: AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md, docs/ops/backlog-roadmap.md, docs/ops/deferred-gated-ideas-register.md, docs/project-control/backlog.md, docs/project-control/current-sprint.md, docs/project-control/decision-log.md, docs/project-control/kanban-board.md, docs/project-control/master-roadmap.md, docs/project-control/report-mirror-log.md, docs/command-center/current-status.md, docs/command-center/next-actions.md.
+
+**Tests:** No tests run — docs-only pass.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, src/*, scripts/e2e-regression-harness.mjs, scripts/fixtures/*, tests/* untouched; no pagination constants; no BOOK_PAGINATION_VERSION; no external-system files; no credentials/tokens/raw-transcripts committed.
+**Next action:** Coordinator authorizes commit and merge of Tower Catch-Up docs; then decides next development package.
+**Follow-up:** false
+
+*Entry added as the Post-Package-3AE Tower Catch-Up record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
+
+### RPT-20260608-003 — package_closeout — Package 3AE — Message Length Analysis Engine
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** feature/message-length-analysis | **HEAD:** dde558c (impl) / 89c3864 (state-sync) | **Status:** mirrored
+
+Package 3AE — Message Length Analysis Engine COMPLETE — implementation `dde558c`, fast-forward merged to `main` 2026-06-08; state-sync `89c3864`. Delivered: (1) `src/core/message-length-analysis.js` — IIFE; `KMEngine.MessageLengthAnalysis.compute(memories)` pure function returning `{ avgCharsPerMessage, longestMessage, perSenderStats }`; skip rules: senderRole==='system', isAttachmentOnly===true, type==='attachment-placeholder', non-string text, blank/whitespace-only; avgCharsPerMessage rounded to 1 decimal (`Math.round((total/msgCount)*10)/10`); longestMessage tie-break strict `len > longestLen` (first occurrence wins); perSenderStats sorted desc avgCharsPerMessage then sender asc; zero-state for empty/invalid: `{ avgCharsPerMessage: 0, longestMessage: null, perSenderStats: [] }`; pure, no DOM, no side effects, Node-testable. (2) `scripts/fixtures/fake-message-length.txt` — WhatsApp bracket fixture for MessageLengthAnalysis. (3) `src/tests/message-length-analysis-tests.mjs` — 82 tests / 15 suites; all PASS. (4) `src/tests/km-engine-tests.mjs` — loads message-length-analysis.js; `MessageLengthAnalysis — smoke` suite (+6 → 168 total); all PASS. (5) `index.html` — CSS cyan/sky-blue light+dark; `<script src="src/core/message-length-analysis.js">`; `<div id="messageLengthPanel">`; `renderMessageLengthPanel(memories)`; called at all 11 import/open sites; `window.__km.renderMessageLengthPanel`. (6) `scripts/e2e-regression-harness.mjs` — Phase 42 (6 real-files tests). (7) `docs/qa/test-strategy.md` — Phase 42 note; Node baseline 3360→3448 / 27→28 suites; real-files 177→183. (8) `docs/architecture/architecture-roadmap.md` — message-length-analysis.js module map; `#messageLengthPanel`; message-length-analysis-tests.mjs; Package 3AE DELIVERED entry. (9) `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs updated.
+
+**Tests:** 3448/28 Node PASS (82 new + 6 smoke); 57/57 seeded E2E PASS; 183/183 real-files E2E PASS (Phase 42 6/6); visual regression PASS.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — src/products/*, src/state/*, src/adapters/*, src/core/normalized-memory.js, src/core/import-adapters.js, src/core/project-session.js untouched; ProductDraft/Preflight/Lifecycle/ProofApproval modules untouched; no GATE-04 crossing; no checkout/PDF/vendor/manufacturing; no credentials/tokens/raw-transcripts committed.
+**Next action:** Post-Package-3AE Tower Catch-Up authorized; then Coordinator decides next package.
+**Follow-up:** false
+
+*Entry added as the Package 3AE closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260607-011 — weekly_sync — Post-Package-3AD Tower Catch-Up operating pass
 
