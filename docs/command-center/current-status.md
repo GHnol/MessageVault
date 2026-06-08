@@ -115,14 +115,14 @@
 
 ---
 
-## Git state (as of post-Package-3AE state-sync — Tower Catch-Up IN PROGRESS)
+## Git state (as of Post-Package-3AE Tower Catch-Up state-sync — 2026-06-08)
 
 | Item | Value |
 |---|---|
-| main HEAD | `89c3864` — docs: sync operating docs after Package 3AE completion |
-| Active branch | `docs/post-3ae-tower-catchup` (Tower Catch-Up in progress) |
-| Working tree | Modified (Tower Catch-Up docs only) |
-| Pushed to remote | main pushed through `89c3864` (Package 3AE impl + state-sync) |
+| main HEAD | `00e084b` — docs: close Post-Package-3AE Tower Catch-Up |
+| Active branch | `main` |
+| Working tree | Clean |
+| Pushed to remote | pending push authorization |
 
 **Package 3P (`fa6f6f2` / `d99fb84`):** Instagram DM JSON UI Wiring — `readTxtFile()` Instagram DM routing guard added (after Android SMS guard, before pipe-delimited fallback); `instagram-dm-adapter.js` script tag; `#fileInput accept=".txt,.xml,.json"`; ingest card copy `.txt or .xml` → `.txt, .xml or .json`; drop hint updated for .json. Phase 29 E2E (5 tests): fixture load, chat view visible, INSTAGRAM_FIXTURE_COUNT=8 messages, importQualityPanel visible, sourcePlatformId=instagram-dm. No engine changes; no sender picker (senderRole always contact; self-ID deferred to Package 3Q). 106/106 real-files; 10/10 manual QA PASS.
 

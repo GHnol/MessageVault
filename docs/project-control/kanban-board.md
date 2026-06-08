@@ -1,6 +1,6 @@
 # KeepMees Kanban Board
 
-**Last updated:** 2026-06-08 (Post-Package-3AE Tower Catch-Up IN PROGRESS — docs-only; Package 3AE COMPLETE — impl `dde558c`, merged to `main` 2026-06-08)
+**Last updated:** 2026-06-08 (Post-Package-3AE Tower Catch-Up COMPLETE — docs `00e084b`, merged to `main` 2026-06-08)
 **Owner:** Coordinator / Project Control
 **Purpose:** Visual status board. Visibility tool only — not the project brain. Source of truth remains `backlog.md` + roadmap.
 
@@ -44,7 +44,7 @@
 - _(empty)_
 
 ### Done
-- **Post-Package-3AE Tower Catch-Up operating pass** · Docs-only · branch `docs/post-3ae-tower-catchup` from `main` at `89c3864`; IN PROGRESS — Tower, command-center, backlog, roadmap, operating docs updated after Package 3AE COMPLETE
+- **Post-Package-3AE Tower Catch-Up operating pass** · Docs-only · docs `00e084b`, merged to `main` 2026-06-08; 13 authorized Tower docs updated after Package 3AE COMPLETE — COMPLETE
 - **Package 3AE — Message Length Analysis Engine** · Development / Engine+UI · Ph3 · implementation `dde558c`, merged to `main` 2026-06-08 (ff-only); `KMEngine.MessageLengthAnalysis.compute()`; returns { avgCharsPerMessage, longestMessage, perSenderStats }; skips system/attachment-only/attachment-placeholder/non-string/blank; rounded to 1 decimal; earliest tie-break for longest; perSenderStats sorted desc avg then alpha; `#messageLengthPanel` cyan/sky-blue CSS; `renderMessageLengthPanel(memories)` at 11 call sites; `window.__km.renderMessageLengthPanel`; 82 new tests (`message-length-analysis-tests.mjs`, 15 suites) + 6 km-engine smoke (→168 total); Phase 42 E2E (6 tests); 3448 Node / 28 suites; 57/57 seeded; 183/183 real-files — COMPLETE
 - **Post-Package-3AD Tower Catch-Up operating pass** · Docs-only · docs `dfb2910`, merged to `main` 2026-06-07; 13 authorized Tower docs updated; no app code — COMPLETE
 - **Package 3AD — Response Time Analysis Engine** · Development / Engine+UI · Ph3 · implementation `6fe873c`, merged to `main` 2026-06-07 (ff-only); `KMEngine.ResponseTimeAnalysis.compute()`; returns { avgResponseTimeMs, fastestResponder, perSenderStats }; same-sender pairs skipped; `#responseTimePanel` orange/rose CSS; `renderResponseTimePanel(memories)` at 11 call sites; `window.__km.renderResponseTimePanel`; 81 new tests (`response-time-analysis-tests.mjs`, 18 suites) + 6 km-engine smoke (→162 total); Phase 41 E2E (6 tests); 3360 Node / 27 suites; 57/57 seeded; 177/177 real-files — COMPLETE
