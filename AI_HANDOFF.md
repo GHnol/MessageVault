@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — **Package 3AJ — Import Insights Consolidation COMPLETE** — impl/merge `92435b7`, fast-forward merged to `main` 2026-06-08; post-merge state-sync (this update). Behavior-preserving wiring consolidation: added a single `renderImportInsights(memories)` dispatcher in `index.html` that delegates to the ten existing import-panel renderers in their existing order; replaced the per-panel call clusters at all 11 import/open sites with one dispatcher call (same argument per site); preserved every individual `renderXPanel` function + `window.__km.renderXPanel` bridge; added `window.__km.renderImportInsights`. No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change (each `renderXPanel` keeps its own visibility logic; the dispatcher only delegates). Baseline unchanged: 3645 Node / 30 suites / 0 failed; 57/57 seeded E2E; 195/195 real-files E2E; visual regression PASS (4/4 baselines unchanged). Active branch `main`. No active pass. No active package. Next recommended action: Post-Package-3AJ Tower Catch-Up (separate docs-only pass) — pending Coordinator authorization. **Package 3AI — Verification & Harness Reliability Hardening remains CLOSED/COMPLETE** (impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, closeout `a84c4f9`, fast-forward merged to `main` 2026-06-08). **Post-Package-3AI Tower Catch-Up remains CLOSED/COMPLETE.** Previously: Package 3AH — Reaction Analysis Engine + Panel COMPLETE — impl `a165122`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`.
+**Status:** `in-progress` — **Post-Package-3AJ Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit)** on branch `docs/post-3aj-tower-catchup` from `main` at `e445212`. Authorized by Coordinator 2026-06-08. Bringing the broader Tower, command-center, project-control, ops, and report-mirror docs current after **Package 3AJ — Import Insights Consolidation COMPLETE** — impl/merge `92435b7`, fast-forward merged to `main` 2026-06-08; post-merge state-sync `e445212`. Behavior-preserving wiring consolidation: a single `renderImportInsights(memories)` dispatcher in `index.html` delegating to the ten existing import-panel renderers in order; 11 per-panel call clusters replaced with one dispatcher call each; all `renderXPanel` functions + `window.__km` bridges preserved; `window.__km.renderImportInsights` added. No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change. Baseline unchanged: 3645 Node / 30 suites / 0 failed; 57/57 seeded E2E; 195/195 real-files E2E; visual regression PASS (4/4 baselines unchanged). `docs/architecture/architecture-roadmap.md` and `docs/qa/test-strategy.md` are left untouched in this catch-up (already updated in the 3AJ impl + state-sync). **Package 3AI — Verification & Harness Reliability Hardening remains CLOSED/COMPLETE** (impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, closeout `a84c4f9`). **Post-Package-3AI Tower Catch-Up remains CLOSED/COMPLETE.** Previously: Package 3AH COMPLETE — impl `a165122`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -18,9 +18,9 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `92435b7` (refactor: consolidate import-panel render wiring into renderImportInsights dispatcher (Package 3AJ); `main` HEAD — pre-state-sync-commit value) |
+| **Active pass** | Post-Package-3AJ Tower Catch-Up (IN PROGRESS, docs-only, stop-before-commit) |
+| **Active branch** | `docs/post-3aj-tower-catchup` (from `main` at `e445212`) |
+| **base HEAD** | `e445212` (docs: sync operating docs after Package 3AJ completion; `main` HEAD at branch creation) |
 | **Active package** | None |
 | **Last completed pass** | Package 3AJ — Import Insights Consolidation — impl/merge `92435b7`, fast-forward merged to `main` 2026-06-08 |
 | **Last closed package** | `Package 3AJ — Import Insights Consolidation` — FULLY COMPLETE (behavior-preserving wiring consolidation; `renderImportInsights` dispatcher; no new engine/panel; no behavior change) — impl/merge `92435b7`, fast-forward merged to `main` 2026-06-08 |
@@ -36,6 +36,22 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Post-Package-3AJ Tower Catch-Up — IN PROGRESS, docs-only, stop-before-commit)
+
+Branch: `docs/post-3aj-tower-catchup` from `main` at `e445212`. Authorized by Coordinator 2026-06-08. **Docs-only. No app code, no tests, no fixtures, no scripts.**
+
+**Objective:** Bring the broader Tower, command-center, project-control, ops, and report-mirror docs current after Package 3AJ completion. Record Package 3AJ as the latest complete package; replace stale "Package 3AI is the latest complete package" claims with Package 3AJ; add the Package 3AJ closeout entry to `docs/project-control/report-mirror-log.md`; add Package 3AJ to project-control history, sprint, kanban, roadmap, backlog, decision-log, command-center, and ops summaries. `docs/architecture/architecture-roadmap.md` and `docs/qa/test-strategy.md` left untouched (already updated in the 3AJ impl + state-sync).
+
+**Authorized files (13):** `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md`, `docs/command-center/current-status.md`, `docs/command-center/next-actions.md`, `docs/ops/backlog-roadmap.md`, `docs/ops/deferred-gated-ideas-register.md`, `docs/project-control/backlog.md`, `docs/project-control/current-sprint.md`, `docs/project-control/decision-log.md`, `docs/project-control/kanban-board.md`, `docs/project-control/master-roadmap.md`, `docs/project-control/report-mirror-log.md`.
+
+**Hard exclusions confirmed:** no `index.html`; no `src/**`; no `scripts/**`; no `scripts/fixtures/**`; no `src/tests/**`; no `docs/architecture/architecture-roadmap.md`; no `docs/qa/test-strategy.md`; no `docs/qa/pre-commit-verification-template.md`; no analytics engines/panels; no Import Insights Consolidation implementation changes; no DEF-11 in-book reaction rendering / Message Book reaction badges; no DEF-14 in-book Stats Page; no DEF-13 library shelf; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no `src/products/*` / `src/state/*` / adapters / ProductDraft / Preflight / Lifecycle / proof approval / Review view / standalone keepsake flows / PDF / checkout / vendor / manufacturing / cover; no dependency files; no external-system files.
+
+**What is done:** Tower/command-center/project-control/ops/report-mirror docs updated to record Package 3AJ COMPLETE; stale "Package 3AI latest" claims replaced; report-mirror entries added (Package 3AJ closeout + this catch-up).
+**What remains:** Commit + ff-merge to `main` + post-merge closeout state-sync (pending Coordinator authorization).
+**Next exact action:** Stop before commit. Report to Coordinator and await commit authorization. Do not commit or push without it.
 
 ---
 

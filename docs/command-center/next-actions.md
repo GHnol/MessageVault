@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Package 3AI — Verification & Harness Reliability Hardening — COMPLETE; impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`; Post-Package-3AI Tower Catch-Up IN PROGRESS — docs-only, stop-before-commit)
+**Updated by:** Claude Code (Package 3AJ — Import Insights Consolidation — COMPLETE; impl/merge `92435b7`, merged to `main` 2026-06-08; state-sync `e445212`; behavior-preserving wiring consolidation — `renderImportInsights` dispatcher, no new engine/panel, no behavior change; Post-Package-3AJ Tower Catch-Up IN PROGRESS — docs-only, stop-before-commit)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3AI COMPLETE (impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`); Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3AJ COMPLETE (impl/merge `92435b7`, merged to `main` 2026-06-08; state-sync `e445212`); Post-Package-3AJ Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3AI COMPLETE — impl `d4a6c71`, merged to `main` 2026-06-08; state-sync `803cd64`. Post-Package-3AI Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit). Coordinator decides next package.**
+**Status: Package 3AJ COMPLETE — impl/merge `92435b7`, merged to `main` 2026-06-08; state-sync `e445212`. Post-Package-3AJ Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit). Coordinator decides next package.**
+
+Package 3AJ (Import Insights Consolidation) is COMPLETE — fast-forward merged to main (`92435b7`; state-sync `e445212` 2026-06-08). Behavior-preserving wiring consolidation: a single `renderImportInsights(memories)` dispatcher was added to `index.html` that delegates to the ten existing import-panel renderers (`renderImportQualityPanel` → `renderReactionAnalysisPanel`) in their existing order; the per-panel call clusters at all 11 import/open sites were replaced with one `renderImportInsights(...)` call each (same argument per site). All individual `renderXPanel` functions and their `window.__km` bridges are preserved; `window.__km.renderImportInsights` is added. **No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change** — this is debt-paydown of the per-engine wiring sprawl created by the analytics series, not new product surface. Baseline unchanged: 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS (panels sit above the page-canvas capture zone). The Post-Package-3AJ Tower Catch-Up (this docs-only pass) records 3AJ across the Tower and is awaiting Coordinator commit authorization.
 
 Package 3AI (Verification & Harness Reliability Hardening) is COMPLETE — fast-forward merged to main (`d4a6c71`; state-sync `803cd64` 2026-06-08). Scripts + docs only: `scripts/e2e-regression-harness.mjs` Phase 1 startup reliability hardened (bounded 3-attempt server re-probe + backoff; richer `waitForKm`/`Harness.run` failure diagnostics) with **no assertion or test-count changes**; baseline docs refreshed without a new stale-number trap (`test-strategy.md` changelog → 3AG/3AH; `current-status.md` detail-lag → 3AH; `pre-commit-verification-template.md` non-staling baseline pointer). No `index.html`, no `src/**`, no new test-runner orchestrator. Baseline unchanged: 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS. The Post-Package-3AI Tower Catch-Up (this docs-only pass) records 3AI across the Tower and is awaiting Coordinator commit authorization.
 
@@ -71,7 +73,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | TBD — Coordinator to decide | TBD | TBD | — |
 | Phase 12 continuation (preflight runners for vendor-gated checks) | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3AI is now COMPLETE — the latest complete package** (Verification & Harness Reliability Hardening; scripts + docs only — no app code). The latest *engine* work remains Package 3AH (ReactionAnalysis + #reactionAnalysisPanel, import-time advisory only), which is DELIVERED — so the earlier "likely candidate" ReactionAnalysis engine is no longer pending. No development package has been authorized after Package 3AI. Post-Package-3AI Tower Catch-Up (docs-only) is IN PROGRESS (stop-before-commit). The next Coordinator step is to decide the next package (candidate TBD).
+**Package 3AJ is now COMPLETE — the latest complete package** (Import Insights Consolidation; behavior-preserving wiring consolidation of `index.html` — `renderImportInsights` dispatcher; no new engine, no new panel, no behavior change). The latest *engine* work remains Package 3AH (ReactionAnalysis + #reactionAnalysisPanel, import-time advisory only), which is DELIVERED. Package 3AI (Verification & Harness Reliability Hardening; scripts + docs only) and Package 3AJ are both complete. No development package has been authorized after Package 3AJ. Post-Package-3AJ Tower Catch-Up (docs-only) is IN PROGRESS (stop-before-commit). The next Coordinator step is to decide the next package (candidate TBD).
 
 ---
 
