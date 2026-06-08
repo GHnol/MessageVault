@@ -45,6 +45,7 @@ load('src/core/content-quality-checks.js');
 load('src/core/conversation-stats.js');
 load('src/core/emoji-analysis.js');
 load('src/core/word-analysis.js');
+load('src/core/timing-analysis.js');
 
 const { KMEngine } = ctx.window;
 
@@ -435,6 +436,17 @@ const waCorpus = KMEngine.WordAnalysis.compute([{
     sender: 'Alice', text: 'hello world', type: 'message', isAttachmentOnly: false
 }]);
 assert(waCorpus.totalWords === 2,                                      'non-empty corpus returns totalWords 2');
+
+// ── TIMING ANALYSIS — smoke ───────────────────────────────────────────────────
+
+suite('TimingAnalysis — smoke');
+assert(KMEngine.TimingAnalysis !== undefined,                          'TimingAnalysis exists on KMEngine');
+assert(typeof KMEngine.TimingAnalysis.compute === 'function',          'compute is a function');
+const taEmpty = KMEngine.TimingAnalysis.compute([]);
+assert(typeof taEmpty === 'object' && taEmpty !== null,                'compute([]) returns an object');
+assert(taEmpty.peakHour === null && taEmpty.peakDayOfWeek === null,    'compute([]) returns zero-state');
+assert(Array.isArray(taEmpty.hourlyDistribution) && taEmpty.hourlyDistribution.length === 24, 'compute([]) hourlyDistribution has 24 slots');
+assert(Array.isArray(taEmpty.dailyDistribution) && taEmpty.dailyDistribution.length === 7,   'compute([]) dailyDistribution has 7 slots');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 

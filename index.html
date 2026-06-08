@@ -75,6 +75,11 @@
                 color: #ce93d8;
             }
             .word-analysis-chip strong { color: #ba68c8; }
+            .timing-analysis-inner {
+                background: #001400;
+                color: #a5d6a7;
+            }
+            .timing-analysis-chip strong { color: #81c784; }
             .sender-picker-inner {
                 background: #1c1c1e;
                 color: #8e8e93;
@@ -953,6 +958,29 @@
         }
         .word-analysis-chip strong {
             color: #6a1b9a;
+        }
+
+        .timing-analysis-panel {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 6px 16px 0;
+        }
+        .timing-analysis-inner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #1b5e20;
+        }
+        .timing-analysis-chip {
+            white-space: nowrap;
+        }
+        .timing-analysis-chip strong {
+            color: #2e7d32;
         }
 
         .whatsapp-sender-picker {
@@ -3583,6 +3611,7 @@
         <div class="conversation-stats-panel" id="conversationStatsPanel" style="display:none;"></div>
         <div class="emoji-analysis-panel" id="emojiAnalysisPanel" style="display:none;"></div>
         <div class="word-analysis-panel" id="wordAnalysisPanel" style="display:none;"></div>
+        <div class="timing-analysis-panel" id="timingAnalysisPanel" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="whatsappSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="instagramSenderPicker" style="display:none;"></div>
         <div class="whatsapp-sender-picker" id="facebookSenderPicker" style="display:none;"></div>
@@ -3685,6 +3714,7 @@
     <script src="src/core/conversation-stats.js"></script>
     <script src="src/core/emoji-analysis.js"></script>
     <script src="src/core/word-analysis.js"></script>
+    <script src="src/core/timing-analysis.js"></script>
     <script src="src/adapters/txt-export-adapter.js"></script>
     <script src="src/adapters/imessage-chatdb-adapter.js"></script>
     <script src="src/adapters/manual-entry-adapter.js"></script>
@@ -3793,6 +3823,7 @@
         const conversationStatsPanel   = document.getElementById('conversationStatsPanel');
         const emojiAnalysisPanel       = document.getElementById('emojiAnalysisPanel');
         const wordAnalysisPanel        = document.getElementById('wordAnalysisPanel');
+        const timingAnalysisPanel      = document.getElementById('timingAnalysisPanel');
         const whatsappSenderPicker  = document.getElementById('whatsappSenderPicker');
         const instagramSenderPicker = document.getElementById('instagramSenderPicker');
         const facebookSenderPicker  = document.getElementById('facebookSenderPicker');
@@ -4216,6 +4247,32 @@
             wordAnalysisPanel.style.display = '';
         }
 
+        function renderTimingAnalysisPanel(memories) {
+            if (!timingAnalysisPanel) return;
+            const TA = window.KMEngine && window.KMEngine.TimingAnalysis;
+            if (!TA || !Array.isArray(memories) || memories.length === 0) {
+                timingAnalysisPanel.style.display = 'none';
+                timingAnalysisPanel.innerHTML = '';
+                return;
+            }
+            const stats = TA.compute(memories);
+            if (stats.peakHour === null) {
+                timingAnalysisPanel.style.display = 'none';
+                timingAnalysisPanel.innerHTML = '';
+                return;
+            }
+            const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const chips = [];
+            const hourStr = String(stats.peakHour).padStart(2, '0') + ':00 UTC';
+            chips.push('<span class="timing-analysis-chip"><strong>' + hourStr + '</strong> peak hour</span>');
+            if (stats.peakDayOfWeek !== null) {
+                chips.push('<span class="timing-analysis-chip"><strong>' + DAY_NAMES[stats.peakDayOfWeek] + '</strong> peak day</span>');
+            }
+            timingAnalysisPanel.innerHTML =
+                '<div class="timing-analysis-inner">' + chips.join(' &nbsp;·&nbsp; ') + '</div>';
+            timingAnalysisPanel.style.display = '';
+        }
+
         /* ─────────────────────────────────────────────
            WhatsApp self-identification sender picker
         ───────────────────────────────────────────── */
@@ -4264,6 +4321,7 @@
             renderConversationStatsPanel(data);
             renderEmojiAnalysisPanel(data);
             renderWordAnalysisPanel(data);
+            renderTimingAnalysisPanel(data);
             if (whatsappSenderPicker) {
                 whatsappSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4323,6 +4381,7 @@
             renderConversationStatsPanel(data);
             renderEmojiAnalysisPanel(data);
             renderWordAnalysisPanel(data);
+            renderTimingAnalysisPanel(data);
             if (instagramSenderPicker) {
                 instagramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4382,6 +4441,7 @@
             renderConversationStatsPanel(data);
             renderEmojiAnalysisPanel(data);
             renderWordAnalysisPanel(data);
+            renderTimingAnalysisPanel(data);
             if (facebookSenderPicker) {
                 facebookSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4438,6 +4498,7 @@
             renderConversationStatsPanel(data);
             renderEmojiAnalysisPanel(data);
             renderWordAnalysisPanel(data);
+            renderTimingAnalysisPanel(data);
             if (telegramSenderPicker) {
                 telegramSenderPicker.querySelectorAll('.sender-chip').forEach(function (btn) {
                     var btnSender = btn.getAttribute('data-sender') || null;
@@ -4469,6 +4530,7 @@
                     renderConversationStatsPanel(result.memories);
                     renderEmojiAnalysisPanel(result.memories);
                     renderWordAnalysisPanel(result.memories);
+                    renderTimingAnalysisPanel(result.memories);
                     showWhatsAppSenderPicker(result.memories);
                     if (instagramSenderPicker) {
                         instagramSenderPicker.style.display = 'none';
@@ -4513,6 +4575,7 @@
                     renderConversationStatsPanel(result.memories);
                     renderEmojiAnalysisPanel(result.memories);
                     renderWordAnalysisPanel(result.memories);
+                    renderTimingAnalysisPanel(result.memories);
                     return;
                 }
 
@@ -4527,6 +4590,7 @@
                     renderConversationStatsPanel(result.memories);
                     renderEmojiAnalysisPanel(result.memories);
                     renderWordAnalysisPanel(result.memories);
+                    renderTimingAnalysisPanel(result.memories);
                     showFacebookSenderPicker(result.memories);
                     return;
                 }
@@ -4542,6 +4606,7 @@
                     renderConversationStatsPanel(result.memories);
                     renderEmojiAnalysisPanel(result.memories);
                     renderWordAnalysisPanel(result.memories);
+                    renderTimingAnalysisPanel(result.memories);
                     showInstagramSenderPicker(result.memories);
                     return;
                 }
@@ -4557,6 +4622,7 @@
                     renderConversationStatsPanel(result.memories);
                     renderEmojiAnalysisPanel(result.memories);
                     renderWordAnalysisPanel(result.memories);
+                    renderTimingAnalysisPanel(result.memories);
                     showTelegramSenderPicker(result.memories);
                     return;
                 }
@@ -4574,6 +4640,7 @@
                 renderConversationStatsPanel(window.chatMessagesData);
                 renderEmojiAnalysisPanel(window.chatMessagesData);
                 renderWordAnalysisPanel(window.chatMessagesData);
+                renderTimingAnalysisPanel(window.chatMessagesData);
             };
 
             reader.readAsText(file);
@@ -5013,6 +5080,7 @@
                     renderConversationStatsPanel(window.chatMessagesData);
                     renderEmojiAnalysisPanel(window.chatMessagesData);
                     renderWordAnalysisPanel(window.chatMessagesData);
+                    renderTimingAnalysisPanel(window.chatMessagesData);
                     hideLoading();
                 } catch (err) {
                     hideLoading();
@@ -9426,6 +9494,8 @@ ${keepsakeFooter}
             renderEmojiAnalysisPanel,
             // Package 3AB: word analysis bridge for E2E testability
             renderWordAnalysisPanel,
+            // Package 3AC: timing analysis bridge for E2E testability
+            renderTimingAnalysisPanel,
             // Package 3L: WhatsApp self-id bridge for E2E testability
             applyWhatsAppSelfSender,
             // Package 3Q: Instagram DM self-id bridge for E2E testability

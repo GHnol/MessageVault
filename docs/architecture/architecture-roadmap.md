@@ -1,6 +1,6 @@
 # Architecture Roadmap — KeepMees / MessageVault
 
-**Last updated:** 2026-06-08 (Package 3AB — Word Count / Language Analysis Engine — COMPLETE)
+**Last updated:** 2026-06-07 (Package 3AC — Message Timing Analysis Engine — IN PROGRESS)
 **Status:** Active
 
 ---
@@ -11,7 +11,7 @@
 
 ---
 
-## Current architecture (post-Package 3AB — Word Count / Language Analysis Engine COMPLETE)
+## Current architecture (Package 3AC — Message Timing Analysis Engine IN PROGRESS)
 
 ```
 index.html               — entire app: UI, CSS, composition logic, pagination, rendering
@@ -20,6 +20,7 @@ src/
     import-adapters.js        — adapter registry + import result shape
     import-quality-report.js  — KMEngine.ImportQualityReport; compute(memories) pure function; post-import summary metrics — Package 3I
     content-quality-checks.js — KMEngine.ContentQualityChecks; compute(memories) pure function; returns array of advisory issue objects; 9 WARN checks: PHONE_NUMBER_AS_SENDER_NAME, RAW_URL_IN_CONTENT, EMPTY_MESSAGE, DUPLICATE_MESSAGE (adjacent-only), SYSTEM_MESSAGE_IN_OUTPUT — Package 3X; HIGH_ATTACHMENT_RATIO (>80%), VERY_LONG_CONTENT (text.length>1000), SHORT_CONVERSATION (<10 messages), SINGLE_SENDER_DOMINANT (all non-system from 1 sender) — Package 3Z
+    timing-analysis.js          — KMEngine.TimingAnalysis; compute(memories) pure function; returns { peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }; UTC only (getUTCHours / getUTCDay); skips null/falsy/invalid timestamps; zero-state for empty/invalid/no-valid-ts input; tie-break: lowest index wins; pure, no DOM, no side effects — Package 3AC
     word-analysis.js            — KMEngine.WordAnalysis; compute(memories) pure function; returns { totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation; lowercase; skips attachment-only and blank/null text; zero-state for empty/invalid; tie-break topWords by count desc then word asc; topWordSender tie-break wordCount desc then name asc; avgWordsPerMessage rounded to 1 decimal — Package 3AB
     emoji-analysis.js          — KMEngine.EmojiAnalysis; compute(memories) pure function; returns { topEmojis: [{ emoji, count, rank }], totalEmojiCount, uniqueEmojiCount, mostEmojifiedSender: { sender, count } | null }; MAX_TOP=5; handles ZWJ sequences, skin-tone modifiers, keycap sequences, flag sequences; zero-state for empty/invalid; tie-break by count desc then emoji string asc; mostEmojifiedSender tie-break count desc then name asc — Package 3AA
     conversation-stats.js     — KMEngine.ConversationStats; compute(memories) pure function; returns { busiestDay, busiestDayCount, longestStreakDays, avgMessagesPerDay, totalDays, perSenderStats }; zero-state for empty/invalid; tie-break earliest date; perSenderStats all senders including senderRole:self, sorted count desc/name asc — Package 3Y
@@ -38,6 +39,7 @@ index.html (Instagram sender picker) — #instagramSenderPicker; showInstagramSe
 index.html (Facebook Messenger sender picker) — #facebookSenderPicker; showFacebookSenderPicker + applyFacebookSelfSender; window.__km.applyFacebookSelfSender; mirrors Instagram DM picker pattern — Package 3T
 index.html (Telegram sender picker) — #telegramSenderPicker; showTelegramSenderPicker + applyTelegramSelfSender; window.__km.applyTelegramSelfSender; mirrors Facebook Messenger picker pattern — Package 3W
 index.html (content quality panel) — #contentQualityPanel; renderContentQualityPanel(memories); amber/warning tone; appears after any import with advisory issues; window.__km.renderContentQualityPanel; follows #importQualityPanel pattern — Package 3X
+index.html (timing analysis panel) — #timingAnalysisPanel; renderTimingAnalysisPanel(memories); green tone (light #e8f5e9/#1b5e20, dark #001400/#a5d6a7); chips: peakHour ("HH:00 UTC peak hour"), peakDayOfWeek (day name + "peak day"); called at all 11 import/open sites; window.__km.renderTimingAnalysisPanel — Package 3AC
 index.html (word analysis panel)  — #wordAnalysisPanel; renderWordAnalysisPanel(memories); purple/violet tone (light #f3e5f5/#4a148c, dark #1a0030/#ce93d8); chips: topWords (word × count), topWordSender ("sent the most words"), totalWords; called at all 11 import/open sites; window.__km.renderWordAnalysisPanel — Package 3AB
 index.html (emoji analysis panel) — #emojiAnalysisPanel; renderEmojiAnalysisPanel(memories); teal tone (light #e0f7fa/#006064, dark #001c1e/#80cbc4); chips: topEmojis (emoji × count), mostEmojifiedSender, totalEmojiCount; called at all 11 import/open sites; window.__km.renderEmojiAnalysisPanel — Package 3AA
 index.html (conversation stats panel) — #conversationStatsPanel; renderConversationStatsPanel(memories); indigo tone; chips: busiestDay, longestStreak, avg messages/day, top sender; called at all 11 import/open sites; window.__km.renderConversationStatsPanel — Package 3Y
@@ -84,6 +86,7 @@ index.html (enterComposition)        — ProductDraft lifecycle wiring: initDraf
     facebook-messenger-adapter-tests.mjs   — 103 tests; API shape, canHandle (accepts/rejects/magic_words discriminator), fixture rawCounts, timestamp conversion, HTML entity decoding, senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, participants, semantic guards — Package 3R
     instagram-dm-adapter-tests.mjs          — 87 tests; API shape, canHandle accepts/rejects, fixture rawCounts, timestamp conversion, HTML entity decoding (sender+content), senderRole, text/attachment normalization, NormalizedMemory fields, importWarnings, no-throw, semantic guards, participants — Package 3O
     telegram-adapter-tests.mjs              — 91 tests; API shape, canHandle (accepts/rejects IG/FB/non-Telegram/from_id discriminator), fixture rawCounts, timestamp (Unix seconds → ISO), sender extraction, text plain/array-entity concatenation, media/attachment detection, senderRole always contact, NormalizedMemory fields, importWarnings, no-throw, participants — Package 3U
+    timing-analysis-tests.mjs              — 93 tests; API shape, empty/null/non-array zero-state, no-valid-timestamps zero-state, single message, hourlyDistribution 24-slot accuracy, dailyDistribution 7-slot accuracy, peakHour computation, peakDayOfWeek computation, null/missing/invalid/falsy timestamps skipped, peakHour tie-break (lowest index), peakDayOfWeek tie-break (lowest index), multi-sender sender-agnostic, no-throw, semantic guards — Package 3AC
     word-analysis-tests.mjs                — 100 tests; API shape, empty/null/invalid zero-state, attachment-only exclusion, basic word extraction, lowercase normalization, punctuation stripping, word accumulation, totalWords, avgWordsPerMessage rounding, topWords sorting/ranking/MAX_TOP=10, tie-breaking, topWordSender, topWordSender tie-breaking, multi-sender scenario, blank/empty text, malformed entries no-throw, fixture behavior, semantic guards — Package 3AB
     emoji-analysis-tests.mjs               — 100 tests; API shape, empty/null/invalid zero-state, emoji extraction, repeated emoji/count accumulation, totalEmojiCount, uniqueEmojiCount, topEmojis sorting/ranking/MAX_TOP=5, tie-breaking, mostEmojifiedSender, ZWJ+skin-tone sequences, keycap+special sequences, fixture behavior, semantic guards — Package 3AA
 ```
@@ -142,7 +145,17 @@ DELIVERED (Package 3L, merged `16d0ca6` 2026-06-05):
 - `scripts/e2e-regression-harness.mjs` — Phase 27 (6 real-files tests): picker visible; Alice + Bob chips; selecting Alice → 4 `.me` rows; selfMessageCount = 4; Skip → 0 `.me` rows; non-WA import hides picker.
 - No engine changes. No persistence changes.
 
-IN PROGRESS (Package 3AB — Word Count / Language Analysis Engine):
+IN PROGRESS (Package 3AC — Message Timing Analysis Engine):
+- `src/core/timing-analysis.js` — `KMEngine.TimingAnalysis`; IIFE module; `compute(memories)` returns `{ peakHour, peakHourCount, peakDayOfWeek, peakDayOfWeekCount, hourlyDistribution: number[24], dailyDistribution: number[7] }`; UTC only (`getUTCHours()` / `getUTCDay()`, Sunday=0); skips null/falsy/invalid timestamps; zero-state for empty/null/non-array/no-valid-ts; tie-break: lowest index wins; pure, no DOM, no side effects.
+- `scripts/fixtures/fake-timing-analysis.txt` — 12-message WhatsApp bracket fixture; 2 senders: Alice (6) + Bob (6); 3 days (Jun 10–12, 2025); local hour 14 appears most; diverse hours for UTC distribution testing.
+- `src/tests/timing-analysis-tests.mjs` — 93 tests across 15 suites.
+- `src/tests/km-engine-tests.mjs` — loads `timing-analysis.js`; `TimingAnalysis — smoke` suite added (+6 → 156 total).
+- `index.html` — CSS for `.timing-analysis-panel` + `.timing-analysis-inner` + `.timing-analysis-chip` (green tone: light `#e8f5e9`/dark `#001400`); dark mode overrides; `<script src="src/core/timing-analysis.js">` tag after word-analysis.js; `<div id="timingAnalysisPanel">` after `#wordAnalysisPanel`; `const timingAnalysisPanel` binding; `renderTimingAnalysisPanel(memories)` function; chips: peakHour ("HH:00 UTC peak hour"), peakDayOfWeek (day name + "peak day"); calls at all 11 import/open sites; `window.__km.renderTimingAnalysisPanel` exposed.
+- `scripts/e2e-regression-harness.mjs` — `TIMING_FIXTURE` + `TIMING_FIXTURE_COUNT = 12` constants; Phase 40 (6 real-files tests): hidden before import → visible after TA fixture import → count=12 → `HH:MM UTC` hour chip → day name chip → TXT reimport resets state for Phase 12.
+- `docs/qa/test-strategy.md` — Phase 40 note; real-files baseline 165→171; Node baseline 3174→3273 (26 suites).
+- `docs/architecture/architecture-roadmap.md` — this file; Package 3AC entry.
+
+DELIVERED (Package 3AB — Word Count / Language Analysis Engine, impl `9290b8e`, merged `ebf9668` 2026-06-08):
 - `src/core/word-analysis.js` — `KMEngine.WordAnalysis`; IIFE module; `compute(memories)` returns `{ totalWords, avgWordsPerMessage, topWords: [{ word, count, rank }], topWordSender: { sender, wordCount } | null }`; MAX_TOP=10; splits on whitespace; strips leading/trailing punctuation (`/^[^\w]+|[^\w]+$/g`); lowercase; skips `type=attachment-placeholder` and `isAttachmentOnly=true`; skips blank/null text; zero-state for empty/invalid; pure, no DOM, no side effects.
 - `scripts/fixtures/fake-word-analysis.txt` — 10-message WhatsApp bracket fixture; 2 senders: Alice (6 messages, 22 words), Bob (4 messages, 14 words); totalWords=36, avgWordsPerMessage=3.6; top word="hello" (count 9); topWordSender=Alice.
 - `src/tests/word-analysis-tests.mjs` — 100 tests across 19 suites.

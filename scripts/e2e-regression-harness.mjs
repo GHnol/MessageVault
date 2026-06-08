@@ -94,6 +94,9 @@ const EA_FIXTURE_COUNT  = 10; // 10 messages: Alice (6, emoji-heavy), Bob (2), C
 const WORD_ANALYSIS_FIXTURE       = path.join(__dir, 'fixtures', 'fake-word-analysis.txt');
 const WORD_ANALYSIS_FIXTURE_COUNT = 10; // 10 messages: Alice (6), Bob (4)
 
+const TIMING_FIXTURE       = path.join(__dir, 'fixtures', 'fake-timing-analysis.txt');
+const TIMING_FIXTURE_COUNT = 12; // 12 messages across 3 days: Alice (6), Bob (6)
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -2051,7 +2054,78 @@ async function main() {
                 `Expected "sent the most words" in WA panel, got: "${panelText.substring(0, 80)}"`);
         });
 
-        await harness.run('non-WA TXT reimport hides panel and resets state for Phase 12', async page => {
+        await harness.run('non-WA TXT reimport hides panel and resets state for Phase 40', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 40 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 40 — Timing Analysis panel (Package 3AC)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 40 — Timing Analysis panel ──\n');
+
+        await harness.run('before TA import #timingAnalysisPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('timingAnalysisPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#timingAnalysisPanel should be hidden before any import');
+        });
+
+        await harness.run('after TA fixture import #timingAnalysisPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TIMING_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('timingAnalysisPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#timingAnalysisPanel should be visible and non-empty after TA fixture import');
+        });
+
+        await harness.run('TA fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TIMING_FIXTURE_COUNT,
+                `Expected ${TIMING_FIXTURE_COUNT} messages from TA fixture, got ${count}`);
+        });
+
+        await harness.run('TA panel shows peak hour chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('timingAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasHour = /\d{2}:\d{2} UTC/.test(panelText);
+            assert(hasHour,
+                `Expected "HH:MM UTC" pattern for peak hour chip in TA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('TA panel shows peak day chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('timingAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasDay = /Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/.test(panelText);
+            assert(hasDay,
+                `Expected a day name in TA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('non-TA TXT reimport hides panel and resets state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');
