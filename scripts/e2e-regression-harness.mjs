@@ -91,6 +91,9 @@ const CST_FIXTURE_COUNT = 8;  // 8 messages across 4 days (Jan14–Jan18)
 const EA_FIXTURE        = path.join(__dir, 'fixtures', 'fake-emoji-conversation.txt');
 const EA_FIXTURE_COUNT  = 10; // 10 messages: Alice (6, emoji-heavy), Bob (2), Carol (2)
 
+const WORD_ANALYSIS_FIXTURE       = path.join(__dir, 'fixtures', 'fake-word-analysis.txt');
+const WORD_ANALYSIS_FIXTURE_COUNT = 10; // 10 messages: Alice (6), Bob (4)
+
 // Optional private chat.db — must never be committed; local use only.
 const CHATDB_PATH = process.env.KEEP_MEES_E2E_CHATDB_PATH || null;
 
@@ -1977,7 +1980,78 @@ async function main() {
                 `Expected "sent the most emoji" in EA panel, got: "${panelText.substring(0, 80)}"`);
         });
 
-        await harness.run('non-EA TXT reimport hides panel and resets state for Phase 12', async page => {
+        await harness.run('non-EA TXT reimport hides panel and resets state for Phase 39', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(TXT_FIXTURE);
+            await waitForChatView(page);
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === TXT_FIXTURE_COUNT,
+                `Expected ${TXT_FIXTURE_COUNT} messages after TXT reimport for Phase 39 reset, got ${count}`);
+        });
+
+        // ─────────────────────────────────────────────────────────────────────
+        // PHASE 39 — Word Analysis panel (Package 3AB)
+        // ─────────────────────────────────────────────────────────────────────
+        console.log('\n── PHASE 39 — Word Analysis panel ──\n');
+
+        await harness.run('before WA import #wordAnalysisPanel is hidden', async page => {
+            await page.reload({ waitUntil: 'domcontentloaded' });
+            await waitForKm(page);
+            const hidden = await page.evaluate(() => {
+                const el = document.getElementById('wordAnalysisPanel');
+                if (!el) return true;
+                return el.style.display === 'none' || el.innerHTML.trim().length === 0;
+            });
+            assert(hidden, '#wordAnalysisPanel should be hidden before any import');
+        });
+
+        await harness.run('after WA fixture import #wordAnalysisPanel is visible and non-empty', async page => {
+            await page.click('#txtUploadCard');
+            await page.locator('#fileInput').setInputFiles(WORD_ANALYSIS_FIXTURE);
+            await waitForChatView(page);
+            const visible = await page.evaluate(() => {
+                const el = document.getElementById('wordAnalysisPanel');
+                if (!el) return false;
+                return el.style.display !== 'none' && el.innerHTML.trim().length > 0;
+            });
+            assert(visible, '#wordAnalysisPanel should be visible and non-empty after WA fixture import');
+        });
+
+        await harness.run('WA fixture imported correct message count', async page => {
+            const count = await page.evaluate(() => {
+                const data = window.chatMessagesData || [];
+                return data.length;
+            });
+            assert(count === WORD_ANALYSIS_FIXTURE_COUNT,
+                `Expected ${WORD_ANALYSIS_FIXTURE_COUNT} messages from WA fixture, got ${count}`);
+        });
+
+        await harness.run('WA panel shows top word chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('wordAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasWord = /×\s*\d/.test(panelText);
+            assert(hasWord,
+                `Expected "× N" pattern for top word chip in WA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('WA panel shows top word sender chip', async page => {
+            const panelText = await page.evaluate(() => {
+                const el = document.getElementById('wordAnalysisPanel');
+                return el ? el.textContent : '';
+            });
+            const hasSender = /sent the most words/i.test(panelText);
+            assert(hasSender,
+                `Expected "sent the most words" in WA panel, got: "${panelText.substring(0, 80)}"`);
+        });
+
+        await harness.run('non-WA TXT reimport hides panel and resets state for Phase 12', async page => {
             await page.reload({ waitUntil: 'domcontentloaded' });
             await waitForKm(page);
             await page.click('#txtUploadCard');

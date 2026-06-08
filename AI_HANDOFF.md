@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — Post-Package-3AA Tower Catch-Up COMPLETE (docs `e1348cb`, merged `0d2d49d` 2026-06-07). Branch: `main`. No active pass. No active development package.
+**Status:** `in-progress` — Package 3AB — Word Count / Language Analysis Engine. Branch: `feature/word-analysis-engine`. Implementation complete. State docs in progress. Stop-before-commit pre-commit report pending.
 
 **Last updated by:** `Claude Code (Sonnet 4.6)` on `2026-06-07`
 
@@ -18,11 +18,12 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **main HEAD** | `0d2d49d` — merge: post-Package-3AA Tower Catch-Up (docs/post-3aa-tower-catchup) |
-| **Last completed pass** | Post-Package-3AA Tower Catch-Up — docs `e1348cb`, merged `0d2d49d` 2026-06-07 |
-| **Active package** | None — awaiting Coordinator authorization for next development package |
+| **Active pass** | Package 3AB — Word Count / Language Analysis Engine |
+| **Active branch** | `feature/word-analysis-engine` |
+| **Branch base** | `main` at `cba3953` |
+| **main HEAD** | `cba3953` — docs: close Post-Package-3AA Tower Catch-Up |
+| **Last completed pass** | Post-Package-3AA Tower Catch-Up — docs `e1348cb`, merged `0d2d49d`, state-sync `cba3953` 2026-06-07 |
+| **Active package** | `Package 3AB — Word Count / Language Analysis Engine` — IN PROGRESS — implementation complete; stop-before-commit report pending |
 | **Last closed package** | `Package 3AA — Emoji Analysis Engine` — FULLY COMPLETE — impl `0e15cfb`, merged `29c4491` 2026-06-07 |
 | **Prior closed package** | `Package 3Y — Conversation Statistics Engine` — FULLY COMPLETE — impl `ca8d520`, merged `e0539d2` 2026-06-07 |
 | **Prior closed package** | `Package 3V — Telegram JSON UI Wiring` — FULLY COMPLETE — impl `2b232f8`, merged `40a6a78` 2026-06-06 |
@@ -30,6 +31,44 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AB — Word Count / Language Analysis Engine — IN PROGRESS)
+
+Branch: `feature/word-analysis-engine` from `main` at `cba3953`. Authorized by Coordinator 2026-06-07.
+
+**Objective:** Add `KMEngine.WordAnalysis.compute(memories)` pure IIFE engine module, Node tests, km-engine smoke, `#wordAnalysisPanel` UI surface (purple/violet tone), E2E Phase 39, and docs updates.
+
+**Return shape:** `{ totalWords: number, avgWordsPerMessage: number, topWords: [{word, count, rank}], topWordSender: {sender, wordCount}|null }`
+
+**Behavior:** MAX_TOP=10; split on whitespace; strip leading/trailing punctuation; lowercase; skip blank/null and attachment-only (type==='attachment-placeholder' or isAttachmentOnly===true); no stopwords; tie-break by count desc then word asc (alphabetical); topWordSender tie-break by wordCount desc then sender asc.
+
+**Files changed (8 implementation + 3 state docs — uncommitted):**
+- `src/core/word-analysis.js` — NEW; IIFE module; `KMEngine.WordAnalysis = { compute }`; MAX_TOP=10; `extractWords(text)`; skip attachment-placeholder/isAttachmentOnly; senderWordCount alphabetical tie-break; pure, no DOM ✓
+- `scripts/fixtures/fake-word-analysis.txt` — NEW; 10 messages; Alice (6 msgs, 22 words) + Bob (4 msgs, 14 words); totalWords=36; avgWordsPerMessage=3.6; topWords[0]={word:"hello",count:9,rank:1}; 11 unique words (capped at MAX_TOP=10) ✓
+- `src/tests/word-analysis-tests.mjs` — NEW; 100 tests / 19 suites; all 100/100 PASS ✓
+- `src/tests/km-engine-tests.mjs` — MODIFIED; loads word-analysis.js; `WordAnalysis — smoke` suite (+6 → 150 total); all 150/150 PASS ✓
+- `index.html` — MODIFIED; CSS (purple/violet `.word-analysis-panel` / `.word-analysis-inner` / `.word-analysis-chip`) + dark mode; `<script src="src/core/word-analysis.js">` tag; `<div id="wordAnalysisPanel">` after `#emojiAnalysisPanel`; `const wordAnalysisPanel` binding; `renderWordAnalysisPanel(memories)` function; called at all 11 import/open sites; `window.__km.renderWordAnalysisPanel` exposed ✓
+- `scripts/e2e-regression-harness.mjs` — MODIFIED; `WORD_ANALYSIS_FIXTURE` + `WORD_ANALYSIS_FIXTURE_COUNT = 10` constants; Phase 39 (6 real-files tests); Phase 38's last test label updated ✓
+- `docs/qa/test-strategy.md` — MODIFIED; Package 3AB note; Node baseline 3068→3174 / 24→25 suites; real-files 159→165; word-analysis-tests.mjs row; km-engine count 144→150 ✓
+- `docs/architecture/architecture-roadmap.md` — MODIFIED; word-analysis.js in module map; `#wordAnalysisPanel` in HTML panels; word-analysis-tests.mjs in tests; Package 3AB IN PROGRESS entry ✓
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — BEING UPDATED NOW
+
+**Verification gate (all passed before stop-before-commit):**
+- Node tests: 3174/3174 (25 suites, 0 failed) ✓
+- E2E seeded: 57/57 ✓
+- E2E real-files: 165/165 (Phase 39: 6/6) ✓
+- Visual regression: PASS (4/4 pages, baselines unchanged) ✓
+- state-freshness-check: 20 PASS / 2 WARN (cosmetic hash lag only) / 0 FAIL ✓
+- project-control-sync-validate: 11 PASS / 0 FAIL ✓
+- os-self-audit: 324 PASS / 0 WARN / 0 FAIL ✓
+
+**Hard exclusions confirmed:** all products/*, state/*, adapters/*, other core engines (emoji-analysis, content-quality-checks, conversation-stats, normalized-memory, import-adapters, project-session, keepsake-group, source-platforms), pagination constants, BOOK_PAGINATION_VERSION, BOOK_PRODUCTION_DEPS, BOOK_PARITY, proof approval modules, ProductDraft/Preflight/Lifecycle, Review view, standalone keepsake flows, PDF/checkout/vendor/manufacturing/cover scope, dependency files, external-system files — none touched ✓
+
+**What is done:** All 11 authorized files written. All verification gates passed. State docs updated.
+**What remains:** Deliver pre-commit report to Coordinator. Await commit authorization.
+**Next exact action:** Pre-commit report delivered to Coordinator. Await explicit commit authorization before running any git commit.
 
 ---
 

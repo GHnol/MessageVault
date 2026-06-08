@@ -44,6 +44,7 @@ load('src/state/session-serialization.js');
 load('src/core/content-quality-checks.js');
 load('src/core/conversation-stats.js');
 load('src/core/emoji-analysis.js');
+load('src/core/word-analysis.js');
 
 const { KMEngine } = ctx.window;
 
@@ -420,6 +421,20 @@ const eaCorpus = KMEngine.EmojiAnalysis.compute([{
     sender: 'Alice', text: 'Hello 😊', type: 'message', isAttachmentOnly: false
 }]);
 assert(eaCorpus.totalEmojiCount === 1,                                 'non-empty corpus returns totalEmojiCount 1');
+
+// ── WORD ANALYSIS — smoke ─────────────────────────────────────────────────────
+
+suite('WordAnalysis — smoke');
+assert(KMEngine.WordAnalysis !== undefined,                            'WordAnalysis exists on KMEngine');
+assert(typeof KMEngine.WordAnalysis.compute === 'function',            'compute is a function');
+const waEmpty = KMEngine.WordAnalysis.compute([]);
+assert(typeof waEmpty === 'object' && waEmpty !== null,                'compute([]) returns an object');
+assert(waEmpty.totalWords === 0 && waEmpty.topWords.length === 0,      'compute([]) returns zero-state');
+assert(waEmpty.topWordSender === null,                                 'compute([]) topWordSender === null');
+const waCorpus = KMEngine.WordAnalysis.compute([{
+    sender: 'Alice', text: 'hello world', type: 'message', isAttachmentOnly: false
+}]);
+assert(waCorpus.totalWords === 2,                                      'non-empty corpus returns totalWords 2');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
