@@ -2,7 +2,7 @@
 
 **Status:** ACTIVE (introduced in Package 3D — Visual Regression Baseline Harness, 2026-06-02)
 **Script:** `scripts/visual-regression-harness.mjs`
-**Baselines:** `scripts/visual-regression-baselines/scenario-a/`
+**Baselines:** `scripts/visual-regression-baselines/scenario-a/` (Message Book pages) · `scripts/visual-regression-baselines/import-panels/` (import-insights panels — Package 3AL)
 **Output:** `visual-regression-output/` (gitignored — generated locally)
 
 ---
@@ -160,6 +160,41 @@ Extension of baselines to additional scenarios requires Coordinator authorizatio
 ## Scenario A content
 
 Scenario A seeds a short balanced conversation (3 sections, 15 messages total) via `scripts/message-book-scenarios.mjs`. No real user data. The seed is deterministic and safe to commit.
+
+---
+
+## Import-insights panel scenario (Package 3AL)
+
+Scenario A captures only `#bookCanvas .book-page` (Message Book pages) and never the import-time advisory panels, which live in `#chatView` above the page canvas. Package 3AL adds an **additive** scenario, selected with `--scenario import-panels`, that closes this blind spot. It is fully independent of Scenario A: separate baseline directory, separate output directory; the Scenario A capture path, thresholds, filenames, and baselines are never touched.
+
+### Running the panel scenario
+
+```bash
+# check the panels against committed baselines
+node scripts/visual-regression-harness.mjs --check --scenario import-panels
+
+# regenerate the panel baselines (Coordinator authorization required)
+node scripts/visual-regression-harness.mjs --update-baselines --scenario import-panels
+
+# verify the panel baselines detect a regression
+node scripts/visual-regression-harness.mjs --simulate-regression --scenario import-panels
+```
+
+The default (no `--scenario`) remains Scenario A book-page rendering, unchanged.
+
+### How it works
+
+The scenario seeds a deterministic NormalizedMemory-shaped array through the existing test bridges — `window.__km.seedChatMessages(memories)` (renders the conversation and reveals `#chatView`) followed by `window.__km.renderImportInsights(memories)` (renders all ten panels via the Package 3AJ/3AK registry dispatcher). **No `index.html`, `src/**`, DOM, CSS, or app-behavior change is required** — only the existing `window.__km` bridges. Each *visible* panel element is screenshot individually (`#importQualityPanel` … `#reactionAnalysisPanel`).
+
+The seed is crafted so all ten panels render: multi-sender text (word / message-length / response-time / conversation panels), emoji (emoji panel), timestamps spanning hours and two days with >6h gaps (timing / conversation-initiation), one reaction (reaction-analysis), one raw URL (content-quality), and one attachment-only message (import-quality). It lives inline in `scripts/visual-regression-harness.mjs` (`buildImportPanelsSeed`) — no fixture or adapter dependency.
+
+### Panel baselines
+
+`scripts/visual-regression-baselines/import-panels/`:
+- `panel-importQualityPanel.png` … `panel-reactionAnalysisPanel.png` — one PNG per visible panel (10 at initial capture)
+- `manifest.json` — panel count, panel list, capture timestamp, viewport, threshold default
+
+Generated output goes to the gitignored `visual-regression-output/import-panels/`. Emoji-bearing panels (emoji, reaction) render via the OS emoji font; baselines are machine-local like Scenario A — a Chromium/font change is a baseline-update event, not a silent regression.
 
 ---
 

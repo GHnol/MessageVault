@@ -1,0 +1,24 @@
+{
+  "scenario_id": "import-panels",
+  "scenario_label": "Import Insights Panels",
+  "panel_count": 10,
+  "panels": [
+    "panel-importQualityPanel.png",
+    "panel-contentQualityPanel.png",
+    "panel-conversationStatsPanel.png",
+    "panel-emojiAnalysisPanel.png",
+    "panel-wordAnalysisPanel.png",
+    "panel-timingAnalysisPanel.png",
+    "panel-responseTimePanel.png",
+    "panel-messageLengthPanel.png",
+    "panel-conversationInitiationPanel.png",
+    "panel-reactionAnalysisPanel.png"
+  ],
+  "capture_timestamp": "2026-06-09T00:31:28.723Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "threshold_default": "0.1%",
+  "note": "Baselines are committed snapshots of the import-insights advisory panels rendered from a deterministic seed via window.__km.renderImportInsights. Update only with Coordinator authorization."
+}
