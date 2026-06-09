@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Post-Package-3AK Tower Catch-Up IN PROGRESS — branch `docs/post-3ak-tower-catchup` from `main` at `18019ba`, docs-only, stop-before-commit; Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation COMPLETE — impl/merge `052346f`, state-sync `18019ba`; behavior-preserving wiring consolidation — `renderImportInsights` now iterates the `IMPORT_INSIGHT_RENDERERS` registry, bridge block left literal, no new engine/panel, no behavior change. Prior: Post-Package-3AJ Tower Catch-Up COMPLETE — docs `1260aa1`; Package 3AJ — Import Insights Consolidation COMPLETE — impl/merge `92435b7`, state-sync `e445212`; Package 3AI — Verification & Harness Reliability Hardening COMPLETE — impl `d4a6c71`, state-sync `803cd64`)
+**Updated by:** Claude Code (Post-Package-3AK Tower Catch-Up COMPLETE — docs `dd0ce0e`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync; Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation COMPLETE — impl/merge `052346f`, state-sync `18019ba`; behavior-preserving wiring consolidation — `renderImportInsights` now iterates the `IMPORT_INSIGHT_RENDERERS` registry, bridge block left literal, no new engine/panel, no behavior change. Prior: Post-Package-3AJ Tower Catch-Up COMPLETE — docs `1260aa1`; Package 3AJ — Import Insights Consolidation COMPLETE — impl/merge `92435b7`, state-sync `e445212`; Package 3AI — Verification & Harness Reliability Hardening COMPLETE — impl `d4a6c71`, state-sync `803cd64`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -128,9 +128,9 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `18019ba` — docs: sync operating docs after Package 3AK completion; pre-closeout-commit value |
-| Active branch | `main` (Post-Package-3AK Tower Catch-Up on `docs/post-3ak-tower-catchup`, stop-before-commit) |
-| Working tree | Clean on `main`; Tower Catch-Up changes pending on `docs/post-3ak-tower-catchup` |
+| main HEAD | `dd0ce0e` — docs: sync Tower docs after Package 3AK completion (Post-Package-3AK Tower Catch-Up); pre-closeout-commit value |
+| Active branch | `main` |
+| Working tree | Clean (post-merge closeout state-sync commit in progress) |
 | Pushed to remote | `main` pushed to `origin/main` at `18019ba` (Package 3AK impl `052346f` + state-sync `18019ba`) |
 
 **Package 3AK (`052346f` / state-sync `18019ba`):** Import Insights Registry-Driven Dispatcher Consolidation — `index.html` only; behavior-preserving wiring consolidation completing the Package 3AJ debt-paydown. `renderImportInsights(memories)` now iterates an ordered `IMPORT_INSIGHT_RENDERERS` registry array (the ten existing panel renderers in their exact current order) instead of ten hardcoded calls; all ten `renderXPanel` functions, their individual `window.__km` bridges, the literal `window.__km` bridge block, `window.__km.renderImportInsights`, and all 11 dispatcher call sites preserved unchanged; the bridge block is deliberately left literal (not generated from the registry). No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change. Baseline unchanged: 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS (4/4 baselines unchanged).
