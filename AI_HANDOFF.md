@@ -8,7 +8,7 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ## Status snapshot
 
-**Status:** `closed` — **Package 3AL — Import Insights Panel Visual Regression Coverage COMPLETE** — impl/merge `a244463`, fast-forward merged to `main` 2026-06-08; post-merge state-sync (this update). QA harness only — additive VR scenario closing the documented blind spot (Scenario A captures only `#bookCanvas .book-page`; the ten import-insights panels were never visually checked). `scripts/visual-regression-harness.mjs` gained a `--scenario import-panels` path that seeds deterministic memories via the existing `window.__km.seedChatMessages` + `window.__km.renderImportInsights` bridges (no `index.html`/`src`/DOM/CSS/app change) and screenshots each visible panel into `scripts/visual-regression-baselines/import-panels/` (10 committed PNG baselines + manifest). Scenario A path/thresholds/filenames/baselines untouched. Verification green: Node 3645/30 unchanged; 57/57 seeded; 195/195 real-files; Scenario A VR PASS 4/4 unchanged; new import-panels VR PASS 10/10; `--simulate-regression --scenario import-panels` proves detection. **Post-Package-3AL Tower Catch-Up COMPLETE** — docs `a7c5676`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync (this update). Brought the broader Tower/command-center/project-control/ops/report-mirror docs current after Package 3AL; report-mirror entries `RPT-20260608-017` (Package 3AL closeout) + `RPT-20260608-018` (this catch-up) added. Active branch `main`. No active pass. No active package. Next: Coordinator decision on the next development package (candidate TBD). **Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation remains CLOSED/COMPLETE** — impl/merge `052346f`, state-sync `18019ba`, merged to `main` 2026-06-08. **Post-Package-3AK Tower Catch-Up remains CLOSED/COMPLETE** — docs `dd0ce0e`, closeout `034d181`, merged to `main` 2026-06-08. **Package 3AJ — Import Insights Consolidation remains CLOSED/COMPLETE** — impl/merge `92435b7`, state-sync `e445212`, merged to `main` 2026-06-08. **Post-Package-3AJ Tower Catch-Up remains CLOSED/COMPLETE** — docs `1260aa1`, closeout `dfeb63b`, merged to `main` 2026-06-08. **Package 3AI — Verification & Harness Reliability Hardening remains CLOSED/COMPLETE** (impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, closeout `a84c4f9`). **Post-Package-3AI Tower Catch-Up remains CLOSED/COMPLETE.** Previously: Package 3AH COMPLETE — impl `a165122`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`.
+**Status:** `active` — **Package 3AM — Import-Panels VR Verification-Gate Integration IN PROGRESS** on branch `docs/import-panels-vr-gate` (from `main` at `1b62963`); Green Path micro-package, docs/QA-only. Wires the Package 3AL `--scenario import-panels` visual-regression check into the `docs/qa/test-strategy.md` "Pre-commit baseline" gate (so the new coverage is actually run before relevant commits), adds a non-staling pointer in `docs/qa/pre-commit-verification-template.md`, and a "when to run each scenario" note in `docs/qa/visual-regression-guide.md`. No app code, no scripts, no baselines, no count change (3645/30; 57; 195; Scenario A VR 4/4; import-panels VR 10/10). **Package 3AL — Import Insights Panel Visual Regression Coverage remains CLOSED/COMPLETE** — impl/merge `a244463`, fast-forward merged to `main` 2026-06-08. QA harness only — additive VR scenario closing the documented blind spot (Scenario A captures only `#bookCanvas .book-page`; the ten import-insights panels were never visually checked). `scripts/visual-regression-harness.mjs` gained a `--scenario import-panels` path that seeds deterministic memories via the existing `window.__km.seedChatMessages` + `window.__km.renderImportInsights` bridges (no `index.html`/`src`/DOM/CSS/app change) and screenshots each visible panel into `scripts/visual-regression-baselines/import-panels/` (10 committed PNG baselines + manifest). Scenario A path/thresholds/filenames/baselines untouched. Verification green: Node 3645/30 unchanged; 57/57 seeded; 195/195 real-files; Scenario A VR PASS 4/4 unchanged; new import-panels VR PASS 10/10; `--simulate-regression --scenario import-panels` proves detection. **Post-Package-3AL Tower Catch-Up COMPLETE** — docs `a7c5676`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync (this update). Brought the broader Tower/command-center/project-control/ops/report-mirror docs current after Package 3AL; report-mirror entries `RPT-20260608-017` (Package 3AL closeout) + `RPT-20260608-018` (this catch-up) added. Active branch `main`. No active pass. No active package. Next: Coordinator decision on the next development package (candidate TBD). **Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation remains CLOSED/COMPLETE** — impl/merge `052346f`, state-sync `18019ba`, merged to `main` 2026-06-08. **Post-Package-3AK Tower Catch-Up remains CLOSED/COMPLETE** — docs `dd0ce0e`, closeout `034d181`, merged to `main` 2026-06-08. **Package 3AJ — Import Insights Consolidation remains CLOSED/COMPLETE** — impl/merge `92435b7`, state-sync `e445212`, merged to `main` 2026-06-08. **Post-Package-3AJ Tower Catch-Up remains CLOSED/COMPLETE** — docs `1260aa1`, closeout `dfeb63b`, merged to `main` 2026-06-08. **Package 3AI — Verification & Harness Reliability Hardening remains CLOSED/COMPLETE** (impl `d4a6c71`, state-sync `803cd64`, Tower Catch-Up `106f500`, closeout `a84c4f9`). **Post-Package-3AI Tower Catch-Up remains CLOSED/COMPLETE.** Previously: Package 3AH COMPLETE — impl `a165122`; Post-Package-3AH Tower Catch-Up COMPLETE — docs `a65d080`, closeout `47d459a`.
 
 **Last updated by:** `Claude Code (Opus 4.8)` on `2026-06-08`
 
@@ -18,10 +18,10 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 | Field | Value |
 |---|---|
-| **Active pass** | None |
-| **Active branch** | `main` |
-| **base HEAD** | `a7c5676` (docs: close Post-Package-3AL Tower Catch-Up; `main` HEAD — pre-closeout-commit value) |
-| **Active package** | None |
+| **Active pass** | None (Package 3AM is a Green Path micro-package, not a Tower pass) |
+| **Active branch** | `docs/import-panels-vr-gate` (Package 3AM; from `main` at `1b62963`) |
+| **base HEAD** | `1b62963` (docs: close Post-Package-3AL Tower Catch-Up; `main` HEAD at Package 3AM branch creation) |
+| **Active package** | `Package 3AM — Import-Panels VR Verification-Gate Integration` — IN PROGRESS on `docs/import-panels-vr-gate`; Green Path docs/QA-only (wires the import-panels VR scenario into the pre-commit gate); no app/script/baseline/count change |
 | **Last completed pass** | Post-Package-3AL Tower Catch-Up — docs `a7c5676`, fast-forward merged to `main` 2026-06-08 |
 | **Last closed package** | `Package 3AL — Import Insights Panel Visual Regression Coverage` — FULLY COMPLETE (QA harness only; additive `--scenario import-panels` VR scenario + 10 committed panel baselines; seeded via `window.__km.renderImportInsights`; Scenario A untouched; no `index.html`/`src`/behavior change) — impl/merge `a244463`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation` — FULLY COMPLETE (behavior-preserving wiring consolidation; `renderImportInsights` iterates the `IMPORT_INSIGHT_RENDERERS` registry; bridge block left literal; no new engine/panel; no behavior change) — impl/merge `052346f`, fast-forward merged to `main` 2026-06-08 |
@@ -38,6 +38,28 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 | **Package 5B** | COMPLETE — merged `dc4f86b` 2026-06-02 |
 | **Package 3H** | COMPLETE — merged `1297f92` 2026-06-03 |
 | **Package 3E** | COMPLETE — merged `4390038` 2026-06-02; `ProductDraftState` + `ProductPreflight`; engine layer only; no app code |
+
+---
+
+## Objective (Package 3AM — Import-Panels VR Verification-Gate Integration — IN PROGRESS)
+
+Branch: `docs/import-panels-vr-gate` from `main` at `1b62963`. Authorized by Coordinator 2026-06-08 as a **Green Path micro-package**. **Docs/QA-only. No app code, no scripts, no baselines, no tests.**
+
+**Objective:** Wire the Package 3AL `--scenario import-panels` visual-regression check into the standard pre-commit verification guidance so the new coverage is not forgotten.
+
+**Files changed (6):**
+- `docs/qa/test-strategy.md` — "Pre-commit baseline" item #4 restructured into two scenarios (Scenario A default + import-panels when import-insights panels / `renderImportInsights` / VR harness / import-panels baselines change); "Backlog / known gaps" VR row records import-panels coverage delivered by Package 3AL.
+- `docs/qa/pre-commit-verification-template.md` — non-staling VR pointer (Scenario A + import-panels per `test-strategy.md`).
+- `docs/qa/visual-regression-guide.md` — "when to run each scenario (pre-commit)" note.
+- `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs.
+
+**Verification gate (all green):** os-self-audit 324/0/0; state-freshness 0 FAIL; project-control-sync-validate 11/0/0; project-control-sync-dry-run STRUCTURAL PASS; Scenario A VR PASS 4/4; import-panels VR PASS 10/10. No Node/E2E count change (docs-only).
+
+**Hard exclusions confirmed:** no `index.html`; no `src/**`; no `scripts/**` (no harness change, no `scripts/package.json`); no new/changed VR baselines; no `scripts/e2e-regression-harness.mjs`; no `src/tests/**`; no new engine/panel; no analytics-series continuation; no DEF-11/DEF-13/DEF-14; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no `src/products/*` / `src/state/*` / adapters / ProductDraft/Preflight/Lifecycle / proof approval / Review view / standalone keepsake flows / PDF / checkout / vendor / manufacturing / cover; no dependency files; no external systems.
+
+**What is done:** All authorized docs + state docs updated; verification gate green.
+**What remains:** Green Path closeout — commit, fast-forward merge to `main`, post-merge state-sync, push.
+**Next exact action:** Continue the Green Path chain (commit → ff-merge → closeout state-sync → push) since all gates are green and changed files are exactly in scope.
 
 ---
 

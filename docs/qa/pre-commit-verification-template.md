@@ -50,6 +50,7 @@ git diff -- [each changed file]
 - [ ] Relevant unit suites run (or N/A — reason: )
 - [ ] E2E run (or N/A — reason: )
 - [ ] Capture harness run (or N/A — reason: )
+- [ ] Visual regression run as applicable — Scenario A (`node scripts/visual-regression-harness.mjs --check`) and/or import-panels (`node scripts/visual-regression-harness.mjs --check --scenario import-panels`), per `docs/qa/test-strategy.md` § "Pre-commit baseline" (or N/A — reason: )
 - [ ] All run checks green
 - [ ] Counts match the current baseline in `docs/qa/test-strategy.md` § "Pre-commit baseline" (authoritative source — Node suites/tests, seeded E2E, real-files E2E)
 

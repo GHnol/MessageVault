@@ -182,6 +182,12 @@ node scripts/visual-regression-harness.mjs --simulate-regression --scenario impo
 
 The default (no `--scenario`) remains Scenario A book-page rendering, unchanged.
 
+**When to run each scenario (pre-commit):**
+- **Scenario A** (`--check`) — when Message Book rendering changes (pagination, section structure, bubble layout, composition engine).
+- **import-panels** (`--check --scenario import-panels`) — when the import-insights panels, `renderImportInsights`, the visual-regression harness, or the import-panels baselines change.
+
+See `docs/qa/test-strategy.md` § "Pre-commit baseline" for the authoritative verification-gate list.
+
 ### How it works
 
 The scenario seeds a deterministic NormalizedMemory-shaped array through the existing test bridges — `window.__km.seedChatMessages(memories)` (renders the conversation and reveals `#chatView`) followed by `window.__km.renderImportInsights(memories)` (renders all ten panels via the Package 3AJ/3AK registry dispatcher). **No `index.html`, `src/**`, DOM, CSS, or app-behavior change is required** — only the existing `window.__km` bridges. Each *visible* panel element is screenshot individually (`#importQualityPanel` … `#reactionAnalysisPanel`).
