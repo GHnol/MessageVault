@@ -1,7 +1,7 @@
 # Current Status — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Post-Package-3AL Tower Catch-Up IN PROGRESS — branch `docs/post-3al-tower-catchup` from `main` at `71a8b26`, docs-only, stop-before-commit; Package 3AL — Import Insights Panel Visual Regression Coverage COMPLETE — impl/merge `a244463`, state-sync `71a8b26`; QA harness only — additive `--scenario import-panels` VR scenario + 10 committed panel baselines; Scenario A untouched; no `index.html`/`src`/behavior change. Prior: Post-Package-3AK Tower Catch-Up COMPLETE — docs `dd0ce0e`; Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation COMPLETE — impl/merge `052346f`, state-sync `18019ba`; Package 3AJ — Import Insights Consolidation COMPLETE — impl/merge `92435b7`, state-sync `e445212`)
+**Updated by:** Claude Code (Post-Package-3AL Tower Catch-Up COMPLETE — docs `a7c5676`, fast-forward merged to `main` 2026-06-08; post-merge closeout state-sync; Package 3AL — Import Insights Panel Visual Regression Coverage COMPLETE — impl/merge `a244463`, state-sync `71a8b26`; QA harness only — additive `--scenario import-panels` VR scenario + 10 committed panel baselines; Scenario A untouched; no `index.html`/`src`/behavior change. Prior: Post-Package-3AK Tower Catch-Up COMPLETE — docs `dd0ce0e`; Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation COMPLETE — impl/merge `052346f`, state-sync `18019ba`; Package 3AJ — Import Insights Consolidation COMPLETE — impl/merge `92435b7`, state-sync `e445212`)
 
 > This file is a point-in-time snapshot. Verify git state with `git log --oneline` and `git status` before acting on it.
 
@@ -129,10 +129,10 @@
 
 | Item | Value |
 |---|---|
-| main HEAD | `71a8b26` — docs: sync operating docs after Package 3AL completion; pre-closeout-commit value |
-| Active branch | `main` (Post-Package-3AL Tower Catch-Up on `docs/post-3al-tower-catchup`, stop-before-commit) |
-| Working tree | Clean on `main`; Tower Catch-Up changes pending on `docs/post-3al-tower-catchup` |
-| Pushed to remote | `main` pushed to `origin/main` at `71a8b26` (Package 3AL impl `a244463` + state-sync `71a8b26`) |
+| main HEAD | `a7c5676` — docs: close Post-Package-3AL Tower Catch-Up; pre-closeout-commit value |
+| Active branch | `main` |
+| Working tree | Clean (post-merge closeout state-sync commit in progress) |
+| Pushed to remote | `main` pushed to `origin/main` at the closeout (Package 3AL impl `a244463` + state-sync `71a8b26` + Tower Catch-Up `a7c5676`) |
 
 **Package 3AL (`a244463` / state-sync `71a8b26`):** Import Insights Panel Visual Regression Coverage — QA harness only. Added an additive `--scenario import-panels` path to `scripts/visual-regression-harness.mjs` that seeds deterministic memories via the existing `window.__km.seedChatMessages` + `window.__km.renderImportInsights` bridges and screenshots each visible import-insights panel into `scripts/visual-regression-baselines/import-panels/` (10 committed PNG baselines + `manifest.json`). Closes the documented blind spot (Scenario A only captures `#bookCanvas .book-page`). Scenario A path/thresholds/filenames/baselines untouched. No `index.html`, no `src/**`, no app DOM/CSS/behavior change, no `scripts/package.json`, no `scripts/message-book-scenarios.mjs`. Verification: Node 3645/30 unchanged; 57/57 seeded; 195/195 real-files; Scenario A VR PASS 4/4 unchanged; import-panels VR PASS 10/10; `--simulate-regression --scenario import-panels` proves detection.
 
