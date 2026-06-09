@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-08
-**Last mirrored:** RPT-20260608-016 (Post-Package-3AK Tower Catch-Up operating pass — COMPLETE; docs `dd0ce0e`, merged to `main` 2026-06-08)
-**Active gate:** None — Package 3AK COMPLETE (impl/merge `052346f`, state-sync `18019ba`, merged to `main` 2026-06-08; behavior-preserving `index.html` wiring consolidation — `renderImportInsights` now iterates the `IMPORT_INSIGHT_RENDERERS` registry; bridge block left literal; no new engine/panel; no behavior change); Post-Package-3AK Tower Catch-Up COMPLETE (docs `dd0ce0e`, merged to `main` 2026-06-08); main HEAD `dd0ce0e` (pre-closeout-commit value); no active pass; no active development package. Prior: Package 3AJ COMPLETE (impl/merge `92435b7`, state-sync `e445212`); Post-Package-3AJ Tower Catch-Up COMPLETE (docs `1260aa1`); Package 3AI COMPLETE (impl `d4a6c71`, state-sync `803cd64`)
+**Last mirrored:** RPT-20260608-017 (Package 3AL — Import Insights Panel Visual Regression Coverage closeout — mirrored; impl/merge `a244463`, state-sync `71a8b26`, merged to `main` 2026-06-08)
+**Active gate:** None — Package 3AL COMPLETE (impl/merge `a244463`, state-sync `71a8b26`, merged to `main` 2026-06-08; QA harness only — additive `--scenario import-panels` VR scenario + 10 committed panel baselines; Scenario A untouched; no `index.html`/`src`/behavior change); Post-Package-3AL Tower Catch-Up IN PROGRESS (RPT-20260608-018; branch `docs/post-3al-tower-catchup`, docs-only, stop-before-commit); main HEAD `71a8b26` (pre-closeout-commit value); no active development package. Prior: Package 3AK COMPLETE (impl/merge `052346f`, state-sync `18019ba`); Post-Package-3AK Tower Catch-Up COMPLETE (docs `dd0ce0e`); Package 3AJ COMPLETE (impl/merge `92435b7`, state-sync `e445212`)
 **Next expected mirror:** Next development package or operating pass
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,8 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260608-018 | weekly_sync | Post-Package-3AL Tower Catch-Up operating pass | docs/post-3al-tower-catchup | 71a8b26 | in-progress | 2026-06-08 |
+| RPT-20260608-017 | package_closeout | Package 3AL — Import Insights Panel Visual Regression Coverage | feature/import-insights-vr-coverage | a244463 / 71a8b26 | mirrored | 2026-06-08 |
 | RPT-20260608-016 | weekly_sync | Post-Package-3AK Tower Catch-Up operating pass | docs/post-3ak-tower-catchup | dd0ce0e | mirrored | 2026-06-08 |
 | RPT-20260608-015 | package_closeout | Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation | feature/import-insights-registry | 052346f / 18019ba | mirrored | 2026-06-08 |
 | RPT-20260608-014 | weekly_sync | Post-Package-3AJ Tower Catch-Up operating pass | docs/post-3aj-tower-catchup | 1260aa1 | mirrored | 2026-06-08 |
@@ -90,6 +92,38 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260608-018 — weekly_sync — Post-Package-3AL Tower Catch-Up operating pass
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** docs/post-3al-tower-catchup | **HEAD:** 71a8b26 (base; finalized at merge) | **Status:** in-progress (stop-before-commit)
+
+Post-Package-3AL Tower Catch-Up operating pass — IN PROGRESS; docs-only; branch `docs/post-3al-tower-catchup` from `main` at `71a8b26`. Bringing the broader Tower, command-center, project-control, ops, and report-mirror docs current after Package 3AL (Import Insights Panel Visual Regression Coverage) completion: recording Package 3AL as the latest complete package; replacing stale "Package 3AK is the latest complete package" claims with Package 3AL; correcting the app-code-state note (Package 3AL changed no app code); correcting the stale "Post-Package-3AK Tower Catch-Up In Progress" residue in `backlog.md` to Done; adding the Package 3AL closeout entry (RPT-20260608-017) and this catch-up entry; adding Package 3AL to project-control history, sprint, kanban, roadmap, backlog, decision-log, command-center, and ops summaries. 13 authorized docs: AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md, docs/command-center/current-status.md, docs/command-center/next-actions.md, docs/ops/backlog-roadmap.md, docs/ops/deferred-gated-ideas-register.md, docs/project-control/backlog.md, docs/project-control/current-sprint.md, docs/project-control/decision-log.md, docs/project-control/kanban-board.md, docs/project-control/master-roadmap.md, docs/project-control/report-mirror-log.md. (docs/qa/test-strategy.md and docs/qa/visual-regression-guide.md intentionally untouched — already updated in the Package 3AL impl + state-sync.)
+
+**Tests:** No tests run — docs-only pass. Baseline unchanged (3645 Node / 30 suites; 57 seeded; 195 real-files; Scenario A VR PASS 4/4; import-panels VR PASS 10/10).
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, src/*, scripts/*, scripts/visual-regression-baselines/*, scripts/fixtures/*, src/tests/*, test-strategy.md, visual-regression-guide.md, pre-commit-verification-template.md untouched; no app code; no credentials/tokens/raw-transcripts committed.
+**Next action:** Stop before commit; await Coordinator authorization to commit the Tower Catch-Up. Finalize HEAD/status at merge.
+**Follow-up:** false
+
+*Entry added as the Post-Package-3AL Tower Catch-Up record (stop-before-commit; HEAD/status finalized at merge). No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
+
+### RPT-20260608-017 — package_closeout — Package 3AL — Import Insights Panel Visual Regression Coverage
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** feature/import-insights-vr-coverage | **HEAD:** a244463 (impl) / 71a8b26 (state-sync) | **Status:** mirrored
+
+Package 3AL — Import Insights Panel Visual Regression Coverage COMPLETE — implementation `a244463`, fast-forward merged to `main` 2026-06-08; post-merge state-sync `71a8b26`. QA harness only; closes the documented VR blind spot (Scenario A only captured `#bookCanvas .book-page`; the ten import-insights panels were never visually checked). Delivered: (1) `scripts/visual-regression-harness.mjs` — additive `--scenario import-panels` path (default `a` = Scenario A, unchanged): `buildImportPanelsSeed()` (deterministic inline NormalizedMemory seed), `seedImportPanels()` (`window.__km.seedChatMessages` + `window.__km.renderImportInsights`), `captureImportPanels()` (per-visible-panel element screenshots), `writePanelManifest()`, `runUpdateBaselinesPanels()`/`runCheckPanels()` (reusing the existing `comparePages`/`loadManifest` helpers), `main()` dispatch on scenario. Scenario A functions/paths/thresholds/filenames/baselines untouched. (2) `scripts/visual-regression-baselines/import-panels/` — 10 committed PNG panel baselines (importQuality, contentQuality, conversationStats, emojiAnalysis, wordAnalysis, timingAnalysis, responseTime, messageLength, conversationInitiation, reactionAnalysis) + `manifest.json`; human-reviewed. (3) `docs/qa/visual-regression-guide.md` + `docs/qa/test-strategy.md` — import-panels scenario documented. (4) `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs (impl `a244463`, state-sync `71a8b26`).
+
+**Tests:** Node 3645/30 PASS (0 failed, unchanged); 57/57 seeded E2E; 195/195 real-files E2E; Scenario A VR PASS 4/4 unchanged (scenario-a baselines byte-identical); import-panels VR PASS 10/10; `--simulate-regression --scenario import-panels` → FAIL (detection proven); state-freshness 0 FAIL; project-control-sync-validate 11/0/0; project-control-sync-dry-run STRUCTURAL PASS; os-self-audit 324/0/0; `node --check` on the harness OK. No app files changed.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — no `index.html`; no `src/**`; no `scripts/e2e-regression-harness.mjs`; no `scripts/fixtures/**`; no `src/tests/**`; no `scripts/package.json`; no `scripts/message-book-scenarios.mjs`; no Scenario A baseline changes; no app DOM/CSS change; no new engine/panel; no generated `window.__km` bridge registry; no DEF-11 in-book rendering / Message Book reaction badges; no DEF-14 in-book Stats Page; no DEF-13 library shelf; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no `src/products/*` / `src/state/*` / adapters / ProductDraft/Preflight/Lifecycle / proof approval / Review view / standalone keepsake flows / PDF / checkout / vendor / manufacturing / cover; no dependency installs; no external systems; no credentials/tokens/raw-transcripts committed.
+**Next action:** Post-Package-3AL Tower Catch-Up (docs-only) to record Package 3AL across the Tower; then Coordinator decides the next development package (candidate TBD).
+**Follow-up:** false
+
+*Entry added as the Package 3AL closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260608-016 — weekly_sync — Post-Package-3AK Tower Catch-Up operating pass
 

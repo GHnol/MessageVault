@@ -1,7 +1,7 @@
 # Next Actions — KeepMees / MessageVault
 
 **Last updated:** 2026-06-08
-**Updated by:** Claude Code (Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation — COMPLETE; impl/merge `052346f`, merged to `main` 2026-06-08; state-sync `18019ba`; behavior-preserving wiring consolidation — `renderImportInsights` iterates the `IMPORT_INSIGHT_RENDERERS` registry, bridge block left literal, no new engine/panel, no behavior change; Post-Package-3AK Tower Catch-Up IN PROGRESS — docs-only, stop-before-commit)
+**Updated by:** Claude Code (Package 3AL — Import Insights Panel Visual Regression Coverage — COMPLETE; impl/merge `a244463`, merged to `main` 2026-06-08; state-sync `71a8b26`; QA harness only — additive `--scenario import-panels` VR scenario + 10 committed panel baselines; Scenario A untouched; no `index.html`/`src`/behavior change; Post-Package-3AL Tower Catch-Up IN PROGRESS — docs-only, stop-before-commit)
 
 Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization before any work begins.
 
@@ -11,7 +11,7 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 | # | Action | Role | Authorization required |
 |---|---|---|---|
-| 1 | Authorize next development package — Package 3AK COMPLETE (impl/merge `052346f`, merged to `main` 2026-06-08; state-sync `18019ba`); Post-Package-3AK Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
+| 1 | Authorize next development package — Package 3AL COMPLETE (impl/merge `a244463`, merged to `main` 2026-06-08; state-sync `71a8b26`); Post-Package-3AL Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit); next candidate: TBD; see decision-log.md | Coordinator | **[NEEDS APPROVAL]** |
 | 2 | (Optional) Import `.ics`, ClickUp CSV, TickTick CSV | Founder | — |
 | 3 | Decide GitHub Projects board setup | Coordinator | **[NEEDS APPROVAL]** |
 | 4 | Decide NotebookLM adoption | Coordinator | **[NEEDS APPROVAL]** |
@@ -22,7 +22,9 @@ Items marked **[NEEDS APPROVAL]** require explicit Coordinator authorization bef
 
 ## Next development package (awaiting Coordinator authorization)
 
-**Status: Package 3AK COMPLETE — impl/merge `052346f`, merged to `main` 2026-06-08; state-sync `18019ba`. Post-Package-3AK Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit). Coordinator decides next package.**
+**Status: Package 3AL COMPLETE — impl/merge `a244463`, merged to `main` 2026-06-08; state-sync `71a8b26`. Post-Package-3AL Tower Catch-Up IN PROGRESS (docs-only, stop-before-commit). Coordinator decides next package.**
+
+Package 3AL (Import Insights Panel Visual Regression Coverage) is COMPLETE — fast-forward merged to main (`a244463`; state-sync `71a8b26` 2026-06-08). QA harness only — an additive `--scenario import-panels` path in `scripts/visual-regression-harness.mjs` seeds deterministic memories via the existing `window.__km.seedChatMessages` + `window.__km.renderImportInsights` bridges (no `index.html`/`src`/DOM/CSS/app change) and screenshots each visible import-insights panel into `scripts/visual-regression-baselines/import-panels/` (10 committed PNG baselines + manifest). Closes the documented blind spot where Scenario A only captured `#bookCanvas .book-page` and the import-panel zone was never visually checked. Scenario A path/thresholds/filenames/baselines untouched. Verification: Node 3645/30 unchanged; 57/57 seeded; 195/195 real-files; Scenario A VR PASS 4/4 unchanged; import-panels VR PASS 10/10; `--simulate-regression --scenario import-panels` proves detection. The Post-Package-3AL Tower Catch-Up (this docs-only pass) records 3AL across the Tower and is awaiting Coordinator commit authorization.
 
 Package 3AK (Import Insights Registry-Driven Dispatcher Consolidation) is COMPLETE — fast-forward merged to main (`052346f`; state-sync `18019ba` 2026-06-08). Behavior-preserving wiring consolidation completing the Package 3AJ debt-paydown: `renderImportInsights(memories)` now iterates an ordered `IMPORT_INSIGHT_RENDERERS` registry array (the ten existing panel renderers in their exact current order) instead of ten hardcoded calls; all ten `renderXPanel` functions, their individual `window.__km` bridges, the literal `window.__km` bridge block, `window.__km.renderImportInsights`, and all 11 dispatcher call sites are preserved unchanged; the bridge block is deliberately left literal (not generated from the registry). **No new engine, no new panel, no DOM/CSS/panel-order/panel-copy/visibility/behavior change.** Baseline unchanged: 3645 Node / 30 suites; 57/57 seeded; 195/195 real-files; visual regression PASS. The Post-Package-3AK Tower Catch-Up (this docs-only pass) records 3AK across the Tower and is awaiting Coordinator commit authorization.
 
@@ -75,7 +77,7 @@ All prior packages (2.7, 2.8, 2.9, 3A–3C, 4A–4E.1, 2.6–2.6.1, 2.5A–2.5B,
 | TBD — Coordinator to decide | TBD | TBD | — |
 | Phase 12 continuation (preflight runners for vendor-gated checks) | Engine layer | Vendor/manufacturing inputs gated | Gated until vendor confirmed |
 
-**Package 3AK is now COMPLETE — the latest complete package** (Import Insights Registry-Driven Dispatcher Consolidation; behavior-preserving wiring consolidation of `index.html` — `renderImportInsights` iterates the `IMPORT_INSIGHT_RENDERERS` registry; bridge block left literal; no new engine, no new panel, no behavior change). The latest *engine* work remains Package 3AH (ReactionAnalysis + #reactionAnalysisPanel, import-time advisory only), which is DELIVERED. Package 3AI (Verification & Harness Reliability Hardening; scripts + docs only), Package 3AJ (Import Insights Consolidation), and Package 3AK are all complete. No development package has been authorized after Package 3AK. Post-Package-3AK Tower Catch-Up (docs-only) is IN PROGRESS (stop-before-commit). The next Coordinator step is to decide the next package (candidate TBD).
+**Package 3AL is now COMPLETE — the latest complete package** (Import Insights Panel Visual Regression Coverage; QA harness only — additive `--scenario import-panels` VR scenario + 10 committed panel baselines; Scenario A untouched; no `index.html`/`src`/behavior change). The latest *engine* work remains Package 3AH (ReactionAnalysis + #reactionAnalysisPanel, import-time advisory only), which is DELIVERED. Package 3AI (Verification & Harness Reliability Hardening; scripts + docs only), Package 3AJ (Import Insights Consolidation), Package 3AK (registry-driven dispatcher), and Package 3AL are all complete. No development package has been authorized after Package 3AL. Post-Package-3AL Tower Catch-Up (docs-only) is IN PROGRESS (stop-before-commit). The next Coordinator step is to decide the next package (candidate TBD).
 
 ---
 
