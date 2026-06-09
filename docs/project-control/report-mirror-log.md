@@ -27,8 +27,8 @@ This log is the durable index of sanitized closeout, planning, handoff, and exte
 ## Latest state summary
 
 **As of:** 2026-06-08
-**Last mirrored:** RPT-20260608-014 (Post-Package-3AJ Tower Catch-Up operating pass — COMPLETE; docs `1260aa1`, merged to `main` 2026-06-08)
-**Active gate:** None — Package 3AJ COMPLETE (impl/merge `92435b7`, state-sync `e445212`, merged to `main` 2026-06-08; behavior-preserving `index.html` wiring consolidation — `renderImportInsights` dispatcher; no new engine/panel; no behavior change); Post-Package-3AJ Tower Catch-Up COMPLETE (docs `1260aa1`, merged to `main`); main HEAD `1260aa1` (pre-closeout-commit value); no active pass; no active development package. Prior: Package 3AI COMPLETE (impl `d4a6c71`, state-sync `803cd64`); Post-Package-3AI Tower Catch-Up COMPLETE (docs `106f500`, closeout `a84c4f9`)
+**Last mirrored:** RPT-20260608-015 (Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation closeout — mirrored; impl/merge `052346f`, state-sync `18019ba`, merged to `main` 2026-06-08)
+**Active gate:** None — Package 3AK COMPLETE (impl/merge `052346f`, state-sync `18019ba`, merged to `main` 2026-06-08; behavior-preserving `index.html` wiring consolidation — `renderImportInsights` now iterates the `IMPORT_INSIGHT_RENDERERS` registry; bridge block left literal; no new engine/panel; no behavior change); Post-Package-3AK Tower Catch-Up IN PROGRESS (RPT-20260608-016; branch `docs/post-3ak-tower-catchup`, docs-only, stop-before-commit); main HEAD `18019ba` (pre-closeout-commit value); no active development package. Prior: Package 3AJ COMPLETE (impl/merge `92435b7`, state-sync `e445212`); Post-Package-3AJ Tower Catch-Up COMPLETE (docs `1260aa1`); Package 3AI COMPLETE (impl `d4a6c71`, state-sync `803cd64`)
 **Next expected mirror:** Next development package or operating pass
 
 Historical closeout reports before Gate 3 exist in chat/project memory only. If selective backfill becomes useful, it requires explicit Coordinator authorization and the same sanitization rules.
@@ -39,6 +39,8 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 
 | ID | Type | Gate / Package | Branch | HEAD | Status | Date |
 |---|---|---|---|---|---|---|
+| RPT-20260608-016 | weekly_sync | Post-Package-3AK Tower Catch-Up operating pass | docs/post-3ak-tower-catchup | 18019ba | in-progress | 2026-06-08 |
+| RPT-20260608-015 | package_closeout | Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation | feature/import-insights-registry | 052346f / 18019ba | mirrored | 2026-06-08 |
 | RPT-20260608-014 | weekly_sync | Post-Package-3AJ Tower Catch-Up operating pass | docs/post-3aj-tower-catchup | 1260aa1 | mirrored | 2026-06-08 |
 | RPT-20260608-013 | package_closeout | Package 3AJ — Import Insights Consolidation | feature/import-insights-consolidation | 92435b7 / e445212 | mirrored | 2026-06-08 |
 | RPT-20260608-012 | weekly_sync | Post-Package-3AI Tower Catch-Up operating pass | docs/post-3ai-tower-catchup | 106f500 | mirrored | 2026-06-08 |
@@ -88,6 +90,38 @@ Historical closeout reports before Gate 3 exist in chat/project memory only. If 
 ---
 
 ## Entry detail
+
+### RPT-20260608-016 — weekly_sync — Post-Package-3AK Tower Catch-Up operating pass
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** docs/post-3ak-tower-catchup | **HEAD:** 18019ba (base; finalized at merge) | **Status:** in-progress (stop-before-commit)
+
+Post-Package-3AK Tower Catch-Up operating pass — IN PROGRESS; docs-only; branch `docs/post-3ak-tower-catchup` from `main` at `18019ba`. Bringing the broader Tower, command-center, project-control, ops, and report-mirror docs current after Package 3AK (Import Insights Registry-Driven Dispatcher Consolidation) completion: recording Package 3AK as the latest complete package; replacing stale "Package 3AJ is the latest complete package" claims with Package 3AK; correcting the app-code-state lag to Package 3AK; correcting the stale "Post-Package-3AJ Tower Catch-Up In Progress" residue in `backlog.md` to Done; adding the Package 3AK closeout entry (RPT-20260608-015) and this catch-up entry; adding Package 3AK to project-control history, sprint, kanban, roadmap, backlog, decision-log, command-center, and ops summaries. 13 authorized docs: AI_HANDOFF.md, CURRENT_STATE.md, NEXT_SESSION_PROMPT.md, docs/command-center/current-status.md, docs/command-center/next-actions.md, docs/ops/backlog-roadmap.md, docs/ops/deferred-gated-ideas-register.md, docs/project-control/backlog.md, docs/project-control/current-sprint.md, docs/project-control/decision-log.md, docs/project-control/kanban-board.md, docs/project-control/master-roadmap.md, docs/project-control/report-mirror-log.md. (docs/architecture/architecture-roadmap.md and docs/qa/test-strategy.md intentionally untouched — already updated in the Package 3AK impl + state-sync.)
+
+**Tests:** No tests run — docs-only pass. Baseline unchanged (3645 Node / 30 suites; 57 seeded; 195 real-files; visual regression PASS).
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — index.html, src/*, scripts/*, scripts/fixtures/*, src/tests/*, architecture-roadmap.md, test-strategy.md, pre-commit-verification-template.md untouched; no app code; no credentials/tokens/raw-transcripts committed.
+**Next action:** Stop before commit; await Coordinator authorization to commit the Tower Catch-Up. Finalize HEAD/status at merge.
+**Follow-up:** false
+
+*Entry added as the Post-Package-3AK Tower Catch-Up record (stop-before-commit; HEAD/status finalized at merge). No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
+
+### RPT-20260608-015 — package_closeout — Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation
+
+**Created:** 2026-06-08T00:00:00Z | **Branch:** feature/import-insights-registry | **HEAD:** 052346f (impl) / 18019ba (state-sync) | **Status:** mirrored
+
+Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation COMPLETE — implementation `052346f`, fast-forward merged to `main` 2026-06-08; post-merge state-sync `18019ba`. Behavior-preserving wiring consolidation; `index.html` only; completes the Package 3AJ debt-paydown. Delivered: (1) `index.html` — added an ordered `IMPORT_INSIGHT_RENDERERS` registry array listing the ten existing import-panel renderers in their exact current order (`renderImportQualityPanel` → `renderReactionAnalysisPanel`); rewrote `renderImportInsights(memories)` to iterate that registry (same order, same argument) instead of ten hardcoded calls; preserved all ten `renderXPanel` functions, their individual `window.__km` bridges, the literal `window.__km` bridge block, `window.__km.renderImportInsights`, and all 11 dispatcher call sites; the `window.__km` bridge block is deliberately NOT generated from the registry (left literal to avoid key-name drift). No DOM/CSS/panel-order/panel-copy/visibility/behavior change. (2) `docs/architecture/architecture-roadmap.md` + `docs/qa/test-strategy.md` — registry-driven dispatcher recorded; baseline counts unchanged. (3) `AI_HANDOFF.md`, `CURRENT_STATE.md`, `NEXT_SESSION_PROMPT.md` — state docs (impl `052346f`, state-sync `18019ba`).
+
+**Tests:** 3645/30 Node PASS (0 failed, unchanged); 57/57 seeded E2E; 195/195 real-files E2E (Phases 25–44 panel assertions green under the registry dispatcher); visual regression PASS (4/4 baselines unchanged); state-freshness 0 FAIL; project-control-sync-validate 11/0/0; project-control-sync-dry-run STRUCTURAL PASS; os-self-audit 324/0/0. Baseline unchanged by this package.
+**External operations:** none — no Google Calendar, no GitHub Projects, no credentials read.
+**Hard exclusions:** confirmed — no generated `window.__km` bridge registry (bridge block left literal); no new engine, no new panel, no analytics-series continuation, no panel regrouping/tabs/accordion, no CSS/DOM/panel-order/panel-text change; no `src/core/*` / `src/adapters/*` / `src/products/*` / `src/state/*` / `src/tests/*` / `scripts/**` / `scripts/fixtures/*`; no test-runner orchestrator; no DEF-11 in-book reaction rendering / Message Book reaction badges; no DEF-14 in-book Stats Page; no DEF-13 library shelf; no pagination constants / BOOK_PAGINATION_VERSION / BOOK_PRODUCTION_DEPS / BOOK_PARITY; no ProductDraft/Preflight/Lifecycle; no proof approval; no Review view; no standalone keepsake flows; no PDF/checkout/vendor/manufacturing/cover; no dependency installs; no external systems; no credentials/tokens/raw-transcripts committed.
+**Next action:** Post-Package-3AK Tower Catch-Up (docs-only) to record Package 3AK across the Tower; then Coordinator decides the next development package (candidate TBD).
+**Follow-up:** false
+
+*Entry added as the Package 3AK closeout record. No raw transcript, credential, token, or local artifact content included. Source type: in-session closeout.*
+
+---
 
 ### RPT-20260608-014 — weekly_sync — Post-Package-3AJ Tower Catch-Up operating pass
 
