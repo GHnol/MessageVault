@@ -6,6 +6,22 @@
 
 ---
 
+## Phase 0 Rebuild Decision Checkpoint (2026-06-10)
+
+**The project has shifted from the analytics-package series into a foundation rebuild.** A read-only dogfood audit of the current `index.html` MVP surfaced foundational defects (one-sided WhatsApp rendering, no media/ZIP intake, no real group-chat support, iMessage `attributedBody` message loss, stopword-only word analytics, copy/pluralization defects, a single iMessage-approximation renderer for all platforms). The decision is to rebuild on a credible foundation. **Authoritative record:** `docs/architecture/phase-0-rebuild-decisions.md`. Locked decisions:
+
+1. **Rendering** — original premium KeepMees visual language; preserve platform-faithful data/structure; never clone native-app trade dress.
+2. **Design resourcing** — no human designer; AI design stream provides art direction; Coordinator approves taste; Claude Code implements + critiques.
+3. **Architecture** — client-side **Vite + React + TypeScript SPA**; staged strangler-fig migration; local-first preserved; no backend; minimal audited runtime deps; `index.html` retained until parity.
+4. **Sequencing** — Phase 0 first (architecture, design tooling, fixtures, plan); then data-foundation-first verticals with UX in each; **WhatsApp iOS first vertical**.
+5. **Platform priority** — WhatsApp iOS → iMessage → Instagram/Messenger → Telegram; Android SMS + WhatsApp Android deferred until fixtures exist.
+6. **Design tooling** — source-of-truth not locked (finalists **Figma vs Subframe**; **Onlook** local-first option; decide via taste trial); **Framer rejected** (privacy); v0/Bolt/Lovable concept-only; verify Subframe privacy terms; **synthetic content only — never real conversations**.
+7. **Fixtures** — real sanitized samples required before adapter rebuild; minimal, structure-preserving, redacted; no raw private conversations committed.
+
+**Status:** decisions locked; **no implementation authorized** (no scaffold/deps/app changes). Next: Coordinator-led design-tool taste trial + sanitized WhatsApp iOS fixture gathering. The prior "await next development package" status is superseded by this rebuild direction.
+
+---
+
 ## Project identity
 
 - **Product:** KeepMees / MessageVault — single-file web app (`index.html`) plus modular `src/` engine (KMEngine).
