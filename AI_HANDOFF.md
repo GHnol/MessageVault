@@ -6,6 +6,15 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Package P1 (Canonical Import Model) COMPLETE (2026-06-16)
+
+**Package P1 — Canonical Import Model + Adapter Contract is CLOSED/COMPLETE** — impl `bd57c8a`, fast-forward merged to `main` 2026-06-16; post-merge state-sync (this update). First package of the **WhatsApp iOS data-foundation** vertical (plan: `docs/architecture/whatsapp-ios-data-foundation-plan.md`). **Engine-only and behavior-preserving** — built alongside the legacy `NormalizedMemory` path (strangler-fig); **no legacy import or UI behavior changed**. Delivered: a **canonical conversation model** (`src/core/canonical-conversation.js` — `KMEngine.CanonicalConversation`: pure deterministic builders for Conversation, Participant, Message, MessageGroup, MediaAttachment, Reaction, Reply, SystemEvent, SourceMetadata, ImportDiagnostics + `groupMessages`), an **import adapter contract** (`src/core/import-adapter-contract.js` — `KMEngine.ImportAdapterContract`: `validateConversation` + `validateAdapter` with a commerce/readiness semantic guard), **canonical-model unit tests** (`src/tests/canonical-conversation-tests.mjs`, 116 tests / 18 suites), and **+8 km-engine smoke** assertions (180→188). Baseline: **3769 Node / 31 suites**; E2E seeded 57/57; real-files 195/195; visual regression Scenario A PASS 4/4 (unchanged). No `index.html`, no `src/adapters`, no `src/products`/`src/state`, no `package.json`/deps.
+
+**Current state:** Branch `main` after fast-forward merge. **No active package. No active pass.** The **KeepMees Design Bible v1** direction (below) remains the creative source of truth; the **WhatsApp iOS data-foundation plan** (`docs/architecture/whatsapp-ios-data-foundation-plan.md`) governs the import-truth verticals.
+**Next exact action:** Await Coordinator authorization for **Package P2 — WhatsApp text parser hardening**, and/or **fixture gathering** for sanitized real WhatsApp iOS samples (1:1 + group, with/without media ZIP, incl. the Abena/N regression case) before/alongside P2. **P2 has not started.** Do not begin P2 or any further implementation without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — KeepMees Design Bible v1 Approved (2026-06-16)
 
 **Builds on (does not erase) the 2026-06-10 Phase 0 Rebuild Decision Checkpoint below.** The Phase 0 design-tooling question is now resolved. A Coordinator-led design-tool **taste trial** (Figma Make 41/70, Subframe 37/70; Onlook skipped) found **no tool fit to originate KeepMees art direction** — both produced cookie-cutter / generic AI output. The creative source of truth is therefore the **human-originated KeepMees Design Bible v1** (`docs/design/keepmees-design-bible.md`), approved by the Coordinator 2026-06-16. Spine: **Quiet Monument** (modern editorial), warmed by the **Keepsake Letter**, disciplined by the **Memoir**; warm bone/ivory base, single **oxblood** accent, foil ceremony only; **edited-editorial-transcript** conversation rendering (no chat bubbles, no platform trade dress); Fraunces display + Newsreader body; Message Book = same world + ceremony. Result record: `docs/design/taste-trial-result.md`. Figma/Subframe are demoted to possible **secondary** L1/L2 execution tools (never originators); Onlook deferred; generic AI-generated design is explicitly rejected as the foundation.
@@ -40,9 +49,9 @@ Locked decisions: (1) **Rendering** = original KeepMees language; faithful data/
 |---|---|
 | **Active pass** | None |
 | **Active branch** | `main` |
-| **base HEAD** | `756df7b` (docs: sync next session prompt for Phase 0 rebuild; `main` HEAD — pre-sync base for the Design Bible v1 docs checkpoint) |
+| **base HEAD** | `bd57c8a` (feat(import): add canonical conversation model and adapter contract — Package P1; `main` HEAD — pre-state-sync base) |
 | **Active package** | None |
-| **Last completed pass** | KeepMees Design Bible v1 — docs-only checkpoint (Bible + taste-trial result + Phase 0 §6 + decision-log + continuity trio), fast-forward merged to `main` 2026-06-16 |
+| **Last completed pass** | Package P1 — Canonical Import Model + Adapter Contract (engine-only, behavior-preserving) — impl `bd57c8a`, fast-forward merged to `main` 2026-06-16 |
 | **Last closed package** | `Package 3AM — Import-Panels VR Verification-Gate Integration` — FULLY COMPLETE (Green Path docs/QA-only; wired the import-panels VR scenario into the pre-commit gate; no app/script/baseline/count change) — docs `beb95a4`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AL — Import Insights Panel Visual Regression Coverage` — FULLY COMPLETE (QA harness only; additive `--scenario import-panels` VR scenario + 10 committed panel baselines; seeded via `window.__km.renderImportInsights`; Scenario A untouched; no `index.html`/`src`/behavior change) — impl/merge `a244463`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation` — FULLY COMPLETE (behavior-preserving wiring consolidation; `renderImportInsights` iterates the `IMPORT_INSIGHT_RENDERERS` registry; bridge block left literal; no new engine/panel; no behavior change) — impl/merge `052346f`, fast-forward merged to `main` 2026-06-08 |
