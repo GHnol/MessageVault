@@ -296,6 +296,145 @@
         return 'document';
     }
 
+    // ── Self-identification + participant mapping (Package P3) ──────────────────
+    // The caller passes opts.self to set participant-level isSelf on the canonical
+    // output deterministically — no post-import UI patching. opts.self accepts:
+    //   - a string: participant id ('par-…'), display name, or phone-like label
+    //   - an object: { id|participantId, displayName|name, aliases[], handle|phone }
+    //   - an array of the above (several identifiers for the SAME self person)
+    // Only the uniquely-matching participant is flipped to isSelf. Ambiguous,
+    // no-match, and invalid options leave every participant non-self and are
+    // recorded in diagnostics so a one-sided collapse can never be hidden.
+
+    function normalizeName(s) {
+        if (typeof s !== 'string') return '';
+        var t = s.replace(INVISIBLE_RE, '').trim().toLowerCase().replace(/\s+/g, ' ');
+        if (t.normalize) t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return t;
+    }
+
+    function phoneDigits(s) {
+        return typeof s === 'string' ? s.replace(/[^\d]/g, '') : '';
+    }
+
+    function isPhoneLike(s) {
+        if (typeof s !== 'string') return false;
+        var t = s.trim();
+        return phoneDigits(t).length >= 7 && /^[+(]?\d[\d\s().+-]*$/.test(t);
+    }
+
+    function phonesMatch(a, b) {
+        var da = phoneDigits(a), db = phoneDigits(b);
+        if (!da || !db) return false;
+        if (da === db) return true;
+        var n = Math.min(da.length, db.length, 10);
+        return n >= 7 && da.slice(-n) === db.slice(-n);
+    }
+
+    function buildSelfDescriptor(opt) {
+        if (opt == null) return { empty: true };
+        if (typeof opt === 'string') {
+            var s = opt.trim();
+            if (!s) return { invalid: true };
+            var d = { id: /^par-/.test(s) ? s : null, primaryNames: [s], aliasNames: [], phones: [] };
+            if (isPhoneLike(s)) d.phones.push(s);
+            return d;
+        }
+        if (Array.isArray(opt)) {
+            var merged = { id: null, primaryNames: [], aliasNames: [], phones: [] };
+            var any = false;
+            for (var i = 0; i < opt.length; i++) {
+                var sub = buildSelfDescriptor(opt[i]);
+                if (sub.invalid || sub.empty) continue;
+                any = true;
+                if (sub.id && !merged.id) merged.id = sub.id;
+                merged.primaryNames = merged.primaryNames.concat(sub.primaryNames);
+                merged.aliasNames   = merged.aliasNames.concat(sub.aliasNames);
+                merged.phones       = merged.phones.concat(sub.phones);
+            }
+            return any ? merged : { invalid: true };
+        }
+        if (typeof opt === 'object') {
+            var o = { id: null, primaryNames: [], aliasNames: [], phones: [] };
+            if (typeof opt.id === 'string' && opt.id.trim()) o.id = opt.id.trim();
+            if (!o.id && typeof opt.participantId === 'string' && opt.participantId.trim()) o.id = opt.participantId.trim();
+            if (typeof opt.displayName === 'string' && opt.displayName.trim()) o.primaryNames.push(opt.displayName);
+            if (typeof opt.name === 'string' && opt.name.trim()) o.primaryNames.push(opt.name);
+            var aliases = Array.isArray(opt.aliases) ? opt.aliases : [];
+            for (var a = 0; a < aliases.length; a++) {
+                if (typeof aliases[a] === 'string' && aliases[a].trim()) o.aliasNames.push(aliases[a]);
+            }
+            if (typeof opt.handle === 'string' && opt.handle.trim()) o.phones.push(opt.handle);
+            if (typeof opt.phone === 'string' && opt.phone.trim()) o.phones.push(opt.phone);
+            for (var p = 0; p < o.primaryNames.length; p++) {
+                if (isPhoneLike(o.primaryNames[p])) o.phones.push(o.primaryNames[p]);
+            }
+            if (!o.id && !o.primaryNames.length && !o.aliasNames.length && !o.phones.length) return { invalid: true };
+            return o;
+        }
+        return { invalid: true };
+    }
+
+    // Returns the highest-priority match method for a participant, or null.
+    function matchSelfMethod(participant, desc) {
+        var i;
+        if (desc.id && participant.id === desc.id) return 'participant-id';
+        var pName = participant.displayName || '';
+        var pNorm = normalizeName(pName);
+        for (i = 0; i < desc.primaryNames.length; i++) {
+            if (desc.primaryNames[i] === pName) return 'exact-name';
+        }
+        for (i = 0; i < desc.primaryNames.length; i++) {
+            if (pNorm && normalizeName(desc.primaryNames[i]) === pNorm) return 'normalized-name';
+        }
+        var pAliases = [];
+        var pa = participant.aliases || [];
+        for (i = 0; i < pa.length; i++) pAliases.push(normalizeName(pa[i]));
+        for (i = 0; i < desc.aliasNames.length; i++) {
+            var an = normalizeName(desc.aliasNames[i]);
+            if (an && (an === pNorm || pAliases.indexOf(an) !== -1)) return 'alias';
+        }
+        for (i = 0; i < desc.primaryNames.length; i++) {
+            var pn = normalizeName(desc.primaryNames[i]);
+            if (pn && pAliases.indexOf(pn) !== -1) return 'alias';
+        }
+        for (i = 0; i < desc.phones.length; i++) {
+            if (phonesMatch(desc.phones[i], pName) || (participant.handle && phonesMatch(desc.phones[i], participant.handle))) return 'phone';
+        }
+        return null;
+    }
+
+    // Flip isSelf on the uniquely-matching participant; record diagnostics.
+    function resolveSelf(participants, selfOpt, warnings) {
+        var none = { identified: false, method: null, ambiguous: false, candidateCount: 0 };
+        if (selfOpt == null) return none;
+        var desc = buildSelfDescriptor(selfOpt);
+        if (desc.empty) return none;
+        if (desc.invalid) {
+            warnings.push({ code: 'INVALID_SELF_OPTION', message: 'opts.self had no usable id / name / handle' });
+            return none;
+        }
+        var matches = [];
+        for (var i = 0; i < participants.length; i++) {
+            var m = matchSelfMethod(participants[i], desc);
+            if (m) matches.push({ p: participants[i], method: m });
+        }
+        if (matches.length === 0) {
+            warnings.push({ code: 'NO_SELF_MATCH', message: 'opts.self matched no participant' });
+            return none;
+        }
+        if (matches.length > 1) {
+            warnings.push({ code: 'MULTIPLE_SELF_MATCHES', candidateIds: matches.map(function (x) { return x.p.id; }) });
+            return { identified: false, method: null, ambiguous: true, candidateCount: matches.length };
+        }
+        matches[0].p.isSelf = true;
+        var method = matches[0].method;
+        if (method === 'alias' || method === 'normalized-name' || method === 'phone') {
+            warnings.push({ code: 'SELF_MATCH_BY_' + method.toUpperCase().replace(/-/g, '_'), participantId: matches[0].p.id });
+        }
+        return { identified: true, method: method, ambiguous: false, candidateCount: 1 };
+    }
+
     // Produce a canonical Conversation (validated against the adapter contract).
     // Never throws; non-WhatsApp or empty input yields an empty-but-valid Conversation.
     adapter.toCanonical = function (rawText, opts) {
@@ -444,6 +583,10 @@
             if (GROUP_EVENT_KINDS[systemEvents[se].kind]) isGroup = true;
         }
 
+        // Participant-level self-identification (Package P3). Mutates the
+        // uniquely-matching participant's isSelf; non-self speakers stay distinct.
+        var selfResult = resolveSelf(participants, opts.self, warnings);
+
         var skipped = groups.length - messages.length - systemEvents.length;
         if (skipped < 0) skipped = 0;
 
@@ -467,10 +610,13 @@
             skipReasons:      skipReasons,
             unparsedLines:    unparsedLines,
             ambiguousDates:   ambiguousDates,
-            mediaMissing:     [],
-            selfIdentified:   false,
-            formatConfidence: confidence,
-            warnings:         warnings
+            mediaMissing:       [],
+            selfIdentified:     selfResult.identified,
+            selfMatchMethod:    selfResult.method,
+            selfMatchAmbiguous: selfResult.ambiguous,
+            selfCandidateCount: selfResult.candidateCount,
+            formatConfidence:   confidence,
+            warnings:           warnings
         });
 
         var source = CC.createSourceMetadata({

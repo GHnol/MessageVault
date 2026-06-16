@@ -532,6 +532,16 @@ assert(waCanon.participants.length === 2 && waCanon.participants.every(function 
 assert(waCanon.messages[0].timestamp === '2024-06-15T09:00:00.000Z', 'timestamp parsed deterministically to ISO UTC');
 assert(KMEngine.ImportAdapterContract.validateConversation(waCanon).valid === true, 'canonical whatsapp conversation passes the contract');
 
+// ── WHATSAPP SELF-ID + PARTICIPANT MAPPING — smoke (Package P3) ───────────────
+
+suite('whatsappTxtAdapter.toCanonical self-ID — smoke');
+const waSelf = KMEngine.whatsappTxtAdapter.toCanonical('[6/15/24, 9:00:00 AM] Alice: Hi\n[6/15/24, 9:01:00 AM] Bob: Hey\n[6/15/24, 9:02:00 AM] Carol: Yo\n', { self: 'Alice' });
+const waSelfParts = waSelf.participants.filter(function (p) { return p.isSelf; });
+assert(waSelfParts.length === 1 && waSelfParts[0].displayName === 'Alice', 'opts.self flips exactly one participant (Alice)');
+assert(waSelf.diagnostics.selfIdentified === true && waSelf.diagnostics.selfMatchMethod === 'exact-name', 'diagnostics record selfIdentified + method');
+assert(waSelf.participants.filter(function (p) { return !p.isSelf; }).length === 2, 'non-self speakers remain distinct participants');
+assert(KMEngine.whatsappTxtAdapter.toCanonical('[6/15/24, 9:00:00 AM] Alice: Hi\n').diagnostics.selfIdentified === false, 'no opts.self → not identified (no UI patch)');
+
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
 console.log('\n' + '─'.repeat(60));

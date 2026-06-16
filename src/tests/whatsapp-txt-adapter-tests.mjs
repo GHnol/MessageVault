@@ -592,6 +592,142 @@ suite('Suite 29 — synthetic iOS group fixture', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 30 — self-ID: exact / normalized / alias / participant-id (Package P3)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const TWO_PERSON = '[6/15/24, 9:00:00 AM] Amina: hi\n[6/15/24, 9:01:00 AM] Kwame: yo\n[6/15/24, 9:02:00 AM] Amina: again\n';
+
+suite('Suite 30 — self-ID match strategies', function () {
+    const exact = adapter.toCanonical(TWO_PERSON, { self: 'Amina' });
+    const exactSelf = exact.participants.filter(function (p) { return p.isSelf; });
+    assert(exactSelf.length === 1 && exactSelf[0].displayName === 'Amina', 'exact display-name match flips exactly one participant');
+    assert(exact.diagnostics.selfMatchMethod === 'exact-name', 'method recorded as exact-name');
+    assert(exact.diagnostics.selfIdentified === true,          'selfIdentified true');
+
+    const norm = adapter.toCanonical(TWO_PERSON, { self: '  amina ' });
+    const normSelf = norm.participants.filter(function (p) { return p.isSelf; });
+    assert(normSelf.length === 1 && normSelf[0].displayName === 'Amina', 'normalized (case/whitespace) name match');
+    assert(norm.diagnostics.selfMatchMethod === 'normalized-name', 'method recorded as normalized-name');
+
+    // diacritic-insensitive normalization (José -> jose)
+    const JOSE = 'Jos' + String.fromCharCode(0xE9);
+    const diac = adapter.toCanonical('[6/15/24, 9:00:00 AM] ' + JOSE + ': hi\n[6/15/24, 9:01:00 AM] Kwame: yo\n', { self: 'jose' });
+    assert(diac.participants.filter(function (p) { return p.isSelf; }).length === 1, 'diacritics stripped in normalized match');
+
+    const alias = adapter.toCanonical(TWO_PERSON, { self: { displayName: 'Ama Owusu', aliases: ['Amina'] } });
+    const aliasSelf = alias.participants.filter(function (p) { return p.isSelf; });
+    assert(aliasSelf.length === 1 && aliasSelf[0].displayName === 'Amina', 'alias-list match');
+    assert(alias.diagnostics.selfMatchMethod === 'alias',      'method recorded as alias');
+
+    const base = adapter.toCanonical(TWO_PERSON);
+    const aminaId = base.participants[0].id;
+    const byId = adapter.toCanonical(TWO_PERSON, { self: { id: aminaId } });
+    const idSelf = byId.participants.filter(function (p) { return p.isSelf; });
+    assert(idSelf.length === 1 && idSelf[0].id === aminaId,     'explicit participant-id match');
+    assert(byId.diagnostics.selfMatchMethod === 'participant-id', 'method recorded as participant-id');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 31 — self-ID: phone-like sender labels / handles
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 31 — self-ID by phone-like label', function () {
+    const PHONE = '[6/15/24, 9:00:00 AM] +1 555-123-4567: hi\n[6/15/24, 9:01:00 AM] Kwame: yo\n';
+    const byPhone = adapter.toCanonical(PHONE, { self: '+15551234567' });
+    const self = byPhone.participants.filter(function (p) { return p.isSelf; });
+    assert(self.length === 1 && self[0].displayName === '+1 555-123-4567', 'phone-like sender matched by digits');
+    assert(byPhone.diagnostics.selfMatchMethod === 'phone',     'method recorded as phone');
+
+    const byPhoneObj = adapter.toCanonical(PHONE, { self: { phone: '+1 (555) 123 4567' } });
+    assert(byPhoneObj.participants.filter(function (p) { return p.isSelf; }).length === 1, 'phone match via opts.self.phone (reformatted)');
+    assert(byPhoneObj.diagnostics.warnings.some(function (w) { return w.code === 'SELF_MATCH_BY_PHONE'; }), 'phone match disclosed as a warning');
+
+    const noMatchPhone = adapter.toCanonical(PHONE, { self: '+44 20 7946 0000' });
+    assert(noMatchPhone.participants.every(function (p) { return p.isSelf === false; }), 'non-matching phone leaves all non-self');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 32 — self-ID diagnostics: no match / ambiguous / invalid
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 32 — self-ID diagnostics', function () {
+    const noMatch = adapter.toCanonical(TWO_PERSON, { self: 'Zelda' });
+    assert(noMatch.diagnostics.selfIdentified === false,        'no match → not identified');
+    assert(noMatch.participants.every(function (p) { return p.isSelf === false; }), 'no match → nobody flipped self');
+    assert(noMatch.diagnostics.warnings.some(function (w) { return w.code === 'NO_SELF_MATCH'; }), 'NO_SELF_MATCH recorded');
+
+    const ambiguous = adapter.toCanonical(GROUP_FIXTURE, { self: { aliases: ['Amina', 'Kwame'] } });
+    assert(ambiguous.diagnostics.selfMatchAmbiguous === true,   'two distinct matches → ambiguous');
+    assert(ambiguous.diagnostics.selfIdentified === false,      'ambiguous → not identified (conservative)');
+    assert(ambiguous.participants.every(function (p) { return p.isSelf === false; }), 'ambiguous → nobody wrongly flipped self');
+    assert(ambiguous.diagnostics.selfCandidateCount === 2,      'candidate count recorded');
+    assert(ambiguous.diagnostics.warnings.some(function (w) { return w.code === 'MULTIPLE_SELF_MATCHES'; }), 'MULTIPLE_SELF_MATCHES recorded');
+
+    const invalidNum = adapter.toCanonical(TWO_PERSON, { self: 42 });
+    assert(invalidNum.diagnostics.warnings.some(function (w) { return w.code === 'INVALID_SELF_OPTION'; }), 'numeric self option → INVALID_SELF_OPTION');
+    const invalidEmpty = adapter.toCanonical(TWO_PERSON, { self: {} });
+    assert(invalidEmpty.diagnostics.warnings.some(function (w) { return w.code === 'INVALID_SELF_OPTION'; }), 'empty-object self option → INVALID_SELF_OPTION');
+    assert(invalidEmpty.diagnostics.selfIdentified === false,   'invalid option → not identified');
+
+    const noOpt = adapter.toCanonical(TWO_PERSON);
+    assert(noOpt.diagnostics.selfIdentified === false,          'no opts.self → not identified (no UI patch)');
+    assert(noOpt.diagnostics.selfMatchMethod === null,          'no opts.self → no method');
+    assert(noOpt.diagnostics.warnings.every(function (w) { return ['NO_SELF_MATCH', 'INVALID_SELF_OPTION', 'MULTIPLE_SELF_MATCHES'].indexOf(w.code) === -1; }), 'no self warnings when self not requested');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 33 — FLAGSHIP: one-sided-sender regression + group preservation
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 33 — one-sided-sender regression', function () {
+    // Without self-ID: messages must NOT collapse into a single "them".
+    const noSelf = adapter.toCanonical(GROUP_FIXTURE);
+    const distinct = {};
+    noSelf.messages.forEach(function (m) { distinct[m.participantId] = true; });
+    assert(Object.keys(distinct).length === 3,                  'group messages map to 3 distinct participants (no them-collapse)');
+    assert(noSelf.participants.length === 3,                    'three distinct participants preserved');
+    assert(noSelf.participants.every(function (p) { return p.isSelf === false; }), 'no participant is self before self-ID');
+
+    // With self-ID: only Amina becomes self; others stay distinct non-self.
+    const withSelf = adapter.toCanonical(GROUP_FIXTURE, { self: 'Amina' });
+    const selfParts = withSelf.participants.filter(function (p) { return p.isSelf; });
+    assert(selfParts.length === 1 && selfParts[0].displayName === 'Amina', 'exactly one self participant (Amina)');
+    const selfId = selfParts[0].id;
+    const selfMsgs = withSelf.messages.filter(function (m) { return m.participantId === selfId; });
+    assert(selfMsgs.length === 3 && selfMsgs.length === selfParts[0].messageCount, 'all self messages reference the self participantId');
+
+    const others = withSelf.participants.filter(function (p) { return !p.isSelf; });
+    assert(others.length === 2,                                 'two non-self speakers remain distinct participants');
+    const otherIds = others.map(function (p) { return p.id; });
+    assert(otherIds[0] !== otherIds[1] && otherIds.indexOf(selfId) === -1, 'non-self participants keep their own distinct ids');
+    assert(withSelf.messages.some(function (m) { return m.participantId === otherIds[0]; }) &&
+           withSelf.messages.some(function (m) { return m.participantId === otherIds[1]; }), 'each non-self speaker still owns their messages');
+    assert(Contract.validateConversation(withSelf).valid === true, 'self-identified group conversation passes the contract');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 34 — self-ID: array identifiers, isSelf persistence, contract
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 34 — self-ID array + persistence', function () {
+    // An array of identifiers all describing the SAME self person.
+    const arr = adapter.toCanonical(TWO_PERSON, { self: ['Nope', { displayName: 'Amina' }] });
+    const arrSelf = arr.participants.filter(function (p) { return p.isSelf; });
+    assert(arrSelf.length === 1 && arrSelf[0].displayName === 'Amina', 'array of identifiers resolves the single self');
+
+    // isSelf lives on the Participant (not only on messages/render) and survives a re-validate.
+    const conv = adapter.toCanonical(TWO_PERSON, { self: 'Amina' });
+    const selfPart = conv.participants.filter(function (p) { return p.isSelf; })[0];
+    assert(selfPart.isSelf === true,                            'isSelf stored on the Participant object');
+    assert(typeof selfPart.id === 'string' && selfPart.id.indexOf('par-') === 0, 'self participant keeps its stable id');
+    assert(Contract.validateConversation(conv).valid === true,  'participant-level self metadata passes the contract');
+    assert(conv.diagnostics.selfCandidateCount === 1,           'unique match → candidate count 1');
+
+    // A 1:1 chat with self identified is still not a group.
+    assert(conv.isGroup === false,                             'self-identified 1:1 chat is not a group');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 

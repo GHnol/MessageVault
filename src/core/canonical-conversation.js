@@ -166,8 +166,11 @@
             unparsedLines:    asArray(f.unparsedLines),
             ambiguousDates:   asArray(f.ambiguousDates),
             mediaMissing:     asArray(f.mediaMissing),
-            selfIdentified:   asBool(f.selfIdentified),
-            formatConfidence: typeof f.formatConfidence === 'number' ? f.formatConfidence : null,
+            selfIdentified:     asBool(f.selfIdentified),
+            selfMatchMethod:    asString(f.selfMatchMethod),
+            selfMatchAmbiguous: asBool(f.selfMatchAmbiguous),
+            selfCandidateCount: typeof f.selfCandidateCount === 'number' ? f.selfCandidateCount : 0,
+            formatConfidence:   typeof f.formatConfidence === 'number' ? f.formatConfidence : null,
             warnings:         asArray(f.warnings)
         };
     }
