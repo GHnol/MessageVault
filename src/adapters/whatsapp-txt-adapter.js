@@ -182,10 +182,32 @@
         [/this message was deleted|deleted this message/i,                         'deleted-message']
     ];
 
-    var GROUP_EVENT_KINDS = {
-        'group-create': 1, 'add-participant': 1, 'remove-participant': 1,
-        'subject-change': 1, 'icon-change': 1
-    };
+    // ── Group-chat correctness (Package P4) ─────────────────────────────────────
+    // Quote class covers straight and curly quotes (iOS uses curly). Built via
+    // new RegExp from a string so the source stays ASCII.
+    var QUOTE   = "['\"\\u2018\\u2019\\u201C\\u201D]";
+    // "X created group "NAME"" → initial subject; "X changed the subject … to "NAME"" → current subject.
+    var GROUP_NAME_RE = new RegExp('created (?:this |the )?group\\s+' + QUOTE + '(.+?)' + QUOTE + '\\s*$', 'i');
+    var SUBJECT_RE    = new RegExp('changed the subject(?:\\s+from\\s+' + QUOTE + '.*?' + QUOTE + ')?\\s+to\\s+' + QUOTE + '(.+?)' + QUOTE + '\\s*$', 'i');
+
+    function splitActorNames(s) {
+        if (typeof s !== 'string') return [];
+        return s.replace(/\.\s*$/, '').split(/\s*,\s*|\s+and\s+/i).map(function (x) { return x.trim(); }).filter(Boolean);
+    }
+
+    // Best-effort actor extraction from English iOS system phrasings. Returns the
+    // names mentioned (roster evidence); empty when the phrasing is not recognised.
+    function extractActors(kind, text) {
+        var t = (text || '').trim(), m;
+        if (kind === 'group-create'   && (m = /^(.+?)\s+created\s+(?:this |the )?group\b/i.exec(t)))  return [m[1].trim()];
+        if (kind === 'add-participant'    && (m = /^(.+?)\s+added\s+(.+)$/i.exec(t)))    return [m[1].trim()].concat(splitActorNames(m[2]));
+        if (kind === 'remove-participant' && (m = /^(.+?)\s+removed\s+(.+)$/i.exec(t)))  return [m[1].trim()].concat(splitActorNames(m[2]));
+        if (kind === 'leave'          && (m = /^(.+?)\s+left\b/i.exec(t)))                return [m[1].trim()];
+        if (kind === 'subject-change' && (m = /^(.+?)\s+changed the subject\b/i.exec(t))) return [m[1].trim()];
+        if (kind === 'icon-change'    && (m = /^(.+?)\s+changed (?:this|the) group/i.exec(t))) return [m[1].trim()];
+        if (kind === 'number-change'  && (m = /^(.+?)\s+changed (?:their|to a new)/i.exec(t))) return [m[1].trim()];
+        return [];
+    }
 
     function matchHeader(line) {
         var m = BRACKET_HDR.exec(line);
@@ -517,9 +539,10 @@
             if (headColon === -1 || !sender.trim()) {
                 // No "Sender: " on the header line → a system line. Preserved, not dropped.
                 var sysText = grp.bodyLines.join('\n');
+                var sysKind = headColon === -1 ? classifySystem(sysText) : 'unknown';
                 systemEvents.push(CC.createSystemEvent({
-                    kind: headColon === -1 ? classifySystem(sysText) : 'unknown',
-                    timestamp: iso, text: sysText, raw: grp.raw
+                    kind: sysKind, timestamp: iso, text: sysText,
+                    actors: extractActors(sysKind, sysText), raw: grp.raw
                 }));
                 continue;
             }
@@ -578,9 +601,47 @@
 
         var hourCycle = sawH12 && sawH24 ? 'mixed' : (sawH12 ? 'h12' : (sawH24 ? 'h24' : null));
 
-        var isGroup = participants.length > 2;
-        for (var se = 0; se < systemEvents.length && !isGroup; se++) {
-            if (GROUP_EVENT_KINDS[systemEvents[se].kind]) isGroup = true;
+        // ── Group detection + title / roster inference (Package P4) ────────────
+        // Distinct human speakers are the participants; system events add evidence.
+        // Strong evidence (>2 speakers, group create, add/remove) → certainly a
+        // group. Moderate (leave) and weak (subject/icon change) still imply a
+        // group (none of these occur in a 1:1) but a weak-only basis is flagged.
+        var speakerCount   = participants.length;
+        var groupEvidence  = [];
+        var rosterSet      = {};
+        var rosterEvidence = [];
+        var inferredTitle  = null;
+        var hasStrong = speakerCount > 2, hasModerate = false, hasWeak = false;
+        if (hasStrong) groupEvidence.push('multiple-speakers');
+
+        function noteEvidence(code) { if (groupEvidence.indexOf(code) === -1) groupEvidence.push(code); }
+
+        for (var se = 0; se < systemEvents.length; se++) {
+            var ev = systemEvents[se];
+            for (var ai = 0; ai < ev.actors.length; ai++) {
+                var nm = ev.actors[ai];
+                if (nm && !Object.prototype.hasOwnProperty.call(rosterSet, nm)) { rosterSet[nm] = true; rosterEvidence.push(nm); }
+            }
+            if (ev.kind === 'group-create')                                    { hasStrong = true; noteEvidence('group-create'); }
+            else if (ev.kind === 'add-participant' || ev.kind === 'remove-participant') { hasStrong = true; noteEvidence('add-remove-participant'); }
+            else if (ev.kind === 'leave')                                      { hasModerate = true; noteEvidence('leave'); }
+            else if (ev.kind === 'subject-change')                             { hasWeak = true; noteEvidence('subject-change'); }
+            else if (ev.kind === 'icon-change')                                { hasWeak = true; noteEvidence('icon-change'); }
+
+            var tm;
+            if (ev.kind === 'subject-change' && (tm = SUBJECT_RE.exec(ev.text || '')))     inferredTitle = tm[1].trim();
+            else if (ev.kind === 'group-create' && (tm = GROUP_NAME_RE.exec(ev.text || ''))) inferredTitle = tm[1].trim();
+        }
+
+        var isGroup, groupInferred = false;
+        if (opts.isGroup === true || opts.isGroup === false) {
+            isGroup = opts.isGroup;
+        } else {
+            isGroup = hasStrong || hasModerate || hasWeak;
+            groupInferred = isGroup;
+        }
+        if (isGroup && groupInferred && !hasStrong && !hasModerate && hasWeak) {
+            warnings.push({ code: 'WEAK_GROUP_EVIDENCE', evidence: groupEvidence.slice() });
         }
 
         // Participant-level self-identification (Package P3). Mutates the
@@ -615,6 +676,9 @@
             selfMatchMethod:    selfResult.method,
             selfMatchAmbiguous: selfResult.ambiguous,
             selfCandidateCount: selfResult.candidateCount,
+            groupInferred:      groupInferred,
+            groupEvidence:      groupEvidence,
+            rosterEvidence:     rosterEvidence,
             formatConfidence:   confidence,
             warnings:           warnings
         });
@@ -636,7 +700,7 @@
             platform:      PLATFORM_ID,
             exportVariant: opts.exportVariant || 'ios',
             isGroup:       isGroup,
-            title:         opts.title || null,
+            title:         opts.title || inferredTitle || null,
             participants:  participants,
             messages:      messages,
             systemEvents:  systemEvents,
@@ -645,6 +709,7 @@
         });
 
         for (var mi = 0; mi < conv.messages.length; mi++) conv.messages[mi].conversationId = conv.id;
+        for (var si = 0; si < conv.systemEvents.length; si++) conv.systemEvents[si].conversationId = conv.id;
 
         if (Contract && typeof Contract.validateConversation === 'function') {
             var v = Contract.validateConversation(conv);

@@ -123,12 +123,13 @@
         var timestamp = asString(f.timestamp);
         var text = asString(f.text);
         return {
-            id:        f.id || idFrom('sys', [kind, timestamp, (text || '').slice(0, 64)]),
-            timestamp: timestamp,
-            kind:      kind,
-            actors:    asArray(f.actors),
-            text:      text,
-            raw:       f.raw != null ? f.raw : null
+            id:             f.id || idFrom('sys', [kind, timestamp, (text || '').slice(0, 64)]),
+            timestamp:      timestamp,
+            kind:           kind,
+            actors:         asArray(f.actors),
+            text:           text,
+            conversationId: asString(f.conversationId),
+            raw:            f.raw != null ? f.raw : null
         };
     }
 
@@ -170,8 +171,11 @@
             selfMatchMethod:    asString(f.selfMatchMethod),
             selfMatchAmbiguous: asBool(f.selfMatchAmbiguous),
             selfCandidateCount: typeof f.selfCandidateCount === 'number' ? f.selfCandidateCount : 0,
+            groupInferred:      asBool(f.groupInferred),
+            groupEvidence:      asArray(f.groupEvidence),
+            rosterEvidence:     asArray(f.rosterEvidence),
             formatConfidence:   typeof f.formatConfidence === 'number' ? f.formatConfidence : null,
-            warnings:         asArray(f.warnings)
+            warnings:           asArray(f.warnings)
         };
     }
 

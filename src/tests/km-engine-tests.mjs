@@ -542,6 +542,18 @@ assert(waSelf.diagnostics.selfIdentified === true && waSelf.diagnostics.selfMatc
 assert(waSelf.participants.filter(function (p) { return !p.isSelf; }).length === 2, 'non-self speakers remain distinct participants');
 assert(KMEngine.whatsappTxtAdapter.toCanonical('[6/15/24, 9:00:00 AM] Alice: Hi\n').diagnostics.selfIdentified === false, 'no opts.self → not identified (no UI patch)');
 
+// ── WHATSAPP GROUP-CHAT CORRECTNESS — smoke (Package P4) ──────────────────────
+
+suite('whatsappTxtAdapter.toCanonical group — smoke');
+const waGrp = KMEngine.whatsappTxtAdapter.toCanonical('[15/06/2024, 20:00:00] Alice created group "Crew"\n[15/06/2024, 20:00:05] Alice added Carol\n[15/06/2024, 20:01:00] Alice: Hi\n[15/06/2024, 20:02:00] Bob: Hey\n[15/06/2024, 20:03:00] Carol: Yo\n', { self: 'Alice' });
+assert(waGrp.isGroup === true && waGrp.diagnostics.groupInferred === true, 'multi-speaker + group-create → isGroup inferred');
+assert(waGrp.title === 'Crew',                                      'group title inferred from create event');
+assert(waGrp.participants.filter(function (p) { return p.isSelf; }).length === 1, 'exactly one self in the group');
+assert(waGrp.participants.filter(function (p) { return !p.isSelf; }).length === 2, 'non-self speakers stay distinct');
+const grpIds = {}; waGrp.messages.forEach(function (m) { grpIds[m.participantId] = true; });
+assert(Object.keys(grpIds).length === 3,                            'group messages map to 3 distinct participants (no them-collapse)');
+assert(KMEngine.whatsappTxtAdapter.toCanonical('[6/15/24, 9:00:00 AM] Alice: Hi\n[6/15/24, 9:01:00 AM] Bob: Hey\n').isGroup === false, '1:1 import stays 1:1');
+
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
 console.log('\n' + '─'.repeat(60));

@@ -728,6 +728,141 @@ suite('Suite 34 — self-ID array + persistence', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 35 — group detection (evidence, weak-only, override) (Package P4)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 35 — group detection', function () {
+    const grp = adapter.toCanonical(GROUP_FIXTURE);
+    assert(grp.isGroup === true,                                 'multi-speaker group fixture → isGroup true');
+    assert(grp.diagnostics.groupInferred === true,              'group flag was inferred');
+    assert(grp.diagnostics.groupEvidence.indexOf('multiple-speakers') !== -1, 'evidence: multiple speakers');
+    assert(grp.diagnostics.groupEvidence.indexOf('group-create') !== -1, 'evidence: group-create');
+    assert(grp.diagnostics.groupEvidence.indexOf('add-remove-participant') !== -1, 'evidence: add/remove participant');
+
+    // Under-spoken group: only two people spoke, but a create event proves a group.
+    const underSpoken = adapter.toCanonical(
+        LRM + '[15/06/2024, 20:00:00] ' + LRM + 'Amina created group "Duo Plus"\n' +
+        '[15/06/2024, 20:01:00] Amina: hi\n' +
+        '[15/06/2024, 20:02:00] Kwame: yo\n'
+    );
+    assert(underSpoken.participants.length === 2,               'only two speakers');
+    assert(underSpoken.isGroup === true,                        'group-create makes it a group despite two speakers');
+
+    // Two speakers, no system events → 1:1.
+    const plain = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Amina: hi\n[6/15/24, 9:01:00' + NNBSP + 'AM] Kwame: yo\n');
+    assert(plain.isGroup === false,                             'two speakers + no events → not a group');
+    assert(plain.diagnostics.groupEvidence.length === 0,        'no group evidence for a plain 1:1');
+
+    // Weak-only evidence (icon change, two speakers) → group, but flagged.
+    const weak = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Amina: hi\n' +
+        LRM + '[6/15/24, 9:01:00' + NNBSP + 'AM] ' + LRM + 'Amina changed this group' + String.fromCharCode(0x2019) + 's icon\n' +
+        '[6/15/24, 9:02:00' + NNBSP + 'AM] Kwame: yo\n'
+    );
+    assert(weak.isGroup === true,                               'icon-change implies a group');
+    assert(weak.diagnostics.warnings.some(function (w) { return w.code === 'WEAK_GROUP_EVIDENCE'; }), 'weak-only basis flagged as WEAK_GROUP_EVIDENCE');
+
+    // Explicit override wins and is not marked inferred.
+    const forcedOff = adapter.toCanonical(GROUP_FIXTURE, { isGroup: false });
+    assert(forcedOff.isGroup === false && forcedOff.diagnostics.groupInferred === false, 'opts.isGroup:false overrides inference');
+    const forcedOn = adapter.toCanonical(TWO_PERSON, { isGroup: true });
+    assert(forcedOn.isGroup === true && forcedOn.diagnostics.groupInferred === false, 'opts.isGroup:true overrides inference');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 36 — 1:1 preservation, including with self-ID
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 36 — 1:1 stays 1:1', function () {
+    const oneToOne = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Amina: hi\n[6/15/24, 9:01:00' + NNBSP + 'AM] Kwame: yo\n');
+    assert(oneToOne.isGroup === false,                          '1:1 import is not a group');
+    assert(oneToOne.participants.length === 2,                  'two distinct participants');
+
+    const withSelf = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Amina: hi\n[6/15/24, 9:01:00' + NNBSP + 'AM] Kwame: yo\n', { self: 'Amina' });
+    assert(withSelf.isGroup === false,                          '1:1 with self-ID is still not a group');
+    const selfP = withSelf.participants.filter(function (p) { return p.isSelf; });
+    assert(selfP.length === 1,                                  'exactly one self in the 1:1');
+    assert(withSelf.participants.filter(function (p) { return !p.isSelf; }).length === 1, 'self stays distinct from the one non-self contact');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 37 — group title / subject inference
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 37 — title / subject inference', function () {
+    const createOnly = adapter.toCanonical(
+        LRM + '[15/06/2024, 20:00:00] ' + LRM + 'Amina created group "Trip Crew"\n' +
+        '[15/06/2024, 20:01:00] Amina: hi\n'
+    );
+    assert(createOnly.title === 'Trip Crew',                    'title inferred from group-create name');
+
+    // Last subject-change wins over the create name.
+    const renamed = adapter.toCanonical(GROUP_FIXTURE);
+    assert(renamed.title === 'Accra Trip',                      'latest subject-change is the current title');
+
+    // Curly-quoted subject change.
+    const LDQ = String.fromCharCode(0x201C), RDQ = String.fromCharCode(0x201D);
+    const curly = adapter.toCanonical(
+        LRM + '[15/06/2024, 20:00:00] ' + LRM + 'Amina created group ' + LDQ + 'Alpha' + RDQ + '\n' +
+        LRM + '[15/06/2024, 20:05:00] ' + LRM + 'Amina changed the subject from ' + LDQ + 'Alpha' + RDQ + ' to ' + LDQ + 'Beta' + RDQ + '\n' +
+        '[15/06/2024, 20:06:00] Amina: hi\n'
+    );
+    assert(curly.title === 'Beta',                              'curly-quoted subject change parsed to current title');
+
+    // No subject evidence → null; opts.title overrides.
+    const noTitle = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Amina: hi\n[6/15/24, 9:01:00' + NNBSP + 'AM] Kwame: yo\n');
+    assert(noTitle.title === null,                              'no subject events → title null');
+    const override = adapter.toCanonical(GROUP_FIXTURE, { title: 'Custom Title' });
+    assert(override.title === 'Custom Title',                   'opts.title overrides inferred subject');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 38 — add/remove/leave events, actors, roster evidence
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 38 — system-event actors + roster evidence', function () {
+    const conv = adapter.toCanonical(
+        LRM + '[15/06/2024, 20:00:00] ' + LRM + 'Amina created group "Planning"\n' +
+        LRM + '[15/06/2024, 20:00:05] ' + LRM + 'Amina added Zara\n' +     // Zara never speaks
+        '[15/06/2024, 20:01:00] Amina: hi\n' +
+        '[15/06/2024, 20:02:00] Kwame: yo\n' +
+        LRM + '[15/06/2024, 21:00:00] ' + LRM + 'Kwame left\n'
+    );
+    const addEv = conv.systemEvents.find(function (s) { return s.kind === 'add-participant'; });
+    assert(addEv && addEv.actors.indexOf('Amina') !== -1 && addEv.actors.indexOf('Zara') !== -1, 'add event actors include adder and added');
+    const leaveEv = conv.systemEvents.find(function (s) { return s.kind === 'leave'; });
+    assert(leaveEv && leaveEv.actors.indexOf('Kwame') !== -1, 'leave event actor captured');
+
+    assert(conv.diagnostics.rosterEvidence.indexOf('Zara') !== -1, 'Zara captured as roster evidence');
+    const speakerNames = conv.participants.map(function (p) { return p.displayName; });
+    assert(speakerNames.indexOf('Zara') === -1,                'Zara is NOT invented as a speaking Participant');
+    assert(speakerNames.indexOf('Amina') !== -1 && speakerNames.indexOf('Kwame') !== -1, 'only actual speakers are Participants');
+    assert(conv.systemEvents.every(function (s) { return KMEngine.CanonicalConversation.SYSTEM_EVENT_KINDS.indexOf(s.kind) !== -1; }), 'all system events carry a valid typed kind');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 39 — group integrity: distinct ids, no them-collapse, self + linkage
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 39 — group integrity', function () {
+    const conv = adapter.toCanonical(GROUP_FIXTURE, { self: 'Amina' });
+    assert(conv.isGroup === true,                               'group import is a group');
+
+    const distinct = {};
+    conv.messages.forEach(function (m) { distinct[m.participantId] = true; });
+    assert(Object.keys(distinct).length === 3,                 'messages map to 3 distinct participants (no them-collapse)');
+
+    const selfP = conv.participants.filter(function (p) { return p.isSelf; });
+    assert(selfP.length === 1 && selfP[0].displayName === 'Amina', 'self distinct (Amina)');
+    const others = conv.participants.filter(function (p) { return !p.isSelf; });
+    assert(others.length === 2 && others[0].id !== others[1].id, 'two distinct non-self participants');
+    assert(others.every(function (p) { return p.id !== selfP[0].id; }), 'self id differs from every non-self id');
+
+    assert(conv.systemEvents.length > 0 && conv.systemEvents.every(function (s) { return s.conversationId === conv.id; }), 'system events linked to the conversation id');
+    assert(Contract.validateConversation(conv).valid === true, 'self-identified group conversation passes the contract');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 
