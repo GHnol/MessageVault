@@ -48,12 +48,14 @@
 
 ## 6. Design tooling status
 
-- **Final source-of-truth tool is NOT locked.** Current finalists: **Figma** vs **Subframe**; **Onlook** is the local-first option. To be decided by a Coordinator-led hands-on **taste trial** using synthetic content.
-- **Framer rejected for now** on privacy grounds (only published privacy statement is Version 1.6 / Jan 2021; broad ML-analysis-of-Content right; no AI-training opt-out).
+- **RESOLVED (2026-06-16): the design source-of-truth taste trial is complete; NO tool was selected as the creative source of truth.** The **KeepMees Design Bible v1** (`docs/design/keepmees-design-bible.md`) is the creative source of truth. Outcome record: `docs/design/taste-trial-result.md` (Figma Make 41/70, Subframe 37/70, Onlook skipped — both tested tools produced cookie-cutter / generic AI output and were rejected as art-direction originators).
+- **Figma and Subframe are demoted to possible secondary execution / handoff tools** (L1 token store / handoff surface; L2 implementation acceleration) — **never originators.** The **UI rebuild must follow the Design Bible.** Generic AI-generated design is explicitly rejected as the foundation.
+- **Onlook deferred** — revisit only if/when it targets Vite; secondary-executor role only.
+- **Subframe privacy / training terms still require verification** before any real use (its capabilities and Claude Code MCP support are verified; its data posture was not examined).
+- **Framer rejected** on privacy grounds (only published privacy statement is Version 1.6 / Jan 2021; broad ML-analysis-of-Content right; no AI-training opt-out).
 - **v0 / Bolt.new / Lovable / etc. = concept-exploration only** unless later proven otherwise.
-- **Subframe privacy / training terms still require verification** before adoption (its capabilities and Claude Code MCP support are verified; its data posture was not examined).
 - **Synthetic / sanitized content only** in all design tools. **Real private conversations must never be pasted into any design tool.**
-- Evidence note: Figma Make, Figma AI, Google Stitch / Gemini, Bolt.new, Magic Patterns, Polymet, and Superflex remain **unevaluated** — no surviving verified evidence yet.
+- Evidence note: Figma Make, Figma AI, Google Stitch / Gemini, Bolt.new, Magic Patterns, Polymet, and Superflex remain **unevaluated** as originators — moot given the Design Bible is the creative source of truth.
 
 ## 7. Fixture protocol
 
@@ -70,8 +72,8 @@ No implementation, scaffold, dependency install, `package.json`, Vite/React/Type
 
 ## Open items (carried)
 
-- **Source-of-truth taste trial** — Figma vs Subframe vs Onlook, Coordinator-led, synthetic content. (A taste-trial brief has been prepared separately.)
-- **Privacy-vs-handoff cost path** — paid Figma seats vs self-hosted Onlook / Penpot.
-- **Pre-adoption verification of the winner** — Subframe privacy/training terms, or Figma privacy/training settings, or Onlook Vite compatibility.
+- **Source-of-truth taste trial — RESOLVED (2026-06-16):** complete; no tool selected; the **KeepMees Design Bible v1** (`docs/design/keepmees-design-bible.md`) is the creative source of truth. See `docs/design/taste-trial-result.md`.
+- **Privacy-vs-handoff cost path** — paid Figma seats vs self-hosted Onlook / Penpot (only relevant if a secondary execution tool is later adopted).
+- **Pre-adoption verification of any secondary tool** — Subframe privacy/training terms, or Figma privacy/training settings, or Onlook Vite compatibility — required before that tool is used as an L1/L2 executor.
 - **IP-attorney review before launch** (trade-dress).
-- **Optional third research pass** on still-unevaluated tools, or deprioritize them in favor of the verified Subframe / Onlook / Figma cluster.
+- **Next steps (separately authorized; no implementation yet)** — design-system tokenization / component contracts, or the WhatsApp iOS data-foundation package.

@@ -1,6 +1,6 @@
 # KeepMees Decision Log
 
-**Last updated:** 2026-06-08 (America/New_York — Package 3AL — Import Insights Panel Visual Regression Coverage COMPLETE; impl/merge `a244463`, merged to `main` 2026-06-08; state-sync `71a8b26`; QA harness only — additive `--scenario import-panels` VR scenario + 10 committed panel baselines; Scenario A untouched; Post-Package-3AL Tower Catch-Up IN PROGRESS, docs-only; Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation COMPLETE (impl/merge `052346f`, state-sync `18019ba`))
+**Last updated:** 2026-06-16 (America/New_York — KeepMees Design Bible v1 approved as the creative source of truth; design-tool taste trial complete with no tool selected as originator. Prior: Package 3AL — Import Insights Panel Visual Regression Coverage COMPLETE, merged to `main` 2026-06-08.)
 **Owner:** Coordinator / Project Control
 **Relationship:** This is the Project Control view of decisions. The authoritative record is `docs/ops/decision-register.md` (DEC-* IDs). If they differ, the decision register wins and this view is corrected.
 
@@ -38,6 +38,7 @@ Each decision: decision · status · date · owner lane · rationale · source/c
 | PDF generation server-side only | Locked | 2026-05 | Development | Print quality | DEC-P-06 | No in-browser PDF; Phase 11 | — |
 | Proof approval is an in-app explicit action | Locked | 2026-05 | Message Book | Manufacturing safety | DEC-P-09 | Package 5A + Gate 9 | — |
 | Deterministic pagination; version-gated | Locked | 2026-05 | Development | Data integrity | DEC-A-03 | Scope-guarded constants | Version bump only |
+| KeepMees Design Bible v1 is the creative source of truth; no AI tool originates art direction | Locked | 2026-06-16 | Design System / Coordinator | Taste trial (Figma Make 41/70, Subframe 37/70, Onlook skipped) produced cookie-cutter / generic AI output; taste must be human-originated | `docs/design/keepmees-design-bible.md`, `docs/design/taste-trial-result.md` | UI rebuild follows the Bible; Figma/Subframe demoted to secondary L1/L2 execution tools; Onlook deferred; generic AI-generated design rejected as foundation | New product/design authority |
 
 ## Active (governing, may evolve)
 

@@ -6,6 +6,15 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — KeepMees Design Bible v1 Approved (2026-06-16)
+
+**Builds on (does not erase) the 2026-06-10 Phase 0 Rebuild Decision Checkpoint below.** The Phase 0 design-tooling question is now resolved. A Coordinator-led design-tool **taste trial** (Figma Make 41/70, Subframe 37/70; Onlook skipped) found **no tool fit to originate KeepMees art direction** — both produced cookie-cutter / generic AI output. The creative source of truth is therefore the **human-originated KeepMees Design Bible v1** (`docs/design/keepmees-design-bible.md`), approved by the Coordinator 2026-06-16. Spine: **Quiet Monument** (modern editorial), warmed by the **Keepsake Letter**, disciplined by the **Memoir**; warm bone/ivory base, single **oxblood** accent, foil ceremony only; **edited-editorial-transcript** conversation rendering (no chat bubbles, no platform trade dress); Fraunces display + Newsreader body; Message Book = same world + ceremony. Result record: `docs/design/taste-trial-result.md`. Figma/Subframe are demoted to possible **secondary** L1/L2 execution tools (never originators); Onlook deferred; generic AI-generated design is explicitly rejected as the foundation.
+
+**Current state:** Phase 0 planning. **Design Bible v1 approved and checkpointed** (this docs-only package: `docs/design/keepmees-design-bible.md`, `docs/design/taste-trial-result.md`, `docs/architecture/phase-0-rebuild-decisions.md`, `docs/project-control/decision-log.md`, continuity trio). Branch `main` after fast-forward merge. **No active package. No active pass. No implementation authorized** — no scaffold, no dependencies, no `package.json`, no Vite/React/TS setup, no `index.html`/`src`/`scripts` changes.
+**Next exact action:** Await Coordinator authorization for the next package — either **(A) design-system tokenization / component contracts** (token roles + component contracts derived from the Bible) or **(B) the WhatsApp iOS data-foundation package**. The next work is **NOT raw UI implementation**. Do not begin any UI implementation, scaffold, or dependency install without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Phase 0 Rebuild Decision Checkpoint (2026-06-10)
 
 **Supersedes the "await next development package" status below.** The project has moved from the analytics-package series into a **foundation rebuild** after a read-only dogfood audit of the current `index.html` MVP surfaced foundational defects (one-sided WhatsApp rendering; no media/ZIP intake; no real group-chat support; iMessage `attributedBody` message loss; stopword-only word analytics; copy/pluralization defects; a single iMessage-approximation renderer for all platforms). **Authoritative record:** `docs/architecture/phase-0-rebuild-decisions.md`.
@@ -31,9 +40,9 @@ Locked decisions: (1) **Rendering** = original KeepMees language; faithful data/
 |---|---|
 | **Active pass** | None |
 | **Active branch** | `main` |
-| **base HEAD** | `beb95a4` (docs: wire import-panels VR into pre-commit guidance (Package 3AM); `main` HEAD — pre-closeout-commit value) |
+| **base HEAD** | `756df7b` (docs: sync next session prompt for Phase 0 rebuild; `main` HEAD — pre-sync base for the Design Bible v1 docs checkpoint) |
 | **Active package** | None |
-| **Last completed pass** | Post-Package-3AL Tower Catch-Up — docs `a7c5676`, fast-forward merged to `main` 2026-06-08 |
+| **Last completed pass** | KeepMees Design Bible v1 — docs-only checkpoint (Bible + taste-trial result + Phase 0 §6 + decision-log + continuity trio), fast-forward merged to `main` 2026-06-16 |
 | **Last closed package** | `Package 3AM — Import-Panels VR Verification-Gate Integration` — FULLY COMPLETE (Green Path docs/QA-only; wired the import-panels VR scenario into the pre-commit gate; no app/script/baseline/count change) — docs `beb95a4`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AL — Import Insights Panel Visual Regression Coverage` — FULLY COMPLETE (QA harness only; additive `--scenario import-panels` VR scenario + 10 committed panel baselines; seeded via `window.__km.renderImportInsights`; Scenario A untouched; no `index.html`/`src`/behavior change) — impl/merge `a244463`, fast-forward merged to `main` 2026-06-08 |
 | **Prior closed package** | `Package 3AK — Import Insights Registry-Driven Dispatcher Consolidation` — FULLY COMPLETE (behavior-preserving wiring consolidation; `renderImportInsights` iterates the `IMPORT_INSIGHT_RENDERERS` registry; bridge block left literal; no new engine/panel; no behavior change) — impl/merge `052346f`, fast-forward merged to `main` 2026-06-08 |
