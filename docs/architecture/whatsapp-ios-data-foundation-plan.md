@@ -7,6 +7,8 @@
 
 > This plan specifies WHAT to build and in what order. It does not build it. No `index.html`, `src/**`, `scripts/**`, `package.json`, dependency, or fixture changes are made by this planning pass.
 
+**Implementation progress (updated 2026-06-16):** **P1 COMPLETE** (canonical model + adapter contract — impl `bd57c8a`, merged to `main`). **P2 IN PROGRESS** (WhatsApp text parser hardening — branch `feature/whatsapp-data-foundation-p2-text-parser`; new `whatsappTxtAdapter.toCanonical(rawText, opts)` path; engine-only; awaiting commit authorization). See the package-breakdown table in §5 for per-package status; `AI_HANDOFF.md` / `CURRENT_STATE.md` carry the live state.
+
 ---
 
 ## 1. Current WhatsApp adapter reality
@@ -113,8 +115,8 @@ Coordinator's six packages are sound. **Recommended resequence** (deliver visibl
 
 | Order | Package | Layer | Notes |
 |---|---|---|---|
-| **P1** | Canonical model + parser/adapter contracts + ImportDiagnostics shape | engine-only | Pure builders for all 10 entities; adapter contract; **no behavior change** (built alongside legacy). |
-| **P2** | WhatsApp text parser hardening | engine-only | Locale-aware date parsing, U+202F/U+200E handling, 24-hour, robust system-line classification → **SystemEvent preserved**, edited/deleted markers, multi-line fix. |
+| **P1** ✅ COMPLETE | Canonical model + parser/adapter contracts + ImportDiagnostics shape | engine-only | Pure builders for all 10 entities; adapter contract; **no behavior change** (built alongside legacy). Impl `bd57c8a`, merged to `main` 2026-06-16. |
+| **P2** 🔄 IN PROGRESS | WhatsApp text parser hardening | engine-only | Locale-aware date parsing, U+202F/U+200E handling, 24-hour, robust system-line classification → **SystemEvent preserved**, edited/deleted markers, multi-line fix. **Delivered via a new `whatsappTxtAdapter.toCanonical(rawText, opts)` path** (strangler-fig — legacy `import()` untouched) producing a contract-validated `CanonicalConversation`. Branch `feature/whatsapp-data-foundation-p2-text-parser`; Node 3769→3890; awaiting commit authorization. |
 | **P3** *(was P4)* | Self-identification + participant mapping | engine + minimal UI wiring | Participant roster with stable ids; **self at participant level**; phone-as-name handling; land the **one-sided regression test**. |
 | **P4** *(was P5)* | Group-chat correctness | engine + minimal UI wiring | Group vs 1:1; per-speaker identity retained (no "them" collapse); system events surfaced. |
 | **P5** *(was P3)* | WhatsApp ZIP / media intake | engine + **dependency decision** | `<attached:>` linking; MediaAttachment populated; present/missing; local-first ZIP read. **Starts with a dependency-evaluation sub-step.** |

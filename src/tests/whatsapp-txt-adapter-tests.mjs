@@ -16,15 +16,20 @@ function makeCtx() {
     load(ctx, 'src/core/source-platforms.js');
     load(ctx, 'src/core/normalized-memory.js');
     load(ctx, 'src/core/import-adapters.js');
+    load(ctx, 'src/core/canonical-conversation.js');
+    load(ctx, 'src/core/import-adapter-contract.js');
     load(ctx, 'src/adapters/whatsapp-txt-adapter.js');
     return ctx.window.KMEngine;
 }
 
 const KMEngine = makeCtx();
 const adapter  = KMEngine.whatsappTxtAdapter;
+const Contract = KMEngine.ImportAdapterContract;
 
 const FIXTURE_PATH = join(__dirname, '../../scripts/fixtures/fake-whatsapp-chat.txt');
 const FIXTURE      = readFileSync(FIXTURE_PATH, 'utf8');
+
+const GROUP_FIXTURE = readFileSync(join(__dirname, '../../scripts/fixtures/whatsapp/ios-group-chat.txt'), 'utf8');
 
 const BRACKET_SINGLE  = '[6/1/24, 9:00:30 AM] Alice: Good morning!\n[6/1/24, 9:01:00 AM] Bob: Morning!\n';
 const HYPHEN_SINGLE   = '6/1/24, 9:00 AM - Alice: Hey there\n6/1/24, 9:01 AM - Bob: Hey back\n';
@@ -271,6 +276,319 @@ suite('Suite 14 — Semantic guard', function () {
     assert(mem.proofReady === undefined,              'memory has no proofReady');
     assert(mem.vendor === undefined,                  'memory has no vendor');
     assert(mem.order === undefined,                   'memory has no order');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 15 — Canonical path: API + contract validity (Package P2)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const NNBSP = String.fromCharCode(0x202F); // narrow no-break space (iOS puts this before AM/PM)
+const LRM   = String.fromCharCode(0x200E); // left-to-right mark (iOS prefixes system / attached lines)
+
+suite('Suite 15 — Canonical path: API + contract', function () {
+    assert(typeof adapter.toCanonical === 'function',            'toCanonical is a function');
+    const conv = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: Good morning\n' +
+        '[6/15/24, 9:01:00' + NNBSP + 'AM] Bob: Morning\n'
+    );
+    assert(conv && conv.platform === 'whatsapp',                 'conversation.platform is whatsapp');
+    assert(conv.source && conv.source.platform === 'whatsapp',   'source.platform is whatsapp');
+    assert(conv.source.adapterId === 'whatsapp-txt-v1',          'source.adapterId is whatsapp-txt-v1');
+    assert(conv.diagnostics && typeof conv.diagnostics.counts === 'object', 'diagnostics.counts present');
+    assert(Contract.validateConversation(conv).valid === true,   'canonical conversation passes the adapter contract');
+    assert(conv.messages.length === 2,                           'two messages produced');
+    assert(conv.source.exportVariant === 'ios',                  'exportVariant defaults to ios');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 16 — 12-hour timestamps + U+202F narrow no-break space
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 16 — 12-hour timestamps + U+202F', function () {
+    const conv = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: Morning\n' +
+        '[6/15/24, 1:05:30' + NNBSP + 'PM] Bob: Afternoon\n' +
+        '[6/15/24, 12:00:00' + NNBSP + 'AM] Alice: Midnight\n' +
+        '[6/15/24, 12:30:00' + NNBSP + 'PM] Bob: Noon\n'
+    );
+    assert(conv.messages[0].timestamp === '2024-06-15T09:00:00.000Z', 'AM time → 09:00 UTC');
+    assert(conv.messages[1].timestamp === '2024-06-15T13:05:30.000Z', 'PM time → 13:05:30 UTC');
+    assert(conv.messages[2].timestamp === '2024-06-15T00:00:00.000Z', '12:00 AM → 00:00 (midnight)');
+    assert(conv.messages[3].timestamp === '2024-06-15T12:30:00.000Z', '12:30 PM → 12:30 (noon)');
+    assert(conv.source.hourCycle === 'h12',                      'hourCycle detected as h12');
+    assert(Contract.validateConversation(conv).valid === true,   'conversation valid');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 17 — 24-hour timestamps (no AM/PM)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 17 — 24-hour timestamps', function () {
+    const conv = adapter.toCanonical(
+        '[15/06/2024, 21:05:00] Alice: Evening\n' +
+        '[15/06/2024, 08:09:00] Bob: Early\n'
+    );
+    assert(conv.messages[0].timestamp === '2024-06-15T21:05:00.000Z', '21:05 stays 21:05 (24h)');
+    assert(conv.messages[1].timestamp === '2024-06-15T08:09:00.000Z', '08:09 stays 08:09 (24h)');
+    assert(conv.source.hourCycle === 'h24',                      'hourCycle detected as h24');
+    assert(conv.source.detectedDateFormat === 'DMY',             'DMY detected from 15 > 12');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — M/D vs D/M ambiguity handling
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 18 — date order ambiguity', function () {
+    const AMBIG = '[3/4/24, 10:00:00' + NNBSP + 'AM] Alice: One\n' +
+                  '[5/6/24, 11:00:00' + NNBSP + 'AM] Bob: Two\n';
+
+    const def = adapter.toCanonical(AMBIG);
+    assert(def.messages[0].timestamp === '2024-03-04T10:00:00.000Z', 'default MDY → 3/4 = March 4');
+    assert(def.source.detectedDateFormat === 'MDY',              'default detected format is MDY');
+    assert(def.diagnostics.ambiguousDates.length === 2,          'both ambiguous dates recorded');
+    assert(def.diagnostics.formatConfidence === 0.5,             'low confidence when ambiguous + no evidence');
+
+    const dmy = adapter.toCanonical(AMBIG, { dateOrder: 'DMY' });
+    assert(dmy.messages[0].timestamp === '2024-04-03T10:00:00.000Z', 'forced DMY → 3/4 = April 3');
+    assert(dmy.source.detectedDateFormat === 'DMY',              'forced format reflected in source');
+
+    const evidence = adapter.toCanonical(
+        '[13/6/24, 09:00:00] Alice: Hi\n' +
+        '[2/6/24, 09:01:00] Bob: Yo\n'
+    );
+    assert(evidence.source.detectedDateFormat === 'DMY',         'DMY inferred from out-of-range day (13)');
+    assert(evidence.messages[0].timestamp === '2024-06-13T09:00:00.000Z', '13/6 → June 13 under DMY');
+    assert(evidence.messages[1].timestamp === '2024-06-02T09:01:00.000Z', 'ambiguous 2/6 follows file DMY → June 2');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — U+200E cleanup + system events preserved
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 19 — U+200E cleanup + system events', function () {
+    const conv = adapter.toCanonical(
+        LRM + '[6/15/24, 9:00:00' + NNBSP + 'AM] ' + LRM + 'Messages and calls are end-to-end encrypted.\n' +
+        '[6/15/24, 9:01:00' + NNBSP + 'AM] Alice: Hello\n'
+    );
+    assert(conv.systemEvents.length === 1,                       'system line preserved as a SystemEvent (not dropped)');
+    assert(conv.systemEvents[0].kind === 'encryption-notice',    'encryption notice classified');
+    assert(conv.systemEvents[0].text.indexOf(LRM) === -1,        'U+200E stripped from system text');
+    assert(conv.messages.length === 1,                           'one real message');
+    assert(conv.messages[0].text === 'Hello',                    'message text clean');
+    assert(Contract.validateConversation(conv).valid === true,   'conversation valid');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 20 — multi-line messages (incl. blank-line preservation) + colon bodies
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 20 — multi-line + colon bodies', function () {
+    const conv = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: First line\n' +
+        'Second line\n' +
+        '\n' +
+        'Fourth line\n' +
+        '[6/15/24, 9:01:00' + NNBSP + 'AM] Bob: Re: the 3:00 meeting\n'
+    );
+    assert(conv.messages.length === 2,                           'multi-line block counts as one message');
+    assert(conv.messages[0].text === 'First line\nSecond line\n\nFourth line', 'all lines incl. blank preserved');
+    assert(conv.messages[0].text.indexOf('\n\n') !== -1,         'intentional blank line preserved');
+    assert(conv.messages[1].text === 'Re: the 3:00 meeting',     'colon-containing body kept intact');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 21 — media: <Media omitted> placeholder + <attached: file>
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 21 — media placeholders + attachments', function () {
+    const omitted = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Bob: <Media omitted>\n');
+    assert(omitted.messages[0].type === 'media',                 '<Media omitted> → type media');
+    assert(omitted.messages[0].media.length === 1,               'one media attachment');
+    assert(omitted.messages[0].media[0].present === false,       'omitted media is marked not present');
+    assert(omitted.messages[0].media[0].placeholderReason === 'omitted', 'placeholderReason omitted');
+    assert(omitted.messages[0].text === null,                    'omitted media has no text');
+
+    const image = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Bob: image omitted\n');
+    assert(image.messages[0].media[0].kind === 'image',          'image omitted → kind image');
+
+    const attached = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Bob: ' + LRM + '<attached: 00000042-PHOTO-2024-06-15-09-00-00.jpg>\n'
+    );
+    assert(attached.messages[0].type === 'media',                '<attached:> → type media');
+    assert(attached.messages[0].media[0].filename === '00000042-PHOTO-2024-06-15-09-00-00.jpg', 'filename captured');
+    assert(attached.messages[0].media[0].kind === 'image',       'jpg → image kind');
+    assert(attached.messages[0].media[0].present === null,       'attached file present is unknown (no ZIP in P2)');
+    assert(attached.messages[0].media[0].placeholderReason === 'referenced-in-text', 'attached placeholderReason');
+    assert(Contract.validateConversation(attached).valid === true, 'attachment conversation valid');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 22 — edited / deleted markers
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 22 — edited / deleted markers', function () {
+    const edited = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Bob: I meant tomorrow <This message was edited>\n'
+    );
+    assert(edited.messages[0].isEdited === true,                 'edited marker → isEdited true');
+    assert(edited.messages[0].text === 'I meant tomorrow',       'edited suffix stripped from text');
+    assert(edited.messages[0].type === 'text',                   'edited message is still text');
+
+    const deleted = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Bob: This message was deleted\n');
+    assert(deleted.messages[0].isDeleted === true,               'deleted marker → isDeleted true');
+    assert(deleted.messages[0].type === 'deleted',               'deleted message → type deleted');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 23 — malformed / unparsed lines recorded in diagnostics (not dropped)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 23 — diagnostics for malformed input', function () {
+    const orphan = adapter.toCanonical(
+        'This is a stray line with no timestamp\n' +
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: Hi\n'
+    );
+    assert(orphan.diagnostics.counts.unparsed === 1,             'orphan line counted as unparsed');
+    assert(orphan.diagnostics.unparsedLines.length === 1,        'unparsed line recorded, not silently dropped');
+    assert(orphan.diagnostics.unparsedLines[0].line.indexOf('stray line') !== -1, 'unparsed line text preserved');
+    assert(orphan.messages.length === 1,                         'the valid message still imports');
+
+    const badTs = adapter.toCanonical('[13/13/24, 9:00:00' + NNBSP + 'AM] Alice: Hi\n');
+    assert(badTs.messages.length === 1,                          'message with bad date still imported (content kept)');
+    assert(badTs.messages[0].timestamp === null,                 'unparseable timestamp → null, not a bogus value');
+    assert(badTs.diagnostics.warnings.length >= 1,               'bad timestamp recorded as a warning');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 24 — participants preserved as Participant objects (P3 self-ID prep)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 24 — participants preserved', function () {
+    const conv = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: Hi\n' +
+        '[6/15/24, 9:01:00' + NNBSP + 'AM] Bob: Yo\n' +
+        '[6/15/24, 9:02:00' + NNBSP + 'AM] Alice: Again\n'
+    );
+    assert(conv.participants.length === 2,                       'two distinct participants');
+    const alice = conv.participants[0];
+    assert(typeof alice.id === 'string' && alice.id.indexOf('par-') === 0, 'participant has stable par- id');
+    assert(alice.displayName === 'Alice',                       'display name preserved (not a bare string only)');
+    assert(alice.isSelf === false,                              'no one is self at import time (P3 sets this)');
+    assert(Array.isArray(alice.aliases),                        'aliases array present for future name changes');
+    assert(alice.messageCount === 2,                            'per-participant message count tallied');
+    assert(conv.participants.every(function (p) { return p.isSelf === false; }), 'all participants default to not-self');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 25 — group detection + system events (P4 prep)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 25 — group detection + group system events', function () {
+    const conv = adapter.toCanonical(
+        LRM + '[15/06/2024, 20:00:00] ' + LRM + 'You created group "Trip"\n' +
+        LRM + '[15/06/2024, 20:00:05] ' + LRM + 'You added Alice\n' +
+        LRM + '[15/06/2024, 20:00:10] ' + LRM + 'You added Bob\n' +
+        '[15/06/2024, 20:01:00] Alice: Hi all\n' +
+        '[15/06/2024, 20:02:00] Bob: Hey\n' +
+        '[15/06/2024, 20:03:00] Carol: Hello\n' +
+        LRM + '[15/06/2024, 21:00:00] ' + LRM + 'Alice left\n'
+    );
+    assert(conv.isGroup === true,                                'three speakers → isGroup true');
+    assert(conv.participants.length === 3,                       'three participants retained (no them-collapse)');
+    const kinds = conv.systemEvents.map(function (s) { return s.kind; });
+    assert(kinds.indexOf('group-create') !== -1,                'group-create event preserved');
+    assert(kinds.indexOf('add-participant') !== -1,             'add-participant event preserved');
+    assert(kinds.indexOf('leave') !== -1,                       'leave event preserved');
+    assert(conv.systemEvents.length === 4,                       'all four system events preserved');
+    assert(Contract.validateConversation(conv).valid === true,   'group conversation valid');
+
+    const oneToOne = adapter.toCanonical(
+        '[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: Hi\n' +
+        '[6/15/24, 9:01:00' + NNBSP + 'AM] Bob: Yo\n'
+    );
+    assert(oneToOne.isGroup === false,                          'two-speaker chat → isGroup false');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 26 — empty / invalid input: no throw, valid empty conversation
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 26 — empty / invalid input', function () {
+    let c1, c2, c3, c4;
+    assert((function () { try { c1 = adapter.toCanonical(''); return true; } catch (e) { return false; } }()), 'toCanonical(\'\') does not throw');
+    assert((function () { try { c2 = adapter.toCanonical(null); return true; } catch (e) { return false; } }()), 'toCanonical(null) does not throw');
+    assert((function () { try { c3 = adapter.toCanonical(undefined); return true; } catch (e) { return false; } }()), 'toCanonical(undefined) does not throw');
+    assert((function () { try { c4 = adapter.toCanonical(42); return true; } catch (e) { return false; } }()), 'toCanonical(42) does not throw');
+    assert(c1.messages.length === 0 && c1.participants.length === 0, 'empty input → empty conversation');
+    assert(Contract.validateConversation(c1).valid === true,    'empty conversation still satisfies the contract');
+    assert(c1.source.detectedDateFormat === null,               'no date format detected for empty input');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 27 — legacy import() path unchanged by the canonical addition
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 27 — legacy path preserved (strangler-fig)', function () {
+    const legacy = adapter['import'](FIXTURE);
+    assert(legacy.memories.length === 8,                         'legacy import still yields 8 memories');
+    assert(legacy.sourcePlatformId === 'whatsapp',              'legacy sourcePlatformId unchanged');
+    assert(legacy.memories[0].senderRole === 'contact',         'legacy senderRole still contact');
+    assert(typeof adapter.normalizeAll === 'function',          'legacy normalizeAll still present');
+    assert(typeof adapter.canHandle === 'function',             'legacy canHandle still present');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 28 — canonical semantic guard (no commerce / readiness fields)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 28 — canonical semantic guard', function () {
+    const conv = adapter.toCanonical('[6/15/24, 9:00:00' + NNBSP + 'AM] Alice: Hi\n');
+    assert(conv.proofReady === undefined,                       'conversation has no proofReady');
+    assert(conv.checkoutReady === undefined,                    'conversation has no checkoutReady');
+    assert(conv.manufacturingReady === undefined,               'conversation has no manufacturingReady');
+    assert(conv.messages[0].vendor === undefined,               'message has no vendor field');
+    assert(conv.messages[0].order === undefined,                'message has no order field');
+    assert(conv.messages[0].reactions.length === 0,             'WhatsApp txt carries no reactions (field empty)');
+    assert(conv.messages[0].replyTo.available === false,        'WhatsApp txt marks replies unavailable');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 29 — committed synthetic iOS group fixture (file path, 24h, DMY, U+200E)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 29 — synthetic iOS group fixture', function () {
+    const conv = adapter.toCanonical(GROUP_FIXTURE, { originalFilename: 'ios-group-chat.txt' });
+    assert(conv.isGroup === true,                                'fixture is detected as a group');
+    assert(conv.participants.length === 3,                       'three participants (Amina, Kwame, Bola)');
+    assert(conv.messages.length === 7,                           'seven real messages');
+    assert(conv.systemEvents.length === 6,                       'six system events preserved');
+
+    const kinds = conv.systemEvents.map(function (s) { return s.kind; });
+    assert(kinds.indexOf('encryption-notice') !== -1,           'encryption notice preserved');
+    assert(kinds.indexOf('group-create') !== -1,                'group-create preserved');
+    assert(kinds.indexOf('add-participant') !== -1,             'add-participant preserved');
+    assert(kinds.indexOf('subject-change') !== -1,              'subject-change preserved');
+    assert(kinds.indexOf('leave') !== -1,                       'leave preserved');
+    assert(conv.systemEvents.every(function (s) { return s.text.indexOf(LRM) === -1; }), 'U+200E stripped from all system text');
+
+    assert(conv.source.detectedDateFormat === 'DMY',            'DD/MM/YYYY detected as DMY');
+    assert(conv.source.hourCycle === 'h24',                     '24-hour clock detected');
+    assert(conv.source.originalFilename === 'ios-group-chat.txt', 'originalFilename carried into source metadata');
+
+    const multi = conv.messages.find(function (m) { return m.text && m.text.indexOf('\n') !== -1; });
+    assert(multi && multi.text.indexOf('what dates') !== -1,    'multi-line message reassembled across lines');
+
+    const omitted = conv.messages.find(function (m) { return m.media.length && m.media[0].placeholderReason === 'omitted'; });
+    assert(omitted && omitted.media[0].present === false,       '<Media omitted> → not-present placeholder');
+
+    const attached = conv.messages.find(function (m) { return m.media.length && m.media[0].filename; });
+    assert(attached && /\.jpg$/.test(attached.media[0].filename), '<attached:> filename captured (.jpg)');
+    assert(attached.media[0].kind === 'image' && attached.media[0].present === null, 'attached jpg → image, present unknown');
+
+    assert(conv.messages.some(function (m) { return m.isEdited === true; }),  'an edited message detected');
+    assert(conv.messages.some(function (m) { return m.isDeleted === true && m.type === 'deleted'; }), 'a deleted message detected');
+
+    assert(Contract.validateConversation(conv).valid === true,  'fixture conversation satisfies the adapter contract');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

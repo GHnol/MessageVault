@@ -521,6 +521,17 @@ assert(typeof KMEngine.ImportAdapterContract.validateConversation === 'function'
 assert(KMEngine.ImportAdapterContract.validateConversation(ccConv).valid === true, 'valid canonical conversation passes the contract');
 assert(KMEngine.ImportAdapterContract.validateAdapter(KMEngine.whatsappTxtAdapter).valid === true, 'existing whatsapp adapter satisfies the adapter interface contract');
 
+// ── WHATSAPP CANONICAL PARSE PATH — smoke (Package P2) ───────────────────────
+
+suite('whatsappTxtAdapter.toCanonical — smoke');
+assert(typeof KMEngine.whatsappTxtAdapter.toCanonical === 'function', 'toCanonical is a function');
+const waCanon = KMEngine.whatsappTxtAdapter.toCanonical('[6/15/24, 9:00:00 AM] Alice: Hi\n[6/15/24, 9:01:00 AM] Bob: Hey\n');
+assert(waCanon.platform === 'whatsapp',                              'canonical conversation platform is whatsapp');
+assert(waCanon.messages.length === 2,                               'canonical conversation has 2 messages');
+assert(waCanon.participants.length === 2 && waCanon.participants.every(function (p) { return p.isSelf === false; }), 'two participants, none self (P3 sets self)');
+assert(waCanon.messages[0].timestamp === '2024-06-15T09:00:00.000Z', 'timestamp parsed deterministically to ISO UTC');
+assert(KMEngine.ImportAdapterContract.validateConversation(waCanon).valid === true, 'canonical whatsapp conversation passes the contract');
+
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
 console.log('\n' + '─'.repeat(60));
