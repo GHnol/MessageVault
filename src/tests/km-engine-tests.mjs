@@ -50,6 +50,8 @@ load('src/core/response-time-analysis.js');
 load('src/core/message-length-analysis.js');
 load('src/core/conversation-initiation.js');
 load('src/core/reaction-analysis.js');
+load('src/core/canonical-conversation.js');
+load('src/core/import-adapter-contract.js');
 
 const { KMEngine } = ctx.window;
 
@@ -495,6 +497,29 @@ assert(typeof raEmpty === 'object' && raEmpty !== null,                         
 assert(raEmpty.totalReactions === 0 && raEmpty.topReactor === null,                             'compute([]) returns zero-state');
 assert(Array.isArray(raEmpty.topReactionEmojis) && raEmpty.topReactionEmojis.length === 0,      'compute([]) topReactionEmojis is empty array');
 assert(Object.keys(KMEngine.ReactionAnalysis).length === 1,                                     'ReactionAnalysis exposes only compute');
+
+// ── CANONICAL CONVERSATION + ADAPTER CONTRACT — smoke ────────────────────────
+
+suite('CanonicalConversation — smoke');
+assert(KMEngine.CanonicalConversation !== undefined,                 'CanonicalConversation exists on KMEngine');
+assert(typeof KMEngine.CanonicalConversation.createConversation === 'function', 'createConversation is a function');
+const ccPar = KMEngine.CanonicalConversation.createParticipant({ displayName: 'Alex', isSelf: false });
+const ccMsg = KMEngine.CanonicalConversation.createMessage({ participantId: ccPar.id, timestamp: '2024-06-01T09:00:00.000Z', text: 'Hi', importIndex: 0 });
+const ccConv = KMEngine.CanonicalConversation.createConversation({
+    platform:     'whatsapp',
+    participants: [ccPar],
+    messages:     [ccMsg],
+    source:       KMEngine.CanonicalConversation.createSourceMetadata({ platform: 'whatsapp' }),
+    diagnostics:  KMEngine.CanonicalConversation.createImportDiagnostics({})
+});
+assert(typeof ccConv.id === 'string' && ccConv.id.indexOf('cnv-') === 0, 'conversation has deterministic cnv- id');
+assert(ccConv.messages.length === 1 && ccConv.messages[0].participantId === ccPar.id, 'message links to participant');
+
+suite('ImportAdapterContract — smoke');
+assert(KMEngine.ImportAdapterContract !== undefined,                 'ImportAdapterContract exists on KMEngine');
+assert(typeof KMEngine.ImportAdapterContract.validateConversation === 'function', 'validateConversation is a function');
+assert(KMEngine.ImportAdapterContract.validateConversation(ccConv).valid === true, 'valid canonical conversation passes the contract');
+assert(KMEngine.ImportAdapterContract.validateAdapter(KMEngine.whatsappTxtAdapter).valid === true, 'existing whatsapp adapter satisfies the adapter interface contract');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
