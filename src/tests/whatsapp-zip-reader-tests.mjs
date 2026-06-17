@@ -13,6 +13,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { deflateRawSync } from 'node:zlib';
+import { summarizeArchive, classifyArchive, redactionSelfCheck, findPrivacyLeaks } from '../../scripts/validate-private-whatsapp-zips.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -446,6 +447,65 @@ const CHAT = '[6/13/24, 9:02:00 AM] Amina: ‎Photo\n<attached: 00000042-PHOTO.j
         const ra2 = await Zip.readArchive(folderZip);
         assert(JSON.stringify(ra1.mediaManifest) === JSON.stringify(ra2.mediaManifest), 'media manifest is deterministic across reads');
     }
+
+    // ── Suite 16 — privacy-safe validation harness summaries (P5C) ────────────
+    // Exercises the production scripts/validate-private-whatsapp-zips.mjs
+    // summarizers against synthetic archives carrying private-looking data,
+    // proving the privacy-safe summary leaks none of it and classifies
+    // PASS / WARN / FAIL correctly. All method 0 (stored) so no DecompressionStream
+    // is required — deterministic across runtimes.
+    suite('Suite 16 — private ZIP validation harness (P5C)');
+    const PRIV = ['Amina', 'Bilal', '+1 555 123 4567', 'secret body text', '00000042-PHOTO.jpg', '00000099-MISSING.jpg'];
+
+    async function summarizeFor(zipBytes, label) {
+        const cdResult      = Zip.readCentralDirectory(zipBytes);
+        const archiveResult = await Zip.readArchive(zipBytes);
+        const conversation  = await adapter.importZip(zipBytes);
+        const contractValid = KMEngine.ImportAdapterContract.validateConversation(conversation).valid;
+        return summarizeArchive({ label, cdResult, archiveResult, conversation, contractValid });
+    }
+
+    const passZip = buildZip([
+        { name: '_chat.txt', method: 0, data:
+            '[6/13/24, 9:02:00 AM] Amina: secret body text\n' +
+            '[6/13/24, 9:03:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n' +
+            '[6/13/24, 9:04:00 AM] Bilal: ok\n' },
+        { name: '00000042-PHOTO.jpg', data: 'JPEGDATAxxxxxxxxxxxx', method: 0 }
+    ]);
+    const pS = await summarizeFor(passZip, 'archive #01');
+    assert(classifyArchive(pS) === 'PASS',                      'clean archive classifies PASS');
+    assert(pS.messageCount === 3 && pS.participantCount === 2,  'message + participant counts captured');
+    assert(pS.mediaPresentCount === 1 && pS.mediaMissingCount === 0, 'present media counted, none missing');
+    assert(pS.chatFileFound === true && pS.archiveReadable === true, 'chat found + archive readable');
+    assert(redactionSelfCheck(pS).length === 0,                 'PASS summary passes the structural privacy self-check');
+    assert(findPrivacyLeaks(pS, PRIV).length === 0,             'PASS summary leaks no names/bodies/phones/filenames');
+
+    const warnZip = buildZip([
+        { name: '_chat.txt', method: 0, data:
+            '[6/13/24, 9:02:00 AM] Amina: secret body text\n' +
+            '[6/13/24, 9:03:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n' +
+            '[6/13/24, 9:04:00 AM] +1 555 123 4567: <attached: 00000099-MISSING.jpg>\n' +
+            '[6/13/24, 9:05:00 AM] Bilal: <Media omitted>\n' },
+        { name: '00000042-PHOTO.jpg', data: 'JPEGDATAxxxxxxxxxxxx', method: 0 }
+    ]);
+    const wS = await summarizeFor(warnZip, 'archive #02');
+    assert(classifyArchive(wS) === 'WARN',                      'missing-media archive classifies WARN');
+    assert(wS.mediaMissingCount === 1,                          'missing-from-archive media counted');
+    assert(wS.mediaOmittedCount === 1,                          '<Media omitted> counted separately from missing');
+    assert(redactionSelfCheck(wS).length === 0,                 'WARN summary passes the structural privacy self-check');
+    assert(findPrivacyLeaks(wS, PRIV).length === 0,             'WARN summary leaks no private data (incl. missing filename + phone sender)');
+    assert(Object.keys(wS.diagnosticCodeCounts).every(function (c) { return /^[A-Z][A-Z0-9_]*$/.test(c); }), 'diagnostics tallied only by safe enum codes');
+
+    const failZip = buildZip([{ name: '00000042-PHOTO.jpg', data: 'JPEGDATA', method: 0 }]);
+    const fS = await summarizeFor(failZip, 'archive #03');
+    assert(classifyArchive(fS) === 'FAIL',                      'no-chat archive classifies FAIL');
+    assert(fS.chatFileFound === false,                          'no chat file reported');
+    assert(fS.rejectionReason === 'NO_CHAT_TXT_IN_ARCHIVE',     'rejection reason is the engine enum');
+    assert(findPrivacyLeaks(fS, PRIV).length === 0,             'FAIL summary leaks no private data');
+
+    // The structural guard must actually catch a leak, not merely pass clean input.
+    assert(redactionSelfCheck({ ...pS, rejectionReason: 'Amina Mensah' }).length > 0,        'self-check catches a non-enum (name-shaped) field');
+    assert(redactionSelfCheck({ ...pS, diagnosticCodeCounts: { 'photo.jpg': 1 } }).length > 0, 'self-check catches a filename-shaped diagnostic key');
 
     // ── Summary ───────────────────────────────────────────────────────────────
     console.log('\n' + '─'.repeat(60));
