@@ -20,24 +20,31 @@ function load(ctx, relPath) {
     runInContext(readFileSync(join(__dirname, '../../', relPath), 'utf8'), ctx);
 }
 
-function makeCtx() {
-    const ctx = createContext({
-        window: {}, console,
-        DecompressionStream: globalThis.DecompressionStream,
-        Response: globalThis.Response,
-        TextDecoder: globalThis.TextDecoder
-    });
-    load(ctx, 'src/core/source-platforms.js');
-    load(ctx, 'src/core/normalized-memory.js');
-    load(ctx, 'src/core/import-adapters.js');
-    load(ctx, 'src/core/canonical-conversation.js');
-    load(ctx, 'src/core/import-adapter-contract.js');
-    load(ctx, 'src/core/whatsapp-zip-reader.js');
-    load(ctx, 'src/adapters/whatsapp-txt-adapter.js');
+const MODULES = [
+    'src/core/source-platforms.js',
+    'src/core/normalized-memory.js',
+    'src/core/import-adapters.js',
+    'src/core/canonical-conversation.js',
+    'src/core/import-adapter-contract.js',
+    'src/core/whatsapp-zip-reader.js',
+    'src/adapters/whatsapp-txt-adapter.js'
+];
+
+// globals lets a suite control which Web APIs the engine sees — e.g. omit
+// DecompressionStream to exercise the decompression-unavailable path deterministically.
+function makeCtx(globals) {
+    const ctx = createContext(Object.assign({ window: {}, console }, globals || {}));
+    for (const m of MODULES) load(ctx, m);
     return ctx.window.KMEngine;
 }
 
-const KMEngine = makeCtx();
+const FULL_GLOBALS = {
+    DecompressionStream: globalThis.DecompressionStream,
+    Response: globalThis.Response,
+    TextDecoder: globalThis.TextDecoder
+};
+
+const KMEngine = makeCtx(FULL_GLOBALS);
 const Zip     = KMEngine.WhatsAppZip;
 const adapter = KMEngine.whatsappTxtAdapter;
 const HAS_INFLATE = typeof globalThis.DecompressionStream !== 'undefined';
@@ -48,7 +55,11 @@ function u16(n) { return [n & 0xFF, (n >>> 8) & 0xFF]; }
 function u32(n) { return [n & 0xFF, (n >>> 8) & 0xFF, (n >>> 16) & 0xFF, (n >>> 24) & 0xFF]; }
 function toBytes(d) { return typeof d === 'string' ? enc.encode(d) : (d instanceof Uint8Array ? d : new Uint8Array(d)); }
 
-// entries: [{ name, data, method(0|8, default 8), encrypted, zip64, flags }]
+// entries: [{ name, data, method(0|8, default 8), encrypted, zip64, flags, rawComp, uncSize }]
+//   rawComp — exact bytes to write as the stored/compressed payload (bypasses
+//             deflate); lets a test inject corrupt compressed bytes to prove media
+//             is never decompressed.
+//   uncSize — override the declared uncompressed size in the headers.
 function buildZip(entries, opts) {
     opts = opts || {};
     const local = [], central = [], records = [];
@@ -56,15 +67,17 @@ function buildZip(entries, opts) {
     for (const e of entries) {
         const raw = toBytes(e.data == null ? '' : e.data);
         const method = e.method == null ? 8 : e.method;
-        const stored = method === 8 ? new Uint8Array(deflateRawSync(raw)) : raw;
+        const stored = e.rawComp != null ? toBytes(e.rawComp)
+                     : (method === 8 ? new Uint8Array(deflateRawSync(raw)) : raw);
+        const unc = e.uncSize != null ? e.uncSize : raw.length;
         const nameBytes = enc.encode(e.name);
         let flags = e.flags != null ? e.flags : 0x0800;
         if (e.encrypted) flags |= 0x0001;
         const lh = [].concat(
             u32(0x04034b50), u16(20), u16(flags), u16(method), u16(0), u16(0),
-            u32(0), u32(stored.length), u32(raw.length), u16(nameBytes.length), u16(0)
+            u32(0), u32(stored.length), u32(unc), u16(nameBytes.length), u16(0)
         );
-        records.push({ nameBytes, method, flags, comp: stored.length, unc: raw.length, offset, zip64: !!e.zip64 });
+        records.push({ nameBytes, method, flags, comp: stored.length, unc: unc, offset, zip64: !!e.zip64 });
         local.push(Uint8Array.from(lh), nameBytes, stored);
         offset += lh.length + nameBytes.length + stored.length;
     }
@@ -173,6 +186,7 @@ const CHAT = '[6/13/24, 9:02:00 AM] Amina: ‎Photo\n<attached: 00000042-PHOTO.j
     assert(mm.manifest.some(function (m) { return m.basename === '00000042-PHOTO.jpg'; }), 'media basename in manifest');
     assert(mm.diagnostics.length === 0,                       'no diagnostics for clean manifest');
 
+    // same basename under different folder paths => ambiguous for <attached:> match
     const dupCd = Zip.readCentralDirectory(buildZip([
         { name: '_chat.txt', data: CHAT, method: 0 },
         { name: 'a/DUP.jpg', data: 'X', method: 0 },
@@ -180,7 +194,31 @@ const CHAT = '[6/13/24, 9:02:00 AM] Amina: ‎Photo\n<attached: 00000042-PHOTO.j
     ]));
     const dupMm = Zip.buildMediaManifest(dupCd.entries, Zip.findChatTxt(dupCd.entries).entry);
     assert(dupMm.manifest.length === 1,                       'duplicate basename kept once');
-    assert(dupMm.diagnostics.some(function (d) { return d.code === 'DUPLICATE_ARCHIVE_ENTRY'; }), 'duplicate diagnosed');
+    assert(dupMm.diagnostics.some(function (d) { return d.code === 'DUPLICATE_MEDIA_BASENAME'; }), 'duplicate basename diagnosed');
+    assert(dupMm.manifest[0].ambiguous === true,              'kept entry flagged ambiguous');
+    assert(dupMm.diagnostics.every(function (d) { return d.code !== 'DUPLICATE_ARCHIVE_ENTRY'; }), 'different paths are not an exact-duplicate entry');
+
+    // the exact same archive-relative name twice => structural duplicate entry
+    const dupNameCd = Zip.readCentralDirectory(buildZip([
+        { name: '_chat.txt', data: CHAT, method: 0 },
+        { name: 'media/SAME.jpg', data: 'X', method: 0 },
+        { name: 'media/SAME.jpg', data: 'Y', method: 0 }
+    ]));
+    const dupNameMm = Zip.buildMediaManifest(dupNameCd.entries, Zip.findChatTxt(dupNameCd.entries).entry);
+    assert(dupNameMm.manifest.length === 1,                   'exact-duplicate name kept once');
+    assert(dupNameMm.diagnostics.some(function (d) { return d.code === 'DUPLICATE_ARCHIVE_ENTRY'; }), 'exact-duplicate entry diagnosed');
+    assert(dupNameMm.manifest[0].ambiguous !== true,          'exact-duplicate kept entry is not basename-ambiguous');
+
+    // absolute / traversal entry names are diagnosed (sourceRef must stay archive-relative)
+    const suspCd = Zip.readCentralDirectory(buildZip([
+        { name: '_chat.txt', data: CHAT, method: 0 },
+        { name: '/etc/passwd.jpg', data: 'X', method: 0 },
+        { name: '../escape.png', data: 'Y', method: 0 }
+    ]));
+    const suspMm = Zip.buildMediaManifest(suspCd.entries, Zip.findChatTxt(suspCd.entries).entry);
+    assert(suspMm.diagnostics.filter(function (d) { return d.code === 'SUSPICIOUS_ENTRY_NAME'; }).length === 2, 'absolute + traversal names diagnosed');
+    assert(Zip.isSuspiciousName('/abs.jpg') && Zip.isSuspiciousName('a/../b.jpg') && Zip.isSuspiciousName('C:\\x.jpg'), 'isSuspiciousName flags absolute/traversal');
+    assert(!Zip.isSuspiciousName('media/00000042-PHOTO.jpg') && !Zip.isSuspiciousName('photo.jpg'), 'isSuspiciousName allows normal archive names');
 
     const badMethodCd = Zip.readCentralDirectory(buildZip([
         { name: '_chat.txt', data: CHAT, method: 0 },
@@ -280,6 +318,134 @@ const CHAT = '[6/13/24, 9:02:00 AM] Amina: ‎Photo\n<attached: 00000042-PHOTO.j
     const convFail = await adapter.importZip(buildZip([{ name: 'p.jpg', data: 'X', method: 0 }]));
     assert(convFail.messages.length === 0 && convFail.diagnostics.warnings.some(function (w) { return w.code === 'ZIP_READ_FAILED'; }),
         'importZip on a no-chat archive returns empty-but-valid with ZIP_READ_FAILED');
+
+    // ── Suite 10 — media bytes are never decompressed (P5B) ───────────────────
+    suite('Suite 10 — media never decompressed');
+    // A media entry declared deflate (method 8) but carrying GARBAGE compressed
+    // bytes. If the manifest tried to inflate it, this would error; it must not —
+    // only central-directory metadata is read for media.
+    const garbageMedia = buildZip([
+        { name: '_chat.txt', data: CHAT, method: 0 },
+        { name: '00000042-PHOTO.jpg', method: 8, rawComp: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]), uncSize: 123456 }
+    ]);
+    const gmCd = Zip.readCentralDirectory(garbageMedia);
+    const gmMm = Zip.buildMediaManifest(gmCd.entries, Zip.findChatTxt(gmCd.entries).entry);
+    assert(gmMm.manifest.length === 1,                        'manifest built despite corrupt media bytes');
+    assert(gmMm.manifest[0].byteSize === 123456,             'byteSize read from central directory, not by inflating');
+    assert(gmMm.diagnostics.length === 0,                     'corrupt media bytes raise no decompression error');
+    if (HAS_INFLATE) {
+        const gmRa = await Zip.readArchive(garbageMedia);
+        assert(gmRa.ok === true,                              'readArchive succeeds with corrupt media (chat is stored)');
+        assert(gmRa.mediaManifest[0].byteSize === 123456,    'readArchive manifest byteSize from CD');
+        assert(gmRa.chatText === CHAT,                        'only the chat text is decompressed/copied');
+    }
+    // manifest builds with no DecompressionStream present at all (media never inflated)
+    const KM_NOINFLATE = makeCtx({ Response: globalThis.Response, TextDecoder: globalThis.TextDecoder });
+    const niMm = KM_NOINFLATE.WhatsAppZip.buildMediaManifest(gmCd.entries, KM_NOINFLATE.WhatsAppZip.findChatTxt(gmCd.entries).entry);
+    assert(niMm.manifest.length === 1 && niMm.manifest[0].byteSize === 123456, 'manifest built with no DecompressionStream present');
+
+    // ── Suite 11 — malformed / truncated archives (P5B) ───────────────────────
+    suite('Suite 11 — malformed archives');
+    function findEocdOffset(bytes) {
+        const dvv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+        for (let i = bytes.length - 22; i >= 0; i--) {
+            if (dvv.getUint32(i, true) === 0x06054b50) return i;
+        }
+        return -1;
+    }
+    const goodZip = buildZip([{ name: '_chat.txt', data: CHAT, method: 0 }, { name: 'p.jpg', data: 'XXXX', method: 0 }]);
+    const truncated = goodZip.slice(0, Math.floor(goodZip.length / 2));
+    assert(Zip.readCentralDirectory(truncated).reason === 'NO_CENTRAL_DIRECTORY', 'truncated archive => NO_CENTRAL_DIRECTORY');
+    assert((await Zip.readArchive(truncated)).ok === false,   'readArchive rejects truncated archive without throwing');
+
+    // corrupt the first central-directory record signature (EOCD still validates)
+    const corrupt = goodZip.slice();
+    const cdv = new DataView(corrupt.buffer, corrupt.byteOffset, corrupt.byteLength);
+    const eo = findEocdOffset(corrupt);
+    const cdOff = cdv.getUint32(eo + 16, true);
+    corrupt[cdOff] = 0x00; corrupt[cdOff + 1] = 0x00;
+    const ccd = Zip.readCentralDirectory(corrupt);
+    assert(ccd.ok === true && ccd.diagnostics.some(function (d) { return d.code === 'TRUNCATED_CENTRAL_DIRECTORY'; }), 'corrupt central record => TRUNCATED_CENTRAL_DIRECTORY diagnostic');
+    assert((await Zip.readArchive(corrupt)).reason === 'NO_CHAT_TXT_IN_ARCHIVE', 'corrupt central directory handled safely (no chat found)');
+
+    // cdOffset pointing past EOF (not the ZIP64 sentinel)
+    const badOffset = goodZip.slice();
+    const bdv = new DataView(badOffset.buffer, badOffset.byteOffset, badOffset.byteLength);
+    bdv.setUint32(findEocdOffset(badOffset) + 16, badOffset.length + 50, true);
+    assert(Zip.readCentralDirectory(badOffset).reason === 'NO_CENTRAL_DIRECTORY', 'cdOffset past EOF => NO_CENTRAL_DIRECTORY');
+
+    // ── Suite 12 — decompression unavailable (P5B) ────────────────────────────
+    suite('Suite 12 — decompression unavailable');
+    const NIZip = KM_NOINFLATE.WhatsAppZip;
+    const NIad  = KM_NOINFLATE.whatsappTxtAdapter;
+    const deflatedChat = buildZip([{ name: '_chat.txt', data: CHAT, method: 8 }]);
+    const niEntry = NIZip.findChatTxt(NIZip.readCentralDirectory(deflatedChat).entries).entry;
+    const niExtract = await NIZip.extractText(deflatedChat, niEntry);
+    assert(niExtract.ok === false && niExtract.reason === 'DECOMPRESSION_UNAVAILABLE', 'deflate extract fails loudly without DecompressionStream');
+    const niRa = await NIZip.readArchive(deflatedChat);
+    assert(niRa.ok === false && niRa.reason === 'DECOMPRESSION_UNAVAILABLE', 'readArchive surfaces DECOMPRESSION_UNAVAILABLE');
+    const niConv = await NIad.importZip(deflatedChat);
+    assert(niConv.messages.length === 0,                      'importZip on undecompressable chat => empty conversation');
+    assert(niConv.diagnostics.warnings.some(function (w) { return w.code === 'ZIP_READ_FAILED' && w.reason === 'DECOMPRESSION_UNAVAILABLE'; }), 'importZip reports DECOMPRESSION_UNAVAILABLE');
+    assert(KM_NOINFLATE.ImportAdapterContract.validateConversation(niConv).valid === true, 'undecompressable importZip stays contract-valid');
+    const storedNoInflate = buildZip([{ name: '_chat.txt', data: CHAT, method: 0 }]);
+    const niStored = await NIZip.readArchive(storedNoInflate);
+    assert(niStored.ok === true && niStored.chatText === CHAT, 'stored chat extracts without DecompressionStream');
+
+    // ── Suite 13 — importZip failure paths are contract-valid + never throw ────
+    suite('Suite 13 — importZip failure paths contract-valid');
+    const Contract = KMEngine.ImportAdapterContract;
+    async function failCase(label, input, reason) {
+        const c = await adapter.importZip(input);
+        assert(c.messages.length === 0,                       label + ': empty conversation');
+        assert(Contract.validateConversation(c).valid === true, label + ': contract-valid');
+        const w = c.diagnostics.warnings.find(function (x) { return x.code === 'ZIP_READ_FAILED'; });
+        assert(!!w && (reason == null || w.reason === reason), label + ': ZIP_READ_FAILED' + (reason ? ' (' + reason + ')' : ''));
+    }
+    await failCase('empty input',   new Uint8Array(0),                                          'EMPTY_INPUT');
+    await failCase('null input',    null,                                                       'EMPTY_INPUT');
+    await failCase('garbage bytes', enc.encode('no zip here at all ' + 'q'.repeat(120)),        'NO_CENTRAL_DIRECTORY');
+    await failCase('encrypted',     buildZip([{ name: '_chat.txt', data: CHAT, method: 0, encrypted: true }]), 'ARCHIVE_ENCRYPTED');
+    await failCase('zip64',         buildZip([{ name: '_chat.txt', data: CHAT, method: 0, zip64: true }]),     'ARCHIVE_ZIP64_UNSUPPORTED');
+    await failCase('no chat',       buildZip([{ name: 'p.jpg', data: 'X', method: 0 }]),                      'NO_CHAT_TXT_IN_ARCHIVE');
+    await failCase('multiple chat', buildZip([{ name: 'a/_chat.txt', data: 'A', method: 0 }, { name: 'b/_chat.txt', data: 'B', method: 0 }]), 'MULTIPLE_TXT_IN_ARCHIVE');
+    let threw = false;
+    try { await adapter.importZip(new ArrayBuffer(64)); await adapter.importZip(undefined); await adapter.importZip({}); }
+    catch (e) { threw = true; }
+    assert(threw === false,                                   'importZip never throws on odd inputs (ArrayBuffer / undefined / object)');
+
+    // ── Suite 14 — ambiguous media match surfaced through importZip (P5B) ──────
+    suite('Suite 14 — ambiguous media match (importZip)');
+    if (HAS_INFLATE) {
+        const ambZip = buildZip([
+            { name: '_chat.txt', data: '[6/13/24, 9:02:00 AM] Amina: <attached: DUP.jpg>\n', method: 8 },
+            { name: 'a/DUP.jpg', data: 'AAAA', method: 0 },
+            { name: 'b/DUP.jpg', data: 'BBBBBB', method: 0 }
+        ]);
+        const ambConv = await adapter.importZip(ambZip);
+        const atts = [];
+        ambConv.messages.forEach(function (m) { (m.media || []).forEach(function (a) { atts.push(a); }); });
+        assert(atts.length === 1 && atts[0].present === true, 'ambiguous attachment still resolves (first occurrence kept)');
+        assert(ambConv.diagnostics.warnings.some(function (w) { return w.code === 'AMBIGUOUS_MEDIA_MATCH'; }), 'ambiguous match surfaced, not silently guessed');
+        assert(ambConv.diagnostics.warnings.some(function (w) { return w.code === 'DUPLICATE_MEDIA_BASENAME'; }), 'duplicate-basename diagnostic propagated to the conversation');
+        assert(Contract.validateConversation(ambConv).valid === true, 'ambiguous-media conversation is contract-valid');
+    }
+
+    // ── Suite 15 — sourceRef archive-relative only + determinism (P5B) ─────────
+    suite('Suite 15 — sourceRef + determinism');
+    if (HAS_INFLATE) {
+        const folderZip = buildZip([
+            { name: '_chat.txt', data: '[6/13/24, 9:02:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n', method: 8 },
+            { name: 'media/00000042-PHOTO.jpg', data: 'JPEGDATA', method: 0 }
+        ]);
+        const c1 = await adapter.importZip(folderZip);
+        const a1 = c1.messages[0].media[0];
+        assert(a1.sourceRef === 'media/00000042-PHOTO.jpg',  'sourceRef = archive-relative name (with folder)');
+        assert(a1.sourceRef.indexOf('blob:') === -1 && !/^([A-Za-z]:[\\/]|[\\/])/.test(a1.sourceRef), 'sourceRef is never a blob URL or absolute path');
+        const ra1 = await Zip.readArchive(folderZip);
+        const ra2 = await Zip.readArchive(folderZip);
+        assert(JSON.stringify(ra1.mediaManifest) === JSON.stringify(ra2.mediaManifest), 'media manifest is deterministic across reads');
+    }
 
     // ── Summary ───────────────────────────────────────────────────────────────
     console.log('\n' + '─'.repeat(60));

@@ -181,26 +181,58 @@
         return { ok: false, reason: 'MULTIPLE_TXT_IN_ARCHIVE', entry: null, candidates: txts };
     }
 
+    // Flag entry names that are not safe archive-relative names: absolute paths
+    // (drive-letter or root-anchored) or paths containing a ".." traversal segment.
+    // WhatsApp never produces these; sourceRef must stay archive-relative, so such
+    // names are diagnosed loudly rather than silently trusted.
+    function isSuspiciousName(name) {
+        var s = String(name == null ? '' : name);
+        if (/^([A-Za-z]:[\\/]|[\\/])/.test(s)) return true;
+        var parts = s.split(/[\\/]/);
+        for (var i = 0; i < parts.length; i++) if (parts[i] === '..') return true;
+        return false;
+    }
+
     // Manifest of media entries (name + size + method), WITHOUT decompressing any
-    // media bytes. First occurrence of a basename wins; duplicates are diagnosed.
+    // media bytes — only central-directory metadata is read. First occurrence of a
+    // basename wins. Two collision classes are diagnosed distinctly:
+    //   DUPLICATE_ARCHIVE_ENTRY  — the exact same archive-relative name appears
+    //                              twice (a structural anomaly; the later one is
+    //                              dropped).
+    //   DUPLICATE_MEDIA_BASENAME — the same basename under different paths, so an
+    //                              <attached: NAME> marker cannot be resolved to a
+    //                              single file; the kept entry is flagged ambiguous
+    //                              so resolution can surface it rather than guess.
     function buildMediaManifest(entries, chatEntry) {
         var manifest = [];
         var diagnostics = [];
-        var seen = {};
+        var seenName = {};
+        var baseIndex = {};
         var chatName = chatEntry ? chatEntry.name : null;
         for (var i = 0; i < entries.length; i++) {
             var en = entries[i];
             if (!en || en.isDirectory) continue;
             if (chatName && en.name === chatName) continue;
-            var key = en.basename.toLowerCase();
-            if (Object.prototype.hasOwnProperty.call(seen, key)) {
+            var nameKey = String(en.name).toLowerCase();
+            var baseKey = en.basename.toLowerCase();
+            if (Object.prototype.hasOwnProperty.call(seenName, nameKey)) {
                 diagnostics.push({ code: 'DUPLICATE_ARCHIVE_ENTRY', basename: en.basename, name: en.name });
                 continue;
             }
-            seen[key] = true;
+            seenName[nameKey] = true;
+            if (Object.prototype.hasOwnProperty.call(baseIndex, baseKey)) {
+                var kept = manifest[baseIndex[baseKey]];
+                kept.ambiguous = true;
+                diagnostics.push({ code: 'DUPLICATE_MEDIA_BASENAME', basename: en.basename, name: en.name, keptName: kept.name });
+                continue;
+            }
+            if (isSuspiciousName(en.name)) {
+                diagnostics.push({ code: 'SUSPICIOUS_ENTRY_NAME', name: en.name });
+            }
             if (en.method !== METHOD_STORED && en.method !== METHOD_DEFLATE) {
                 diagnostics.push({ code: 'UNSUPPORTED_COMPRESSION', name: en.name, method: en.method });
             }
+            baseIndex[baseKey] = manifest.length;
             manifest.push({
                 name:           en.name,
                 basename:       en.basename,
@@ -313,6 +345,7 @@
         extractText:          extractText,
         readArchive:          readArchive,
         basename:             basename,
+        isSuspiciousName:     isSuspiciousName,
         decodeUtf8:           decodeUtf8
     };
 }());

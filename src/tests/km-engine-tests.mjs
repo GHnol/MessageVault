@@ -566,6 +566,29 @@ assert(KMEngine.WhatsAppZip.readCentralDirectory(new Uint8Array(0)).reason === '
 assert(KMEngine.WhatsAppZip.readCentralDirectory(new Uint8Array([1, 2, 3, 4, 5])).reason === 'NO_CENTRAL_DIRECTORY', 'non-zip bytes → NO_CENTRAL_DIRECTORY');
 assert(typeof KMEngine.whatsappTxtAdapter.importZip === 'function',     'whatsappTxtAdapter.importZip is a function');
 
+// ── WHATSAPP ZIP / MEDIA INTAKE — hardening smoke (Package P5B) ───────────────
+// Synchronous only (this harness injects no DecompressionStream); the async
+// importZip / readArchive paths are covered by whatsapp-zip-reader-tests.mjs.
+
+suite('WhatsAppZip / media intake — P5B hardening smoke');
+assert(typeof KMEngine.WhatsAppZip.isSuspiciousName === 'function',     'isSuspiciousName is a function');
+assert(KMEngine.WhatsAppZip.isSuspiciousName('/abs.jpg') === true && KMEngine.WhatsAppZip.isSuspiciousName('a/../b.jpg') === true, 'isSuspiciousName flags absolute / traversal names');
+assert(KMEngine.WhatsAppZip.isSuspiciousName('media/photo.jpg') === false, 'isSuspiciousName allows normal archive-relative names');
+
+var p5bAmbiguous = KMEngine.whatsappTxtAdapter.toCanonical(
+    '[6/13/24, 9:02:00 AM] Amina: <attached: DUP.jpg>\n',
+    { mediaManifest: [{ name: 'a/DUP.jpg', byteSize: 1 }, { name: 'b/DUP.jpg', byteSize: 2 }] });
+assert(p5bAmbiguous.messages[0].media[0].present === true && p5bAmbiguous.diagnostics.warnings.some(function (w) { return w.code === 'AMBIGUOUS_MEDIA_MATCH'; }), 'duplicate basename → resolve first + AMBIGUOUS_MEDIA_MATCH');
+
+var p5bResolved = KMEngine.whatsappTxtAdapter.toCanonical(
+    '[6/13/24, 9:02:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n',
+    { mediaManifest: [{ name: 'media/00000042-PHOTO.jpg', byteSize: 9 }] });
+assert(p5bResolved.messages[0].media[0].present === true && p5bResolved.messages[0].media[0].sourceRef === 'media/00000042-PHOTO.jpg', 'manifest resolution sets present + archive-relative sourceRef');
+
+var p5bBadManifest = KMEngine.whatsappTxtAdapter.toCanonical(
+    '[6/13/24, 9:02:00 AM] Amina: <attached: Y.jpg>\n', { mediaManifest: 'not-an-array' });
+assert(p5bBadManifest.diagnostics.warnings.some(function (w) { return w.code === 'INVALID_MEDIA_MANIFEST'; }) && p5bBadManifest.messages[0].media[0].present === null, 'non-array manifest → INVALID_MEDIA_MANIFEST, attachment stays present:null');
+
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 
 console.log('\n' + '─'.repeat(60));

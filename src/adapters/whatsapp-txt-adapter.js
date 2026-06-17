@@ -318,12 +318,15 @@
         return 'document';
     }
 
-    // ── ZIP / media manifest resolution (Package P5A) ───────────────────────────
+    // ── ZIP / media manifest resolution (Package P5A; hardened P5B) ─────────────
     // When the caller supplies opts.mediaManifest (the name+size manifest produced by
     // KMEngine.WhatsAppZip from a WhatsApp export .zip), each <attached: FILE> marker
     // is resolved against it: present/byteSize/mimeType/sourceRef are populated from
     // the archive, misses are recorded in diagnostics.mediaMissing, and <Media omitted>
     // stays present:false. No media bytes are read — this resolves links only.
+    // A duplicated basename resolves to the first occurrence and raises an
+    // AMBIGUOUS_MEDIA_MATCH warning (never a silent guess); a non-array manifest
+    // raises INVALID_MEDIA_MANIFEST.
 
     var MIME_BY_EXT = {
         jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif',
@@ -347,23 +350,29 @@
         return cut === -1 ? s : s.slice(cut + 1);
     }
 
-    // Index a manifest ([{name|basename, byteSize}]) by lowercased basename; first wins.
+    // Index a manifest ([{name|basename, byteSize, ambiguous?}]) by lowercased
+    // basename; the first occurrence wins. A basename that appears more than once in
+    // the supplied manifest is recorded as ambiguous so resolution can flag it rather
+    // than silently bind an <attached: NAME> marker to an arbitrary file.
     function indexManifest(manifest) {
-        var index = {};
-        if (!Array.isArray(manifest)) return index;
+        var index = {}, ambiguous = {};
+        if (!Array.isArray(manifest)) return { index: index, ambiguous: ambiguous };
         for (var i = 0; i < manifest.length; i++) {
             var en = manifest[i];
             if (!en) continue;
             var nm = en.name != null ? en.name : en.basename;
             if (nm == null) continue;
             var key = baseNameOf(nm).toLowerCase();
-            if (key && !Object.prototype.hasOwnProperty.call(index, key)) index[key] = en;
+            if (!key) continue;
+            if (Object.prototype.hasOwnProperty.call(index, key)) { ambiguous[key] = true; continue; }
+            index[key] = en;
         }
-        return index;
+        return { index: index, ambiguous: ambiguous };
     }
 
-    function resolveMediaManifest(messages, manifest, mediaMissing) {
-        var index = indexManifest(manifest);
+    function resolveMediaManifest(messages, manifest, mediaMissing, warnings) {
+        var idx = indexManifest(manifest);
+        var index = idx.index, ambiguousKeys = idx.ambiguous;
         for (var i = 0; i < messages.length; i++) {
             var media = messages[i].media || [];
             for (var j = 0; j < media.length; j++) {
@@ -379,6 +388,9 @@
                     att.mimeType = mimeFromFilename(hitName) || att.mimeType;
                     att.sourceRef = hitName;
                     att.placeholderReason = 'resolved-from-archive';
+                    if (warnings && (hit.ambiguous === true || ambiguousKeys[key] === true)) {
+                        warnings.push({ code: 'AMBIGUOUS_MEDIA_MATCH', filename: fname || null, basename: key, resolvedTo: hitName });
+                    }
                 } else {
                     att.present = false;
                     att.placeholderReason = 'missing-from-archive';
@@ -718,11 +730,14 @@
         // uniquely-matching participant's isSelf; non-self speakers stay distinct.
         var selfResult = resolveSelf(participants, opts.self, warnings);
 
-        // Media manifest resolution (Package P5A). Only runs when an archive manifest
-        // is supplied; a txt-only import leaves <attached:> as present:null (P4).
+        // Media manifest resolution (Package P5A/P5B). Only runs when an archive
+        // manifest is supplied; a txt-only import leaves <attached:> as present:null
+        // (P4). A non-array manifest is rejected loudly, not silently ignored.
         var mediaMissing = [];
         if (Array.isArray(opts.mediaManifest)) {
-            resolveMediaManifest(messages, opts.mediaManifest, mediaMissing);
+            resolveMediaManifest(messages, opts.mediaManifest, mediaMissing, warnings);
+        } else if (opts.mediaManifest != null) {
+            warnings.push({ code: 'INVALID_MEDIA_MANIFEST' });
         }
 
         var skipped = groups.length - messages.length - systemEvents.length;

@@ -943,6 +943,45 @@ suite('Suite 42 — diagnostics + integrity', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 43 — manifest resolution hardening (Package P5B)
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 43 — manifest hardening', function () {
+    // duplicate basename in a directly-supplied manifest => resolve first + warn
+    const ambManifest = [
+        { name: 'a/00000042-PHOTO.jpg', byteSize: 10 },
+        { name: 'b/00000042-PHOTO.jpg', byteSize: 20 }
+    ];
+    const amb = adapter.toCanonical('[6/13/24, 9:02:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n', { mediaManifest: ambManifest });
+    const ambAtt = allMedia(amb)[0];
+    assert(ambAtt.present === true,                           'ambiguous basename still resolves to the first occurrence');
+    assert(ambAtt.byteSize === 10 && ambAtt.sourceRef === 'a/00000042-PHOTO.jpg', 'first manifest occurrence wins deterministically');
+    assert(amb.diagnostics.warnings.some(function (w) { return w.code === 'AMBIGUOUS_MEDIA_MATCH'; }), 'AMBIGUOUS_MEDIA_MATCH raised, never a silent guess');
+
+    // a pre-marked ambiguous manifest entry (as produced by KMEngine.WhatsAppZip)
+    const preMarked = adapter.toCanonical('[6/13/24, 9:02:00 AM] Amina: <attached: X.jpg>\n',
+        { mediaManifest: [{ name: 'X.jpg', byteSize: 5, ambiguous: true }] });
+    assert(preMarked.diagnostics.warnings.some(function (w) { return w.code === 'AMBIGUOUS_MEDIA_MATCH'; }), 'manifest entry ambiguous flag honored');
+
+    // non-array manifest => INVALID_MEDIA_MANIFEST, attachments left present:null
+    const badMan = adapter.toCanonical('[6/13/24, 9:02:00 AM] Amina: <attached: Y.jpg>\n', { mediaManifest: { Y: 1 } });
+    assert(badMan.diagnostics.warnings.some(function (w) { return w.code === 'INVALID_MEDIA_MANIFEST'; }), 'non-array manifest rejected loudly');
+    assert(allMedia(badMan)[0].present === null,             'invalid manifest leaves attachment present:null (unresolved)');
+    assert(badMan.diagnostics.mediaMissing.length === 0,     'invalid manifest does not fabricate missing-media entries');
+
+    // <Media omitted> never counted as missing-from-archive even with a manifest present
+    const omittedWithMan = adapter.toCanonical('[6/13/24, 9:02:00 AM] Bilal: <Media omitted>\n', { mediaManifest: [{ name: 'unrelated.jpg', byteSize: 1 }] });
+    const omAtt = allMedia(omittedWithMan)[0];
+    assert(omAtt.present === false && omAtt.placeholderReason === 'omitted', '<Media omitted> stays present:false/omitted with a manifest');
+    assert(omittedWithMan.diagnostics.mediaMissing.length === 0, '<Media omitted> not confused with missing archive media');
+
+    // a clean, unambiguous resolution raises no AMBIGUOUS_MEDIA_MATCH
+    const clean = adapter.toCanonical('[6/13/24, 9:02:00 AM] Amina: <attached: Z.jpg>\n', { mediaManifest: [{ name: 'Z.jpg', byteSize: 3 }] });
+    assert(clean.diagnostics.warnings.every(function (w) { return w.code !== 'AMBIGUOUS_MEDIA_MATCH'; }), 'unambiguous resolution raises no ambiguity warning');
+    assert(Contract.validateConversation(clean).valid === true, 'P5B manifest hardening stays contract-valid');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 
