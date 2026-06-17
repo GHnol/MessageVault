@@ -1,6 +1,6 @@
 # Private WhatsApp ZIP Validation — Package P5C
 
-**Status:** ACTIVE (added in Package P5C — Private WhatsApp ZIP Fixture Validation Harness, 2026-06-17).
+**Status:** ACTIVE (added in Package P5C — Private WhatsApp ZIP Fixture Validation Harness, 2026-06-17; canonical diagnostic vocabulary §11 added in Package P6 — Import Diagnostics + Coverage Consolidation, 2026-06-17).
 **Owner:** Development stream / Claude Code under Operator Mode.
 **Script:** `scripts/validate-private-whatsapp-zips.mjs`
 **Engine under test:** the production native no-dependency path — `KMEngine.WhatsAppZip` (`src/core/whatsapp-zip-reader.js`) + `KMEngine.whatsappTxtAdapter.importZip` (`src/adapters/whatsapp-txt-adapter.js`).
@@ -149,4 +149,60 @@ Each one validated through this harness moves the "real archive shape" risk from
 
 ## 10. Test coverage
 
-The harness's privacy-safe summarization and classification are covered by `src/tests/whatsapp-zip-reader-tests.mjs` **Suite 16** (synthetic archives carrying private-looking data, asserting the summary leaks none of it and classifies PASS/WARN/FAIL). The script's built-in `--selftest` runs the same proof end-to-end at runtime. See `docs/qa/test-strategy.md`.
+The harness's privacy-safe summarization and classification are covered by `src/tests/whatsapp-zip-reader-tests.mjs` **Suite 16** (synthetic archives carrying private-looking data, asserting the summary leaks none of it and classifies PASS/WARN/FAIL). **Suite 17** (Package P6) locks the canonical diagnostic vocabulary below: it proves `UNSUPPORTED_COMPRESSION` is dual-nature (fatal for `_chat.txt`, non-fatal for media), that `TRUNCATED_CENTRAL_DIRECTORY` is a non-fatal notice and never a fatal `reason`, and that the harness `REVIEW_CODES` WARN subset matches §11 exactly. The script's built-in `--selftest` runs the same proof end-to-end at runtime. See `docs/qa/test-strategy.md`.
+
+---
+
+## 11. Canonical import diagnostic vocabulary (Package P6)
+
+This is the single source of truth for the WhatsApp import diagnostic codes. Every runtime path speaks this vocabulary: the native reader (`src/core/whatsapp-zip-reader.js`), the adapter (`src/adapters/whatsapp-txt-adapter.js`, incl. `importZip`), this harness (`scripts/validate-private-whatsapp-zips.mjs`), and the browser ZIP status path (`index.html` — `zipFailureMessage` + `renderZipImportStatus`). Codes are fixed `UPPER_SNAKE` enums and **never carry private data in their code**; data-bearing fields (`name`, `filename`, …) live on the diagnostic object and are only ever read in opt-in `--debug` triage, never in default output or the browser panel.
+
+There are two kinds of code.
+
+### 11.1 Fatal reasons (`ok:false` → import does not render)
+
+A fatal `reason` means the archive (or its `_chat.txt`) could not be read. `importZip` wraps it as `ZIP_READ_FAILED { reason }` and returns an empty-but-valid conversation; the browser maps it to a plain-language error via `zipFailureMessage(reason)`; the harness classifies the archive **FAIL**.
+
+| Reason | When | Browser message (plain language) |
+|---|---|---|
+| `EMPTY_INPUT` | no/empty bytes | "This file appears to be empty." |
+| `NO_CENTRAL_DIRECTORY` | not a valid ZIP / corrupt / incomplete / cd offset past EOF | "This doesn't look like a valid ZIP archive…" |
+| `ARCHIVE_ZIP64_UNSUPPORTED` | ZIP64 sentinel / locator | "This ZIP uses the ZIP64 format, which isn't supported yet…" |
+| `ARCHIVE_ENCRYPTED` | any entry encrypted | "This ZIP is password-protected…" |
+| `NO_CHAT_TXT_IN_ARCHIVE` | no `_chat.txt` candidate | "No chat text file was found inside this ZIP…" |
+| `MULTIPLE_TXT_IN_ARCHIVE` | more than one chat-text candidate | "This ZIP contains more than one chat text file…" |
+| `UNSUPPORTED_COMPRESSION` | **the `_chat.txt` entry** uses a method other than stored/deflate | "The chat file inside this ZIP uses a compression method this app can't open yet…" |
+| `DECOMPRESSION_UNAVAILABLE` | browser lacks `DecompressionStream` and the chat is deflated | "This browser can't unzip files locally…" |
+| `DECOMPRESSION_FAILED` / `BAD_LOCAL_HEADER` / `TRUNCATED_ENTRY` | deflate stream errored / bad local header / declared size past EOF | "The chat inside this ZIP couldn't be read — the archive looks corrupted or incomplete." |
+| `BAD_INPUT` / `BAD_ENTRY` | only from `extractEntryBytes` called directly; **unreachable** via `readArchive`/`importZip` | (falls to the safe default message) |
+
+### 11.2 Non-fatal notices (`ok:true` → import still renders)
+
+A notice means the archive imported but something is worth a human glance. It is surfaced in the `#zipImportStatus` panel (counts + enum codes only, never the data the code carries) and counted as a **WARN** by the harness when it is in the `REVIEW_CODES` subset. It is **never** a fatal `reason` and never shown via `zipFailureMessage`.
+
+| Code | Meaning | Harness WARN (`REVIEW_CODES`) |
+|---|---|---|
+| `TRUNCATED_CENTRAL_DIRECTORY` | central directory ended early; the reader keeps the entries it parsed | yes |
+| `DUPLICATE_ARCHIVE_ENTRY` | the exact same archive-relative name appears twice | yes |
+| `DUPLICATE_MEDIA_BASENAME` | same basename under different paths; kept entry flagged `ambiguous` | yes |
+| `SUSPICIOUS_ENTRY_NAME` | absolute or `..`-traversal entry name | yes |
+| `UNSUPPORTED_COMPRESSION` | **a media entry** uses an unsupported method (media is never decompressed, so non-fatal) | yes |
+| `AMBIGUOUS_MEDIA_MATCH` | an `<attached:>` marker binds to an ambiguous basename (first occurrence kept, never a silent guess) | yes |
+| `INVALID_MEDIA_MANIFEST` | `opts.mediaManifest` is non-null but not an array (attachments left `present:null`) | yes |
+| `WEAK_GROUP_EVIDENCE` | group inferred from weak signals only (subject/icon change) | yes |
+| `BAD_TIMESTAMP` | a message group's timestamp could not be parsed | yes |
+| `CONTRACT_INVALID` | the produced conversation failed `ImportAdapterContract.validateConversation` (also forces harness FAIL via `contractValid`) | yes |
+| `NO_SELF_MATCH` / `MULTIPLE_SELF_MATCHES` / `INVALID_SELF_OPTION` / `SELF_MATCH_BY_*` | self-identification outcomes — emitted **only** when `opts.self` is supplied (not by the ZIP UI or this harness) | no |
+
+`UNSUPPORTED_COMPRESSION` is **dual-nature**: fatal when it is the `_chat.txt` entry (the chat cannot be read), non-fatal when it is a media entry (media is manifest-only and never decompressed). Suite 17 locks both halves.
+
+### 11.3 `importZip` wrapper codes
+
+| Code | Meaning |
+|---|---|
+| `ZIP_READ_FAILED` `{ reason }` | wraps any §11.1 fatal reason into the empty-but-valid conversation |
+| `ZIP_READER_UNAVAILABLE` | `KMEngine.WhatsAppZip` is not loaded in the runtime |
+
+### 11.4 Harness classification statuses
+
+`PASS` / `WARN` / `FAIL` per archive (see §6), plus `SKIP` (`NO_PRIVATE_FIXTURES`), `VALIDATED`, and `UNKNOWN` (a rejection reason that is not a recognized enum). All are non-private enums.

@@ -13,7 +13,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { deflateRawSync } from 'node:zlib';
-import { summarizeArchive, classifyArchive, redactionSelfCheck, findPrivacyLeaks } from '../../scripts/validate-private-whatsapp-zips.mjs';
+import { summarizeArchive, classifyArchive, redactionSelfCheck, findPrivacyLeaks, REVIEW_CODES } from '../../scripts/validate-private-whatsapp-zips.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -506,6 +506,75 @@ const CHAT = '[6/13/24, 9:02:00 AM] Amina: ‎Photo\n<attached: 00000042-PHOTO.j
     // The structural guard must actually catch a leak, not merely pass clean input.
     assert(redactionSelfCheck({ ...pS, rejectionReason: 'Amina Mensah' }).length > 0,        'self-check catches a non-enum (name-shaped) field');
     assert(redactionSelfCheck({ ...pS, diagnosticCodeCounts: { 'photo.jpg': 1 } }).length > 0, 'self-check catches a filename-shaped diagnostic key');
+
+    // ── Suite 17 — diagnostic vocabulary consolidation (P6) ───────────────────
+    // Locks the cross-path WhatsApp import diagnostic vocabulary documented in
+    // docs/qa/private-whatsapp-zip-validation.md §11 so the reader, adapter,
+    // harness, and browser status paths cannot drift apart silently.
+    suite('Suite 17 — diagnostic vocabulary consolidation (P6)');
+
+    // UNSUPPORTED_COMPRESSION is dual-nature. As the _chat.txt entry's method it is a
+    // FATAL reason (the chat cannot be read); readArchive + importZip must surface it
+    // so the browser maps it to a plain-language error (index.html zipFailureMessage).
+    const unsupChat = buildZip([{ name: '_chat.txt', data: CHAT, method: 99 }]);
+    const unsupRa = await Zip.readArchive(unsupChat);
+    assert(unsupRa.ok === false && unsupRa.reason === 'UNSUPPORTED_COMPRESSION', 'readArchive surfaces UNSUPPORTED_COMPRESSION when _chat.txt method is unsupported');
+    const unsupConv = await adapter.importZip(unsupChat);
+    assert(unsupConv.messages.length === 0,                   'importZip on unsupported-method chat => empty conversation');
+    assert(unsupConv.diagnostics.warnings.some(function (w) { return w.code === 'ZIP_READ_FAILED' && w.reason === 'UNSUPPORTED_COMPRESSION'; }), 'importZip wraps UNSUPPORTED_COMPRESSION as ZIP_READ_FAILED');
+    assert(KMEngine.ImportAdapterContract.validateConversation(unsupConv).valid === true, 'unsupported-chat importZip stays contract-valid');
+
+    // As a MEDIA entry's method it is a NON-FATAL notice: media is never decompressed,
+    // so the archive still reads and the manifest is still built (chat is stored here).
+    const unsupMedia = buildZip([
+        { name: '_chat.txt', data: CHAT, method: 0 },
+        { name: 'weird.bin', data: 'X', method: 99 }
+    ]);
+    const unsupMediaRa = await Zip.readArchive(unsupMedia);
+    assert(unsupMediaRa.ok === true,                          'an unsupported-method MEDIA entry does not make the archive fatal');
+    assert(unsupMediaRa.mediaManifest.length === 1,           'manifest still built despite an unsupported media method');
+    assert(unsupMediaRa.diagnostics.some(function (d) { return d.code === 'UNSUPPORTED_COMPRESSION'; }), 'unsupported media method surfaces as a non-fatal diagnostic');
+
+    // TRUNCATED_CENTRAL_DIRECTORY is a non-fatal NOTICE (the reader keeps the entries
+    // it parsed and returns ok:true), never a fatal archive.reason. This is why
+    // index.html's fatal-error map must NOT list it as a corrupted-archive case.
+    const goodForTrunc = buildZip([{ name: '_chat.txt', data: CHAT, method: 0 }, { name: 'p.jpg', data: 'XXXX', method: 0 }]);
+    const truncCorrupt = goodForTrunc.slice();
+    const tdv = new DataView(truncCorrupt.buffer, truncCorrupt.byteOffset, truncCorrupt.byteLength);
+    const tcdOff = tdv.getUint32(findEocdOffset(truncCorrupt) + 16, true);
+    truncCorrupt[tcdOff] = 0x00; truncCorrupt[tcdOff + 1] = 0x00;
+    const tcd = Zip.readCentralDirectory(truncCorrupt);
+    assert(tcd.ok === true && tcd.diagnostics.some(function (d) { return d.code === 'TRUNCATED_CENTRAL_DIRECTORY'; }), 'TRUNCATED_CENTRAL_DIRECTORY is a non-fatal diagnostic (readCentralDirectory stays ok:true)');
+    const tcdRa = await Zip.readArchive(truncCorrupt);
+    assert(tcdRa.reason !== 'TRUNCATED_CENTRAL_DIRECTORY',    'TRUNCATED_CENTRAL_DIRECTORY is never surfaced as a fatal archive.reason');
+
+    // Vocabulary lock — the documented canonical sets. If the engine grows or drops a
+    // code, update docs/qa/private-whatsapp-zip-validation.md §11 and these arrays
+    // together. The harness WARN subset (REVIEW_CODES) must match exactly.
+    const DOCUMENTED_FATAL = [
+        'EMPTY_INPUT', 'NO_CENTRAL_DIRECTORY', 'ARCHIVE_ZIP64_UNSUPPORTED', 'ARCHIVE_ENCRYPTED',
+        'NO_CHAT_TXT_IN_ARCHIVE', 'MULTIPLE_TXT_IN_ARCHIVE', 'UNSUPPORTED_COMPRESSION',
+        'DECOMPRESSION_UNAVAILABLE', 'DECOMPRESSION_FAILED', 'BAD_LOCAL_HEADER', 'TRUNCATED_ENTRY',
+        'BAD_INPUT', 'BAD_ENTRY'
+    ];
+    const DOCUMENTED_REVIEW = [
+        'AMBIGUOUS_MEDIA_MATCH', 'DUPLICATE_MEDIA_BASENAME', 'DUPLICATE_ARCHIVE_ENTRY',
+        'SUSPICIOUS_ENTRY_NAME', 'UNSUPPORTED_COMPRESSION', 'INVALID_MEDIA_MANIFEST',
+        'TRUNCATED_CENTRAL_DIRECTORY', 'WEAK_GROUP_EVIDENCE', 'BAD_TIMESTAMP', 'CONTRACT_INVALID'
+    ];
+    assert(JSON.stringify(REVIEW_CODES.slice().sort()) === JSON.stringify(DOCUMENTED_REVIEW.slice().sort()), 'harness REVIEW_CODES exactly matches the documented WARN vocabulary');
+
+    // Every fatal reason observed across the rejection paths is a documented enum code.
+    const observedFatal = [
+        Zip.readCentralDirectory(new Uint8Array(0)).reason,
+        Zip.readCentralDirectory(enc.encode('not a zip ' + 'x'.repeat(80))).reason,
+        Zip.readCentralDirectory(encZip).reason,
+        Zip.readCentralDirectory(z64).reason,
+        (await Zip.readArchive(buildZip([{ name: 'p.jpg', data: 'X', method: 0 }]))).reason,
+        unsupRa.reason
+    ];
+    assert(observedFatal.every(function (r) { return DOCUMENTED_FATAL.indexOf(r) !== -1; }), 'every observed fatal reason is in the documented FATAL vocabulary');
+    assert(observedFatal.every(function (r) { return /^[A-Z][A-Z0-9_]*$/.test(r); }),        'fatal reasons are UPPER_SNAKE enum codes (no private data)');
 
     // ── Summary ───────────────────────────────────────────────────────────────
     console.log('\n' + '─'.repeat(60));

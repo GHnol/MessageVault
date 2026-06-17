@@ -74,8 +74,12 @@ export function loadEngine() {
 const CODE_RE = /^[A-Z][A-Z0-9_]*$/;
 
 // Diagnostic codes that, on an otherwise-valid import, mean "native path worked
-// but a human should review this archive" → WARN rather than PASS.
-const REVIEW_CODES = [
+// but a human should review this archive" → WARN rather than PASS. This is the
+// canonical WARN subset of the import diagnostic vocabulary; the full vocabulary
+// (fatal reasons + non-fatal notices) is documented in
+// docs/qa/private-whatsapp-zip-validation.md and locked by Suite 17 of
+// src/tests/whatsapp-zip-reader-tests.mjs.
+export const REVIEW_CODES = [
     'AMBIGUOUS_MEDIA_MATCH',
     'DUPLICATE_MEDIA_BASENAME',
     'DUPLICATE_ARCHIVE_ENTRY',

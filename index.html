@@ -4892,10 +4892,14 @@
                     return 'This file appears to be empty.';
                 case 'DECOMPRESSION_UNAVAILABLE':
                     return 'This browser can\'t unzip files locally. Try a recent version of Chrome, Edge, or Safari — or import the chat as a .txt file.';
+                case 'UNSUPPORTED_COMPRESSION':
+                    return 'The chat file inside this ZIP uses a compression method this app can\'t open yet. Try exporting the chat again, or import it as a .txt file.';
+                // TRUNCATED_CENTRAL_DIRECTORY is a non-fatal notice (the reader keeps the
+                // entries it parsed and continues), never a fatal archive.reason — it
+                // surfaces in the diagnostics panel, not here.
                 case 'DECOMPRESSION_FAILED':
                 case 'BAD_LOCAL_HEADER':
                 case 'TRUNCATED_ENTRY':
-                case 'TRUNCATED_CENTRAL_DIRECTORY':
                     return 'The chat inside this ZIP couldn\'t be read — the archive looks corrupted or incomplete.';
                 default:
                     return 'This ZIP couldn\'t be read locally (' + String(reason || 'unknown') + ').';
