@@ -3670,9 +3670,9 @@
             <div class="txt-drop-zone" id="txtDropZone">
                 <div class="txt-drop-icon">📄</div>
                 <div class="txt-drop-text">Drop your file here or click to browse</div>
-                <div class="txt-drop-hint">Supports .txt, .xml and .json exports</div>
+                <div class="txt-drop-hint">Supports .txt, .xml, .json and WhatsApp .zip exports — read locally on your device</div>
             </div>
-            <input type="file" id="fileInput" accept=".txt,.xml,.json" />
+            <input type="file" id="fileInput" accept=".txt,.xml,.json,.zip" />
             <div class="status" id="txtStatus"></div>
         </div>
     </div>
@@ -3719,6 +3719,7 @@
             <button type="button" class="search-close" id="searchClose">Done</button>
         </div>
         <div class="import-quality-panel" id="importQualityPanel" style="display:none;"></div>
+        <div class="import-quality-panel" id="zipImportStatus" style="display:none;"></div>
         <div class="content-quality-panel" id="contentQualityPanel" style="display:none;"></div>
         <div class="conversation-stats-panel" id="conversationStatsPanel" style="display:none;"></div>
         <div class="emoji-analysis-panel" id="emojiAnalysisPanel" style="display:none;"></div>
@@ -3835,6 +3836,9 @@
     <script src="src/core/message-length-analysis.js"></script>
     <script src="src/core/conversation-initiation.js"></script>
     <script src="src/core/reaction-analysis.js"></script>
+    <script src="src/core/canonical-conversation.js"></script>
+    <script src="src/core/import-adapter-contract.js"></script>
+    <script src="src/core/whatsapp-zip-reader.js"></script>
     <script src="src/adapters/txt-export-adapter.js"></script>
     <script src="src/adapters/imessage-chatdb-adapter.js"></script>
     <script src="src/adapters/manual-entry-adapter.js"></script>
@@ -3939,6 +3943,7 @@
         const fileInput = document.getElementById('fileInput');
         const txtStatus             = document.getElementById('txtStatus');
         const importQualityPanel    = document.getElementById('importQualityPanel');
+        const zipImportStatus       = document.getElementById('zipImportStatus');
         const contentQualityPanel      = document.getElementById('contentQualityPanel');
         const conversationStatsPanel   = document.getElementById('conversationStatsPanel');
         const emojiAnalysisPanel       = document.getElementById('emojiAnalysisPanel');
@@ -4119,16 +4124,28 @@
             txtDropZone.classList.remove('drag-over');
         });
 
+        function isZipImportFile(file) {
+            return !!file && /\.zip$/i.test(file.name || '');
+        }
+
+        function dispatchImportFile(file) {
+            if (isZipImportFile(file)) {
+                readWhatsAppZipFile(file);
+            } else {
+                readTxtFile(file);
+            }
+        }
+
         txtDropZone.addEventListener('drop', e => {
             e.preventDefault();
             txtDropZone.classList.remove('drag-over');
             const file = e.dataTransfer.files[0];
-            if (file) readTxtFile(file);
+            if (file) dispatchImportFile(file);
         });
 
         fileInput.addEventListener('change', e => {
             const file = e.target.files[0];
-            if (file) readTxtFile(file);
+            if (file) dispatchImportFile(file);
         });
 
         /* ─────────────────────────────────────────────
@@ -4752,6 +4769,8 @@
             reader.onload = e => {
                 const text = e.target.result;
 
+                if (zipImportStatus) { zipImportStatus.style.display = 'none'; zipImportStatus.innerHTML = ''; }
+
                 if (window.KMEngine && window.KMEngine.whatsappTxtAdapter
                         && window.KMEngine.whatsappTxtAdapter.canHandle(text)) {
                     const result = window.KMEngine.whatsappTxtAdapter.import(text);
@@ -4847,6 +4866,166 @@
             };
 
             reader.readAsText(file);
+        }
+
+        /* ─────────────────────────────────────────────
+           WhatsApp .zip flow (native, no-dependency ZIP reader)
+           Reads the export locally: only _chat.txt is decompressed; media stays a
+           name+size manifest (no media bytes decompressed, no object URLs created,
+           nothing uploaded). Renders via the same legacy WhatsApp .txt path so a .zip
+           import behaves identically to a .txt import; the native ZIP path additionally
+           powers a privacy-safe diagnostics panel (counts + enum codes only).
+        ───────────────────────────────────────────── */
+        function zipFailureMessage(reason) {
+            switch (reason) {
+                case 'ARCHIVE_ENCRYPTED':
+                    return 'This ZIP is password-protected, so it can\'t be opened. Export the chat without a password and try again.';
+                case 'ARCHIVE_ZIP64_UNSUPPORTED':
+                    return 'This ZIP uses the ZIP64 format, which isn\'t supported yet. Try a smaller export, or import the chat as a .txt file.';
+                case 'NO_CHAT_TXT_IN_ARCHIVE':
+                    return 'No chat text file was found inside this ZIP. Make sure you used WhatsApp\'s "Export Chat" on the conversation itself.';
+                case 'MULTIPLE_TXT_IN_ARCHIVE':
+                    return 'This ZIP contains more than one chat text file, so it\'s unclear which to import. Export a single chat and try again.';
+                case 'NO_CENTRAL_DIRECTORY':
+                    return 'This doesn\'t look like a valid ZIP archive. It may be corrupted or incomplete.';
+                case 'EMPTY_INPUT':
+                    return 'This file appears to be empty.';
+                case 'DECOMPRESSION_UNAVAILABLE':
+                    return 'This browser can\'t unzip files locally. Try a recent version of Chrome, Edge, or Safari — or import the chat as a .txt file.';
+                case 'DECOMPRESSION_FAILED':
+                case 'BAD_LOCAL_HEADER':
+                case 'TRUNCATED_ENTRY':
+                case 'TRUNCATED_CENTRAL_DIRECTORY':
+                    return 'The chat inside this ZIP couldn\'t be read — the archive looks corrupted or incomplete.';
+                default:
+                    return 'This ZIP couldn\'t be read locally (' + String(reason || 'unknown') + ').';
+            }
+        }
+
+        async function readWhatsAppZipFile(file) {
+            const KM      = window.KMEngine;
+            const Zip     = KM && KM.WhatsAppZip;
+            const adapter = KM && KM.whatsappTxtAdapter;
+            if (!Zip || !adapter || typeof Zip.readArchive !== 'function' || typeof adapter.import !== 'function') {
+                showStatusIn(txtStatus, 'ZIP import isn\'t available in this build. Try exporting the chat as a .txt file instead.', true);
+                return;
+            }
+
+            if (zipImportStatus) { zipImportStatus.style.display = 'none'; zipImportStatus.innerHTML = ''; }
+            showLoading('Reading your ZIP locally…');
+
+            let uint8;
+            try {
+                const buffer = await file.arrayBuffer();
+                uint8 = new Uint8Array(buffer);
+            } catch (err) {
+                hideLoading();
+                showStatusIn(txtStatus, 'Could not read that file. Try selecting it again.', true);
+                return;
+            }
+
+            let archive;
+            try {
+                archive = await Zip.readArchive(uint8, { originalFilename: file.name });
+            } catch (err) {
+                hideLoading();
+                showStatusIn(txtStatus, 'Something went wrong reading this ZIP locally. The archive may be corrupted.', true);
+                return;
+            }
+
+            if (!archive || !archive.ok) {
+                hideLoading();
+                showStatusIn(txtStatus, zipFailureMessage(archive ? archive.reason : 'UNKNOWN'), true);
+                return;
+            }
+
+            // Contract-validated canonical conversation (native path) — used only for the
+            // diagnostics panel, never for rendering. Best-effort: a failure here must not
+            // block the import, which renders from the legacy path below.
+            let conv = null;
+            if (typeof adapter.importZip === 'function') {
+                try {
+                    conv = await adapter.importZip(uint8, { originalFilename: file.name });
+                } catch (err) {
+                    conv = null;
+                }
+            }
+            hideLoading();
+
+            // Render via the same legacy WhatsApp .txt path (identical behavior to .txt).
+            const result = adapter.import(archive.chatText);
+            window.chatMessagesData = result.memories;
+            showStatusIn(txtStatus, `Found ${result.memories.length.toLocaleString()} messages — processed locally`);
+            renderConversation(result.memories);
+            renderImportInsights(result.memories);
+            showWhatsAppSenderPicker(result.memories);
+            if (instagramSenderPicker) {
+                instagramSenderPicker.style.display = 'none';
+                instagramSenderPicker.innerHTML = '';
+            }
+            if (facebookSenderPicker) {
+                facebookSenderPicker.style.display = 'none';
+                facebookSenderPicker.innerHTML = '';
+            }
+            if (telegramSenderPicker) {
+                telegramSenderPicker.style.display = 'none';
+                telegramSenderPicker.innerHTML = '';
+            }
+            renderZipImportStatus(archive, conv);
+        }
+
+        // Privacy-safe ZIP diagnostics: counts + enum codes only. Never message text,
+        // participant names, phone numbers, or filenames. <Media omitted> is reported
+        // distinctly from attached media that is missing from the archive.
+        function renderZipImportStatus(archive, conv) {
+            if (!zipImportStatus) return;
+            const manifest = (archive && archive.mediaManifest) || [];
+            const diag     = (conv && conv.diagnostics) || {};
+            const messages = (conv && conv.messages) || [];
+
+            let linked = 0, omitted = 0, missing = 0, located = 0;
+            for (let i = 0; i < messages.length; i++) {
+                const media = messages[i].media || [];
+                for (let j = 0; j < media.length; j++) {
+                    const reason = media[j].placeholderReason;
+                    if (reason === 'resolved-from-archive')    linked++;
+                    else if (reason === 'omitted')             omitted++;
+                    else if (reason === 'missing-from-archive') missing++;
+                    else if (reason === 'location')            located++;
+                }
+            }
+            if (!missing && Array.isArray(diag.mediaMissing)) missing = diag.mediaMissing.length;
+
+            const chips = [];
+            chips.push('<span class="import-quality-chip"><strong>Chat file</strong> found in ZIP</span>');
+            chips.push('<span class="import-quality-chip"><strong>' + manifest.length.toLocaleString() +
+                '</strong> media file' + (manifest.length === 1 ? '' : 's') + ' in archive</span>');
+            if (linked)  chips.push('<span class="import-quality-chip"><strong>' + linked.toLocaleString()  + '</strong> media linked</span>');
+            if (omitted) chips.push('<span class="import-quality-chip"><strong>' + omitted.toLocaleString() + '</strong> media omitted by export</span>');
+            if (missing) chips.push('<span class="import-quality-chip"><strong>' + missing.toLocaleString() + '</strong> attached media missing from archive</span>');
+            if (located) chips.push('<span class="import-quality-chip"><strong>' + located.toLocaleString() + '</strong> location' + (located === 1 ? '' : 's') + '</span>');
+
+            // Structural notices — enum codes only. importZip merges the ZIP reader's
+            // diagnostics into conv.diagnostics.warnings; fall back to archive.diagnostics
+            // only when the canonical pass is unavailable (avoids double counting).
+            const codeCounts = {};
+            const source = (conv && diag.warnings) ? diag.warnings : (archive && archive.diagnostics);
+            if (Array.isArray(source)) {
+                for (let k = 0; k < source.length; k++) {
+                    const c = source[k] && source[k].code;
+                    if (typeof c === 'string') codeCounts[c] = (codeCounts[c] || 0) + 1;
+                }
+            }
+            const codes = Object.keys(codeCounts);
+            if (codes.length) {
+                const notice = codes.map(function (c) { return c + (codeCounts[c] > 1 ? ' ×' + codeCounts[c] : ''); }).join(', ');
+                chips.push('<span class="import-quality-chip">Notices: ' + notice + '</span>');
+            }
+
+            chips.push('<span class="import-quality-chip">Read locally — nothing uploaded, no media opened</span>');
+
+            zipImportStatus.innerHTML = '<div class="import-quality-inner">' + chips.join(' · ') + '</div>';
+            zipImportStatus.style.display = '';
         }
 
         /* ─────────────────────────────────────────────
