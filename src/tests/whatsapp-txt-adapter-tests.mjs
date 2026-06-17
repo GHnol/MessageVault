@@ -863,6 +863,86 @@ suite('Suite 39 — group integrity', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 40 — media manifest resolution (Package P5A)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const ATTACH_CHAT =
+    '[6/13/24, 9:02:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n' +
+    '[6/13/24, 9:03:00 AM] Amina: <attached: 00000099-GONE.jpg>\n' +
+    '[6/13/24, 9:04:00 AM] Bilal: <Media omitted>\n';
+
+function allMedia(conv) {
+    const out = [];
+    conv.messages.forEach(function (m) { (m.media || []).forEach(function (a) { out.push(a); }); });
+    return out;
+}
+
+suite('Suite 40 — manifest resolution', function () {
+    const manifest = [{ name: '00000042-PHOTO.jpg', byteSize: 2048 }];
+    const conv = adapter.toCanonical(ATTACH_CHAT, { mediaManifest: manifest });
+    const media = allMedia(conv);
+
+    const resolved = media.filter(function (a) { return a.present === true; });
+    assert(resolved.length === 1,                              'one attachment resolved from the manifest');
+    assert(resolved[0].placeholderReason === 'resolved-from-archive', 'resolved attachment reason updated');
+
+    const missing = media.filter(function (a) { return a.placeholderReason === 'missing-from-archive'; });
+    assert(missing.length === 1 && missing[0].present === false, 'referenced-but-absent file marked present:false');
+
+    const omitted = media.filter(function (a) { return a.placeholderReason === 'omitted'; });
+    assert(omitted.length === 1 && omitted[0].present === false, '<Media omitted> stays present:false (untouched)');
+
+    // txt-only (no manifest) keeps the P4 contract: referenced-in-text => present:null
+    const txtOnly = adapter.toCanonical(ATTACH_CHAT);
+    const refd = allMedia(txtOnly).filter(function (a) { return a.placeholderReason === 'referenced-in-text'; });
+    assert(refd.length === 2 && refd.every(function (a) { return a.present === null; }), 'no manifest => attachments stay present:null');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 41 — resolved attachment fields
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 41 — resolved fields', function () {
+    const manifest = [{ name: 'media/00000042-PHOTO.jpg', byteSize: 50 }];
+    const conv = adapter.toCanonical('[6/13/24, 9:02:00 AM] Amina: <attached: 00000042-PHOTO.jpg>\n', { mediaManifest: manifest });
+    const att = allMedia(conv)[0];
+    assert(att.present === true,                               'attachment resolved by basename across a folder path');
+    assert(att.sourceRef === 'media/00000042-PHOTO.jpg',      'sourceRef = archive-relative name (with folder)');
+    assert(att.byteSize === 50,                               'byteSize taken from the manifest');
+    assert(att.mimeType === 'image/jpeg',                     'mimeType inferred from extension');
+    assert(att.kind === 'image',                              'kind preserved from filename');
+
+    const opus = adapter.toCanonical('[6/13/24, 9:05:00 AM] Amina: <attached: 00000043-AUDIO.opus>\n',
+        { mediaManifest: [{ name: '00000043-AUDIO.opus', byteSize: 12 }] });
+    assert(allMedia(opus)[0].mimeType === 'audio/ogg',        'opus mime resolved (audio/ogg)');
+
+    const vcf = adapter.toCanonical('[6/13/24, 9:06:00 AM] Amina: <attached: CONTACT.vcf>\n',
+        { mediaManifest: [{ name: 'CONTACT.vcf', byteSize: 8 }] });
+    assert(allMedia(vcf)[0].mimeType === 'text/vcard',        'vcf mime resolved (text/vcard)');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 42 — diagnostics, contract, count integrity
+// ─────────────────────────────────────────────────────────────────────────────
+
+suite('Suite 42 — diagnostics + integrity', function () {
+    const conv = adapter.toCanonical(ATTACH_CHAT, { mediaManifest: [{ name: '00000042-PHOTO.jpg', byteSize: 2048 }] });
+    assert(conv.diagnostics.mediaMissing.length === 1,        'one missing-media entry recorded');
+    assert(conv.diagnostics.mediaMissing[0].filename === '00000099-GONE.jpg', 'missing filename captured');
+    assert(typeof conv.diagnostics.mediaMissing[0].messageIndex === 'number', 'missing entry carries a message index');
+    assert(conv.diagnostics.counts.media === 3,              'media count unchanged by resolution');
+    assert(Contract.validateConversation(conv).valid === true, 'manifest-resolved conversation passes the contract');
+
+    // empty manifest (archive supplied, no media) still flags referenced files missing
+    const emptyMan = adapter.toCanonical('[6/13/24, 9:02:00 AM] Amina: <attached: X.jpg>\n', { mediaManifest: [] });
+    assert(allMedia(emptyMan)[0].present === false && emptyMan.diagnostics.mediaMissing.length === 1, 'empty manifest => referenced file missing');
+
+    // self-ID + group inference still work alongside manifest resolution
+    const withSelf = adapter.toCanonical(ATTACH_CHAT, { mediaManifest: [{ name: '00000042-PHOTO.jpg', byteSize: 1 }], self: 'Amina' });
+    assert(withSelf.participants.filter(function (p) { return p.isSelf; }).length === 1, 'self-ID unaffected by manifest resolution');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Summary
 // ─────────────────────────────────────────────────────────────────────────────
 

@@ -32,6 +32,9 @@ screenshots/
 .tmp-ai/
 _source-intake/
 
+# Private fixtures — real/sanitized exports & media for WhatsApp ZIP intake (never commit)
+scripts/fixtures/private/
+
 # Dependencies (never commit)
 node_modules/
 scripts/node_modules/

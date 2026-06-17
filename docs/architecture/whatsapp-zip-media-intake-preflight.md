@@ -173,3 +173,18 @@
 ## 9. Recommendation (summary)
 
 Pursue **native, no-dependency ZIP reading** scoped to WhatsApp's archive shape, exploiting "decompress only `_chat.txt`; manifest-only for media." Keep **fflate (vendored/pinned, or post-Vite)** as an explicitly **Coordinator-gated fallback (P5A)** if a sanitized real `.zip` exposes ZIP64/encoding cases that make a correct native reader uneconomical. Deliver the engine first (P5B/P5C, no `index.html`), gate UI wiring separately (P5D). The canonical model already supports the outcome — P5 is additive and low-risk to the existing engine, with the **single real unknown (real ZIP shape) resolved at the P5A gate before any code is written**.
+
+---
+
+## 10. P5A spike result (2026-06-17)
+
+**Status:** P5A spike IMPLEMENTED on `feature/whatsapp-data-foundation-p5a-native-zip-reader-spike` — **engine/test only, zero dependencies, no `package.json`, no `index.html`, no UI** — awaiting Coordinator commit authorization.
+
+**What was built (engine + tests only):**
+- `src/core/whatsapp-zip-reader.js` — `KMEngine.WhatsAppZip`: `readCentralDirectory` (EOCD-from-tail with comment validation; per-entry name/method/sizes/offset/UTF-8 flag), `findChatTxt` (exact `_chat.txt` preference; **rejects zero or multiple** candidates), `buildMediaManifest` (name+size+method, **no media decompression**; duplicate-basename + unsupported-method diagnostics), `extractText`/`extractEntryBytes` (method 0 verbatim; method 8 via `DecompressionStream('deflate-raw')`), `readArchive` (orchestration). Realm-robust (`ArrayBuffer.isView`, manual UTF-8) so central-directory parsing needs no Web APIs.
+- `src/adapters/whatsapp-txt-adapter.js` — `toCanonical` gains `opts.mediaManifest` resolution (§4.4/§4.5/§4.7/§4.8 behavior exactly) + async `importZip(uint8, opts)`. `src/core/canonical-conversation.js` and `src/core/import-adapter-contract.js` **unchanged** (model was already ZIP-ready, per §0).
+- Tests: `src/tests/whatsapp-zip-reader-tests.mjs` (62, in-memory synthetic ZIPs via Node `zlib` — **no committed binary**), `whatsapp-txt-adapter-tests.mjs` +19 (Suites 40–42), `km-engine-tests.mjs` +7. Node 3980→**4068 / 32 suites**; E2E 57/57 + 195/195; VR Scenario A 4/4 — all green. `.gitignore` adds `scripts/fixtures/private/`.
+
+**Decision outcome (recommendation — Coordinator to ratify):** the **native no-dependency reader is sufficient** for WhatsApp's documented export shape and passes full synthetic coverage across both compression methods and every rejection path (encrypted / ZIP64 sentinel / unsupported method / missing-or-multiple chat file / duplicate media / truncation). **Recommend continuing native-only**; **do not add fflate**. The one residual unknown remains **real archive shape** — native correctness is proven against synthetic fixtures but not yet against a sanitized real `.zip`. Per the §6 decision rule, this is the "native passes synthetic; only blocker is lack of sanitized real ZIPs" branch: **continue no-dependency and record real-fixture validation as a gate** (gather sanitized 1:1 + group with-media exports, incl. the Abena/N case, into the now-gitignored `scripts/fixtures/private/`). fflate stays a Coordinator-gated fallback only if a real archive later exposes ZIP64/exotic-encoding cases.
+
+**Remaining fixture-gated risk:** ZIP64 and non-UTF-8/CP437 filename archives are currently **rejected loudly** (not mis-parsed); whether WhatsApp ever produces them for large media collections can only be confirmed against real exports.

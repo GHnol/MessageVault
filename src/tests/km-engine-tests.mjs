@@ -52,6 +52,7 @@ load('src/core/conversation-initiation.js');
 load('src/core/reaction-analysis.js');
 load('src/core/canonical-conversation.js');
 load('src/core/import-adapter-contract.js');
+load('src/core/whatsapp-zip-reader.js');
 
 const { KMEngine } = ctx.window;
 
@@ -553,6 +554,17 @@ assert(waGrp.participants.filter(function (p) { return !p.isSelf; }).length === 
 const grpIds = {}; waGrp.messages.forEach(function (m) { grpIds[m.participantId] = true; });
 assert(Object.keys(grpIds).length === 3,                            'group messages map to 3 distinct participants (no them-collapse)');
 assert(KMEngine.whatsappTxtAdapter.toCanonical('[6/15/24, 9:00:00 AM] Alice: Hi\n[6/15/24, 9:01:00 AM] Bob: Hey\n').isGroup === false, '1:1 import stays 1:1');
+
+// ── WHATSAPP ZIP READER — smoke (Package P5A) ─────────────────────────────────
+
+suite('WhatsAppZip — smoke');
+assert(KMEngine.WhatsAppZip && typeof KMEngine.WhatsAppZip === 'object', 'KMEngine.WhatsAppZip exists');
+assert(typeof KMEngine.WhatsAppZip.readCentralDirectory === 'function', 'readCentralDirectory is a function');
+assert(typeof KMEngine.WhatsAppZip.findChatTxt === 'function',          'findChatTxt is a function');
+assert(typeof KMEngine.WhatsAppZip.readArchive === 'function',          'readArchive is a function');
+assert(KMEngine.WhatsAppZip.readCentralDirectory(new Uint8Array(0)).reason === 'EMPTY_INPUT', 'empty input → EMPTY_INPUT');
+assert(KMEngine.WhatsAppZip.readCentralDirectory(new Uint8Array([1, 2, 3, 4, 5])).reason === 'NO_CENTRAL_DIRECTORY', 'non-zip bytes → NO_CENTRAL_DIRECTORY');
+assert(typeof KMEngine.whatsappTxtAdapter.importZip === 'function',     'whatsappTxtAdapter.importZip is a function');
 
 // ── SUMMARY ──────────────────────────────────────────────────────────────────
 

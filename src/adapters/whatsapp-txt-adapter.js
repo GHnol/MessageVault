@@ -318,6 +318,76 @@
         return 'document';
     }
 
+    // ── ZIP / media manifest resolution (Package P5A) ───────────────────────────
+    // When the caller supplies opts.mediaManifest (the name+size manifest produced by
+    // KMEngine.WhatsAppZip from a WhatsApp export .zip), each <attached: FILE> marker
+    // is resolved against it: present/byteSize/mimeType/sourceRef are populated from
+    // the archive, misses are recorded in diagnostics.mediaMissing, and <Media omitted>
+    // stays present:false. No media bytes are read — this resolves links only.
+
+    var MIME_BY_EXT = {
+        jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif',
+        webp: 'image/webp', heic: 'image/heic', bmp: 'image/bmp',
+        mp4: 'video/mp4', mov: 'video/quicktime', m4v: 'video/x-m4v', '3gp': 'video/3gpp',
+        avi: 'video/x-msvideo', mkv: 'video/x-matroska',
+        opus: 'audio/ogg', ogg: 'audio/ogg', mp3: 'audio/mpeg', m4a: 'audio/mp4',
+        aac: 'audio/aac', amr: 'audio/amr', wav: 'audio/wav',
+        vcf: 'text/vcard', pdf: 'application/pdf', txt: 'text/plain'
+    };
+
+    function mimeFromFilename(name) {
+        var m = /\.([A-Za-z0-9]+)$/.exec(name || '');
+        var ext = m ? m[1].toLowerCase() : '';
+        return Object.prototype.hasOwnProperty.call(MIME_BY_EXT, ext) ? MIME_BY_EXT[ext] : null;
+    }
+
+    function baseNameOf(name) {
+        var s = String(name == null ? '' : name);
+        var cut = Math.max(s.lastIndexOf('/'), s.lastIndexOf('\\'));
+        return cut === -1 ? s : s.slice(cut + 1);
+    }
+
+    // Index a manifest ([{name|basename, byteSize}]) by lowercased basename; first wins.
+    function indexManifest(manifest) {
+        var index = {};
+        if (!Array.isArray(manifest)) return index;
+        for (var i = 0; i < manifest.length; i++) {
+            var en = manifest[i];
+            if (!en) continue;
+            var nm = en.name != null ? en.name : en.basename;
+            if (nm == null) continue;
+            var key = baseNameOf(nm).toLowerCase();
+            if (key && !Object.prototype.hasOwnProperty.call(index, key)) index[key] = en;
+        }
+        return index;
+    }
+
+    function resolveMediaManifest(messages, manifest, mediaMissing) {
+        var index = indexManifest(manifest);
+        for (var i = 0; i < messages.length; i++) {
+            var media = messages[i].media || [];
+            for (var j = 0; j < media.length; j++) {
+                var att = media[j];
+                if (!att || att.placeholderReason !== 'referenced-in-text') continue;
+                var fname = att.filename || att.sourceRef;
+                var key = baseNameOf(fname || '').toLowerCase();
+                var hit = (key && Object.prototype.hasOwnProperty.call(index, key)) ? index[key] : null;
+                if (hit) {
+                    var hitName = hit.name != null ? hit.name : (hit.basename != null ? hit.basename : fname);
+                    att.present  = true;
+                    if (typeof hit.byteSize === 'number' && isFinite(hit.byteSize)) att.byteSize = hit.byteSize;
+                    att.mimeType = mimeFromFilename(hitName) || att.mimeType;
+                    att.sourceRef = hitName;
+                    att.placeholderReason = 'resolved-from-archive';
+                } else {
+                    att.present = false;
+                    att.placeholderReason = 'missing-from-archive';
+                    mediaMissing.push({ filename: fname || null, messageIndex: messages[i].importIndex });
+                }
+            }
+        }
+    }
+
     // ── Self-identification + participant mapping (Package P3) ──────────────────
     // The caller passes opts.self to set participant-level isSelf on the canonical
     // output deterministically — no post-import UI patching. opts.self accepts:
@@ -648,6 +718,13 @@
         // uniquely-matching participant's isSelf; non-self speakers stay distinct.
         var selfResult = resolveSelf(participants, opts.self, warnings);
 
+        // Media manifest resolution (Package P5A). Only runs when an archive manifest
+        // is supplied; a txt-only import leaves <attached:> as present:null (P4).
+        var mediaMissing = [];
+        if (Array.isArray(opts.mediaManifest)) {
+            resolveMediaManifest(messages, opts.mediaManifest, mediaMissing);
+        }
+
         var skipped = groups.length - messages.length - systemEvents.length;
         if (skipped < 0) skipped = 0;
 
@@ -671,7 +748,7 @@
             skipReasons:      skipReasons,
             unparsedLines:    unparsedLines,
             ambiguousDates:   ambiguousDates,
-            mediaMissing:       [],
+            mediaMissing:       mediaMissing,
             selfIdentified:     selfResult.identified,
             selfMatchMethod:    selfResult.method,
             selfMatchAmbiguous: selfResult.ambiguous,
@@ -717,6 +794,40 @@
         }
 
         return conv;
+    };
+
+    // Read a WhatsApp export .zip (Uint8Array/ArrayBuffer) and produce a canonical
+    // Conversation with media links resolved against the archive manifest (Package
+    // P5A). Async (DecompressionStream). Only _chat.txt is decompressed; media stays
+    // a manifest. On any ZIP rejection, returns an empty-but-valid Conversation with
+    // the failure recorded in diagnostics — never throws.
+    adapter.importZip = function (input, opts) {
+        opts = opts || {};
+        var self = this;
+        var Zip = KMEngine.WhatsAppZip;
+        if (!Zip || typeof Zip.readArchive !== 'function') {
+            var stub = self.toCanonical('', opts);
+            stub.diagnostics.warnings.push({ code: 'ZIP_READER_UNAVAILABLE' });
+            return Promise.resolve(stub);
+        }
+        return Zip.readArchive(input, opts).then(function (res) {
+            if (!res.ok) {
+                var failConv = self.toCanonical('', opts);
+                failConv.diagnostics.warnings.push({ code: 'ZIP_READ_FAILED', reason: res.reason });
+                if (Array.isArray(res.diagnostics)) {
+                    for (var d = 0; d < res.diagnostics.length; d++) failConv.diagnostics.warnings.push(res.diagnostics[d]);
+                }
+                return failConv;
+            }
+            var merged = {};
+            for (var k in opts) if (Object.prototype.hasOwnProperty.call(opts, k)) merged[k] = opts[k];
+            merged.mediaManifest = res.mediaManifest;
+            var conv = self.toCanonical(res.chatText, merged);
+            if (Array.isArray(res.diagnostics)) {
+                for (var di = 0; di < res.diagnostics.length; di++) conv.diagnostics.warnings.push(res.diagnostics[di]);
+            }
+            return conv;
+        });
     };
 
     KMEngine.whatsappTxtAdapter = adapter;
