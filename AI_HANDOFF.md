@@ -6,6 +6,33 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Message Book Proof Approval 5D (Approval Content Binding + Staleness Completion) COMPLETE (2026-06-24)
+
+**Message Book Proof Approval 5D — Approval Content Binding + Staleness Completion is CLOSED/COMPLETE** — impl `ddb4243`, fast-forward merged to `main` 2026-06-24 (`d4605f2..ddb4243`); this entry is the narrow post-merge state-sync (trio only). **Additive extension of the existing proof-approval foundation — no rebuild, no new module, no dependency, no `package.json`, no `import`/WhatsApp/ZIP change, no checkout/payment/manufacturing/vendor/export semantics, no persistence schema change.**
+
+**Naming correction (Coordinator-confirmed):** initially authorized as "Package 5A — Message Book Proof Approval State Foundation," but pre-flight inspection found proof-approval work was **already merged**: prior **5A** delivered `KMEngine.ProofApprovalState`, prior **5B** delivered `KMEngine.ProofApprovalUX` + the `#bookProofPanel`, prior **5C** delivered proof withdrawal. The Coordinator corrected the identity to **5D — Approval Content Binding + Staleness Completion** and directed **extending** the existing foundation rather than rebuilding it. The genuine gap (binding an approval to the actual proof and invalidating it on edit) is what 5D delivers. Delivered:
+
+- **Explicit durable `STALE` proof status** in `KMEngine.ProofApprovalState` + transitions `approved→stale`, `stale→pending-review` (re-review), `stale→none` (clear); `stale` reachable only from `approved`; `staleAt` timestamp; approval history (`approvedAt`/`approvedProofFingerprint`) preserved through stale.
+- **`approvedProofFingerprint` capture** on `pending-review→approved` (via `opts.proofFingerprint`).
+- **Pure `computeProofFingerprint(bookState, contactName)`** → `kmpf1:<hash>` over the proof-affecting projection (format, opening, body modes, volumes id/name, per-section structure + message ids in order) **plus the title-page `contactName`** (optional, backward-compatible 2nd arg; omitted/non-string == `''`); **excludes `activeVolumeId` and derived page-count estimates** so navigation / re-pagination never falsely invalidates. `isApprovalStale(record, currentFingerprint)`.
+- **`contactName` is fingerprinted** because it is printed on the visible proof/title page — changing it after approval marks the approval stale.
+- **`KMEngine.ProofApprovalUX`**: `approve(id, fingerprint)` (makes the approved state reachable), `refreshStaleness(id, currentFingerprint)` (flips approved→stale on mismatch), updated `getAllowedUserActions` (`pending-review`→`['approve','withdraw-submission']`, `stale`→`['submit-for-review']`), `stale` label.
+- **`index.html` `renderBookProofPanel()`**: refreshes staleness on every render (passing the same trimmed `contactName` the renderer uses), adds a minimal **Approve proof** control, a **stale** state with a re-review path, and `.book-proof-stale` styling (both themes). Proof-affecting edits flip approval to stale; a same-proof re-render does not.
+- **Persistence**: no schema change — `approvedProofFingerprint`/`staleAt` ride inside the already-persisted `projectSession.proofApprovalStates` record; round-trip preserved (snapshot→JSON→validate→restore).
+- **Local-first; product-scoped (`message-book`)**; **no checkout/payment/manufacturing/vendor/export semantics** (guarded by tests).
+
+Verified on `main`: Node **4318 / 32 suites** (4170→4318; `proof-approval-state-tests` 155→240, `proof-approval-ux-tests` 102→155, `project-persistence-tests` 157→167); seeded E2E 57/57; real-files E2E 195/195; VR Scenario A 4/4; VR import-panels 10/10; P5C harness SKIP exit 0; project-control validators VALID/PASS; os-self-audit 324/0/0; state-freshness 0 FAIL post-merge. The new Approve + stale flow (incl. `contactName`-change→stale and no-false-staleness on re-render) was additionally verified locally via a throwaway Playwright run against the real `index.html` (synthetic in-memory state; **not committed**) — all green, zero console errors.
+
+**Caveats / open risks:**
+- **Staleness is detected at render time** (every `renderBookView`/panel render + on restore). Robust because all book-edit controls re-render — but any future code path that mutates `messageBookState` without re-rendering must continue to render/refresh.
+- If **in-place message text editing** is ever added (messages are import-only today, so message identity + order is the proof signature), the fingerprint should be extended to include the edited text.
+- **Real-world WhatsApp ZIP validation remains fixture-gated separately** (unchanged by 5D).
+
+**Current state:** Branch `main` after fast-forward merge (`d4605f2..ddb4243`; this state-sync adds one docs commit on top). **No active package. No active pass.** WhatsApp iOS data-foundation **P1–P6 remain CLOSED/COMPLETE**; the **native no-dependency ZIP decision stands** (no fflate; real ZIP import fixture-gated). The proof-approval foundation (prior 5A/5B/5C + this 5D) is complete. **No checkout / manufacturing / vendor handoff / packaging work, and no next package, has started.**
+**Next recommended action:** Await Coordinator authorization for the next package. Candidate directions (all gated, none started): a proof **review UI** package, checkout-readiness / manufacturing-handoff state (separate, gated), or sanitized real with-media WhatsApp ZIP fixture validation through the P5C harness. Do not begin any of these without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Package P6 (WhatsApp Import Diagnostics + Coverage Consolidation) COMPLETE (2026-06-17)
 
 **Package P6 — WhatsApp Import Diagnostics + Coverage Consolidation is CLOSED/COMPLETE** — impl `426c1a2`, fast-forward merged to `main` 2026-06-17 (`87c0c66..426c1a2`); this entry is the narrow post-merge state-sync (trio only). Ninth implementation step of the **WhatsApp iOS data-foundation** vertical (plan: `docs/architecture/whatsapp-ios-data-foundation-plan.md`; preflight: `docs/architecture/whatsapp-zip-media-intake-preflight.md` §13). **Diagnostics + coverage + docs + small UI status consistency only — no new product feature, no engine logic change, no `src/` engine change, no `package.json`/dependency, no dependency installed, no fflate, no real ZIP/media/private fixture committed, no Message Book / product-strategy work.** Makes the WhatsApp import diagnostic vocabulary internally consistent across text import, ZIP import, canonical import, the private validation harness, and the browser ZIP status panel. Delivered:
