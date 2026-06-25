@@ -3417,6 +3417,7 @@
             .book-proof-status.book-proof-changes { color: #ff9f0a; }
             .book-proof-status.book-proof-revoked { color: #636366; }
             .book-proof-status.book-proof-stale { color: #ff6b35; }
+            .book-proof-status.book-proof-ready { color: #f2f2f7; }
             .book-proof-reason { color: #636366; }
             .book-proof-disabled .book-proof-status { color: #3a3a3c; }
             .book-proof-cancel-btn { color: #636366; }
@@ -3461,6 +3462,7 @@
         .book-proof-status.book-proof-changes { color: #ff9f0a; }
         .book-proof-status.book-proof-revoked { color: #8e8e93; }
         .book-proof-status.book-proof-stale { color: #e8590c; }
+        .book-proof-status.book-proof-ready { color: #1c1c1e; }
         .book-proof-reason {
             font-size: 12px; color: #8e8e93; margin: 2px 0 0; flex-basis: 100%;
         }
@@ -9491,56 +9493,43 @@ ${keepsakeFooter}
                 }
             }
 
-            var html = '';
+            // Map status + readiness context to a single panel phase. The 'none' status
+            // splits into not-ready / ready sub-states; every other status maps 1:1.
+            var phase;
             if (status === 'none') {
-                if (hasContent && _allBookCheckPassed) {
-                    html = '<div class="book-proof-panel-inner">' +
-                        '<button type="button" class="book-proof-btn" id="bookProofSubmitBtn">Mark ready for proof review</button>' +
-                        '<p class="book-proof-hint">Records local proof review status. It does not send files, create a PDF, or place an order.</p>' +
-                        '</div>';
-                } else if (hasContent) {
-                    var _bookCheckMsg = _anyBookCheckFailed
-                        ? 'Book check needs attention before proof review.'
-                        : 'Checking whether this book is ready for proof review.';
-                    html = '<div class="book-proof-panel-inner book-proof-disabled">' +
-                        '<span class="book-proof-status">' + _bookCheckMsg + '</span>' +
-                        '</div>';
+                if (!hasContent) {
+                    phase = 'not-ready-empty';
+                } else if (_anyBookCheckFailed) {
+                    phase = 'not-ready-failed';
+                } else if (!_allBookCheckPassed) {
+                    phase = 'not-ready-checking';
                 } else {
-                    html = '<div class="book-proof-panel-inner book-proof-disabled">' +
-                        '<span class="book-proof-status">No content — add messages to a keepsake group to enable proof review.</span>' +
-                        '</div>';
+                    phase = 'ready';
                 }
-            } else if (status === 'pending-review') {
-                html = '<div class="book-proof-panel-inner">' +
-                    '<span class="book-proof-status book-proof-pending">Marked ready for proof review</span>' +
-                    '<button type="button" class="book-proof-btn" id="bookProofApproveBtn">Approve proof</button>' +
-                    '<button type="button" class="book-proof-cancel-btn" id="bookProofCancelBtn">Cancel proof review</button>' +
-                    '<p class="book-proof-hint">Approval is recorded locally on this device. It does not send files, create a PDF, place an order, or confirm manufacturing.</p>' +
-                    '</div>';
-            } else if (status === 'approved') {
-                html = '<div class="book-proof-panel-inner">' +
-                    '<span class="book-proof-status book-proof-approved">Approved</span>' +
-                    '<p class="book-proof-hint">This approval matches the current book. Editing the book will mark it for re-approval.</p>' +
-                    '</div>';
-            } else if (status === 'stale') {
-                html = '<div class="book-proof-panel-inner">' +
-                    '<span class="book-proof-status book-proof-stale">Approval out of date — the book changed since it was approved</span>' +
-                    '<button type="button" class="book-proof-btn" id="bookProofResubmitBtn">Mark ready for proof review again</button>' +
-                    '<p class="book-proof-hint">The earlier approval no longer matches the current book. Re-approve to record approval of this version. Local only — no files were sent.</p>' +
-                    '</div>';
-            } else if (status === 'changes-requested') {
-                var crReason = record.changeRequestReason || '';
-                html = '<div class="book-proof-panel-inner">' +
-                    '<span class="book-proof-status book-proof-changes">Changes requested</span>' +
-                    (crReason ? '<p class="book-proof-reason">' + escapeHTML(crReason) + '</p>' : '') +
-                    '</div>';
-            } else if (status === 'revoked') {
-                var rvReason = record.revokeReason || '';
-                html = '<div class="book-proof-panel-inner">' +
-                    '<span class="book-proof-status book-proof-revoked">Approval revoked</span>' +
-                    (rvReason ? '<p class="book-proof-reason">' + escapeHTML(rvReason) + '</p>' : '') +
-                    '</div>';
+            } else {
+                phase = status;
             }
+
+            const view = UX.getProofPanelCopy(phase);
+            if (!view) { bookProofPanel.innerHTML = ''; bookProofPanel.style.display = 'none'; return; }
+
+            const isNotReady = phase.indexOf('not-ready') === 0;
+            var parts = ['<span class="book-proof-status ' + view.statusClass + '">' + view.label + '</span>'];
+            view.actions.forEach(function (act) {
+                var btnCls = act.action === 'withdraw-submission' ? 'book-proof-cancel-btn' : 'book-proof-btn';
+                parts.push('<button type="button" class="' + btnCls + '" id="' + act.id + '">' + act.label + '</button>');
+            });
+            if (view.hint) {
+                parts.push('<p class="book-proof-hint">' + view.hint + '</p>');
+            }
+            if (phase === 'changes-requested' && record && record.changeRequestReason) {
+                parts.push('<p class="book-proof-reason">' + escapeHTML(record.changeRequestReason) + '</p>');
+            }
+            if (phase === 'revoked' && record && record.revokeReason) {
+                parts.push('<p class="book-proof-reason">' + escapeHTML(record.revokeReason) + '</p>');
+            }
+            var html = '<div class="book-proof-panel-inner' + (isNotReady ? ' book-proof-disabled' : '') + '">' +
+                parts.join('') + '</div>';
 
             bookProofPanel.innerHTML = html;
             bookProofPanel.style.display = '';

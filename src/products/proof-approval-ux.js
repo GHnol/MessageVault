@@ -8,11 +8,97 @@
     var _statusLabels = {
         'none':               'Not submitted',
         'pending-review':     'Marked ready for proof review',
-        'approved':           'Approved',
+        'approved':           'Proof approved',
         'changes-requested':  'Changes requested',
         'revoked':            'Approval revoked',
-        'stale':              'Approval out of date — book changed since approval'
+        'stale':              'Approval out of date'
     };
+
+    // ── Customer-facing proof-panel copy (single source of truth) ──────────────
+    // The Message Book proof panel renders its label, status class, hint, and action
+    // buttons from this table so the wording stays consistent and is unit-testable.
+    // Phases are a superset of ProofApprovalState statuses: the 'none' status splits
+    // into the readiness sub-states the panel computes from app content + book-check.
+    //
+    // Framing is local-only sign-off: approving a proof means "I approve this proof".
+    // It never buys, prints, or sends anything anywhere. The hints reassure using that
+    // plain language; no copy may imply any such downstream readiness. The engine source
+    // itself is also kept free of such vocabulary (guarded by a source-scan test).
+    var _panelCopy = {
+        'not-ready-empty': {
+            label:       'Not ready for proof review',
+            statusClass: 'book-proof-notready',
+            hint:        'Add messages to a keepsake group to enable proof review.',
+            actions:     []
+        },
+        'not-ready-checking': {
+            label:       'Not ready for proof review',
+            statusClass: 'book-proof-notready',
+            hint:        'Checking whether this book is ready for proof review.',
+            actions:     []
+        },
+        'not-ready-failed': {
+            label:       'Not ready for proof review',
+            statusClass: 'book-proof-notready',
+            hint:        'The book check needs attention before this book can go to proof review.',
+            actions:     []
+        },
+        'ready': {
+            label:       'Ready for proof review',
+            statusClass: 'book-proof-ready',
+            hint:        'Reviewing a proof happens on this device. It does not buy, print, or send anything.',
+            actions:     [{ action: 'submit-for-review', id: 'bookProofSubmitBtn', label: 'Mark ready for proof review' }]
+        },
+        'pending-review': {
+            label:       'Marked ready for proof review',
+            statusClass: 'book-proof-pending',
+            hint:        'Approving means you approve this proof to keep. It is recorded on this device — it does not buy, print, or send anything.',
+            actions:     [
+                { action: 'approve',             id: 'bookProofApproveBtn', label: 'Approve proof' },
+                { action: 'withdraw-submission', id: 'bookProofCancelBtn',  label: 'Cancel proof review' }
+            ]
+        },
+        'approved': {
+            label:       'Proof approved',
+            statusClass: 'book-proof-approved',
+            hint:        'You approved this proof and it matches the current book. Your approval is recorded on this device — it does not buy, print, or send anything. Editing the book will mark it for re-approval.',
+            actions:     []
+        },
+        'stale': {
+            label:       'Approval out of date',
+            statusClass: 'book-proof-stale',
+            hint:        'This proof changed after it was approved. Review the book and approve it again. Recorded on this device only.',
+            actions:     [{ action: 'submit-for-review', id: 'bookProofResubmitBtn', label: 'Mark ready for proof review again' }]
+        },
+        'changes-requested': {
+            label:       'Changes requested',
+            statusClass: 'book-proof-changes',
+            hint:        null,
+            actions:     []
+        },
+        'revoked': {
+            label:       'Approval revoked',
+            statusClass: 'book-proof-revoked',
+            hint:        null,
+            actions:     []
+        }
+    };
+
+    // Returns a defensive copy of the panel view-model for a phase, or null for an
+    // unknown phase (caller hides the panel). Pure: no DOM, no Date, no mutation.
+    function getProofPanelCopy(phase) {
+        var entry = _panelCopy[phase];
+        if (!entry) return null;
+        return {
+            phase:       phase,
+            label:       entry.label,
+            statusClass: entry.statusClass,
+            hint:        entry.hint,
+            actions:     entry.actions.map(function (a) {
+                return { action: a.action, id: a.id, label: a.label };
+            })
+        };
+    }
 
     function initialize(productTypeId) {
         if (typeof productTypeId !== 'string' || productTypeId === '') {
@@ -136,6 +222,7 @@
         approve:              approve,
         refreshStaleness:     refreshStaleness,
         getStatusLabel:       getStatusLabel,
+        getProofPanelCopy:    getProofPanelCopy,
         getAllowedUserActions: getAllowedUserActions,
         serialize:            serialize,
         restore:              restore
