@@ -6,6 +6,29 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Message Book Proof Approval 5E (Proof Review UX Hardening + Dogfood Gate) COMPLETE (2026-06-25)
+
+**Message Book Proof Approval 5E — Proof Review UX Hardening + Dogfood Gate is CLOSED/COMPLETE** — impl `42f7c30`, fast-forward merged to `main` 2026-06-25 (`989c4ce..42f7c30`); this entry is the narrow post-merge state-sync (trio only). **Narrow UX/status hardening over the existing 5D proof-approval system — no engine state-machine change, no persistence change, no new module, no dependency, no `package.json`, no import/WhatsApp/ZIP change, no checkout/payment/manufacturing/vendor/export semantics, no broad redesign.** Makes the existing proof approval states feel coherent and dogfoodable in the UI. Delivered:
+
+- **Tested proof-panel view-model** — `KMEngine.ProofApprovalUX.getProofPanelCopy(phase)` is the single source of truth for the panel's `{label, statusClass, hint, actions}`. Phases are a superset of statuses: the `none` status splits into `not-ready-empty` / `not-ready-checking` / `not-ready-failed` / `ready`.
+- **Legible proof review labels for every phase** — not-ready, ready ("Ready for proof review"), pending ("Marked ready for proof review", E2E-locked), approved ("Proof approved"), stale ("Approval out of date"), plus the engine-only changes-requested / revoked phases.
+- **Clearer local-only / not-commerce copy** — the approved, pending, and stale states now state that approval is recorded on this device and does not buy, print, or send anything.
+- **`index.html` `renderBookProofPanel()` renders from the view-model** — preserves the existing DOM ids (`bookProofSubmitBtn`/`bookProofApproveBtn`/`bookProofCancelBtn`/`bookProofResubmitBtn`), the `book-proof-*` status classes, and the E2E-locked pending text; +1 CSS rule per theme for the ready label. Button-wiring unchanged.
+- **Tested action/copy matrix** — `proof-approval-ux-tests.mjs` 155→**422** (Suites 23–24): per-phase labels/status-classes/actions, approve-only-in-pending-review, ready/stale action gating with the committed button ids, panel-action↔`getAllowedUserActions` consistency, defensive-copy guard, and **guards against checkout/payment/manufacturing/vendor CTA language** with on-device sign-off reassurance.
+- **5D remains intact** — content/`contactName` proof fingerprint, explicit durable `STALE` status, approval becomes stale after proof-affecting edits, the minimal Approve action, and persistence through the existing `proofApprovalStates` record (no schema change).
+
+Verified on `main`: Node **4585 / 32 suites** (4318→4585; all +267 in `proof-approval-ux-tests` 155→422; no other suite/count change, no `km-engine-tests.mjs` change); seeded E2E 57/57; real-files E2E 195/195; VR Scenario A 4/4; VR import-panels 10/10; P5C harness SKIP exit 0; project-control validators VALID/PASS; os-self-audit 324/0/0. The new ready/pending/approved/stale rendering (correct labels, on-device copy, zero console errors) was additionally verified locally via a throwaway Playwright run against the real `index.html` (synthetic in-memory state; **not committed**) — 15/15 green.
+
+**Caveats / open risks:**
+- The proof review UX is hardened and dogfoodable, but **checkout / manufacturing / vendor-handoff / packaging readiness has not started** and is out of scope.
+- **Real-world WhatsApp ZIP validation remains fixture-gated separately** (unchanged by 5E).
+- The `changes-requested` / `revoked` phases render coherently but remain engine-only (no UI entry path) — unchanged from 5D.
+
+**Current state:** Branch `main` after fast-forward merge (`989c4ce..42f7c30`; this state-sync adds one docs commit on top). **No active package. No active pass.** WhatsApp iOS data-foundation **P1–P6 remain CLOSED/COMPLETE**; the **native no-dependency ZIP decision stands** (no fflate; real ZIP import fixture-gated). The Message Book proof-approval foundation (prior 5A/5B/5C + 5D content-binding/staleness + this 5E UX hardening) is complete. **No checkout / manufacturing / vendor handoff / packaging work, and no next package, has started.**
+**Next recommended action:** Await Coordinator authorization for the next package. Candidate directions (all gated, none started): checkout-readiness / manufacturing-handoff state (separate, gated), sanitized real with-media WhatsApp ZIP fixture validation through the P5C harness, or design-system tokenization / component contracts. Do not begin any of these without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Message Book Proof Approval 5D (Approval Content Binding + Staleness Completion) COMPLETE (2026-06-24)
 
 **Message Book Proof Approval 5D — Approval Content Binding + Staleness Completion is CLOSED/COMPLETE** — impl `ddb4243`, fast-forward merged to `main` 2026-06-24 (`d4605f2..ddb4243`); this entry is the narrow post-merge state-sync (trio only). **Additive extension of the existing proof-approval foundation — no rebuild, no new module, no dependency, no `package.json`, no `import`/WhatsApp/ZIP change, no checkout/payment/manufacturing/vendor/export semantics, no persistence schema change.**
