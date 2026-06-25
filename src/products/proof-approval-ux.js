@@ -10,7 +10,8 @@
         'pending-review':     'Marked ready for proof review',
         'approved':           'Approved',
         'changes-requested':  'Changes requested',
-        'revoked':            'Approval revoked'
+        'revoked':            'Approval revoked',
+        'stale':              'Approval out of date — book changed since approval'
     };
 
     function initialize(productTypeId) {
@@ -45,6 +46,44 @@
         return _statusLabels[status] || 'Unknown status';
     }
 
+    // Approve the current proof, binding the approval to the supplied proof fingerprint.
+    // Local-only: records an approved review status. It does not transmit anything and
+    // does not imply any downstream production or purchase readiness.
+    function approve(productTypeId, proofFingerprint) {
+        var current = _states[productTypeId];
+        if (!current) {
+            return { success: false, error: 'not-initialized: ' + productTypeId, state: null };
+        }
+        var result = KMEngine.ProofApprovalState.transition(current, 'approved', {
+            proofFingerprint: (typeof proofFingerprint === 'string' && proofFingerprint !== '')
+                ? proofFingerprint
+                : null
+        });
+        if (!result.success) return result;
+        _states[productTypeId] = result.state;
+        return { success: true, error: null, state: _states[productTypeId] };
+    }
+
+    // If the current proof differs from the approved one, move the approval to 'stale'.
+    // No-op for any non-approved status or when the proof still matches. Returns whether
+    // the status changed so callers can re-render only when needed.
+    function refreshStaleness(productTypeId, currentFingerprint) {
+        var current = _states[productTypeId];
+        if (!current) {
+            return { success: false, changed: false, error: 'not-initialized: ' + productTypeId, state: null };
+        }
+        var PAS = KMEngine.ProofApprovalState;
+        if (!PAS.isApprovalStale(current, currentFingerprint)) {
+            return { success: true, changed: false, error: null, state: current };
+        }
+        var result = PAS.transition(current, 'stale');
+        if (!result.success) {
+            return { success: false, changed: false, error: result.error, state: current };
+        }
+        _states[productTypeId] = result.state;
+        return { success: true, changed: true, error: null, state: _states[productTypeId] };
+    }
+
     function withdrawSubmission(productTypeId) {
         var current = _states[productTypeId];
         if (!current) {
@@ -58,7 +97,8 @@
 
     function getAllowedUserActions(status) {
         if (status === 'none') return ['submit-for-review'];
-        if (status === 'pending-review') return ['withdraw-submission'];
+        if (status === 'pending-review') return ['approve', 'withdraw-submission'];
+        if (status === 'stale') return ['submit-for-review'];
         return [];
     }
 
@@ -93,6 +133,8 @@
         getState:             getState,
         submitForReview:      submitForReview,
         withdrawSubmission:   withdrawSubmission,
+        approve:              approve,
+        refreshStaleness:     refreshStaleness,
         getStatusLabel:       getStatusLabel,
         getAllowedUserActions: getAllowedUserActions,
         serialize:            serialize,

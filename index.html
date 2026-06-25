@@ -3416,6 +3416,7 @@
             .book-proof-status.book-proof-approved { color: #30d158; }
             .book-proof-status.book-proof-changes { color: #ff9f0a; }
             .book-proof-status.book-proof-revoked { color: #636366; }
+            .book-proof-status.book-proof-stale { color: #ff6b35; }
             .book-proof-reason { color: #636366; }
             .book-proof-disabled .book-proof-status { color: #3a3a3c; }
             .book-proof-cancel-btn { color: #636366; }
@@ -3459,6 +3460,7 @@
         .book-proof-status.book-proof-approved { color: #34c759; }
         .book-proof-status.book-proof-changes { color: #ff9f0a; }
         .book-proof-status.book-proof-revoked { color: #8e8e93; }
+        .book-proof-status.book-proof-stale { color: #e8590c; }
         .book-proof-reason {
             font-size: 12px; color: #8e8e93; margin: 2px 0 0; flex-basis: 100%;
         }
@@ -9444,6 +9446,21 @@ ${keepsakeFooter}
 
             UX.initialize('message-book');
 
+            // Bind approval to the current proof. If proof-affecting content/settings
+            // changed since approval, refreshStaleness moves the record to 'stale' before
+            // we read its status — so the panel never silently shows "Approved" for a
+            // book that no longer matches what was approved.
+            const PAS = window.KMEngine && window.KMEngine.ProofApprovalState;
+            // contactName is printed on the proof title page, so it is part of the proof
+            // identity — fingerprint it with the same trimmed value the renderer uses.
+            const proofContactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
+            const currentProofFingerprint = (PAS && PAS.computeProofFingerprint)
+                ? PAS.computeProofFingerprint(messageBookState, proofContactName)
+                : null;
+            if (currentProofFingerprint) {
+                UX.refreshStaleness('message-book', currentProofFingerprint);
+            }
+
             const state = messageBookState;
             const hasContent = !!(state && state.sections &&
                 state.sections.some(function (s) {
@@ -9496,12 +9513,20 @@ ${keepsakeFooter}
             } else if (status === 'pending-review') {
                 html = '<div class="book-proof-panel-inner">' +
                     '<span class="book-proof-status book-proof-pending">Marked ready for proof review</span>' +
+                    '<button type="button" class="book-proof-btn" id="bookProofApproveBtn">Approve proof</button>' +
                     '<button type="button" class="book-proof-cancel-btn" id="bookProofCancelBtn">Cancel proof review</button>' +
-                    '<p class="book-proof-hint">Removes local proof review marking. No files were sent.</p>' +
+                    '<p class="book-proof-hint">Approval is recorded locally on this device. It does not send files, create a PDF, place an order, or confirm manufacturing.</p>' +
                     '</div>';
             } else if (status === 'approved') {
                 html = '<div class="book-proof-panel-inner">' +
                     '<span class="book-proof-status book-proof-approved">Approved</span>' +
+                    '<p class="book-proof-hint">This approval matches the current book. Editing the book will mark it for re-approval.</p>' +
+                    '</div>';
+            } else if (status === 'stale') {
+                html = '<div class="book-proof-panel-inner">' +
+                    '<span class="book-proof-status book-proof-stale">Approval out of date — the book changed since it was approved</span>' +
+                    '<button type="button" class="book-proof-btn" id="bookProofResubmitBtn">Mark ready for proof review again</button>' +
+                    '<p class="book-proof-hint">The earlier approval no longer matches the current book. Re-approve to record approval of this version. Local only — no files were sent.</p>' +
                     '</div>';
             } else if (status === 'changes-requested') {
                 var crReason = record.changeRequestReason || '';
@@ -9532,6 +9557,26 @@ ${keepsakeFooter}
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', function () {
                     const result = UX.withdrawSubmission('message-book');
+                    if (result.success) renderBookProofPanel();
+                });
+            }
+
+            const approveBtn = document.getElementById('bookProofApproveBtn');
+            if (approveBtn) {
+                approveBtn.addEventListener('click', function () {
+                    const fp = (PAS && PAS.computeProofFingerprint)
+                        ? PAS.computeProofFingerprint(messageBookState,
+                            chatHeaderName ? chatHeaderName.innerText.trim() : '')
+                        : null;
+                    const result = UX.approve('message-book', fp);
+                    if (result.success) renderBookProofPanel();
+                });
+            }
+
+            const resubmitBtn = document.getElementById('bookProofResubmitBtn');
+            if (resubmitBtn) {
+                resubmitBtn.addEventListener('click', function () {
+                    const result = UX.submitForReview('message-book');
                     if (result.success) renderBookProofPanel();
                 });
             }

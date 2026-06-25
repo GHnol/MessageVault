@@ -48,6 +48,8 @@ suite('Suite 1 — API shape', function () {
     assert(typeof UX.getState             === 'function', 'getState is a function');
     assert(typeof UX.submitForReview      === 'function', 'submitForReview is a function');
     assert(typeof UX.withdrawSubmission   === 'function', 'withdrawSubmission is a function');
+    assert(typeof UX.approve              === 'function', 'approve is a function');
+    assert(typeof UX.refreshStaleness     === 'function', 'refreshStaleness is a function');
     assert(typeof UX.getStatusLabel       === 'function', 'getStatusLabel is a function');
     assert(typeof UX.getAllowedUserActions === 'function', 'getAllowedUserActions is a function');
     assert(typeof UX.serialize            === 'function', 'serialize is a function');
@@ -182,11 +184,17 @@ suite('Suite 8 — getAllowedUserActions for all five statuses', function () {
 
     const pendingActions = UX.getAllowedUserActions('pending-review');
     assert(Array.isArray(pendingActions),                          'pending-review → returns array');
+    assert(pendingActions.includes('approve'),                     'pending-review → includes approve');
     assert(pendingActions.includes('withdraw-submission'),         'pending-review → includes withdraw-submission');
-    assert(pendingActions.length === 1,                            'pending-review → exactly one user action');
+    assert(pendingActions.length === 2,                            'pending-review → exactly two user actions');
     assert(UX.getAllowedUserActions('approved').length         === 0, 'approved → no user actions');
     assert(UX.getAllowedUserActions('changes-requested').length === 0, 'changes-requested → no user actions');
     assert(UX.getAllowedUserActions('revoked').length           === 0, 'revoked → no user actions');
+
+    const staleActions = UX.getAllowedUserActions('stale');
+    assert(Array.isArray(staleActions),                  'stale → returns array');
+    assert(staleActions.includes('submit-for-review'),   'stale → includes submit-for-review (re-review path)');
+    assert(staleActions.length === 1,                    'stale → exactly one user action');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -434,6 +442,202 @@ suite('Suite 16b — withdrawSubmission() uninitialized and resubmit', function 
     assert(resubmit.success === true, 'can resubmit after withdrawal');
     assert(UX.getState('message-book').status === 'pending-review',
         'status is pending-review after resubmit following withdrawal');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 17 — approve() captures fingerprint and reaches approved (Package 5D)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 17 — approve() captures fingerprint and reaches approved', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    UX.initialize('message-book');
+    UX.submitForReview('message-book');
+
+    const res = UX.approve('message-book', 'kmpf1:fp-1');
+    assert(res.success === true,                 'approve succeeds from pending-review');
+    assert(res.state.status === 'approved',      'status is approved after approve');
+    assert(res.state.approvedProofFingerprint === 'kmpf1:fp-1', 'approve captures the supplied fingerprint');
+    assert(typeof res.state.approvedAt === 'string' && res.state.approvedAt.length > 0, 'approvedAt set');
+
+    assert(UX.getState('message-book').status === 'approved', 'getState reflects approved');
+
+    // Second approve (already approved) fails — no self-transition
+    const r2 = UX.approve('message-book', 'kmpf1:fp-2');
+    assert(r2.success === false, 'second approve (already approved) fails');
+    assert(UX.getState('message-book').status === 'approved', 'state remains approved after failed approve');
+    assert(UX.getState('message-book').approvedProofFingerprint === 'kmpf1:fp-1',
+        'fingerprint unchanged after failed approve');
+});
+
+suite('Suite 17b — approve() guards', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    const r0 = UX.approve('message-book', 'kmpf1:x');
+    assert(r0.success === false, 'approve before initialize fails');
+    assert(r0.state === null,    'approve before initialize state null');
+
+    UX.initialize('message-book');
+    const r1 = UX.approve('message-book', 'kmpf1:x');
+    assert(r1.success === false, 'approve from none fails (must be pending-review)');
+    assert(UX.getState('message-book').status === 'none', 'state remains none after failed approve');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — refreshStaleness() flips approved → stale on content change
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 18 — refreshStaleness() flips approved → stale on content change', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    UX.initialize('message-book');
+    UX.submitForReview('message-book');
+    UX.approve('message-book', 'kmpf1:original');
+
+    const same = UX.refreshStaleness('message-book', 'kmpf1:original');
+    assert(same.success === true,  'refreshStaleness succeeds with matching fingerprint');
+    assert(same.changed === false, 'no change when fingerprint matches');
+    assert(UX.getState('message-book').status === 'approved', 'remains approved when fingerprint matches');
+
+    const diff = UX.refreshStaleness('message-book', 'kmpf1:edited');
+    assert(diff.success === true,            'refreshStaleness succeeds with different fingerprint');
+    assert(diff.changed === true,            'changed true when fingerprint differs');
+    assert(diff.state.status === 'stale',    'status flips to stale on content change');
+    assert(UX.getState('message-book').status === 'stale', 'getState reflects stale');
+
+    const again = UX.refreshStaleness('message-book', 'kmpf1:edited');
+    assert(again.changed === false, 'no further change once already stale');
+});
+
+suite('Suite 18b — refreshStaleness() no-op for non-approved and uninitialized', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    const r0 = UX.refreshStaleness('message-book', 'kmpf1:x');
+    assert(r0.success === false, 'refreshStaleness before initialize fails');
+
+    UX.initialize('message-book');
+    UX.submitForReview('message-book');
+    const r1 = UX.refreshStaleness('message-book', 'kmpf1:anything');
+    assert(r1.changed === false, 'pending-review never goes stale');
+    assert(UX.getState('message-book').status === 'pending-review', 'pending-review unchanged');
+
+    UX.approve('message-book'); // approve without a fingerprint
+    const r2 = UX.refreshStaleness('message-book', 'kmpf1:anything');
+    assert(r2.changed === false, 'approved without stored fingerprint never goes stale');
+    assert(UX.getState('message-book').status === 'approved', 'remains approved without stored fingerprint');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — getStatusLabel("stale") is truthful local-only wording
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 19 — getStatusLabel("stale") is truthful local-only wording', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    const label = UX.getStatusLabel('stale');
+    assert(typeof label === 'string' && label.length > 0, 'stale has a non-empty label');
+    const lc = label.toLowerCase();
+    assert(!lc.includes('sent') && !lc.includes('upload') && !lc.includes('order'),
+        'stale label does not claim external action');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 20 — serialize/restore preserves fingerprint and stale state
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 20 — serialize/restore preserves fingerprint and stale state', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    UX.initialize('message-book');
+    UX.submitForReview('message-book');
+    UX.approve('message-book', 'kmpf1:saved-fp');
+
+    const saved = JSON.parse(JSON.stringify(UX.serialize()));
+    assert(saved['message-book'].status === 'approved', 'serialized status is approved');
+    assert(saved['message-book'].approvedProofFingerprint === 'kmpf1:saved-fp',
+        'serialized record carries approvedProofFingerprint');
+
+    const KM2 = makeCtx();
+    const UX2 = KM2.ProofApprovalUX;
+    UX2.restore(saved);
+    const st = UX2.getState('message-book');
+    assert(st.status === 'approved', 'restored status is approved');
+    assert(st.approvedProofFingerprint === 'kmpf1:saved-fp', 'restored fingerprint preserved');
+
+    assert(KM2.ProofApprovalState.isApprovalStale(st, 'kmpf1:changed') === true,
+        'restored approval is detected stale against a changed proof');
+    const refreshed = UX2.refreshStaleness('message-book', 'kmpf1:changed');
+    assert(refreshed.changed === true && refreshed.state.status === 'stale',
+        'restored approval flips to stale on changed proof');
+
+    const savedStale = JSON.parse(JSON.stringify(UX2.serialize()));
+    assert(savedStale['message-book'].status === 'stale', 'stale status survives serialize');
+    const KM3 = makeCtx();
+    KM3.ProofApprovalUX.restore(savedStale);
+    assert(KM3.ProofApprovalUX.getState('message-book').status === 'stale', 'stale status survives restore');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 21 — approve()/stale introduce no commerce/manufacturing fields
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 21 — approve()/stale introduce no commerce/manufacturing fields', function () {
+    const KM = makeCtx();
+    const UX = KM.ProofApprovalUX;
+
+    UX.initialize('message-book');
+    UX.submitForReview('message-book');
+    UX.approve('message-book', 'kmpf1:z');
+    UX.refreshStaleness('message-book', 'kmpf1:z2'); // → stale
+    const st = UX.getState('message-book');
+
+    assert(st.status === 'stale',                'reached stale via approve + content change');
+    assert(st.checkoutReady      === undefined,  'no checkoutReady on stale state');
+    assert(st.commerceReady      === undefined,  'no commerceReady on stale state');
+    assert(st.manufacturingReady === undefined,  'no manufacturingReady on stale state');
+    assert(st.exportReady        === undefined,  'no exportReady on stale state');
+    assert(st.orderReady         === undefined,  'no orderReady on stale state');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 22 — contactName change marks an approved proof stale (Proof Approval 5D)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 22 — contactName change marks an approved proof stale', function () {
+    const KM  = makeCtx();
+    const UX  = KM.ProofApprovalUX;
+    const PAS = KM.ProofApprovalState;
+
+    const book = {
+        format: { trimWidthIn: 7, trimHeightIn: 10, maxPages: 250 },
+        opening: { title: 'Our Conversation', dedicationEnabled: false, dedicationText: '' },
+        body: { timestampMode: 'on', pageNumberMode: 'on', dividerMode: 'sparse',
+                endingMode: 'branded', flowMode: 'sectioned' },
+        volumes: [ { id: 'vol-1', name: 'Volume 1' } ],
+        activeVolumeId: 'vol-1',
+        sections: [ { sourceGroupId: 'g1', orderIndex: 0, included: true, messages: [ { id: 'm1' } ] } ]
+    };
+
+    UX.initialize('message-book');
+    UX.submitForReview('message-book');
+    UX.approve('message-book', PAS.computeProofFingerprint(book, 'Alex'));
+    assert(UX.getState('message-book').status === 'approved', 'approved with contactName-bound fingerprint');
+
+    // Re-render with the SAME contactName → not stale (no false invalidation)
+    const same = UX.refreshStaleness('message-book', PAS.computeProofFingerprint(book, 'Alex'));
+    assert(same.changed === false, 'same contactName → not stale');
+    assert(UX.getState('message-book').status === 'approved', 'remains approved when contactName unchanged');
+
+    // Only a derived/nav change with the same name → still not stale
+    const navBook = JSON.parse(JSON.stringify(book));
+    navBook.activeVolumeId = 'vol-2';
+    const nav = UX.refreshStaleness('message-book', PAS.computeProofFingerprint(navBook, 'Alex'));
+    assert(nav.changed === false, 'nav-only change with same contactName → not stale');
+
+    // contactName changed → stale
+    const diff = UX.refreshStaleness('message-book', PAS.computeProofFingerprint(book, 'Alexander'));
+    assert(diff.changed === true, 'changed contactName → stale');
+    assert(diff.state.status === 'stale', 'status flips to stale on contactName change');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

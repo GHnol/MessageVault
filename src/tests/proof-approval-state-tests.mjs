@@ -482,6 +482,269 @@ suite('Suite 15 — pending-review → none withdrawal transition', function () 
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 16 — STALE status and transitions (Package 5D)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 16 — STALE status and transitions', function () {
+    const KM  = makeCtx();
+    const PAS = KM.ProofApprovalState;
+    const ct  = PAS.canTransition;
+
+    assert(PAS.STATUS.STALE === 'stale', 'STATUS.STALE === "stale"');
+
+    // Allowed
+    assert(ct('approved', 'stale')          === true, 'approved → stale allowed');
+    assert(ct('stale',    'pending-review') === true, 'stale → pending-review allowed (re-review)');
+    assert(ct('stale',    'none')           === true, 'stale → none allowed (clear)');
+
+    // Blocked — stale is only reachable from approved
+    assert(ct('none',              'stale') === false, 'none → stale blocked');
+    assert(ct('pending-review',    'stale') === false, 'pending-review → stale blocked');
+    assert(ct('changes-requested', 'stale') === false, 'changes-requested → stale blocked');
+    assert(ct('revoked',           'stale') === false, 'revoked → stale blocked');
+    assert(ct('stale',             'stale') === false, 'stale self-transition blocked');
+    assert(ct('stale', 'approved')          === false, 'stale → approved blocked (must re-review)');
+    assert(ct('stale', 'changes-requested') === false, 'stale → changes-requested blocked');
+    assert(ct('stale', 'revoked')           === false, 'stale → revoked blocked');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 17 — transition() STALE field behavior
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 17 — transition() STALE field behavior', function () {
+    const KM  = makeCtx();
+    const PAS = KM.ProofApprovalState;
+
+    const s0 = PAS.create({ productTypeId: 'message-book' }).state;
+    const s1 = PAS.transition(s0, 'pending-review').state;
+    const s2 = PAS.transition(s1, 'approved', { proofFingerprint: 'kmpf1:aaaa' }).state;
+
+    // approved → stale
+    const r3 = PAS.transition(s2, 'stale');
+    assert(r3.success === true, 'approved → stale succeeds');
+    assert(r3.state.status === 'stale', 'status is stale');
+    assert(typeof r3.state.staleAt === 'string' && r3.state.staleAt.length > 0,
+        'staleAt set on approved→stale');
+    assert(r3.state.approvedAt === s2.approvedAt, 'approvedAt preserved through stale (history)');
+    assert(r3.state.approvedProofFingerprint === 'kmpf1:aaaa',
+        'approvedProofFingerprint preserved through stale (history)');
+
+    // stale → pending-review (re-review after edits)
+    const r4 = PAS.transition(r3.state, 'pending-review');
+    assert(r4.success === true, 'stale → pending-review succeeds');
+    assert(typeof r4.state.submittedAt === 'string' && r4.state.submittedAt.length > 0,
+        'submittedAt set on stale→pending-review');
+    assert(r4.state.staleAt === r3.state.staleAt, 'staleAt preserved as history through re-review');
+
+    // stale → none (clear)
+    const r5 = PAS.transition(r3.state, 'none');
+    assert(r5.success === true, 'stale → none succeeds');
+    assert(r5.state.status === 'none', 'status none after clear');
+    assert(r5.state.submittedAt === null, 'submittedAt cleared on stale→none');
+
+    // Immutability — original approved record unchanged
+    assert(s2.status === 'approved', 'original approved record unchanged after stale transition');
+    assert(s2.staleAt === null, 'original approved record staleAt still null');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — approval captures proof fingerprint
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 18 — approval captures proof fingerprint', function () {
+    const KM  = makeCtx();
+    const PAS = KM.ProofApprovalState;
+
+    const s0 = PAS.create({ productTypeId: 'message-book' }).state;
+    assert(s0.approvedProofFingerprint === null, 'create() initializes approvedProofFingerprint to null');
+    assert(s0.staleAt === null, 'create() initializes staleAt to null');
+
+    const s1 = PAS.transition(s0, 'pending-review').state;
+
+    const withFp = PAS.transition(s1, 'approved', { proofFingerprint: 'kmpf1:1234' }).state;
+    assert(withFp.approvedProofFingerprint === 'kmpf1:1234', 'approvedProofFingerprint captured from opts');
+    assert(typeof withFp.approvedAt === 'string', 'approvedAt set alongside fingerprint');
+
+    const noFp = PAS.transition(s1, 'approved').state;
+    assert(noFp.approvedProofFingerprint === null, 'approvedProofFingerprint null when opts omitted');
+
+    const emptyFp = PAS.transition(s1, 'approved', { proofFingerprint: '' }).state;
+    assert(emptyFp.approvedProofFingerprint === null, 'approvedProofFingerprint null when opts has empty string');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — computeProofFingerprint determinism / sensitivity / exclusions
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 19 — computeProofFingerprint determinism/sensitivity/exclusions', function () {
+    const KM  = makeCtx();
+    const fp  = KM.ProofApprovalState.computeProofFingerprint;
+
+    function makeBook() {
+        return {
+            format:  { trimWidthIn: 7, trimHeightIn: 10, maxPages: 250 },
+            opening: { title: 'Our Conversation', dedicationEnabled: false, dedicationText: '' },
+            body:    { timestampMode: 'on', pageNumberMode: 'on', dividerMode: 'sparse',
+                       endingMode: 'branded', flowMode: 'sectioned' },
+            volumes: [ { id: 'vol-1', name: 'Volume 1', estimatedPageCount: 0, exceedsPageLimit: false } ],
+            activeVolumeId: 'vol-1',
+            estimatedPageCount: 0,
+            exceedsPageLimit: false,
+            sections: [
+                { sourceGroupId: 'g1', customName: 'A', customTitle: null, volumeId: 'vol-1',
+                  included: true, orderIndex: 0, featured: false, forcePageBreakBefore: false,
+                  showDividerBefore: false, preserveSameSenderRuns: true,
+                  preserveShortExchangeClusters: true, messages: [ { id: 'm1' }, { id: 'm2' } ] },
+                { sourceGroupId: 'g2', customName: 'B', customTitle: null, volumeId: 'vol-1',
+                  included: true, orderIndex: 1, featured: false, forcePageBreakBefore: false,
+                  showDividerBefore: true, preserveSameSenderRuns: true,
+                  preserveShortExchangeClusters: true, messages: [ { id: 'm3' } ] }
+            ]
+        };
+    }
+
+    const base = fp(makeBook());
+    assert(typeof base === 'string' && base.indexOf('kmpf1:') === 0, 'fingerprint is a kmpf1-prefixed string');
+
+    // Determinism
+    assert(fp(makeBook()) === base, 'same content → same fingerprint');
+    assert(fp(JSON.parse(JSON.stringify(makeBook()))) === base, 'deep-cloned content → same fingerprint');
+
+    // Sensitivity — proof-affecting changes must change the fingerprint
+    let b;
+    b = makeBook(); b.body.timestampMode = 'off';            assert(fp(b) !== base, 'timestampMode change → different fingerprint');
+    b = makeBook(); b.body.dividerMode = 'none';             assert(fp(b) !== base, 'dividerMode change → different fingerprint');
+    b = makeBook(); b.body.endingMode = 'none';              assert(fp(b) !== base, 'endingMode change → different fingerprint');
+    b = makeBook(); b.format.maxPages = 200;                 assert(fp(b) !== base, 'format.maxPages change → different fingerprint');
+    b = makeBook(); b.opening.title = 'Changed';             assert(fp(b) !== base, 'opening.title change → different fingerprint');
+    b = makeBook(); b.opening.dedicationEnabled = true;      assert(fp(b) !== base, 'dedicationEnabled change → different fingerprint');
+    b = makeBook(); b.sections[0].included = false;          assert(fp(b) !== base, 'section.included toggle → different fingerprint');
+    b = makeBook(); b.sections[0].orderIndex = 5;            assert(fp(b) !== base, 'section.orderIndex change → different fingerprint');
+    b = makeBook(); b.sections[0].featured = true;           assert(fp(b) !== base, 'section.featured change → different fingerprint');
+    b = makeBook(); b.sections[0].volumeId = 'vol-2';        assert(fp(b) !== base, 'section.volumeId change → different fingerprint');
+    b = makeBook(); b.sections[0].customTitle = 'T';         assert(fp(b) !== base, 'section.customTitle change → different fingerprint');
+    b = makeBook(); b.sections[0].messages.push({ id: 'm9' }); assert(fp(b) !== base, 'added message → different fingerprint');
+    b = makeBook(); b.sections[0].messages = [ { id: 'm2' }, { id: 'm1' } ]; assert(fp(b) !== base, 'message reorder within section → different fingerprint');
+
+    // Exclusions — navigation/derived state must NOT change the fingerprint
+    b = makeBook(); b.activeVolumeId = 'vol-2';              assert(fp(b) === base, 'activeVolumeId change → same fingerprint (navigation only)');
+    b = makeBook(); b.estimatedPageCount = 42;              assert(fp(b) === base, 'estimatedPageCount change → same fingerprint (derived)');
+    b = makeBook(); b.exceedsPageLimit = true;              assert(fp(b) === base, 'exceedsPageLimit change → same fingerprint (derived)');
+    b = makeBook(); b.volumes[0].estimatedPageCount = 99;   assert(fp(b) === base, 'volume.estimatedPageCount change → same fingerprint (derived)');
+    b = makeBook(); b.volumes[0].exceedsPageLimit = true;   assert(fp(b) === base, 'volume.exceedsPageLimit change → same fingerprint (derived)');
+
+    // Canonical section-array reorder (same orderIndex values) → same fingerprint
+    b = makeBook(); b.sections = [ b.sections[1], b.sections[0] ];
+    assert(fp(b) === base, 'section array reorder without orderIndex change → same fingerprint');
+
+    // Malformed / empty inputs do not throw and return stable strings
+    assert(typeof fp(null) === 'string' && fp(null).indexOf('kmpf1:') === 0, 'null → stable kmpf1 string (no throw)');
+    assert(fp(null) === fp(null), 'null → deterministic');
+    assert(typeof fp(undefined) === 'string', 'undefined → string (no throw)');
+    assert(typeof fp({}) === 'string', 'empty object → string (no throw)');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 20 — isApprovalStale
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 20 — isApprovalStale', function () {
+    const KM    = makeCtx();
+    const stale = KM.ProofApprovalState.isApprovalStale;
+
+    const approvedA = { status: 'approved', approvedProofFingerprint: 'kmpf1:A' };
+    assert(stale(approvedA, 'kmpf1:A') === false, 'approved + matching fingerprint → not stale');
+    assert(stale(approvedA, 'kmpf1:B') === true,  'approved + different fingerprint → stale');
+    assert(stale(approvedA, '')        === false, 'approved + empty current fingerprint → not stale');
+    assert(stale(approvedA, null)      === false, 'approved + null current fingerprint → not stale');
+
+    const approvedNoFp = { status: 'approved', approvedProofFingerprint: null };
+    assert(stale(approvedNoFp, 'kmpf1:B') === false, 'approved without stored fingerprint → not stale');
+
+    const pending = { status: 'pending-review', approvedProofFingerprint: 'kmpf1:A' };
+    assert(stale(pending, 'kmpf1:B') === false, 'non-approved status → not stale');
+
+    assert(stale(null, 'kmpf1:B')      === false, 'null record → not stale (no throw)');
+    assert(stale(undefined, 'kmpf1:B') === false, 'undefined record → not stale (no throw)');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 21 — STALE state introduces no commerce/manufacturing/export fields
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 21 — STALE state has no commerce/manufacturing/export fields', function () {
+    const KM  = makeCtx();
+    const PAS = KM.ProofApprovalState;
+
+    const s0 = PAS.create({ productTypeId: 'message-book' }).state;
+    const s1 = PAS.transition(s0, 'pending-review').state;
+    const s2 = PAS.transition(s1, 'approved', { proofFingerprint: 'kmpf1:x' }).state;
+    const s3 = PAS.transition(s2, 'stale').state;
+
+    assert(s3.commerceReady      === undefined, 'STALE state has no commerceReady');
+    assert(s3.manufacturingReady === undefined, 'STALE state has no manufacturingReady');
+    assert(s3.exportReady        === undefined, 'STALE state has no exportReady');
+    assert(s3.checkoutReady      === undefined, 'STALE state has no checkoutReady');
+    assert(s3.orderReady         === undefined, 'STALE state has no orderReady');
+    assert(s3.paymentReady       === undefined, 'STALE state has no paymentReady');
+
+    // approvedProofFingerprint is a content signature only — not a readiness flag
+    assert(typeof s3.approvedProofFingerprint === 'string',
+        'approvedProofFingerprint retained as a content-signature string, not a readiness flag');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 22 — computeProofFingerprint contactName binding (Proof Approval 5D)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 22 — computeProofFingerprint contactName binding', function () {
+    const KM = makeCtx();
+    const fp = KM.ProofApprovalState.computeProofFingerprint;
+
+    function makeBook() {
+        return {
+            format:  { trimWidthIn: 7, trimHeightIn: 10, maxPages: 250 },
+            opening: { title: 'Our Conversation', dedicationEnabled: false, dedicationText: '' },
+            body:    { timestampMode: 'on', pageNumberMode: 'on', dividerMode: 'sparse',
+                       endingMode: 'branded', flowMode: 'sectioned' },
+            volumes: [ { id: 'vol-1', name: 'Volume 1', estimatedPageCount: 0, exceedsPageLimit: false } ],
+            activeVolumeId: 'vol-1',
+            estimatedPageCount: 0,
+            exceedsPageLimit: false,
+            sections: [
+                { sourceGroupId: 'g1', customName: 'A', customTitle: null, volumeId: 'vol-1',
+                  included: true, orderIndex: 0, featured: false, forcePageBreakBefore: false,
+                  showDividerBefore: false, preserveSameSenderRuns: true,
+                  preserveShortExchangeClusters: true, messages: [ { id: 'm1' }, { id: 'm2' } ] }
+            ]
+        };
+    }
+
+    const baseNoName = fp(makeBook());
+
+    // Backward compatibility — omitted / non-string contactName is treated as ''
+    assert(fp(makeBook()) === fp(makeBook(), ''),        'omitted contactName equals empty-string contactName');
+    assert(fp(makeBook(), undefined) === fp(makeBook(), ''), 'undefined contactName treated as empty string');
+    assert(fp(makeBook(), null) === fp(makeBook(), ''),  'null contactName treated as empty string');
+    assert(fp(makeBook(), 42) === fp(makeBook(), ''),    'non-string contactName treated as empty string');
+
+    // Same contactName → same fingerprint; different contactName → different fingerprint
+    assert(fp(makeBook(), 'Alex') === fp(makeBook(), 'Alex'), 'same contactName → same fingerprint');
+    assert(fp(makeBook(), 'Alex') !== fp(makeBook(), 'Bob'),  'different contactName → different fingerprint');
+    assert(fp(makeBook(), 'Alex') !== baseNoName,             'named fingerprint differs from empty-name fingerprint');
+
+    // contactName must not pull in unrelated nav/derived state: with the name held
+    // constant, activeVolumeId and derived page counts still do not change the fingerprint.
+    const withName = fp(makeBook(), 'Alex');
+    let b;
+    b = makeBook(); b.activeVolumeId = 'vol-2';           assert(fp(b, 'Alex') === withName, 'activeVolumeId still excluded with contactName held constant');
+    b = makeBook(); b.estimatedPageCount = 77;            assert(fp(b, 'Alex') === withName, 'estimatedPageCount still excluded with contactName held constant');
+    b = makeBook(); b.volumes[0].estimatedPageCount = 88; assert(fp(b, 'Alex') === withName, 'volume.estimatedPageCount still excluded with contactName held constant');
+
+    // A genuine proof-affecting book change still changes the fingerprint with name constant
+    b = makeBook(); b.body.timestampMode = 'off';         assert(fp(b, 'Alex') !== withName, 'book change still changes fingerprint with contactName constant');
+
+    // Degenerate empty-book path also binds contactName, consistently
+    assert(fp(null, 'Alex') !== fp(null, 'Bob'),         'null book: contactName still differentiates');
+    assert(typeof fp(null, 'Alex') === 'string' && fp(null, 'Alex').indexOf('kmpf1:') === 0,
+        'null book with name → kmpf1 string');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Results
 // ─────────────────────────────────────────────────────────────────────────────
 

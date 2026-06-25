@@ -640,6 +640,68 @@ var vStringPAS = PP.validate({
 });
 assert(!vStringPAS.valid, 'validate rejects string proofApprovalStates');
 
+// ── Package 5D — proof approval fingerprint + stale state persistence ─────────
+
+suite('Package 5D — approved record fingerprint round-trips through snapshot + restore');
+
+var pas5dApproved = { 'message-book': {
+    productTypeId: 'message-book',
+    status: 'approved',
+    createdAt: '2026-06-24T00:00:00.000Z',
+    updatedAt: '2026-06-24T00:00:00.000Z',
+    submittedAt: '2026-06-24T00:00:00.000Z',
+    approvedAt: '2026-06-24T00:00:00.000Z',
+    changesRequestedAt: null, revokedAt: null, staleAt: null,
+    changeRequestReason: null, revokeReason: null,
+    approvedProofFingerprint: 'kmpf1:deadbeefcafef00d', notes: null
+} };
+var snap5d = PP.createSnapshot({
+    memories: [], keepsakeGroups: [],
+    selectedIndices: { forEach: function () {} }, contactName: '',
+    proofApprovalStates: pas5dApproved
+});
+var parsed5d = JSON.parse(JSON.stringify(snap5d));
+assert(PP.validate(parsed5d).valid, 'approved-with-fingerprint snapshot validates after JSON round-trip');
+assert(parsed5d.projectSession.proofApprovalStates['message-book'].approvedProofFingerprint === 'kmpf1:deadbeefcafef00d',
+    'approvedProofFingerprint preserved through snapshot JSON round-trip');
+
+var restore5d = PSR.restore(parsed5d);
+assert(restore5d.success, 'restore of approved-with-fingerprint succeeds');
+assert(restore5d.appState.proofApprovalStates['message-book'].status === 'approved',
+    'restored status is approved');
+assert(restore5d.appState.proofApprovalStates['message-book'].approvedProofFingerprint === 'kmpf1:deadbeefcafef00d',
+    'restored record preserves approvedProofFingerprint');
+assert(!restore5d.warnings.some(function (w) { return w.indexOf('proofApprovalStates') >= 0; }),
+    'approved-with-fingerprint produces no unknown-field warning');
+
+suite('Package 5D — stale record round-trips through snapshot + restore');
+
+var pas5dStale = { 'message-book': {
+    productTypeId: 'message-book',
+    status: 'stale',
+    createdAt: '2026-06-24T00:00:00.000Z',
+    updatedAt: '2026-06-24T00:00:00.000Z',
+    submittedAt: '2026-06-24T00:00:00.000Z',
+    approvedAt: '2026-06-24T00:00:00.000Z',
+    changesRequestedAt: null, revokedAt: null,
+    staleAt: '2026-06-24T01:00:00.000Z',
+    changeRequestReason: null, revokeReason: null,
+    approvedProofFingerprint: 'kmpf1:00112233aabbccdd', notes: null
+} };
+var snap5dStale = PP.createSnapshot({
+    memories: [], keepsakeGroups: [],
+    selectedIndices: { forEach: function () {} }, contactName: '',
+    proofApprovalStates: pas5dStale
+});
+var parsed5dStale = JSON.parse(JSON.stringify(snap5dStale));
+assert(PP.validate(parsed5dStale).valid, 'stale snapshot validates after JSON round-trip');
+var restore5dStale = PSR.restore(parsed5dStale);
+assert(restore5dStale.success, 'restore of stale record succeeds');
+assert(restore5dStale.appState.proofApprovalStates['message-book'].status === 'stale',
+    'restored status is stale');
+assert(restore5dStale.appState.proofApprovalStates['message-book'].staleAt === '2026-06-24T01:00:00.000Z',
+    'restored record preserves staleAt');
+
 // ── Package 3E: productDrafts validation ─────────────────────────────────────
 
 suite('Package 3E — productDrafts validation');
