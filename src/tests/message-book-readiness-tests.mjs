@@ -77,6 +77,11 @@ suite('Suite 1 — API shape', function () {
     assert(typeof MBR.isCheckoutEligible === 'function', 'isCheckoutEligible is a function');
     assert(typeof MBR.blockerMessage === 'function', 'blockerMessage is a function');
     assert(typeof MBR.describeBoundary === 'function', 'describeBoundary is a function');
+    // 7B read-only display layer.
+    assert(typeof MBR.STATUS_TONE === 'object' && MBR.STATUS_TONE !== null, 'STATUS_TONE is an object');
+    assert(MBR.STATUS_TONE.ELIGIBLE === 'eligible' && MBR.STATUS_TONE.BLOCKED === 'blocked', 'STATUS_TONE values');
+    assert(typeof MBR.describeReadiness === 'function', 'describeReadiness is a function');
+    assert(typeof MBR.resolveLiveStatus === 'function', 'resolveLiveStatus is a function');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -524,6 +529,124 @@ suite('Suite 14 — integration with ProofApprovalState / ProofPreviewContract /
                 'non-reviewable phase ⇒ gate proofReviewable false for ' + JSON.stringify(facts));
         }
     });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 15 — describeReadiness display copy matrix (7B)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 15 — describeReadiness copy (acceptance #2,#7,#10)', function () {
+    const MBR = makeCtx().MessageBookReadiness;
+
+    // Eligible result → eligible tone + proceed-later copy, no blocker.
+    const okD = MBR.describeReadiness(MBR.evaluate(ELIGIBLE));
+    assert(okD.tone === 'eligible', 'eligible result → eligible tone');
+    assert(okD.headline === 'Eligible to proceed toward checkout later', 'eligible headline says proceed toward checkout later');
+    assert(typeof okD.detail === 'string' && okD.detail.length > 0, 'eligible detail is non-empty');
+    assert(okD.blocker === null, 'eligible display has no blocker');
+
+    // Every blocking scenario → blocked tone, the safe blocker message as detail, and
+    // the primary blocker code carried through for theming.
+    const blocked = [
+        ['no content',        withInput({ hasContent: false }),                         MBR.BLOCKER.NO_CONTENT],
+        ['missing approval',  withInput({ approvalStatus: 'none' }),                     MBR.BLOCKER.PROOF_NOT_SUBMITTED],
+        ['pending-review',    withInput({ approvalStatus: 'pending-review' }),           MBR.BLOCKER.PROOF_PENDING_REVIEW],
+        ['stale status',      withInput({ approvalStatus: 'stale' }),                    MBR.BLOCKER.PROOF_APPROVAL_STALE],
+        ['stale flag',        withInput({ approvalStatus: 'approved', approvalStale: true }), MBR.BLOCKER.PROOF_APPROVAL_STALE],
+        ['changes-requested', withInput({ approvalStatus: 'changes-requested' }),        MBR.BLOCKER.PROOF_CHANGES_REQUESTED],
+        ['revoked',           withInput({ approvalStatus: 'revoked' }),                  MBR.BLOCKER.PROOF_REVOKED],
+        ['over page limit',   withInput({ exceedsPageLimit: true }),                     MBR.BLOCKER.OVER_PAGE_LIMIT],
+        ['preflight failure', withInput({ preflightBlockingFailures: 1 }),               MBR.BLOCKER.PREFLIGHT_BLOCKING_FAILURE]
+    ];
+    blocked.forEach(function (c) {
+        const r = MBR.evaluate(c[1]);
+        const d = MBR.describeReadiness(r);
+        assert(d.tone === 'blocked', c[0] + ' → blocked tone');
+        assert(d.headline === 'Not eligible to proceed yet', c[0] + ' → not-eligible headline');
+        assert(d.blocker === c[2], c[0] + ' → primary blocker ' + c[2]);
+        assert(d.detail === MBR.blockerMessage(c[2]), c[0] + ' → detail is the safe blocker message');
+    });
+
+    // No buy/print/order/send/vendor/production-ready language in any copy path.
+    const banned = ['buy', 'print', 'order', 'send', 'vendor', 'production-ready', 'pay', 'cart', 'ship'];
+    const allCopy = [okD.headline, okD.detail].concat(blocked.map(function (c) {
+        const d = MBR.describeReadiness(MBR.evaluate(c[1]));
+        return d.headline + ' ' + d.detail;
+    })).join(' ').toLowerCase();
+    banned.forEach(function (w) {
+        assert(allCopy.indexOf(w) === -1, 'readiness copy avoids "' + w + '"');
+    });
+
+    // Defensive: a null/garbage result degrades to a safe blocked view.
+    const degraded = MBR.describeReadiness(null);
+    assert(degraded.tone === 'blocked' && degraded.headline === 'Not eligible to proceed yet',
+        'null result → safe blocked view');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 16 — resolveLiveStatus live input mapping + acceptance scenarios (7B)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 16 — resolveLiveStatus live mapping (acceptance #1-#7)', function () {
+    const MBR = makeCtx().MessageBookReadiness;
+
+    // The live signals a running book view has when a current proof is approved.
+    function live(over) {
+        return Object.assign({
+            engineSupported:    true,
+            hasContent:         true,
+            exceedsPageLimit:   false,
+            approvalStatus:     'approved',
+            approvalStale:      false,
+            anyBookCheckFailed: false
+        }, over);
+    }
+
+    // Shape.
+    const ok = MBR.resolveLiveStatus(live());
+    assert(ok && ok.input && ok.result && ok.display, 'resolveLiveStatus returns { input, result, display }');
+
+    // anyBookCheckFailed → preflightBlockingFailures count mapping.
+    assert(MBR.resolveLiveStatus(live()).input.preflightBlockingFailures === 0,
+        'anyBookCheckFailed false → 0 blocking failures');
+    assert(MBR.resolveLiveStatus(live({ anyBookCheckFailed: true })).input.preflightBlockingFailures === 1,
+        'anyBookCheckFailed true → 1 blocking failure');
+    // An explicit numeric count wins over the boolean.
+    assert(MBR.resolveLiveStatus(live({ anyBookCheckFailed: true, preflightBlockingFailures: 0 }))
+        .input.preflightBlockingFailures === 0, 'explicit numeric preflightBlockingFailures wins');
+    // Missing approvalStatus defaults to 'none'.
+    assert(MBR.resolveLiveStatus({ hasContent: true }).input.approvalStatus === 'none',
+        'missing approvalStatus → none');
+
+    // Acceptance #2: current approved, under-limit, no blocker → eligible.
+    assert(ok.result.checkoutEligible === true && ok.display.tone === 'eligible',
+        '#2 approved/current/under-limit/no-blocker → checkoutEligible + eligible tone');
+
+    // Acceptance #3-#7: each blocking live condition → ineligible + safe blocker.
+    const cases = [
+        ['#3 missing approval',  live({ approvalStatus: 'none' }),          MBR.BLOCKER.PROOF_NOT_SUBMITTED],
+        ['#4 pending-review',    live({ approvalStatus: 'pending-review' }), MBR.BLOCKER.PROOF_PENDING_REVIEW],
+        ['#5 stale status',      live({ approvalStatus: 'stale' }),          MBR.BLOCKER.PROOF_APPROVAL_STALE],
+        ['#5 stale flag',        live({ approvalStale: true }),              MBR.BLOCKER.PROOF_APPROVAL_STALE],
+        ['#6 over page limit',   live({ exceedsPageLimit: true }),           MBR.BLOCKER.OVER_PAGE_LIMIT],
+        ['#7 preflight failure', live({ anyBookCheckFailed: true }),         MBR.BLOCKER.PREFLIGHT_BLOCKING_FAILURE]
+    ];
+    cases.forEach(function (c) {
+        const rs = MBR.resolveLiveStatus(c[1]);
+        assert(rs.result.checkoutEligible === false, c[0] + ' → ineligible');
+        assert(rs.display.tone === 'blocked', c[0] + ' → blocked tone');
+        assert(rs.result.blockers.indexOf(c[2]) !== -1, c[0] + ' → blocker ' + c[2] + ' present');
+        assert(typeof rs.display.detail === 'string' && rs.display.detail.length > 0, c[0] + ' → safe detail');
+    });
+
+    // Higher gates stay false even when checkout-eligible (acceptance #9 surfaced shape).
+    assert(ok.result.manufacturingReady === false && ok.result.vendorReady === false &&
+        ok.result.productionReady === false && ok.result.exportReady === false &&
+        ok.result.packagingReady === false, 'higher production/vendor gates remain false when eligible');
+
+    // Purity: the live argument is not mutated.
+    const arg = live({ anyBookCheckFailed: true });
+    const before = JSON.stringify(arg);
+    MBR.resolveLiveStatus(arg);
+    assert(JSON.stringify(arg) === before, 'resolveLiveStatus does not mutate its argument');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

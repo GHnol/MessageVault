@@ -3422,12 +3422,44 @@
             .book-proof-disabled .book-proof-status { color: #3a3a3c; }
             .book-proof-cancel-btn { color: #636366; }
             .book-proof-cancel-btn:hover { color: #0a84ff; }
+
+            .book-readiness-status { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.07); }
+            .book-readiness-headline { color: #aeaeb2; }
+            .book-readiness-eligible .book-readiness-headline { color: #30d158; }
+            .book-readiness-blocked .book-readiness-headline { color: #aeaeb2; }
+            .book-readiness-detail { color: #636366; }
         }
 
         .book-proof-panel {
             width: 100%;
             background: #fff;
             border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+        .book-readiness-status {
+            width: 100%;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+        .book-readiness-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 8px 24px;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .book-readiness-headline {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.1px;
+            color: #8e8e93;
+        }
+        .book-readiness-eligible .book-readiness-headline { color: #1c8a3a; }
+        .book-readiness-blocked .book-readiness-headline { color: #8e8e93; }
+        .book-readiness-detail {
+            font-size: 12px;
+            color: #8e8e93;
         }
         .book-proof-panel-inner {
             max-width: 1040px;
@@ -3761,6 +3793,7 @@
             </div>
         </div>
         <div id="bookProofPanel" class="book-proof-panel" style="display:none;"></div>
+        <div id="bookReadinessStatus" class="book-readiness-status" style="display:none;"></div>
         <div class="book-shell">
             <div class="book-controls-bar" id="bookControlsBar"></div>
             <div class="book-sections-bar" id="bookSectionsBar"></div>
@@ -3894,6 +3927,7 @@
     <script src="src/products/proof-approval-ux.js"></script>
     <script src="src/products/proof-preview-contract.js"></script>
     <script src="src/products/book-composition.js"></script>
+    <script src="src/products/message-book-readiness.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -4001,6 +4035,7 @@
         const bookSectionsBar = document.getElementById('bookSectionsBar');
         const bookCanvas = document.getElementById('bookCanvas');
         const bookProofPanel = document.getElementById('bookProofPanel');
+        const bookReadinessStatus = document.getElementById('bookReadinessStatus');
         const reviewBookBtn = document.getElementById('reviewBookBtn');
 
         // Loading
@@ -9010,7 +9045,11 @@ ${keepsakeFooter}
 
         function renderBookProofPanel() {
             const UX = window.KMEngine && window.KMEngine.ProofApprovalUX;
-            if (!UX) { bookProofPanel.style.display = 'none'; return; }
+            if (!UX) {
+                bookProofPanel.style.display = 'none';
+                if (bookReadinessStatus) bookReadinessStatus.style.display = 'none';
+                return;
+            }
 
             UX.initialize('message-book');
 
@@ -9098,7 +9137,12 @@ ${keepsakeFooter}
             }
 
             const view = UX.getProofPanelCopy(phase);
-            if (!view) { bookProofPanel.innerHTML = ''; bookProofPanel.style.display = 'none'; return; }
+            if (!view) {
+                bookProofPanel.innerHTML = '';
+                bookProofPanel.style.display = 'none';
+                if (bookReadinessStatus) bookReadinessStatus.style.display = 'none';
+                return;
+            }
 
             const isNotReady = phase.indexOf('not-ready') === 0;
             var parts = ['<span class="book-proof-status ' + view.statusClass + '">' + view.label + '</span>'];
@@ -9120,6 +9164,12 @@ ${keepsakeFooter}
 
             bookProofPanel.innerHTML = html;
             bookProofPanel.style.display = '';
+
+            // 7B: read-only checkout-readiness status. Consume the 7A gate with the
+            // same live signals this panel already computed — content, page-limit
+            // status, proof status, staleness (via the 5D fingerprint), and any
+            // blocking preflight failure. Read-only: no button, no checkout/cart/order.
+            renderBookReadinessStatus(state, hasContent, status, record, currentProofFingerprint, _anyBookCheckFailed);
 
             const submitBtn = document.getElementById('bookProofSubmitBtn');
             if (submitBtn) {
@@ -9156,6 +9206,34 @@ ${keepsakeFooter}
                     if (result.success) renderBookProofPanel();
                 });
             }
+        }
+
+        // 7B: render the read-only Message Book checkout-readiness status from the
+        // 7A KMEngine.MessageBookReadiness gate. It only displays whether the current
+        // proof could proceed toward checkout LATER, or the safe reason it cannot. It
+        // adds no checkout button and creates no cart / order / payment / checkout
+        // session, and never implies print / manufacturing / vendor / export readiness.
+        function renderBookReadinessStatus(state, hasContent, approvalStatus, record, currentProofFingerprint, anyBookCheckFailed) {
+            if (!bookReadinessStatus) return;
+            const MBR = window.KMEngine && window.KMEngine.MessageBookReadiness;
+            if (!MBR || !MBR.resolveLiveStatus) { bookReadinessStatus.style.display = 'none'; return; }
+            const PAS = window.KMEngine && window.KMEngine.ProofApprovalState;
+            const approvalStale = !!(PAS && PAS.isApprovalStale &&
+                PAS.isApprovalStale(record, currentProofFingerprint));
+            const rs = MBR.resolveLiveStatus({
+                engineSupported:    true,
+                hasContent:         hasContent,
+                exceedsPageLimit:   !!(state && state.exceedsPageLimit),
+                approvalStatus:     approvalStatus,
+                approvalStale:      approvalStale,
+                anyBookCheckFailed: anyBookCheckFailed
+            });
+            const d = rs.display;
+            bookReadinessStatus.className = 'book-readiness-status book-readiness-' + d.tone;
+            var parts = ['<span class="book-readiness-headline">' + escapeHTML(d.headline) + '</span>'];
+            if (d.detail) parts.push('<span class="book-readiness-detail">' + escapeHTML(d.detail) + '</span>');
+            bookReadinessStatus.innerHTML = '<div class="book-readiness-inner">' + parts.join('') + '</div>';
+            bookReadinessStatus.style.display = '';
         }
 
         function renderBookView() {

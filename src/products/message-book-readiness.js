@@ -200,15 +200,89 @@
         };
     }
 
+    // ── Read-only display layer (7B live status hook) ────────────────────────
+    // A live UI may want to SHOW this readiness, not just decide it. These helpers
+    // turn a result into safe, render-ready copy and bridge the signals a running
+    // app already has into the evaluate() input. They are still pure: no DOM, no
+    // clock, no I/O. The copy never says buy, pay, order, print, send, or that a
+    // vendor/production step is ready — when eligible it says only that the proof may
+    // PROCEED TOWARD checkout LATER (checkout itself is a separate, not-started gate).
+    var STATUS_TONE = Object.freeze({
+        ELIGIBLE: 'eligible',
+        BLOCKED:  'blocked'
+    });
+
+    var _ELIGIBLE_HEADLINE = 'Eligible to proceed toward checkout later';
+    var _ELIGIBLE_DETAIL   = 'This proof is approved and within its page limit. Checkout is not open yet.';
+    var _BLOCKED_HEADLINE  = 'Not eligible to proceed yet';
+
+    // Pure display view-model for a readiness result: { tone, headline, detail,
+    // blocker }. Eligible → the proceed-later copy. Otherwise → the existing safe
+    // blocker message (already CTA-free) as the one-line detail, plus the primary
+    // blocker code so a caller can theme it.
+    function describeReadiness(result) {
+        var r = result || {};
+        if (r.checkoutEligible) {
+            return {
+                tone:     STATUS_TONE.ELIGIBLE,
+                headline: _ELIGIBLE_HEADLINE,
+                detail:   _ELIGIBLE_DETAIL,
+                blocker:  null
+            };
+        }
+        var primary = r.primaryBlocker || null;
+        var detail  = (r.blockerMessages && r.blockerMessages.length)
+            ? r.blockerMessages[0]
+            : (primary ? blockerMessage(primary) : '');
+        return {
+            tone:     STATUS_TONE.BLOCKED,
+            headline: _BLOCKED_HEADLINE,
+            detail:   detail,
+            blocker:  primary
+        };
+    }
+
+    // Read-only bridge for a live caller: map the signals the running app already has
+    // (the same producers 5D/6A/6B/6C expose) into the evaluate() input, run the gate,
+    // and attach display copy. The only transform is anyBookCheckFailed → a blocking
+    // preflight-failure count; an explicit numeric preflightBlockingFailures wins.
+    // Pure: reads only its argument and calls evaluate()/describeReadiness().
+    function resolveLiveStatus(live) {
+        var l = live || {};
+        var preflightBlockingFailures;
+        if (typeof l.preflightBlockingFailures === 'number') {
+            preflightBlockingFailures = l.preflightBlockingFailures;
+        } else {
+            preflightBlockingFailures = l.anyBookCheckFailed ? 1 : 0;
+        }
+        var input = {
+            engineSupported:           l.engineSupported !== false,
+            hasContent:                !!l.hasContent,
+            exceedsPageLimit:          !!l.exceedsPageLimit,
+            approvalStatus:            (typeof l.approvalStatus === 'string' && l.approvalStatus) || 'none',
+            approvalStale:             !!l.approvalStale,
+            preflightBlockingFailures: preflightBlockingFailures
+        };
+        var result = evaluate(input);
+        return {
+            input:   input,
+            result:  result,
+            display: describeReadiness(result)
+        };
+    }
+
     KMEngine.MessageBookReadiness = {
         CONTRACT_VERSION:   CONTRACT_VERSION,
         PRODUCT_TYPE_ID:    PRODUCT_TYPE_ID,
         LEVEL:              LEVEL,
         BLOCKER:            BLOCKER,
+        STATUS_TONE:        STATUS_TONE,
         GATED_REASON:       GATED_REASON,
         evaluate:           evaluate,
         isCheckoutEligible: isCheckoutEligible,
         blockerMessage:     blockerMessage,
-        describeBoundary:   describeBoundary
+        describeBoundary:   describeBoundary,
+        describeReadiness:  describeReadiness,
+        resolveLiveStatus:  resolveLiveStatus
     };
 }());

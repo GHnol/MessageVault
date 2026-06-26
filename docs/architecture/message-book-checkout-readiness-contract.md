@@ -1,6 +1,6 @@
 # Message Book Checkout Readiness Contract
 
-**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix).
+**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate).
 **Scope:** A local-first, deterministic **readiness decision** only. It is **not** checkout, payment, cart/order creation, manufacturing, vendor handoff, export, packaging, gifting, or shipping, and 7A added none of those. Certifying "checkout eligible" means a proof is *safe to proceed toward checkout later* — nothing is bought, charged, printed, produced, or sent.
 
 ---
@@ -51,6 +51,12 @@ Pure and dependency-free: no DOM, no clock, no randomness, no I/O, no network, n
 - `blockerMessage(code)` → a short, safe, non-CTA label for a blocker code.
 - `describeBoundary()` → a plain-language statement of what the gate decides and, emphatically, what it does **not** do (buy, charge, order, print, make, package, or ship).
 
+**Read-only display layer (7B):**
+
+- `STATUS_TONE` — frozen enum, `{ ELIGIBLE: 'eligible', BLOCKED: 'blocked' }`.
+- `describeReadiness(result)` → a pure display view-model `{ tone, headline, detail, blocker }`. Eligible → the proceed-toward-checkout-later copy; otherwise → the safe blocker message as the one-line detail plus the primary blocker code for theming. It is copy only — no DOM, no checkout/cart/order verbs.
+- `resolveLiveStatus(live)` → `{ input, result, display }`. Bridges the signals a running app already has into the `evaluate()` input, runs the gate, and attaches the display copy. The only transform is `anyBookCheckFailed → preflightBlockingFailures` (an explicit numeric `preflightBlockingFailures` wins). Pure: reads only its argument.
+
 ### Input shape
 
 All fields are already computed by the app from existing engine outputs; the gate stays free of app/DOM coupling:
@@ -61,7 +67,7 @@ All fields are already computed by the app from existing engine outputs; the gat
 | `exceedsPageLimit` | boolean | `BookComposition.computePageLimitStatus(...)` / the 6A `vol.exceedsPageLimit` |
 | `approvalStatus` | string | `ProofApprovalState.STATUS` of the proof record (`'none'` when no record) |
 | `approvalStale` | boolean | `ProofApprovalState.isApprovalStale(record, currentFingerprint)` |
-| `preflightBlockingFailures` | number | `ProductPreflight` report `blockingFailureCount` |
+| `preflightBlockingFailures` | number | `ProductPreflight` report `blockingFailureCount`. The live hook maps the proof panel's `anyBookCheckFailed` boolean (per-group `ProductDraftLifecycle` `preflight-failed`, set from `ProductPreflight.PAGINATION_STABILITY`) to `1`/`0`. |
 | `engineSupported` | boolean (optional) | defaults `true` (the Message Book renderer is shipped) |
 
 ### Output shape
@@ -98,4 +104,30 @@ The cross-module consistency (`ProofApprovalState` → `ProofPreviewContract` �
 
 ## Wiring
 
-7A is **engine + tests + docs only** — no `index.html` change, no UI, no `window.__km` bridge. `MessageBookReadiness` is available for a later UI/status package to consume; this package adds no checkout button and changes no browser rendering, consistent with the engine-only package precedent (P1/P5A/P5B). The module source is kept free of commerce/production action verbs and side effects (its own source-scan test).
+7A was **engine + tests + docs only** — no `index.html` change, no UI, no `window.__km` bridge. The module source is kept free of commerce/production action verbs and side effects (its own source-scan test).
+
+### Live readiness status hook (7B)
+
+7B consumes the 7A gate from the live Message Book app as a **read-only status**, closing the "engine-only, not wired into UI" gap. It adds **no** checkout button and creates **no** cart, order, payment, or checkout session, and it never implies print / manufacturing / vendor / export / packaging / shipping readiness — those higher gates stay structurally `false` and are not surfaced.
+
+- **Script load** — `index.html` now loads `src/products/message-book-readiness.js` alongside the other product engines.
+- **Input mapping** — `renderBookProofPanel()` already computes every signal the gate needs. It passes them to `MessageBookReadiness.resolveLiveStatus({ hasContent, exceedsPageLimit: state.exceedsPageLimit, approvalStatus: record.status, approvalStale: ProofApprovalState.isApprovalStale(record, currentProofFingerprint), anyBookCheckFailed })`. The proof fingerprint uses the **same** trimmed `contactName` / `computeProofFingerprint` path as 5D, so staleness drives the readiness status identically.
+- **Render** — `renderBookReadinessStatus()` writes the display copy into a read-only `#bookReadinessStatus` element (a sibling of `#bookProofPanel`, **outside** `#bookCanvas`, so VR Scenario A — which captures only `#bookCanvas` pages — is unaffected). The element is hidden whenever the proof panel itself cannot render.
+
+#### Status / copy matrix
+
+| Live condition | `checkoutEligible` | tone | headline | detail |
+|---|---|---|---|---|
+| Approved, current, content, under limit, no blocking failure | true | `eligible` | "Eligible to proceed toward checkout later" | "This proof is approved and within its page limit. Checkout is not open yet." |
+| No content | false | `blocked` | "Not eligible to proceed yet" | "Add messages before this Message Book can proceed." |
+| Over page limit | false | `blocked` | "Not eligible to proceed yet" | "This Message Book is over its page limit." |
+| No approval record (`none`) | false | `blocked` | "Not eligible to proceed yet" | "This Message Book has not been submitted for proof review." |
+| Pending review | false | `blocked` | "Not eligible to proceed yet" | "This proof is still waiting to be reviewed." |
+| Stale approval (`stale`, or approved + old fingerprint) | false | `blocked` | "Not eligible to proceed yet" | "This proof changed after it was approved and needs another review." |
+| Blocking preflight failure | false | `blocked` | "Not eligible to proceed yet" | "A required book check still needs to pass." |
+
+The copy avoids buy / pay / print / order / send / vendor / production-ready language (guarded by Suite 15). The eligible state is phrased as *proceed toward checkout later*, never as an action.
+
+### Static `proofSupported` gate (unaffected)
+
+The static `ProductRenderSpecs` message-book gate `proofSupported: false` (consumed by `ProductExperienceReadiness`) remains conservative and is a **separate** stale-capability reconciliation issue. The live readiness hook does **not** read it — it consumes live instance facts only — so the stale static gate does not affect this status. 7B does not change it.
