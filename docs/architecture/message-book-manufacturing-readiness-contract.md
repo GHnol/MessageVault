@@ -107,3 +107,46 @@ Fully pure and dependency-free: no DOM, no clock, no `Date`, no randomness, no I
 ## What 8A does not do
 
 No print-file generation, no export/PDF generation, no vendor selection or integration, no manufacturing/packaging/shipping behavior, no checkout, payment, cart, real order, or order submission, no address collection, shipping, tax, price, or line-item behavior, no dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI. The module's own source-scan test keeps it free of commerce/production action verbs and side effects (including any `Date`/clock — it is fully pure). Every downstream capability remains `false` until the repo genuinely implements it, at which point the corresponding `CAPABILITIES` flag (and only that flag) would flip.
+
+---
+
+## 8B — Live Production Readiness Status Hook + Dogfood Gate
+
+**Status:** Active — introduced in Message Book Manufacturing Readiness 8B. **Visibility only.** 8B surfaces the 8A boundary in the live Message Book app as a **read-only** status. It adds no production behavior: no print/export/PDF/vendor-packet generation, no vendor selection or integration, no checkout/payment/cart/real-order/order-submission, no address/shipping/tax/price/line-item, and no manufacturing/vendor/export/production/packaging implementation. The 8A engine is **unchanged** (no new helper was needed — `resolveFromReadiness` + `describeReadiness` already produce the display view-model).
+
+### What 8B wires
+
+`index.html` loads `src/products/message-book-manufacturing-readiness.js` and renders a read-only `#bookManufacturingStatus` element — a sibling of `#bookReadinessStatus` (7B) and `#bookOrderIntentPanel` (7E), **outside `#bookCanvas`** (so VR Scenario A, which captures only `#bookCanvas` pages, is unaffected). `renderBookProofPanel()` now:
+
+1. computes the 7A/7B readiness **result** (`renderBookReadinessStatus`, already returned for 7E),
+2. captures the 7D/7E order-intent **resolve view** (`renderBookOrderIntentPanel` now returns it), and
+3. calls `renderBookManufacturingStatus(readinessResult, orderIntentView)`.
+
+The live input mapping is exactly:
+
+```js
+MMR.resolveFromReadiness({
+    readiness: readinessResult,                                  // 7A/7B result → checkoutEligible
+    intent:    { active: !!(orderIntentView && orderIntentView.active) }   // 7D/7E view → hasLocalIntent
+})
+```
+
+No `capabilities` argument is passed, so the engine applies its all-false `CAPABILITIES` and `LOCAL_INTENT_REQUIRED = true` defaults. The panel renders `display.headline` + `display.detail` with the `book-manufacturing-<tone>` class. It registers **no buttons or handlers**. When the proof panel is hidden (engine unavailable, or no proof copy), the status is hidden alongside the readiness/order-intent panels.
+
+### Live status / copy matrix
+
+| Checkout eligible | Local intent active | Primary blocker | Detail copy | Tone |
+|---|---|---|---|---|
+| false | (any) | `checkout-not-eligible` | "This Message Book is not checkout-eligible yet." | gated |
+| true | false | `no-local-intent` | "No local intent to continue has been saved on this device yet." | gated |
+| true | true | `print-spec-not-selected` | "A print production specification has not been selected yet." | gated |
+
+Headline is always **"Print production is not available yet"** in the live app; the `ready` tone is unreachable because `CAPABILITIES` is all-false. No copy implies production is ready or invites a commerce/production action (locked by the Suite 24 scan over the rendered copy).
+
+### 8B coverage
+
+`message-book-manufacturing-readiness-tests.mjs` 260 → **324**: Suite 23 (live status-hook input mapping — reproduces the exact `renderBookManufacturingStatus` call against the real 7A gate + 7D/7E shell, including the defensive `!!(view && view.active)` coercion of a missing/undefined intent view) and Suite 24 (copy/status matrix — the exact safe copy per live-reachable state + a no-unsafe-claim/CTA scan over the produced copy + the live default never reaching the `ready` tone).
+
+### 8B preserves
+
+5D/5E/6A/6B/6C, 7A/7B (readiness source of truth), 7C (static capability alignment — commerce/manufacturing/public-claim stay false), and 7D/7E (order-intent behavior) are all intact. WhatsApp P1–P6 and the native no-dependency ZIP path are unchanged. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI redesign.

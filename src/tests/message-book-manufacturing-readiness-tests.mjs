@@ -674,6 +674,147 @@ suite('Suite 22 — integration with MessageBookReadiness + MessageBookOrderInte
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 23 — 8B live status-hook input mapping (mirrors renderBookManufacturingStatus)
+// ─────────────────────────────────────────────────────────────────────────────
+// The live hook calls, verbatim:
+//   MMR.resolveFromReadiness({
+//       readiness: <7A/7B MessageBookReadiness result>,
+//       intent:    { active: !!(orderIntentView && orderIntentView.active) }
+//   })
+// where orderIntentView is the 7D/7E MessageBookOrderIntent.resolve(...) view. This suite
+// reproduces that exact mapping against the real lower layers and the defensive coercion
+// of a missing/undefined intent view.
+suite('Suite 23 — 8B live status-hook input mapping', function () {
+    const KM  = makeIntegrationCtx();
+    const MBR = KM.MessageBookReadiness;
+    const OI  = KM.MessageBookOrderIntent;
+    const MR  = KM.MessageBookManufacturingReadiness;
+
+    // Exactly what index.html does: build active from a (possibly missing) resolve view.
+    function liveActive(orderIntentView) {
+        return !!(orderIntentView && orderIntentView.active);
+    }
+    function liveResolve(readinessResult, orderIntentView) {
+        return MR.resolveFromReadiness({
+            readiness: readinessResult,
+            intent:    { active: liveActive(orderIntentView) }
+        });
+    }
+
+    const eligible = MBR.evaluate({
+        engineSupported: true, hasContent: true, exceedsPageLimit: false,
+        approvalStatus: 'approved', approvalStale: false, preflightBlockingFailures: 0
+    });
+    const ineligible = MBR.evaluate({
+        engineSupported: true, hasContent: false, exceedsPageLimit: false,
+        approvalStatus: 'none', approvalStale: false, preflightBlockingFailures: 0
+    });
+    assert(eligible.checkoutEligible === true,  'precondition: eligible 7A result');
+    assert(ineligible.checkoutEligible === false, 'precondition: ineligible 7A result');
+
+    // (#3) checkout-not-eligible: ineligible readiness → checkout blocker, gated tone.
+    const noneRec = OI.create().state;
+    const ineligView = OI.resolve(noneRec, ineligible);
+    const a = liveResolve(ineligible, ineligView);
+    assert(a.result.primaryBlocker === 'checkout-not-eligible', '#3 ineligible readiness → checkout-not-eligible');
+    assert(a.display.tone === 'gated', '#3 ineligible readiness → gated tone');
+
+    // (#4) no-local-intent: eligible readiness, but no saved local intent (record 'none').
+    const eligNoIntentView = OI.resolve(noneRec, eligible);
+    assert(eligNoIntentView.active === false, 'no saved intent → resolve view inactive');
+    const b = liveResolve(eligible, eligNoIntentView);
+    assert(b.input.checkoutEligible === true, '#4 maps eligible readiness through');
+    assert(b.input.hasLocalIntent === false, '#4 inactive intent view → hasLocalIntent false');
+    assert(b.result.primaryBlocker === 'no-local-intent', '#4 eligible + no intent → no-local-intent');
+    assert(b.display.tone === 'gated', '#4 eligible + no intent → gated tone');
+
+    // (#5) eligible + active local intent → the next production blocker, never "ready".
+    const started = OI.startIntent(noneRec, eligible);
+    const activeView = OI.resolve(started.state, eligible);
+    assert(activeView.active === true, 'started intent on eligible proof → active view');
+    const c = liveResolve(eligible, activeView);
+    assert(c.input.hasLocalIntent === true, '#5 active intent view → hasLocalIntent true');
+    assert(c.result.primaryBlocker === 'print-spec-not-selected', '#5 eligible + active intent → print-spec-not-selected');
+    assert(c.result.exportSpecKnown === false && c.result.packagingReady === false,
+        '#5 production rungs stay false under live capabilities');
+    assert(c.display.tone === 'gated', '#5 eligible + active intent → still gated');
+
+    // Defensive coercion the live code performs: a missing/undefined/null intent view is
+    // treated as no local intent (so an eligible proof falls to no-local-intent, never ready).
+    assert(liveActive(undefined) === false, 'undefined intent view → active false');
+    assert(liveActive(null) === false, 'null intent view → active false');
+    assert(liveResolve(eligible, undefined).result.primaryBlocker === 'no-local-intent',
+        'eligible + undefined intent view → no-local-intent');
+    assert(liveResolve(eligible, {}).result.primaryBlocker === 'no-local-intent',
+        'eligible + empty intent view → no-local-intent');
+
+    // The live hook passes no capabilities, so every live-reachable state stays gated.
+    [a, b, c].forEach(function (r) {
+        assert(r.result.packagingReady === false, 'live mapping never reaches packaging readiness');
+        assert(r.display.tone === 'gated', 'live mapping is gated in every reachable state');
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 24 — 8B copy / status matrix (what the read-only panel renders)
+// ─────────────────────────────────────────────────────────────────────────────
+// The panel renders display.headline + display.detail with the book-manufacturing-<tone>
+// class. This locks the exact safe copy for every live-reachable state and proves no copy
+// implies production is ready or invites a commerce/production action.
+suite('Suite 24 — 8B copy / status matrix', function () {
+    const MR = makeCtx().MessageBookManufacturingReadiness;
+
+    const GATED_HEADLINE = 'Print production is not available yet';
+
+    // The four live-reachable input combinations (checkout eligibility × local intent),
+    // resolved through the live bridge with the default all-false CAPABILITIES.
+    const MATRIX = [
+        { elig: false, active: false, blocker: 'checkout-not-eligible',
+          detail: 'This Message Book is not checkout-eligible yet.' },
+        { elig: false, active: true,  blocker: 'checkout-not-eligible',
+          detail: 'This Message Book is not checkout-eligible yet.' },
+        { elig: true,  active: false, blocker: 'no-local-intent',
+          detail: 'No local intent to continue has been saved on this device yet.' },
+        { elig: true,  active: true,  blocker: 'print-spec-not-selected',
+          detail: 'A print production specification has not been selected yet.' }
+    ];
+
+    const renderedCopy = [];
+    MATRIX.forEach(function (row) {
+        const out = MR.resolveFromReadiness({
+            readiness: { checkoutEligible: row.elig },
+            intent:    { active: row.active }
+        });
+        const d = out.display;
+        const tag = 'elig=' + row.elig + ',active=' + row.active;
+        assert(d.tone === 'gated', tag + ' → gated tone (#6 never ready)');
+        assert(d.headline === GATED_HEADLINE, tag + ' → safe gated headline');
+        assert(d.blocker === row.blocker, tag + ' → primary blocker ' + row.blocker);
+        assert(d.detail === row.detail, tag + ' → exact safe detail');
+        assert(out.result.packagingReady === false, tag + ' → production not ready');
+        renderedCopy.push(d.headline, d.detail);
+    });
+
+    // (#6, #12) No live-reachable copy may imply production is ready or invite a
+    // commerce/production action. Scan the actual rendered strings.
+    const blob = renderedCopy.join('  ').toLowerCase();
+    ['ready to print', 'order now', 'buy now', 'buy ', 'add to cart', 'add to bag',
+     'pay now', 'purchase', 'checkout now', 'print now', 'ship ', 'shipping',
+     'now available', 'in production', 'production complete', 'manufactured'].forEach(function (term) {
+        assert(blob.indexOf(term) === -1, 'rendered copy contains no unsafe claim/CTA "' + term + '"');
+    });
+
+    // The live default (all-false CAPABILITIES) can never produce the ready tone, no matter
+    // the lower-layer state — describeReadiness only goes ready when packagingReady is true.
+    [true, false].forEach(function (elig) {
+        [true, false].forEach(function (active) {
+            const out = MR.resolveFromReadiness({ readiness: { checkoutEligible: elig }, intent: { active: active } });
+            assert(out.display.tone !== 'ready', 'live default never reaches ready tone (elig=' + elig + ',active=' + active + ')');
+        });
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Results
 // ─────────────────────────────────────────────────────────────────────────────
 console.log(`\n${'─'.repeat(60)}`);
