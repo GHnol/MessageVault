@@ -6,6 +6,33 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Message Book Print Proof Fidelity 6A (Proof Preview Contract + Page-Limit Gate) COMPLETE (2026-06-25)
+
+**Message Book Print Proof Fidelity 6A — Proof Preview Contract + Page-Limit Gate is CLOSED/COMPLETE** — impl `b9cc32f`, fast-forward merged to `main` 2026-06-25 (`c82f2dc..b9cc32f`); this entry is the narrow post-merge state-sync (trio only). **Additive proof-review fidelity hardening over the existing 5D/5E proof-approval system — no engine state-machine change, no persistence change, no dependency, no `package.json`, no import/WhatsApp/ZIP change, no checkout/payment/manufacturing/vendor/export semantics.** Extracts the proof-panel phase decision into a single tested engine module and closes the >250-page "Ready for proof review" gap. Delivered:
+
+- **New `KMEngine.ProofPreviewContract`** (`src/products/proof-preview-contract.js`) — a pure, dependency-free tested source of truth for the proof-panel phase. `resolveProofPreviewPhase(input)` mirrors the prior inline mapping and adds a **page-limit blocker**; plus `firstBlockingReason`, `isReviewablePhase`, and `describeScope` (on-device framing, no commerce-readiness fields); guarded by its own source-scan against commerce/production vocabulary.
+- **Page-limit blocker with priority over the actionable review phases** — `ready` + over-limit blocks submission; **`pending-review` + over-limit removes Approve**; **`stale` + over-limit removes re-review**. Each resolves to the new **`not-ready-over-limit`** phase (legible "Not ready for proof review" label, shared `book-proof-notready` class, page-limit hint, **no actions**). Over-limit takes priority because an over-limit proof is not reviewable; the gate is **reversible** once the book fits again. `approved`/`changes-requested`/`revoked` map through 1:1.
+- **`KMEngine.ProofApprovalUX`** gains the `not-ready-over-limit` panel copy (existing not-ready styling, no actions). No state-machine or transition change.
+- **`index.html` `renderBookProofPanel()`** resolves the phase through the contract, with a defensive inline fallback mirroring the same mapping (incl. the over-limit gate). Existing proof-panel DOM ids (`bookProof{Submit,Approve,Cancel,Resubmit}Btn`), `book-proof-*` classes, and the E2E-locked `pending-review` text are preserved.
+- **Tests** — new `proof-preview-contract-tests.mjs` (**115**, incl. Suite 10 over-limit-blocker matrix: ready/pending-review/stale + over-limit → not-ready-over-limit, under-limit pass-through, reversibility, over-limit keyed specifically, purity/no-mutation, source-scan); `proof-approval-ux-tests.mjs` **422→453** (new blocked phase folded into Suites 23/24).
+- **Docs** — new `docs/architecture/message-book-proof-preview-contract.md`; `docs/qa/test-strategy.md` baseline updated.
+
+Verified on `main`: **all 33 Node suites green, 0 failed** (`proof-preview-contract-tests` 115 new, `proof-approval-ux-tests` 453; `proof-approval-state-tests` 240 unchanged); seeded E2E 57/57; real-files E2E 195/195; VR Scenario A 4/4; import-panels VR 10/10; P5C harness SKIP exit 0; project-control validators VALID/PASS; os-self-audit 324/0/0; post-merge state-freshness WARN only (cosmetic hash lag, 0 FAIL). The over-limit pending-review → no-Approve behavior (and reversibility, zero console errors) was additionally verified locally via a throwaway Playwright run against the real `index.html` (synthetic in-memory state; **not committed**, deleted after) — 13/13 green.
+
+**5D remains intact:** the content/`contactName` proof fingerprint, durable `STALE` status, and approved→stale after proof-affecting edits are unchanged — the gate is a render-time phase decision only and calls no transition.
+**5E remains intact (narrowly extended):** the `getProofPanelCopy` view-model and copy table are unchanged except the one additive `not-ready-over-limit` entry; the dogfoodable proof review UX is preserved.
+
+**Caveats / open risks:**
+- **`approved` + over-limit** is expected to be handled by 5D staleness: a proof-affecting over-limit edit changes the fingerprint and moves the approval to `stale` (which is then gated). Any future code path that mutates `messageBookState` **without** re-rendering / re-fingerprinting must preserve the existing render-time `refreshStaleness` behavior.
+- When an over-limit proof is also `stale`, the panel surfaces the **over-limit** blocker first (the more fundamental gap), not the "Approval out of date" wording; the stale record is preserved and its re-review path returns once the book fits.
+- **Real-world WhatsApp ZIP validation remains fixture-gated separately** (unchanged by 6A).
+- **Checkout / manufacturing / vendor-handoff / packaging readiness has not started** and is out of scope.
+
+**Current state:** Branch `main` after fast-forward merge (`c82f2dc..b9cc32f`; this state-sync adds one docs commit on top). **No active package. No active pass.** WhatsApp iOS data-foundation **P1–P6 remain CLOSED/COMPLETE**; the **native no-dependency ZIP decision stands** (no fflate; real ZIP import fixture-gated). The Message Book proof-approval foundation (prior 5A/5B/5C + 5D content-binding/staleness + 5E UX hardening + this 6A preview-contract/page-limit-gate) is complete. **No checkout / manufacturing / vendor handoff / packaging work, and no next package, has started.**
+**Next recommended action:** Await Coordinator authorization for the next package. Candidate directions (all gated, none started): checkout-readiness / manufacturing-handoff state (separate, gated), sanitized real with-media WhatsApp ZIP fixture validation through the P5C harness, or design-system tokenization / component contracts. Do not begin any of these without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Message Book Proof Approval 5E (Proof Review UX Hardening + Dogfood Gate) COMPLETE (2026-06-25)
 
 **Message Book Proof Approval 5E — Proof Review UX Hardening + Dogfood Gate is CLOSED/COMPLETE** — impl `42f7c30`, fast-forward merged to `main` 2026-06-25 (`989c4ce..42f7c30`); this entry is the narrow post-merge state-sync (trio only). **Narrow UX/status hardening over the existing 5D proof-approval system — no engine state-machine change, no persistence change, no new module, no dependency, no `package.json`, no import/WhatsApp/ZIP change, no checkout/payment/manufacturing/vendor/export semantics, no broad redesign.** Makes the existing proof approval states feel coherent and dogfoodable in the UI. Delivered:
