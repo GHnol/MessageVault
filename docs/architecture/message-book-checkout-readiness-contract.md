@@ -1,7 +1,7 @@
 # Message Book Checkout Readiness Contract
 
-**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate); the static product-capability model was reconciled to proof-supported in 7C (Static Capability Reconciliation + Product Experience Alignment).
-**Scope:** A local-first, deterministic **readiness decision** only. It is **not** checkout, payment, cart/order creation, manufacturing, vendor handoff, export, packaging, gifting, or shipping, and 7A added none of those. Certifying "checkout eligible" means a proof is *safe to proceed toward checkout later* — nothing is bought, charged, printed, produced, or sent.
+**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate); the static product-capability model was reconciled to proof-supported in 7C (Static Capability Reconciliation + Product Experience Alignment); the local-only **order-intent shell** (commerce boundary) was added in 7D (Order Intent Shell + Commerce Boundary).
+**Scope:** A local-first, deterministic **readiness decision** plus a local-only, **non-transactional** intent boundary — only. It is **not** checkout, payment, cart/order creation, order submission, manufacturing, vendor handoff, export, packaging, gifting, or shipping, and none of 7A–7D added any of those. Certifying "checkout eligible" means a proof is *safe to proceed toward checkout later* — nothing is bought, charged, printed, produced, or sent. The 7D order-intent shell only records, on this device, that an eligible proof *may* be continued later.
 
 ---
 
@@ -137,3 +137,44 @@ Through 7A/7B the static `ProductRenderSpecs` message-book gate was `proofSuppor
 - `commerceSupported`, `manufacturingSupported`, and `publicClaimSupported` remain `false` (not implemented). 7C adds no checkout, payment, cart, order, manufacturing, vendor, export, packaging, or shipping behavior.
 - In `ProductExperienceReadiness`, `canProof` is gated on previewability (`proofSupported && canPreview`), so an empty or ineligible group is never reported as proof-ready — it still resolves to `blocked`.
 - The 7B live readiness hook is unchanged. It still consumes live instance facts and does **not** read the static gate, so the instance-level checkout-eligibility decision (7A) remains the source of truth for whether *this* book's current proof is checkout-eligible.
+
+## Order-intent shell — the commerce boundary (7D)
+
+`KMEngine.MessageBookOrderIntent` (`src/products/message-book-order-intent.js`) is a **local-only, non-transactional** record of the user's intent to continue an eligible Message Book proof toward a later checkout flow. It is the **commerce boundary**, not commerce: it opens no payment provider or checkout flow, builds no cart, places/submits no order, collects no address, calculates no tax, and prints/manufactures/exports/packages/ships nothing. It is engine + tests + docs only — **no `index.html`/UI** (mirroring the 7A engine-only split; a future package may add a read-only status hook as 7B did for 7A).
+
+It is **gated by 7A/7B**: the only authority for eligibility is `MessageBookReadiness`. The shell consumes that gate's **result** (`checkoutEligible` / `primaryBlocker`) and never recomputes proof, page-limit, or preflight logic. It references no sibling module at runtime.
+
+### State machine
+
+| State | Meaning |
+|---|---|
+| `none` | No intent expressed |
+| `intent-draft-local` | A local, non-transactional note that the user may continue later (only reachable while eligible) |
+| `blocked` | A note whose proof stopped being eligible — paused, not lost |
+| `cleared` | The user cleared their local note |
+
+Transitions (no edge fabricates a real order — there is no such state):
+
+| From | To | Via | Guard |
+|---|---|---|---|
+| `none` | `intent-draft-local` | `startIntent` | `readiness.checkoutEligible === true` |
+| `cleared` | `intent-draft-local` | `startIntent` | `readiness.checkoutEligible === true` |
+| `intent-draft-local` | `blocked` | `reconcile` | readiness no longer eligible |
+| `blocked` | `intent-draft-local` | `reconcile` | readiness eligible again |
+| `intent-draft-local` | `cleared` | `clearIntent` | — |
+| `blocked` | `cleared` | `clearIntent` | — |
+
+### Gating + the core safety invariant
+
+`startIntent` succeeds **only** when `deriveAvailability(readiness).eligible` (strictly `checkoutEligible === true`) and the record is `none`/`cleared`. So a note can never be created when there is no content, the proof is over the page limit, the approval is missing/pending/changes-requested/revoked/stale (incl. an approved-but-old-fingerprint proof via 5D), or a blocking preflight failure exists.
+
+`resolve(record, readiness)` is the safe read. Its `active` flag is true **only** for a recorded note under a currently eligible gate, and is **never** true when readiness is ineligible — even if `reconcile` has not yet been called (the 5D/6A "detect at render + durable transition" pattern). A recorded note under an ineligible proof resolves to an effective `blocked` state with `active:false`. This is the property a UI must trust: the boundary can never present an active intent for an ineligible book.
+
+### Local-only / non-transactional guarantees
+
+- The record carries `nonTransactional: true` and stores **no** price, order number, cart, payment, address, line item, or vendor — there are none.
+- `manufacturingReady` / `vendorReady` / `productionReady` / `exportReady` / `packagingReady` are always `false` (`gatedReason: 'not-implemented'`).
+- Status names and `describeIntent` copy avoid buy / print / order / send / vendor / production-ready / pay / cart / ship / purchase language; eligible/recorded copy is framed as continuing *later*, never as an action. The module source carries no commerce CTA/action and no network/DOM/storage/random side effect (its own source-scan). Record builders stamp local-only timestamps with `new Date()`, like the sibling `ProofApprovalState` / `ProductDraftState` state machines; the decision layer (`deriveAvailability` / `resolve` / `canStartIntent` / `describeIntent` / `describeBoundary`) is pure.
+- `describeBoundary()` states in plain language that it is gated by `MessageBookReadiness.checkoutEligible`, recorded on-device, non-transactional, and creates no cart / payment / checkout-session / real-order / shipment.
+
+7D does **not** persist the record into the project snapshot (no `project-persistence` change); a later package can wire persistence if needed.
