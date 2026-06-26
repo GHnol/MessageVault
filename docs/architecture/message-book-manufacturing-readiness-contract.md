@@ -150,3 +150,40 @@ Headline is always **"Print production is not available yet"** in the live app; 
 ### 8B preserves
 
 5D/5E/6A/6B/6C, 7A/7B (readiness source of truth), 7C (static capability alignment — commerce/manufacturing/public-claim stay false), and 7D/7E (order-intent behavior) are all intact. WhatsApp P1–P6 and the native no-dependency ZIP path are unchanged. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI redesign.
+
+---
+
+## 8C — Print Spec Selection Contract + Export-Spec Gate
+
+**Status:** Active — introduced in Message Book Manufacturing Readiness 8C. **The first genuine production-capability layer.** 8C adds the tested module `KMEngine.MessageBookPrintSpec` (`src/products/message-book-print-spec.js`) — an **internal print-spec selection and validation contract** — and integrates it through 8A's **existing** `printSpecSelected` input path so that a valid internal spec can clear the `print-spec-not-selected` blocker. **8A's engine source is not modified.** Authoritative 8C contract: `docs/architecture/message-book-print-spec-contract.md`.
+
+### What 8C is (and is not)
+
+An **internal print spec** is a selectable, validatable, KeepMees-owned specification — the LOCKED `7x10` casebound-hardcover / matte-premium / even-parity / separate-physical-book direction from `docs/ops/vendor-manufacturing-register.md`. It is **not** a print file, **not** an export pipeline, **not** a vendor-confirmed spec, and **not** manufacturing readiness. 8C generates no print/export/PDF file, builds no vendor packet, selects/confirms no vendor, and begins no manufacturing, packaging, or shipping. It adds no checkout, payment, cart, real order, or order submission, and no address/shipping/tax/price/line-item behavior. The geometry source of truth remains `BOOK_PRODUCTION_DEPS` / `BOOK_PARITY` in `index.html` (scope-guarded; **not modified**).
+
+### How it integrates — 8A's existing input path
+
+8A's `evaluate` / `resolveFromReadiness` already accept a `printSpecSelected` capability (see the input shape table above). 8C feeds that path; it does not change 8A:
+
+```js
+const sel  = MessageBookPrintSpec.evaluate({ selectedSpecId, pageCount, maxPages });
+const caps = MessageBookPrintSpec.toManufacturingCapabilities(sel);   // { printSpecSelected: <selected && valid> }
+const out  = MessageBookManufacturingReadiness.resolveFromReadiness({ readiness, intent, capabilities: caps });
+```
+
+`toManufacturingCapabilities` flips **only** `printSpecSelected`, and only for a selected **and** valid internal spec. Effect on this boundary's ladder:
+
+| 8C selection | `printSpecSelected` | 8A primary blocker | 8A furthest level |
+|---|---|---|---|
+| none / unknown / selected-but-invalid | `false` | `print-spec-not-selected` | `production-boundary-known` |
+| valid internal spec (lower layers satisfied) | `true` | **`export-pipeline-not-implemented`** | `export-spec-known` |
+
+No higher rung advances — `print-file-ready` / `vendor-ready` / `manufacturing-ready` / `packaging-ready` remain `false` because the export pipeline, vendor, manufacturing, and packaging capabilities are still genuinely not implemented. A valid spec never jumps the lower-layer queue: under an ineligible proof or a missing local intent, 8A still reports `checkout-not-eligible` / `no-local-intent` first.
+
+### 8C preserves
+
+The **8B live status path is unchanged**: it calls `resolveFromReadiness` with **no** `capabilities`, so the default all-false `CAPABILITIES` still report `print-spec-not-selected` in the live app — 8C wires no UI and selects no spec at runtime. 8A's `CAPABILITIES` constant is unchanged (still all-false). 5D/5E/6A/6B/6C, 7A/7B, 7C, and 7D/7E are all intact. WhatsApp P1–P6 and the native no-dependency ZIP path are unchanged. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI.
+
+### 8C coverage
+
+New `message-book-print-spec-tests.mjs` (**306**, 14 suites — see the print-spec contract doc). `message-book-manufacturing-readiness-tests.mjs` 324 → **340** (Suite 25 — the 8C print-spec input path against the real 7A gate + 7D/7E intent shell + 8C contract, proving the `print-spec-not-selected` → `export-pipeline-not-implemented` transition and that the 8B live no-capabilities path is unaffected).

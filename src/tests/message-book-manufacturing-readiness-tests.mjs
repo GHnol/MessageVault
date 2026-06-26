@@ -28,6 +28,7 @@ function makeIntegrationCtx() {
     load(ctx, 'src/products/book-composition.js');
     load(ctx, 'src/products/message-book-readiness.js');
     load(ctx, 'src/products/message-book-order-intent.js');
+    load(ctx, 'src/products/message-book-print-spec.js');
     load(ctx, 'src/products/message-book-manufacturing-readiness.js');
     return ctx.window.KMEngine;
 }
@@ -812,6 +813,87 @@ suite('Suite 24 — 8B copy / status matrix', function () {
             assert(out.display.tone !== 'ready', 'live default never reaches ready tone (elig=' + elig + ',active=' + active + ')');
         });
     });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 25 — 8C print-spec input path: the real bridge clears print-spec-not-selected
+// ─────────────────────────────────────────────────────────────────────────────
+// 8C adds KMEngine.MessageBookPrintSpec, whose toManufacturingCapabilities() feeds
+// this boundary's EXISTING capabilities input path (8A is not modified). A valid
+// internal print spec must move the primary blocker from `print-spec-not-selected`
+// to `export-pipeline-not-implemented`, and no further. Proven against the real 7A
+// gate + 7D/7E intent shell + 8C print-spec contract.
+suite('Suite 25 — 8C print-spec input path', function () {
+    const KM  = makeIntegrationCtx();
+    const MBR = KM.MessageBookReadiness;
+    const OI  = KM.MessageBookOrderIntent;
+    const PS  = KM.MessageBookPrintSpec;
+    const MR  = KM.MessageBookManufacturingReadiness;
+
+    assert(typeof PS === 'object' && PS !== null, 'MessageBookPrintSpec is available to the integration');
+
+    // Build the genuine lower layers: a checkout-eligible proof with an active intent.
+    const eligible = MBR.evaluate({
+        engineSupported: true, hasContent: true, exceedsPageLimit: false,
+        approvalStatus: 'approved', approvalStale: false, preflightBlockingFailures: 0
+    });
+    const started    = OI.startIntent(OI.create().state, eligible);
+    const activeView = OI.resolve(started.state, eligible);
+    assert(eligible.checkoutEligible === true && activeView.active === true,
+        'precondition: checkout-eligible proof with an active local intent');
+
+    // Without a print spec, the live default keeps 8A at print-spec-not-selected.
+    const defaultOut = MR.resolveFromReadiness({ readiness: eligible, intent: activeView });
+    assert(defaultOut.result.primaryBlocker === 'print-spec-not-selected',
+        'no print spec (live default) → print-spec-not-selected');
+
+    // The real 8C bridge for a valid internal spec → printSpecSelected true → 8A clears
+    // print-spec-not-selected and advances exactly one rung to export-pipeline-not-implemented.
+    const validSel  = PS.evaluate({ selectedSpecId: PS.INTERNAL_SPEC_ID, pageCount: 120, maxPages: 400 });
+    assert(validSel.internalSpecValid === true, 'precondition: valid internal print spec');
+    const caps = PS.toManufacturingCapabilities(validSel);
+    assert(caps.printSpecSelected === true && Object.keys(caps).length === 1,
+        'bridge flips only printSpecSelected');
+
+    const withSpec = MR.resolveFromReadiness({ readiness: eligible, intent: activeView, capabilities: caps });
+    assert(withSpec.result.exportSpecKnown === true, 'valid internal spec → export-spec-known');
+    assert(withSpec.result.primaryBlocker === 'export-pipeline-not-implemented',
+        'valid internal spec → next blocker is export-pipeline-not-implemented');
+    assert(withSpec.result.blockers.indexOf('print-spec-not-selected') === -1,
+        'valid internal spec → print-spec-not-selected cleared');
+
+    // No higher rung advances: vendor / manufacturing / packaging readiness stay false.
+    assert(withSpec.result.printFileReady === false, 'print file still not ready');
+    assert(withSpec.result.vendorReady === false, 'vendor still not ready');
+    assert(withSpec.result.manufacturingReady === false, 'manufacturing still not ready');
+    assert(withSpec.result.packagingReady === false, 'packaging still not ready');
+    assert(withSpec.display.tone === 'gated', '8A status stays gated even with a valid print spec');
+
+    // A selected-but-invalid spec (over the page limit) does NOT clear the blocker.
+    const overCaps = PS.toManufacturingCapabilities(
+        PS.evaluate({ selectedSpecId: PS.INTERNAL_SPEC_ID, pageCount: 9999, maxPages: 400 })
+    );
+    const overOut = MR.resolveFromReadiness({ readiness: eligible, intent: activeView, capabilities: overCaps });
+    assert(overOut.result.primaryBlocker === 'print-spec-not-selected',
+        'selected-but-invalid internal spec → 8A still print-spec-not-selected');
+
+    // A valid spec never jumps the lower-layer queue: an ineligible proof stays at
+    // checkout-not-eligible even with printSpecSelected true.
+    const ineligible = MBR.evaluate({
+        engineSupported: true, hasContent: false, exceedsPageLimit: false,
+        approvalStatus: 'none', approvalStale: false, preflightBlockingFailures: 0
+    });
+    const ineligibleOut = MR.resolveFromReadiness({
+        readiness: ineligible, intent: { active: false }, capabilities: caps
+    });
+    assert(ineligibleOut.result.primaryBlocker === 'checkout-not-eligible',
+        'valid spec under ineligible proof → checkout-not-eligible (print spec does not advance the lower gates)');
+
+    // 8A's own default behavior is unchanged: a no-capabilities call still reports
+    // print-spec-not-selected (8B live path is unaffected by 8C).
+    const eightBLive = MR.resolveFromReadiness({ readiness: eligible, intent: { active: true } });
+    assert(eightBLive.result.primaryBlocker === 'print-spec-not-selected',
+        '8B live path (no capabilities) is unchanged by 8C');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
