@@ -5,7 +5,8 @@
     var KNOWN_SESSION_FIELDS = [
         'id', 'version', 'createdAt', 'updatedAt', 'contactName',
         'memories', 'selectedMemoryIds', 'keepsakeGroups',
-        'productDrafts', 'proofApprovalStates', 'messageBookState'
+        'productDrafts', 'proofApprovalStates', 'messageBookOrderIntent',
+        'messageBookState'
     ];
 
     // Restore a deserialized project file into typed app state.
@@ -140,6 +141,16 @@
             proofApprovalStates = s.proofApprovalStates;
         }
 
+        // ── messageBookOrderIntent (7E) ───────────────────────────────────────
+        // A single local-only, non-transactional record (or null). Passed through
+        // as-is; the live caller re-gates it through MessageBookOrderIntent.restore +
+        // the current readiness gate, so a stale record can never restore as active.
+        var messageBookOrderIntent = null;
+        if (s.messageBookOrderIntent && typeof s.messageBookOrderIntent === 'object' &&
+                !Array.isArray(s.messageBookOrderIntent)) {
+            messageBookOrderIntent = s.messageBookOrderIntent;
+        }
+
         // ── Unknown fields — report but do not crash ──────────────────────────
         for (var key in s) {
             if (s.hasOwnProperty(key) && KNOWN_SESSION_FIELDS.indexOf(key) === -1) {
@@ -155,6 +166,7 @@
                 groups:              groups,
                 contactName:         contactName,
                 proofApprovalStates: proofApprovalStates,
+                messageBookOrderIntent: messageBookOrderIntent,
                 messageBookState:    messageBookState
             },
             warnings: warnings,

@@ -836,6 +836,99 @@ assert(typeof restPAS.appState.proofApprovalStates === 'object', 'proofApprovalS
 assert(restPAS.appState.proofApprovalStates['message-book'] !== undefined,
     'proofApprovalStates entry preserved');
 
+// ── 7E: messageBookOrderIntent persistence ───────────────────────────────────
+
+// A representative local-only, non-transactional order-intent record (the shape
+// produced by KMEngine.MessageBookOrderIntent). Persistence treats it as an opaque
+// plain object — it carries no price/cart/order/payment/address field.
+var orderIntentRecord = {
+    productTypeId: 'message-book',
+    status: 'intent-draft-local',
+    nonTransactional: true,
+    createdAt: '2026-06-26T00:00:00.000Z',
+    updatedAt: '2026-06-26T00:00:00.000Z',
+    intentAt: '2026-06-26T00:00:00.000Z',
+    blockedAt: null,
+    blockedReason: null,
+    clearedAt: null,
+    notes: null
+};
+
+suite('7E — createSnapshot includes messageBookOrderIntent when passed');
+var snapOI = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} },
+    contactName: '', messageBookOrderIntent: orderIntentRecord
+});
+assert(snapOI.projectSession.messageBookOrderIntent !== null &&
+       typeof snapOI.projectSession.messageBookOrderIntent === 'object',
+    'createSnapshot includes messageBookOrderIntent in projectSession');
+assert(snapOI.projectSession.messageBookOrderIntent.status === 'intent-draft-local',
+    'order-intent status carried into snapshot');
+assert(snapOI.projectSession.messageBookOrderIntent.nonTransactional === true,
+    'order-intent record stays non-transactional in snapshot');
+
+suite('7E — createSnapshot defaults messageBookOrderIntent to null when absent / non-object');
+var snapNoOI = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} }, contactName: ''
+});
+assert(snapNoOI.projectSession.messageBookOrderIntent === null,
+    'omitted messageBookOrderIntent defaults to null');
+var snapArrOI = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} },
+    contactName: '', messageBookOrderIntent: ['nope']
+});
+assert(snapArrOI.projectSession.messageBookOrderIntent === null,
+    'array messageBookOrderIntent coerced to null in snapshot');
+
+suite('7E — validate accepts object / null / absent and rejects array messageBookOrderIntent');
+var vWithOI = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookOrderIntent: orderIntentRecord }
+});
+assert(vWithOI.valid, 'validate accepts projectSession with messageBookOrderIntent object');
+var vNullOI = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookOrderIntent: null }
+});
+assert(vNullOI.valid, 'validate accepts null messageBookOrderIntent');
+var vAbsentOI = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [] }
+});
+assert(vAbsentOI.valid, 'validate accepts absent messageBookOrderIntent (back-compat)');
+var vArrOI = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookOrderIntent: ['x'] }
+});
+assert(!vArrOI.valid && vArrOI.errors.some(function (e) { return e.indexOf('messageBookOrderIntent') >= 0; }),
+    'validate rejects array messageBookOrderIntent with a referencing error');
+
+suite('7E — restore puts messageBookOrderIntent in appState without unknown-field warning');
+var rOI = PSR.restore(snapOI);
+assert(rOI.success, 'restore with messageBookOrderIntent succeeds');
+assert(rOI.appState.messageBookOrderIntent !== null &&
+       rOI.appState.messageBookOrderIntent.status === 'intent-draft-local',
+    'order-intent record survives restore into appState');
+assert(!rOI.warnings.some(function (w) { return w.indexOf('messageBookOrderIntent') >= 0; }),
+    'messageBookOrderIntent does NOT produce an unknown-field warning');
+
+suite('7E — restore without messageBookOrderIntent defaults to null');
+var rNoOI = PSR.restore(snapNoOI);
+assert(rNoOI.success && rNoOI.appState.messageBookOrderIntent === null,
+    'absent messageBookOrderIntent restores as null');
+
+suite('7E — round-trip preserves messageBookOrderIntent through JSON');
+var rtOIParsed = JSON.parse(JSON.stringify(snapOI));
+assert(PP.validate(rtOIParsed).valid, 'round-tripped messageBookOrderIntent snapshot validates');
+var rtOIRestore = PSR.restore(rtOIParsed);
+assert(rtOIRestore.appState.messageBookOrderIntent.status === 'intent-draft-local',
+    'order-intent status preserved through JSON round-trip');
+assert(rtOIRestore.appState.messageBookOrderIntent.intentAt === '2026-06-26T00:00:00.000Z',
+    'order-intent timestamps preserved through JSON round-trip');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 console.log('\n─────────────────────────────────────');

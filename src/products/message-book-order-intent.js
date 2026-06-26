@@ -346,6 +346,34 @@
         }
     }
 
+    // Pure safe button labels for a resolved view. Returns only the actions the
+    // boundary actually permits for this view: a start action when canStart, a clear
+    // action when canClear. Mirrors the proof-panel view-model's actions array. The
+    // labels deliberately avoid buy / pay / order / checkout / cart / print / vendor /
+    // ship language (guarded by the suite source-scan) and frame the start action as
+    // continuing LATER, never as a transaction. The caller maps action → DOM id.
+    function describeActions(view) {
+        var v = view || {};
+        var actions = [];
+        if (v.canStart) {
+            actions.push({ action: 'start-intent', label: 'Save local intent to continue later' });
+        }
+        if (v.canClear) {
+            actions.push({ action: 'clear-intent', label: 'Clear local intent' });
+        }
+        return actions;
+    }
+
+    // Safe restore of a persisted record. A live caller that reloads a saved project
+    // session passes the stored record (or null) through here to get a valid, defensive
+    // record back: a well-formed record is returned unchanged; anything malformed or
+    // missing coerces to a fresh 'none' record. The current readiness gate still
+    // governs the record on the next resolve/reconcile — restore never re-activates an
+    // intent on its own; it only guarantees a structurally safe record to gate.
+    function restore(record) {
+        return _coerce(record);
+    }
+
     // Plain-language statement of what this boundary is and — emphatically — what it
     // is not. Mirrors the on-device framing of the 7A/7B readiness copy.
     function describeBoundary() {
@@ -377,7 +405,9 @@
         clearIntent:       clearIntent,
         reconcile:         reconcile,
         resolve:           resolve,
+        restore:           restore,
         describeIntent:    describeIntent,
+        describeActions:   describeActions,
         describeBoundary:  describeBoundary
     };
 }());

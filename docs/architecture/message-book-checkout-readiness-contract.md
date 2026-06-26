@@ -1,6 +1,6 @@
 # Message Book Checkout Readiness Contract
 
-**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate); the static product-capability model was reconciled to proof-supported in 7C (Static Capability Reconciliation + Product Experience Alignment); the local-only **order-intent shell** (commerce boundary) was added in 7D (Order Intent Shell + Commerce Boundary).
+**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate); the static product-capability model was reconciled to proof-supported in 7C (Static Capability Reconciliation + Product Experience Alignment); the local-only **order-intent shell** (commerce boundary) was added in 7D (Order Intent Shell + Commerce Boundary); the **order-intent UI + local persistence** were wired in 7E (Local Order Intent UI + Persistence Boundary).
 **Scope:** A local-first, deterministic **readiness decision** plus a local-only, **non-transactional** intent boundary — only. It is **not** checkout, payment, cart/order creation, order submission, manufacturing, vendor handoff, export, packaging, gifting, or shipping, and none of 7A–7D added any of those. Certifying "checkout eligible" means a proof is *safe to proceed toward checkout later* — nothing is bought, charged, printed, produced, or sent. The 7D order-intent shell only records, on this device, that an eligible proof *may* be continued later.
 
 ---
@@ -178,3 +178,43 @@ Transitions (no edge fabricates a real order — there is no such state):
 - `describeBoundary()` states in plain language that it is gated by `MessageBookReadiness.checkoutEligible`, recorded on-device, non-transactional, and creates no cart / payment / checkout-session / real-order / shipment.
 
 7D does **not** persist the record into the project snapshot (no `project-persistence` change); a later package can wire persistence if needed.
+
+## Order-intent UI + persistence boundary (7E)
+
+7E wires the 7D shell into the live Message Book app with a minimal, safe UI surface and local project-session persistence. It is still a **commerce boundary, not commerce**: it adds no payment, checkout session, cart, real order, order submission, address collection, shipping, tax, price, line item, manufacturing, vendor handoff, export, packaging, or production behavior.
+
+### Engine additions (additive, pure)
+
+Two helpers were added to `KMEngine.MessageBookOrderIntent`; all 7D behavior is unchanged:
+
+- `describeActions(view)` — returns the safe action buttons for a resolved view: `{action:'start-intent', label:'Save local intent to continue later'}` when `view.canStart`, and `{action:'clear-intent', label:'Clear local intent'}` when `view.canClear`. Pure; null-safe; its labels carry no commerce/production verb (source-scanned).
+- `restore(record)` — coerces a persisted record (or `null`/malformed) into a structurally valid record (exposes the internal `_coerce`). It never re-activates an intent on its own; the current readiness gate re-governs the record on the next `resolve`/`reconcile`.
+
+### Live UI surface
+
+`index.html` loads `src/products/message-book-order-intent.js` and renders a read-write `#bookOrderIntentPanel` — a sibling placed **after `#bookReadinessStatus`, outside `#bookCanvas`** (so VR Scenario A, which captures only `#bookCanvas` pages, is unaffected — confirmed 4/4). `renderBookReadinessStatus` returns the readiness **result** it already computed; `renderBookOrderIntentPanel(readinessResult)` then:
+
+1. `reconcile`s the durable record against current readiness (persisting a real blocked↔draft transition), then
+2. `resolve`s it for the view, themes the panel by `display.tone`, and renders the status copy plus the `describeActions` buttons.
+
+**Save** calls `startIntent(record, readinessResult)` — itself gated on `readinessResult.checkoutEligible`, so a stale button can never record an intent for an ineligible proof. **Clear** calls `clearIntent(record)`. Both store the returned record and re-render. There is no checkout button; the panel creates no cart/order/payment/checkout-session.
+
+#### Status / action matrix
+
+| Resolved state | Headline (tone) | Actions |
+|---|---|---|
+| eligible, no note | "Eligible to continue later" (`eligible`) | Save local intent to continue later |
+| recorded, eligible | "Saved your intent to continue later" (`recorded`) | Clear local intent |
+| blocked (lost eligibility) | "Your intent note is on hold" (`blocked`) | Clear local intent |
+| cleared | "Intent note cleared" (`cleared`) | Save (when eligible again) |
+| not eligible, no note | "Not available to continue yet" (`unavailable`) | — |
+
+### Persistence
+
+The record persists in the existing project session, mirroring the `proofApprovalStates` precedent — a single `projectSession.messageBookOrderIntent` field (a plain-object record, or `null`):
+
+- `ProjectPersistence.createSnapshot` writes the field (non-object/array coerced to `null`); `validate` requires a plain object or `null` if present (older snapshots without it still validate).
+- `ProjectSessionRestore` lists it in `KNOWN_SESSION_FIELDS` (no unknown-field warning) and returns it on `appState.messageBookOrderIntent`.
+- On load, `handleProjectFileLoad` restores it through `MessageBookOrderIntent.restore`. The current readiness gate re-governs it on the next render, so **a saved note never restores as active for a proof that is no longer eligible** (requirement: restore stays gated). `saveProject` and the `__km.captureProjectSnapshot` bridge pass the live record.
+
+No `package.json`/dependency change; no import/WhatsApp/ZIP change; 7A/7B/7C/7D and 5D/5E/6A/6B/6C remain intact.

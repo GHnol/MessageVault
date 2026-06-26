@@ -3428,6 +3428,15 @@
             .book-readiness-eligible .book-readiness-headline { color: #30d158; }
             .book-readiness-blocked .book-readiness-headline { color: #aeaeb2; }
             .book-readiness-detail { color: #636366; }
+
+            .book-order-intent-panel { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.07); }
+            .book-order-intent-headline { color: #aeaeb2; }
+            .book-order-intent-recorded .book-order-intent-headline { color: #30d158; }
+            .book-order-intent-eligible .book-order-intent-headline { color: #aeaeb2; }
+            .book-order-intent-blocked .book-order-intent-headline { color: #ff9f0a; }
+            .book-order-intent-cleared .book-order-intent-headline { color: #aeaeb2; }
+            .book-order-intent-unavailable .book-order-intent-headline { color: #636366; }
+            .book-order-intent-detail { color: #636366; }
         }
 
         .book-proof-panel {
@@ -3499,6 +3508,41 @@
             font-size: 12px; color: #8e8e93; margin: 2px 0 0; flex-basis: 100%;
         }
         .book-proof-disabled .book-proof-status { color: #c7c7cc; }
+
+        /* 7E: local-only, non-transactional order-intent boundary surface.
+           A sibling of the readiness status (outside #bookCanvas). It mirrors the
+           readiness styling and reuses the proof buttons; it never styles a cart,
+           checkout, price, or order. */
+        .book-order-intent-panel {
+            width: 100%;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+        .book-order-intent-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 8px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .book-order-intent-headline {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.1px;
+            color: #8e8e93;
+        }
+        .book-order-intent-recorded .book-order-intent-headline { color: #1c8a3a; }
+        .book-order-intent-eligible .book-order-intent-headline { color: #48484a; }
+        .book-order-intent-blocked .book-order-intent-headline { color: #b35309; }
+        .book-order-intent-cleared .book-order-intent-headline { color: #8e8e93; }
+        .book-order-intent-unavailable .book-order-intent-headline { color: #8e8e93; }
+        .book-order-intent-detail {
+            font-size: 12px;
+            color: #8e8e93;
+            flex-basis: 100%;
+        }
     </style>
 </head>
 <body>
@@ -3794,6 +3838,7 @@
         </div>
         <div id="bookProofPanel" class="book-proof-panel" style="display:none;"></div>
         <div id="bookReadinessStatus" class="book-readiness-status" style="display:none;"></div>
+        <div id="bookOrderIntentPanel" class="book-order-intent-panel" style="display:none;"></div>
         <div class="book-shell">
             <div class="book-controls-bar" id="bookControlsBar"></div>
             <div class="book-sections-bar" id="bookSectionsBar"></div>
@@ -3928,6 +3973,9 @@
     <script src="src/products/proof-preview-contract.js"></script>
     <script src="src/products/book-composition.js"></script>
     <script src="src/products/message-book-readiness.js"></script>
+    <!-- 7D/7E: local-only, non-transactional order-intent boundary (gated by the
+         7A/7B readiness result). Consumes MessageBookReadiness; loads after it. -->
+    <script src="src/products/message-book-order-intent.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -4036,6 +4084,7 @@
         const bookCanvas = document.getElementById('bookCanvas');
         const bookProofPanel = document.getElementById('bookProofPanel');
         const bookReadinessStatus = document.getElementById('bookReadinessStatus');
+        const bookOrderIntentPanel = document.getElementById('bookOrderIntentPanel');
         const reviewBookBtn = document.getElementById('reviewBookBtn');
 
         // Loading
@@ -7903,6 +7952,11 @@ ${keepsakeFooter}
 
         let messageBookState = null;  // null until first showBookView call
         let bookReturnView   = null;  // which view to return to from book back-press
+        // 7E: live holder for the local-only, non-transactional order-intent record.
+        // null = no intent noted. Persisted in the project session; re-gated on every
+        // render by the current readiness result, so it can never present as active for
+        // an ineligible proof. It holds no price/cart/order/payment/address.
+        let messageBookOrderIntent = null;
 
         function initMessageBookState() {
             if (messageBookState) return; // preserve settings across visits
@@ -9048,6 +9102,7 @@ ${keepsakeFooter}
             if (!UX) {
                 bookProofPanel.style.display = 'none';
                 if (bookReadinessStatus) bookReadinessStatus.style.display = 'none';
+                if (bookOrderIntentPanel) bookOrderIntentPanel.style.display = 'none';
                 return;
             }
 
@@ -9141,6 +9196,7 @@ ${keepsakeFooter}
                 bookProofPanel.innerHTML = '';
                 bookProofPanel.style.display = 'none';
                 if (bookReadinessStatus) bookReadinessStatus.style.display = 'none';
+                if (bookOrderIntentPanel) bookOrderIntentPanel.style.display = 'none';
                 return;
             }
 
@@ -9169,7 +9225,12 @@ ${keepsakeFooter}
             // same live signals this panel already computed — content, page-limit
             // status, proof status, staleness (via the 5D fingerprint), and any
             // blocking preflight failure. Read-only: no button, no checkout/cart/order.
-            renderBookReadinessStatus(state, hasContent, status, record, currentProofFingerprint, _anyBookCheckFailed);
+            const readinessResult = renderBookReadinessStatus(state, hasContent, status, record, currentProofFingerprint, _anyBookCheckFailed);
+
+            // 7E: local-only, non-transactional order-intent boundary. Gated entirely
+            // by the readiness RESULT just computed — it can record/clear a local note
+            // to continue an eligible proof later, and nothing more.
+            renderBookOrderIntentPanel(readinessResult);
 
             const submitBtn = document.getElementById('bookProofSubmitBtn');
             if (submitBtn) {
@@ -9214,9 +9275,9 @@ ${keepsakeFooter}
         // adds no checkout button and creates no cart / order / payment / checkout
         // session, and never implies print / manufacturing / vendor / export readiness.
         function renderBookReadinessStatus(state, hasContent, approvalStatus, record, currentProofFingerprint, anyBookCheckFailed) {
-            if (!bookReadinessStatus) return;
+            if (!bookReadinessStatus) return null;
             const MBR = window.KMEngine && window.KMEngine.MessageBookReadiness;
-            if (!MBR || !MBR.resolveLiveStatus) { bookReadinessStatus.style.display = 'none'; return; }
+            if (!MBR || !MBR.resolveLiveStatus) { bookReadinessStatus.style.display = 'none'; return null; }
             const PAS = window.KMEngine && window.KMEngine.ProofApprovalState;
             const approvalStale = !!(PAS && PAS.isApprovalStale &&
                 PAS.isApprovalStale(record, currentProofFingerprint));
@@ -9234,6 +9295,69 @@ ${keepsakeFooter}
             if (d.detail) parts.push('<span class="book-readiness-detail">' + escapeHTML(d.detail) + '</span>');
             bookReadinessStatus.innerHTML = '<div class="book-readiness-inner">' + parts.join('') + '</div>';
             bookReadinessStatus.style.display = '';
+            // 7E consumes the same readiness RESULT this status was built from.
+            return rs.result;
+        }
+
+        // 7E: render the local-only, non-transactional order-intent boundary from the
+        // 7D KMEngine.MessageBookOrderIntent shell, gated entirely by the 7A/7B
+        // readiness RESULT. It lets the user save or clear a local note to continue an
+        // eligible proof later — and nothing more. It creates no cart, order, payment,
+        // checkout session, address, shipping, tax, price, or line item, and never
+        // implies manufacturing / vendor / export / packaging / production readiness.
+        function renderBookOrderIntentPanel(readinessResult) {
+            if (!bookOrderIntentPanel) return;
+            const OI = window.KMEngine && window.KMEngine.MessageBookOrderIntent;
+            if (!OI || !readinessResult) { bookOrderIntentPanel.style.display = 'none'; return; }
+
+            // Re-gate the durable record against current readiness. reconcile only
+            // stamps a transition when eligibility actually changed (intent-draft↔
+            // blocked); otherwise it returns the record unchanged. Persist a real
+            // transition so a now-ineligible proof durably parks the note as blocked.
+            const rec = OI.reconcile(messageBookOrderIntent, readinessResult);
+            if (rec.changed) messageBookOrderIntent = rec.state;
+
+            // resolve() guarantees the note is reported ACTIVE only under a currently
+            // eligible gate — even before reconcile — so the surface can never present
+            // an active intent for an ineligible book.
+            const view = OI.resolve(messageBookOrderIntent, readinessResult);
+            const d = view.display;
+            bookOrderIntentPanel.className = 'book-order-intent-panel book-order-intent-' + d.tone;
+
+            var parts = ['<span class="book-order-intent-headline">' + escapeHTML(d.headline) + '</span>'];
+            OI.describeActions(view).forEach(function (act) {
+                var isClear = act.action === 'clear-intent';
+                var btnCls  = isClear ? 'book-proof-cancel-btn' : 'book-proof-btn';
+                var id      = isClear ? 'bookOrderIntentClearBtn' : 'bookOrderIntentSaveBtn';
+                parts.push('<button type="button" class="' + btnCls + '" id="' + id + '">' +
+                    escapeHTML(act.label) + '</button>');
+            });
+            if (d.detail) parts.push('<span class="book-order-intent-detail">' + escapeHTML(d.detail) + '</span>');
+            bookOrderIntentPanel.innerHTML = '<div class="book-order-intent-inner">' + parts.join('') + '</div>';
+            bookOrderIntentPanel.style.display = '';
+
+            const saveBtn = document.getElementById('bookOrderIntentSaveBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function () {
+                    // startIntent is itself gated on readinessResult.checkoutEligible, so
+                    // a stale button can never record an intent for an ineligible proof.
+                    const result = OI.startIntent(messageBookOrderIntent, readinessResult);
+                    if (result.success) {
+                        messageBookOrderIntent = result.state;
+                        renderBookProofPanel();
+                    }
+                });
+            }
+            const clearBtn = document.getElementById('bookOrderIntentClearBtn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    const result = OI.clearIntent(messageBookOrderIntent);
+                    if (result.success) {
+                        messageBookOrderIntent = result.state;
+                        renderBookProofPanel();
+                    }
+                });
+            }
         }
 
         function renderBookView() {
@@ -9391,7 +9515,8 @@ ${keepsakeFooter}
                 selectedIndices:    selectedIndices,
                 contactName:        chatHeaderName.innerText.trim(),
                 messageBookState:   messageBookState,
-                proofApprovalStates: PAUX ? PAUX.serialize() : {}
+                proofApprovalStates: PAUX ? PAUX.serialize() : {},
+                messageBookOrderIntent: messageBookOrderIntent
             });
             IO.save(snapshot, chatHeaderName.innerText.trim());
         }
@@ -9456,6 +9581,15 @@ ${keepsakeFooter}
                 PAUX.restore(appState.proofApprovalStates || {});
             }
 
+            // 7E: restore the local-only order-intent record through the engine's safe
+            // coercion. The current readiness gate re-governs it on the next render
+            // (reconcile/resolve), so a saved note never restores as active for a proof
+            // that is no longer eligible.
+            const OI = window.KMEngine && window.KMEngine.MessageBookOrderIntent;
+            messageBookOrderIntent = (OI && OI.restore)
+                ? (appState.messageBookOrderIntent ? OI.restore(appState.messageBookOrderIntent) : null)
+                : (appState.messageBookOrderIntent || null);
+
             // Render conversation (also shows chatView)
             renderConversation(appState.memories);
 
@@ -9507,6 +9641,10 @@ ${keepsakeFooter}
             get messageBookState()   { return messageBookState; },
             set messageBookState(v)  { messageBookState = v; },
 
+            // 7E: local-only order-intent record (test-harness access only).
+            get messageBookOrderIntent()  { return messageBookOrderIntent; },
+            set messageBookOrderIntent(v) { messageBookOrderIntent = v; },
+
             setContactName(name) { chatHeaderName.innerText = name; },
             getContactName()     { return chatHeaderName.innerText.trim(); },
 
@@ -9546,7 +9684,8 @@ ${keepsakeFooter}
                     keepsakeGroups:   keepsakeGroups,
                     selectedIndices:  selectedIndices,
                     contactName:      chatHeaderName.innerText.trim(),
-                    messageBookState: messageBookState
+                    messageBookState: messageBookState,
+                    messageBookOrderIntent: messageBookOrderIntent
                 }));
             },
             // Package 4D: Product experience readiness consumer bridge

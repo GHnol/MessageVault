@@ -65,7 +65,8 @@ suite('Suite 1 — API shape', function () {
         assert(typeof OI[k] === 'object' && OI[k] !== null, k + ' is an object');
     });
     ['isValidStatus', 'canTransition', 'deriveAvailability', 'create', 'canStartIntent',
-     'startIntent', 'clearIntent', 'reconcile', 'resolve', 'describeIntent', 'describeBoundary'
+     'startIntent', 'clearIntent', 'reconcile', 'resolve', 'restore', 'describeIntent',
+     'describeActions', 'describeBoundary'
     ].forEach(function (fn) {
         assert(typeof OI[fn] === 'function', fn + ' is a function');
     });
@@ -570,6 +571,109 @@ suite('Suite 17 — integration with MessageBookReadiness', function () {
     const restored = OI.reconcile(reblocked, eligibleResult);
     assert(restored.changed === true && restored.state.status === 'intent-draft-local',
         'note restores once the gate is eligible again');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — describeActions (7E safe UI action labels)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 18 — describeActions safe button labels', function () {
+    const OI = makeCtx().MessageBookOrderIntent;
+
+    const START_LABEL = 'Save local intent to continue later';
+    const CLEAR_LABEL = 'Clear local intent';
+
+    // Eligible, no recorded note → only a start action.
+    const eligibleNone = OI.resolve(OI.create().state, ELIGIBLE_READINESS);
+    const aEligible = OI.describeActions(eligibleNone);
+    assert(Array.isArray(aEligible) && aEligible.length === 1, 'eligible+no-intent → exactly one action');
+    assert(aEligible[0].action === 'start-intent' && aEligible[0].label === START_LABEL,
+        'eligible+no-intent → start-intent with the safe save label');
+
+    // A recorded, active note → only a clear action.
+    const draft = OI.startIntent(OI.create().state, ELIGIBLE_READINESS).state;
+    const activeView = OI.resolve(draft, ELIGIBLE_READINESS);
+    assert(activeView.active === true, 'recorded note resolves active under eligible gate');
+    const aActive = OI.describeActions(activeView);
+    assert(aActive.length === 1 && aActive[0].action === 'clear-intent' && aActive[0].label === CLEAR_LABEL,
+        'active note → clear-intent with the safe clear label');
+
+    // A blocked note (lost eligibility) → still clearable, never startable.
+    const blocked = OI.reconcile(draft, blockedReadiness('over-page-limit')).state;
+    const blockedView = OI.resolve(blocked, blockedReadiness('over-page-limit'));
+    const aBlocked = OI.describeActions(blockedView);
+    assert(aBlocked.length === 1 && aBlocked[0].action === 'clear-intent',
+        'blocked note → only a clear action (no start while ineligible)');
+
+    // Not eligible, no note → no actions at all ("Not available yet" status only).
+    const unavailable = OI.resolve(OI.create().state, blockedReadiness('no-content'));
+    assert(OI.describeActions(unavailable).length === 0, 'ineligible+no-intent → no actions');
+
+    // Cleared + eligible again → a fresh start action returns.
+    const cleared = OI.clearIntent(draft).state;
+    const clearedEligible = OI.resolve(cleared, ELIGIBLE_READINESS);
+    const aCleared = OI.describeActions(clearedEligible);
+    assert(aCleared.length === 1 && aCleared[0].action === 'start-intent',
+        'cleared+eligible → start-intent available again');
+
+    // Defensive: fresh array per call; null-safe.
+    assert(OI.describeActions(eligibleNone) !== aEligible, 'returns a fresh array each call');
+    assert(Array.isArray(OI.describeActions(null)) && OI.describeActions(null).length === 0,
+        'describeActions(null) → empty array (null-safe)');
+
+    // No commerce/production verb may appear in any action label, in any state.
+    const allLabels = [START_LABEL, CLEAR_LABEL].join(' ').toLowerCase();
+    ['buy', 'pay', 'checkout', 'cart', 'place order', 'submit order', 'order now',
+     'print now', 'send to vendor', 'production ready', 'ship', 'purchase', 'charge'
+    ].forEach(function (term) {
+        assert(allLabels.indexOf(term) === -1, 'action labels contain no commerce/production verb "' + term + '"');
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — restore + persistence-restore gating (7E)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 19 — restore coercion + restore-then-resolve gating', function () {
+    const OI = makeCtx().MessageBookOrderIntent;
+
+    // A well-formed persisted record is returned structurally intact.
+    const saved = OI.startIntent(OI.create().state, ELIGIBLE_READINESS).state;
+    const savedSnapshot = JSON.stringify(saved);
+    const restored = OI.restore(saved);
+    assert(restored && restored.status === 'intent-draft-local', 'restore keeps a valid recorded status');
+    assert(JSON.stringify(saved) === savedSnapshot, 'restore does not mutate its input');
+
+    // Malformed / missing inputs coerce to a safe none record (never throws).
+    [null, undefined, {}, { status: 'not-a-status' }, 42, 'x', []].forEach(function (bad) {
+        const r = OI.restore(bad);
+        assert(r && r.status === 'none' && r.productTypeId === 'message-book' && r.nonTransactional === true,
+            'restore(' + JSON.stringify(bad) + ') → safe none record');
+    });
+
+    // Requirement #6/#9: a restored note remains gated by CURRENT readiness. The same
+    // saved record is active only under an eligible gate, never under an ineligible one
+    // — even before reconcile is called.
+    assert(OI.resolve(OI.restore(saved), ELIGIBLE_READINESS).active === true,
+        'restored note is active under a currently-eligible gate');
+    ['no-content', 'over-page-limit', 'proof-approval-stale', 'proof-pending-review',
+     'preflight-blocking-failure'
+    ].forEach(function (code) {
+        const view = OI.resolve(OI.restore(saved), blockedReadiness(code));
+        assert(view.active === false, 'restored note is NOT active under ineligible (' + code + ')');
+        assert(view.state === 'blocked', 'restored note resolves as blocked under ineligible (' + code + ')');
+    });
+
+    // Requirement scenarios: proof becomes stale / over-limit AFTER a local intent was
+    // saved → reconcile durably parks the note as blocked carrying the safe blocker.
+    [['proof-approval-stale'], ['over-page-limit']].forEach(function (c) {
+        const rec = OI.reconcile(saved, blockedReadiness(c[0]));
+        assert(rec.changed === true && rec.state.status === 'blocked',
+            c[0] + ' after save → note durably blocked');
+        assert(rec.state.blockedReason === c[0], c[0] + ' after save → blocked reason is the safe gate code');
+        // ...and it restores cleanly once eligible again.
+        const back = OI.reconcile(rec.state, ELIGIBLE_READINESS);
+        assert(back.changed === true && back.state.status === 'intent-draft-local',
+            c[0] + ' → restores to a live note when eligible again');
+    });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

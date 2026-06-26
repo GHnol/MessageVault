@@ -87,6 +87,13 @@
                 proofApprovalStates: (opts.proofApprovalStates && typeof opts.proofApprovalStates === 'object' && !Array.isArray(opts.proofApprovalStates))
                     ? opts.proofApprovalStates
                     : {},
+                // 7E: local-only, non-transactional Message Book order-intent record.
+                // A single plain-object record (or null when no intent has been noted).
+                // It carries no price/cart/order/payment/address — only the local-note
+                // status machine from KMEngine.MessageBookOrderIntent.
+                messageBookOrderIntent: (opts.messageBookOrderIntent && typeof opts.messageBookOrderIntent === 'object' && !Array.isArray(opts.messageBookOrderIntent))
+                    ? opts.messageBookOrderIntent
+                    : null,
                 messageBookState:   safeBookState
             }
         };
@@ -125,6 +132,10 @@
         if (s.proofApprovalStates !== undefined && s.proofApprovalStates !== null &&
                 (typeof s.proofApprovalStates !== 'object' || Array.isArray(s.proofApprovalStates))) {
             errors.push('projectSession.proofApprovalStates must be a plain object if present');
+        }
+        if (s.messageBookOrderIntent !== undefined && s.messageBookOrderIntent !== null &&
+                (typeof s.messageBookOrderIntent !== 'object' || Array.isArray(s.messageBookOrderIntent))) {
+            errors.push('projectSession.messageBookOrderIntent must be a plain object or null if present');
         }
         if (s.productDrafts !== undefined && s.productDrafts !== null &&
                 !Array.isArray(s.productDrafts)) {
