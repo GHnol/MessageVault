@@ -1,6 +1,6 @@
 # Message Book Checkout Readiness Contract
 
-**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate).
+**Status:** Active — introduced in Message Book Checkout Readiness 7A (Product Eligibility Gate + Readiness Matrix); the read-only **live status hook** was added in 7B (Live Readiness Status Hook + Dogfood Gate); the static product-capability model was reconciled to proof-supported in 7C (Static Capability Reconciliation + Product Experience Alignment).
 **Scope:** A local-first, deterministic **readiness decision** only. It is **not** checkout, payment, cart/order creation, manufacturing, vendor handoff, export, packaging, gifting, or shipping, and 7A added none of those. Certifying "checkout eligible" means a proof is *safe to proceed toward checkout later* — nothing is bought, charged, printed, produced, or sent.
 
 ---
@@ -9,7 +9,7 @@
 
 KeepMees is broader than Message Book; Message Book is the flagship first product, not the project boundary. A Message Book can be previewable and even proof-approved while still not being checkout-ready, and checkout readiness is itself separate from manufacturing, vendor, and production readiness. Before 7A there was no single tested answer to **"is this specific book's current proof safe enough to proceed toward checkout?"**
 
-The existing `KMEngine.ProductExperienceReadiness` (4C) answers a different question: whether the **system**, in principle, supports a product **type**, derived from the **static render-spec gates**. Those static gates do not track the live proof-approval state of a particular book — message-book's static `proofSupported` gate is conservative even though proof review shipped in 5D/5E/6A. 7A is an **instance-level** gate that consumes the real proof/page-limit/preflight outputs instead, and is scoped specifically to Message Book.
+The existing `KMEngine.ProductExperienceReadiness` (4C) answers a different question: whether the **system**, in principle, supports a product **type**, derived from the **static render-spec gates**. Those static gates do not track the live proof-approval state of a *particular* book. (Through 7A/7B the message-book static `proofSupported` gate was deliberately conservative even though proof review shipped in 5D/5E/6A; **7C reconciled it to `true`** — see "Static `proofSupported` gate" below.) 7A remains an **instance-level** gate that consumes the real proof/page-limit/preflight outputs and is scoped specifically to Message Book — it is the source of truth for whether *this* book's current proof is checkout-eligible, independent of the static product-type capability.
 
 ## The readiness ladder
 
@@ -128,6 +128,12 @@ The cross-module consistency (`ProofApprovalState` → `ProofPreviewContract` �
 
 The copy avoids buy / pay / print / order / send / vendor / production-ready language (guarded by Suite 15). The eligible state is phrased as *proceed toward checkout later*, never as an action.
 
-### Static `proofSupported` gate (unaffected)
+### Static `proofSupported` gate (reconciled in 7C)
 
-The static `ProductRenderSpecs` message-book gate `proofSupported: false` (consumed by `ProductExperienceReadiness`) remains conservative and is a **separate** stale-capability reconciliation issue. The live readiness hook does **not** read it — it consumes live instance facts only — so the stale static gate does not affect this status. 7B does not change it.
+Through 7A/7B the static `ProductRenderSpecs` message-book gate was `proofSupported: false` — deliberately conservative, and flagged as a separate stale-capability reconciliation issue. **Checkout Readiness 7C reconciled it to `proofSupported: true`**, because the live Message Book proof review/approval/readiness flow shipped in 5D/5E/6A/7A/7B. As a result `ProductExperienceReadiness` now reports message-book as `proof-ready` for a previewable (content-eligible) group, rather than capping it at `prototype-preview-supported`.
+
+7C is **capability-truth alignment only**:
+
+- `commerceSupported`, `manufacturingSupported`, and `publicClaimSupported` remain `false` (not implemented). 7C adds no checkout, payment, cart, order, manufacturing, vendor, export, packaging, or shipping behavior.
+- In `ProductExperienceReadiness`, `canProof` is gated on previewability (`proofSupported && canPreview`), so an empty or ineligible group is never reported as proof-ready — it still resolves to `blocked`.
+- The 7B live readiness hook is unchanged. It still consumes live instance facts and does **not** read the static gate, so the instance-level checkout-eligibility decision (7A) remains the source of truth for whether *this* book's current proof is checkout-eligible.

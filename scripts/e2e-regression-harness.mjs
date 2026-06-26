@@ -651,7 +651,7 @@ async function main() {
         assert(result !== null && result.length > 0, 'resolveGroupReadiness returned empty array — no products resolved');
     });
 
-    await harness.run('resolveGroupReadiness: message-book reaches prototype-preview-supported', async page => {
+    await harness.run('resolveGroupReadiness: message-book reaches proof-ready', async page => {
         const status = await page.evaluate(() => {
             const KM = window.KMEngine;
             if (!KM || !KM.ProductExperienceConsumer || !KM.EXPERIENCE_STATUS) return null;
@@ -660,8 +660,8 @@ async function main() {
             const book = results.find(r => r.productTypeId === 'message-book');
             return book ? book.experienceStatus : null;
         });
-        assert(status === 'prototype-preview-supported',
-            'message-book with 2 messages did not reach prototype-preview-supported (got: ' + status + ')');
+        assert(status === 'proof-ready',
+            'message-book with 2 messages did not reach proof-ready (got: ' + status + ')');
     });
 
     await harness.run('resolveGroupReadiness: non-book render-planning products are render-planning-known', async page => {

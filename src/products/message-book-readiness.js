@@ -15,10 +15,10 @@
     // It is product-scoped to Message Book specifically. The existing
     // ProductExperienceReadiness resolver answers a different question — whether
     // the SYSTEM, in principle, supports a product TYPE (from the static
-    // render-spec gates). Those static gates do not reflect the live, shipped
-    // proof-approval state of a particular book (e.g. message-book's static
-    // proofSupported gate is conservative even though proof review shipped in
-    // 5D/5E/6A). This gate consumes the real instance outputs instead:
+    // render-spec gates). Those static gates describe type-level capability, not
+    // the live proof-approval state of a particular book (message-book's static
+    // proofSupported gate was reconciled to true in 7C now that proof review
+    // shipped in 5D/5E/6A). This gate consumes the real instance outputs instead:
     //
     //   hasContent              — the book has readable content to print
     //                             (caller: book has >=1 included, readable message)

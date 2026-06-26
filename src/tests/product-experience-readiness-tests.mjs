@@ -135,12 +135,12 @@ suite('Suite 4 — resolveForProduct: message-book with adequate group', functio
     assert(r.renderPlanningKnown    === true,  'message-book: renderPlanningKnown is true');
     assert(r.prototypePreviewKnown  === true,  'message-book: prototypePreviewKnown is true');
     assert(r.canPreview             === true,  'message-book(5 msgs): canPreview is true');
-    assert(r.canProof               === false, 'message-book: canProof is false (gate not yet open)');
-    assert(r.canOrder               === false, 'message-book: canOrder is false');
+    assert(r.canProof               === true,  'message-book(5 msgs): canProof is true (proof shipped 5D/5E/6A/7A/7B; reconciled 7C)');
+    assert(r.canOrder               === false, 'message-book: canOrder is false (commerce not implemented)');
     assert(r.canManufacture         === false, 'message-book: canManufacture is false');
     assert(r.canPubliclyClaim       === false, 'message-book: canPubliclyClaim is false');
-    assert(r.experienceStatus === KM.EXPERIENCE_STATUS.PROTOTYPE_PREVIEW_SUPPORTED,
-        'message-book(5 msgs): experienceStatus is prototype-preview-supported');
+    assert(r.experienceStatus === KM.EXPERIENCE_STATUS.PROOF_READY,
+        'message-book(5 msgs): experienceStatus is proof-ready (reconciled 7C)');
     assert(typeof r.userLabel === 'string' && r.userLabel.length > 0, 'userLabel is non-empty string');
     assert(r.blockers.length === 0, 'message-book(5 msgs): no blockers');
     assert(r.eligibilityResult !== null, 'eligibilityResult is present');
@@ -235,12 +235,12 @@ suite('Suite 7 — Gate invariants: non-book products are not commerce/manufactu
         assert(r.canProof         === false, r.productTypeId + ': canProof is false');
     });
 
-    // Message Book itself also has all gates false currently
+    // Message Book supports proof (reconciled 7C) but commerce/manufacturing/public-claim remain false
     const mb = allProducts.find(function (r) { return r.productTypeId === 'message-book'; });
     assert(mb.canOrder         === false, 'message-book: canOrder is false (commerce blocked)');
     assert(mb.canManufacture   === false, 'message-book: canManufacture is false');
     assert(mb.canPubliclyClaim === false, 'message-book: canPubliclyClaim is false');
-    assert(mb.canProof         === false, 'message-book: canProof is false');
+    assert(mb.canProof         === true,  'message-book(10 msgs): canProof is true (proof shipped; reconciled 7C)');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -333,6 +333,16 @@ suite('Suite 10 — resolveByStatus: filters by experienceStatus', function () {
         assert(r.experienceStatus === ES.PROTOTYPE_PREVIEW_SUPPORTED,
             r.productTypeId + ': resolveByStatus(PROTOTYPE_PREVIEW_SUPPORTED) result has correct status');
     });
+
+    // Reconciled 7C: message-book now resolves to PROOF_READY for an adequate group.
+    const proofList = KM.ProductExperienceReadiness.resolveByStatus(group5, ES.PROOF_READY);
+    assert(Array.isArray(proofList), 'resolveByStatus(PROOF_READY) returns array');
+    proofList.forEach(function (r) {
+        assert(r.experienceStatus === ES.PROOF_READY,
+            r.productTypeId + ': resolveByStatus(PROOF_READY) result has correct status');
+    });
+    assert(proofList.map(function (r) { return r.productTypeId; }).indexOf('message-book') !== -1,
+        'message-book(5 msgs) is returned under PROOF_READY (reconciled 7C)');
 
     const rptList = KM.ProductExperienceReadiness.resolveByStatus(group5, ES.RENDER_PLANNING_KNOWN);
     rptList.forEach(function (r) {

@@ -96,7 +96,10 @@
             designReadinessNotes:        '7x10 hardcover format locked',
             engineSupported:             true,
             prototypePreviewSupported:   true,
-            proofSupported:              false,
+            // proofSupported reconciled false→true in Checkout Readiness 7C: the live
+            // Message Book proof review/approval/readiness flow shipped in 5D/5E/6A/7A/7B.
+            // Commerce/manufacturing/public-claim remain false (not implemented).
+            proofSupported:              true,
             commerceSupported:           false,
             manufacturingSupported:      false,
             publicClaimSupported:        false,

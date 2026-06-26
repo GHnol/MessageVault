@@ -153,7 +153,11 @@
         };
 
         var canPreview     = !!(previewResult && previewResult.previewSupported);
-        var canProof       = !!gates.proofSupported;
+        // Proof readiness is one rung above previewability: a product is proof-ready
+        // for THIS group only when it both supports proof (static gate) and has a
+        // previewable (content-eligible) group. Without the canPreview guard, the
+        // static gate alone would falsely report an empty/ineligible book as proof-ready.
+        var canProof       = !!gates.proofSupported && canPreview;
         var canOrder       = !!gates.commerceSupported;
         var canManufacture = !!gates.manufacturingSupported;
         var canPubliclyClaim = !!gates.publicClaimSupported;

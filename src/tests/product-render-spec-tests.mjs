@@ -52,7 +52,7 @@ const mbSpec = KMEngine.ProductRenderSpecs.get('message-book');
 assert(mbSpec !== null,                                              'message-book spec exists');
 assert(mbSpec.gates.engineSupported           === true,             'message-book: engineSupported=true');
 assert(mbSpec.gates.prototypePreviewSupported === true,             'message-book: prototypePreviewSupported=true');
-assert(mbSpec.gates.proofSupported            === false,            'message-book: proofSupported=false');
+assert(mbSpec.gates.proofSupported            === true,             'message-book: proofSupported=true (proof shipped 5D/5E/6A/7A/7B; reconciled in 7C)');
 assert(mbSpec.gates.commerceSupported         === false,            'message-book: commerceSupported=false');
 assert(mbSpec.gates.manufacturingSupported    === false,            'message-book: manufacturingSupported=false');
 assert(mbSpec.gates.publicClaimSupported      === false,            'message-book: publicClaimSupported=false');

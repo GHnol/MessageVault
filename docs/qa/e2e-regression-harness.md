@@ -80,7 +80,7 @@ npx playwright install chromium
 | 8 | Reload + restore | Clean reload; project load restores messages, groups, and all three views |
 | 9 | Invalid file handling | Invalid JSON and wrong schema version produce no crash; app stays functional |
 | 10 | Capture harness smoke | Capture bridge functions (showBookView, renderBookView, etc.) present after load |
-| 20 | Product experience readiness consumer bridge | `window.__km.isReadinessAvailable()` true; `EXPERIENCE_STATUS` accessible; `resolveGroupReadiness` returns array; message-book reaches `prototype-preview-supported`; non-book render-planning products are `render-planning-known`; null group safe — Package 4D |
+| 20 | Product experience readiness consumer bridge | `window.__km.isReadinessAvailable()` true; `EXPERIENCE_STATUS` accessible; `resolveGroupReadiness` returns array; message-book reaches `proof-ready` (reconciled in Checkout Readiness 7C); non-book render-planning products are `render-planning-known`; null group safe — Package 4D |
 | 21 | Product format availability surface | `[data-testid="format-availability"]` renders in keepsakes card; message-book tag text is "Available for Message Book preview" with `fmt-available` class; non-book tags show "Planned format"; no order/buy/checkout language; bridge call does not crash — Package 4E |
 
 ### Real-file coverage (phases 11–19, 23 tests — only with `--real-files`)

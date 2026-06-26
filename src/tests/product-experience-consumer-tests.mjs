@@ -225,8 +225,8 @@ suite('Suite 12 — Message Book has the highest current readiness path', functi
     const group = { messages: msgs(3) };
 
     const bookResult = KM.ProductExperienceConsumer.resolveProductForGroup('message-book', group);
-    assert(bookResult.experienceStatus === STATUS.PROTOTYPE_PREVIEW_SUPPORTED,
-        'message-book with 3 messages resolves to prototype-preview-supported (highest current path)');
+    assert(bookResult.experienceStatus === STATUS.PROOF_READY,
+        'message-book with 3 messages resolves to proof-ready (highest current path; reconciled 7C)');
 
     // all other render-planning products should be render-planning-known or lower
     const otherIds = ['mug', 'framed-print', 'sticker-pack', 'mini-notebook', 'fridge-magnet'];
