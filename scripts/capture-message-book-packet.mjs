@@ -50,11 +50,41 @@ const chatDbPath = (() => {
 // ── Static server ─────────────────────────────────────────────────────────────
 
 function startServer(port = 7331) {
-    const html = fs.readFileSync(APP_FILE);
+    // Static file server — serves index.html plus the real src/*.js modules from the
+    // repo, mirroring the E2E/VR harness servers. Required because the Message Book
+    // composition path depends on the KMEngine.BookComposition module (6B); a server
+    // that returns index.html for every request never loads it.
+    const MIME = {
+        '.html': 'text/html; charset=utf-8',
+        '.js':   'text/javascript; charset=utf-8',
+        '.mjs':  'text/javascript; charset=utf-8',
+        '.css':  'text/css; charset=utf-8',
+        '.json': 'application/json; charset=utf-8',
+    };
     return new Promise((resolve, reject) => {
         const server = http.createServer((req, res) => {
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end(html);
+            const rawPath  = req.url.split('?')[0];
+            const urlPath  = rawPath === '/' ? '/index.html' : rawPath;
+            const filePath = path.normalize(path.join(REPO_ROOT, urlPath));
+
+            // Guard against path traversal outside repo root
+            if (!filePath.startsWith(REPO_ROOT + path.sep) && filePath !== path.join(REPO_ROOT, 'index.html')) {
+                res.writeHead(403, { 'Content-Type': 'text/plain' });
+                res.end('Forbidden');
+                return;
+            }
+
+            const ext         = path.extname(filePath);
+            const contentType = MIME[ext] || 'application/octet-stream';
+
+            try {
+                const content = fs.readFileSync(filePath);
+                res.writeHead(200, { 'Content-Type': contentType });
+                res.end(content);
+            } catch {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.end('Not found: ' + urlPath);
+            }
         });
         server.on('error', reject);
         server.listen(port, '127.0.0.1', () => resolve({ server, url: `http://127.0.0.1:${port}` }));
