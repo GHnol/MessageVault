@@ -43,6 +43,12 @@
             hint:        'The book check needs attention before this book can go to proof review.',
             actions:     []
         },
+        'not-ready-over-limit': {
+            label:       'Not ready for proof review',
+            statusClass: 'book-proof-notready',
+            hint:        'This volume is longer than its page limit. Move or remove sections until it fits, then it can go to proof review.',
+            actions:     []
+        },
         'ready': {
             label:       'Ready for proof review',
             statusClass: 'book-proof-ready',

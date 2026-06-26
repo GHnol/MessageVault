@@ -3892,6 +3892,7 @@
     ════════════════════════════════════════════ -->
     <script src="src/products/proof-approval-state.js"></script>
     <script src="src/products/proof-approval-ux.js"></script>
+    <script src="src/products/proof-preview-contract.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -9493,12 +9494,31 @@ ${keepsakeFooter}
                 }
             }
 
-            // Map status + readiness context to a single panel phase. The 'none' status
-            // splits into not-ready / ready sub-states; every other status maps 1:1.
+            // Map status + readiness context to a single panel phase via the proof
+            // preview contract (single tested source of truth). The 'none' status splits
+            // into not-ready / ready sub-states — including the page-limit gate, so a
+            // book over its page limit cannot be marked ready for proof review. The
+            // page-limit blocker also has priority over the actionable post-submission
+            // phases: an over-limit 'pending-review' or 'stale' proof resolves to
+            // not-ready-over-limit so it cannot be approved or re-reviewed until it fits.
+            // Every other status maps through 1:1 so 5D staleness and the rest of the 5E
+            // flow are preserved. The inline fallback mirrors this mapping if the contract
+            // module is ever unavailable.
             var phase;
-            if (status === 'none') {
+            var _PPC = window.KMEngine && window.KMEngine.ProofPreviewContract;
+            if (_PPC && _PPC.resolveProofPreviewPhase) {
+                phase = _PPC.resolveProofPreviewPhase({
+                    approvalStatus:     status,
+                    hasContent:         hasContent,
+                    exceedsPageLimit:   !!(state && state.exceedsPageLimit),
+                    anyBookCheckFailed: _anyBookCheckFailed,
+                    allBookCheckPassed: _allBookCheckPassed
+                });
+            } else if (status === 'none') {
                 if (!hasContent) {
                     phase = 'not-ready-empty';
+                } else if (state && state.exceedsPageLimit) {
+                    phase = 'not-ready-over-limit';
                 } else if (_anyBookCheckFailed) {
                     phase = 'not-ready-failed';
                 } else if (!_allBookCheckPassed) {
@@ -9506,6 +9526,8 @@ ${keepsakeFooter}
                 } else {
                     phase = 'ready';
                 }
+            } else if ((status === 'pending-review' || status === 'stale') && state && state.exceedsPageLimit) {
+                phase = 'not-ready-over-limit';
             } else {
                 phase = status;
             }

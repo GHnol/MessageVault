@@ -649,8 +649,9 @@ suite('Suite 23 — getProofPanelCopy per-phase labels and actions', function ()
     const KM = makeCtx();
     const UX = KM.ProofApprovalUX;
 
-    const PHASES = ['not-ready-empty', 'not-ready-checking', 'not-ready-failed', 'ready',
-                    'pending-review', 'approved', 'stale', 'changes-requested', 'revoked'];
+    const PHASES = ['not-ready-empty', 'not-ready-checking', 'not-ready-failed',
+                    'not-ready-over-limit', 'ready', 'pending-review', 'approved',
+                    'stale', 'changes-requested', 'revoked'];
 
     assert(UX.getProofPanelCopy('no-such-phase') === null, 'unknown phase returns null');
 
@@ -706,9 +707,20 @@ suite('Suite 23 — getProofPanelCopy per-phase labels and actions', function ()
     assert(hasAction('ready', 'submit-for-review'), 'ready offers submit-for-review');
     assert(UX.getProofPanelCopy('ready').actions.length === 1, 'ready offers exactly one action');
     assert(UX.getProofPanelCopy('ready').actions[0].id === 'bookProofSubmitBtn', 'ready uses bookProofSubmitBtn');
-    ['not-ready-empty', 'not-ready-checking', 'not-ready-failed'].forEach(function (p) {
+    ['not-ready-empty', 'not-ready-checking', 'not-ready-failed', 'not-ready-over-limit'].forEach(function (p) {
         assert(UX.getProofPanelCopy(p).actions.length === 0, p + ' offers no actions');
     });
+
+    // Proof Preview Fidelity 6A: the page-limit gate renders as a not-ready phase —
+    // legible label, the shared not-ready status class, an explanatory hint, and no
+    // actions (so an over-limit book cannot be marked ready and cannot be approved).
+    const overLimit = UX.getProofPanelCopy('not-ready-over-limit');
+    assert(overLimit !== null, 'not-ready-over-limit phase has panel copy');
+    assert(overLimit.label === 'Not ready for proof review', 'over-limit label reads "Not ready for proof review"');
+    assert(overLimit.statusClass === 'book-proof-notready', 'over-limit reuses the book-proof-notready status class');
+    assert(typeof overLimit.hint === 'string' && overLimit.hint.indexOf('page limit') !== -1,
+        'over-limit hint explains the page-limit problem');
+    assert(overLimit.actions.length === 0, 'over-limit offers no actions');
 
     // Stale offers ONLY re-review (submit-for-review) with the resubmit button id — never
     // an approve, checkout, production, or vendor action.
@@ -752,8 +764,9 @@ suite('Suite 24 — proof-panel copy implies no commerce/production readiness', 
         'print ready', 'print-ready', 'order ready', 'order-ready', 'ship now', 'send to print',
         'send to vendor', 'submit to vendor', 'place an order to'
     ];
-    const PHASES = ['not-ready-empty', 'not-ready-checking', 'not-ready-failed', 'ready',
-                    'pending-review', 'approved', 'stale', 'changes-requested', 'revoked'];
+    const PHASES = ['not-ready-empty', 'not-ready-checking', 'not-ready-failed',
+                    'not-ready-over-limit', 'ready', 'pending-review', 'approved',
+                    'stale', 'changes-requested', 'revoked'];
 
     PHASES.forEach(function (p) {
         const v = UX.getProofPanelCopy(p);
