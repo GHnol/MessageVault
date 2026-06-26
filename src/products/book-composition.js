@@ -5,10 +5,12 @@
 
     // ── Message Book page composition engine ─────────────────────────────────
     // The pure, DOM-free pagination math behind the Message Book proof preview.
-    // It is the single tested source of truth for HOW composition units pack into
-    // pages and what each page is — separate from how a page is drawn to the DOM
-    // (the renderer in index.html owns that) and separate from the proof-review
-    // phase decision (KMEngine.ProofPreviewContract, 6A, owns that).
+    // It is the single tested source of truth for HOW a Message Book editorial
+    // state becomes composition units (generateUnits, 6C) and HOW those units pack
+    // into pages and what each page is (paginateUnits/enrichPageMetadata, 6B) —
+    // separate from how a page is drawn to the DOM (the renderer in index.html owns
+    // that) and separate from the proof-review phase decision
+    // (KMEngine.ProofPreviewContract, 6A, owns that).
     //
     // Pure: no DOM, no timestamps, no randomness, no I/O, and no hardcoded page
     // constants. The page geometry (page line budget, header weights) lives with
@@ -58,6 +60,150 @@
             }
         }
         return runs;
+    }
+
+    // ── Composition-unit generation (mostly pure) ────────────────────────────
+    // Turn a Message Book editorial state into the sequence of composition units
+    // that paginateUnits packs into pages. This is the FRONT of the same
+    // pipeline as paginateUnits: generateUnits -> paginateUnits -> enrichPageMetadata.
+    //
+    // It owns no page constants and no app state. The line weights and the three
+    // things it cannot derive from `state` alone are supplied via config:
+    //   - headerLines / dividerLines / featuredHeaderLines: the scope-guarded
+    //     pagination line weights (defined with the renderer, passed in here).
+    //   - normalizeSingleLine / normalizeDedication: the editorial text
+    //     normalizers (single source of truth lives with the renderer; passed
+    //     in by reference, never copied into this module).
+    //   - resolveGroupDisplayName(sourceGroupId) -> string: the keepsake-group
+    //     display-name fallback, which depends on the global group sequence in
+    //     the app and so cannot be pure; returns '' when no group resolves.
+    //
+    // The defaults below keep the function total and pure if a dependency is
+    // omitted (e.g. in isolation tests); the renderer always injects the real
+    // implementations. Output units are byte/structure-compatible with the prior
+    // in-index generator, so paginateUnits behaviour is unchanged.
+    function generateUnits(state, contactName, config) {
+        var cfg            = config || {};
+        var HEADER_LINES   = cfg.headerLines;
+        var DIVIDER_LINES  = cfg.dividerLines;
+        var FEATURED_LINES = cfg.featuredHeaderLines;
+        var normalizeSingleLine = cfg.normalizeSingleLine || function (t) { return t == null ? '' : String(t); };
+        var normalizeDedication = cfg.normalizeDedication || function (t) { return t == null ? '' : String(t); };
+        var resolveGroupDisplayName = cfg.resolveGroupDisplayName || function () { return ''; };
+
+        var units = [];
+        var activeVolId = state.activeVolumeId;
+        var showTs = state.body.timestampMode === 'on';
+
+        var volumeSections = state.sections
+            .filter(function (s) { return s.volumeId === activeVolId && s.included; })
+            .sort(function (a, b) { return a.orderIndex - b.orderIndex; });
+
+        // ── Frontmatter ──────────────────────────────────────────────
+        units.push({
+            type: 'title-page', alwaysOwnPage: true,
+            state: state, contactName: contactName, volumeSections: volumeSections
+        });
+
+        if (state.opening.dedicationEnabled) {
+            var normalizedDed = normalizeDedication(state.opening.dedicationText);
+            if (normalizedDed) {
+                units.push({ type: 'dedication-page', alwaysOwnPage: true, state: state });
+            }
+        }
+
+        // ── Body sections ────────────────────────────────────────────
+        for (var si = 0; si < volumeSections.length; si++) {
+            var section = volumeSections[si];
+            // Stable identifier for this section within the volume's sorted list.
+            // Used by the paginator to track section-spanning pages and inject
+            // continuation headers; not persisted beyond this render pass.
+            var sectionId = si;
+
+            // Featured sections always start on a fresh page — stronger presence than
+            // a sparse divider. Non-featured sections obey forcePageBreakBefore.
+            if (section.featured || (section.forcePageBreakBefore && si > 0)) {
+                units.push({ type: 'force-page-break' });
+            }
+
+            // Priority: MB editorial title -> keepsake-group custom name -> derived group name
+            var displayName = (section.customTitle && section.customTitle.trim())
+                ? normalizeSingleLine(section.customTitle)
+                : (section.customName && section.customName.trim())
+                    ? section.customName.trim()
+                    : resolveGroupDisplayName(section.sourceGroupId);
+
+            // Sparse divider: bind it to the section-header so they move together.
+            // Featured sections get a fresh page instead — the page break already
+            // signals the boundary; a divider before the featured header would land
+            // on the wrong page.
+            var hasSectionDivider = !section.featured &&
+                !section.forcePageBreakBefore &&
+                state.body.dividerMode === 'sparse' && si > 0;
+
+            if (hasSectionDivider && !displayName) {
+                // No section-header to bind to; fall back to standalone divider.
+                units.push({ type: 'divider', lines: DIVIDER_LINES });
+            }
+
+            if (displayName) {
+                if (section.featured) {
+                    // Featured header: compositionally distinct unit with extra vertical weight.
+                    // Paginator treats it identically to section-header for orphan-guard purposes.
+                    units.push({
+                        type: 'featured-header',
+                        lines: FEATURED_LINES,
+                        keepWithNext: true,
+                        displayName: displayName,
+                        featured: true,
+                        sectionId: sectionId
+                    });
+                } else {
+                    units.push({
+                        type: 'section-header',
+                        lines: HEADER_LINES + (hasSectionDivider ? DIVIDER_LINES : 0),
+                        hasDivider: hasSectionDivider,
+                        keepWithNext: true,
+                        displayName: displayName,
+                        featured: false,
+                        sectionId: sectionId
+                    });
+                }
+            }
+
+            if (section.preserveSameSenderRuns) {
+                var runs = groupIntoRuns(section.messages);
+                for (var r = 0; r < runs.length; r++) {
+                    units.push({
+                        type: 'sender-run',
+                        lines: runLineCount(runs[r]),
+                        atomic: true,
+                        run: runs[r], contactName: contactName, showTs: showTs,
+                        featured: section.featured,
+                        sectionId: sectionId
+                    });
+                }
+            } else {
+                for (var mi = 0; mi < section.messages.length; mi++) {
+                    var m = section.messages[mi];
+                    units.push({
+                        type: 'message',
+                        lines: msgLineCount(m),
+                        atomic: true,
+                        m: m, showTs: showTs,
+                        featured: section.featured,
+                        sectionId: sectionId
+                    });
+                }
+            }
+        }
+
+        // ── Backmatter ───────────────────────────────────────────────
+        if (state.body.endingMode === 'branded') {
+            units.push({ type: 'ending-page', alwaysOwnPage: true });
+        }
+
+        return units;
     }
 
     // Split a sender-run unit into page-safe chunks at message boundaries.
@@ -412,6 +558,7 @@
         msgLineCount:           msgLineCount,
         runLineCount:           runLineCount,
         groupIntoRuns:          groupIntoRuns,
+        generateUnits:          generateUnits,
         splitRunIntoChunks:     splitRunIntoChunks,
         splitRunForPage:        splitRunForPage,
         paginateUnits:          paginateUnits,

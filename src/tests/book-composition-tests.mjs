@@ -84,7 +84,7 @@ suite('Suite 1 — API shape', function () {
     const BC = makeKM().BookComposition;
     assert(typeof BC === 'object' && BC !== null, 'KMEngine.BookComposition is an object');
     eq(BC.MODULE_VERSION, 'kmbc1', 'MODULE_VERSION is "kmbc1"');
-    ['msgLineCount', 'runLineCount', 'groupIntoRuns', 'splitRunIntoChunks',
+    ['msgLineCount', 'runLineCount', 'groupIntoRuns', 'generateUnits', 'splitRunIntoChunks',
      'splitRunForPage', 'paginateUnits', 'enrichPageMetadata', 'computePageLimitStatus']
         .forEach(function (fn) {
             assert(typeof BC[fn] === 'function', fn + ' is a function');
@@ -366,10 +366,16 @@ suite('Suite 15 — determinism and purity', function () {
 // Suite 16 — no commerce/production vocabulary in source (parity with 6A)
 // ─────────────────────────────────────────────────────────────────────────────
 suite('Suite 16 — source is free of commerce/production vocabulary', function () {
-    const src = readFileSync(
+    const rawSrc = readFileSync(
         join(__dirname, '../../src/products/book-composition.js'),
         'utf8'
     ).toLowerCase();
+
+    // `orderIndex` is the section sort-key field on messageBookState (a sequence
+    // position, not commerce vocabulary). Neutralize the identifier before the
+    // bare-term scan so it does not false-positive on "order"; a standalone
+    // commerce "order" (e.g. "place an order") is still rejected.
+    const src = rawSrc.replace(/orderindex/g, 'seqindex');
 
     ['checkout', 'payment', 'order', 'commerce', 'manufacturing', 'vendor',
      'fulfillment', 'export', 'purchase'].forEach(function (term) {
@@ -386,6 +392,383 @@ suite('Suite 16 — source is free of commerce/production vocabulary', function 
      'math.random', 'new date', 'date.now'].forEach(function (bad) {
         assert(src.indexOf(bad) === -1, 'book-composition.js source contains no "' + bad + '"');
     });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
+// generateUnits (6C) — composition-unit generation golden coverage
+// ═════════════════════════════════════════════════════════════════════════════
+// The 6C extraction. Deterministic injected deps make the app-coupled bits — the
+// editorial text normalizers and the keepsake-group display-name fallback —
+// observable in isolation. The line weights mirror the real scope-guarded
+// pagination constants (BOOK_HEADER_LINES/BOOK_DIVIDER_LINES/BOOK_FEATURED_HEADER_LINES).
+const GEN_CFG = {
+    headerLines:         4,
+    dividerLines:        3,
+    featuredHeaderLines: 8,
+    // Mirrors bookEditorial.normalizeSingleLine: collapses ALL internal whitespace.
+    normalizeSingleLine: function (t) {
+        return String(t == null ? '' : t).replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    },
+    // Mirrors bookEditorial.normalizeDedication: trims; collapses 3+ blank lines.
+    normalizeDedication: function (t) {
+        return String(t == null ? '' : t).replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+    },
+    // Mirrors keepsakeGroups.find(...) -> getGroupDisplayName(...); '' when unresolved.
+    resolveGroupDisplayName: function (id) {
+        return ({ g1: 'Keepsake Set 1', g2: 'Keepsake Set 2' })[id] || '';
+    }
+};
+
+function mkState(overrides) {
+    return Object.assign({
+        activeVolumeId: 'v1',
+        volumes: [{ id: 'v1', name: 'Volume 1' }],
+        sections: [],
+        opening: { dedicationEnabled: false, dedicationText: '', title: '' },
+        body: { timestampMode: 'off', dividerMode: 'off', endingMode: 'plain', pageNumberMode: 'off' }
+    }, overrides || {});
+}
+
+function mkSection(overrides) {
+    return Object.assign({
+        volumeId: 'v1', included: true, orderIndex: 0,
+        featured: false, forcePageBreakBefore: false,
+        sourceGroupId: null, customTitle: '', customName: '',
+        preserveSameSenderRuns: false, messages: []
+    }, overrides || {});
+}
+
+function types(units)      { return units.map(function (u) { return u.type; }); }
+function ofType(units, t)  { return units.filter(function (u) { return u.type === t; }); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 17 — generateUnits frontmatter & backmatter (title / dedication / ending)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 17 — generateUnits frontmatter & backmatter', function () {
+    const BC = makeKM().BookComposition;
+
+    // Empty state → just the title page.
+    const empty = BC.generateUnits(mkState(), 'Ada', GEN_CFG);
+    eq(empty.length, 1, 'empty state → only the title page');
+    eq(empty[0].type, 'title-page', 'first unit is the title page');
+    eq(empty[0].alwaysOwnPage, true, 'title page is alwaysOwnPage');
+    eq(empty[0].contactName, 'Ada', 'title page carries the contactName');
+    assert(Array.isArray(empty[0].volumeSections) && empty[0].volumeSections.length === 0,
+        'title page carries the (empty) volumeSections');
+    assert(empty[0].state && empty[0].state.body, 'title page carries the state reference');
+
+    // No config → still total and safe (defaults applied), title page present.
+    const noCfg = BC.generateUnits(mkState(), 'Ada');
+    eq(noCfg.length, 1, 'no config → defaults applied, still produces the title page');
+    eq(noCfg[0].type, 'title-page', 'no-config path still yields the title page');
+
+    // Dedication enabled + real text → dedication page right after the title.
+    const ded = BC.generateUnits(mkState({
+        opening: { dedicationEnabled: true, dedicationText: '  For you  ', title: '' }
+    }), 'Ada', GEN_CFG);
+    eq(types(ded)[1], 'dedication-page', 'enabled non-empty dedication → dedication page after title');
+    eq(ded[1].alwaysOwnPage, true, 'dedication page is alwaysOwnPage');
+
+    // Enabled but whitespace-only → normalizeDedication empties it → no page.
+    const dedBlank = BC.generateUnits(mkState({
+        opening: { dedicationEnabled: true, dedicationText: '   \n\n   ', title: '' }
+    }), 'Ada', GEN_CFG);
+    eq(ofType(dedBlank, 'dedication-page').length, 0, 'whitespace-only dedication → no dedication page');
+
+    // Disabled → no page even with text present.
+    const dedOff = BC.generateUnits(mkState({
+        opening: { dedicationEnabled: false, dedicationText: 'For you', title: '' }
+    }), 'Ada', GEN_CFG);
+    eq(ofType(dedOff, 'dedication-page').length, 0, 'disabled dedication → no dedication page');
+
+    // Branded ending → ending page last; plain → none.
+    const branded = BC.generateUnits(mkState({
+        body: { timestampMode: 'off', dividerMode: 'off', endingMode: 'branded', pageNumberMode: 'off' }
+    }), 'Ada', GEN_CFG);
+    const bt = types(branded);
+    eq(bt[bt.length - 1], 'ending-page', 'branded ending → ending page is last');
+    eq(branded[branded.length - 1].alwaysOwnPage, true, 'ending page is alwaysOwnPage');
+
+    const plain = BC.generateUnits(mkState({
+        body: { timestampMode: 'off', dividerMode: 'off', endingMode: 'plain', pageNumberMode: 'off' }
+    }), 'Ada', GEN_CFG);
+    eq(ofType(plain, 'ending-page').length, 0, 'plain ending → no ending page');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — section ordering, included & volume filters, sectionId basing
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 18 — section ordering, included & volume filters', function () {
+    const BC = makeKM().BookComposition;
+
+    const state = mkState({
+        sections: [
+            mkSection({ orderIndex: 2, customName: 'C', messages: [{ sender: 'A', text: 'c' }] }),
+            mkSection({ orderIndex: 0, customName: 'A', messages: [{ sender: 'A', text: 'a' }] }),
+            mkSection({ orderIndex: 1, customName: 'B', messages: [{ sender: 'A', text: 'b' }] }),
+            mkSection({ orderIndex: 3, included: false, customName: 'X', messages: [{ sender: 'A', text: 'x' }] }),
+            mkSection({ orderIndex: 4, volumeId: 'v2', customName: 'Y', messages: [{ sender: 'A', text: 'y' }] })
+        ]
+    });
+    const units = BC.generateUnits(state, 'N', GEN_CFG);
+
+    const headers = ofType(units, 'section-header').map(function (u) { return u.displayName; });
+    eq(headers.join(','), 'A,B,C', 'sections emitted in orderIndex order; excluded & other-volume dropped');
+
+    const headerUnits = ofType(units, 'section-header');
+    eq(headerUnits[0].sectionId, 0, 'first emitted section has sectionId 0');
+    eq(headerUnits[1].sectionId, 1, 'second emitted section has sectionId 1');
+    eq(headerUnits[2].sectionId, 2, 'third emitted section has sectionId 2 (positional, not orderIndex)');
+
+    const msgs = ofType(units, 'message');
+    eq(msgs.map(function (m) { return m.m.text; }).join(','), 'a,b,c', 'messages follow section order');
+    eq(msgs[0].sectionId, 0, 'message a belongs to section 0');
+    eq(msgs[2].sectionId, 2, 'message c belongs to section 2');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — display-name resolution priority (title > name > group fallback)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 19 — display-name resolution priority', function () {
+    const BC = makeKM().BookComposition;
+
+    // customTitle wins and is routed through normalizeSingleLine (internal whitespace collapses).
+    const t = BC.generateUnits(mkState({
+        sections: [mkSection({ customTitle: '  Our   First\nChapter ', customName: 'ignored', sourceGroupId: 'g1', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(t, 'section-header')[0].displayName, 'Our First Chapter',
+        'customTitle wins and is normalized (internal whitespace collapsed)');
+
+    // customName (no customTitle) is trimmed only — internal double space survives.
+    const n = BC.generateUnits(mkState({
+        sections: [mkSection({ customName: '  Keep  Spaces  ', sourceGroupId: 'g1', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(n, 'section-header')[0].displayName, 'Keep  Spaces',
+        'customName is trimmed only (distinct from normalizeSingleLine)');
+
+    // Neither custom field → resolveGroupDisplayName fallback.
+    const g = BC.generateUnits(mkState({
+        sections: [mkSection({ sourceGroupId: 'g2', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(g, 'section-header')[0].displayName, 'Keepsake Set 2', 'falls back to resolveGroupDisplayName');
+
+    // Unresolved group + no custom → '' → no header unit, content still emitted.
+    const u = BC.generateUnits(mkState({
+        sections: [mkSection({ sourceGroupId: 'missing', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(u, 'section-header').length, 0, 'no resolvable name → no section-header emitted');
+    eq(ofType(u, 'message').length, 1, 'content still emitted even without a header');
+    eq(ofType(u, 'message')[0].sectionId, 0, 'header-less content still carries its sectionId');
+
+    // Whitespace-only customTitle is treated as absent → next priority (customName).
+    const wsTitle = BC.generateUnits(mkState({
+        sections: [mkSection({ customTitle: '   ', customName: 'Fallback', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(wsTitle, 'section-header')[0].displayName, 'Fallback',
+        'whitespace-only customTitle skipped in favor of customName');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 20 — section-header vs featured-header and line weights
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 20 — section-header vs featured-header and line weights', function () {
+    const BC = makeKM().BookComposition;
+
+    // Non-featured first section: section-header, no divider, header weight only.
+    const plain = BC.generateUnits(mkState({
+        sections: [mkSection({ customName: 'Sec', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    const sh = ofType(plain, 'section-header')[0];
+    eq(sh.lines, GEN_CFG.headerLines, 'section-header line weight = headerLines (no divider)');
+    eq(sh.hasDivider, false, 'no divider on a first non-sparse section');
+    eq(sh.keepWithNext, true, 'section-header keepWithNext');
+    eq(sh.featured, false, 'section-header not featured');
+    eq(types(plain).indexOf('force-page-break'), -1, 'non-featured first section emits no page break');
+
+    // Featured section: featured-header (featured weight) preceded by a force-page-break — even first.
+    const feat = BC.generateUnits(mkState({
+        sections: [mkSection({ featured: true, customName: 'Fav', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(types(feat)[1], 'force-page-break', 'featured section is preceded by a force-page-break (even first)');
+    const fh = ofType(feat, 'featured-header')[0];
+    assert(fh, 'featured section emits a featured-header');
+    eq(fh.lines, GEN_CFG.featuredHeaderLines, 'featured-header weight = featuredHeaderLines');
+    eq(fh.featured, true, 'featured-header carries the featured flag');
+    eq(fh.keepWithNext, true, 'featured-header keepWithNext');
+    eq(ofType(feat, 'section-header').length, 0, 'featured section emits no plain section-header');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 21 — sparse dividers (bound / standalone / featured-excluded)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 21 — sparse dividers', function () {
+    const BC = makeKM().BookComposition;
+    const sparseBody = { timestampMode: 'off', dividerMode: 'sparse', endingMode: 'plain', pageNumberMode: 'off' };
+
+    // First section (si=0) gets no divider; the second binds the divider into its header.
+    const two = BC.generateUnits(mkState({
+        body: sparseBody,
+        sections: [
+            mkSection({ orderIndex: 0, customName: 'A', messages: [{ sender: 'A', text: 'a' }] }),
+            mkSection({ orderIndex: 1, customName: 'B', messages: [{ sender: 'A', text: 'b' }] })
+        ]
+    }), 'N', GEN_CFG);
+    const hs = ofType(two, 'section-header');
+    eq(hs[0].hasDivider, false, 'first section (si=0) has no sparse divider');
+    eq(hs[0].lines, GEN_CFG.headerLines, 'first header weight excludes divider');
+    eq(hs[1].hasDivider, true, 'second section binds a sparse divider into its header');
+    eq(hs[1].lines, GEN_CFG.headerLines + GEN_CFG.dividerLines, 'second header weight includes divider');
+    eq(ofType(two, 'divider').length, 0, 'bound divider is not a standalone divider unit');
+
+    // Second section with NO resolvable name under sparse → standalone divider unit, no header.
+    const noName = BC.generateUnits(mkState({
+        body: sparseBody,
+        sections: [
+            mkSection({ orderIndex: 0, customName: 'A', messages: [{ sender: 'A', text: 'a' }] }),
+            mkSection({ orderIndex: 1, sourceGroupId: 'missing', messages: [{ sender: 'A', text: 'b' }] })
+        ]
+    }), 'N', GEN_CFG);
+    const dv = ofType(noName, 'divider');
+    eq(dv.length, 1, 'header-less sparse section emits a standalone divider');
+    eq(dv[0].lines, GEN_CFG.dividerLines, 'standalone divider weight = dividerLines');
+
+    // Featured second section under sparse → no divider (featured excluded); page break + featured-header.
+    const featSparse = BC.generateUnits(mkState({
+        body: sparseBody,
+        sections: [
+            mkSection({ orderIndex: 0, customName: 'A', messages: [{ sender: 'A', text: 'a' }] }),
+            mkSection({ orderIndex: 1, featured: true, customName: 'Fav', messages: [{ sender: 'A', text: 'b' }] })
+        ]
+    }), 'N', GEN_CFG);
+    eq(ofType(featSparse, 'divider').length, 0, 'featured section takes a page break, not a sparse divider');
+    eq(ofType(featSparse, 'featured-header').length, 1, 'featured section emits a featured-header under sparse');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 22 — forced page breaks
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 22 — forced page breaks', function () {
+    const BC = makeKM().BookComposition;
+
+    // forcePageBreakBefore on a later section → force-page-break before it; no sparse divider on it.
+    const forced = BC.generateUnits(mkState({
+        body: { timestampMode: 'off', dividerMode: 'sparse', endingMode: 'plain', pageNumberMode: 'off' },
+        sections: [
+            mkSection({ orderIndex: 0, customName: 'A', messages: [{ sender: 'A', text: 'a' }] }),
+            mkSection({ orderIndex: 1, forcePageBreakBefore: true, customName: 'B', messages: [{ sender: 'A', text: 'b' }] })
+        ]
+    }), 'N', GEN_CFG);
+    eq(ofType(forced, 'force-page-break').length, 1, 'second section emits a force-page-break');
+    const bHeader = ofType(forced, 'section-header').filter(function (u) { return u.displayName === 'B'; })[0];
+    eq(bHeader.hasDivider, false, 'forced-break section does not also get a sparse divider');
+    eq(bHeader.lines, GEN_CFG.headerLines, 'forced-break section header weight excludes divider');
+
+    // forcePageBreakBefore on the FIRST section (si=0) → no break (guarded by si>0).
+    const firstForced = BC.generateUnits(mkState({
+        sections: [mkSection({ orderIndex: 0, forcePageBreakBefore: true, customName: 'A', messages: [{ sender: 'A', text: 'a' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(firstForced, 'force-page-break').length, 0, 'first section never emits a leading page break');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 23 — messages vs sender-runs, order, showTs, featured propagation
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 23 — messages vs sender-runs, order & flags', function () {
+    const BC = makeKM().BookComposition;
+
+    const msgs = [
+        { sender: 'A', text: 'one' }, { sender: 'A', text: 'two' }, { sender: 'B', text: 'three' }
+    ];
+
+    // preserveSameSenderRuns=false → one message unit per message, order preserved, showTs from body.
+    const flat = BC.generateUnits(mkState({
+        body: { timestampMode: 'on', dividerMode: 'off', endingMode: 'plain', pageNumberMode: 'off' },
+        sections: [mkSection({ customName: 'S', preserveSameSenderRuns: false, messages: msgs })]
+    }), 'N', GEN_CFG);
+    const mu = ofType(flat, 'message');
+    eq(mu.length, 3, 'one message unit per message');
+    eq(mu.map(function (u) { return u.m.text; }).join(','), 'one,two,three', 'message order preserved');
+    eq(mu[0].lines, BC.msgLineCount(msgs[0]), 'message line cost from msgLineCount');
+    eq(mu[0].atomic, true, 'message unit is atomic');
+    eq(mu[0].showTs, true, 'timestampMode on → showTs true');
+    eq(mu[0].sectionId, 0, 'message carries the sectionId');
+
+    // preserveSameSenderRuns=true → grouped runs; consecutive A merged, then B.
+    const runs = BC.generateUnits(mkState({
+        body: { timestampMode: 'off', dividerMode: 'off', endingMode: 'plain', pageNumberMode: 'off' },
+        sections: [mkSection({ customName: 'S', preserveSameSenderRuns: true, messages: msgs })]
+    }), 'N', GEN_CFG);
+    const ru = ofType(runs, 'sender-run');
+    eq(ru.length, 2, 'consecutive same-sender messages merged into runs');
+    eq(ru[0].run.sender, 'A', 'first run is sender A');
+    eq(ru[0].run.messages.length, 2, 'first run holds both A messages');
+    eq(ru[1].run.sender, 'B', 'second run is sender B');
+    eq(ru[0].lines, BC.runLineCount(ru[0].run), 'run line cost from runLineCount');
+    eq(ru[0].showTs, false, 'timestampMode off → showTs false');
+
+    // Featured section propagates its featured flag onto content units.
+    const feat = BC.generateUnits(mkState({
+        sections: [mkSection({ featured: true, customName: 'F', messages: [{ sender: 'A', text: 'x' }] })]
+    }), 'N', GEN_CFG);
+    eq(ofType(feat, 'message')[0].featured, true, 'featured flag propagates to content units');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 24 — multi-volume assignment (active-volume scoping, sectionId re-basing)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 24 — multi-volume assignment', function () {
+    const BC = makeKM().BookComposition;
+
+    const base = {
+        volumes: [{ id: 'v1', name: 'Volume 1' }, { id: 'v2', name: 'Volume 2' }],
+        sections: [
+            mkSection({ volumeId: 'v1', orderIndex: 0, customName: 'V1-A', messages: [{ sender: 'A', text: 'a' }] }),
+            mkSection({ volumeId: 'v2', orderIndex: 0, customName: 'V2-A', messages: [{ sender: 'A', text: 'b' }] }),
+            mkSection({ volumeId: 'v2', orderIndex: 1, customName: 'V2-B', messages: [{ sender: 'A', text: 'c' }] })
+        ]
+    };
+
+    const v1 = BC.generateUnits(mkState(Object.assign({ activeVolumeId: 'v1' }, base)), 'N', GEN_CFG);
+    eq(ofType(v1, 'section-header').map(function (u) { return u.displayName; }).join(','), 'V1-A',
+        'active volume v1 yields only v1 sections');
+
+    const v2 = BC.generateUnits(mkState(Object.assign({ activeVolumeId: 'v2' }, base)), 'N', GEN_CFG);
+    eq(ofType(v2, 'section-header').map(function (u) { return u.displayName; }).join(','), 'V2-A,V2-B',
+        'active volume v2 yields only v2 sections, in order');
+    eq(ofType(v2, 'section-header')[0].sectionId, 0, 'first v2 section is sectionId 0 (re-based per volume)');
+    eq(ofType(v2, 'section-header')[1].sectionId, 1, 'second v2 section is sectionId 1');
+    eq(v2[0].volumeSections.length, 2, 'title page volumeSections scoped to the active volume');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 25 — determinism, purity (no state mutation), and pipeline integration
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 25 — determinism, purity & pipeline integration', function () {
+    const BC = makeKM().BookComposition;
+
+    const state = mkState({
+        body: { timestampMode: 'off', dividerMode: 'sparse', endingMode: 'branded', pageNumberMode: 'off' },
+        opening: { dedicationEnabled: true, dedicationText: 'For N', title: 'Title' },
+        sections: [
+            mkSection({ orderIndex: 0, customName: 'A', preserveSameSenderRuns: true, messages: [{ sender: 'A', text: 'a' }, { sender: 'A', text: 'b' }] }),
+            mkSection({ orderIndex: 1, featured: true, customTitle: 'Fav', messages: [{ sender: 'B', text: 'c' }] })
+        ]
+    });
+
+    const before = JSON.stringify(state);
+    const a = BC.generateUnits(state, 'N', GEN_CFG);
+    const b = BC.generateUnits(state, 'N', GEN_CFG);
+    eq(JSON.stringify(state), before, 'generateUnits does not mutate the input state');
+    assert(JSON.stringify(a) === JSON.stringify(b), 'same state → identical units (deterministic)');
+
+    // Generated units feed paginateUnits unchanged → real pages; frontmatter stays isolated.
+    const pages = BC.paginateUnits(a, CFG);
+    assert(pages.length >= 1, 'generated units paginate into at least one page');
+    eq(pages[0].units[0].type, 'title-page', 'first page is the title page (frontmatter isolated)');
+
+    // The page-limit bridge consumes the real page count.
+    const status = BC.computePageLimitStatus({ pageCount: pages.length, maxPages: 1 });
+    eq(status.exceedsPageLimit, pages.length > 1, 'computePageLimitStatus consistent with the real page count');
 });
 
 console.log('\n' + (failed === 0 ? 'PASS' : 'FAIL') + ' — ' + passed + ' passed, ' + failed + ' failed');
