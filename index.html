@@ -4110,6 +4110,14 @@
          artifact generation is not implemented. It generates no print/export/PDF file,
          writes no file, builds no vendor packet, and never flips exportPipelineImplemented. -->
     <script src="src/products/message-book-export-pipeline.js"></script>
+    <!-- 8G: render-environment input-availability contract. Pure; decomposes 8E's single
+         renderEnvironmentKnown boolean into the cover/spine/safe-area/bleed-trim/parity/
+         font/interior/export-target inputs, derives each present/missing from repo truth
+         (BOOK_PRODUCTION_DEPS / BOOK_PARITY + captured production-dependency flags), and
+         reports the aggregate true only when EVERY input is genuinely known. It renders
+         nothing, builds no cover/spine/file/vendor packet, and only feeds 8E its honest
+         (currently false) aggregate so the export preflight keeps blocking honestly. -->
+    <script src="src/products/message-book-render-environment.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -9649,10 +9657,13 @@ ${keepsakeFooter}
         //                              bounds → page-count/parity, known-spec → export-target)
         //   - proofApprovedCurrent   : the proof is approved AND not stale (5D/7A signals)
         //   - compositionReady       : there is content and it is within the page limit (6A/6B)
-        //   - renderEnvironmentKnown : FALSE — cover/spine/safe-area/render-environment inputs
-        //                              are not computed in the live app yet (ProductPreflight's
-        //                              render-environment checks are not wired), so this input is
-        //                              honestly reported missing rather than invented.
+        //   - renderEnvironmentKnown : the 8G MessageBookRenderEnvironment aggregate, derived
+        //                              from live repo truth (BOOK_PRODUCTION_DEPS / BOOK_PARITY
+        //                              geometry + the captured production-dependency flags). Trim/
+        //                              bleed/safe-area/parity/export-target/interior are known;
+        //                              cover, spine width (vendor-supplied paper/board thickness),
+        //                              and font/emoji render availability are genuinely missing, so
+        //                              the aggregate is honestly FALSE — nothing is invented.
         // Capabilities are left at the engine's all-false default, so every generation rung stays
         // false and the live status is always gated.
         function renderBookExportPreflightStatus(state, hasContent, approvalStatus, record, currentProofFingerprint, printSpecResult) {
@@ -9666,11 +9677,33 @@ ${keepsakeFooter}
             const proofApprovedCurrent = approvalStatus === 'approved' && !approvalStale;
             const compositionReady = hasContent === true && !(state && state.exceedsPageLimit);
 
+            // 8G: derive renderEnvironmentKnown from the MessageBookRenderEnvironment input
+            // contract against live repo truth instead of a hardcoded literal. Cover, spine
+            // width (vendor-supplied paper/board thickness), and font/emoji render availability
+            // are genuinely missing, so the aggregate is honestly false and the export preflight
+            // keeps blocking at render-environment-missing. A future package that confirms those
+            // inputs would advance this automatically — nothing here is invented.
+            const RE = window.KMEngine && window.KMEngine.MessageBookRenderEnvironment;
+            const renderEnvironmentKnown = (RE && RE.resolveFromContext)
+                ? RE.resolveFromContext({
+                    geometry: BOOK_PRODUCTION_DEPS,
+                    parity:   BOOK_PARITY,
+                    productionDependencies: {
+                        interiorPageCountConfirmed: compositionReady,
+                        coverGenerationBlocked:     true,
+                        spineWidthKnown:            false,
+                        stockConfirmed:             false,
+                        bindingConfirmed:           false
+                    },
+                    fontRender: { fontsAvailable: false, emojiStrategyConfirmed: false }
+                }).result.renderEnvironmentKnown
+                : false;
+
             const resolved = EP.resolveFromContext({
                 printSpec:              printSpecResult || null,
                 proofApprovedCurrent:   proofApprovedCurrent,
                 compositionReady:       compositionReady,
-                renderEnvironmentKnown: false
+                renderEnvironmentKnown: renderEnvironmentKnown
             });
             const d = resolved.display;
             bookExportPreflightStatus.className = 'book-export-preflight-status book-export-preflight-' + d.tone;
