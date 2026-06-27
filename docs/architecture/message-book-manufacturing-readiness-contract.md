@@ -187,3 +187,19 @@ The **8B live status path is unchanged**: it calls `resolveFromReadiness` with *
 ### 8C coverage
 
 New `message-book-print-spec-tests.mjs` (**306**, 14 suites — see the print-spec contract doc). `message-book-manufacturing-readiness-tests.mjs` 324 → **340** (Suite 25 — the 8C print-spec input path against the real 7A gate + 7D/7E intent shell + 8C contract, proving the `print-spec-not-selected` → `export-pipeline-not-implemented` transition and that the 8B live no-capabilities path is unaffected).
+
+---
+
+## 8D — Live Print Spec Selection + Production Status Bridge
+
+**Status:** Active — introduced in Message Book Manufacturing Readiness 8D. 8D wires the 8C `MessageBookPrintSpec` contract into the live app (a local-only `#bookPrintSpecPanel` outside `#bookCanvas`) and feeds this boundary's status hook a third argument so the **live** production status can advance. `renderBookManufacturingStatus(readinessResult, orderIntentView, printSpecResult)` now maps the 8C selection result via `MessageBookPrintSpec.toManufacturingCapabilities(...)` into this engine's **existing** `capabilities.printSpecSelected` input:
+
+```js
+const PS = window.KMEngine && window.KMEngine.MessageBookPrintSpec;
+const capabilities = (PS && PS.toManufacturingCapabilities && printSpecResult)
+    ? PS.toManufacturingCapabilities(printSpecResult)   // { printSpecSelected: <selected && valid> }
+    : undefined;                                         // no print spec → all-false default (8B behaviour)
+MMR.resolveFromReadiness({ readiness, intent, capabilities });
+```
+
+So in the live app: with no local print-spec selection (or an over-limit / unknown one) the status stays at `print-spec-not-selected`; with a selected-AND-valid internal spec and the lower gates satisfied it advances to **`export-pipeline-not-implemented`** — and no higher rung. **This engine's source is unchanged** — 8D uses only the pre-existing `printSpecSelected` capability input. `CAPABILITIES`, `LOCAL_INTENT_REQUIRED = true`, the ladder, and the blocker priority are all intact. When `capabilities` is omitted (the prior 8B call shape), the all-false default is applied exactly as before. Coverage: `message-book-manufacturing-readiness-tests.mjs` 340 → **348** (Suite 26 — the 8D live status-hook mapping).

@@ -929,6 +929,92 @@ assert(rtOIRestore.appState.messageBookOrderIntent.status === 'intent-draft-loca
 assert(rtOIRestore.appState.messageBookOrderIntent.intentAt === '2026-06-26T00:00:00.000Z',
     'order-intent timestamps preserved through JSON round-trip');
 
+// ── 8D — messageBookPrintSpecSelection persistence ──────────────────────────────
+
+var PRINT_SPEC_ID = 'message-book-internal-7x10-hardcover-v1';
+
+suite('8D — createSnapshot carries messageBookPrintSpecSelection string');
+var snapPS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} },
+    contactName: '', messageBookPrintSpecSelection: PRINT_SPEC_ID
+});
+assert(snapPS.projectSession.messageBookPrintSpecSelection === PRINT_SPEC_ID,
+    'createSnapshot carries the selected print spec id');
+
+suite('8D — createSnapshot defaults messageBookPrintSpecSelection to null when absent / non-string');
+var snapNoPS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} }, contactName: ''
+});
+assert(snapNoPS.projectSession.messageBookPrintSpecSelection === null,
+    'omitted print-spec selection defaults to null');
+var snapBadPS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} },
+    contactName: '', messageBookPrintSpecSelection: { id: 'x' }
+});
+assert(snapBadPS.projectSession.messageBookPrintSpecSelection === null,
+    'non-string print-spec selection coerced to null in snapshot');
+var snapEmptyPS = PP.createSnapshot({
+    memories: [], keepsakeGroups: [], selectedIndices: { forEach: function () {} },
+    contactName: '', messageBookPrintSpecSelection: ''
+});
+assert(snapEmptyPS.projectSession.messageBookPrintSpecSelection === null,
+    'empty-string print-spec selection coerced to null in snapshot');
+
+suite('8D — validate accepts string / null / absent and rejects non-string messageBookPrintSpecSelection');
+var vStrPS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookPrintSpecSelection: PRINT_SPEC_ID }
+});
+assert(vStrPS.valid, 'validate accepts string print-spec selection');
+var vNullPS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookPrintSpecSelection: null }
+});
+assert(vNullPS.valid, 'validate accepts null print-spec selection');
+var vAbsentPS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [] }
+});
+assert(vAbsentPS.valid, 'validate accepts absent print-spec selection (back-compat)');
+var vBadPS = PP.validate({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookPrintSpecSelection: { id: 'x' } }
+});
+assert(!vBadPS.valid && vBadPS.errors.some(function (e) { return e.indexOf('messageBookPrintSpecSelection') >= 0; }),
+    'validate rejects non-string print-spec selection with a referencing error');
+
+suite('8D — restore puts messageBookPrintSpecSelection in appState without unknown-field warning');
+var rPS = PSR.restore(snapPS);
+assert(rPS.success, 'restore with print-spec selection succeeds');
+assert(rPS.appState.messageBookPrintSpecSelection === PRINT_SPEC_ID,
+    'print-spec selection survives restore into appState');
+assert(!rPS.warnings.some(function (w) { return w.indexOf('messageBookPrintSpecSelection') >= 0; }),
+    'messageBookPrintSpecSelection does NOT produce an unknown-field warning');
+
+suite('8D — restore without messageBookPrintSpecSelection defaults to null');
+var rNoPS = PSR.restore(snapNoPS);
+assert(rNoPS.success && rNoPS.appState.messageBookPrintSpecSelection === null,
+    'absent print-spec selection restores as null');
+
+suite('8D — restore drops a non-string persisted print-spec selection to null');
+var rBadPS = PSR.restore({
+    keepmeesVersion: '1',
+    projectSession: { id: 's1', memories: [], selectedMemoryIds: [], keepsakeGroups: [],
+        messageBookPrintSpecSelection: { id: 'x' } }
+});
+assert(rBadPS.appState.messageBookPrintSpecSelection === null,
+    'non-string persisted selection restores as null');
+
+suite('8D — round-trip preserves messageBookPrintSpecSelection through JSON');
+var rtPSParsed = JSON.parse(JSON.stringify(snapPS));
+assert(PP.validate(rtPSParsed).valid, 'round-tripped print-spec snapshot validates');
+var rtPSRestore = PSR.restore(rtPSParsed);
+assert(rtPSRestore.appState.messageBookPrintSpecSelection === PRINT_SPEC_ID,
+    'print-spec selection preserved through JSON round-trip');
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 console.log('\n─────────────────────────────────────');

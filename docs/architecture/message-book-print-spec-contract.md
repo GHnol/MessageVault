@@ -111,3 +111,45 @@ No print-file generation, no export/PDF generation, no vendor selection, confirm
 `src/tests/message-book-print-spec-tests.mjs` (**306**, 14 suites): API shape; `SELECTION_STATE` / `BLOCKER` frozen enums + safe messages; the `INTERNAL_DRAFT_SPEC` descriptor matching the LOCKED register facts + `vendorConfirmed`/`exportPipelineImplemented` false + frozen + geometry pointer; no-spec / unknown-spec / valid-spec selection; page count **under / at / over** allowed bounds + invalid count + unknown bounds; parity reported-not-enforced; selection implies no downstream readiness; the `toManufacturingCapabilities` bridge (only `printSpecSelected`, valid-gated, defensive); `describeBoundary`; purity (deterministic + no input mutation + fresh arrays); a no-commerce/production-CTA + no-side-effect source-scan; and a real-`MessageBookManufacturingReadiness` integration proving the `print-spec-not-selected` → `export-pipeline-not-implemented` transition.
 
 `src/tests/message-book-manufacturing-readiness-tests.mjs` Suite 25 (324 → **340**) proves the same transition from the 8A side against the real 7A gate + 7D/7E intent shell + 8C print-spec contract, and that the 8B live (no-capabilities) path is unchanged.
+
+---
+
+## 8D — Live Print Spec Selection + Production Status Bridge
+
+**Status:** Active — introduced in Message Book Manufacturing Readiness 8D. 8D wires this 8C contract into the live Message Book app as a **local-only** print-spec selection/status surface, and bridges a selected-and-valid internal spec into the 8B production-readiness status so the live app advances from `print-spec-not-selected` to `export-pipeline-not-implemented` once the lower gates are satisfied. It is still not export, not PDF generation, not vendor selection, not manufacturing, not checkout, not payment, and not order submission.
+
+### Engine additions (8D)
+
+`KMEngine.MessageBookPrintSpec` gains a small, pure display + selection-helper layer (no DOM, no clock, no I/O):
+
+- `SELECTION_TONE` — frozen `{ SELECTED: 'selected', UNSELECTED: 'unselected', BLOCKED: 'blocked' }`.
+- `describeSelection(result)` → `{ tone, headline, detail }`. `internal-valid` → selected tone + "Export pipeline is still not implemented."; a selected-but-invalid (over-limit / bounds-unknown / page-count-invalid) or unknown spec → blocked tone + the safe blocker message; nothing selected → unselected tone + "No print specification selected".
+- `describeActions(result)` → `[{ action, label }]`. Offers `use-spec` "Use internal print spec" when no internal spec is selected, and `clear-spec` "Clear print spec" when one is. No commerce/production CTA (guarded by the suite scan).
+- `coerceSelectedSpecId(value)` → the known internal id when the stored value is exactly that id, otherwise `null` — the safe restore coercion.
+
+### Live wiring (`index.html`)
+
+`index.html` loads `src/products/message-book-print-spec.js` and renders a read-write `#bookPrintSpecPanel` — a sibling of the 7B `#bookReadinessStatus`, 7E `#bookOrderIntentPanel`, and 8B `#bookManufacturingStatus`, **outside `#bookCanvas`** (so VR Scenario A, which captures only `#bookCanvas` pages, is unaffected). On each `renderBookProofPanel()`:
+
+1. `renderBookPrintSpecPanel(readinessResult, state)` evaluates the local selection (`messageBookPrintSpecSelection`) against the live proof page bounds — `state.estimatedPageCount` (active-volume page count) and `state.format.maxPages` (the same numbers the proof flow already computed) — via `evaluate()`, renders the selection status + the **Use internal print spec** / **Clear print spec** control, and returns the result.
+2. `renderBookManufacturingStatus(readinessResult, orderIntentView, printSpecResult)` bridges that result via `toManufacturingCapabilities` into 8A's existing `capabilities.printSpecSelected` input. With no result (or no print-spec module) it omits `capabilities`, so 8B's all-false default is preserved.
+
+Selecting the internal spec is local-only (`messageBookPrintSpecSelection = INTERNAL_SPEC_ID`); it is never a vendor-confirmed spec and implies no export / vendor / manufacturing / packaging readiness. The selection is **revalidated against the current page bounds on every render**, so an over-limit book never advances even with a spec selected.
+
+### Persistence (8D)
+
+A single optional `projectSession.messageBookPrintSpecSelection` field (a **string** spec id or `null`) mirrors the 7E `messageBookOrderIntent` pattern: `ProjectPersistence.createSnapshot` carries the string (non-string / empty → `null`), `validate` requires a string or `null` if present (older snapshots still validate), and `ProjectSessionRestore` lists it in `KNOWN_SESSION_FIELDS` (no unknown-field warning) and returns it raw. `handleProjectFileLoad` restores it through `coerceSelectedSpecId` (unknown / malformed → `null`); the current page bounds re-govern it on the next render, so a restored selection can never advance production on its own.
+
+### Live status matrix (8D)
+
+| `messageBookPrintSpecSelection` | page bounds | `#bookPrintSpecPanel` | 8B manufacturing status (lower gates satisfied) |
+|---|---|---|---|
+| `null` | — | "No print specification selected" + Use control | `print-spec-not-selected` |
+| internal id | within | "Internal print spec selected" + "Export pipeline is still not implemented." + Clear | **`export-pipeline-not-implemented`** |
+| internal id | over limit | "Internal print spec selected" + over-limit detail + Clear | `print-spec-not-selected` |
+
+The 8B manufacturing status only *advances* when the lower gates (checkout eligibility + local intent, `LOCAL_INTENT_REQUIRED = true`) are also satisfied; a valid spec never jumps an unmet lower gate (`checkout-not-eligible` / `no-local-intent` still show first).
+
+### 8D coverage
+
+`message-book-print-spec-tests.mjs` 306 → **377** (Suites 15–20: helper API surface, `describeSelection` / `describeActions` copy matrices, `coerceSelectedSpecId`, a display-copy safety scan, and a real-8A live select/clear/restore-revalidate mapping). `message-book-manufacturing-readiness-tests.mjs` 340 → **348** (Suite 26 — the live `renderBookManufacturingStatus` 8D mapping: no spec → `print-spec-not-selected`, valid spec → `export-pipeline-not-implemented`, over-limit → no advance, 8B no-capabilities path unchanged). `project-persistence-tests.mjs` 183 → **198** (the `messageBookPrintSpecSelection` snapshot/validate/restore round-trip). 8D adds no export/PDF/print/vendor-packet generation, selects no vendor, and adds no checkout/payment/cart/order/order-submission/manufacturing/packaging behavior; no dependency; the 8A engine source and the 8B no-capabilities path are unchanged; `BOOK_PRODUCTION_DEPS` / `BOOK_PARITY` are read-only references.

@@ -94,6 +94,12 @@
                 messageBookOrderIntent: (opts.messageBookOrderIntent && typeof opts.messageBookOrderIntent === 'object' && !Array.isArray(opts.messageBookOrderIntent))
                     ? opts.messageBookOrderIntent
                     : null,
+                // 8D: the locally-selected internal Message Book print spec id (a string),
+                // or null when none is selected. It is not a vendor-confirmed spec and
+                // carries no price/cart/order/payment — only the local selection id.
+                messageBookPrintSpecSelection: (typeof opts.messageBookPrintSpecSelection === 'string' && opts.messageBookPrintSpecSelection)
+                    ? opts.messageBookPrintSpecSelection
+                    : null,
                 messageBookState:   safeBookState
             }
         };
@@ -136,6 +142,10 @@
         if (s.messageBookOrderIntent !== undefined && s.messageBookOrderIntent !== null &&
                 (typeof s.messageBookOrderIntent !== 'object' || Array.isArray(s.messageBookOrderIntent))) {
             errors.push('projectSession.messageBookOrderIntent must be a plain object or null if present');
+        }
+        if (s.messageBookPrintSpecSelection !== undefined && s.messageBookPrintSpecSelection !== null &&
+                typeof s.messageBookPrintSpecSelection !== 'string') {
+            errors.push('projectSession.messageBookPrintSpecSelection must be a string or null if present');
         }
         if (s.productDrafts !== undefined && s.productDrafts !== null &&
                 !Array.isArray(s.productDrafts)) {

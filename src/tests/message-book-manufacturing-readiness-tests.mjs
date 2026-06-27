@@ -897,6 +897,73 @@ suite('Suite 25 — 8C print-spec input path', function () {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 26 — 8D live status-hook mapping (renderBookManufacturingStatus with print spec)
+// ─────────────────────────────────────────────────────────────────────────────
+// 8D feeds renderBookManufacturingStatus a third argument (the 8C print-spec result) and
+// maps it to a capabilities object via toManufacturingCapabilities. This suite reproduces
+// that exact call against the real 7A gate, 7D/7E shell, and 8C contract, and proves: no
+// print spec keeps print-spec-not-selected; a valid spec advances to
+// export-pipeline-not-implemented; an invalid spec does not; and a no-capabilities call
+// (the 8B path) is unchanged.
+suite('Suite 26 — 8D print-spec live status-hook mapping', function () {
+    const KM  = makeIntegrationCtx();
+    const MBR = KM.MessageBookReadiness;
+    const OI  = KM.MessageBookOrderIntent;
+    const PS  = KM.MessageBookPrintSpec;
+    const MR  = KM.MessageBookManufacturingReadiness;
+
+    // Exactly what index.html renderBookManufacturingStatus does in 8D.
+    function liveManufacturing(readinessResult, orderIntentView, printSpecResult) {
+        const capabilities = (PS && PS.toManufacturingCapabilities && printSpecResult)
+            ? PS.toManufacturingCapabilities(printSpecResult)
+            : undefined;
+        return MR.resolveFromReadiness({
+            readiness:    readinessResult,
+            intent:       { active: !!(orderIntentView && orderIntentView.active) },
+            capabilities: capabilities
+        });
+    }
+
+    // Lower layers satisfied: checkout-eligible proof with an active local intent.
+    const eligible = MBR.evaluate({
+        engineSupported: true, hasContent: true, exceedsPageLimit: false,
+        approvalStatus: 'approved', approvalStale: false, preflightBlockingFailures: 0
+    });
+    const activeIntent = OI.resolve(OI.startIntent(OI.create().state, eligible).state, eligible);
+    assert(eligible.checkoutEligible === true && activeIntent.active === true, 'precondition: eligible + active intent');
+
+    // No print-spec result (null) → 8B default → print-spec-not-selected.
+    assert(liveManufacturing(eligible, activeIntent, null).result.primaryBlocker === 'print-spec-not-selected',
+        'no print-spec result → print-spec-not-selected');
+
+    // The exact 8B call shape (third arg omitted/undefined) is unchanged.
+    assert(liveManufacturing(eligible, activeIntent, undefined).result.primaryBlocker === 'print-spec-not-selected',
+        '8B no-capabilities path unchanged');
+
+    // Valid internal spec result → advances to export-pipeline-not-implemented.
+    const validRes = PS.evaluate({ selectedSpecId: PS.INTERNAL_SPEC_ID, pageCount: 120, maxPages: 400 });
+    const withSpec = liveManufacturing(eligible, activeIntent, validRes);
+    assert(withSpec.result.primaryBlocker === 'export-pipeline-not-implemented',
+        'valid print-spec result → export-pipeline-not-implemented');
+    assert(withSpec.result.exportSpecKnown === true && withSpec.result.packagingReady === false,
+        'valid print-spec result → export-spec-known, no higher rung');
+    assert(withSpec.display.tone === 'gated', 'valid print-spec result → still gated');
+
+    // Over-limit print-spec result → does not advance.
+    const overRes = PS.evaluate({ selectedSpecId: PS.INTERNAL_SPEC_ID, pageCount: 9999, maxPages: 400 });
+    assert(liveManufacturing(eligible, activeIntent, overRes).result.primaryBlocker === 'print-spec-not-selected',
+        'over-limit print-spec result → still print-spec-not-selected');
+
+    // A valid spec never advances when a lower gate is unmet.
+    const ineligible = MBR.evaluate({
+        engineSupported: true, hasContent: false, exceedsPageLimit: false,
+        approvalStatus: 'none', approvalStale: false, preflightBlockingFailures: 0
+    });
+    assert(liveManufacturing(ineligible, { active: false }, validRes).result.primaryBlocker === 'checkout-not-eligible',
+        'valid spec under ineligible proof → checkout-not-eligible');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Results
 // ─────────────────────────────────────────────────────────────────────────────
 console.log(`\n${'─'.repeat(60)}`);

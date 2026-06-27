@@ -478,6 +478,193 @@ suite('Suite 14 — integration with MessageBookManufacturingReadiness', functio
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 15 — 8D display + selection-helper API surface
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 15 — 8D helper API surface', function () {
+    const PS = makeCtx().MessageBookPrintSpec;
+
+    assert(typeof PS.SELECTION_TONE === 'object' && PS.SELECTION_TONE !== null, 'SELECTION_TONE is an object');
+    assert(PS.SELECTION_TONE.SELECTED === 'selected', 'SELECTION_TONE.SELECTED');
+    assert(PS.SELECTION_TONE.UNSELECTED === 'unselected', 'SELECTION_TONE.UNSELECTED');
+    assert(PS.SELECTION_TONE.BLOCKED === 'blocked', 'SELECTION_TONE.BLOCKED');
+    try { 'use strict'; PS.SELECTION_TONE.SELECTED = 'x'; } catch (e) { /* ok */ }
+    assert(PS.SELECTION_TONE.SELECTED === 'selected', 'SELECTION_TONE is frozen');
+
+    assert(typeof PS.describeSelection === 'function', 'describeSelection is a function');
+    assert(typeof PS.describeActions === 'function', 'describeActions is a function');
+    assert(typeof PS.coerceSelectedSpecId === 'function', 'coerceSelectedSpecId is a function');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 16 — describeSelection copy matrix
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 16 — describeSelection', function () {
+    const PS = makeCtx().MessageBookPrintSpec;
+
+    const none = PS.describeSelection(PS.evaluate());
+    assert(none.tone === 'unselected', 'no spec → unselected tone');
+    assert(none.headline === 'No print specification selected', 'no spec → headline');
+    assert(none.detail.length > 0, 'no spec → has detail');
+
+    const valid = PS.describeSelection(PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 120, maxPages: 400 }));
+    assert(valid.tone === 'selected', 'valid spec → selected tone');
+    assert(valid.headline === 'Internal print spec selected', 'valid spec → headline');
+    assert(valid.detail === 'Export pipeline is still not implemented.', 'valid spec → export-pipeline-still-missing detail');
+
+    const over = PS.describeSelection(PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 401, maxPages: 400 }));
+    assert(over.tone === 'blocked', 'selected-but-over-limit → blocked tone');
+    assert(over.headline === 'Internal print spec selected', 'over-limit → still selected headline');
+    assert(over.detail.indexOf('page limit') !== -1, 'over-limit → page-limit detail');
+
+    const unknown = PS.describeSelection(PS.evaluate({ selectedSpecId: 'nope', pageCount: 120, maxPages: 400 }));
+    assert(unknown.tone === 'blocked', 'unknown spec → blocked tone');
+    assert(unknown.headline === 'Print specification not recognized', 'unknown → not-recognized headline');
+
+    // Defensive: null result → unselected.
+    const nul = PS.describeSelection(null);
+    assert(nul.tone === 'unselected' && nul.headline.length > 0, 'null result → defensive unselected');
+
+    // Fresh object per call.
+    const a = PS.describeSelection(PS.evaluate());
+    a.headline = 'mutated';
+    assert(PS.describeSelection(PS.evaluate()).headline === 'No print specification selected',
+        'describeSelection returns a fresh object');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 17 — describeActions
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 17 — describeActions', function () {
+    const PS = makeCtx().MessageBookPrintSpec;
+
+    const none = PS.describeActions(PS.evaluate());
+    assert(none.length === 1 && none[0].action === 'use-spec', 'no spec → offers use-spec');
+    assert(none[0].label === 'Use internal print spec', 'use-spec safe label');
+
+    const valid = PS.describeActions(PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 120, maxPages: 400 }));
+    assert(valid.length === 1 && valid[0].action === 'clear-spec', 'valid spec → offers clear-spec');
+    assert(valid[0].label === 'Clear print spec', 'clear-spec safe label');
+
+    const over = PS.describeActions(PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 401, maxPages: 400 }));
+    assert(over.length === 1 && over[0].action === 'clear-spec', 'selected-but-invalid → still offers clear-spec');
+
+    const unknown = PS.describeActions(PS.evaluate({ selectedSpecId: 'nope' }));
+    assert(unknown.length === 1 && unknown[0].action === 'use-spec', 'unknown → offers use-spec (replace with internal)');
+
+    // Fresh array per call.
+    PS.describeActions(PS.evaluate()).push({ action: 'x' });
+    assert(PS.describeActions(PS.evaluate()).length === 1, 'describeActions returns a fresh array');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 18 — coerceSelectedSpecId (restore coercion)
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 18 — coerceSelectedSpecId', function () {
+    const PS = makeCtx().MessageBookPrintSpec;
+
+    assert(PS.coerceSelectedSpecId(SPEC_ID) === SPEC_ID, 'known internal id → kept');
+    assert(PS.coerceSelectedSpecId('other-spec') === null, 'unknown id → null');
+    assert(PS.coerceSelectedSpecId(SPEC_ID + ' ') === null, 'near-miss id → null');
+    [null, undefined, 0, 123, true, {}, [], ''].forEach(function (v) {
+        assert(PS.coerceSelectedSpecId(v) === null, 'non-known value ' + JSON.stringify(v) + ' → null');
+    });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 19 — display helpers carry no unsafe commerce/production claim or CTA
+// ─────────────────────────────────────────────────────────────────────────────
+suite('Suite 19 — display copy safety', function () {
+    const PS = makeCtx().MessageBookPrintSpec;
+
+    const results = [
+        PS.evaluate(),
+        PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 120, maxPages: 400 }),
+        PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 401, maxPages: 400 }),
+        PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 0, maxPages: 400 }),
+        PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 120, maxPages: 0 }),
+        PS.evaluate({ selectedSpecId: 'nope' })
+    ];
+    const strings = [];
+    results.forEach(function (r) {
+        const d = PS.describeSelection(r);
+        strings.push(d.headline, d.detail);
+        PS.describeActions(r).forEach(function (a) { strings.push(a.label); });
+    });
+    const blob = strings.join('  ').toLowerCase();
+
+    ['buy', 'pay', 'order now', 'place order', 'add to cart', 'add to bag', 'checkout now',
+     'purchase', 'print now', 'send to vendor', 'production ready', 'ready to print',
+     'ship ', 'shipping', 'manufactured', 'now available'].forEach(function (term) {
+        assert(blob.indexOf(term) === -1, 'display copy contains no unsafe claim/CTA "' + term + '"');
+    });
+    // Safe affirmative copy IS present.
+    assert(blob.indexOf('use internal print spec') !== -1, 'offers the safe select label');
+    assert(blob.indexOf('clear print spec') !== -1, 'offers the safe clear label');
+    assert(blob.indexOf('export pipeline is still not implemented') !== -1, 'states export pipeline is still not implemented');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Suite 20 — 8D live select/clear/restore mapping into the real 8A boundary
+// ─────────────────────────────────────────────────────────────────────────────
+// Reproduces exactly what index.html renderBookPrintSpecPanel + renderBookManufacturingStatus
+// do: evaluate the local selection against live page bounds, bridge it via
+// toManufacturingCapabilities, and resolve the real 8A boundary with the lower gates satisfied.
+suite('Suite 20 — 8D live mapping into MessageBookManufacturingReadiness', function () {
+    const KM = makeIntegrationCtx();
+    const PS = KM.MessageBookPrintSpec;
+    const MR = KM.MessageBookManufacturingReadiness;
+
+    const READY_LOWER = { readiness: { checkoutEligible: true }, intent: { active: true } };
+    function live(selectedSpecId, pageCount, maxPages) {
+        const result = PS.evaluate({ selectedSpecId: selectedSpecId, pageCount: pageCount, maxPages: maxPages });
+        const caps   = PS.toManufacturingCapabilities(result);
+        return MR.resolveFromReadiness(Object.assign({ capabilities: caps }, READY_LOWER));
+    }
+
+    // No spec selected → blocked at print-spec-not-selected.
+    assert(live(null, 120, 400).result.primaryBlocker === 'print-spec-not-selected',
+        'no selection → print-spec-not-selected');
+
+    // Select the internal spec, under the limit → advances to export-pipeline-not-implemented.
+    const sel = live(PS.INTERNAL_SPEC_ID, 120, 400);
+    assert(sel.result.exportSpecKnown === true, 'valid selection → export-spec-known');
+    assert(sel.result.primaryBlocker === 'export-pipeline-not-implemented',
+        'valid selection → next blocker export-pipeline-not-implemented');
+    assert(sel.result.printFileReady === false && sel.result.vendorReady === false &&
+        sel.result.manufacturingReady === false && sel.result.packagingReady === false,
+        'valid selection → no higher production rung advances');
+    assert(sel.display.tone === 'gated', 'valid selection → 8A still gated');
+
+    // Selected but over the page limit → does NOT advance.
+    assert(live(PS.INTERNAL_SPEC_ID, 401, 400).result.primaryBlocker === 'print-spec-not-selected',
+        'selected-but-over-limit → still print-spec-not-selected');
+
+    // Clear (back to null) → blocked again.
+    assert(live(null, 120, 400).result.primaryBlocker === 'print-spec-not-selected',
+        'cleared selection → print-spec-not-selected');
+
+    // Restore path: a persisted KNOWN id coerces through and revalidates against bounds.
+    const restoredKnown = PS.coerceSelectedSpecId(PS.INTERNAL_SPEC_ID);
+    assert(restoredKnown === PS.INTERNAL_SPEC_ID, 'known persisted id restores');
+    assert(live(restoredKnown, 120, 400).result.primaryBlocker === 'export-pipeline-not-implemented',
+        'restored selection revalidates → advances when under limit');
+    assert(live(restoredKnown, 401, 400).result.primaryBlocker === 'print-spec-not-selected',
+        'restored selection revalidates → does NOT advance when over limit');
+
+    // Restore path: a persisted UNKNOWN id coerces to null → no advance.
+    const restoredUnknown = PS.coerceSelectedSpecId('stale-or-unknown-spec');
+    assert(restoredUnknown === null, 'unknown persisted id coerces to null');
+    assert(live(restoredUnknown, 120, 400).result.primaryBlocker === 'print-spec-not-selected',
+        'restored unknown selection → print-spec-not-selected');
+
+    // A valid selection never jumps an unsatisfied lower gate.
+    const caps = PS.toManufacturingCapabilities(PS.evaluate({ selectedSpecId: PS.INTERNAL_SPEC_ID, pageCount: 120, maxPages: 400 }));
+    const ineligible = MR.resolveFromReadiness({ readiness: { checkoutEligible: false }, intent: { active: false }, capabilities: caps });
+    assert(ineligible.result.primaryBlocker === 'checkout-not-eligible',
+        'valid selection under ineligible proof → checkout-not-eligible (does not jump the queue)');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Results
 // ─────────────────────────────────────────────────────────────────────────────
 console.log(`\n${'─'.repeat(60)}`);

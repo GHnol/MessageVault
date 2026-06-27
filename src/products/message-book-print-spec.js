@@ -266,12 +266,72 @@
         };
     }
 
+    // ── Read-only display + selection-helper layer (8D live bridge) ───────────
+    // A live caller may SHOW the selection and offer local select/clear controls.
+    // These helpers keep the copy in the tested engine (no commerce/production CTA)
+    // and never imply a vendor-confirmed spec, export readiness, or production
+    // readiness. Pure: no DOM, no clock, no I/O.
+    var SELECTION_TONE = Object.freeze({
+        SELECTED:   'selected',
+        UNSELECTED: 'unselected',
+        BLOCKED:    'blocked'
+    });
+
+    var _UNSELECTED_HEADLINE = 'No print specification selected';
+    var _SELECTED_HEADLINE   = 'Internal print spec selected';
+    var _UNKNOWN_HEADLINE    = 'Print specification not recognized';
+    var _UNSELECTED_DETAIL   = 'Select the internal Message Book print specification to continue.';
+    var _VALID_DETAIL        = 'Export pipeline is still not implemented.';
+
+    // Pure display view-model for a selection result: { tone, headline, detail }.
+    // internal-valid → selected tone + the export-pipeline-still-missing reminder;
+    // a selected-but-invalid spec (over the page limit, etc.) or an unknown spec →
+    // blocked tone + the safe blocker message; nothing selected → unselected tone.
+    function describeSelection(result) {
+        var r = result || {};
+        if (r.internalSpecValid) {
+            return { tone: SELECTION_TONE.SELECTED, headline: _SELECTED_HEADLINE, detail: _VALID_DETAIL };
+        }
+        var detail = (r.blockerMessages && r.blockerMessages.length)
+            ? r.blockerMessages[0]
+            : (r.primaryBlocker ? blockerMessage(r.primaryBlocker) : '');
+        if (r.internalSpecSelected) {
+            // A known internal spec is selected but not valid for the current proof.
+            return { tone: SELECTION_TONE.BLOCKED, headline: _SELECTED_HEADLINE, detail: detail };
+        }
+        if (r.state === SELECTION_STATE.UNKNOWN) {
+            return { tone: SELECTION_TONE.BLOCKED, headline: _UNKNOWN_HEADLINE, detail: detail };
+        }
+        return { tone: SELECTION_TONE.UNSELECTED, headline: _UNSELECTED_HEADLINE, detail: _UNSELECTED_DETAIL };
+    }
+
+    // Pure safe action labels for a selection result. Offers a local select action when
+    // no internal spec is selected, and a local clear action when one is. The labels
+    // avoid any commerce/production CTA (no buy/pay/order/print-now/send-to-vendor).
+    function describeActions(result) {
+        var r = result || {};
+        if (r.internalSpecSelected) {
+            return [{ action: 'clear-spec', label: 'Clear print spec' }];
+        }
+        return [{ action: 'use-spec', label: 'Use internal print spec' }];
+    }
+
+    // Safe restore of a persisted local selection. Returns the known internal spec id
+    // only when the stored value is exactly that id, otherwise null — so an unknown or
+    // malformed persisted value can never select a spec. The live caller still
+    // revalidates the restored selection against the current proof page bounds on the
+    // next evaluate(), so a restored selection can never advance production on its own.
+    function coerceSelectedSpecId(value) {
+        return isKnownSpecId(value) ? value : null;
+    }
+
     KMEngine.MessageBookPrintSpec = {
         CONTRACT_VERSION:            CONTRACT_VERSION,
         PRODUCT_TYPE_ID:             PRODUCT_TYPE_ID,
         INTERNAL_SPEC_ID:            INTERNAL_SPEC_ID,
         INTERNAL_DRAFT_SPEC:         INTERNAL_DRAFT_SPEC,
         SELECTION_STATE:             SELECTION_STATE,
+        SELECTION_TONE:              SELECTION_TONE,
         BLOCKER:                     BLOCKER,
         GATED_REASON:                GATED_REASON,
         isKnownSpecId:               isKnownSpecId,
@@ -279,6 +339,9 @@
         blockerMessage:              blockerMessage,
         evaluate:                    evaluate,
         toManufacturingCapabilities: toManufacturingCapabilities,
+        describeSelection:           describeSelection,
+        describeActions:             describeActions,
+        coerceSelectedSpecId:        coerceSelectedSpecId,
         describeBoundary:            describeBoundary
     };
 }());

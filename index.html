@@ -3443,6 +3443,12 @@
             .book-manufacturing-gated .book-manufacturing-headline { color: #aeaeb2; }
             .book-manufacturing-ready .book-manufacturing-headline { color: #30d158; }
             .book-manufacturing-detail { color: #636366; }
+            .book-print-spec-panel { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.07); }
+            .book-print-spec-headline { color: #aeaeb2; }
+            .book-print-spec-selected .book-print-spec-headline { color: #30d158; }
+            .book-print-spec-unselected .book-print-spec-headline { color: #aeaeb2; }
+            .book-print-spec-blocked .book-print-spec-headline { color: #ff9f0a; }
+            .book-print-spec-detail { color: #636366; }
         }
 
         .book-proof-panel {
@@ -3580,6 +3586,39 @@
         .book-manufacturing-detail {
             font-size: 12px;
             color: #8e8e93;
+        }
+
+        /* 8D: local-only internal print-spec selection / status surface. A sibling of the
+           readiness/order-intent/manufacturing panels (outside #bookCanvas). Local selection
+           only — it selects the single internal draft print spec, never a vendor-confirmed
+           spec, and implies no export/vendor/manufacturing/packaging readiness. */
+        .book-print-spec-panel {
+            width: 100%;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+        .book-print-spec-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 8px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .book-print-spec-headline {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.1px;
+            color: #8e8e93;
+        }
+        .book-print-spec-selected .book-print-spec-headline { color: #1c8a3a; }
+        .book-print-spec-unselected .book-print-spec-headline { color: #48484a; }
+        .book-print-spec-blocked .book-print-spec-headline { color: #b35309; }
+        .book-print-spec-detail {
+            font-size: 12px;
+            color: #8e8e93;
+            flex-basis: 100%;
         }
     </style>
 </head>
@@ -3877,6 +3916,7 @@
         <div id="bookProofPanel" class="book-proof-panel" style="display:none;"></div>
         <div id="bookReadinessStatus" class="book-readiness-status" style="display:none;"></div>
         <div id="bookOrderIntentPanel" class="book-order-intent-panel" style="display:none;"></div>
+        <div id="bookPrintSpecPanel" class="book-print-spec-panel" style="display:none;"></div>
         <div id="bookManufacturingStatus" class="book-manufacturing-status" style="display:none;"></div>
         <div class="book-shell">
             <div class="book-controls-bar" id="bookControlsBar"></div>
@@ -4019,6 +4059,11 @@
          the 7A readiness result + the 7D/7E intent active state; loads after both. It
          generates no print/export/PDF file or vendor packet and selects no vendor. -->
     <script src="src/products/message-book-manufacturing-readiness.js"></script>
+    <!-- 8C/8D: internal print-spec selection/validation contract + live local-only
+         selection bridge. Pure; consumes only its own inputs and bridges a selected-and-
+         valid internal spec into 8A's existing printSpecSelected capability. It generates
+         no print/export/PDF file, selects no vendor, and implies no production readiness. -->
+    <script src="src/products/message-book-print-spec.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -4128,6 +4173,7 @@
         const bookProofPanel = document.getElementById('bookProofPanel');
         const bookReadinessStatus = document.getElementById('bookReadinessStatus');
         const bookOrderIntentPanel = document.getElementById('bookOrderIntentPanel');
+        const bookPrintSpecPanel = document.getElementById('bookPrintSpecPanel');
         const bookManufacturingStatus = document.getElementById('bookManufacturingStatus');
         const reviewBookBtn = document.getElementById('reviewBookBtn');
 
@@ -8002,6 +8048,12 @@ ${keepsakeFooter}
         // an ineligible proof. It holds no price/cart/order/payment/address.
         let messageBookOrderIntent = null;
 
+        // 8D: the locally-selected internal Message Book print spec id (or null when no
+        // spec is selected). Persisted in the project session; revalidated against the
+        // current proof page bounds on every render, so it can never advance production
+        // readiness on its own and never implies a vendor-confirmed spec.
+        let messageBookPrintSpecSelection = null;
+
         function initMessageBookState() {
             if (messageBookState) return; // preserve settings across visits
             const contactName = chatHeaderName ? chatHeaderName.innerText.trim() : '';
@@ -9147,6 +9199,7 @@ ${keepsakeFooter}
                 bookProofPanel.style.display = 'none';
                 if (bookReadinessStatus) bookReadinessStatus.style.display = 'none';
                 if (bookOrderIntentPanel) bookOrderIntentPanel.style.display = 'none';
+                if (bookPrintSpecPanel) bookPrintSpecPanel.style.display = 'none';
                 if (bookManufacturingStatus) bookManufacturingStatus.style.display = 'none';
                 return;
             }
@@ -9242,6 +9295,7 @@ ${keepsakeFooter}
                 bookProofPanel.style.display = 'none';
                 if (bookReadinessStatus) bookReadinessStatus.style.display = 'none';
                 if (bookOrderIntentPanel) bookOrderIntentPanel.style.display = 'none';
+                if (bookPrintSpecPanel) bookPrintSpecPanel.style.display = 'none';
                 if (bookManufacturingStatus) bookManufacturingStatus.style.display = 'none';
                 return;
             }
@@ -9278,13 +9332,21 @@ ${keepsakeFooter}
             // to continue an eligible proof later, and nothing more.
             const orderIntentView = renderBookOrderIntentPanel(readinessResult);
 
+            // 8D: local-only internal print-spec selection. Validates the selected spec
+            // against the live proof page bounds (active-volume page count vs the book's
+            // page maximum) and returns the result so the 8A/8B production status can bridge
+            // a selected-AND-valid internal spec into 8A's existing printSpecSelected
+            // capability. Local-only: it selects no vendor and generates no print/export file.
+            const printSpecResult = renderBookPrintSpecPanel(readinessResult, state);
+
             // 8A/8B: read-only production / manufacturing-readiness status. It sits ABOVE
             // checkout readiness (7A/7B) and the local order intent (7D/7E) and reports,
             // read-only, how far the book is from print / export / vendor / manufacturing /
             // packaging readiness — every one of which is gated and not implemented. It adds
             // no production action, generates no print/export/PDF file or vendor packet, and
-            // selects no vendor.
-            renderBookManufacturingStatus(readinessResult, orderIntentView);
+            // selects no vendor. 8D feeds it the print-spec capability so a valid local
+            // selection advances it from print-spec-not-selected to export-pipeline-not-implemented.
+            renderBookManufacturingStatus(readinessResult, orderIntentView, printSpecResult);
 
             const submitBtn = document.getElementById('bookProofSubmitBtn');
             if (submitBtn) {
@@ -9419,6 +9481,65 @@ ${keepsakeFooter}
             return view;
         }
 
+        // 8D: render the local-only internal print-spec selection surface from the 8C
+        // KMEngine.MessageBookPrintSpec contract. It lets the user locally SELECT or CLEAR
+        // the single internal draft Message Book print spec, and validates that selection
+        // against the live proof page bounds (active-volume page count vs the book's page
+        // maximum). It is local-only: the selection is never a vendor-confirmed spec, and it
+        // implies no export / vendor / manufacturing / packaging readiness. It generates no
+        // print / export / PDF file and selects no vendor. The returned result is handed to
+        // the 8A/8B production status, which bridges a selected-AND-valid spec into 8A's
+        // existing printSpecSelected capability (advancing it only to export-pipeline-not-
+        // implemented). Returns null when the contract module is unavailable.
+        function renderBookPrintSpecPanel(readinessResult, state) {
+            if (!bookPrintSpecPanel) return null;
+            const PS = window.KMEngine && window.KMEngine.MessageBookPrintSpec;
+            if (!PS || !PS.evaluate) { bookPrintSpecPanel.style.display = 'none'; return null; }
+
+            // Validate the locally-selected spec against the SAME page numbers the proof
+            // flow already computed for this active volume. evaluate() returns
+            // internalSpecValid only for a known internal spec within those bounds.
+            const result = PS.evaluate({
+                selectedSpecId: messageBookPrintSpecSelection,
+                pageCount:      state ? state.estimatedPageCount : undefined,
+                maxPages:       (state && state.format) ? state.format.maxPages : undefined
+            });
+
+            const d = PS.describeSelection(result);
+            bookPrintSpecPanel.className = 'book-print-spec-panel book-print-spec-' + d.tone;
+            var parts = ['<span class="book-print-spec-headline">' + escapeHTML(d.headline) + '</span>'];
+            PS.describeActions(result).forEach(function (act) {
+                var isClear = act.action === 'clear-spec';
+                var btnCls  = isClear ? 'book-proof-cancel-btn' : 'book-proof-btn';
+                var id      = isClear ? 'bookPrintSpecClearBtn' : 'bookPrintSpecUseBtn';
+                parts.push('<button type="button" class="' + btnCls + '" id="' + id + '">' +
+                    escapeHTML(act.label) + '</button>');
+            });
+            if (d.detail) parts.push('<span class="book-print-spec-detail">' + escapeHTML(d.detail) + '</span>');
+            bookPrintSpecPanel.innerHTML = '<div class="book-print-spec-inner">' + parts.join('') + '</div>';
+            bookPrintSpecPanel.style.display = '';
+
+            const useBtn = document.getElementById('bookPrintSpecUseBtn');
+            if (useBtn) {
+                useBtn.addEventListener('click', function () {
+                    // Local-only: select the single internal draft spec. It is revalidated
+                    // against current page bounds on the next render and is never a
+                    // vendor-confirmed spec.
+                    messageBookPrintSpecSelection = PS.INTERNAL_SPEC_ID;
+                    renderBookProofPanel();
+                });
+            }
+            const clearBtn = document.getElementById('bookPrintSpecClearBtn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    messageBookPrintSpecSelection = null;
+                    renderBookProofPanel();
+                });
+            }
+
+            return result;
+        }
+
         // 8A/8B: render the read-only Message Book production / manufacturing-readiness
         // status from the 8A KMEngine.MessageBookManufacturingReadiness boundary, gated by
         // the 7A/7B readiness RESULT and the 7D/7E local-intent active state. It only
@@ -9429,16 +9550,26 @@ ${keepsakeFooter}
         // gated, not-implemented concern). The engine applies its all-false CAPABILITIES and
         // keeps LOCAL_INTENT_REQUIRED true, so an eligible proof with no saved local intent
         // shows no-local-intent, and an active intent shows the next production blocker.
-        function renderBookManufacturingStatus(readinessResult, orderIntentView) {
+        function renderBookManufacturingStatus(readinessResult, orderIntentView, printSpecResult) {
             if (!bookManufacturingStatus) return;
             const MMR = window.KMEngine && window.KMEngine.MessageBookManufacturingReadiness;
             if (!MMR || !MMR.resolveFromReadiness || !readinessResult) {
                 bookManufacturingStatus.style.display = 'none';
                 return;
             }
+            // 8D: bridge the local print-spec selection into 8A's existing printSpecSelected
+            // capability. toManufacturingCapabilities flips printSpecSelected ONLY for a
+            // selected-AND-valid internal spec; otherwise it is false and the status stays at
+            // print-spec-not-selected. With no print-spec module or no result, capabilities is
+            // omitted and the engine falls back to its all-false default — 8B behaviour intact.
+            const PS = window.KMEngine && window.KMEngine.MessageBookPrintSpec;
+            const capabilities = (PS && PS.toManufacturingCapabilities && printSpecResult)
+                ? PS.toManufacturingCapabilities(printSpecResult)
+                : undefined;
             const resolved = MMR.resolveFromReadiness({
-                readiness: readinessResult,
-                intent:    { active: !!(orderIntentView && orderIntentView.active) }
+                readiness:    readinessResult,
+                intent:       { active: !!(orderIntentView && orderIntentView.active) },
+                capabilities: capabilities
             });
             const d = resolved.display;
             bookManufacturingStatus.className = 'book-manufacturing-status book-manufacturing-' + d.tone;
@@ -9604,7 +9735,8 @@ ${keepsakeFooter}
                 contactName:        chatHeaderName.innerText.trim(),
                 messageBookState:   messageBookState,
                 proofApprovalStates: PAUX ? PAUX.serialize() : {},
-                messageBookOrderIntent: messageBookOrderIntent
+                messageBookOrderIntent: messageBookOrderIntent,
+                messageBookPrintSpecSelection: messageBookPrintSpecSelection
             });
             IO.save(snapshot, chatHeaderName.innerText.trim());
         }
@@ -9678,6 +9810,15 @@ ${keepsakeFooter}
                 ? (appState.messageBookOrderIntent ? OI.restore(appState.messageBookOrderIntent) : null)
                 : (appState.messageBookOrderIntent || null);
 
+            // 8D: restore the local-only print-spec selection through the engine's safe
+            // coercion (an unknown/malformed stored id becomes null). It is revalidated
+            // against the current proof page bounds on the next render, so a restored
+            // selection can never advance production readiness on its own.
+            const PS = window.KMEngine && window.KMEngine.MessageBookPrintSpec;
+            messageBookPrintSpecSelection = (PS && PS.coerceSelectedSpecId)
+                ? PS.coerceSelectedSpecId(appState.messageBookPrintSpecSelection)
+                : (typeof appState.messageBookPrintSpecSelection === 'string' ? appState.messageBookPrintSpecSelection : null);
+
             // Render conversation (also shows chatView)
             renderConversation(appState.memories);
 
@@ -9733,6 +9874,10 @@ ${keepsakeFooter}
             get messageBookOrderIntent()  { return messageBookOrderIntent; },
             set messageBookOrderIntent(v) { messageBookOrderIntent = v; },
 
+            // 8D: local-only print-spec selection id (test-harness access only).
+            get messageBookPrintSpecSelection()  { return messageBookPrintSpecSelection; },
+            set messageBookPrintSpecSelection(v) { messageBookPrintSpecSelection = v; },
+
             setContactName(name) { chatHeaderName.innerText = name; },
             getContactName()     { return chatHeaderName.innerText.trim(); },
 
@@ -9773,7 +9918,8 @@ ${keepsakeFooter}
                     selectedIndices:  selectedIndices,
                     contactName:      chatHeaderName.innerText.trim(),
                     messageBookState: messageBookState,
-                    messageBookOrderIntent: messageBookOrderIntent
+                    messageBookOrderIntent: messageBookOrderIntent,
+                    messageBookPrintSpecSelection: messageBookPrintSpecSelection
                 }));
             },
             // Package 4D: Product experience readiness consumer bridge

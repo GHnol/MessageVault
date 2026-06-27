@@ -5,7 +5,7 @@
     var KNOWN_SESSION_FIELDS = [
         'id', 'version', 'createdAt', 'updatedAt', 'contactName',
         'memories', 'selectedMemoryIds', 'keepsakeGroups',
-        'productDrafts', 'proofApprovalStates', 'messageBookOrderIntent',
+        'productDrafts', 'proofApprovalStates', 'messageBookOrderIntent', 'messageBookPrintSpecSelection',
         'messageBookState'
     ];
 
@@ -151,6 +151,16 @@
             messageBookOrderIntent = s.messageBookOrderIntent;
         }
 
+        // ── messageBookPrintSpecSelection (8D) ────────────────────────────────
+        // The locally-selected internal print spec id (a string) or null. Passed
+        // through as-is; the live caller coerces it through MessageBookPrintSpec and
+        // revalidates it against the current proof page bounds on render, so an unknown
+        // or stale selection can never advance production readiness.
+        var messageBookPrintSpecSelection = null;
+        if (typeof s.messageBookPrintSpecSelection === 'string' && s.messageBookPrintSpecSelection) {
+            messageBookPrintSpecSelection = s.messageBookPrintSpecSelection;
+        }
+
         // ── Unknown fields — report but do not crash ──────────────────────────
         for (var key in s) {
             if (s.hasOwnProperty(key) && KNOWN_SESSION_FIELDS.indexOf(key) === -1) {
@@ -167,6 +177,7 @@
                 contactName:         contactName,
                 proofApprovalStates: proofApprovalStates,
                 messageBookOrderIntent: messageBookOrderIntent,
+                messageBookPrintSpecSelection: messageBookPrintSpecSelection,
                 messageBookState:    messageBookState
             },
             warnings: warnings,
