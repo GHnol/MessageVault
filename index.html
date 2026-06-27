@@ -3449,6 +3449,12 @@
             .book-print-spec-unselected .book-print-spec-headline { color: #aeaeb2; }
             .book-print-spec-blocked .book-print-spec-headline { color: #ff9f0a; }
             .book-print-spec-detail { color: #636366; }
+
+            .book-export-preflight-status { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.07); }
+            .book-export-preflight-headline { color: #aeaeb2; }
+            .book-export-preflight-gated .book-export-preflight-headline { color: #aeaeb2; }
+            .book-export-preflight-ready .book-export-preflight-headline { color: #30d158; }
+            .book-export-preflight-detail { color: #636366; }
         }
 
         .book-proof-panel {
@@ -3619,6 +3625,39 @@
             font-size: 12px;
             color: #8e8e93;
             flex-basis: 100%;
+        }
+
+        /* 8E/8F: read-only export-preflight status. A sibling of the readiness/order-intent/
+           manufacturing/print-spec panels (outside #bookCanvas). It mirrors their styling and
+           is read-only — no button, no export/print/PDF/file/vendor affordance, and it never
+           styles a "ready to export" / "generate" / "order" control. In the live app it is
+           always gated (artifact generation is not implemented; render-environment inputs are
+           not available), so the ready tone is unreachable. */
+        .book-export-preflight-status {
+            width: 100%;
+            background: #fff;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+        }
+        .book-export-preflight-inner {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 8px 24px;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .book-export-preflight-headline {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: -0.1px;
+            color: #8e8e93;
+        }
+        .book-export-preflight-gated .book-export-preflight-headline { color: #8e8e93; }
+        .book-export-preflight-ready .book-export-preflight-headline { color: #1c8a3a; }
+        .book-export-preflight-detail {
+            font-size: 12px;
+            color: #8e8e93;
         }
     </style>
 </head>
@@ -3918,6 +3957,7 @@
         <div id="bookOrderIntentPanel" class="book-order-intent-panel" style="display:none;"></div>
         <div id="bookPrintSpecPanel" class="book-print-spec-panel" style="display:none;"></div>
         <div id="bookManufacturingStatus" class="book-manufacturing-status" style="display:none;"></div>
+        <div id="bookExportPreflightStatus" class="book-export-preflight-status" style="display:none;"></div>
         <div class="book-shell">
             <div class="book-controls-bar" id="bookControlsBar"></div>
             <div class="book-sections-bar" id="bookSectionsBar"></div>
@@ -4064,6 +4104,12 @@
          valid internal spec into 8A's existing printSpecSelected capability. It generates
          no print/export/PDF file, selects no vendor, and implies no production readiness. -->
     <script src="src/products/message-book-print-spec.js"></script>
+    <!-- 8E/8F: artifact-free export-pipeline preflight contract + live read-only status
+         hook. Pure; consumes the 8C/8D print-spec result plus already-decided proof /
+         composition facts and reports which export inputs are known/missing and that
+         artifact generation is not implemented. It generates no print/export/PDF file,
+         writes no file, builds no vendor packet, and never flips exportPipelineImplemented. -->
+    <script src="src/products/message-book-export-pipeline.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -4175,6 +4221,7 @@
         const bookOrderIntentPanel = document.getElementById('bookOrderIntentPanel');
         const bookPrintSpecPanel = document.getElementById('bookPrintSpecPanel');
         const bookManufacturingStatus = document.getElementById('bookManufacturingStatus');
+        const bookExportPreflightStatus = document.getElementById('bookExportPreflightStatus');
         const reviewBookBtn = document.getElementById('reviewBookBtn');
 
         // Loading
@@ -9201,6 +9248,7 @@ ${keepsakeFooter}
                 if (bookOrderIntentPanel) bookOrderIntentPanel.style.display = 'none';
                 if (bookPrintSpecPanel) bookPrintSpecPanel.style.display = 'none';
                 if (bookManufacturingStatus) bookManufacturingStatus.style.display = 'none';
+                if (bookExportPreflightStatus) bookExportPreflightStatus.style.display = 'none';
                 return;
             }
 
@@ -9297,6 +9345,7 @@ ${keepsakeFooter}
                 if (bookOrderIntentPanel) bookOrderIntentPanel.style.display = 'none';
                 if (bookPrintSpecPanel) bookPrintSpecPanel.style.display = 'none';
                 if (bookManufacturingStatus) bookManufacturingStatus.style.display = 'none';
+                if (bookExportPreflightStatus) bookExportPreflightStatus.style.display = 'none';
                 return;
             }
 
@@ -9347,6 +9396,16 @@ ${keepsakeFooter}
             // selects no vendor. 8D feeds it the print-spec capability so a valid local
             // selection advances it from print-spec-not-selected to export-pipeline-not-implemented.
             renderBookManufacturingStatus(readinessResult, orderIntentView, printSpecResult);
+
+            // 8E/8F: read-only export-pipeline preflight status. It sits ABOVE the production /
+            // manufacturing status (8A/8B) and reports, read-only, which export inputs an export
+            // pipeline would need are known vs missing — and that artifact generation is not
+            // implemented yet. It builds its inputs only from already-decided live facts (the 8D
+            // print-spec result + this panel's proof/composition signals); render-environment /
+            // cover / spine / safe-area inputs are not available in the live app, so that input
+            // is honestly reported missing. Read-only: no button, no export/print/PDF/file/vendor
+            // packet generation, no file writing, no vendor selection.
+            renderBookExportPreflightStatus(state, hasContent, status, record, currentProofFingerprint, printSpecResult);
 
             const submitBtn = document.getElementById('bookProofSubmitBtn');
             if (submitBtn) {
@@ -9577,6 +9636,48 @@ ${keepsakeFooter}
             if (d.detail) parts.push('<span class="book-manufacturing-detail">' + escapeHTML(d.detail) + '</span>');
             bookManufacturingStatus.innerHTML = '<div class="book-manufacturing-inner">' + parts.join('') + '</div>';
             bookManufacturingStatus.style.display = '';
+        }
+
+        // 8E/8F: render the read-only Message Book export-pipeline preflight status from the 8E
+        // KMEngine.MessageBookExportPipeline contract. It only DISPLAYS which export inputs are
+        // known vs missing and that artifact generation is not implemented yet. It is strictly
+        // read-only and artifact-free: it adds no button, generates no print / export / PDF file,
+        // writes no file, builds no vendor packet, selects no vendor, and never flips
+        // exportPipelineImplemented or implies a print file / vendor / manufacturing / packaging
+        // is ready. Inputs are built ONLY from already-decided live facts:
+        //   - printSpec              : the 8D print-spec evaluation result (spec validity, page
+        //                              bounds → page-count/parity, known-spec → export-target)
+        //   - proofApprovedCurrent   : the proof is approved AND not stale (5D/7A signals)
+        //   - compositionReady       : there is content and it is within the page limit (6A/6B)
+        //   - renderEnvironmentKnown : FALSE — cover/spine/safe-area/render-environment inputs
+        //                              are not computed in the live app yet (ProductPreflight's
+        //                              render-environment checks are not wired), so this input is
+        //                              honestly reported missing rather than invented.
+        // Capabilities are left at the engine's all-false default, so every generation rung stays
+        // false and the live status is always gated.
+        function renderBookExportPreflightStatus(state, hasContent, approvalStatus, record, currentProofFingerprint, printSpecResult) {
+            if (!bookExportPreflightStatus) return;
+            const EP = window.KMEngine && window.KMEngine.MessageBookExportPipeline;
+            if (!EP || !EP.resolveFromContext) { bookExportPreflightStatus.style.display = 'none'; return; }
+
+            const PAS = window.KMEngine && window.KMEngine.ProofApprovalState;
+            const approvalStale = !!(PAS && PAS.isApprovalStale &&
+                PAS.isApprovalStale(record, currentProofFingerprint));
+            const proofApprovedCurrent = approvalStatus === 'approved' && !approvalStale;
+            const compositionReady = hasContent === true && !(state && state.exceedsPageLimit);
+
+            const resolved = EP.resolveFromContext({
+                printSpec:              printSpecResult || null,
+                proofApprovedCurrent:   proofApprovedCurrent,
+                compositionReady:       compositionReady,
+                renderEnvironmentKnown: false
+            });
+            const d = resolved.display;
+            bookExportPreflightStatus.className = 'book-export-preflight-status book-export-preflight-' + d.tone;
+            var parts = ['<span class="book-export-preflight-headline">' + escapeHTML(d.headline) + '</span>'];
+            if (d.detail) parts.push('<span class="book-export-preflight-detail">' + escapeHTML(d.detail) + '</span>');
+            bookExportPreflightStatus.innerHTML = '<div class="book-export-preflight-inner">' + parts.join('') + '</div>';
+            bookExportPreflightStatus.style.display = '';
         }
 
         function renderBookView() {

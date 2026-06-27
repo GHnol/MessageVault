@@ -657,6 +657,147 @@ suite('Suite 19 — integration with MessageBookPrintSpec + MessageBookManufactu
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Suite 20 — 8F live export-preflight status hook input mapping + dogfood gate
+// ─────────────────────────────────────────────────────────────────────────────
+// Locks the read-only #bookExportPreflightStatus surface (8F) against the contract.
+// `liveExportPreflightInput` is a faithful mirror of renderBookExportPreflightStatus's
+// input mapping in index.html: the proof-approved-current and composition-ready signals
+// are derived exactly as the live function derives them, and render-environment is always
+// reported missing because the live app computes no cover/spine/safe-area inputs. Kept in
+// lockstep so the live status can never drift from the tested engine or imply more than is
+// true (no print/export/file generation, no vendor, no production readiness).
+suite('Suite 20 — 8F live export-preflight status hook mapping', function () {
+    const KM = makeIntegrationCtx();
+    const PS = KM.MessageBookPrintSpec;
+    const MR = KM.MessageBookManufacturingReadiness;
+    const EP = KM.MessageBookExportPipeline;
+
+    // Exact mirror of the live renderBookExportPreflightStatus input mapping.
+    function liveExportPreflightInput(live) {
+        const l = live || {};
+        const proofApprovedCurrent = l.approvalStatus === 'approved' && l.approvalStale !== true;
+        const compositionReady = l.hasContent === true && !(l.state && l.state.exceedsPageLimit);
+        return {
+            printSpec:              l.printSpecResult || null,
+            proofApprovedCurrent:   proofApprovedCurrent,
+            compositionReady:       compositionReady,
+            renderEnvironmentKnown: false   // not available in the live app — honestly missing
+        };
+    }
+
+    const validSpec   = PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 120, maxPages: 400 });
+    const noSpec       = PS.evaluate({ selectedSpecId: null,    pageCount: 120, maxPages: 400 });
+    const overSpec     = PS.evaluate({ selectedSpecId: SPEC_ID, pageCount: 500, maxPages: 400 });
+    const okState      = { exceedsPageLimit: false };
+    const overState    = { exceedsPageLimit: true };
+
+    // The live hook consumes the real 8E contract.
+    const baseline = EP.resolveFromContext(liveExportPreflightInput({
+        printSpecResult: noSpec, approvalStatus: 'none', hasContent: false, state: okState
+    }));
+    assert(baseline.result.contractVersion === 'kmep1', 'live hook consumes MessageBookExportPipeline (kmep1)');
+    assert(typeof baseline.display === 'object' && baseline.display !== null, 'live hook produces a display view-model');
+
+    // (#4) Missing print spec blocks export preflight at print-spec-not-valid.
+    assert(baseline.result.primaryBlocker === EP.BLOCKER.PRINT_SPEC_NOT_VALID,
+        'no print spec → primaryBlocker print-spec-not-valid');
+    assert(baseline.display.tone === EP.STATUS_TONE.GATED, 'no print spec → gated tone');
+
+    // (#4) An invalid (over-limit) selected spec also blocks at print-spec-not-valid.
+    const overLimitSpec = EP.resolveFromContext(liveExportPreflightInput({
+        printSpecResult: overSpec, approvalStatus: 'approved', hasContent: true, state: overState
+    }));
+    assert(overSpec.internalSpecValid === false, 'over-limit print spec is not valid');
+    assert(overLimitSpec.result.primaryBlocker === EP.BLOCKER.PRINT_SPEC_NOT_VALID,
+        'invalid print spec → primaryBlocker print-spec-not-valid');
+
+    // (#5/#6) A valid print spec + approved-current proof + ready composition advances past
+    // the spec/proof/page-count/composition/parity inputs to the next honest missing input:
+    // render-environment, which the live app does not provide.
+    const validLive = EP.resolveFromContext(liveExportPreflightInput({
+        printSpecResult: validSpec, approvalStatus: 'approved', hasContent: true, state: okState
+    }));
+    assert(validSpec.internalSpecValid === true, 'valid print spec is valid');
+    assert(validLive.result.inputs['print-spec-valid'] === true, 'valid spec → print-spec-valid input known');
+    assert(validLive.result.inputs['proof-approved-current'] === true, 'approved current proof → input known');
+    assert(validLive.result.inputs['page-count-known'] === true, 'within-bounds page count → input known');
+    assert(validLive.result.inputs['composition-ready'] === true, 'content within limit → composition-ready known');
+    assert(validLive.result.inputs['parity-known'] === true, 'print-spec page bounds → parity known');
+    assert(validLive.result.inputs['render-environment-known'] === false, 'render-environment input is missing in the live app');
+    assert(validLive.result.primaryBlocker === EP.BLOCKER.RENDER_ENVIRONMENT_MISSING,
+        'valid spec + approved proof → next honest blocker is render-environment-missing');
+    assert(validLive.display.tone === EP.STATUS_TONE.GATED, 'valid spec live path is still gated');
+
+    // (#5) A stale approval is NOT approved-current, so the live path falls back to the
+    // proof-not-approved-current blocker even with a valid spec.
+    const staleLive = EP.resolveFromContext(liveExportPreflightInput({
+        printSpecResult: validSpec, approvalStatus: 'approved', approvalStale: true, hasContent: true, state: okState
+    }));
+    assert(staleLive.result.inputs['proof-approved-current'] === false, 'stale approval → proof not approved-current');
+    assert(staleLive.result.primaryBlocker === EP.BLOCKER.PROOF_NOT_APPROVED_CURRENT,
+        'stale approval → primaryBlocker proof-not-approved-current');
+
+    // (#5) Content over the page limit → composition not ready.
+    const overLimitComposition = EP.resolveFromContext(liveExportPreflightInput({
+        printSpecResult: validSpec, approvalStatus: 'approved', hasContent: true, state: overState
+    }));
+    // (validSpec was built within bounds; the live composition signal is the page-limit gate.)
+    assert(overLimitComposition.result.inputs['composition-ready'] === false,
+        'content over the page limit → composition-ready false');
+
+    // (#7) When every preflight input is known (render-environment hypothetically supplied),
+    // artifact-generation-not-implemented is the terminal blocker — never a print file.
+    const allKnown = EP.evaluate(ALL_INPUTS);
+    assert(allKnown.exportInputsKnown === true, 'all inputs known → export-inputs-known');
+    assert(allKnown.primaryBlocker === EP.BLOCKER.ARTIFACT_GENERATION_NOT_IMPLEMENTED,
+        'all inputs known → terminal blocker artifact-generation-not-implemented');
+    assert(allKnown.printFileReady === false, 'all inputs known → print-file-ready still false');
+
+    // (#11/#17) The live result never flips exportPipelineImplemented through the 8A bridge.
+    [baseline, overLimitSpec, validLive, staleLive, overLimitComposition].forEach(function (r, idx) {
+        assert(EP.toManufacturingCapabilities(r.result).exportPipelineImplemented === false,
+            'live result #' + idx + ' → exportPipelineImplemented stays false');
+        assert(r.result.printFileReady === false, 'live result #' + idx + ' → print-file-ready stays false');
+        assert(r.result.exportArtifactGenerationReady === false, 'live result #' + idx + ' → artifact generation not ready');
+        assert(r.result.vendorReady === false && r.result.manufacturingReady === false && r.result.packagingReady === false,
+            'live result #' + idx + ' → vendor/manufacturing/packaging stay false');
+    });
+
+    // (#14) The rendered copy across every live blocker carries no commerce/production CTA and
+    // no "ready to print / order" claim. The headline legitimately names the export pipeline,
+    // so we scan for ACTION phrases, not nouns.
+    const liveResults = [baseline, overLimitSpec, validLive, staleLive, overLimitComposition];
+    const FORBIDDEN_COPY = [
+        'add to cart', 'place order', 'order now', 'buy now', 'pay now', 'checkout',
+        'print now', 'generate pdf', 'send to vendor', 'send to print', 'download',
+        'ready to print', 'ready to order', 'ready to export', '$'
+    ];
+    liveResults.forEach(function (r, idx) {
+        const copy = ((r.display.headline || '') + ' ' + (r.display.detail || '')).toLowerCase();
+        FORBIDDEN_COPY.forEach(function (term) {
+            assert(copy.indexOf(term) === -1, 'live copy #' + idx + ' has no unsafe term "' + term + '"');
+        });
+    });
+
+    // (#15/#16) The live path never reaches the ready tone, and feeding the live result into
+    // the 8A bridge (with lower gates satisfied) keeps 8A at export-pipeline-not-implemented.
+    liveResults.forEach(function (r, idx) {
+        assert(r.display.tone === EP.STATUS_TONE.GATED, 'live result #' + idx + ' is gated (never ready)');
+    });
+    const caps = Object.assign(
+        {},
+        PS.toManufacturingCapabilities(validSpec),     // printSpecSelected: true
+        EP.toManufacturingCapabilities(validLive.result) // exportPipelineImplemented: false
+    );
+    const bridged = MR.resolveFromReadiness({
+        readiness: { checkoutEligible: true }, intent: { active: true }, capabilities: caps
+    });
+    assert(bridged.result.primaryBlocker === 'export-pipeline-not-implemented',
+        'live export-preflight result keeps 8A at export-pipeline-not-implemented');
+    assert(bridged.result.printFileReady === false, '8A print-file-ready stays false on the live path');
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Results
 // ─────────────────────────────────────────────────────────────────────────────
 console.log(`\n${'─'.repeat(60)}`);
