@@ -4118,6 +4118,16 @@
          nothing, builds no cover/spine/file/vendor packet, and only feeds 8E its honest
          (currently false) aggregate so the export preflight keeps blocking honestly. -->
     <script src="src/products/message-book-render-environment.js"></script>
+    <!-- 8H: spine / stock / binding material-input contract. Pure; decomposes 8G's opaque
+         spine-known / cover-gate inputs into the internal stock/binding direction, the
+         vendor stock/binding confirmation, the paper/board thickness, the page count, and
+         the derived spine-width computability + cover unblock — deriving each present/missing
+         from repo truth (BOOK_PRODUCTION_DEPS internal direction + captured production-
+         dependency flags; vendor-supplied thicknesses are absent). It selects no vendor,
+         renders no spine/cover, builds no file/vendor packet, and only feeds 8G its honest
+         (currently spine-not-computable / cover-blocked) facts through 8G's existing input
+         path so the render environment keeps blocking honestly. -->
+    <script src="src/products/message-book-spine-inputs.js"></script>
 
     <!-- ════════════════════════════════════════════
          KEEPMEES ENGINE — PACKAGE 3G
@@ -9683,18 +9693,32 @@ ${keepsakeFooter}
             // are genuinely missing, so the aggregate is honestly false and the export preflight
             // keeps blocking at render-environment-missing. A future package that confirms those
             // inputs would advance this automatically — nothing here is invented.
+            // 8H: derive the spine/stock/binding/cover production-dependency facts that 8G
+            // consumes from the MessageBookSpineInputs contract against live repo truth
+            // instead of hardcoded literals. The internal stock/binding direction is known
+            // (BOOK_PRODUCTION_DEPS.STOCK / .BINDING), but the vendor confirmations and the
+            // vendor-supplied paper/board thickness are genuinely absent, so spine width is
+            // not computable and the cover stays blocked — exactly the prior honest values.
+            // Nothing is invented; a future package that supplies those material facts would
+            // advance this automatically.
+            const SI = window.KMEngine && window.KMEngine.MessageBookSpineInputs;
+            const spineDeps = (SI && SI.resolveFromContext)
+                ? SI.toRenderEnvironmentInput(SI.resolveFromContext({
+                    productionDirection:    BOOK_PRODUCTION_DEPS,
+                    productionDependencies: { coverGenerationBlocked: true, stockConfirmed: false, bindingConfirmed: false }
+                    // materialSpec omitted — vendor-supplied paper/board thickness is not in repo truth.
+                }).result)
+                : { coverGenerationBlocked: true, spineWidthKnown: false, stockConfirmed: false, bindingConfirmed: false };
+
             const RE = window.KMEngine && window.KMEngine.MessageBookRenderEnvironment;
             const renderEnvironmentKnown = (RE && RE.resolveFromContext)
                 ? RE.resolveFromContext({
                     geometry: BOOK_PRODUCTION_DEPS,
                     parity:   BOOK_PARITY,
-                    productionDependencies: {
-                        interiorPageCountConfirmed: compositionReady,
-                        coverGenerationBlocked:     true,
-                        spineWidthKnown:            false,
-                        stockConfirmed:             false,
-                        bindingConfirmed:           false
-                    },
+                    productionDependencies: Object.assign(
+                        { interiorPageCountConfirmed: compositionReady },
+                        spineDeps
+                    ),
                     fontRender: { fontsAvailable: false, emojiStrategyConfirmed: false }
                 }).result.renderEnvironmentKnown
                 : false;

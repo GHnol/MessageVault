@@ -131,6 +131,7 @@ Fully pure and dependency-free: no DOM, no clock, no `Date`, no randomness, no I
 - **8C/8D** — `MessageBookPrintSpec` and the live `#bookPrintSpecPanel` are unchanged.
 - **8E** — `MessageBookExportPipeline` engine source is **unchanged**; 8G supplies its existing `renderEnvironmentKnown` input as an honestly-derived (currently false) aggregate.
 - **8F** — the live `#bookExportPreflightStatus` element and copy are unchanged; only the source of the `renderEnvironmentKnown` value changed (hardcoded `false` → contract-derived `false`).
+- **8H** — `MessageBookSpineInputs` (`docs/architecture/message-book-spine-stock-binding-input-contract.md`) decomposes 8G's opaque `spine-known` / cover-gate inputs into the internal stock/binding direction, the vendor stock/binding confirmation, the paper/board thickness, the page count, and the derived spine-width computability + cover unblock. It feeds 8G's existing `productionDependencies` (`spineWidthKnown` / cover gate / stock / binding) input path with honestly-derived facts — currently spine-not-computable / cover-blocked — so the 8G aggregate stays false. **8G engine source is unchanged**; 8H supplies its inputs, it does not modify it.
 
 WhatsApp P1–P6 and the native no-dependency ZIP path are unchanged. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI redesign.
 
