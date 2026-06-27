@@ -6,6 +6,40 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Message Book Manufacturing Readiness 8E (Export Pipeline Contract + Artifact-Free Preflight) COMPLETE (2026-06-27)
+
+**Message Book Manufacturing Readiness 8E — Export Pipeline Contract + Artifact-Free Preflight is CLOSED/COMPLETE** — impl `8a0b959`, fast-forward merged to `main` 2026-06-27 (`84bc3f2..8a0b959`); this entry is the narrow post-merge state-sync (trio only). **An artifact-free export-pipeline preflight contract — engine + tests + docs only, no UI, no file output, no production behavior.** 8E attacks the `export-pipeline-not-implemented` blocker honestly: it defines what an export pipeline must KNOW before real print-file generation could exist, without generating any file and **without flipping `exportPipelineImplemented`**. Delivered:
+
+- **New `KMEngine.MessageBookExportPipeline`** (`src/products/message-book-export-pipeline.js`) — a pure, dependency-free, **artifact-free** export-pipeline preflight contract. It consumes already-decided facts (a 8C `MessageBookPrintSpec` result + app-computed proof / composition / render-environment booleans), references no sibling module at runtime, and is fully pure (no DOM/clock/`Date`/random/I/O and **no file output of any kind**).
+- **Required input checks** — `print-spec-valid`, `proof-approved-current`, `page-count-known` (within bounds), `composition-ready`, `parity-known`, `render-environment-known` (cover/spine/safe-area inputs — genuinely missing today), `export-target-known` (PDF/X-4 direction). Each is reported present or explicitly missing; a valid internal print spec is required before preflight proceeds.
+- **Readiness ladder** — `export-pipeline-contract-known` → `export-inputs-known` → `export-artifact-generation-ready` → `print-file-ready` → `vendor-ready` → `manufacturing-ready` → `packaging-ready`. The live state reaches at most `export-inputs-known`; every generation rung stays `false` (`CAPABILITIES` all-false).
+- **Safe blocker codes** — `print-spec-not-valid` → `proof-not-approved-current` → `page-count-unknown` → `composition-not-ready` → `parity-unknown` → `render-environment-missing` → `export-target-unknown` → **`artifact-generation-not-implemented`** (the honest terminal blocker) → `print-file-not-ready`.
+- **Honest bridge to 8A** — `toManufacturingCapabilities(result)` maps to 8A's **existing** input as `{ exportPipelineImplemented: result.exportArtifactGenerationReady }`, which is **false** in this package. Feeding it to 8A keeps the live answer at `export-pipeline-not-implemented`. **`exportPipelineImplemented` was NOT flipped.** Only a future package implementing a real generator could advance it.
+- **Tests** — new `message-book-export-pipeline-tests.mjs` (**466**, 19 suites) incl. a real `MessageBookPrintSpec` (8C) + `MessageBookManufacturingReadiness` (8A) integration cross-check proving that reaching `export-inputs-known` does **not** advance 8A past `export-pipeline-not-implemented`. Node baseline 6483→**6949 / 39 suites**.
+- **Docs** — new `docs/architecture/message-book-export-pipeline-contract.md`; 8E sections in `docs/architecture/message-book-manufacturing-readiness-contract.md` and `docs/architecture/message-book-print-spec-contract.md`; `docs/qa/test-strategy.md` baseline.
+
+Verified on `main` after merge: **all 39 Node suites green, 0 failed** (6949); seeded E2E 57/57; real-files E2E 195/195; VR Scenario A 4/4; import-panels VR 10/10; P5C harness SKIP exit 0; project-control validators VALID/PASS; os-self-audit 324/0/0.
+
+**Honesty boundary (Coordinator-approved):**
+- **`exportPipelineImplemented` is NOT flipped** — in 8A it means real print-file production capability; flipping it for an artifact-free contract would over-claim. `exportArtifactGenerationReady` stays false, so `print-file-ready` stays false.
+- **Vendor / manufacturing / packaging readiness remain false/gated.**
+
+**Unchanged boundaries (8E added none of these):**
+- **No export/PDF/print-file/vendor-packet generation. No file writing or artifact creation of any kind. No real vendor selection or integration. No payment, checkout session, cart, real order, order submission, address collection, shipping, tax, price, SKU, or line-item behavior. No manufacturing/vendor/export/production/packaging implementation. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI.**
+- **8A manufacturing readiness engine source remained unchanged** (the bridge uses only its pre-existing `exportPipelineImplemented` input). **8B/8C/8D paths remain unchanged.** **7A/7B/7C/7D/7E remain intact. 5D/5E/6A/6B/6C remain intact.**
+- **WhatsApp P1–P6 remain CLOSED/COMPLETE; the native no-dependency ZIP decision stands; real-world WhatsApp ZIP validation remains fixture-gated separately.**
+
+**Caveats / open risks:**
+- The **export pipeline remains not implemented as an artifact generator**; `artifact-generation-not-implemented` is the honest terminal blocker once all inputs are known.
+- The **render-environment / cover / spine / safe-area inputs** remain future work.
+- A **future package may add a read-only live export-preflight status hook** (as 8B/8D surfaced 8A/8C); 8E is engine-only.
+- Real-world WhatsApp ZIP validation remains fixture-gated separately (unchanged by 8E).
+
+**Current state:** Branch `main` after fast-forward merge (`84bc3f2..8a0b959`; this state-sync adds one docs commit on top). **No active package. No active pass.** The Message Book readiness foundation now spans proof approval (5D/5E), print-proof fidelity (6A/6B/6C), checkout readiness (7A–7E), manufacturing readiness (8A boundary, 8B live status, 8C print-spec contract, 8D live print-spec selection), and this 8E artifact-free export-pipeline preflight contract — all gated, with no commerce/manufacturing/export-generation behavior started. **No payment, checkout session, cart, real order, order submission, manufacturing, vendor handoff, packaging, shipping, file export, or next package has started.**
+**Next recommended action:** Await Coordinator authorization for the next package. Candidate directions (all gated, none started): the first genuine **export-artifact generator** (which would flip the 8E `artifactGenerationImplemented` capability and, once it validates a produced file, advance 8A's `print-file-ready`); a read-only live export-preflight status hook surfacing 8E; sanitized real with-media WhatsApp ZIP fixture validation through the P5C harness; or design-system tokenization / component contracts. Do not begin any of these without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Message Book Manufacturing Readiness 8D (Live Print Spec Selection + Production Status Bridge) COMPLETE (2026-06-26)
 
 **Message Book Manufacturing Readiness 8D — Live Print Spec Selection + Production Status Bridge is CLOSED/COMPLETE** — impl `32befa3`, fast-forward merged to `main` 2026-06-26 (`0692de2..32befa3`); this entry is the narrow post-merge state-sync (trio only). **Live local-only selection surface — no export, no PDF, no print file, no vendor, no commerce, no production behavior.** 8D wires the 8C `KMEngine.MessageBookPrintSpec` contract into the live Message Book app so a user can locally select the internal print spec, and bridges a selected-and-valid spec into the 8B production-readiness status. Delivered:
