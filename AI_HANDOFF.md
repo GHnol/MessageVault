@@ -6,6 +6,38 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Message Book Manufacturing Readiness 8G (Render Environment Input Contract + Export Preflight Feed) COMPLETE (2026-06-27)
+
+**Message Book Manufacturing Readiness 8G — Render Environment Input Contract + Export Preflight Feed is CLOSED/COMPLETE** — impl `81eb8cf`, fast-forward merged to `main` 2026-06-27 (`09f3156..81eb8cf`); this entry is the narrow post-merge state-sync (trio only). **A render-environment input-availability contract — engine + tests + docs + a minimal, behavior-preserving live feed; no file output, no production behavior.** 8G decomposes 8E's single opaque `renderEnvironmentKnown` boolean into its individual required render-environment facts and reports which are genuinely known versus missing — it does NOT force the export preflight past `render-environment-missing`. Delivered:
+
+- **New `KMEngine.MessageBookRenderEnvironment`** (`src/products/message-book-render-environment.js`) — a pure, dependency-free, artifact-free render-environment input-availability contract. Fully pure (no DOM/clock/`Date`/random/I/O, no file output), references no sibling module at runtime.
+- **Individual input checks** — nine required render-environment inputs: interior structure, trim, bleed, safe area, parity/padding, spine, cover, font/emoji render availability, export target. Each is derived present/missing from already-decided repo truth.
+- **Known render facts** (derived from `BOOK_PRODUCTION_DEPS`/`BOOK_PARITY`, read-only, and the captured paginator structure): **trim known**, **bleed known**, **safe-area constants known**, **parity known**, **interior structure known**, **export target known** (PDF/X-4 direction).
+- **Missing render facts** (genuinely absent in repo truth): **spine width missing** (vendor-supplied paper/board thickness), **cover inputs missing / cover generation blocked**, **stock and binding confirmation missing**, **font/emoji render availability missing**.
+- **Aggregate `renderEnvironmentKnown` remains false** — it is true only when EVERY required input is genuinely present, and spine/cover/font are missing. **`renderEnvironmentKnown` was NOT marked true.**
+- **Live 8F export-preflight feed now contract-derived** — `index.html` `renderBookExportPreflightStatus(...)` now derives the `renderEnvironmentKnown` it feeds into 8E from `MessageBookRenderEnvironment.resolveFromContext` (against the live `BOOK_PRODUCTION_DEPS`/`BOOK_PARITY` constants — read only, not modified — plus the captured production-dependency flags) instead of a hardcoded `false`. Behavior-preserving: the aggregate is false, so the live export preflight still blocks honestly at `render-environment-missing` (same copy, same gated tone). The scope-guarded production constants were read only and not modified.
+- **Tests** — new `message-book-render-environment-tests.mjs` **307** (18 suites; incl. a real `MessageBookExportPipeline` (8E) integration cross-check + a live 8F mapping mirror). Node baseline 7072 → **7379 / 40 suites**; no other suite/count change, no `km-engine-tests.mjs` change.
+- **Docs** — new `docs/architecture/message-book-render-environment-contract.md`; cross-references in `docs/architecture/message-book-export-pipeline-contract.md`; `docs/qa/test-strategy.md` baseline + Layer 1 row.
+
+Verified on `main` after merge: **all 40 Node suites green, 0 failed** (7379); seeded E2E 57/57; real-files E2E 195/195; VR Scenario A 4/4; import-panels VR 10/10; P5C harness SKIP exit 0 (NO_PRIVATE_FIXTURES); project-control validators VALID/PASS; os-self-audit 324/0/0.
+
+**Unchanged boundaries (8G added none of these):**
+- **No cover/spine rendering. No export/PDF/print-file/vendor-packet generation. No file writing or artifact creation. No real vendor selection or integration. No payment, checkout session, cart, real order, order submission, address collection, shipping, tax, price, SKU, or line-item behavior. No manufacturing/vendor/export/production/packaging implementation. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI redesign.**
+- **`renderEnvironmentKnown` was not marked true. `exportPipelineImplemented` remains false; `print-file-ready` remains false; vendor/manufacturing/packaging remain false/gated.**
+- **8E export-pipeline engine source remained unchanged. 8F live export-preflight status remains intact (now uses the render-environment contract feed). 8A/8B/8C/8D remain intact. 7A/7B/7C/7D/7E remain intact. 5D/5E/6A/6B/6C remain intact. Browser rendering stable; import/WhatsApp behavior unchanged.**
+- **WhatsApp P1–P6 remain CLOSED/COMPLETE; the native no-dependency ZIP decision stands; real-world WhatsApp ZIP validation remains fixture-gated separately.**
+
+**Caveats / open risks:**
+- The live export preflight still blocks at `render-environment-missing`.
+- Spine width, cover inputs, stock/binding confirmation, and font/emoji render availability remain future work.
+- `artifact-generation-not-implemented` remains the engine terminal blocker; **no real export-artifact generator exists yet**.
+- Real-world WhatsApp ZIP validation remains fixture-gated separately (unchanged by 8G).
+
+**Current state:** Branch `main` after fast-forward merge (`09f3156..81eb8cf`; this state-sync adds one docs commit on top). **No active package. No active pass.** The Message Book readiness foundation now spans proof approval (5D/5E), print-proof fidelity (6A/6B/6C), checkout readiness (7A–7E), manufacturing readiness (8A boundary, 8B live status, 8C print-spec contract, 8D live print-spec selection, 8E artifact-free export-pipeline preflight, 8F live export-preflight status), and this 8G render-environment input contract + export-preflight feed — all gated, with no commerce/manufacturing/export-generation behavior started. **No payment, checkout session, cart, real order, order submission, manufacturing, vendor handoff, packaging, shipping, file export, PDF generation, or next package has started.**
+**Next recommended action:** Await Coordinator authorization for the next package. Candidate directions (all gated, none started): the first genuine **export-artifact generator** (which would flip the 8E `artifactGenerationImplemented` capability and, once it validates a produced file, advance `print-file-ready`) — and could begin confirming the missing render facts (spine/cover/font); a sanitized real with-media WhatsApp ZIP fixture validation through the P5C harness; or design-system tokenization / component contracts. Do not begin any of these without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Message Book Manufacturing Readiness 8F (Live Export Preflight Status Hook + Dogfood Gate) COMPLETE (2026-06-27)
 
 **Message Book Manufacturing Readiness 8F — Live Export Preflight Status Hook + Dogfood Gate is CLOSED/COMPLETE** — impl `50493e3`, fast-forward merged to `main` 2026-06-27 (`43c0b4d..50493e3`); this entry is the narrow post-merge state-sync (trio only). **Read-only visibility / dogfood package — `index.html` + tests + docs only, no production behavior added.** 8F surfaces the 8E `KMEngine.MessageBookExportPipeline` contract in the live Message Book app as a read-only export-preflight status, so a user can see which export inputs are known vs missing and that artifact generation is not implemented — **without generating anything**. Delivered:
