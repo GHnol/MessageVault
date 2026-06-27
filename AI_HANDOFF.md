@@ -6,6 +6,41 @@ Update this file whenever you stop mid-task, approach context pressure, or hand 
 
 ---
 
+## ⚠ ACTIVE DIRECTION — Message Book Manufacturing Readiness 8D (Live Print Spec Selection + Production Status Bridge) COMPLETE (2026-06-26)
+
+**Message Book Manufacturing Readiness 8D — Live Print Spec Selection + Production Status Bridge is CLOSED/COMPLETE** — impl `32befa3`, fast-forward merged to `main` 2026-06-26 (`0692de2..32befa3`); this entry is the narrow post-merge state-sync (trio only). **Live local-only selection surface — no export, no PDF, no print file, no vendor, no commerce, no production behavior.** 8D wires the 8C `KMEngine.MessageBookPrintSpec` contract into the live Message Book app so a user can locally select the internal print spec, and bridges a selected-and-valid spec into the 8B production-readiness status. Delivered:
+
+- **Live local-only `#bookPrintSpecPanel`** — `index.html` renders a read-write panel beside the 7B readiness / 7E order-intent / 8B manufacturing panels, **outside `#bookCanvas`** (VR Scenario A unaffected, 4/4). Only the single internal draft Message Book print spec is selectable; safe **Use internal print spec** / **Clear print spec** controls.
+- **Selected-spec validation against live page bounds** — `renderBookPrintSpecPanel(readinessResult, state)` evaluates the selection against `state.estimatedPageCount` (active-volume page count) and `state.format.maxPages` via `MessageBookPrintSpec.evaluate(...)`; an over-limit / unknown / invalid / bounds-unknown spec is never reported valid.
+- **Live bridge into 8A** — `renderBookManufacturingStatus(readinessResult, orderIntentView, printSpecResult)` maps the selection via `MessageBookPrintSpec.toManufacturingCapabilities(...)` into 8A's **existing** `printSpecSelected` capability input. A selected-AND-valid internal spec advances the live production blocker from `print-spec-not-selected` to `export-pipeline-not-implemented` **only when the lower gates pass**; it never jumps an unmet lower gate, and no higher rung advances.
+- **Local persistence** — optional `projectSession.messageBookPrintSpecSelection` (a **string** spec id or `null`) mirroring the 7E `messageBookOrderIntent` pattern (`project-persistence.js` snapshot/validate + `project-session-restore.js` `KNOWN_SESSION_FIELDS`/parse). Restored through the new `coerceSelectedSpecId` (unknown/malformed → `null`) and **revalidated against current page bounds on render**, so a restored selection can never advance production on its own.
+- **Pure engine helpers (additive only)** — `SELECTION_TONE`, `describeSelection`, `describeActions`, `coerceSelectedSpecId` on `MessageBookPrintSpec` (no DOM/clock; no commerce/production CTA — guarded by the suite scan).
+- **Tests** — `message-book-print-spec-tests.mjs` 306→**377** (Suites 15–20), `message-book-manufacturing-readiness-tests.mjs` 340→**348** (Suite 26 live mapping), `project-persistence-tests.mjs` 183→**198** (selection round-trip). Node baseline 6389→**6483 / 38 suites**.
+- **Docs** — 8D sections in `docs/architecture/message-book-print-spec-contract.md` and `docs/architecture/message-book-manufacturing-readiness-contract.md`; `docs/qa/test-strategy.md` baseline.
+
+Verified on `main` after merge: **all 38 Node suites green, 0 failed** (6483); seeded E2E 57/57; real-files E2E 195/195; VR Scenario A 4/4; import-panels VR 10/10; P5C harness SKIP exit 0; project-control validators VALID/PASS; os-self-audit 324/0/0. A throwaway Playwright check of the live 8D golden path (select → "Internal print spec selected" + "Export pipeline is still not implemented"; snapshot persists; Clear reverts; panel outside `#bookCanvas`; in-browser engine bridge advances to `export-pipeline-not-implemented`; no unsafe CTA) passed 17/17 with 0 console errors (**not committed**, deleted after).
+
+**Unchanged boundaries (8D added none of these):**
+- **No export/PDF/print-file/vendor-packet generation. No real vendor selection or integration. No payment, checkout session, cart, real order, order submission, address collection, shipping, tax, price, or line-item behavior. No manufacturing/vendor/export/production/packaging implementation. No dependency, no `package.json`, no import/WhatsApp/ZIP change, no broad UI redesign.**
+- **`LOCAL_INTENT_REQUIRED` remains `true`.**
+- **8A manufacturing readiness engine source remained unchanged** (the bridge uses only its pre-existing `printSpecSelected` input).
+- **8B live production readiness status remains intact and now consumes the valid print-spec capability** (the no-capabilities call shape is unchanged).
+- **8C print-spec contract remains intact** (additive pure helpers only; all 8C evaluate/bridge logic unchanged).
+- **7A / 7B / 7C / 7D / 7E remain intact. 5D / 5E / 6A / 6B / 6C remain intact.**
+- **WhatsApp P1–P6 remain CLOSED/COMPLETE; the native no-dependency ZIP decision stands; real-world WhatsApp ZIP validation remains fixture-gated separately.**
+
+**Caveats / open risks:**
+- The **export pipeline remains not implemented**; `export-pipeline-not-implemented` is the live blocker once a valid spec + satisfied lower gates exist.
+- **Vendor / manufacturing / packaging readiness remain false/gated.**
+- The live advance to `export-pipeline-not-implemented` requires a checkout-eligible proof, a saved local intent, **and** a valid internal spec.
+- Page bounds are **active-volume based**, matching the current proof flow.
+- Real-world WhatsApp ZIP validation remains fixture-gated separately (unchanged by 8D).
+
+**Current state:** Branch `main` after fast-forward merge (`0692de2..32befa3`; this state-sync adds one docs commit on top). **No active package. No active pass.** The Message Book readiness foundation now spans proof approval (5D/5E), print-proof fidelity (6A/6B/6C), checkout readiness (7A–7E), the 8A production-readiness boundary, the 8B live read-only status, the 8C internal print-spec selection/validation contract, and this 8D live print-spec selection + production-status bridge — all gated, with no commerce/manufacturing behavior started. **No payment, checkout session, cart, real order, order submission, manufacturing, vendor handoff, packaging, shipping, export pipeline, or next package has started.**
+**Next recommended action:** Await Coordinator authorization for the next package. Candidate directions (all gated, none started): the first genuine **export-pipeline** implementation (which would flip the `exportPipelineImplemented` capability and add its inputs); sanitized real with-media WhatsApp ZIP fixture validation through the P5C harness; or design-system tokenization / component contracts. Do not begin any of these without explicit Coordinator authorization.
+
+---
+
 ## ⚠ ACTIVE DIRECTION — Message Book Manufacturing Readiness 8C (Print Spec Selection Contract + Export-Spec Gate) COMPLETE (2026-06-26)
 
 **Message Book Manufacturing Readiness 8C — Print Spec Selection Contract + Export-Spec Gate is CLOSED/COMPLETE** — impl `f0d3f8c`, fast-forward merged to `main` 2026-06-26 (`b29d997..f0d3f8c`); this entry is the narrow post-merge state-sync (trio only). **The first genuine production-capability layer — engine + tests + docs only, no UI, no production behavior.** 8C adds a tested internal print-spec selection/validation contract that can satisfy 8A's `print-spec-not-selected` blocker without generating files, selecting a vendor, exporting PDFs, or implying manufacturing readiness. Delivered:
