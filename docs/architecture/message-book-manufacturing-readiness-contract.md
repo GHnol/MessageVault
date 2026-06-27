@@ -203,3 +203,39 @@ MMR.resolveFromReadiness({ readiness, intent, capabilities });
 ```
 
 So in the live app: with no local print-spec selection (or an over-limit / unknown one) the status stays at `print-spec-not-selected`; with a selected-AND-valid internal spec and the lower gates satisfied it advances to **`export-pipeline-not-implemented`** — and no higher rung. **This engine's source is unchanged** — 8D uses only the pre-existing `printSpecSelected` capability input. `CAPABILITIES`, `LOCAL_INTENT_REQUIRED = true`, the ladder, and the blocker priority are all intact. When `capabilities` is omitted (the prior 8B call shape), the all-false default is applied exactly as before. Coverage: `message-book-manufacturing-readiness-tests.mjs` 340 → **348** (Suite 26 — the 8D live status-hook mapping).
+
+---
+
+## 8E — Export Pipeline Contract + Artifact-Free Preflight
+
+**Status:** Active — introduced in Message Book Manufacturing Readiness 8E. **The first export-pipeline layer — engine + tests + docs only, artifact-free.** 8E attacks the `export-pipeline-not-implemented` blocker **honestly**: it adds a lower-level, artifact-free **export-pipeline preflight contract** (`KMEngine.MessageBookExportPipeline`) that defines what an export pipeline must know before a real print file could ever be produced, **without flipping `exportPipelineImplemented` and without generating any file.** Authoritative 8E contract: `docs/architecture/message-book-export-pipeline-contract.md`.
+
+### The honesty determination — `exportPipelineImplemented` is NOT flipped
+
+In this engine `printFileReady = exportSpecKnown && exportPipelineImplemented`, so `exportPipelineImplemented` means **the export pipeline can actually produce a print file**. Flipping it true would imply generated print files / production-ready artifacts exist — they do not. 8E therefore **does not flip it.** 8E's `MessageBookExportPipeline.toManufacturingCapabilities(result)` returns `{ exportPipelineImplemented: result.exportArtifactGenerationReady }`, and `exportArtifactGenerationReady` is **false** in this package (it requires the genuine, currently-absent `artifactGenerationImplemented` capability). Feeding the 8E bridge into this engine therefore leaves the live answer at **`export-pipeline-not-implemented`** — identical to the 8B/8D no-export-capability path.
+
+### How it relates — this engine's existing input path
+
+8E does not change this module. It supplies this engine's **existing** `exportPipelineImplemented` capability as honestly-false:
+
+```js
+const ep   = MessageBookExportPipeline.resolveFromContext({ printSpec, proofApprovedCurrent, compositionReady, renderEnvironmentKnown });
+const caps = Object.assign({}, MessageBookPrintSpec.toManufacturingCapabilities(printSpecResult),  // { printSpecSelected: <valid> }
+                               MessageBookExportPipeline.toManufacturingCapabilities(ep.result));   // { exportPipelineImplemented: false }
+const out  = MessageBookManufacturingReadiness.resolveFromReadiness({ readiness, intent, capabilities: caps });
+```
+
+| 8E preflight | `exportPipelineImplemented` | this engine's primary blocker | this engine's furthest level |
+|---|---|---|---|
+| any state in this package (no real generator) | `false` | `export-pipeline-not-implemented` | `export-spec-known` |
+| hypothetical real generator (future package) | `true` | `vendor-not-selected` (next genuine gap) | `print-file-ready` |
+
+Even when 8E reaches `export-inputs-known` (every required export input supplied), the production ladder does **not** advance past `export-pipeline-not-implemented`, because no print file can be produced. Only a **future** package implementing a real generator (flipping the 8E `artifactGenerationImplemented` capability, then validating a produced file) could advance it.
+
+### 8E preserves
+
+This engine's `CAPABILITIES` (still all-false), `LOCAL_INTENT_REQUIRED = true`, the ladder, and the blocker priority are all intact. **The 8B/8D live path is unchanged** — it passes no export capability, so the live app still shows `export-pipeline-not-implemented` once a valid spec is selected. 5D/5E/6A/6B/6C, 7A/7B/7C/7D/7E, and 8A/8B/8C/8D are all intact. WhatsApp P1–P6 and the native no-dependency ZIP path are unchanged. No print/export/PDF/print-file/vendor-packet generation, no file writing, no vendor selection, no checkout/payment/cart/order/order-submission, no address/shipping/tax/price/SKU/line-item, no manufacturing/packaging, no dependency, no `package.json`, no import/WhatsApp/ZIP change, no UI.
+
+### 8E coverage
+
+New `message-book-export-pipeline-tests.mjs` (**466**, 19 suites — see the export-pipeline contract doc). No change to `message-book-manufacturing-readiness-tests.mjs` (348) — the 8A/8B/8C/8D engine and its suite are untouched; the cross-module integration that proves 8E does **not** advance this engine past `export-pipeline-not-implemented` lives in the new export-pipeline suite (which loads the real 8C + 8A modules alongside 8E).
