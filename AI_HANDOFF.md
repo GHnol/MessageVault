@@ -1,8 +1,38 @@
 # AI_HANDOFF.md — Work Transfer Record
 
-Update this file whenever you stop mid-task, approach context pressure, or hand off to another agent. The incoming agent reads this before touching anything.
+## REPOSITORY ARCHIVED — READ THIS FIRST
 
-**This file is the compact-safe handoff.** Auto-compact summaries are not a substitute for updating this file. If a context event happens and this file is not current, the incoming session must stop and ask the Coordinator for direction before proceeding.
+**Status: ARCHIVED / PERMANENTLY FEATURE-FROZEN.** Founder-approved at Gate 0 on **2026-07-22**.
+
+This repository is the **archived pre-reset KeepMees prototype, formerly developed as MessageVault**. It is not the active KeepMees product repository. There is no work to hand off.
+
+| Field | Value |
+|---|---|
+| Repository status | ARCHIVED / PERMANENTLY FEATURE-FROZEN |
+| Active package | None |
+| Active pass | None |
+| Next package | None |
+| Next recommended action in this repository | **None** |
+
+**No feature, repair, design, migration, manufacturing, vendor, commerce, or product work should resume here.** No package may be started in this repository — not Message Book Manufacturing Readiness 8B, and not any other. Every "next exact action", "next recommended", "candidate package", and "await Coordinator authorization" statement below this banner is **historical record only and is superseded**.
+
+**Read these instead:**
+
+1. `README.md`
+2. `ARCHIVE_NOTICE.md`
+3. `docs/archive/keepmees-gate-0-decision.md`
+
+The canonical clean **KeepMees** product will be built in a separate repository, created only after its approved planning and design gates (product/brand, data/privacy, UX/design, architecture, master specification).
+
+**Nothing in this repository automatically transfers or remains authoritative.** Salvage requires explicit evidence and explicit founder approval, per item.
+
+Everything below is preserved unchanged as the historical work-transfer record of the prototype.
+
+---
+
+Update this file whenever you stop mid-task, approach context pressure, or hand off to another agent. The incoming agent reads this before touching anything. *(Superseded — the repository is archived and this file is no longer updated.)*
+
+**This file is the compact-safe handoff.** Auto-compact summaries are not a substitute for updating this file. If a context event happens and this file is not current, the incoming session must stop and ask the Coordinator for direction before proceeding. *(Superseded — see the archive banner above.)*
 
 ---
 
@@ -762,10 +792,13 @@ Locked decisions: (1) **Rendering** = original KeepMees language; faithful data/
 
 | Field | Value |
 |---|---|
+| **Repository status** | **ARCHIVED / PERMANENTLY FEATURE-FROZEN** (Gate 0, founder-approved 2026-07-22) |
 | **Active pass** | None |
 | **Active branch** | `main` |
+| **Next package** | None — no package may be started in this repository |
+| **Next recommended action** | None — see `ARCHIVE_NOTICE.md` |
 | **base HEAD** | `636e413` (feat(message-book): surface production readiness status — 8B live read-only status hook; `main` HEAD — this state-sync adds one docs commit on top) |
-| **Active package** | None |
+| **Active package** | None — repository archived; no package may be started here |
 | **Last completed work** | Message Book Manufacturing Readiness 8B — Live Production Readiness Status Hook + Dogfood Gate (read-only visibility only; `index.html` loads `message-book-manufacturing-readiness.js` and renders a read-only `#bookManufacturingStatus` beside the readiness/order-intent panels, **outside `#bookCanvas`**; mapped from `resolveFromReadiness` using the 7A readiness result + 7D/7E local-intent `active`; safe blocker copy for checkout-not-eligible / no-local-intent / print-spec-not-selected; no buttons, no handlers, no export/PDF/print/vendor packet, no vendor selection, no production action; `LOCAL_INTENT_REQUIRED` stays true; 8A engine unchanged; `message-book-manufacturing-readiness-tests.mjs` 260→324; Node 6003→6067 / 37 suites; all browser gates green) — impl `636e413`, fast-forward merged to `main` 2026-06-26 |
 | **Last completed pass** | Message Book Manufacturing Readiness 8B — Live Production Readiness Status Hook + Dogfood Gate (read-only status only) — impl `636e413`, fast-forward merged to `main` 2026-06-26 |
 | **Prior completed pass** | Message Book Manufacturing Readiness 8A — Print Production Boundary + Readiness Matrix (engine + tests + docs only) — impl `13b6e0f`; Message Book Checkout Readiness 7E — Local Order Intent UI + Persistence Boundary — impl `b5a6c63`; 7D — Order Intent Shell + Commerce Boundary — impl `4fa8e59`; all merged to `main` |
@@ -2180,11 +2213,23 @@ RESOLVED. The `MISSING_LOCAL_MAPPING` advisory from the post-Gate-3 dry-run has 
 
 ## Next exact action
 
+**None. This repository is ARCHIVED and permanently feature-frozen** (Gate 0, founder-approved 2026-07-22). Do not start any package. No feature, repair, design, migration, manufacturing, vendor, commerce, or product work should resume here — including Message Book Manufacturing Readiness 8B and every other candidate named below. Read `README.md`, `ARCHIVE_NOTICE.md`, and `docs/archive/keepmees-gate-0-decision.md`. The canonical clean KeepMees product will be built in a separate repository, created only after its approved planning and design gates. Nothing in this repository automatically transfers or remains authoritative.
+
+### Historical next-action record — superseded by the archive
+
 Message Book Manufacturing Readiness 8B — Live Production Readiness Status Hook + Dogfood Gate COMPLETE — impl `636e413`, fast-forward merged to `main` 2026-06-26 (`43955bc..636e413`); narrow trio-only state-sync follows (this commit). 8B surfaced the 8A `MessageBookManufacturingReadiness` boundary in the live app as a read-only `#bookManufacturingStatus` status (outside `#bookCanvas`), mapped from the 7A readiness result + 7D/7E local-intent `active`; read-only, no buttons/handlers, no export/PDF/print/vendor packet, no production action; `LOCAL_INTENT_REQUIRED` stays true; 8A engine intact; Node 6003→6067 / 37 suites, all browser gates green. **No active pass. No active package. Active branch `main`.** Next development candidate: await Coordinator authorization for the next package (candidates, all gated/none started: checkout shell beyond the local boundary; first genuine print/export-spec implementation; sanitized real with-media WhatsApp ZIP fixture validation via the P5C harness; design-system tokenization / component contracts). Do not start any package without explicit Coordinator authorization. No external mutations authorized.
 
 ---
 
 ## Source-of-truth files to read first on resume
+
+**Archived repository — the resume path below is superseded. Read these instead:**
+
+1. `README.md`
+2. `ARCHIVE_NOTICE.md`
+3. `docs/archive/keepmees-gate-0-decision.md`
+
+There is nothing to resume. The historical resume order is retained below as record:
 
 1. `AGENTS.md`
 2. `CLAUDE.md`
